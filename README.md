@@ -25,16 +25,15 @@
 ### ⛏️ Compile
 
 ```bash
-protostar build --cairo-path=lib
+make
 ```
 
 ### 🌡️ Test
 
 ```bash
-# Run all tests
-pytest tests
+make test
 ```
 
 ## 📄 License
 
-**carbonable-starknet-contracts** is released under the [Apache-2.0](LICENSE).
+**carbonable-starknet-protocol** is released under the [MIT](LICENSE).
