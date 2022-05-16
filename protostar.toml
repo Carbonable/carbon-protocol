@@ -1,0 +1,18 @@
+["protostar.config"]
+protostar_version = "0.1.0"
+
+["protostar.project"]
+libs_path = "lib"
+
+["protostar.shared_command_configs"]
+cairo_path = ["./lib/cairo_contracts/src"]
+
+["protostar.contracts"]
+CarbonableProjectNFT = [
+    "./src/nft/CarbonableProjectNFT.cairo",
+]
+
+CarbonableMinter = [
+    "./src/mint/CarbonableMinter.cairo",
+]
+

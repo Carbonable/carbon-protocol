@@ -1,0 +1,17 @@
+# IDE
+.vscode
+
+# Python
+__pycache__
+env
+
+# starknet 
+node.json
+*.deployments.txt
+artifacts
+
+# nile
+127.0.0.1.*
+
+# Protostar
+build
