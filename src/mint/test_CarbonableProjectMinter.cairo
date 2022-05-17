@@ -16,6 +16,9 @@ func test_deploy{syscall_ptr : felt*, range_check_ptr}():
             [
                 1, # Owner,
                 ids.project_nft_address, # Project NFT contract address
+                0, # Is whitelisted sale open
+                0, # Is public sale open
+                5, # Max buy per transaction
             ]
         ).contract_address
     %}
