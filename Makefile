@@ -8,3 +8,7 @@ test:
 	
 date:
 	date
+
+format:
+	black scripts
+	cairo-format -i src/**/*.cairo

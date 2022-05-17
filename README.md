@@ -34,6 +34,12 @@ make
 make test
 ```
 
+### 💋 Format code
+
+```bash
+make format
+```
+
 ## 📄 License
 
 **carbonable-starknet-protocol** is released under the [MIT](LICENSE).

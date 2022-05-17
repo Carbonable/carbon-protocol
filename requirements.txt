@@ -1,0 +1,5 @@
+cairo-lang
+cairo-nile
+marshmallow-dataclass==8.5.3
+black
+pylint

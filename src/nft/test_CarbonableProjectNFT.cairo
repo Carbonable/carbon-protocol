@@ -1,5 +1,7 @@
 %lang starknet
 
+from interfaces.ICarbonableProjectNFT import ICarbonableProjectNFT
+
 @external
 func test_deploy{syscall_ptr : felt*, range_check_ptr}():
     alloc_locals
@@ -15,6 +17,7 @@ func test_deploy{syscall_ptr : felt*, range_check_ptr}():
             ]
         ).contract_address
     %}
-    
+    let (name) = ICarbonableProjectNFT.name(project_nft_address)
+    assert name = 1
     return ()
 end
