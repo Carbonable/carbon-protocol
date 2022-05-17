@@ -18,7 +18,7 @@ jobs:
         run: cairo-format -c src/**/*.cairo
   python:
     runs-on: ubuntu-latest
-    steps:cair
+    steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
         with:
@@ -28,4 +28,4 @@ jobs:
         run: |
           pip install black
       - name: Check files formatting
-        run: black --check scripts
+        run: black --check s
