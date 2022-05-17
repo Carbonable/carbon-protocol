@@ -36,7 +36,8 @@ from openzeppelin.token.erc721_enumerable.library import (
     ERC721_Enumerable_mint,
     ERC721_Enumerable_burn,
 )
-from openzeppelin.introspection.ERC165 import ERC165
+# TODO: fix nile deploy issues
+# from openzeppelin.introspection.ERC165 import ERC165
 from openzeppelin.access.ownable import (
     Ownable_initializer,
     Ownable_only_owner,
@@ -97,8 +98,10 @@ end
 func supportsInterface{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     interfaceId : felt
 ) -> (success : felt):
-    let (success) = ERC165.supports_interface(interfaceId)
-    return (success)
+    # TODO: fix nile deploy issues
+    # let (success) = ERC165.supports_interface(interfaceId)
+    # return (success)
+    return (1)
 end
 
 @view
