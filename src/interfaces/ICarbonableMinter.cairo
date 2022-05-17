@@ -6,4 +6,7 @@ from starkware.cairo.common.uint256 import Uint256
 namespace ICarbonableMinter:
     func buy(quantity : Uint256):
     end
+
+    func whitelisted_sale_open() -> (whitelisted_sale_open : felt):
+    end
 end

@@ -59,6 +59,11 @@ end
 func max_supply_for_mint_() -> (res : Uint256):
 end
 
+# Total supply
+@storage_var
+func whitelist_(account : felt) -> (res : Uint256):
+end
+
 # -----
 # VIEWS
 # -----
@@ -110,6 +115,13 @@ func max_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     max_supply_for_mint : Uint256
 ):
     return max_supply_for_mint_.read()
+end
+
+@view
+func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    account : felt
+) -> (slots : Uint256):
+    return whitelist_.read(account)
 end
 
 # ------
@@ -179,6 +191,15 @@ func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @external
+func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    account : felt, slots : Uint256
+):
+    Ownable_only_owner()
+    whitelist_.write(account, slots)
+    return ()
+end
+
+@external
 func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quantity : Uint256) -> (
     success : felt
 ):
@@ -196,6 +217,25 @@ func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quan
     let (project_nft_address) = project_nft_address_.read()
     let (unit_price) = unit_price_.read()
     let (payment_token_address) = payment_token_address_.read()
+    let (whitelisted_sale_open) = whitelisted_sale_open_.read()
+    let (public_sale_open) = public_sale_open_.read()
+    let (whitelisted_slots) = whitelist_.read(caller)
+
+    # Compute variables required to check business logic rules
+    let (enough_slots) = uint256_le(quantity, whitelisted_slots)
+    let at_least_one_sale_type_open = (whitelisted_sale_open + public_sale_open)
+
+    # Check if at least whitelisted or public sale is open
+    with_attr error_message("CarbonableMinter: mint is not open"):
+        assert_not_zero(at_least_one_sale_type_open)
+    end
+
+    # Check if account has available whitelisted slots if public sale is not open
+    if public_sale_open == FALSE:
+        with_attr error_message("CarbonableMinter: no whitelisted slot available"):
+            assert enough_slots = TRUE
+        end
+    end
 
     # Check if enough NFTs available
     let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
