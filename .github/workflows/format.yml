@@ -28,4 +28,4 @@ jobs:
         run: |
           pip install black
       - name: Check files formatting
-        run: black --check s
+        run: black --check scripts
