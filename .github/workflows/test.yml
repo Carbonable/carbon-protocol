@@ -19,4 +19,4 @@ jobs:
       - name: Install protostar dependencies
         run: /home/runner/.protostar/dist/protostar/protostar install
       - name: Run protostar tests
-        run: /home/runner/.protostar/dist/protostar/protostar protostar test src -m '.*$(match).*'
+        run: /home/runner/.protostar/dist/protostar/protostar test src -m '.*$(match).*'
