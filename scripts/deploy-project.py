@@ -13,11 +13,11 @@ def run(nre: NileRuntimeEnvironment):
         ]
     )
     owner = os.environ["OWNER"]
-    
+
     name = str(str_to_felt("CarbonableProject"))
     symbol = str(str_to_felt("CP"))
     params = [name, symbol, owner]
-    
+
     print("Deploying CarbonableProjectNFT...")
     address, _ = nre.deploy(
         "CarbonableProjectNFT",
@@ -41,8 +41,10 @@ def run(nre: NileRuntimeEnvironment):
         whitelistedSaleOpen,
         publicSaleOpen,
         maxBuyPerTx,
-        100, 0, # unit price
-        10, 0 # max supply for mint 
+        100,
+        0,  # unit price
+        10,
+        0,  # max supply for mint
     ]
 
     print("Deploying CarbonableMinter...")
