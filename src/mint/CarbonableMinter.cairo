@@ -59,7 +59,9 @@ end
 func max_supply_for_mint_() -> (res : Uint256):
 end
 
-# Total supply
+# Whitelist
+# TODO: use Merkle drop
+# https://github.com/ncitron/cairo-merkle-distributor
 @storage_var
 func whitelist_(account : felt) -> (res : Uint256):
 end

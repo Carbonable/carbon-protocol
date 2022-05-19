@@ -5,49 +5,53 @@ from nile.core.call_or_invoke import call_or_invoke
 
 
 def run(nre: NileRuntimeEnvironment):
-    print("Compiling contracts…")
+    print("Compiling contracts...")
     nre.compile(
         [
             "src/nft/CarbonableProjectNFT.cairo",
             "src/mint/CarbonableMinter.cairo",
         ]
     )
-    print("Deploying contracts…")
     owner = os.environ["OWNER"]
+    
     name = str(str_to_felt("CarbonableProject"))
     symbol = str(str_to_felt("CP"))
     params = [name, symbol, owner]
-    address, abi = nre.deploy(
+    
+    print("Deploying CarbonableProjectNFT...")
+    address, _ = nre.deploy(
         "CarbonableProjectNFT",
         params,
         alias="CarbonableProjectNFT",
     )
-    print(f"ABI: {abi},\CarbonableProjectNFT contract address: {address}")
+    print(f"CarbonableProjectNFT contract address: {address}")
 
     projectNFTAddress = address
-    paymentTokenAddress = "0x1234"
+    paymentTokenAddress = 0
     whitelistedSaleOpen = 0
     publicSaleOpen = 0
     maxBuyPerTx = 5
     unitPrice = uint(100)
     maxSupplyForMint = uint(10)
 
-    params = [
+    minterParams = [
         owner,
         projectNFTAddress,
         paymentTokenAddress,
         whitelistedSaleOpen,
         publicSaleOpen,
         maxBuyPerTx,
-        unitPrice,
-        maxSupplyForMint,
+        100, 0, # unit price
+        10, 0 # max supply for mint 
     ]
-    address, abi = nre.deploy(
+
+    print("Deploying CarbonableMinter...")
+    minterAddress, _ = nre.deploy(
         "CarbonableMinter",
-        params,
+        minterParams,
         alias="CarbonableMinter",
     )
-    print(f"ABI: {abi},\CarbonableMinter contract address: {address}")
+    print(f"CarbonableMinter contract address: {minterAddress}")
 
 
 # Auxiliary functions
