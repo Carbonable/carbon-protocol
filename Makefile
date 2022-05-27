@@ -4,7 +4,7 @@ build:
 	protostar build
 
 test:
-	protostar test src -m '.*$(match).*'
+	protostar test src
 	
 date:
 	date
