@@ -15,3 +15,5 @@ artifacts
 
 # Protostar
 build
+
+.DS_Store
