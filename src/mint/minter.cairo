@@ -139,7 +139,7 @@ end
 @external
 func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     account : felt, slots : Uint256
-):
+) -> (success : felt):
     return CarbonableMinter.add_to_whitelist(account, slots)
 end
 

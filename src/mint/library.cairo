@@ -174,10 +174,10 @@ namespace CarbonableMinter:
 
     func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt, slots : Uint256
-    ):
+    ) -> (success : felt):
         Ownable_only_owner()
         whitelist_.write(account, slots)
-        return ()
+        return (TRUE)
     end
 
     func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

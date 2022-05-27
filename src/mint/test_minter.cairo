@@ -163,7 +163,107 @@ func test_buy_revert_not_whitelisted{
     # Public sale: CLOSED
     # Is user whitelisted: NO
     # current NFT totalSupply: 5
-    # has enough funds: NO
+    # has enough funds: YES
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    let quantity = Uint256(2, 0)
+    %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: no whitelisted slot available") %}
+    CarbonableMinter.buy(quantity)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_add_to_whitelist_revert_if_not_owner{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        TRUE, FALSE, 5, unit_price, max_supply
+    )
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableMinter.add_to_whitelist(42, Uint256(1, 0))
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_add_to_whitelist_nominal_case{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        TRUE, FALSE, 5, unit_price, max_supply
+    )
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    let (success) = CarbonableMinter.add_to_whitelist(42, Uint256(33, 65))
+    assert success = TRUE
+    let (slots) = CarbonableMinter.whitelist(42)
+    assert slots = Uint256(33, 65)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_buy_user_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        TRUE, FALSE, 5, unit_price, max_supply
+    )
+
+    # Admin adds anyone_1 to whitelist
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    CarbonableMinter.add_to_whitelist(context.signers.anyone_1, Uint256(2, 0))
+    %{ stop() %}
+
+    # User: anyone_1
+    # Wants to buy 2 NFTs
+    # Whitelisted sale: OPEN
+    # Public sale: CLOSED
+    # Is user whitelisted: YES
+    # current NFT totalSupply: 5
+    # has enough funds: YES
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    let quantity = Uint256(2, 0)
+    %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
+    let (success) = CarbonableMinter.buy(quantity)
+    assert success = TRUE
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_buy_user_whitelisted_but_not_enough_slots{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        TRUE, FALSE, 5, unit_price, max_supply
+    )
+
+    # Admin adds anyone_1 to whitelist
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    CarbonableMinter.add_to_whitelist(context.signers.anyone_1, Uint256(1, 0))
+    %{ stop() %}
+
+    # User: anyone_1
+    # Wants to buy 2 NFTs
+    # Whitelisted sale: OPEN
+    # Public sale: CLOSED
+    # Is user whitelisted: YES (but not enough slots)
+    # current NFT totalSupply: 5
+    # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = Uint256(2, 0)
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
