@@ -53,7 +53,3 @@ cairo-format -i src/**/*.cairo tests/**/*.cairo
 ## 📄 License
 
 **carbonable-starknet-protocol** is released under the [MIT](LICENSE).
-
-```
-
-```
