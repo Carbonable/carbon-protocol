@@ -6,6 +6,8 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le
 from starkware.cairo.common.math import assert_not_zero
+from starkware.cairo.common.math_cmp import is_le
+
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 
@@ -15,6 +17,12 @@ from openzeppelin.token.erc721.interfaces.IERC721 import IERC721
 from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import IERC721_Enumerable
 
 from openzeppelin.access.ownable import Ownable
+
+@contract_interface
+namespace IERC721Mintable:
+    func mint(to : felt, token_id : Uint256):
+    end
+end
 
 # ------
 # STORAGE
@@ -56,10 +64,8 @@ func max_supply_for_mint_() -> (res : Uint256):
 end
 
 # Whitelist
-# TODO: use Merkle drop
-# https://github.com/ncitron/cairo-merkle-distributor
 @storage_var
-func whitelist_(account : felt) -> (res : Uint256):
+func whitelist_(account : felt) -> (res : felt):
 end
 
 namespace CarbonableMinter:
@@ -114,7 +120,7 @@ namespace CarbonableMinter:
 
     func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt
-    ) -> (slots : Uint256):
+    ) -> (slots : felt):
         let (slots) = whitelist_.read(account)
         return (slots)
     end
@@ -185,7 +191,7 @@ namespace CarbonableMinter:
     end
 
     func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        account : felt, slots : Uint256
+        account : felt, slots : felt
     ) -> (success : felt):
         # Access control check
         Ownable.assert_only_owner()
@@ -194,12 +200,14 @@ namespace CarbonableMinter:
     end
 
     func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        quantity : Uint256
+        quantity : felt
     ) -> (success : felt):
         alloc_locals
         # Get variables through system calls
         let (caller) = get_caller_address()
         let (contract_address) = get_contract_address()
+
+        let quantity_uint256 = Uint256(quantity, 0)
 
         # Check preconditions
         with_attr error_message("CarbonableMinter: caller is the zero address"):
@@ -214,8 +222,10 @@ namespace CarbonableMinter:
         let (public_sale_open) = public_sale_open_.read()
         let (whitelisted_slots) = whitelist_.read(caller)
 
+        let whitelisted_slots_uint256 = Uint256(quantity, 0)
+
         # Compute variables required to check business logic rules
-        let (enough_slots) = uint256_le(quantity, whitelisted_slots)
+        let (enough_slots) = is_le(quantity, whitelisted_slots)
         let at_least_one_sale_type_open = (whitelisted_sale_open + public_sale_open)
 
         # Check if at least whitelisted or public sale is open
@@ -232,7 +242,7 @@ namespace CarbonableMinter:
 
         # Check if enough NFTs available
         let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
-        let (supply_after_buy) = SafeUint256.add(total_supply, quantity)
+        let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
         let (max_supply_for_mint) = max_supply_for_mint_.read()
         let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
         with_attr error_message("CarbonableMinter: not enough available NFTs"):
@@ -240,7 +250,7 @@ namespace CarbonableMinter:
         end
 
         # Compute mint price
-        let (amount) = SafeUint256.mul(quantity, unit_price)
+        let (amount) = SafeUint256.mul(quantity_uint256, unit_price)
 
         # Do ERC20 transfer
         let (transfer_success) = IERC20.transferFrom(
@@ -251,8 +261,16 @@ namespace CarbonableMinter:
         end
 
         # TODO: do the actual NFT mint
-
+        let starting_index = total_supply.low
+        mint_n(caller, starting_index, quantity)
         # Success
         return (TRUE)
+    end
+
+    func mint_n{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        to : felt, starting_index : felt, quantity : felt
+    ):
+        # TODO: implement
+        return ()
     end
 end
