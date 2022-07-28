@@ -4,7 +4,7 @@
 %lang starknet
 # Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le
+from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le, uint256_eq
 from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.math_cmp import is_le
 
@@ -265,17 +265,35 @@ namespace CarbonableMinter:
             assert transfer_success = TRUE
         end
 
-        # TODO: do the actual NFT mint
-        let starting_index = total_supply.low
-        mint_n(caller, starting_index, quantity)
+        # Do the actual NFT mint
+        let starting_index = total_supply
+        mint_n(project_nft_address, caller, starting_index, quantity_uint256)
         # Success
         return (TRUE)
     end
 
+    ###
+    # Mint a number of NFTs to a recipient.
+    # @param nft_contract_address the address of the NFT contract
+    # @param to the address of the recipient
+    # @param starting_index the starting index
+    # @param quantity the quantity to mint
+    ###
     func mint_n{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        to : felt, starting_index : felt, quantity : felt
+        nft_contract_address : felt, to : felt, starting_index : Uint256, quantity : Uint256
     ):
-        # TODO: implement
+        alloc_locals
+        let (no_more_left) = uint256_eq(quantity, Uint256(0, 0))
+        if no_more_left == TRUE:
+            return ()
+        end
+        let one = Uint256(1, 0)
+        let (token_id) = SafeUint256.add(starting_index, one)
+        # Mint
+        IERC721Mintable.mint(nft_contract_address, to, token_id)
+
+        let (new_quantity) = SafeUint256.sub_le(quantity, one)
+        mint_n(nft_contract_address, to, token_id, new_quantity)
         return ()
     end
 end
