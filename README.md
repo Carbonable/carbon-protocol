@@ -14,6 +14,7 @@
 ## Usage
 
 > ## ⚠️ WARNING! ⚠️
+>
 > This is repo contains highly experimental code.
 > Expect rapid iteration.
 > **Use at your own risk.**
@@ -22,22 +23,31 @@
 
 #### 📦 Install the requirements
 
+- [protostar](https://github.com/software-mansion/protostar)
+
 ### ⛏️ Compile
 
 ```bash
-make
+protostar build
 ```
 
 ### 🌡️ Test
 
 ```bash
-make test
+# Run all tests
+protostar test
+
+# Run only unit tests
+protostar test tests/units
+
+# Run only integration tests
+protostar test tests/integrations
 ```
 
 ### 💋 Format code
 
 ```bash
-make format
+cairo-format -i src/**/*.cairo tests/**/*.cairo
 ```
 
 ## 📄 License
