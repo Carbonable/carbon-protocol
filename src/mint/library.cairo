@@ -221,8 +221,7 @@ namespace CarbonableMinter:
         let (whitelisted_sale_open) = whitelisted_sale_open_.read()
         let (public_sale_open) = public_sale_open_.read()
         let (whitelisted_slots) = whitelist_.read(caller)
-
-        let whitelisted_slots_uint256 = Uint256(quantity, 0)
+        let (max_buy_per_tx) = max_buy_per_tx_.read()
 
         # Compute variables required to check business logic rules
         let (enough_slots) = is_le(quantity, whitelisted_slots)
@@ -238,6 +237,12 @@ namespace CarbonableMinter:
             with_attr error_message("CarbonableMinter: no whitelisted slot available"):
                 assert enough_slots = TRUE
             end
+        end
+
+        # Check that desired quantity is lower than maximum allowed per transaction
+        let (quantity_allowed) = is_le(quantity, max_buy_per_tx)
+        with_attr error_message("CarbonableMinter: quantity not allowed"):
+            assert quantity_allowed = TRUE
         end
 
         # Check if enough NFTs available
