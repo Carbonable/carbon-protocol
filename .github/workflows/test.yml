@@ -1,12 +1,9 @@
-name: Tests
+name: CI Tests
 
-on:
-  push:
-    branches:
-      - main
+on: [push, pull_request, pull_request_target]
 
 jobs:
-  unit-tests:
+  protostar-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,5 +15,7 @@ jobs:
           source /home/runner/.bashrc | bash
       - name: Install protostar dependencies
         run: /home/runner/.protostar/dist/protostar/protostar install
+      - name: Compile smart contracts
+        run: /home/runner/.protostar/dist/protostar/protostar build
       - name: Run protostar tests
-        run: /home/runner/.protostar/dist/protostar/protostar test src
+        run: /home/runner/.protostar/dist/protostar/protostar test
