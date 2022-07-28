@@ -4,17 +4,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le
-from starkware.cairo.common.math import assert_not_zero
-from starkware.cairo.common.bool import TRUE, FALSE
-
-from openzeppelin.security.safemath import uint256_checked_add, uint256_checked_mul
-from openzeppelin.token.erc20.interfaces.IERC20 import IERC20
-from openzeppelin.token.erc721.interfaces.IERC721 import IERC721
-from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import IERC721_Enumerable
-
-from openzeppelin.access.ownable import Ownable_initializer, Ownable_only_owner
-
+from starkware.cairo.common.uint256 import Uint256
 from src.mint.library import CarbonableMinter
 
 # -----

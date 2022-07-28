@@ -9,12 +9,12 @@ from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 
-from openzeppelin.security.safemath import uint256_checked_add, uint256_checked_mul
+from openzeppelin.security.safemath import SafeUint256
 from openzeppelin.token.erc20.interfaces.IERC20 import IERC20
 from openzeppelin.token.erc721.interfaces.IERC721 import IERC721
 from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import IERC721_Enumerable
 
-from openzeppelin.access.ownable import Ownable_initializer, Ownable_only_owner
+from openzeppelin.access.ownable import Ownable
 
 # ------
 # STORAGE
@@ -69,46 +69,54 @@ namespace CarbonableMinter:
 
     func project_nft_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ) -> (project_nft_address : felt):
-        return project_nft_address_.read()
+        let (project_nft_address) = project_nft_address_.read()
+        return (project_nft_address)
     end
 
     func payment_token_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ) -> (payment_token_address : felt):
-        return payment_token_address_.read()
+        let (payment_token_address) = payment_token_address_.read()
+        return (payment_token_address)
     end
 
     func whitelisted_sale_open{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ) -> (whitelisted_sale_open : felt):
-        return whitelisted_sale_open_.read()
+        let (whitelisted_sale_open) = whitelisted_sale_open_.read()
+        return (whitelisted_sale_open)
     end
 
     func public_sale_open{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
         public_sale_open : felt
     ):
-        return public_sale_open_.read()
+        let (public_sale_open) = public_sale_open_.read()
+        return (public_sale_open)
     end
 
     func max_buy_per_tx{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
         max_buy_per_tx : felt
     ):
-        return max_buy_per_tx_.read()
+        let (max_buy_per_tx) = max_buy_per_tx_.read()
+        return (max_buy_per_tx)
     end
 
     func unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
         unit_price : Uint256
     ):
-        return unit_price_.read()
+        let (unit_price) = unit_price_.read()
+        return (unit_price)
     end
 
     func max_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ) -> (max_supply_for_mint : Uint256):
-        return max_supply_for_mint_.read()
+        let (max_supply_for_mint) = max_supply_for_mint_.read()
+        return (max_supply_for_mint)
     end
 
     func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt
     ) -> (slots : Uint256):
-        return whitelist_.read(account)
+        let (slots) = whitelist_.read(account)
+        return (slots)
     end
 
     # ------
@@ -125,7 +133,7 @@ namespace CarbonableMinter:
         unit_price : Uint256,
         max_supply_for_mint : Uint256,
     ):
-        Ownable_initializer(owner)
+        Ownable.initializer(owner)
         project_nft_address_.write(project_nft_address)
         payment_token_address_.write(payment_token_address)
         whitelisted_sale_open_.write(whitelisted_sale_open)
@@ -143,7 +151,8 @@ namespace CarbonableMinter:
     func set_whitelisted_sale_open{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(whitelisted_sale_open : felt):
-        Ownable_only_owner()
+        # Access control check
+        Ownable.assert_only_owner()
         whitelisted_sale_open_.write(whitelisted_sale_open)
         return ()
     end
@@ -151,7 +160,8 @@ namespace CarbonableMinter:
     func set_public_sale_open{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         public_sale_open : felt
     ):
-        Ownable_only_owner()
+        # Access control check
+        Ownable.assert_only_owner()
         public_sale_open_.write(public_sale_open)
         return ()
     end
@@ -159,7 +169,8 @@ namespace CarbonableMinter:
     func set_max_buy_per_tx{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         max_buy_per_tx : felt
     ):
-        Ownable_only_owner()
+        # Access control check
+        Ownable.assert_only_owner()
         max_buy_per_tx_.write(max_buy_per_tx)
         return ()
     end
@@ -167,7 +178,8 @@ namespace CarbonableMinter:
     func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         unit_price : Uint256
     ):
-        Ownable_only_owner()
+        # Access control check
+        Ownable.assert_only_owner()
         unit_price_.write(unit_price)
         return ()
     end
@@ -175,7 +187,8 @@ namespace CarbonableMinter:
     func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt, slots : Uint256
     ) -> (success : felt):
-        Ownable_only_owner()
+        # Access control check
+        Ownable.assert_only_owner()
         whitelist_.write(account, slots)
         return (TRUE)
     end
@@ -219,7 +232,7 @@ namespace CarbonableMinter:
 
         # Check if enough NFTs available
         let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
-        let (supply_after_buy) = uint256_checked_add(total_supply, quantity)
+        let (supply_after_buy) = SafeUint256.add(total_supply, quantity)
         let (max_supply_for_mint) = max_supply_for_mint_.read()
         let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
         with_attr error_message("CarbonableMinter: not enough available NFTs"):
@@ -227,7 +240,7 @@ namespace CarbonableMinter:
         end
 
         # Compute mint price
-        let (amount) = uint256_checked_mul(quantity, unit_price)
+        let (amount) = SafeUint256.mul(quantity, unit_price)
 
         # Do ERC20 transfer
         let (transfer_success) = IERC20.transferFrom(

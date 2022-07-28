@@ -1,5 +1,5 @@
 ["protostar.config"]
-protostar_version = "0.2.1"
+protostar_version = "0.2.5"
 
 ["protostar.project"]
 libs_path = "lib"
@@ -16,6 +16,8 @@ CarbonableMinter = [
     "./src/mint/minter.cairo",
 ]
 
+["protostar.test"]
+target = ["tests"]
 
 # https://github.com/Shard-Labs/starknet-devnet
 [profile.devnet.protostar.deploy]
