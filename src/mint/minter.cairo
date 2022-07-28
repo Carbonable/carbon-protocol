@@ -63,7 +63,7 @@ end
 @view
 func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     account : felt
-) -> (slots : Uint256):
+) -> (slots : felt):
     return CarbonableMinter.whitelist(account)
 end
 
@@ -128,13 +128,13 @@ end
 
 @external
 func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    account : felt, slots : Uint256
+    account : felt, slots : felt
 ) -> (success : felt):
     return CarbonableMinter.add_to_whitelist(account, slots)
 end
 
 @external
-func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quantity : Uint256) -> (
+func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quantity : felt) -> (
     success : felt
 ):
     return CarbonableMinter.buy(quantity)
