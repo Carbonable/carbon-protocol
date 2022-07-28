@@ -44,6 +44,18 @@ protostar test tests/units
 protostar test tests/integrations
 ```
 
+#### Test account
+
+If you want a fresh account for tests, you can deploy an account with the following command:
+
+```bash
+starknet deploy_account --network=<network>
+```
+
+> It will generate account information into the `~/.starknet_accounts/starknet_open_zeppelin_accounts.json` file.  
+> See also starknet [documentation](https://www.cairo-lang.org/docs/hello_starknet/account_setup.html#creating-an-account)
+> for more details.
+
 ### 💋 Format code
 
 ```bash
