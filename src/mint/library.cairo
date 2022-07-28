@@ -265,7 +265,7 @@ namespace CarbonableMinter:
             assert transfer_success = TRUE
         end
 
-        # TODO: do the actual NFT mint
+        # Do the actual NFT mint
         let starting_index = total_supply
         mint_n(project_nft_address, caller, starting_index, quantity_uint256)
         # Success
