@@ -58,6 +58,7 @@ func test_buy_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(ids.context.mocks.project_nft_address, "mint", []) %}
     %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
     let (success) = CarbonableMinter.buy(quantity)
     assert success = TRUE
@@ -234,6 +235,7 @@ func test_buy_user_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(ids.context.mocks.project_nft_address, "mint", []) %}
     %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
     let (success) = CarbonableMinter.buy(quantity)
     assert success = TRUE
