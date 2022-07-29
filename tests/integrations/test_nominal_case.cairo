@@ -6,122 +6,107 @@
 # Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.math import assert_not_zero
+from starkware.cairo.common.uint256 import Uint256
+from starkware.starknet.common.syscalls import get_block_timestamp
+
+# OpenZeppelin dependencies
+from openzeppelin.token.erc20.interfaces.IERC20 import IERC20
 
 # Project dependencies
-from tests.integrations.library import (
-    carbonable_minter_instance,
-    project_nft_instance,
-    payment_token_instance,
-    admin_instance as admin,
-    anyone_instance as anyone,
-)
+from interfaces.minter import ICarbonableMinter
+
+# Shared context
+const ADMIN = 'carbonable-admin'
+const USER_1 = 'user-1'
+
+# CarbonableProjectNFT context
+const NFT_NAME = 'Carbonable ERC-721 Test'
+const NFT_SYMBOL = 'CET'
+
+# CarbonableMint
+const PAYMENT_TOKEN_ADDRESS = 0x073314940630fd6dcda0d772d4c972c4e0a9946bef9dabf4ef84eda8ef542b82
+const WHITELISTED_SALE_OPEN = FALSE
+const PUBLIC_SALE_OPEN = TRUE
+const MAX_BUY_PER_TX = 5
+const UNIT_PRICE = 10
+const MAX_SUPPLY_FOR_MINT = 10
 
 @view
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    alloc_locals
-    tempvar carbonable_minter
+    tempvar project_nft_contract
+    tempvar carbonable_minter_contract
     %{
-        # --- INITIAL SETTINGS ---
-        # User addresses
-        context.ADMIN = 1000
-        context.ANYONE = 1001
-        # CarbonableProjectNFT
-        context.NFT_NAME = 'Carbonable ERC-721 Test'
-        context.NFT_SYMBOL = 'CET'
-        # Payment token
-        context.TOKEN_NAME = 'StableCoinToken'
-        context.TOKEN_SYMBOL = 'SCT'
-        context.TOKEN_DECIMALS = 6
-        context.TOKEN_INITIAL_SUPPLY = 1000000
-        # CarbonableMint
-        context.WHITELISTED_SALE_OPEN = ids.TRUE
-        context.PUBLIC_SALE_OPEN = ids.FALSE
-        context.MAX_BUY_PER_TX = 5
-        context.UNIT_PRICE = 10
-        context.MAX_SUPPLY_FOR_MINT = 10
-
-        # ERC-721 deployment
-        context.project_nft_contract = deploy_contract(
+        ids.project_nft_contract = deploy_contract(
             "./src/nft/project/CarbonableProjectNFT.cairo",
             {
-                "name": context.NFT_NAME,
-                "symbol": context.NFT_SYMBOL,
-                "owner": context.ADMIN,
+                "name": ids.NFT_NAME,
+                "symbol": ids.NFT_SYMBOL,
+                "owner": ids.ADMIN,
             },
-        ).contract_address
+        ).contract_address 
+        context.project_nft_contract = ids.project_nft_contract
 
-        # ERC-20 deployment
-        context.payment_token_contract = deploy_contract(
-            "./tests/mocks/token/erc20.cairo",
-            {
-                "name": context.TOKEN_NAME,
-                "symbol": context.TOKEN_SYMBOL,
-                "decimals": context.TOKEN_DECIMALS,
-                "initial_supply": context.TOKEN_INITIAL_SUPPLY,
-                "recipient": context.ANYONE
-            },
-        ).contract_address
-
-        # Minter deployment
-        context.carbonable_minter_contract = deploy_contract(
+        ids.carbonable_minter_contract = deploy_contract(
             "./src/mint/minter.cairo",
             {
-                "owner": context.ADMIN,
-                "project_nft_address": context.project_nft_contract,
-                "payment_token_address": context.payment_token_contract,
-                "whitelisted_sale_open": context.WHITELISTED_SALE_OPEN,
-                "public_sale_open": context.PUBLIC_SALE_OPEN,
-                "max_buy_per_tx": context.MAX_BUY_PER_TX,
-                "unit_price": context.UNIT_PRICE,
-                "max_supply_for_mint": context.MAX_SUPPLY_FOR_MINT,
+                "owner": ids.ADMIN,
+                "project_nft_address": ids.project_nft_contract,
+                "payment_token_address": ids.PAYMENT_TOKEN_ADDRESS,
+                "whitelisted_sale_open": ids.WHITELISTED_SALE_OPEN,
+                "public_sale_open": ids.PUBLIC_SALE_OPEN,
+                "max_buy_per_tx": ids.MAX_BUY_PER_TX,
+                "unit_price": ids.UNIT_PRICE,
+                "max_supply_for_mint": ids.MAX_SUPPLY_FOR_MINT,
             },
-        ).contract_address
-        ids.carbonable_minter = context.carbonable_minter_contract
+        ).contract_address 
+        context.carbonable_minter_contract = ids.carbonable_minter_contract
     %}
 
-    # Transfer project nft ownershop from admin to minter
-    admin.transferOwnership(carbonable_minter)
+    %{ stop_pranks = [start_prank(ids.ADMIN, contract) for contract in [ids.project_nft_contract, ids.carbonable_minter_contract] ] %}
+    # Setup contracts with admin account
+    %{ [stop_prank() for stop_prank in stop_pranks] %}
 
     return ()
 end
 
 @view
-func test_e2e_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # STORY
-    # ---
-    # User: ANYONE
-    # - wants to buy 6 NFTs (5 whitelist, 1 public)
-    # - whitelisted: TRUE
-    # - has enough funds: YES
-    let (anyone_address) = anyone.get_address()
+func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    alloc_locals
+    # Get ERC721 token deployed contract instance
+    let (nft) = project_nft_instance.deployed()
+    # Get Carbonable Minter deployed contract instance
+    let (carbonable_minter) = carbonable_minter_instance.deployed()
 
-    admin.add_to_whitelist(account=anyone_address, slots=5)
-    anyone.approve(quantity=5)
-    anyone.buy(quantity=5)
-    admin.set_whitelisted_sale_open(FALSE)
-    admin.set_public_sale_open(TRUE)
-    anyone.approve(quantity=1)
-    anyone.buy(quantity=1)
+    with carbonable_minter:
+        # Buy 2 NFTs
+        let quantity = 2
+        let (success) = ICarbonableMinter.buy(carbonable_minter, quantity)
+        assert success = TRUE
+    end
 
     return ()
 end
 
-@view
-func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # STORY
-    # ---
-    # User: ANYONE
-    # - wants to buy 6 NFTs (1 whitelist, 5 public)
-    # - whitelisted: FALSE
-    # - has enough funds: YES
+namespace carbonable_minter_instance:
+    func deployed() -> (carbonable_minter_contract : felt):
+        tempvar carbonable_minter_contract
+        %{ ids.carbonable_minter_contract = context.carbonable_minter_contract %}
+        return (carbonable_minter_contract)
+    end
 
-    anyone.approve(quantity=1)
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: no whitelisted slot available") %}
-    anyone.buy(quantity=1)
-    admin.set_whitelisted_sale_open(FALSE)
-    admin.set_public_sale_open(TRUE)
-    anyone.approve(quantity=5)
-    anyone.buy(quantity=5)
+    func buy(quantity : felt) -> (success : felt):
+        %{ stop_prank = start_prank(ids.ADMIN, ids.carbonable_minter) %}
+        let (success) = ICarbonableMinter.buy(quantity)
+        %{ stop_prank() %}
+        return (success)
+    end
+end
 
-    return ()
+namespace project_nft_instance:
+    func deployed() -> (project_nft_contract : felt):
+        tempvar project_nft_contract
+        %{ ids.project_nft_contract = context.project_nft_contract %}
+        return (project_nft_contract)
+    end
 end
