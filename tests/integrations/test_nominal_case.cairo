@@ -25,17 +25,21 @@ const NFT_NAME = 'Carbonable ERC-721 Test'
 const NFT_SYMBOL = 'CET'
 
 # CarbonableMint
-const PAYMENT_TOKEN_ADDRESS = 0x073314940630fd6dcda0d772d4c972c4e0a9946bef9dabf4ef84eda8ef542b82
+const PAYMENT_TOKEN_ADDRESS = 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7
 const WHITELISTED_SALE_OPEN = FALSE
 const PUBLIC_SALE_OPEN = TRUE
 const MAX_BUY_PER_TX = 5
 const UNIT_PRICE = 10
 const MAX_SUPPLY_FOR_MINT = 10
 
+
 @view
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    alloc_locals
     tempvar project_nft_contract
     tempvar carbonable_minter_contract
+    # hex address defined here to be felt-typed (const doesn't type it well)
+    tempvar payment_token_address : felt = PAYMENT_TOKEN_ADDRESS
     %{
         ids.project_nft_contract = deploy_contract(
             "./src/nft/project/CarbonableProjectNFT.cairo",
@@ -52,7 +56,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
             {
                 "owner": ids.ADMIN,
                 "project_nft_address": ids.project_nft_contract,
-                "payment_token_address": ids.PAYMENT_TOKEN_ADDRESS,
+                "payment_token_address": ids.payment_token_address,
                 "whitelisted_sale_open": ids.WHITELISTED_SALE_OPEN,
                 "public_sale_open": ids.PUBLIC_SALE_OPEN,
                 "max_buy_per_tx": ids.MAX_BUY_PER_TX,
@@ -81,6 +85,7 @@ func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
     with carbonable_minter:
         # Buy 2 NFTs
         let quantity = 2
+        %{ expect_revert("UNINITIALIZED_CONTRACT") %}
         let (success) = ICarbonableMinter.buy(carbonable_minter, quantity)
         assert success = TRUE
     end
