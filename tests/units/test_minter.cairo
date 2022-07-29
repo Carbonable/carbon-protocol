@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Carbonable smart contracts written in Cairo v0.1.0 (test_minter.cairo)
+
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Carbonable smart contracts written in Cairo v0.1.0 (CarbonableMinter.cairo)
+# Carbonable smart contracts written in Cairo v0.1.0 (minter.cairo)
 
 %lang starknet
 
