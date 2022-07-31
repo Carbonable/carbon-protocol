@@ -87,44 +87,44 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
         context.carbonable_minter_contract = ids.carbonable_minter_contract
     %}
 
-    return ()
-end
-
-@view
-func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    alloc_locals
-    # Get ERC721 token deployed contract instance
     let (project_nft) = project_nft_instance.deployed()
-    %{ print(f"project_nft contract address: {ids.project_nft}") %}
-    # Get ERC20 token deployed contract instance
     let (payment_token) = payment_token_instance.deployed()
-    %{ print(f"payment_token contract address: {ids.payment_token}") %}
-    # Get Carbonable Minter deployed contract instance
     let (carbonable_minter) = carbonable_minter_instance.deployed()
-    %{ print(f"carbonable_minter contract address: {ids.carbonable_minter}") %}
 
     with project_nft:
-        %{ expect_events({"name": "OwnershipTransferred", "data": [ids.ADMIN, ids.carbonable_minter]}) %}
         project_nft_instance.transferOwnership(carbonable_minter)
         let (owner) = project_nft_instance.owner()
         assert owner = carbonable_minter
     end
 
+    return ()
+end
+
+@view
+func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # User: ANYONE_1
+    # Wants to buy 2 NFTs
+    # Whitelisted sale: CLOSED
+    # Public sale: OPEN
+    # current NFT totalSupply: 10
+    # has enough funds: YES
+    alloc_locals
+    let (project_nft) = project_nft_instance.deployed()
+    let (payment_token) = payment_token_instance.deployed()
+    let (carbonable_minter) = carbonable_minter_instance.deployed()
+
+    let quantity = 2
+    with carbonable_minter:
+        let (unit_price) = carbonable_minter_instance.unit_price()
+    end
+    let (amount) = SafeUint256.mul(Uint256(quantity, 0), unit_price)
+
     with payment_token:
-        let (user_balance) = payment_token_instance.balanceOf(ANYONE_1)
-        assert user_balance = Uint256(1000000, 0)
-
-        %{ expect_events({"name": "Approval", "data": [ids.ANYONE_1, ids.carbonable_minter, 20, 0]}) %}
-        let (success) = payment_token_instance.approve(carbonable_minter, Uint256(20, 0))
+        let (success) = payment_token_instance.approve(carbonable_minter, amount)
         assert success = TRUE
-
-        let (allowance) = payment_token_instance.allowance(ANYONE_1, carbonable_minter)
-        assert allowance = Uint256(20, 0)
     end
 
     with carbonable_minter:
-        # Buy 2 NFTs
-        let quantity = 2
         let (success) = carbonable_minter_instance.buy(quantity)
         assert success = TRUE
     end
@@ -192,6 +192,13 @@ namespace carbonable_minter_instance:
         tempvar carbonable_minter_contract
         %{ ids.carbonable_minter_contract = context.carbonable_minter_contract %}
         return (carbonable_minter_contract)
+    end
+
+    func unit_price{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }() -> (unit_price : Uint256):
+        let (unit_price) = ICarbonableMinter.unit_price(carbonable_minter)
+        return (unit_price)
     end
 
     func buy{
