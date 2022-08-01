@@ -20,7 +20,7 @@ from interfaces.CarbonableProjectNFT import ICarbonableProjectNFT
 
 # Context
 const ADMIN = 1000
-const ANYONE_1 = 1001
+const ANYONE = 1001
 
 # CarbonableProjectNFT
 const NFT_NAME = 'Carbonable ERC-721 Test'
@@ -33,8 +33,8 @@ const TOKEN_DECIMALS = 6
 const TOKEN_INITIAL_SUPPLY = 1000000
 
 # CarbonableMint
-const WHITELISTED_SALE_OPEN = FALSE
-const PUBLIC_SALE_OPEN = TRUE
+const WHITELISTED_SALE_OPEN = TRUE
+const PUBLIC_SALE_OPEN = FALSE
 const MAX_BUY_PER_TX = 5
 const UNIT_PRICE = 10
 const MAX_SUPPLY_FOR_MINT = 10
@@ -65,7 +65,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
                 "symbol": ids.TOKEN_SYMBOL,
                 "decimals": ids.TOKEN_DECIMALS,
                 "initial_supply": ids.TOKEN_INITIAL_SUPPLY,
-                "recipient": ids.ANYONE_1
+                "recipient": ids.ANYONE
             },
         ).contract_address 
         context.payment_token_contract = ids.payment_token_contract
@@ -90,9 +90,10 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     let (project_nft) = project_nft_instance.deployed()
     let (payment_token) = payment_token_instance.deployed()
     let (carbonable_minter) = carbonable_minter_instance.deployed()
+    let (admin) = metadata.admin()
 
     with project_nft:
-        project_nft_instance.transferOwnership(carbonable_minter)
+        project_nft_instance.transferOwnership(carbonable_minter, caller=admin)
         let (owner) = project_nft_instance.owner()
         assert owner = carbonable_minter
     end
@@ -102,34 +103,94 @@ end
 
 @view
 func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # User: ANYONE_1
-    # Wants to buy 2 NFTs
-    # Whitelisted sale: CLOSED
-    # Public sale: OPEN
-    # current NFT totalSupply: 10
-    # has enough funds: YES
+    # STORY
+    # ---
+    # User: ANYONE
+    # - wants to buy 6 NFTs (5 whitelist, 1 public)
+    # - whitelisted: TRUE
+    # - has enough funds: YES
+    #
+    # INITIAL STATE
+    # ---
+    # WHITELISTED_SALE_OPEN = TRUE
+    # PUBLIC_SALE_OPEN = FALSE
+    # MAX_BUY_PER_TX = 5
+    # UNIT_PRICE = 10
+    # MAX_SUPPLY_FOR_MINT = 10
     alloc_locals
     let (project_nft) = project_nft_instance.deployed()
     let (payment_token) = payment_token_instance.deployed()
     let (carbonable_minter) = carbonable_minter_instance.deployed()
+    let (admin) = metadata.admin()
+    let (anyone) = metadata.anyone()
 
-    let quantity = 2
+    let whitelist_sale_quantity = 5
+    let public_sale_quantity = 1
+    let expected_final_quantity = Uint256(6, 0)
+
+    # Admin set-up the minter contract and get the nft unit price
     with carbonable_minter:
+        carbonable_minter_instance.add_to_whitelist(anyone, 5, caller=admin)
         let (unit_price) = carbonable_minter_instance.unit_price()
     end
-    let (amount) = SafeUint256.mul(Uint256(quantity, 0), unit_price)
 
+    # Compute the amount of payment_token required for the whitelist sale
+    let (whitelist_sale_amount) = SafeUint256.mul(Uint256(whitelist_sale_quantity, 0), unit_price)
+
+    # Anyone approves the exact spend and buy nfts
     with payment_token:
-        let (success) = payment_token_instance.approve(carbonable_minter, amount)
+        let (success) = payment_token_instance.approve(
+            carbonable_minter, whitelist_sale_amount, caller=anyone
+        )
+        assert success = TRUE
+    end
+    with carbonable_minter:
+        let (success) = carbonable_minter_instance.buy(whitelist_sale_quantity, caller=anyone)
         assert success = TRUE
     end
 
+    # Admin turn the whitelist sale off and enable public sale
     with carbonable_minter:
-        let (success) = carbonable_minter_instance.buy(quantity)
+        carbonable_minter_instance.set_whitelisted_sale_open(FALSE, caller=admin)
+        carbonable_minter_instance.set_public_sale_open(TRUE, caller=admin)
+    end
+
+    # Compute the amount of payment_token required for the public sale
+    let (public_sale_amount) = SafeUint256.mul(Uint256(public_sale_quantity, 0), unit_price)
+
+    # Anyone approves the exact spend and buy nfts
+    with payment_token:
+        let (success) = payment_token_instance.approve(
+            carbonable_minter, public_sale_amount, caller=anyone
+        )
         assert success = TRUE
+    end
+    with carbonable_minter:
+        let (success) = carbonable_minter_instance.buy(public_sale_quantity, caller=anyone)
+        assert success = TRUE
+    end
+
+    # Check the user final nfts balance
+    with project_nft:
+        let (balance) = project_nft_instance.balanceOf(anyone)
+        assert balance = expected_final_quantity
     end
 
     return ()
+end
+
+namespace metadata:
+    func admin() -> (admin : felt):
+        tempvar admin
+        %{ ids.admin = ids.ADMIN %}
+        return (admin)
+    end
+
+    func anyone() -> (user : felt):
+        tempvar anyone
+        %{ ids.anyone = ids.ANYONE %}
+        return (anyone)
+    end
 end
 
 namespace project_nft_instance:
@@ -141,8 +202,8 @@ namespace project_nft_instance:
 
     func transferOwnership{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
-    }(newOwner : felt):
-        %{ stop_prank = start_prank(caller_address=ids.ADMIN, target_contract_address=ids.project_nft) %}
+    }(newOwner : felt, caller : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.project_nft) %}
         ICarbonableProjectNFT.transferOwnership(project_nft, newOwner)
         %{ stop_prank() %}
         return ()
@@ -153,6 +214,13 @@ namespace project_nft_instance:
     }() -> (owner : felt):
         let (owner : felt) = ICarbonableProjectNFT.owner(project_nft)
         return (owner)
+    end
+
+    func balanceOf{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
+    }(owner : felt) -> (balance : Uint256):
+        let (balance) = IERC20.balanceOf(project_nft, owner)
+        return (balance)
     end
 end
 
@@ -172,8 +240,8 @@ namespace payment_token_instance:
 
     func approve{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, payment_token : felt
-    }(spender : felt, amount : Uint256) -> (success : felt):
-        %{ stop_prank = start_prank(ids.ANYONE_1, ids.payment_token) %}
+    }(spender : felt, amount : Uint256, caller : felt) -> (success : felt):
+        %{ stop_prank = start_prank(ids.caller, ids.payment_token) %}
         let (success) = IERC20.approve(payment_token, spender, amount)
         %{ stop_prank() %}
         return (success)
@@ -201,10 +269,37 @@ namespace carbonable_minter_instance:
         return (unit_price)
     end
 
+    func set_whitelisted_sale_open{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }(whitelisted_sale_open : felt, caller : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        ICarbonableMinter.set_whitelisted_sale_open(carbonable_minter, whitelisted_sale_open)
+        %{ stop_prank() %}
+        return ()
+    end
+
+    func set_public_sale_open{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }(public_sale_open : felt, caller : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        ICarbonableMinter.set_public_sale_open(carbonable_minter, public_sale_open)
+        %{ stop_prank() %}
+        return ()
+    end
+
+    func add_to_whitelist{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }(account : felt, slots : felt, caller : felt) -> (success : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        let (success) = ICarbonableMinter.add_to_whitelist(carbonable_minter, account, slots)
+        %{ stop_prank() %}
+        return (success)
+    end
+
     func buy{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
-    }(quantity : felt) -> (success : felt):
-        %{ stop_prank = start_prank(caller_address=ids.ANYONE_1, target_contract_address=ids.carbonable_minter) %}
+    }(quantity : felt, caller : felt) -> (success : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
         let (success) = ICarbonableMinter.buy(carbonable_minter, quantity)
         %{ stop_prank() %}
         return (success)
