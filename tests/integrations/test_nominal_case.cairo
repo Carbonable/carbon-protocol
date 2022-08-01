@@ -102,7 +102,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 @view
-func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func test_e2e_whitelist_on{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     # STORY
     # ---
     # User: ANYONE
@@ -126,7 +126,7 @@ func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
 
     let whitelist_sale_quantity = 5
     let public_sale_quantity = 1
-    let expected_final_quantity = Uint256(6, 0)
+    let expected_nft_balance = Uint256(6, 0)
 
     # Admin set-up the minter contract and get the nft unit price
     with carbonable_minter:
@@ -139,6 +139,7 @@ func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
 
     # Anyone approves the exact spend and buy nfts
     with payment_token:
+        let (initial_token_balance) = payment_token_instance.balanceOf(anyone)
         let (success) = payment_token_instance.approve(
             carbonable_minter, whitelist_sale_amount, caller=anyone
         )
@@ -149,7 +150,7 @@ func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
         assert success = TRUE
     end
 
-    # Admin turn the whitelist sale off and enable public sale
+    # Admin turn the whitelist sale off and enable the public sale
     with carbonable_minter:
         carbonable_minter_instance.set_whitelisted_sale_open(FALSE, caller=admin)
         carbonable_minter_instance.set_public_sale_open(TRUE, caller=admin)
@@ -172,8 +173,103 @@ func test_e2e{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
 
     # Check the user final nfts balance
     with project_nft:
-        let (balance) = project_nft_instance.balanceOf(anyone)
-        assert balance = expected_final_quantity
+        let (nft_balance) = project_nft_instance.balanceOf(anyone)
+        assert nft_balance = expected_nft_balance
+    end
+
+    # Check the user final token balance
+    with payment_token:
+        let (token_balance) = payment_token_instance.balanceOf(anyone)
+        let (delta) = SafeUint256.add(whitelist_sale_amount, public_sale_amount)
+        let (expected_token_balance) = SafeUint256.sub_le(initial_token_balance, delta)
+        assert token_balance = expected_token_balance
+    end
+
+    return ()
+end
+
+@view
+func test_e2e_whitelist_off{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # STORY
+    # ---
+    # User: ANYONE
+    # - wants to buy 6 NFTs (1 whitelist, 5 public)
+    # - whitelisted: FALSE
+    # - has enough funds: YES
+    #
+    # INITIAL STATE
+    # ---
+    # WHITELISTED_SALE_OPEN = TRUE
+    # PUBLIC_SALE_OPEN = FALSE
+    # MAX_BUY_PER_TX = 5
+    # UNIT_PRICE = 10
+    # MAX_SUPPLY_FOR_MINT = 10
+    alloc_locals
+    let (project_nft) = project_nft_instance.deployed()
+    let (payment_token) = payment_token_instance.deployed()
+    let (carbonable_minter) = carbonable_minter_instance.deployed()
+    let (admin) = metadata.admin()
+    let (anyone) = metadata.anyone()
+
+    let whitelist_sale_quantity = 1
+    let public_sale_quantity = 5
+    let expected_nft_balance = Uint256(5, 0)
+
+    # Get the nft unit price
+    with carbonable_minter:
+        let (unit_price) = carbonable_minter_instance.unit_price()
+    end
+
+    # Compute the amount of payment_token required for the whitelist sale
+    let (whitelist_sale_amount) = SafeUint256.mul(Uint256(whitelist_sale_quantity, 0), unit_price)
+
+    # Anyone approves the exact spend and buy nfts
+    with payment_token:
+        let (initial_token_balance) = payment_token_instance.balanceOf(anyone)
+        let (success) = payment_token_instance.approve(
+            carbonable_minter, whitelist_sale_amount, caller=anyone
+        )
+        assert success = TRUE
+    end
+
+    with carbonable_minter:
+        %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: no whitelisted slot available") %}
+        let (success) = carbonable_minter_instance.buy(whitelist_sale_quantity, caller=anyone)
+        assert success = FALSE
+    end
+
+    # Admin turn the whitelist sale off and enable the public sale
+    with carbonable_minter:
+        carbonable_minter_instance.set_whitelisted_sale_open(FALSE, caller=admin)
+        carbonable_minter_instance.set_public_sale_open(TRUE, caller=admin)
+    end
+
+    # Compute the amount of payment_token required for the public sale
+    let (public_sale_amount) = SafeUint256.mul(Uint256(public_sale_quantity, 0), unit_price)
+
+    # Anyone approves the exact spend and buy nfts
+    with payment_token:
+        let (success) = payment_token_instance.approve(
+            carbonable_minter, public_sale_amount, caller=anyone
+        )
+        assert success = TRUE
+    end
+    with carbonable_minter:
+        let (success) = carbonable_minter_instance.buy(public_sale_quantity, caller=anyone)
+        assert success = TRUE
+    end
+
+    # Check the user final nfts balance
+    with project_nft:
+        let (nft_balance) = project_nft_instance.balanceOf(anyone)
+        assert nft_balance = expected_nft_balance
+    end
+
+    # Check the user final token balance
+    with payment_token:
+        let (token_balance) = payment_token_instance.balanceOf(anyone)
+        let (expected_token_balance) = SafeUint256.sub_le(initial_token_balance, public_sale_amount)
+        assert token_balance = expected_token_balance
     end
 
     return ()
