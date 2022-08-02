@@ -6,7 +6,6 @@
 # Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
-from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.uint256 import Uint256
 
 # OpenZeppelin dependencies
@@ -15,7 +14,11 @@ from openzeppelin.security.safemath import SafeUint256
 
 # Project dependencies
 from interfaces.minter import ICarbonableMinter
-from interfaces.CarbonableProjectNFT import ICarbonableProjectNFT
+from interfaces.CarbonableProjectNFT  import (
+    IERC721,
+    IERC721_Enumerable,
+    ICarbonableProjectNFT,
+)
 
 namespace project_nft_instance:
 
@@ -39,14 +42,14 @@ namespace project_nft_instance:
     func balanceOf{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
     }(owner : felt) -> (balance : Uint256):
-        let (balance) = IERC20.balanceOf(project_nft, owner)
+        let (balance) = IERC721.balanceOf(project_nft, owner)
         return (balance)
     end
     
     func totalSupply{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
     }() -> (totalSupply: Uint256):
-        let (total_supply) = IERC20.totalSupply(project_nft)
+        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft)
         return (total_supply)
     end
 
@@ -227,17 +230,21 @@ end
 
 namespace admin_instance:
 
-    func get_caller_address() -> (address : felt):
+    # Internals
+
+    func get_address() -> (address : felt):
         tempvar admin
-        %{ ids.admin = context.admin %}
+        %{ ids.admin = context.ADMIN %}
         return (admin)
     end
+
+    # Externals
 
     func set_whitelisted_sale_open{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(whitelisted_sale_open : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_caller_address()
+        let (caller) = admin_instance.get_address()
         with carbonable_minter:
             carbonable_minter_instance.set_whitelisted_sale_open(whitelisted_sale_open=whitelisted_sale_open, caller=caller)
             let (returned_whitelisted_sale_open) = carbonable_minter_instance.whitelisted_sale_open()
@@ -250,7 +257,7 @@ namespace admin_instance:
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(public_sale_open : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_caller_address()
+        let (caller) = admin_instance.get_address()
         with carbonable_minter:
             carbonable_minter_instance.set_public_sale_open(public_sale_open=public_sale_open, caller=caller)
             let (returned_public_sale_open) = carbonable_minter_instance.public_sale_open()
@@ -263,7 +270,7 @@ namespace admin_instance:
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(max_buy_per_tx : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_caller_address()
+        let (caller) = admin_instance.get_address()
         with carbonable_minter:
             carbonable_minter_instance.set_max_buy_per_tx(max_buy_per_tx=max_buy_per_tx, caller=caller)
             let (returned_max_buy_per_tx) = carbonable_minter_instance.max_buy_per_tx()
@@ -276,7 +283,7 @@ namespace admin_instance:
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(unit_price : Uint256):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_caller_address()
+        let (caller) = admin_instance.get_address()
         with carbonable_minter:
             carbonable_minter_instance.set_unit_price(unit_price=unit_price, caller=caller)
             let (returned_unit_price) = carbonable_minter_instance.unit_price()
@@ -289,7 +296,7 @@ namespace admin_instance:
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(account : felt, slots : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_caller_address()
+        let (caller) = admin_instance.get_address()
         with carbonable_minter:
             let (success) = carbonable_minter_instance.add_to_whitelist(account=account, slots=slots, caller=caller)
             assert success = TRUE
@@ -298,15 +305,34 @@ namespace admin_instance:
         end
         return ()
     end
+
+    func transferOwnership{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(newOwner : felt):
+        let (project_nft) = project_nft_instance.deployed()
+        let (caller) = admin_instance.get_address()
+        with project_nft:
+            project_nft_instance.transferOwnership(newOwner=newOwner, caller=caller)
+            let (owner) = project_nft_instance.owner()
+            assert owner = newOwner
+        end
+        return ()
+    end
+
+
 end
 
 namespace anyone_instance:
 
-    func get_caller_address() -> (address : felt):
+    # Internals
+
+    func get_address() -> (address : felt):
         tempvar anyone
-        %{ ids.anyone = context.anyone %}
+        %{ ids.anyone = context.ANYONE %}
         return (anyone)
     end
+
+    # Externals
 
     func approve{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
@@ -314,7 +340,7 @@ namespace anyone_instance:
         alloc_locals
         let (carbonable_minter) = carbonable_minter_instance.deployed()
         let (payment_token) = payment_token_instance.deployed()
-        let (caller) = anyone_instance.get_caller_address()
+        let (caller) = anyone_instance.get_address()
         with carbonable_minter:
             let (unit_price) = carbonable_minter_instance.unit_price()
             let (allowance) = SafeUint256.mul(Uint256(quantity, 0), unit_price)
@@ -335,7 +361,7 @@ namespace anyone_instance:
         let (carbonable_minter) = carbonable_minter_instance.deployed()
         let (project_nft) = project_nft_instance.deployed()
         let (payment_token) = payment_token_instance.deployed()
-        let (caller) = anyone_instance.get_caller_address()
+        let (caller) = anyone_instance.get_address()
 
         # get user nft and payment token balances to check after buy
         with project_nft:
