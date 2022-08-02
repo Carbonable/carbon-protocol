@@ -6,6 +6,7 @@
 # Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.uint256 import Uint256
 
 # OpenZeppelin dependencies
@@ -14,9 +15,10 @@ from openzeppelin.security.safemath import SafeUint256
 
 # Project dependencies
 from interfaces.minter import ICarbonableMinter
-from interfaces.CarbonableProjectNFT import IERC721, IERC721_Enumerable, ICarbonableProjectNFT
+from interfaces.CarbonableProjectNFT import ICarbonableProjectNFT
 
 namespace project_nft_instance:
+
     # Internals
 
     func deployed() -> (project_nft_contract : felt):
@@ -37,14 +39,14 @@ namespace project_nft_instance:
     func balanceOf{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
     }(owner : felt) -> (balance : Uint256):
-        let (balance) = IERC721.balanceOf(project_nft, owner)
+        let (balance) = IERC20.balanceOf(project_nft, owner)
         return (balance)
     end
-
+    
     func totalSupply{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
-    }() -> (totalSupply : Uint256):
-        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft)
+    }() -> (totalSupply: Uint256):
+        let (total_supply) = IERC20.totalSupply(project_nft)
         return (total_supply)
     end
 
@@ -61,6 +63,7 @@ namespace project_nft_instance:
 end
 
 namespace payment_token_instance:
+
     # Internals
 
     func deployed() -> (payment_token_contract : felt):
@@ -98,6 +101,7 @@ namespace payment_token_instance:
 end
 
 namespace carbonable_minter_instance:
+
     # Internals
 
     func deployed() -> (carbonable_minter_contract : felt):
@@ -222,67 +226,57 @@ namespace carbonable_minter_instance:
 end
 
 namespace admin_instance:
-    # Internals
 
-    func get_address() -> (address : felt):
+    func get_caller_address() -> (address : felt):
         tempvar admin
-        %{ ids.admin = context.ADMIN %}
+        %{ ids.admin = context.admin %}
         return (admin)
     end
-
-    # Externals
 
     func set_whitelisted_sale_open{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(whitelisted_sale_open : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_address()
+        let (caller) = admin_instance.get_caller_address()
         with carbonable_minter:
-            carbonable_minter_instance.set_whitelisted_sale_open(
-                whitelisted_sale_open=whitelisted_sale_open, caller=caller
-            )
-            let (returned_whitelisted_sale_open) = carbonable_minter_instance.whitelisted_sale_open(
-                )
+            carbonable_minter_instance.set_whitelisted_sale_open(whitelisted_sale_open=whitelisted_sale_open, caller=caller)
+            let (returned_whitelisted_sale_open) = carbonable_minter_instance.whitelisted_sale_open()
             assert returned_whitelisted_sale_open = whitelisted_sale_open
         end
         return ()
     end
 
-    func set_public_sale_open{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        public_sale_open : felt
-    ):
+    func set_public_sale_open{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(public_sale_open : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_address()
+        let (caller) = admin_instance.get_caller_address()
         with carbonable_minter:
-            carbonable_minter_instance.set_public_sale_open(
-                public_sale_open=public_sale_open, caller=caller
-            )
+            carbonable_minter_instance.set_public_sale_open(public_sale_open=public_sale_open, caller=caller)
             let (returned_public_sale_open) = carbonable_minter_instance.public_sale_open()
             assert returned_public_sale_open = public_sale_open
         end
         return ()
     end
 
-    func set_max_buy_per_tx{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        max_buy_per_tx : felt
-    ):
+    func set_max_buy_per_tx{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(max_buy_per_tx : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_address()
+        let (caller) = admin_instance.get_caller_address()
         with carbonable_minter:
-            carbonable_minter_instance.set_max_buy_per_tx(
-                max_buy_per_tx=max_buy_per_tx, caller=caller
-            )
+            carbonable_minter_instance.set_max_buy_per_tx(max_buy_per_tx=max_buy_per_tx, caller=caller)
             let (returned_max_buy_per_tx) = carbonable_minter_instance.max_buy_per_tx()
             assert returned_max_buy_per_tx = max_buy_per_tx
         end
         return ()
     end
 
-    func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        unit_price : Uint256
-    ):
+    func set_unit_price{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(unit_price : Uint256):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_address()
+        let (caller) = admin_instance.get_caller_address()
         with carbonable_minter:
             carbonable_minter_instance.set_unit_price(unit_price=unit_price, caller=caller)
             let (returned_unit_price) = carbonable_minter_instance.unit_price()
@@ -291,77 +285,57 @@ namespace admin_instance:
         return ()
     end
 
-    func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        account : felt, slots : felt
-    ):
+    func add_to_whitelist{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(account : felt, slots : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (caller) = admin_instance.get_address()
+        let (caller) = admin_instance.get_caller_address()
         with carbonable_minter:
-            let (success) = carbonable_minter_instance.add_to_whitelist(
-                account=account, slots=slots, caller=caller
-            )
+            let (success) = carbonable_minter_instance.add_to_whitelist(account=account, slots=slots, caller=caller)
             assert success = TRUE
             let (returned_slots) = carbonable_minter_instance.whitelist(account=account)
             assert returned_slots = slots
         end
         return ()
     end
-
-    func transferOwnership{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        newOwner : felt
-    ):
-        let (project_nft) = project_nft_instance.deployed()
-        let (caller) = admin_instance.get_address()
-        with project_nft:
-            project_nft_instance.transferOwnership(newOwner=newOwner, caller=caller)
-            let (owner) = project_nft_instance.owner()
-            assert owner = newOwner
-        end
-        return ()
-    end
 end
 
 namespace anyone_instance:
-    # Internals
 
-    func get_address() -> (address : felt):
+    func get_caller_address() -> (address : felt):
         tempvar anyone
-        %{ ids.anyone = context.ANYONE %}
+        %{ ids.anyone = context.anyone %}
         return (anyone)
     end
 
-    # Externals
-
-    func approve{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        quantity : felt
-    ):
+    func approve{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(quantity : felt):
         alloc_locals
         let (carbonable_minter) = carbonable_minter_instance.deployed()
         let (payment_token) = payment_token_instance.deployed()
-        let (caller) = anyone_instance.get_address()
+        let (caller) = anyone_instance.get_caller_address()
         with carbonable_minter:
             let (unit_price) = carbonable_minter_instance.unit_price()
             let (allowance) = SafeUint256.mul(Uint256(quantity, 0), unit_price)
         end
         with payment_token:
-            let (success) = payment_token_instance.approve(
-                spender=carbonable_minter, amount=allowance, caller=caller
-            )
+            let (success) = payment_token_instance.approve(spender=carbonable_minter, amount=allowance, caller=caller)
             assert success = TRUE
-            let (returned_allowance) = payment_token_instance.allowance(
-                owner=caller, spender=carbonable_minter
-            )
+            let (returned_allowance) = payment_token_instance.allowance(owner=caller, spender=carbonable_minter)
             assert returned_allowance = allowance
         end
         return ()
     end
 
-    func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quantity : felt):
+    func buy{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(quantity : felt):
         alloc_locals
         let (carbonable_minter) = carbonable_minter_instance.deployed()
         let (project_nft) = project_nft_instance.deployed()
         let (payment_token) = payment_token_instance.deployed()
-        let (caller) = anyone_instance.get_address()
+        let (caller) = anyone_instance.get_caller_address()
 
         # get user nft and payment token balances to check after buy
         with project_nft:
@@ -382,9 +356,7 @@ namespace anyone_instance:
         # check total supply and user nft quantity after buy
         with project_nft:
             let (returned_total_supply) = project_nft_instance.totalSupply()
-            let (expected_total_supply) = SafeUint256.sub_le(
-                returned_total_supply, intial_total_supply
-            )
+            let (expected_total_supply) = SafeUint256.sub_le(returned_total_supply, intial_total_supply)
             assert expected_total_supply = Uint256(quantity, 0)
 
             let (returned_quantity) = project_nft_instance.balanceOf(owner=caller)
