@@ -86,30 +86,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 @view
-func test_e2e_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # STORY
-    # ---
-    # User: ANYONE
-    # - wants to buy 6 NFTs (5 whitelist, 1 public)
-    # - whitelisted: TRUE
-    # - has enough funds: YES
-    let (anyone_address) = anyone.get_address()
-
-    admin.add_to_whitelist(account=anyone_address, slots=5)
-    anyone.approve(quantity=5)
-    anyone.buy(quantity=5)
-    admin.set_whitelisted_sale_open(FALSE)
-    admin.set_public_sale_open(TRUE)
-    anyone.approve(quantity=1)
-    anyone.buy(quantity=1)
-
-    return ()
-end
-
-@view
 func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # STORY
-    # ---
     # User: ANYONE
     # - wants to buy 6 NFTs (1 whitelist, 5 public)
     # - whitelisted: FALSE
@@ -122,6 +99,57 @@ func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     admin.set_public_sale_open(TRUE)
     anyone.approve(quantity=5)
     anyone.buy(quantity=5)
+
+    return ()
+end
+
+@view
+func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # User: ADMIN
+    # - set reserved supply to 5
+    # User: ANYONE
+    # - wants to buy 6 NFTs (5 whitelist, 1 public)
+    # - whitelisted: TRUE
+    # - has enough funds: YES
+    # User: ADMIN
+    # - aidrop 5 nft to ANYONE
+    alloc_locals
+    let (anyone_address) = anyone.get_address()
+
+    admin.set_reserved_supply_for_mint(5)
+    admin.add_to_whitelist(account=anyone_address, slots=5)
+    anyone.approve(quantity=5)
+    anyone.buy(quantity=5)
+    admin.set_whitelisted_sale_open(FALSE)
+    admin.set_public_sale_open(TRUE)
+    anyone.approve(quantity=1)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
+    anyone.buy(quantity=1)
+    admin.airdrop(to=anyone_address, quantity=5)
+
+    return ()
+end
+
+@view
+func test_e2e_over_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # User: ADMIN
+    # - set reserved supply to 10
+    # User: ANYONE
+    # - wants to buy 1 NFT1 (1 whitelist)
+    # - whitelisted: TRUE
+    # - has enough funds: YES
+    # User: ADMIN
+    # - aidrop 11 nft to ANYONE
+    alloc_locals
+    let (anyone_address) = anyone.get_address()
+
+    admin.set_reserved_supply_for_mint(10)
+    admin.add_to_whitelist(account=anyone_address, slots=1)
+    anyone.approve(quantity=1)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
+    anyone.buy(quantity=1)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
+    admin.airdrop(to=anyone_address, quantity=11)
 
     return ()
 end
