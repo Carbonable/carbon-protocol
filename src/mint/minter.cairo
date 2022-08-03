@@ -54,6 +54,12 @@ func unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 end
 
 @view
+func reserved_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ) -> (reserved_supply_for_mint : Uint256):
+    return CarbonableMinter.reserved_supply_for_mint()
+end
+
+@view
 func max_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     max_supply_for_mint : Uint256
 ):
@@ -127,6 +133,13 @@ func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @external
+func set_reserved_supply_for_mint{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(reserved_supply_for_mint : Uint256):
+    return CarbonableMinter.set_reserved_supply_for_mint(reserved_supply_for_mint)
+end
+
+@external
 func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     account : felt, slots : felt
 ) -> (success : felt):
@@ -138,4 +151,11 @@ func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quan
     success : felt
 ):
     return CarbonableMinter.buy(quantity)
+end
+
+@external
+func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    to : felt, quantity : felt
+) -> (success : felt):
+    return CarbonableMinter.airdrop(to, quantity)
 end

@@ -33,6 +33,9 @@ namespace ICarbonableMinter:
     func max_supply_for_mint() -> (max_supply_for_mint : Uint256):
     end
 
+    func reserved_supply_for_mint() -> (reserved_supply_for_mint : Uint256):
+    end
+
     ###
     # Get the reserved slots number of the specified address.
     # @param account the specified account
@@ -53,9 +56,15 @@ namespace ICarbonableMinter:
     func set_unit_price(unit_price : Uint256):
     end
 
+    func set_reserved_supply_for_mint(reserved_supply_for_mint : Uint256):
+    end
+
     func add_to_whitelist(account : felt, slots : felt) -> (success : felt):
     end
 
     func buy(quantity : felt) -> (success : felt):
+    end
+
+    func airdrop(to : felt, quantity : felt) -> (success : felt):
     end
 end

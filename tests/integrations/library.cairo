@@ -157,6 +157,15 @@ namespace carbonable_minter_instance:
         return (max_supply_for_mint)
     end
 
+    func reserved_supply_for_mint{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }() -> (reserved_supply_for_mint : Uint256):
+        let (reserved_supply_for_mint) = ICarbonableMinter.reserved_supply_for_mint(
+            carbonable_minter
+        )
+        return (reserved_supply_for_mint)
+    end
+
     func whitelist{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
     }(account : felt) -> (slots : felt):
@@ -202,6 +211,15 @@ namespace carbonable_minter_instance:
         return ()
     end
 
+    func set_reserved_supply_for_mint{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }(reserved_supply_for_mint : Uint256, caller : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        ICarbonableMinter.set_reserved_supply_for_mint(carbonable_minter, reserved_supply_for_mint)
+        %{ stop_prank() %}
+        return ()
+    end
+
     func add_to_whitelist{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
     }(account : felt, slots : felt, caller : felt) -> (success : felt):
@@ -216,6 +234,15 @@ namespace carbonable_minter_instance:
     }(quantity : felt, caller : felt) -> (success : felt):
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
         let (success) = ICarbonableMinter.buy(carbonable_minter, quantity)
+        %{ stop_prank() %}
+        return (success)
+    end
+
+    func airdrop{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }(to : felt, quantity : felt, caller : felt) -> (success : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        let (success) = ICarbonableMinter.airdrop(carbonable_minter, to, quantity)
         %{ stop_prank() %}
         return (success)
     end
@@ -291,6 +318,22 @@ namespace admin_instance:
         return ()
     end
 
+    func set_reserved_supply_for_mint{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(reserved_supply_for_mint : felt):
+        let (carbonable_minter) = carbonable_minter_instance.deployed()
+        let (caller) = admin_instance.get_address()
+        let reserved_supply_for_mint_uint256 = Uint256(reserved_supply_for_mint, 0)
+        with carbonable_minter:
+            carbonable_minter_instance.set_reserved_supply_for_mint(
+                reserved_supply_for_mint=reserved_supply_for_mint_uint256, caller=caller
+            )
+            let (returned_supply) = carbonable_minter_instance.reserved_supply_for_mint()
+            assert returned_supply = reserved_supply_for_mint_uint256
+        end
+        return ()
+    end
+
     func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt, slots : felt
     ):
@@ -317,6 +360,44 @@ namespace admin_instance:
             let (owner) = project_nft_instance.owner()
             assert owner = newOwner
         end
+        return ()
+    end
+
+    func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        to : felt, quantity : felt
+    ):
+        alloc_locals
+        let (carbonable_minter) = carbonable_minter_instance.deployed()
+        let (project_nft) = project_nft_instance.deployed()
+        let (caller) = admin_instance.get_address()
+
+        # get user nft and payment token balances to check after buy
+        with project_nft:
+            let (initial_quantity) = project_nft_instance.balanceOf(owner=caller)
+            let (intial_total_supply) = project_nft_instance.totalSupply()
+        end
+
+        # make the user to buy the quantity
+        with carbonable_minter:
+            let (success) = carbonable_minter_instance.airdrop(
+                to=to, quantity=quantity, caller=caller
+            )
+            assert success = TRUE
+        end
+
+        # check total supply and user nft quantity after buy
+        with project_nft:
+            let (returned_total_supply) = project_nft_instance.totalSupply()
+            let (expected_total_supply) = SafeUint256.sub_le(
+                returned_total_supply, intial_total_supply
+            )
+            assert expected_total_supply = Uint256(quantity, 0)
+
+            let (returned_quantity) = project_nft_instance.balanceOf(owner=caller)
+            let (expected_quantity) = SafeUint256.sub_le(returned_quantity, initial_quantity)
+            assert expected_quantity = Uint256(quantity, 0)
+        end
+
         return ()
     end
 end
