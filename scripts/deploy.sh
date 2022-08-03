@@ -7,7 +7,6 @@ CACHE_FILE=$ROOT/build/deployed_contracts.txt
 STARKNET_ACCOUNTS_FILE=$HOME/.starknet_accounts/starknet_open_zeppelin_accounts.json
 PROTOSTAR_TOML_FILE=$ROOT/protostar.toml
 NETWORK=
-WALLET=$STARKNET_WALLET
 
 ### FUNCTIONS
 . $SCRIPT_DIR/logging.sh # Logging utilities
@@ -159,6 +158,8 @@ done
 
 CONFIG_FILE=$ROOT/scripts/configs/$PROFILE.config
 [ -f $CONFIG_FILE ] && source $CONFIG_FILE || exit_error "$CONFIG_FILE file not found"
+
+WALLET=$STARKNET_WALLET
 
 [ -z $ADMIN_ADDRESS ] && ADMIN_ADDRESS=`get_account_address $ACCOUNT`
 [ -z $ADMIN_ADDRESS ] && exit_error "Unable to determine account address"
