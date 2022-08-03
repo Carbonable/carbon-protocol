@@ -57,6 +57,7 @@ func test_buy_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     # Whitelisted sale: CLOSED
     # Public sale: OPEN
     # current NFT totalSupply: 5
+    # current NFT reserved supply: 0
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
@@ -85,10 +86,44 @@ func test_buy_revert_not_enough_nfts_available{
     # Whitelisted sale: CLOSED
     # Public sale: OPEN
     # current NFT totalSupply: 10
+    # current NFT reserved supply: 0
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [10, 0]) %}
+    %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
+    CarbonableMinter.buy(quantity)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_buy_revert_not_enough_free_nfts{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        FALSE, TRUE, 5, unit_price, max_supply
+    )
+
+    # User: anyone_1
+    # Wants to buy 2 NFTs
+    # Whitelisted sale: CLOSED
+    # Public sale: OPEN
+    # current NFT totalSupply: 0
+    # current NFT reserved supply: 9
+    # has enough funds: YES
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    let reserved_quantity = Uint256(9, 0)
+    CarbonableMinter.set_reserved_supply_for_mint(reserved_quantity)
+    %{ stop() %}
+
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    let quantity = 2
+    %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [0, 0]) %}
     %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.buy(quantity)
@@ -112,6 +147,7 @@ func test_buy_revert_transfer_failed{
     # Whitelisted sale: CLOSED
     # Public sale: OPEN
     # current NFT totalSupply: 5
+    # current NFT reserved supply: 0
     # has enough funds: NO
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
@@ -139,6 +175,7 @@ func test_buy_revert_mint_not_open{
     # Whitelisted sale: CLOSED
     # Public sale: CLOSED
     # current NFT totalSupply: 5
+    # current NFT reserved supply: 0
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
@@ -167,6 +204,7 @@ func test_buy_revert_not_whitelisted{
     # Public sale: CLOSED
     # Is user whitelisted: NO
     # current NFT totalSupply: 5
+    # current NFT reserved supply: 0
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
@@ -234,6 +272,7 @@ func test_buy_user_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     # Public sale: CLOSED
     # Is user whitelisted: YES
     # current NFT totalSupply: 5
+    # current NFT reserved supply: 0
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
@@ -268,6 +307,7 @@ func test_buy_user_whitelisted_but_not_enough_slots{
     # Public sale: CLOSED
     # Is user whitelisted: YES (but not enough slots)
     # current NFT totalSupply: 5
+    # current NFT reserved supply: 0
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
@@ -275,6 +315,76 @@ func test_buy_user_whitelisted_but_not_enough_slots{
     %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: no whitelisted slot available") %}
     CarbonableMinter.buy(quantity)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_airdrop_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        TRUE, FALSE, 5, unit_price, max_supply
+    )
+
+    # User: admin
+    # Wants to aidrop 5 NFTs
+    # Whitelisted sale: OPEN
+    # Public sale: CLOSED
+    # Is user whitelisted: NO
+    # current NFT totalSupply: 5
+    # current NFT reserved supply: 0
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    let quantity = 5
+    %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(ids.context.mocks.project_nft_address, "mint", []) %}
+    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_airdrop_revert_if_not_owner{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        TRUE, FALSE, 5, unit_price, max_supply
+    )
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=1)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_airdrop_revert_not_enough_nfts_available{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        FALSE, TRUE, 5, unit_price, max_supply
+    )
+
+    # User: admin
+    # Wants to airdrop 5 NFTs
+    # Whitelisted sale: CLOSED
+    # Public sale: OPEN
+    # current NFT totalSupply: 6
+    # current NFT reserved supply: 5
+    # has enough funds: YES
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    let quantity = 5
+    CarbonableMinter.set_reserved_supply_for_mint(Uint256(quantity, 0))
+    %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [6, 0]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
+    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
     %{ stop() %}
     return ()
 end
