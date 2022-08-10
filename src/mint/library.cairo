@@ -213,6 +213,34 @@ namespace CarbonableMinter:
         return (TRUE)
     end
 
+    func withdraw{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        success : felt
+    ):
+        # Access control check
+        Ownable.assert_only_owner()
+
+        # Get storage variables
+        let (caller) = get_caller_address()
+        let (contract_address) = get_contract_address()
+        let (payment_token_address) = payment_token_address_.read()
+
+        # Do ERC20 transfer
+        let (balance) = IERC20.balanceOf(
+            contract_address=payment_token_address, account=contract_address
+        )
+        let (transfer_success) = IERC20.transferFrom(
+            contract_address=payment_token_address,
+            sender=contract_address,
+            recipient=caller,
+            amount=balance,
+        )
+        with_attr error_message("CarbonableMinter: transfer failed"):
+            assert transfer_success = TRUE
+        end
+
+        return (TRUE)
+    end
+
     func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         quantity : felt
     ) -> (success : felt):
