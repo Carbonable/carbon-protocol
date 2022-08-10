@@ -104,7 +104,7 @@ send_transaction() {
 # Deploy all contracts and log the deployed addresses in the cache file
 deploy_all_contracts() {
     [ -f $CACHE_FILE ] && {
-        . $CACHE_FILE
+        source $CACHE_FILE
         log_info "Found those deployed accounts:"
         cat $CACHE_FILE
         ask "Do you want to deploy missing contracts and initialize them" || return 
@@ -121,24 +121,18 @@ deploy_all_contracts() {
 
     # Deploy ERC-721 token contract
     if [ -z $ERC721_ADDRESS ]; then
-        erc721_name=$(str_to_felt "Carbonable ERC-721 Test")
-        erc721_symbol=$(str_to_felt "CET")
+        erc721_name=$(str_to_felt "$ERC721_NAME")
+        erc721_symbol=$(str_to_felt "$ERC721_SYMBOL")
         log_info "Deploying ERC-721 contract..."
-        ERC721_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProjectNFT.json --inputs "$erc721_name" "$erc721_symbol" $ADMIN_ADDRESS"` || exit_error
+        ERC721_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProjectNFT.json --inputs $erc721_name $erc721_symbol $ADMIN_ADDRESS"` || exit_error
     fi
 
     # Deploy Minter contract
     if [ -z $MINTER_ADDRESS ]; then
         owner=$ADMIN_ADDRESS
         project_nft_address=$ERC721_ADDRESS
-        payment_token_address=$ADMIN_ADDRESS
-        whitelisted_sale_open=0
-        public_sale_open=1
-        max_buy_per_tx=5
-        unit_price="10 0"
-        max_supply_for_mint="10 0"
         log_info "Deploying Minter contract..."
-        MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $payment_token_address $whitelisted_sale_open $public_sale_open $max_buy_per_tx "$unit_price" "$max_supply_for_mint""` || exit_error
+        MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $WHITELISTED_SALE_OPEN $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT"` || exit_error
     fi    
 
     # Save values in cache file
@@ -163,12 +157,14 @@ do
     esac
 done
 
+CONFIG_FILE=$ROOT/scripts/configs/$PROFILE.config
+[ -f $CONFIG_FILE ] && source $CONFIG_FILE || exit_error "$CONFIG_FILE file not found"
+
 [ -z $ADMIN_ADDRESS ] && ADMIN_ADDRESS=`get_account_address $ACCOUNT`
 [ -z $ADMIN_ADDRESS ] && exit_error "Unable to determine account address"
 
 [[ -z $NETWORK && ! -z $PROFILE ]] && NETWORK=`get_network $PROFILE`
 [ -z $NETWORK ] && exit_error "Unable to determine network"
-
 
 ### PRE_CONDITIONS
 check_starknet

@@ -15,5 +15,6 @@ artifacts
 
 # Protostar
 build
+*logs.json
 
 .DS_Store

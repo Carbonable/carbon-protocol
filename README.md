@@ -44,7 +44,7 @@ protostar test tests/units
 protostar test tests/integrations
 ```
 
-#### Test account
+### Test account
 
 If you want a fresh account for tests, you can deploy an account with the following command:
 
@@ -55,25 +55,43 @@ starknet deploy_account --network=<network>
 It will generate the account information into the `~/.starknet_accounts/starknet_open_zeppelin_accounts.json` file.  
 See also starknet [documentation](https://www.cairo-lang.org/docs/hello_starknet/account_setup.html#creating-an-account) for more details.
 
-#### Test on devnet
-
-Requirements:
-
-- [starknet-devnet](https://github.com/Shard-Labs/starknet-devnet)
-
-If you want to test on devnet, you need first to run a starknet devnet, you can run it with the following command (in a dedicated terminal):
-
-```bash
-starknet-devnet
-```
-
-Note: default http://host:port is http://127.0.0.1:5050/ (which match [protostar](protostar.toml) config).
-
 ### 💋 Format code
 
 ```bash
 cairo-format -i src/**/*.cairo tests/**/*.cairo
 ```
+
+## Deployment
+
+```bash
+# On testnet
+./scripts/deploy.sh -p testnet -a carbonable
+```
+
+With:
+- `testnet` profile defined in protostar config file (testnet for alpha-goerli)
+- `carbonable` alias to the admin account (optional if it is your `__default__`  acount, see also starknet account [documentation](https://starknet.io/docs/hello_starknet/account_setup.html))
+
+Contract addresses will be logged into the prompt.
+
+### Inputs
+
+To manage inputs sent to constructor during the deployment, you can customize the [config files](./scripts/configs/).
+
+### Prepare the contracts before tests
+
+After deployment, the **admin** account (according to parameters) is the owner of all contracts.
+So far, you have to do the following actions manually:
+
+- Change the NFT contract owner from **admin** to **Minter contract**
+  * How: _Voyager > Write contract > `transferOwnership`_
+  * Verifiy: _Voyager > Read contract > `owner`_
+- Approve the **Minter contract** to spend the **admin payment tokens**
+  * How: Voyager > _Write contract > `approve`_
+  * Verifiy: Voyager > _Read contract > `allowance`_
+- Buy NFT through the **Minter contract**
+  * How: _Voyager > Write contract > `buy`_
+  * Verifiy: _Voyager > Read contract > `balanceOf` (of the NFT contract)_
 
 ## 📄 License
 
