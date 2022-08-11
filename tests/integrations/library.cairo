@@ -175,6 +175,15 @@ namespace carbonable_minter_instance:
 
     # Externals
 
+    func withdraw{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }(caller : felt) -> (success : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        let (success) = ICarbonableMinter.withdraw(carbonable_minter)
+        %{ stop_prank() %}
+        return (success)
+    end
+
     func set_whitelisted_sale_open{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
     }(whitelisted_sale_open : felt, caller : felt):
@@ -249,6 +258,26 @@ namespace admin_instance:
     end
 
     # Externals
+
+    func withdraw{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+        let (carbonable_minter) = carbonable_minter_instance.deployed()
+        let (payment_token) = payment_token_instance.deployed()
+        let (caller) = admin_instance.get_address()
+        with payment_token:
+            let (initial_balance) = payment_token_instance.balanceOf(account=caller)
+            let (contract_balance) = payment_token_instance.balanceOf(account=carbonable_minter)
+        end
+        with carbonable_minter:
+            let (success) = carbonable_minter_instance.withdraw(caller=caller)
+            assert success = TRUE
+        end
+        with payment_token:
+            let (returned_balance) = payment_token_instance.balanceOf(account=caller)
+            let (expected_balance) = SafeUint256.add(initial_balance, contract_balance)
+            assert returned_balance = expected_balance
+        end
+        return ()
+    end
 
     func set_whitelisted_sale_open{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr

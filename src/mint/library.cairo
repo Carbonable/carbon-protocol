@@ -228,11 +228,8 @@ namespace CarbonableMinter:
         let (balance) = IERC20.balanceOf(
             contract_address=payment_token_address, account=contract_address
         )
-        let (transfer_success) = IERC20.transferFrom(
-            contract_address=payment_token_address,
-            sender=contract_address,
-            recipient=caller,
-            amount=balance,
+        let (transfer_success) = IERC20.transfer(
+            contract_address=payment_token_address, recipient=caller, amount=balance
         )
         with_attr error_message("CarbonableMinter: transfer failed"):
             assert transfer_success = TRUE
