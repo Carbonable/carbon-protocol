@@ -20,6 +20,7 @@ from tests.integrations.library import (
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     alloc_locals
     tempvar carbonable_minter
+    tempvar merkle_root = 3236969588476960619958150604131083087415975923122021901088942336874683133579
     %{
         # --- INITIAL SETTINGS ---
         # User addresses
@@ -34,7 +35,6 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
         context.TOKEN_DECIMALS = 6
         context.TOKEN_INITIAL_SUPPLY = 1000000
         # CarbonableMint
-        context.WHITELISTED_SALE_OPEN = ids.TRUE
         context.PUBLIC_SALE_OPEN = ids.FALSE
         context.MAX_BUY_PER_TX = 5
         context.UNIT_PRICE = 10
@@ -70,7 +70,6 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
                 "owner": context.ADMIN,
                 "project_nft_address": context.project_nft_contract,
                 "payment_token_address": context.payment_token_contract,
-                "whitelisted_sale_open": context.WHITELISTED_SALE_OPEN,
                 "public_sale_open": context.PUBLIC_SALE_OPEN,
                 "max_buy_per_tx": context.MAX_BUY_PER_TX,
                 "unit_price": context.UNIT_PRICE,
@@ -83,6 +82,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 
     # Transfer project nft ownershop from admin to minter
     admin.transferOwnership(carbonable_minter)
+    admin.set_merkle_root(merkle_root)
 
     return ()
 end
@@ -94,10 +94,10 @@ func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     # - whitelisted: FALSE
     # - has enough funds: YES
 
+    admin.set_merkle_root(123)
     anyone.approve(quantity=1)
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: no whitelisted slot available") %}
-    anyone.buy(quantity=1)
-    admin.set_whitelisted_sale_open(FALSE)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: caller address is not whitelisted") %}
+    anyone.whitelist_buy(quantity=1)
     admin.set_public_sale_open(TRUE)
     anyone.approve(quantity=5)
     anyone.buy(quantity=5)

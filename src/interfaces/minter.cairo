@@ -39,12 +39,17 @@ namespace ICarbonableMinter:
     ###
     # Get the reserved slots number of the specified address.
     # @param account the specified account
+    # @param slots the expected slots
+    # @param proof_len the len of proof array
+    # @param proof the proof array
     # @return the number of reserved slots
     ###
-    func whitelist(account : felt) -> (slots : felt):
+    func whitelisted_slots(account : felt, slots : felt, proof_len : felt, proof : felt*) -> (
+        slots : felt
+    ):
     end
 
-    func set_whitelisted_sale_open(whitelisted_sale_open : felt):
+    func set_merkle_root(merkle_root : felt):
     end
 
     func set_public_sale_open(public_sale_open : felt):
@@ -56,7 +61,9 @@ namespace ICarbonableMinter:
     func set_unit_price(unit_price : Uint256):
     end
 
-    func add_to_whitelist(account : felt, slots : felt) -> (success : felt):
+    func whitelist_buy(slots : felt, proof_len : felt, proof : felt*, quantity : felt) -> (
+        success : felt
+    ):
     end
 
     func airdrop(to : felt, quantity : felt) -> (success : felt):

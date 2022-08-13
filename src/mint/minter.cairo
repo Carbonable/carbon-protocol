@@ -67,10 +67,17 @@ func max_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
 end
 
 @view
-func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    account : felt
+func merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    root : felt
+):
+    return CarbonableMinter.merkle_root()
+end
+
+@view
+func whitelisted_slots{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    account : felt, slots : felt, proof_len : felt, proof : felt*
 ) -> (slots : felt):
-    return CarbonableMinter.whitelist(account)
+    return CarbonableMinter.whitelisted_slots(account, slots, proof_len, proof)
 end
 
 # ------
@@ -82,7 +89,6 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     owner : felt,
     project_nft_address : felt,
     payment_token_address : felt,
-    whitelisted_sale_open : felt,
     public_sale_open : felt,
     max_buy_per_tx : felt,
     unit_price : Uint256,
@@ -93,7 +99,6 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
         owner,
         project_nft_address,
         payment_token_address,
-        whitelisted_sale_open,
         public_sale_open,
         max_buy_per_tx,
         unit_price,
@@ -107,10 +112,10 @@ end
 # ------------------
 
 @external
-func set_whitelisted_sale_open{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    whitelisted_sale_open : felt
+func set_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    merkle_root : felt
 ):
-    return CarbonableMinter.set_whitelisted_sale_open(whitelisted_sale_open)
+    return CarbonableMinter.set_merkle_root(merkle_root)
 end
 
 @external
@@ -135,10 +140,10 @@ func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @external
-func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    account : felt, slots : felt
+func whitelist_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    slots : felt, proof_len : felt, proof : felt*, quantity : felt
 ) -> (success : felt):
-    return CarbonableMinter.add_to_whitelist(account, slots)
+    return CarbonableMinter.whitelist_buy(slots, proof_len, proof, quantity)
 end
 
 @external
