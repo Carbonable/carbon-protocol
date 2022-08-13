@@ -3,19 +3,19 @@
 
 %lang starknet
 # Starkware dependencies
-from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le, uint256_eq
-from starkware.cairo.common.math import assert_not_zero
-from starkware.cairo.common.math_cmp import is_le
-
 from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.hash import hash2
+from starkware.cairo.common.math import assert_not_zero
+from starkware.cairo.common.math_cmp import is_le, is_le_felt, is_not_zero
+from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le, uint256_eq
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 
+# Project dependencies
 from openzeppelin.security.safemath import SafeUint256
 from openzeppelin.token.erc20.interfaces.IERC20 import IERC20
 from openzeppelin.token.erc721.interfaces.IERC721 import IERC721
 from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import IERC721_Enumerable
-
 from openzeppelin.access.ownable import Ownable
 
 @contract_interface
@@ -36,11 +36,6 @@ end
 # Address of the project NFT contract
 @storage_var
 func payment_token_address_() -> (res : felt):
-end
-
-# Whether or not the whitelisted sale is open
-@storage_var
-func whitelisted_sale_open_() -> (res : felt):
 end
 
 # Whether or not the public sale is open
@@ -70,7 +65,7 @@ end
 
 # Whitelist
 @storage_var
-func whitelist_(account : felt) -> (res : felt):
+func merkle_root_() -> (root : felt):
 end
 
 namespace CarbonableMinter:
@@ -92,7 +87,8 @@ namespace CarbonableMinter:
 
     func whitelisted_sale_open{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ) -> (whitelisted_sale_open : felt):
-        let (whitelisted_sale_open) = whitelisted_sale_open_.read()
+        let (merkle_root) = merkle_root_.read()
+        let (whitelisted_sale_open) = is_not_zero(merkle_root)
         return (whitelisted_sale_open)
     end
 
@@ -133,8 +129,12 @@ namespace CarbonableMinter:
     func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt
     ) -> (slots : felt):
-        let (slots) = whitelist_.read(account)
-        return (slots)
+        let (leaf) = hash2{hash_ptr=pedersen_ptr}(account, slots)
+        let (merkle_root) = merkle_root_.read()  # 0 by default if not write
+        let (whitelisted) = merkle_verify(
+            leaf=leaf, merkle_root=merkle_root, proof_len=proof_len, proof=proof
+        )
+        return (slots=slots * whitelisted)  # 0 if note whitelisted else 1 * slots
     end
 
     # ------
@@ -145,7 +145,6 @@ namespace CarbonableMinter:
         owner : felt,
         project_nft_address : felt,
         payment_token_address : felt,
-        whitelisted_sale_open : felt,
         public_sale_open : felt,
         max_buy_per_tx : felt,
         unit_price : Uint256,
@@ -155,7 +154,6 @@ namespace CarbonableMinter:
         Ownable.initializer(owner)
         project_nft_address_.write(project_nft_address)
         payment_token_address_.write(payment_token_address)
-        whitelisted_sale_open_.write(whitelisted_sale_open)
         public_sale_open_.write(public_sale_open)
         max_buy_per_tx_.write(max_buy_per_tx)
         unit_price_.write(unit_price)
@@ -168,12 +166,12 @@ namespace CarbonableMinter:
     # EXTERNAL FUNCTIONS
     # ------------------
 
-    func set_whitelisted_sale_open{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(whitelisted_sale_open : felt):
+    func set_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        merkle_root : felt
+    ):
         # Access control check
         Ownable.assert_only_owner()
-        whitelisted_sale_open_.write(whitelisted_sale_open)
+        merkle_root_.write(merkle_root)
         return ()
     end
 
@@ -204,13 +202,36 @@ namespace CarbonableMinter:
         return ()
     end
 
-    func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        account : felt, slots : felt
+    func whitelist_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        slots : felt, proof_len : felt, proof : felt*, quantity : felt
     ) -> (success : felt):
-        # Access control check
-        Ownable.assert_only_owner()
-        whitelist_.write(account, slots)
-        return (TRUE)
+        alloc_locals
+
+        # Get variables through system calls
+        let (caller) = get_caller_address()
+
+        # Check if at least whitelisted or public sale is open
+        let (is_whitelist_open) = whitelisted_sale_open()
+        with_attr error_message("CarbonableMinter: whitelist sale is not open"):
+            assert_not_zero(is_whitelist_open)
+        end
+
+        # Check if account is whitelisted
+        let (slots) = whitelisted_slots(
+            account=caller, slots=slots, proof_len=proof_len, proof=proof
+        )
+        with_attr error_message("CarbonableMinter: caller address is not whitelisted"):
+            assert_not_zero(slots)
+        end
+
+        # Check if account has available whitelisted slots
+        let (enough_slots) = is_le(quantity, slots)
+        with_attr error_message("CarbonableMinter: no whitelisted slot available"):
+            assert enough_slots = TRUE
+        end
+
+        let (success) = buy(quantity)
+        return (success)
     end
 
     func withdraw{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
@@ -271,26 +292,7 @@ namespace CarbonableMinter:
         let (project_nft_address) = project_nft_address_.read()
         let (unit_price) = unit_price_.read()
         let (payment_token_address) = payment_token_address_.read()
-        let (whitelisted_sale_open) = whitelisted_sale_open_.read()
-        let (public_sale_open) = public_sale_open_.read()
-        let (whitelisted_slots) = whitelist_.read(caller)
         let (max_buy_per_tx) = max_buy_per_tx_.read()
-
-        # Compute variables required to check business logic rules
-        let (enough_slots) = is_le(quantity, whitelisted_slots)
-        let at_least_one_sale_type_open = (whitelisted_sale_open + public_sale_open)
-
-        # Check if at least whitelisted or public sale is open
-        with_attr error_message("CarbonableMinter: mint is not open"):
-            assert_not_zero(at_least_one_sale_type_open)
-        end
-
-        # Check if account has available whitelisted slots if public sale is not open
-        if public_sale_open == FALSE:
-            with_attr error_message("CarbonableMinter: no whitelisted slot available"):
-                assert enough_slots = TRUE
-            end
-        end
 
         # Check that desired quantity is lower than maximum allowed per transaction
         let (quantity_allowed) = is_le(quantity, max_buy_per_tx)
@@ -403,5 +405,57 @@ namespace CarbonableMinter:
         let (new_quantity) = SafeUint256.sub_le(quantity, one)
         mint_n(nft_contract_address, to, token_id, new_quantity)
         return ()
+    end
+
+    ###
+    # Verify that leaf belongs to merkle tree.
+    # ref: https://github.com/ncitron/cairo-merkle-distributor/blob/master/contracts/merkle.cairo
+    # @param leaf
+    # @param proof_len
+    # @param proof
+    ###
+    func merkle_verify{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        leaf : felt, merkle_root : felt, proof_len : felt, proof : felt*
+    ) -> (res : felt):
+        alloc_locals
+
+        let (calc_root) = calc_merkle_root(leaf, proof_len, proof)
+        # check if calculated root is equal to expected
+        if calc_root == merkle_root:
+            return (1)
+        end
+        return (0)
+    end
+
+    ###
+    # Calculates the merkle root of a given proof
+    # ref: https://github.com/ncitron/cairo-merkle-distributor/blob/master/contracts/merkle.cairo
+    # @param curr
+    # @param proof_len
+    # @param proof
+    ###
+    func calc_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        curr : felt, proof_len : felt, proof : felt*
+    ) -> (res : felt):
+        alloc_locals
+
+        if proof_len == 0:
+            return (curr)
+        end
+
+        local node
+        local proof_elem = [proof]
+        let (le) = is_le_felt(curr, proof_elem)
+
+        if le == 1:
+            let (n) = hash2{hash_ptr=pedersen_ptr}(curr, proof_elem)
+            node = n
+        else:
+            let (n) = hash2{hash_ptr=pedersen_ptr}(proof_elem, curr)
+            node = n
+        end
+
+        let (res) = calc_merkle_root(node, proof_len - 1, proof + 1)
+        return (res)
     end
 end
