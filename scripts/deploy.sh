@@ -131,7 +131,7 @@ deploy_all_contracts() {
         owner=$ADMIN_ADDRESS
         project_nft_address=$ERC721_ADDRESS
         log_info "Deploying Minter contract..."
-        MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $WHITELISTED_SALE_OPEN $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT"` || exit_error
+        MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT"` || exit_error
     fi    
 
     # Save values in cache file
