@@ -44,9 +44,6 @@ namespace ICarbonableMinter:
     func whitelist(account : felt) -> (slots : felt):
     end
 
-    func withdraw() -> (success : felt):
-    end
-
     func set_whitelisted_sale_open(whitelisted_sale_open : felt):
     end
 
@@ -60,6 +57,12 @@ namespace ICarbonableMinter:
     end
 
     func add_to_whitelist(account : felt, slots : felt) -> (success : felt):
+    end
+
+    func withdraw() -> (success : felt):
+    end
+
+    func transfer(token_address : felt, recipient : felt, amount : Uint256) -> (success : felt):
     end
 
     func buy(quantity : felt) -> (success : felt):
