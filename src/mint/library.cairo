@@ -68,7 +68,7 @@ end
 
 # Whitelist
 @storage_var
-func whitelist_merkle_root_() -> (root : felt):
+func whitelist_merkle_root_() -> (whitelist_merkle_root : felt):
 end
 
 namespace CarbonableMinter:
@@ -129,8 +129,14 @@ namespace CarbonableMinter:
         return (reserved_supply_for_mint)
     end
 
-    func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        account : felt
+    func whitelist_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        ) -> (whitelist_merkle_root : felt):
+        let (whitelist_merkle_root) = whitelist_merkle_root_.read()
+        return (whitelist_merkle_root)
+    end
+
+    func whitelisted_slots{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        account : felt, slots : felt, proof_len : felt, proof : felt*
     ) -> (slots : felt):
         let (leaf) = hash2{hash_ptr=pedersen_ptr}(account, slots)
         let (whitelist_merkle_root) = whitelist_merkle_root_.read()  # 0 by default if not write
@@ -205,36 +211,55 @@ namespace CarbonableMinter:
         return ()
     end
 
-    func whitelist_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        slots : felt, proof_len : felt, proof : felt*, quantity : felt
+    func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        to : felt, quantity : felt
     ) -> (success : felt):
         alloc_locals
+        # Access control check
+        Ownable.assert_only_owner()
 
         # Get variables through system calls
         let (caller) = get_caller_address()
+        let (contract_address) = get_contract_address()
 
-        # Check if at least whitelisted or public sale is open
-        let (is_whitelist_open) = whitelisted_sale_open()
-        with_attr error_message("CarbonableMinter: whitelist sale is not open"):
-            assert_not_zero(is_whitelist_open)
+        let quantity_uint256 = Uint256(quantity, 0)
+
+        # Check preconditions
+        with_attr error_message("CarbonableMinter: caller is the zero address"):
+            assert_not_zero(caller)
         end
 
-        # Check if account is whitelisted
-        let (slots) = whitelisted_slots(
-            account=caller, slots=slots, proof_len=proof_len, proof=proof
+        # Get storage variables
+        let (project_nft_address) = project_nft_address_.read()
+
+        # Check if enough NFTs available
+        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
+        let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
+        let (max_supply_for_mint) = max_supply_for_mint_.read()
+        let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
+        with_attr error_message("CarbonableMinter: not enough available NFTs"):
+            assert enough_left = TRUE
+        end
+
+        # Check if enough reserved NFTs available
+        let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
+        let (enough_reserved_left) = uint256_le(quantity_uint256, reserved_supply_for_mint)
+        with_attr error_message("CarbonableMinter: not enough available reserved NFTs"):
+            assert enough_reserved_left = TRUE
+        end
+
+        # Do the actual NFT mint
+        let starting_index = total_supply
+        mint_n(project_nft_address, to, starting_index, quantity_uint256)
+
+        # Remove the minted quantity from the reserved supply
+        let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
+            reserved_supply_for_mint, quantity_uint256
         )
-        with_attr error_message("CarbonableMinter: caller address is not whitelisted"):
-            assert_not_zero(slots)
-        end
+        reserved_supply_for_mint_.write(new_reserved_supply_for_mint)
 
-        # Check if account has available whitelisted slots
-        let (enough_slots) = is_le(quantity, slots)
-        with_attr error_message("CarbonableMinter: no whitelisted slot available"):
-            assert enough_slots = TRUE
-        end
-
-        let (success) = buy(quantity)
-        return (success)
+        # Success
+        return (TRUE)
     end
 
     func withdraw{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
@@ -274,6 +299,51 @@ namespace CarbonableMinter:
         end
 
         return (TRUE)
+    end
+
+    func whitelist_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        slots : felt, proof_len : felt, proof : felt*, quantity : felt
+    ) -> (success : felt):
+        alloc_locals
+
+        # Get variables through system calls
+        let (caller) = get_caller_address()
+
+        # Check if at least whitelisted or public sale is open
+        let (is_whitelist_open) = whitelisted_sale_open()
+        with_attr error_message("CarbonableMinter: whitelist sale is not open"):
+            assert_not_zero(is_whitelist_open)
+        end
+
+        # Check if account is whitelisted
+        let (slots) = whitelisted_slots(
+            account=caller, slots=slots, proof_len=proof_len, proof=proof
+        )
+        with_attr error_message("CarbonableMinter: caller address is not whitelisted"):
+            assert_not_zero(slots)
+        end
+
+        # Check if account has available whitelisted slots
+        let (enough_slots) = is_le(quantity, slots)
+        with_attr error_message("CarbonableMinter: no whitelisted slot available"):
+            assert enough_slots = TRUE
+        end
+
+        let (success) = buy(quantity)
+        return (success)
+    end
+
+    func public_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        quantity : felt
+    ) -> (success : felt):
+        # Check if at least whitelisted or public sale is open
+        let (public_sale_open) = public_sale_open_.read()
+        with_attr error_message("CarbonableMinter: public sale is not open"):
+            assert_not_zero(public_sale_open)
+        end
+
+        let (success) = buy(quantity)
+        return (success)
     end
 
     func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -330,57 +400,6 @@ namespace CarbonableMinter:
         # Do the actual NFT mint
         let starting_index = total_supply
         mint_n(project_nft_address, caller, starting_index, quantity_uint256)
-        # Success
-        return (TRUE)
-    end
-
-    func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        to : felt, quantity : felt
-    ) -> (success : felt):
-        alloc_locals
-        # Access control check
-        Ownable.assert_only_owner()
-
-        # Get variables through system calls
-        let (caller) = get_caller_address()
-        let (contract_address) = get_contract_address()
-
-        let quantity_uint256 = Uint256(quantity, 0)
-
-        # Check preconditions
-        with_attr error_message("CarbonableMinter: caller is the zero address"):
-            assert_not_zero(caller)
-        end
-
-        # Get storage variables
-        let (project_nft_address) = project_nft_address_.read()
-
-        # Check if enough NFTs available
-        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
-        let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
-        let (max_supply_for_mint) = max_supply_for_mint_.read()
-        let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
-        with_attr error_message("CarbonableMinter: not enough available NFTs"):
-            assert enough_left = TRUE
-        end
-
-        # Check if enough reserved NFTs available
-        let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
-        let (enough_reserved_left) = uint256_le(quantity_uint256, reserved_supply_for_mint)
-        with_attr error_message("CarbonableMinter: not enough available reserved NFTs"):
-            assert enough_reserved_left = TRUE
-        end
-
-        # Do the actual NFT mint
-        let starting_index = total_supply
-        mint_n(project_nft_address, to, starting_index, quantity_uint256)
-
-        # Remove the minted quantity from the reserved supply
-        let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
-            reserved_supply_for_mint, quantity_uint256
-        )
-        reserved_supply_for_mint_.write(new_reserved_supply_for_mint)
-
         # Success
         return (TRUE)
     end

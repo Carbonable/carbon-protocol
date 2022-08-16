@@ -68,7 +68,7 @@ end
 
 @view
 func whitelist_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-    root : felt
+    whitelist_merkle_root : felt
 ):
     return CarbonableMinter.whitelist_merkle_root()
 end
@@ -140,13 +140,6 @@ func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @external
-func whitelist_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    slots : felt, proof_len : felt, proof : felt*, quantity : felt
-) -> (success : felt):
-    return CarbonableMinter.whitelist_buy(slots, proof_len, proof, quantity)
-end
-
-@external
 func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     to : felt, quantity : felt
 ) -> (success : felt):
@@ -168,8 +161,15 @@ func transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
 end
 
 @external
-func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quantity : felt) -> (
-    success : felt
-):
-    return CarbonableMinter.buy(quantity)
+func whitelist_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    slots : felt, proof_len : felt, proof : felt*, quantity : felt
+) -> (success : felt):
+    return CarbonableMinter.whitelist_buy(slots, proof_len, proof, quantity)
+end
+
+@external
+func public_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    quantity : felt
+) -> (success : felt):
+    return CarbonableMinter.public_buy(quantity)
 end

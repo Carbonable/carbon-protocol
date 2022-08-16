@@ -40,6 +40,12 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
         context.UNIT_PRICE = 10
         context.MAX_SUPPLY_FOR_MINT = 10
         context.RESERVED_SUPPLY_FOR_MINT = 4
+        # Whitelist ANYONE
+        context.SLOTS = 5
+        context.PROOF = [
+            1489335374474017495857579265074565262713421005832572026644103123081435719307,
+        ]
+        context.PROOF_LEN = len(context.PROOF)
 
         # ERC-721 deployment
         context.project_nft_contract = deploy_contract(
@@ -88,7 +94,29 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 @view
+func test_e2e_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # STORY
+    # ---
+    # User: ANYONE
+    # - wants to buy 6 NFTs (5 whitelist, 1 public)
+    # - whitelisted: TRUE
+    # - has enough funds: YES
+    let (anyone_address) = anyone.get_address()
+
+    anyone.approve(quantity=5)
+    anyone.whitelist_buy(quantity=5)
+    admin.set_public_sale_open(TRUE)
+    anyone.approve(quantity=1)
+    anyone.public_buy(quantity=1)
+    admin.withdraw()
+
+    return ()
+end
+
+@view
 func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # STORY
+    # ---
     # User: ANYONE
     # - wants to buy 6 NFTs (1 whitelist, 5 public)
     # - whitelisted: FALSE
@@ -100,7 +128,7 @@ func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     anyone.whitelist_buy(quantity=1)
     admin.set_public_sale_open(TRUE)
     anyone.approve(quantity=5)
-    anyone.buy(quantity=5)
+    anyone.public_buy(quantity=5)
     admin.withdraw()
 
     return ()
@@ -118,14 +146,12 @@ func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     alloc_locals
     let (anyone_address) = anyone.get_address()
 
-    admin.add_to_whitelist(account=anyone_address, slots=5)
     anyone.approve(quantity=5)
-    anyone.buy(quantity=5)
-    admin.set_whitelisted_sale_open(FALSE)
+    anyone.whitelist_buy(quantity=5)
     admin.set_public_sale_open(TRUE)
     anyone.approve(quantity=2)
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    anyone.buy(quantity=2)
+    anyone.public_buy(quantity=2)
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
     admin.airdrop(to=anyone_address, quantity=5)
     admin.airdrop(to=anyone_address, quantity=4)

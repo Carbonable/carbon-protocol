@@ -36,6 +36,9 @@ namespace ICarbonableMinter:
     func reserved_supply_for_mint() -> (reserved_supply_for_mint : Uint256):
     end
 
+    func whitelist_merkle_root() -> (whitelist_merkle_root : felt):
+    end
+
     ###
     # Get the reserved slots number of the specified address.
     # @param account the specified account
@@ -61,11 +64,6 @@ namespace ICarbonableMinter:
     func set_unit_price(unit_price : Uint256):
     end
 
-    func whitelist_buy(slots : felt, proof_len : felt, proof : felt*, quantity : felt) -> (
-        success : felt
-    ):
-    end
-
     func airdrop(to : felt, quantity : felt) -> (success : felt):
     end
 
@@ -75,6 +73,11 @@ namespace ICarbonableMinter:
     func transfer(token_address : felt, recipient : felt, amount : Uint256) -> (success : felt):
     end
 
-    func buy(quantity : felt) -> (success : felt):
+    func whitelist_buy(slots : felt, proof_len : felt, proof : felt*, quantity : felt) -> (
+        success : felt
+    ):
+    end
+
+    func public_buy(quantity : felt) -> (success : felt):
     end
 end

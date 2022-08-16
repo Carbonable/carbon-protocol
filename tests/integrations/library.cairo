@@ -167,11 +167,11 @@ namespace carbonable_minter_instance:
         return (reserved_supply_for_mint)
     end
 
-    func whitelist{
+    func whitelist_merkle_root{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
-    }() -> (root : felt):
-        let (root) = ICarbonableMinter.whitelist_merkle_root(carbonable_minter)
-        return (root)
+    }() -> (whitelist_merkle_root : felt):
+        let (whitelist_merkle_root) = ICarbonableMinter.whitelist_merkle_root(carbonable_minter)
+        return (whitelist_merkle_root)
     end
 
     func whitelisted_slots{
@@ -194,7 +194,7 @@ namespace carbonable_minter_instance:
         return (success)
     end
 
-    func set_whitelisted_sale_open{
+    func set_whitelist_merkle_root{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
     }(whitelist_merkle_root : felt, caller : felt):
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
@@ -293,17 +293,18 @@ namespace admin_instance:
         return ()
     end
 
-    func set_whitelisted_sale_open{
+    func set_whitelist_merkle_root{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(whitelisted_sale_open : felt):
+    }(whitelist_merkle_root : felt):
         let (carbonable_minter) = carbonable_minter_instance.deployed()
         let (caller) = admin_instance.get_address()
         with carbonable_minter:
             carbonable_minter_instance.set_whitelist_merkle_root(
-                whitelist_merkle_root=root, caller=caller
+                whitelist_merkle_root=whitelist_merkle_root, caller=caller
             )
-            let (returned_root) = carbonable_minter_instance.whitelist_merkle_root()
-            assert returned_root = root
+            let (returned_whitelist_merkle_root) = carbonable_minter_instance.whitelist_merkle_root(
+                )
+            assert returned_whitelist_merkle_root = whitelist_merkle_root
         end
         return ()
     end
@@ -490,7 +491,7 @@ namespace anyone_instance:
 
         # make the user to buy the quantity
         with carbonable_minter:
-            let (root) = carbonable_minter_instance.whitelist_merkle_root()
+            let (whitelist_merkle_root) = carbonable_minter_instance.whitelist_merkle_root()
             let (unit_price) = carbonable_minter_instance.unit_price()
             let (success) = carbonable_minter_instance.whitelist_buy(
                 slots=slots, proof_len=proof_len, proof=proof, quantity=quantity, caller=caller

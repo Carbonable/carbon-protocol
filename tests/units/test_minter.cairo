@@ -55,7 +55,7 @@ func test_buy_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+        1, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -85,7 +85,7 @@ func test_buy_revert_not_enough_nfts_available{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+        1, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -114,7 +114,7 @@ func test_buy_revert_not_enough_free_nfts{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(9, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+        1, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -129,7 +129,7 @@ func test_buy_revert_not_enough_free_nfts{
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [0, 0]) %}
     %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    CarbonableMinter.buy(quantity)
+    CarbonableMinter.public_buy(quantity)
     %{ stop() %}
     return ()
 end
@@ -143,7 +143,7 @@ func test_buy_revert_transfer_failed{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+        1, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -172,7 +172,7 @@ func test_buy_revert_mint_not_open{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, FALSE, 5, unit_price, max_supply, reserved_supply
+        0, FALSE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -201,7 +201,7 @@ func test_buy_revert_not_whitelisted{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
+        MERKLE_ROOT, FALSE, 5, unit_price, max_supply, reserved_supply
     )
     let (local proof : felt*) = alloc()
     assert [proof] = 1
@@ -233,17 +233,23 @@ func test_set_whitelist_merkle_root_nominal_case{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
+        MERKLE_ROOT, FALSE, 5, unit_price, max_supply, reserved_supply
     )
-    %{ stop=start_prank(ids.context.signers.anyone_1) %}
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    CarbonableMinter.add_to_whitelist(42, 1)
+    let (local proof : felt*) = alloc()
+    assert [proof] = PROOF
+
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    CarbonableMinter.set_whitelist_merkle_root(context.whitelist_merkle_root)
+    let (slots) = CarbonableMinter.whitelisted_slots(
+        account=context.signers.anyone_1, slots=5, proof_len=1, proof=proof
+    )
+    assert slots = 5
     %{ stop() %}
     return ()
 end
 
 @external
-func test_add_to_whitelist_nominal_case{
+func test_set_merkle_tree_revert_if_not_owner{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     alloc_locals
@@ -251,13 +257,11 @@ func test_add_to_whitelist_nominal_case{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
+        MERKLE_ROOT, FALSE, 5, unit_price, max_supply, reserved_supply
     )
-    %{ stop=start_prank(ids.context.signers.admin) %}
-    let (success) = CarbonableMinter.add_to_whitelist(42, 33)
-    assert success = TRUE
-    let (slots) = CarbonableMinter.whitelist(42)
-    assert slots = 33
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableMinter.set_whitelist_merkle_root(123)
     %{ stop() %}
     return ()
 end
@@ -269,7 +273,7 @@ func test_buy_user_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
+        MERKLE_ROOT, FALSE, 5, unit_price, max_supply, reserved_supply
     )
     let (local proof : felt*) = alloc()
     assert [proof] = PROOF
@@ -304,7 +308,7 @@ func test_buy_user_whitelisted_but_not_enough_slots{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
+        MERKLE_ROOT, FALSE, 5, unit_price, max_supply, reserved_supply
     )
     let (local proof : felt*) = alloc()
     assert [proof] = PROOF
@@ -333,7 +337,7 @@ func test_airdrop_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(5, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
+        1, FALSE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: admin
@@ -361,7 +365,7 @@ func test_airdrop_revert_if_not_owner{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
+        1, FALSE, 5, unit_price, max_supply, reserved_supply
     )
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
@@ -379,7 +383,7 @@ func test_airdrop_revert_not_enough_nfts_available{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(1, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+        1, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: admin
@@ -409,7 +413,7 @@ func test_withdraw_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+        1, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: admin
@@ -432,7 +436,7 @@ func test_withdraw_revert_not_owner{
     let max_supply = Uint256(10, 0)
     let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+        1, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
