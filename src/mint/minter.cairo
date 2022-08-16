@@ -154,3 +154,17 @@ func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
 ) -> (success : felt):
     return CarbonableMinter.airdrop(to, quantity)
 end
+
+@external
+func transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    token_address : felt, recipient : felt, amount : Uint256
+) -> (success : felt):
+    return CarbonableMinter.transfer(token_address, recipient, amount)
+end
+
+@external
+func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quantity : felt) -> (
+    success : felt
+):
+    return CarbonableMinter.buy(quantity)
+end

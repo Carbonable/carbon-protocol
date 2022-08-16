@@ -228,8 +228,22 @@ namespace CarbonableMinter:
         let (balance) = IERC20.balanceOf(
             contract_address=payment_token_address, account=contract_address
         )
+        let (success) = transfer(
+            token_address=payment_token_address, recipient=caller, amount=balance
+        )
+
+        return (success)
+    end
+
+    func transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        token_address : felt, recipient : felt, amount : Uint256
+    ) -> (success : felt):
+        # Access control check
+        Ownable.assert_only_owner()
+
+        # Do ERC20 transfer
         let (transfer_success) = IERC20.transfer(
-            contract_address=payment_token_address, recipient=caller, amount=balance
+            contract_address=token_address, recipient=recipient, amount=amount
         )
         with_attr error_message("CarbonableMinter: transfer failed"):
             assert transfer_success = TRUE
