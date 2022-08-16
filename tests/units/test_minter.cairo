@@ -40,7 +40,7 @@ struct TestContext:
     member signers : Signers
     member mocks : Mocks
 
-    member merkle_root : felt
+    member whitelist_merkle_root : felt
     member public_sale_open : felt
     member max_buy_per_tx : felt
     member unit_price : Uint256
@@ -225,7 +225,7 @@ func test_buy_revert_not_whitelisted{
 end
 
 @external
-func test_set_merkle_root_nominal_case{
+func test_set_whitelist_merkle_root_nominal_case{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     alloc_locals
@@ -446,7 +446,7 @@ end
 
 namespace test_internal:
     func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        merkle_root : felt,
+        whitelist_merkle_root : felt,
         public_sale_open : felt,
         max_buy_per_tx : felt,
         unit_price : Uint256,
@@ -464,7 +464,7 @@ namespace test_internal:
         local context : TestContext = TestContext(
             signers=signers,
             mocks=mocks,
-            merkle_root=merkle_root,
+            whitelist_merkle_root=whitelist_merkle_root,
             public_sale_open=public_sale_open,
             max_buy_per_tx=max_buy_per_tx,
             unit_price=unit_price,
@@ -483,9 +483,9 @@ namespace test_internal:
             context.reserved_supply_for_mint,
         )
 
-        # Admin adds merkle_root including anyone_1 with 5 slots
+        # Admin adds whitelist_merkle_root including anyone_1 with 5 slots
         %{ stop=start_prank(ids.context.signers.admin) %}
-        CarbonableMinter.set_merkle_root(context.merkle_root)
+        CarbonableMinter.set_whitelist_merkle_root(context.whitelist_merkle_root)
         %{ stop() %}
 
         return (test_context=context)

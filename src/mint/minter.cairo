@@ -67,10 +67,10 @@ func max_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
 end
 
 @view
-func merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func whitelist_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     root : felt
 ):
-    return CarbonableMinter.merkle_root()
+    return CarbonableMinter.whitelist_merkle_root()
 end
 
 @view
@@ -112,10 +112,10 @@ end
 # ------------------
 
 @external
-func set_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    merkle_root : felt
+func set_whitelist_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    whitelist_merkle_root : felt
 ):
-    return CarbonableMinter.set_merkle_root(merkle_root)
+    return CarbonableMinter.set_whitelist_merkle_root(whitelist_merkle_root)
 end
 
 @external

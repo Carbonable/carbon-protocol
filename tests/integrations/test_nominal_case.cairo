@@ -20,7 +20,7 @@ from tests.integrations.library import (
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     alloc_locals
     tempvar carbonable_minter
-    tempvar merkle_root = 3236969588476960619958150604131083087415975923122021901088942336874683133579
+    tempvar whitelist_merkle_root = 3236969588476960619958150604131083087415975923122021901088942336874683133579
     %{
         # --- INITIAL SETTINGS ---
         # User addresses
@@ -82,7 +82,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 
     # Transfer project nft ownershop from admin to minter
     admin.transferOwnership(carbonable_minter)
-    admin.set_merkle_root(merkle_root)
+    admin.set_whitelist_merkle_root(whitelist_merkle_root)
 
     return ()
 end
@@ -94,7 +94,7 @@ func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     # - whitelisted: FALSE
     # - has enough funds: YES
 
-    admin.set_merkle_root(123)
+    admin.set_whitelist_merkle_root(123)
     anyone.approve(quantity=1)
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: caller address is not whitelisted") %}
     anyone.whitelist_buy(quantity=1)
