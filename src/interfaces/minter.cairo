@@ -49,7 +49,7 @@ namespace ICarbonableMinter:
     ):
     end
 
-    func set_merkle_root(merkle_root : felt):
+    func set_whitelist_merkle_root(whitelist_merkle_root : felt):
     end
 
     func set_public_sale_open(public_sale_open : felt):

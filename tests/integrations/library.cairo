@@ -170,7 +170,7 @@ namespace carbonable_minter_instance:
     func whitelist{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
     }() -> (root : felt):
-        let (root) = ICarbonableMinter.merkle_root(carbonable_minter)
+        let (root) = ICarbonableMinter.whitelist_merkle_root(carbonable_minter)
         return (root)
     end
 
@@ -196,9 +196,9 @@ namespace carbonable_minter_instance:
 
     func set_whitelisted_sale_open{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
-    }(merkle_root : felt, caller : felt):
+    }(whitelist_merkle_root : felt, caller : felt):
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.set_merkle_root(carbonable_minter, merkle_root)
+        ICarbonableMinter.set_whitelist_merkle_root(carbonable_minter, whitelist_merkle_root)
         %{ stop_prank() %}
         return ()
     end
@@ -299,8 +299,10 @@ namespace admin_instance:
         let (carbonable_minter) = carbonable_minter_instance.deployed()
         let (caller) = admin_instance.get_address()
         with carbonable_minter:
-            carbonable_minter_instance.set_merkle_root(merkle_root=root, caller=caller)
-            let (returned_root) = carbonable_minter_instance.merkle_root()
+            carbonable_minter_instance.set_whitelist_merkle_root(
+                whitelist_merkle_root=root, caller=caller
+            )
+            let (returned_root) = carbonable_minter_instance.whitelist_merkle_root()
             assert returned_root = root
         end
         return ()
@@ -488,7 +490,7 @@ namespace anyone_instance:
 
         # make the user to buy the quantity
         with carbonable_minter:
-            let (root) = carbonable_minter_instance.merkle_root()
+            let (root) = carbonable_minter_instance.whitelist_merkle_root()
             let (unit_price) = carbonable_minter_instance.unit_price()
             let (success) = carbonable_minter_instance.whitelist_buy(
                 slots=slots, proof_len=proof_len, proof=proof, quantity=quantity, caller=caller
