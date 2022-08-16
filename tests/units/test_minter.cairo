@@ -337,6 +337,7 @@ func test_airdrop_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     # current NFT reserved supply: 0
     %{ stop=start_prank(ids.context.signers.admin) %}
     let quantity = 5
+    CarbonableMinter.set_reserved_supply_for_mint(Uint256(quantity, 0))
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
     %{ mock_call(ids.context.mocks.project_nft_address, "mint", []) %}
     CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
@@ -373,18 +374,22 @@ func test_airdrop_revert_not_enough_nfts_available{
     )
 
     # User: admin
-    # Wants to airdrop 5 NFTs
+    # Wants to airdrop 5 NFTs then 4 NFTs
     # Whitelisted sale: CLOSED
     # Public sale: OPEN
     # current NFT totalSupply: 6
-    # current NFT reserved supply: 5
+    # current NFT reserved supply: 3
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.admin) %}
-    let quantity = 5
-    CarbonableMinter.set_reserved_supply_for_mint(Uint256(quantity, 0))
+    let first_quantity = 5
+    let second_quantity = 4
+    let reserved_quantity = 3
+    CarbonableMinter.set_reserved_supply_for_mint(Uint256(reserved_quantity, 0))
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [6, 0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
+    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=first_quantity)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
+    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=second_quantity)
     %{ stop() %}
     return ()
 end
