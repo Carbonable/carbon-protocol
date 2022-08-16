@@ -101,6 +101,7 @@ func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     admin.set_public_sale_open(TRUE)
     anyone.approve(quantity=5)
     anyone.buy(quantity=5)
+    admin.withdraw()
 
     return ()
 end
@@ -128,6 +129,7 @@ func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
     admin.airdrop(to=anyone_address, quantity=5)
     admin.airdrop(to=anyone_address, quantity=4)
+    admin.withdraw()
 
     return ()
 end
