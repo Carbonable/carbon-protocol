@@ -142,17 +142,17 @@ func add_to_whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
 end
 
 @external
-func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quantity : felt) -> (
-    success : felt
-):
-    return CarbonableMinter.buy(quantity)
-end
-
-@external
 func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     to : felt, quantity : felt
 ) -> (success : felt):
     return CarbonableMinter.airdrop(to, quantity)
+end
+
+@external
+func withdraw{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    success : felt
+):
+    return CarbonableMinter.withdraw()
 end
 
 @external

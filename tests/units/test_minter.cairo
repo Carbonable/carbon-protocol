@@ -400,6 +400,49 @@ func test_airdrop_revert_not_enough_nfts_available{
     return ()
 end
 
+@external
+func test_withdraw_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ):
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+    )
+
+    # User: admin
+    # Withdraw contract balance
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    %{ mock_call(ids.context.mocks.payment_token_address, "balanceOf", [5, 0]) %}
+    %{ mock_call(ids.context.mocks.payment_token_address, "transfer", [1]) %}
+    let (success) = CarbonableMinter.withdraw()
+    assert success = TRUE
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_withdraw_revert_not_owner{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
+    )
+
+    # User: anyone_1
+    # Withdraw contract balance
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableMinter.withdraw()
+    %{ stop() %}
+    return ()
+end
+
 namespace test_internal:
     func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         whitelisted_sale_open : felt,
