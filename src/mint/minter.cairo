@@ -87,6 +87,7 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     max_buy_per_tx : felt,
     unit_price : Uint256,
     max_supply_for_mint : Uint256,
+    reserved_supply_for_mint : Uint256,
 ):
     return CarbonableMinter.constructor(
         owner,
@@ -97,6 +98,7 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
         max_buy_per_tx,
         unit_price,
         max_supply_for_mint,
+        reserved_supply_for_mint,
     )
 end
 
@@ -130,13 +132,6 @@ func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
     unit_price : Uint256
 ):
     return CarbonableMinter.set_unit_price(unit_price)
-end
-
-@external
-func set_reserved_supply_for_mint{
-    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(reserved_supply_for_mint : Uint256):
-    return CarbonableMinter.set_reserved_supply_for_mint(reserved_supply_for_mint)
 end
 
 @external
