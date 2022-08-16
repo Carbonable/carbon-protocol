@@ -327,9 +327,23 @@ namespace CarbonableMinter:
             assert enough_left = TRUE
         end
 
+        # Check if enough reserved NFTs available
+        let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
+        let (enough_reserved_left) = uint256_le(quantity_uint256, reserved_supply_for_mint)
+        with_attr error_message("CarbonableMinter: not enough available reserved NFTs"):
+            assert enough_reserved_left = TRUE
+        end
+
         # Do the actual NFT mint
         let starting_index = total_supply
         mint_n(project_nft_address, to, starting_index, quantity_uint256)
+
+        # Remove the minted quantity from the reserved supply
+        let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
+            reserved_supply_for_mint, quantity_uint256
+        )
+        reserved_supply_for_mint_.write(new_reserved_supply_for_mint)
+
         # Success
         return (TRUE)
     end
