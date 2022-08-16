@@ -63,6 +63,11 @@ end
 func max_supply_for_mint_() -> (res : Uint256):
 end
 
+# Reserved supply
+@storage_var
+func reserved_supply_for_mint_() -> (res : Uint256):
+end
+
 # Whitelist
 @storage_var
 func whitelist_(account : felt) -> (res : felt):
@@ -118,6 +123,13 @@ namespace CarbonableMinter:
         return (max_supply_for_mint)
     end
 
+    func reserved_supply_for_mint{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }() -> (reserved_supply_for_mint : Uint256):
+        let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
+        return (reserved_supply_for_mint)
+    end
+
     func whitelist{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt
     ) -> (slots : felt):
@@ -138,6 +150,7 @@ namespace CarbonableMinter:
         max_buy_per_tx : felt,
         unit_price : Uint256,
         max_supply_for_mint : Uint256,
+        reserved_supply_for_mint : Uint256,
     ):
         Ownable.initializer(owner)
         project_nft_address_.write(project_nft_address)
@@ -147,6 +160,7 @@ namespace CarbonableMinter:
         max_buy_per_tx_.write(max_buy_per_tx)
         unit_price_.write(unit_price)
         max_supply_for_mint_.write(max_supply_for_mint)
+        reserved_supply_for_mint_.write(reserved_supply_for_mint)
         return ()
     end
 
@@ -249,7 +263,11 @@ namespace CarbonableMinter:
         let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
         let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
         let (max_supply_for_mint) = max_supply_for_mint_.read()
-        let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
+        let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
+        let (available_supply_for_mint) = SafeUint256.sub_le(
+            max_supply_for_mint, reserved_supply_for_mint
+        )
+        let (enough_left) = uint256_le(supply_after_buy, available_supply_for_mint)
         with_attr error_message("CarbonableMinter: not enough available NFTs"):
             assert enough_left = TRUE
         end
@@ -268,6 +286,57 @@ namespace CarbonableMinter:
         # Do the actual NFT mint
         let starting_index = total_supply
         mint_n(project_nft_address, caller, starting_index, quantity_uint256)
+        # Success
+        return (TRUE)
+    end
+
+    func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        to : felt, quantity : felt
+    ) -> (success : felt):
+        alloc_locals
+        # Access control check
+        Ownable.assert_only_owner()
+
+        # Get variables through system calls
+        let (caller) = get_caller_address()
+        let (contract_address) = get_contract_address()
+
+        let quantity_uint256 = Uint256(quantity, 0)
+
+        # Check preconditions
+        with_attr error_message("CarbonableMinter: caller is the zero address"):
+            assert_not_zero(caller)
+        end
+
+        # Get storage variables
+        let (project_nft_address) = project_nft_address_.read()
+
+        # Check if enough NFTs available
+        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
+        let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
+        let (max_supply_for_mint) = max_supply_for_mint_.read()
+        let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
+        with_attr error_message("CarbonableMinter: not enough available NFTs"):
+            assert enough_left = TRUE
+        end
+
+        # Check if enough reserved NFTs available
+        let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
+        let (enough_reserved_left) = uint256_le(quantity_uint256, reserved_supply_for_mint)
+        with_attr error_message("CarbonableMinter: not enough available reserved NFTs"):
+            assert enough_reserved_left = TRUE
+        end
+
+        # Do the actual NFT mint
+        let starting_index = total_supply
+        mint_n(project_nft_address, to, starting_index, quantity_uint256)
+
+        # Remove the minted quantity from the reserved supply
+        let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
+            reserved_supply_for_mint, quantity_uint256
+        )
+        reserved_supply_for_mint_.write(new_reserved_supply_for_mint)
+
         # Success
         return (TRUE)
     end

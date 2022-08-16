@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Carbonable smart contracts written in Cairo v0.1.0 (CarbonableMinter.cairo)
+# Carbonable smart contracts written in Cairo v0.1.0 (minter.cairo)
 
 %lang starknet
 
@@ -54,6 +54,12 @@ func unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 end
 
 @view
+func reserved_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ) -> (reserved_supply_for_mint : Uint256):
+    return CarbonableMinter.reserved_supply_for_mint()
+end
+
+@view
 func max_supply_for_mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     max_supply_for_mint : Uint256
 ):
@@ -81,6 +87,7 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     max_buy_per_tx : felt,
     unit_price : Uint256,
     max_supply_for_mint : Uint256,
+    reserved_supply_for_mint : Uint256,
 ):
     return CarbonableMinter.constructor(
         owner,
@@ -91,6 +98,7 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
         max_buy_per_tx,
         unit_price,
         max_supply_for_mint,
+        reserved_supply_for_mint,
     )
 end
 
@@ -138,4 +146,11 @@ func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(quan
     success : felt
 ):
     return CarbonableMinter.buy(quantity)
+end
+
+@external
+func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    to : felt, quantity : felt
+) -> (success : felt):
+    return CarbonableMinter.airdrop(to, quantity)
 end
