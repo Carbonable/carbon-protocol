@@ -18,6 +18,9 @@ from openzeppelin.token.erc721.interfaces.IERC721 import IERC721
 from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import IERC721_Enumerable
 from openzeppelin.access.ownable import Ownable
 
+# Local dependencies
+from src.mint.merkletree import MerkleTree
+
 @contract_interface
 namespace IERC721Mintable:
     func mint(to : felt, token_id : Uint256):
@@ -65,7 +68,7 @@ end
 
 # Whitelist
 @storage_var
-func merkle_root_() -> (root : felt):
+func whitelist_merkle_root_() -> (root : felt):
 end
 
 namespace CarbonableMinter:
@@ -87,8 +90,8 @@ namespace CarbonableMinter:
 
     func whitelisted_sale_open{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ) -> (whitelisted_sale_open : felt):
-        let (merkle_root) = merkle_root_.read()
-        let (whitelisted_sale_open) = is_not_zero(merkle_root)
+        let (whitelist_merkle_root) = whitelist_merkle_root_.read()
+        let (whitelisted_sale_open) = is_not_zero(whitelist_merkle_root)
         return (whitelisted_sale_open)
     end
 
@@ -130,9 +133,9 @@ namespace CarbonableMinter:
         account : felt
     ) -> (slots : felt):
         let (leaf) = hash2{hash_ptr=pedersen_ptr}(account, slots)
-        let (merkle_root) = merkle_root_.read()  # 0 by default if not write
-        let (whitelisted) = merkle_verify(
-            leaf=leaf, merkle_root=merkle_root, proof_len=proof_len, proof=proof
+        let (whitelist_merkle_root) = whitelist_merkle_root_.read()  # 0 by default if not write
+        let (whitelisted) = MerkleTree.verify(
+            leaf=leaf, merkle_root=whitelist_merkle_root, proof_len=proof_len, proof=proof
         )
         return (slots=slots * whitelisted)  # 0 if note whitelisted else 1 * slots
     end
@@ -166,12 +169,12 @@ namespace CarbonableMinter:
     # EXTERNAL FUNCTIONS
     # ------------------
 
-    func set_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        merkle_root : felt
-    ):
+    func set_whitelist_merkle_root{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(whitelist_merkle_root : felt):
         # Access control check
         Ownable.assert_only_owner()
-        merkle_root_.write(merkle_root)
+        whitelist_merkle_root_.write(whitelist_merkle_root)
         return ()
     end
 
@@ -405,57 +408,5 @@ namespace CarbonableMinter:
         let (new_quantity) = SafeUint256.sub_le(quantity, one)
         mint_n(nft_contract_address, to, token_id, new_quantity)
         return ()
-    end
-
-    ###
-    # Verify that leaf belongs to merkle tree.
-    # ref: https://github.com/ncitron/cairo-merkle-distributor/blob/master/contracts/merkle.cairo
-    # @param leaf
-    # @param proof_len
-    # @param proof
-    ###
-    func merkle_verify{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        leaf : felt, merkle_root : felt, proof_len : felt, proof : felt*
-    ) -> (res : felt):
-        alloc_locals
-
-        let (calc_root) = calc_merkle_root(leaf, proof_len, proof)
-        # check if calculated root is equal to expected
-        if calc_root == merkle_root:
-            return (1)
-        end
-        return (0)
-    end
-
-    ###
-    # Calculates the merkle root of a given proof
-    # ref: https://github.com/ncitron/cairo-merkle-distributor/blob/master/contracts/merkle.cairo
-    # @param curr
-    # @param proof_len
-    # @param proof
-    ###
-    func calc_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        curr : felt, proof_len : felt, proof : felt*
-    ) -> (res : felt):
-        alloc_locals
-
-        if proof_len == 0:
-            return (curr)
-        end
-
-        local node
-        local proof_elem = [proof]
-        let (le) = is_le_felt(curr, proof_elem)
-
-        if le == 1:
-            let (n) = hash2{hash_ptr=pedersen_ptr}(curr, proof_elem)
-            node = n
-        else:
-            let (n) = hash2{hash_ptr=pedersen_ptr}(proof_elem, curr)
-            node = n
-        end
-
-        let (res) = calc_merkle_root(node, proof_len - 1, proof + 1)
-        return (res)
     end
 end
