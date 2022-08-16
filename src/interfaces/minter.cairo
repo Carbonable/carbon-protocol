@@ -59,6 +59,9 @@ namespace ICarbonableMinter:
     func add_to_whitelist(account : felt, slots : felt) -> (success : felt):
     end
 
+    func airdrop(to : felt, quantity : felt) -> (success : felt):
+    end
+
     func withdraw() -> (success : felt):
     end
 
@@ -66,8 +69,5 @@ namespace ICarbonableMinter:
     end
 
     func buy(quantity : felt) -> (success : felt):
-    end
-
-    func airdrop(to : felt, quantity : felt) -> (success : felt):
     end
 end
