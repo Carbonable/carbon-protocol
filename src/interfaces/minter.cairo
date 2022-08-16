@@ -56,9 +56,6 @@ namespace ICarbonableMinter:
     func set_unit_price(unit_price : Uint256):
     end
 
-    func set_reserved_supply_for_mint(reserved_supply_for_mint : Uint256):
-    end
-
     func add_to_whitelist(account : felt, slots : felt) -> (success : felt):
     end
 

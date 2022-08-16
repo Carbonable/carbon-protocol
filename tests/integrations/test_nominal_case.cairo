@@ -39,6 +39,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
         context.MAX_BUY_PER_TX = 5
         context.UNIT_PRICE = 10
         context.MAX_SUPPLY_FOR_MINT = 10
+        context.RESERVED_SUPPLY_FOR_MINT = 4
 
         # ERC-721 deployment
         context.project_nft_contract = deploy_contract(
@@ -74,6 +75,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
                 "max_buy_per_tx": context.MAX_BUY_PER_TX,
                 "unit_price": context.UNIT_PRICE,
                 "max_supply_for_mint": context.MAX_SUPPLY_FOR_MINT,
+                "reserved_supply_for_mint": context.RESERVED_SUPPLY_FOR_MINT,
             },
         ).contract_address
         ids.carbonable_minter = context.carbonable_minter_contract
@@ -105,8 +107,6 @@ end
 
 @view
 func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # User: ADMIN
-    # - set reserved supply to 4
     # User: ANYONE
     # - wants to buy 6 NFTs (5 whitelist, 2 public)
     # - whitelisted: TRUE
@@ -117,7 +117,6 @@ func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     alloc_locals
     let (anyone_address) = anyone.get_address()
 
-    admin.set_reserved_supply_for_mint(4)
     admin.add_to_whitelist(account=anyone_address, slots=5)
     anyone.approve(quantity=5)
     anyone.buy(quantity=5)
@@ -135,8 +134,6 @@ end
 
 @view
 func test_e2e_over_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # User: ADMIN
-    # - set reserved supply to 10
     # User: ANYONE
     # - wants to buy 1 NFT1 (1 whitelist)
     # - whitelisted: TRUE
@@ -145,12 +142,6 @@ func test_e2e_over_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     # - aidrop 11 nft to ANYONE
     alloc_locals
     let (anyone_address) = anyone.get_address()
-
-    admin.set_reserved_supply_for_mint(10)
-    admin.add_to_whitelist(account=anyone_address, slots=1)
-    anyone.approve(quantity=1)
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    anyone.buy(quantity=1)
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     admin.airdrop(to=anyone_address, quantity=11)
 

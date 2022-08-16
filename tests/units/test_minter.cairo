@@ -41,6 +41,7 @@ struct TestContext:
     member max_buy_per_tx : felt
     member unit_price : Uint256
     member max_supply_for_mint : Uint256
+    member reserved_supply_for_mint : Uint256
 end
 
 @external
@@ -48,8 +49,9 @@ func test_buy_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply
+        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -77,8 +79,9 @@ func test_buy_revert_not_enough_nfts_available{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply
+        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -105,8 +108,9 @@ func test_buy_revert_not_enough_free_nfts{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(9, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply
+        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -116,11 +120,6 @@ func test_buy_revert_not_enough_free_nfts{
     # current NFT totalSupply: 0
     # current NFT reserved supply: 9
     # has enough funds: YES
-    %{ stop=start_prank(ids.context.signers.admin) %}
-    let reserved_quantity = Uint256(9, 0)
-    CarbonableMinter.set_reserved_supply_for_mint(reserved_quantity)
-    %{ stop() %}
-
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     let quantity = 2
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [0, 0]) %}
@@ -138,8 +137,9 @@ func test_buy_revert_transfer_failed{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply
+        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -166,8 +166,9 @@ func test_buy_revert_mint_not_open{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, FALSE, 5, unit_price, max_supply
+        FALSE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -194,8 +195,9 @@ func test_buy_revert_not_whitelisted{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply
+        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: anyone_1
@@ -223,8 +225,9 @@ func test_add_to_whitelist_revert_if_not_owner{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply
+        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
@@ -240,8 +243,9 @@ func test_add_to_whitelist_nominal_case{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply
+        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
     %{ stop=start_prank(ids.context.signers.admin) %}
     let (success) = CarbonableMinter.add_to_whitelist(42, 33)
@@ -257,8 +261,9 @@ func test_buy_user_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply
+        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
 
     # Admin adds anyone_1 to whitelist
@@ -292,8 +297,9 @@ func test_buy_user_whitelisted_but_not_enough_slots{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply
+        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
 
     # Admin adds anyone_1 to whitelist
@@ -324,8 +330,9 @@ func test_airdrop_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(5, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply
+        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: admin
@@ -337,7 +344,6 @@ func test_airdrop_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     # current NFT reserved supply: 0
     %{ stop=start_prank(ids.context.signers.admin) %}
     let quantity = 5
-    CarbonableMinter.set_reserved_supply_for_mint(Uint256(quantity, 0))
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
     %{ mock_call(ids.context.mocks.project_nft_address, "mint", []) %}
     CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
@@ -352,8 +358,9 @@ func test_airdrop_revert_if_not_owner{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
     let (local context : TestContext) = test_internal.prepare(
-        TRUE, FALSE, 5, unit_price, max_supply
+        TRUE, FALSE, 5, unit_price, max_supply, reserved_supply
     )
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
@@ -369,8 +376,9 @@ func test_airdrop_revert_not_enough_nfts_available{
     alloc_locals
     let unit_price = Uint256(10, 0)
     let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(1, 0)
     let (local context : TestContext) = test_internal.prepare(
-        FALSE, TRUE, 5, unit_price, max_supply
+        FALSE, TRUE, 5, unit_price, max_supply, reserved_supply
     )
 
     # User: admin
@@ -382,8 +390,6 @@ func test_airdrop_revert_not_enough_nfts_available{
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.admin) %}
     let quantity = 5
-    let reserved_quantity = 1
-    CarbonableMinter.set_reserved_supply_for_mint(Uint256(reserved_quantity, 0))
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [6, 0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
@@ -401,6 +407,7 @@ namespace test_internal:
         max_buy_per_tx : felt,
         unit_price : Uint256,
         max_supply_for_mint : Uint256,
+        reserved_supply_for_mint : Uint256,
     ) -> (test_context : TestContext):
         alloc_locals
         local signers : Signers = Signers(admin=ADMIN, anyone_1=ANYONE_1, anyone_2=ANYONE_2, anyone_3=ANYONE_3)
@@ -418,6 +425,7 @@ namespace test_internal:
             max_buy_per_tx=max_buy_per_tx,
             unit_price=unit_price,
             max_supply_for_mint=max_supply_for_mint,
+            reserved_supply_for_mint=reserved_supply_for_mint,
             )
 
         CarbonableMinter.constructor(
@@ -429,6 +437,7 @@ namespace test_internal:
             context.max_buy_per_tx,
             context.unit_price,
             context.max_supply_for_mint,
+            context.reserved_supply_for_mint,
         )
         return (test_context=context)
     end

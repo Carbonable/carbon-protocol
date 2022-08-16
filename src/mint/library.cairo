@@ -150,6 +150,7 @@ namespace CarbonableMinter:
         max_buy_per_tx : felt,
         unit_price : Uint256,
         max_supply_for_mint : Uint256,
+        reserved_supply_for_mint : Uint256,
     ):
         Ownable.initializer(owner)
         project_nft_address_.write(project_nft_address)
@@ -159,6 +160,7 @@ namespace CarbonableMinter:
         max_buy_per_tx_.write(max_buy_per_tx)
         unit_price_.write(unit_price)
         max_supply_for_mint_.write(max_supply_for_mint)
+        reserved_supply_for_mint_.write(reserved_supply_for_mint)
         return ()
     end
 
@@ -199,15 +201,6 @@ namespace CarbonableMinter:
         # Access control check
         Ownable.assert_only_owner()
         unit_price_.write(unit_price)
-        return ()
-    end
-
-    func set_reserved_supply_for_mint{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(reserved_supply_for_mint : Uint256):
-        # Access control check
-        Ownable.assert_only_owner()
-        reserved_supply_for_mint_.write(reserved_supply_for_mint)
         return ()
     end
 
