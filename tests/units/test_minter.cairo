@@ -324,8 +324,51 @@ func test_buy_user_whitelisted_but_not_enough_slots{
     %{ stop=start_prank(ids.context.signers.anyone_1) %}
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [3, 0]) %}
     %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: no whitelisted slot available") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough whitelisted slots available") %}
     CarbonableMinter.whitelist_buy(slots=5, proof_len=1, proof=proof, quantity=6)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_buy_user_whitelisted_but_not_enough_slots_after_claim{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(0, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        MERKLE_ROOT, FALSE, 5, unit_price, max_supply, reserved_supply
+    )
+    let (local proof : felt*) = alloc()
+    assert [proof] = PROOF
+
+    # User: anyone_1
+    # Wants to buy 5 NFTs and then 1 NFT
+    # Whitelisted sale: OPEN
+    # Public sale: CLOSED
+    # Is user whitelisted: YES (but not enough slots for second buy)
+    # current NFT totalSupply: 3
+    # current NFT reserved supply: 0
+    # has enough funds: YES
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+
+    # Mock
+    %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [3, 0]) %}
+    %{ mock_call(ids.context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{ mock_call(ids.context.mocks.project_nft_address, "mint", []) %}
+
+    # First buy
+    # Call whitelist_buy
+    CarbonableMinter.whitelist_buy(slots=5, proof_len=1, proof=proof, quantity=5)
+
+    # Expect error
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough whitelisted slots available") %}
+
+    # Second buy
+    # Call whitelist_buy
+    CarbonableMinter.whitelist_buy(slots=5, proof_len=1, proof=proof, quantity=1)
     %{ stop() %}
     return ()
 end

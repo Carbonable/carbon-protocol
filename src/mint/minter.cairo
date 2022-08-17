@@ -80,6 +80,12 @@ func whitelisted_slots{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     return CarbonableMinter.whitelisted_slots(account, slots, proof_len, proof)
 end
 
+@view
+func claimed_slots{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    account : felt
+) -> (slots : felt):
+    return CarbonableMinter.claimed_slots(account)
+end
 # ------
 # CONSTRUCTOR
 # ------
