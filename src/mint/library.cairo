@@ -71,6 +71,11 @@ end
 func whitelist_merkle_root_() -> (whitelist_merkle_root : felt):
 end
 
+# Claimed slots
+@storage_var
+func claimed_slots_(account : felt) -> (slots : felt):
+end
+
 namespace CarbonableMinter:
     # -----
     # VIEWS
@@ -144,6 +149,13 @@ namespace CarbonableMinter:
             leaf=leaf, merkle_root=whitelist_merkle_root, proof_len=proof_len, proof=proof
         )
         return (slots=slots * whitelisted)  # 0 if note whitelisted else 1 * slots
+    end
+
+    func claimed_slots{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        account : felt
+    ) -> (slots : felt):
+        let (slots) = claimed_slots_.read(account)
+        return (slots)
     end
 
     # ------
@@ -323,13 +335,23 @@ namespace CarbonableMinter:
             assert_not_zero(slots)
         end
 
+        # Retrieve slots already claimed
+        let (claimed_slots) = claimed_slots_.read(caller)
+        let available_slots = slots - claimed_slots
+
         # Check if account has available whitelisted slots
-        let (enough_slots) = is_le(quantity, slots)
-        with_attr error_message("CarbonableMinter: no whitelisted slot available"):
+        let (enough_slots) = is_le(quantity, available_slots)
+        with_attr error_message("CarbonableMinter: not enough whitelisted slots available"):
             assert enough_slots = TRUE
         end
 
+        # Buy NFTs
         let (success) = buy(quantity)
+
+        # Update claimed slots
+        let new_claimed_slots = claimed_slots + quantity
+        claimed_slots_.write(caller, new_claimed_slots)
+
         return (success)
     end
 
