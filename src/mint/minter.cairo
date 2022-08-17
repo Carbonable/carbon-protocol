@@ -173,10 +173,3 @@ func public_buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 ) -> (success : felt):
     return CarbonableMinter.public_buy(quantity)
 end
-
-@external
-func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    to : felt, quantity : felt
-) -> (success : felt):
-    return CarbonableMinter.airdrop(to, quantity)
-end
