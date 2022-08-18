@@ -16,6 +16,10 @@ CarbonableMinter = [
     "./src/mint/minter.cairo",
 ]
 
+CarbonableYieldManager = [
+    "./src/yield/yield_manager.cairo",
+]
+
 ["protostar.test"]
 target = ["tests"]
 
