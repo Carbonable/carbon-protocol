@@ -64,6 +64,9 @@ namespace ICarbonableMinter:
     func set_unit_price(unit_price : Uint256):
     end
 
+    func decrease_reserved_supply_for_mint(slots : Uint256):
+    end
+
     func airdrop(to : felt, quantity : felt) -> (success : felt):
     end
 
