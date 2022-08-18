@@ -8,6 +8,8 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.bool import TRUE, FALSE
 
+from openzeppelin.security.safemath import SafeUint256
+
 from src.mint.library import CarbonableMinter
 
 const PROJECT_NFT_ADDRESS = 0x056d4ffea4ca664ffe1256af4b029998014471a87dec8036747a927ab3320b46
@@ -387,14 +389,12 @@ func test_airdrop_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     # Wants to aidrop 5 NFTs
     # Whitelisted sale: OPEN
     # Public sale: CLOSED
-    # Is user whitelisted: NO
     # current NFT totalSupply: 5
-    # current NFT reserved supply: 0
+    # current NFT reserved supply: 5
     %{ stop=start_prank(ids.context.signers.admin) %}
-    let quantity = 5
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
     %{ mock_call(ids.context.mocks.project_nft_address, "mint", []) %}
-    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
+    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=5)
     %{ stop() %}
     return ()
 end
@@ -437,13 +437,89 @@ func test_airdrop_revert_not_enough_nfts_available{
     # current NFT reserved supply: 1
     # has enough funds: YES
     %{ stop=start_prank(ids.context.signers.admin) %}
-    let quantity = 5
     %{ mock_call(ids.context.mocks.project_nft_address, "totalSupply", [6, 0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=quantity)
+    CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=5)
     CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=1)
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
     CarbonableMinter.airdrop(to=context.signers.anyone_1, quantity=1)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_decrease_reserved_supply_nominal_case{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(5, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        1, FALSE, 5, unit_price, max_supply, reserved_supply
+    )
+
+    # User: admin
+    # Wants to decrease the reserved supply by 2
+    # Whitelisted sale: OPEN
+    # Public sale: CLOSED
+    # current NFT reserved supply: 5
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    let slots = Uint256(2, 0)
+    let (expected_slots) = SafeUint256.sub_le(reserved_supply, slots)
+    CarbonableMinter.decrease_reserved_supply_for_mint(slots=slots)
+    let (returned_supply) = CarbonableMinter.reserved_supply_for_mint()
+    assert returned_supply = expected_slots
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_decrease_reserved_supply_revert_not_owner{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(5, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        1, FALSE, 5, unit_price, max_supply, reserved_supply
+    )
+
+    # User: anyone_1
+    # Wants to decrease the reserved supply by 2
+    # Whitelisted sale: OPEN
+    # Public sale: CLOSED
+    # current NFT reserved supply: 5
+    %{ stop=start_prank(ids.context.signers.anyone_1) %}
+    let slots = Uint256(2, 0)
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableMinter.decrease_reserved_supply_for_mint(slots=slots)
+    %{ stop() %}
+    return ()
+end
+
+@external
+func test_decrease_reserved_supply_revert_over_decreased{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    alloc_locals
+    let unit_price = Uint256(10, 0)
+    let max_supply = Uint256(10, 0)
+    let reserved_supply = Uint256(5, 0)
+    let (local context : TestContext) = test_internal.prepare(
+        1, FALSE, 5, unit_price, max_supply, reserved_supply
+    )
+
+    # User: admin
+    # Wants to decrease the reserved supply by 6
+    # Whitelisted sale: OPEN
+    # Public sale: CLOSED
+    # current NFT reserved supply: 5
+    %{ stop=start_prank(ids.context.signers.admin) %}
+    let slots = Uint256(6, 0)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough reserved slots") %}
+    CarbonableMinter.decrease_reserved_supply_for_mint(slots=slots)
     %{ stop() %}
     return ()
 end

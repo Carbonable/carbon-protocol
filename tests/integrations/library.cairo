@@ -185,6 +185,15 @@ namespace carbonable_minter_instance:
 
     # Externals
 
+    func decrease_reserved_supply_for_mint{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
+    }(slots : Uint256, caller : felt):
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        ICarbonableMinter.decrease_reserved_supply_for_mint(carbonable_minter, slots)
+        %{ stop_prank() %}
+        return ()
+    end
+
     func withdraw{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
     }(caller : felt) -> (success : felt):
@@ -348,6 +357,25 @@ namespace admin_instance:
             carbonable_minter_instance.set_unit_price(unit_price=unit_price, caller=caller)
             let (returned_unit_price) = carbonable_minter_instance.unit_price()
             assert returned_unit_price = unit_price
+        end
+        return ()
+    end
+
+    func decrease_reserved_supply_for_mint{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(slots : felt):
+        alloc_locals
+        let (carbonable_minter) = carbonable_minter_instance.deployed()
+        let (caller) = admin_instance.get_address()
+        let slots_uint256 = Uint256(slots, 0)
+        with carbonable_minter:
+            let (initial_supply) = carbonable_minter_instance.reserved_supply_for_mint()
+            carbonable_minter_instance.decrease_reserved_supply_for_mint(
+                slots=slots_uint256, caller=caller
+            )
+            let (returned_supply) = carbonable_minter_instance.reserved_supply_for_mint()
+            let (expected_supply) = SafeUint256.sub_le(initial_supply, slots_uint256)
+            assert returned_supply = expected_supply
         end
         return ()
     end

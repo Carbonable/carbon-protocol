@@ -223,6 +223,23 @@ namespace CarbonableMinter:
         return ()
     end
 
+    func decrease_reserved_supply_for_mint{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }(slots : Uint256):
+        alloc_locals
+
+        # Access control check
+        Ownable.assert_only_owner()
+        let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
+        let (enough_slots) = uint256_le(slots, reserved_supply_for_mint)
+        with_attr error_message("CarbonableMinter: not enough reserved slots"):
+            assert enough_slots = TRUE
+        end
+        let (new_reserved_supply_for_mint) = SafeUint256.sub_le(reserved_supply_for_mint, slots)
+        reserved_supply_for_mint_.write(new_reserved_supply_for_mint)
+        return ()
+    end
+
     func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         to : felt, quantity : felt
     ) -> (success : felt):

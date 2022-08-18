@@ -146,6 +146,13 @@ func set_unit_price{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @external
+func decrease_reserved_supply_for_mint{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(slots : Uint256):
+    return CarbonableMinter.decrease_reserved_supply_for_mint(slots)
+end
+
+@external
 func airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     to : felt, quantity : felt
 ) -> (success : felt):

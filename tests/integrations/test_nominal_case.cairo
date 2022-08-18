@@ -142,7 +142,10 @@ func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     # - has enough funds: YES
     # User: ADMIN
     # - aidrop 5 nft to ANYONE
-    # - aidrop 4 nft to ANYONE
+    # - aidrop 3 nft to ANYONE
+    # - decrease reserved supply by one
+    # User: ADMIN
+    # - wants to buy 2 NFTs (2 public)
     alloc_locals
     let (anyone_address) = anyone.get_address()
 
@@ -154,7 +157,9 @@ func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     anyone.public_buy(quantity=2)
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
     admin.airdrop(to=anyone_address, quantity=5)
-    admin.airdrop(to=anyone_address, quantity=4)
+    admin.airdrop(to=anyone_address, quantity=3)
+    admin.decrease_reserved_supply_for_mint(slots=1)
+    anyone.public_buy(quantity=1)
     admin.withdraw()
 
     return ()
