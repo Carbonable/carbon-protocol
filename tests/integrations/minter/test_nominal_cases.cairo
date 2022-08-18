@@ -4,14 +4,13 @@
 %lang starknet
 
 # Starkware dependencies
-from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 # Project dependencies
-from tests.integrations.library import (
-    carbonable_minter_instance,
-    project_nft_instance,
-    payment_token_instance,
+from tests.integrations.minter.library import (
+    setup,
     admin_instance as admin,
     anyone_instance as anyone,
 )
@@ -19,77 +18,33 @@ from tests.integrations.library import (
 @view
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     alloc_locals
-    tempvar carbonable_minter
-    tempvar whitelist_merkle_root = 3236969588476960619958150604131083087415975923122021901088942336874683133579
-    %{
-        # --- INITIAL SETTINGS ---
+    let (local whitelist_merkle_proof : felt*) = alloc()
+    assert [whitelist_merkle_proof] = 1489335374474017495857579265074565262713421005832572026644103123081435719307
+    let whitelist_merkle_proof_len = 1
+    setup(
         # User addresses
-        context.ADMIN = 1000
-        context.ANYONE = 1001
+        admin_address=1000,
+        anyone_address=1001,
         # CarbonableProjectNFT
-        context.NFT_NAME = 'Carbonable ERC-721 Test'
-        context.NFT_SYMBOL = 'CET'
+        nft_name='Carbonable ERC-721 Test',
+        nft_symbol='CET',
         # Payment token
-        context.TOKEN_NAME = 'StableCoinToken'
-        context.TOKEN_SYMBOL = 'SCT'
-        context.TOKEN_DECIMALS = 6
-        context.TOKEN_INITIAL_SUPPLY = 1000000
+        token_name='StableCoinToken',
+        token_symbol='SCT',
+        token_decimals=6,
+        token_initial_supply=1000000,
         # CarbonableMint
-        context.PUBLIC_SALE_OPEN = ids.FALSE
-        context.MAX_BUY_PER_TX = 5
-        context.UNIT_PRICE = 10
-        context.MAX_SUPPLY_FOR_MINT = 10
-        context.RESERVED_SUPPLY_FOR_MINT = 4
+        minter_public_sale_open=FALSE,
+        minter_max_buy_per_tx=5,
+        minter_unit_price=10,
+        minter_max_supply_for_mint=10,
+        minter_reserved_supply_for_mint=4,
         # Whitelist ANYONE
-        context.SLOTS = 5
-        context.PROOF = [
-            1489335374474017495857579265074565262713421005832572026644103123081435719307,
-        ]
-        context.PROOF_LEN = len(context.PROOF)
-
-        # ERC-721 deployment
-        context.project_nft_contract = deploy_contract(
-            "./src/nft/project/CarbonableProjectNFT.cairo",
-            {
-                "name": context.NFT_NAME,
-                "symbol": context.NFT_SYMBOL,
-                "owner": context.ADMIN,
-            },
-        ).contract_address
-
-        # ERC-20 deployment
-        context.payment_token_contract = deploy_contract(
-            "./tests/mocks/token/erc20.cairo",
-            {
-                "name": context.TOKEN_NAME,
-                "symbol": context.TOKEN_SYMBOL,
-                "decimals": context.TOKEN_DECIMALS,
-                "initial_supply": context.TOKEN_INITIAL_SUPPLY,
-                "recipient": context.ANYONE
-            },
-        ).contract_address
-
-        # Minter deployment
-        context.carbonable_minter_contract = deploy_contract(
-            "./src/mint/minter.cairo",
-            {
-                "owner": context.ADMIN,
-                "project_nft_address": context.project_nft_contract,
-                "payment_token_address": context.payment_token_contract,
-                "public_sale_open": context.PUBLIC_SALE_OPEN,
-                "max_buy_per_tx": context.MAX_BUY_PER_TX,
-                "unit_price": context.UNIT_PRICE,
-                "max_supply_for_mint": context.MAX_SUPPLY_FOR_MINT,
-                "reserved_supply_for_mint": context.RESERVED_SUPPLY_FOR_MINT,
-            },
-        ).contract_address
-        ids.carbonable_minter = context.carbonable_minter_contract
-    %}
-
-    # Transfer project nft ownershop from admin to minter
-    admin.transferOwnership(carbonable_minter)
-    admin.set_whitelist_merkle_root(whitelist_merkle_root)
-
+        whitelist_slots=5,
+        whitelist_merkle_root=3236969588476960619958150604131083087415975923122021901088942336874683133579,
+        whitelist_merkle_proof=whitelist_merkle_proof,
+        whitelist_merkle_proof_len=whitelist_merkle_proof_len,
+    )
     return ()
 end
 

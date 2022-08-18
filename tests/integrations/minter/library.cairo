@@ -17,6 +17,100 @@ from openzeppelin.security.safemath import SafeUint256
 from interfaces.minter import ICarbonableMinter
 from interfaces.CarbonableProjectNFT import IERC721, IERC721_Enumerable, ICarbonableProjectNFT
 
+func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    admin_address : felt,
+    anyone_address : felt,
+    nft_name : felt,
+    nft_symbol : felt,
+    token_name : felt,
+    token_symbol : felt,
+    token_decimals : felt,
+    token_initial_supply : felt,
+    minter_public_sale_open : felt,
+    minter_max_buy_per_tx : felt,
+    minter_unit_price : felt,
+    minter_max_supply_for_mint : felt,
+    minter_reserved_supply_for_mint : felt,
+    whitelist_slots : felt,
+    whitelist_merkle_root : felt,
+    whitelist_merkle_proof : felt*,
+    whitelist_merkle_proof_len : felt,
+):
+    alloc_locals
+    tempvar carbonable_minter
+    %{
+        # --- INITIAL SETTINGS ---
+        # User addresses
+        context.ADMIN = ids.admin_address
+        context.ANYONE = ids.anyone_address
+        # CarbonableProjectNFT
+        context.NFT_NAME = ids.nft_name
+        context.NFT_SYMBOL = ids.nft_symbol
+        # Payment token
+        context.TOKEN_NAME = ids.token_name
+        context.TOKEN_SYMBOL = ids.token_symbol
+        context.TOKEN_DECIMALS = ids.token_decimals
+        context.TOKEN_INITIAL_SUPPLY = ids.token_initial_supply
+        # CarbonableMint
+        context.PUBLIC_SALE_OPEN = ids.minter_public_sale_open
+        context.MAX_BUY_PER_TX = ids.minter_max_buy_per_tx
+        context.UNIT_PRICE = ids.minter_unit_price
+        context.MAX_SUPPLY_FOR_MINT = ids.minter_max_supply_for_mint
+        context.RESERVED_SUPPLY_FOR_MINT = ids.minter_reserved_supply_for_mint
+        # Whitelist ANYONE
+        context.SLOTS = ids.whitelist_slots
+        context.PROOF_LEN = ids.whitelist_merkle_proof_len
+        context.PROOF = [
+            memory[ids.whitelist_merkle_proof + index]
+            for index in range(context.PROOF_LEN)
+        ]
+
+        # ERC-721 deployment
+        context.project_nft_contract = deploy_contract(
+            "./src/nft/project/CarbonableProjectNFT.cairo",
+            {
+                "name": context.NFT_NAME,
+                "symbol": context.NFT_SYMBOL,
+                "owner": context.ADMIN,
+            },
+        ).contract_address
+
+        # ERC-20 deployment
+        context.payment_token_contract = deploy_contract(
+            "./tests/mocks/token/erc20.cairo",
+            {
+                "name": context.TOKEN_NAME,
+                "symbol": context.TOKEN_SYMBOL,
+                "decimals": context.TOKEN_DECIMALS,
+                "initial_supply": context.TOKEN_INITIAL_SUPPLY,
+                "recipient": context.ANYONE
+            },
+        ).contract_address
+
+        # Minter deployment
+        context.carbonable_minter_contract = deploy_contract(
+            "./src/mint/minter.cairo",
+            {
+                "owner": context.ADMIN,
+                "project_nft_address": context.project_nft_contract,
+                "payment_token_address": context.payment_token_contract,
+                "public_sale_open": context.PUBLIC_SALE_OPEN,
+                "max_buy_per_tx": context.MAX_BUY_PER_TX,
+                "unit_price": context.UNIT_PRICE,
+                "max_supply_for_mint": context.MAX_SUPPLY_FOR_MINT,
+                "reserved_supply_for_mint": context.RESERVED_SUPPLY_FOR_MINT,
+            },
+        ).contract_address
+        ids.carbonable_minter = context.carbonable_minter_contract
+    %}
+
+    # Transfer project nft ownershop from admin to minter
+    admin_instance.transferOwnership(carbonable_minter)
+    admin_instance.set_whitelist_merkle_root(whitelist_merkle_root)
+
+    return ()
+end
+
 namespace project_nft_instance:
     # Internals
 
@@ -462,7 +556,7 @@ namespace anyone_instance:
 
     func get_proof() -> (proof : felt*):
         alloc_locals
-        let (proof : felt*) = alloc()
+        let (local proof : felt*) = alloc()
         %{
             for index, node in enumerate(context.PROOF):
                 memory[ids.proof + index] = node
