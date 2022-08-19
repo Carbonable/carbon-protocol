@@ -58,7 +58,7 @@ See also starknet [documentation](https://www.cairo-lang.org/docs/hello_starknet
 ### 💋 Format code
 
 ```bash
-cairo-format -i src/**/*.cairo tests/**/*.cairo
+cairo-format -i src/**/*.cairo tests/**/**/*.cairo
 ```
 
 ## Deployment
