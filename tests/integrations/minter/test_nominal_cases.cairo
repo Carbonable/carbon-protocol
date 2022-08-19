@@ -16,19 +16,35 @@ from tests.integrations.minter.library import (
 
 @view
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    setup()
-    return ()
+    # GIVEN a deployed user contracts
+    #   AND admin with address 1000
+    #   AND anyone with address 1001
+    # GIVEN a deployed project nft contact
+    # GIVEN a deployed payment token contact
+    #   AND total supply set to 1,000,000
+    #   AND anyone owns the whole supply
+    # GIVEN a deployed minter contact
+    #   AND whitelist sale open
+    #   AND public sale close
+    #   AND max buy per tx set to 5
+    #   AND unit price set to 10
+    #   AND max supply set to 10
+    #   AND reserved supply set to 4
+    # GIVEN a set up whitelist merkle tree
+    #   AND whitelist includes 5 slots to anyone
+    return setup()
 end
 
 @view
 func test_e2e_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # STORY
-    # ---
-    # User: ANYONE
-    # - wants to buy 6 NFTs (5 whitelist, 1 public)
-    # - whitelisted: TRUE
-    # - has enough funds: YES
-    let (anyone_address) = anyone.get_address()
+    # GIVEN setup context
+    #  WHEN anyone approves minter for 5 token equivalent nfts
+    #   AND anyone makes 5 whitelist buy
+    #   AND admin open the public sale
+    #   AND anyone approves minter for 1 token equivalent nft
+    #   AND anyone makes 1 public buy
+    #   AND admin withdraw minter contract balance
+    #  THEN no failed transactions expected
 
     anyone.approve(quantity=5)
     anyone.whitelist_buy(quantity=5)
@@ -42,12 +58,16 @@ end
 
 @view
 func test_e2e_not_whitelisted{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # STORY
-    # ---
-    # User: ANYONE
-    # - wants to buy 6 NFTs (1 whitelist, 5 public)
-    # - whitelisted: FALSE
-    # - has enough funds: YES
+    # GIVEN setup context
+    #  WHEN admin set up a new whitelist merkle tree excluding anyone
+    #   AND anyone approves minter for 1 token equivalent nft
+    #   AND anyone makes 1 whitelist buy
+    #  THEN 'caller address is not whitelisted' failed transaction happens
+    #  WHEN admin open the public sale
+    #   AND anyone approves minter for 5 token equivalent nfts
+    #   AND anyone makes 5 public buy
+    #   AND admin withdraw minter contract balance
+    #  THEN no failed transactions expected
 
     admin.set_whitelist_merkle_root(123)
     anyone.approve(quantity=1)
@@ -63,16 +83,20 @@ end
 
 @view
 func test_e2e_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # User: ANYONE
-    # - wants to buy 6 NFTs (5 whitelist, 2 public)
-    # - whitelisted: TRUE
-    # - has enough funds: YES
-    # User: ADMIN
-    # - aidrop 5 nft to ANYONE
-    # - aidrop 3 nft to ANYONE
-    # - decrease reserved supply by one
-    # User: ADMIN
-    # - wants to buy 2 NFTs (2 public)
+    # GIVEN setup context
+    #  WHEN anyone approves minter for 5 token equivalent nfts
+    #   AND anyone makes 5 whitelist buy
+    #   AND admin open the public sale
+    #   AND anyone approves minter for 2 token equivalent nfts
+    #   AND anyone makes 2 public buy
+    #  THEN 'not enough available NFTs' failed transaction happens
+    #  WHEN admin airdrop 5 nfts to anyone
+    #  THEN 'not enough available reserved NFTs' failed transaction happens
+    #  WHEN admin airdrop 3 nfts to anyone
+    #   AND admin decreases reserved supply by 1
+    #   AND anyone makes 1 public buy
+    #   AND admin withdraw minter contract balance
+    #  THEN no failed transactions expected
     alloc_locals
     let (anyone_address) = anyone.get_address()
 
@@ -94,14 +118,12 @@ end
 
 @view
 func test_e2e_over_airdrop{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    # User: ANYONE
-    # - wants to buy 1 NFT1 (1 whitelist)
-    # - whitelisted: TRUE
-    # - has enough funds: YES
-    # User: ADMIN
-    # - aidrop 11 nft to ANYONE
+    # GIVEN setup context
+    #  WHEN admin airdrop 11 nfts to anyone
+    #  THEN 'not enough available NFTs' failed transaction happens
     alloc_locals
     let (anyone_address) = anyone.get_address()
+
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     admin.airdrop(to=anyone_address, quantity=11)
 
