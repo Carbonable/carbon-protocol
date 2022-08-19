@@ -1,0 +1,27 @@
+user:
+  admin: 1000
+  anyone: 1001
+
+nft:
+  name: Project
+  symbol: NFT
+
+token:
+  name: Token
+  symbol: TOK
+  decimals: 6
+  initial_supply: 1000000
+
+minter:
+  public_sale_open: 0
+  max_buy_per_tx: 5
+  unit_price: 10
+  max_supply_for_mint: 10
+  reserved_supply_for_mint: 4
+
+whitelist:
+  slots: 5
+  merkle_root: 3236969588476960619958150604131083087415975923122021901088942336874683133579
+  merkle_proof: 
+    - 1489335374474017495857579265074565262713421005832572026644103123081435719307
+  merkle_proof_len: 1

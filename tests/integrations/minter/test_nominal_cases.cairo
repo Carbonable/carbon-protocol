@@ -4,7 +4,6 @@
 %lang starknet
 
 # Starkware dependencies
-from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
@@ -17,34 +16,7 @@ from tests.integrations.minter.library import (
 
 @view
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    alloc_locals
-    let (local whitelist_merkle_proof : felt*) = alloc()
-    assert [whitelist_merkle_proof] = 1489335374474017495857579265074565262713421005832572026644103123081435719307
-    let whitelist_merkle_proof_len = 1
-    setup(
-        # User addresses
-        admin_address=1000,
-        anyone_address=1001,
-        # CarbonableProjectNFT
-        nft_name='Carbonable ERC-721 Test',
-        nft_symbol='CET',
-        # Payment token
-        token_name='StableCoinToken',
-        token_symbol='SCT',
-        token_decimals=6,
-        token_initial_supply=1000000,
-        # CarbonableMint
-        minter_public_sale_open=FALSE,
-        minter_max_buy_per_tx=5,
-        minter_unit_price=10,
-        minter_max_supply_for_mint=10,
-        minter_reserved_supply_for_mint=4,
-        # Whitelist ANYONE
-        whitelist_slots=5,
-        whitelist_merkle_root=3236969588476960619958150604131083087415975923122021901088942336874683133579,
-        whitelist_merkle_proof=whitelist_merkle_proof,
-        whitelist_merkle_proof_len=whitelist_merkle_proof_len,
-    )
+    setup()
     return ()
 end
 
