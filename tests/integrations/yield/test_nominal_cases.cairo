@@ -12,8 +12,7 @@ from tests.integrations.yield.library import setup
 
 @view
 func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    setup()
-    return ()
+    return setup()
 end
 
 @view
