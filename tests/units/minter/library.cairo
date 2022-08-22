@@ -96,10 +96,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     )
 
     # Instantiate context, useful to avoid many hints in tests
-    local signers : Signers = Signers(
-        admin=admin,
-        anyone=anyone,
-        )
+    local signers : Signers = Signers(admin=admin, anyone=anyone)
 
     local mocks : Mocks = Mocks(
         project_nft_address=project_nft_address,
@@ -113,11 +110,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         merkle_proof_len=merkle_proof_len,
         )
 
-    local context : TestContext = TestContext(
-        signers=signers,
-        mocks=mocks,
-        whitelist=whitelist,
-        )
+    local context : TestContext = TestContext(signers=signers, mocks=mocks, whitelist=whitelist)
 
     return (context)
 end

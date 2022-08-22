@@ -1,0 +1,8 @@
+signers:
+  admin: 1000
+  anyone: 1001
+
+mocks:
+  project_nft_address: 0x056d4ffea4ca664ffe1256af4b029998014471a87dec8036747a927ab3320b46
+  carbonable_token_address: 0x043eB0d3D84CC1f850D4b6dEe9630cAc35Af99980BAA30577A76adEa72475598
+  reward_token_address: 0x073314940630fd6dcda0d772d4c972c4e0a9946bef9dabf4ef84eda8ef542b82
