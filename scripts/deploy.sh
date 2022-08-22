@@ -53,6 +53,9 @@ check_wallet() {
 # $1 - transaction hash to check
 wait_for_acceptance() {
     tx_hash=$1
+    if [[ "$tx_hash" != *"0x"* ]]; then
+        tx_hash=$(felt_to_hex "$1")
+    fi
     while true 
     do
         tx_status=`starknet tx_status --hash $tx_hash --network $NETWORK | sed -n 's@^.*"tx_status": "\(.*\)".*$@\1@p'`
@@ -74,6 +77,20 @@ str_to_felt() {
     hex_bytes=$(echo $str_val | xxd -p)
     hex_bytes=0x$(echo $hex_bytes | rev | cut -c2- | rev)
     echo $hex_bytes
+}
+
+# convert hex to felt
+# $1 - hex value
+hex_to_felt() {
+    hex_upper=`echo ${1//0x/} | tr '[:lower:]' '[:upper:]'`
+    echo "obase=10; ibase=16; $hex_upper" | BC_LINE_LENGTH=0 bc
+}
+
+# convert felt to hex
+# $1 - felt value
+felt_to_hex() {
+    felt=`echo "obase=16; ibase=10; $1" | BC_LINE_LENGTH=0 bc`
+    echo 0x$felt
 }
 
 # send a transaction
@@ -132,6 +149,9 @@ deploy_all_contracts() {
         project_nft_address=$ERC721_ADDRESS
         log_info "Deploying Minter contract..."
         MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT"` || exit_error
+        # Transfer ownership
+        log_info "Transfer ERC-721 ontract ownership..."
+        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProjectNFT_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT"` || exit_error
     fi    
 
     # Save values in cache file
@@ -159,8 +179,6 @@ done
 CONFIG_FILE=$ROOT/scripts/configs/$PROFILE.config
 [ -f $CONFIG_FILE ] && source $CONFIG_FILE || exit_error "$CONFIG_FILE file not found"
 
-WALLET=$STARKNET_WALLET
-
 [ -z $ADMIN_ADDRESS ] && ADMIN_ADDRESS=`get_account_address $ACCOUNT`
 [ -z $ADMIN_ADDRESS ] && exit_error "Unable to determine account address"
 
@@ -169,7 +187,6 @@ WALLET=$STARKNET_WALLET
 
 ### PRE_CONDITIONS
 check_starknet
-check_wallet
 
 ### BUSINESS LOGIC
 
