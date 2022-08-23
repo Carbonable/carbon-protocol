@@ -25,6 +25,12 @@
 
 - [protostar](https://github.com/software-mansion/protostar)
 
+### 🎉 Install
+
+```bash
+protostar install
+```
+
 ### ⛏️ Compile
 
 ```bash
@@ -44,7 +50,7 @@ protostar test tests/units
 protostar test tests/integrations
 ```
 
-### Test account
+### 🌐 Test account
 
 If you want a fresh account for tests, you can deploy an account with the following command:
 
@@ -61,7 +67,7 @@ See also starknet [documentation](https://www.cairo-lang.org/docs/hello_starknet
 cairo-format -i src/**/*.cairo tests/**/*.cairo
 ```
 
-## Deployment
+## 🚀 Deployment
 
 ```bash
 # On testnet
