@@ -1,6 +1,4 @@
 import yaml
-import collections.abc
-from collections import namedtuple
 from pathlib import Path
 
 
@@ -11,7 +9,7 @@ class Object():
 def update(ref: dict, new: dict) -> dict:
     """Update ref recursively with new."""
     for key, value in new.items():
-        if isinstance(value, collections.abc.Mapping):
+        if isinstance(value, dict):
             ref[key] = update(ref.get(key, {}), value)
         else:
             ref[key] = value
