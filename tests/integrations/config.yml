@@ -1,0 +1,9 @@
+project:
+  name: Project
+  symbol: NFT
+
+token:
+  name: Token
+  symbol: TOK
+  decimals: 6
+  initial_supply: 1000000

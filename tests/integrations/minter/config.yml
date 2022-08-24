@@ -1,17 +1,3 @@
-user:
-  admin: 1000
-  anyone: 1001
-
-nft:
-  name: Project
-  symbol: NFT
-
-token:
-  name: Token
-  symbol: TOK
-  decimals: 6
-  initial_supply: 1000000
-
 minter:
   public_sale_open: 0
   max_buy_per_tx: 5

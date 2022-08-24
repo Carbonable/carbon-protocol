@@ -10,21 +10,18 @@ from starkware.cairo.common.bool import TRUE, FALSE
 func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     %{
         # Load config
-        import yaml
-        with open("./tests/integrations/yield/config.yml", 'r') as file_instance:
-            config = yaml.safe_load(file_instance)
-        for section, subconfig in config.items():
-            for key, value in subconfig.items():
-                name = f"{section.lower()}_{key.lower()}"
-                setattr(context, name, value)
+        import sys
+        sys.path.append('.')
+        from tests import load
+        load("./tests/integrations/yield/config.yml", context)
 
         # ERC-721 deployment
         context.project_nft_contract = deploy_contract(
             "./src/nft/project/CarbonableProjectNFT.cairo",
             {
-                "name": context.nft_name,
-                "symbol": context.nft_symbol,
-                "owner": context.user_admin,
+                "name": context.project.name,
+                "symbol": context.project.symbol,
+                "owner": context.signers.admin,
             },
         ).contract_address
 
@@ -32,11 +29,11 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         context.reward_token_contract = deploy_contract(
             "./tests/mocks/token/erc20.cairo",
             {
-                "name": context.token_name,
-                "symbol": context.token_symbol,
-                "decimals": context.token_decimals,
-                "initial_supply": context.token_initial_supply,
-                "recipient": context.user_anyone
+                "name": context.token.name,
+                "symbol": context.token.symbol,
+                "decimals": context.token.decimals,
+                "initial_supply": context.token.initial_supply,
+                "recipient": context.signers.anyone
             },
         ).contract_address
 
@@ -44,11 +41,11 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         context.carbonable_token_contract = deploy_contract(
             "./tests/mocks/token/erc20.cairo",
             {
-                "name": context.carbonable_token_name,
-                "symbol": context.carbonable_token_symbol,
-                "decimals": context.carbonable_token_decimals,
-                "initial_supply": context.carbonable_token_initial_supply,
-                "recipient": context.user_anyone
+                "name": context.carbonable_token.name,
+                "symbol": context.carbonable_token.symbol,
+                "decimals": context.carbonable_token.decimals,
+                "initial_supply": context.carbonable_token.initial_supply,
+                "recipient": context.signers.anyone
             },
         ).contract_address
 
@@ -56,7 +53,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         context.yield_manager_contract = deploy_contract(
             "./src/yield/yield_manager.cairo",
             {
-                "owner": context.user_admin,
+                "owner": context.signers.admin,
                 "project_nft_address": context.project_nft_contract,
                 "carbonable_token_address": context.carbonable_token_contract,
                 "reward_token_address": context.reward_token_contract,
