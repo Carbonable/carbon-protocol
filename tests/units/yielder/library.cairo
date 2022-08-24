@@ -31,15 +31,10 @@ end
 func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     %{
         # Load config
-        import yaml
-        from collections import namedtuple
-        with open("./tests/units/yielder/config.yml", 'r') as file_instance:
-            config = yaml.safe_load(file_instance)
-        for section, subconfig in config.items():
-            obj = namedtuple(section, list(subconfig.keys()))
-            for key, value in subconfig.items():
-                setattr(obj, key, value)
-            setattr(context, section, obj)
+        import sys
+        sys.path.append('.')
+        from tests import load
+        load("./tests/units/yielder/config.yml", context)
     %}
 
     return ()

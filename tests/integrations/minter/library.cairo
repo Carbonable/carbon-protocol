@@ -23,21 +23,18 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     local merkle_root
     %{
         # Load config
-        import yaml
-        with open("./tests/integrations/minter/config.yml", 'r') as file_instance:
-            config = yaml.safe_load(file_instance)
-        for section, subconfig in config.items():
-            for key, value in subconfig.items():
-                name = f"{section.lower()}_{key.lower()}"
-                setattr(context, name, value)
+        import sys
+        sys.path.append('.')
+        from tests import load
+        load("./tests/integrations/minter/config.yml", context)
 
         # ERC-721 deployment
         context.project_nft_contract = deploy_contract(
             "./src/nft/project/CarbonableProjectNFT.cairo",
             {
-                "name": context.nft_name,
-                "symbol": context.nft_symbol,
-                "owner": context.user_admin,
+                "name": context.project.name,
+                "symbol": context.project.symbol,
+                "owner": context.signers.admin,
             },
         ).contract_address
 
@@ -45,11 +42,11 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         context.payment_token_contract = deploy_contract(
             "./tests/mocks/token/erc20.cairo",
             {
-                "name": context.token_name,
-                "symbol": context.token_symbol,
-                "decimals": context.token_decimals,
-                "initial_supply": context.token_initial_supply,
-                "recipient": context.user_anyone
+                "name": context.token.name,
+                "symbol": context.token.symbol,
+                "decimals": context.token.decimals,
+                "initial_supply": context.token.initial_supply,
+                "recipient": context.signers.anyone
             },
         ).contract_address
 
@@ -57,20 +54,20 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         context.carbonable_minter_contract = deploy_contract(
             "./src/mint/minter.cairo",
             {
-                "owner": context.user_admin,
+                "owner": context.signers.admin,
                 "project_nft_address": context.project_nft_contract,
                 "payment_token_address": context.payment_token_contract,
-                "public_sale_open": context.minter_public_sale_open,
-                "max_buy_per_tx": context.minter_max_buy_per_tx,
-                "unit_price": context.minter_unit_price,
-                "max_supply_for_mint": context.minter_max_supply_for_mint,
-                "reserved_supply_for_mint": context.minter_reserved_supply_for_mint,
+                "public_sale_open": context.minter.public_sale_open,
+                "max_buy_per_tx": context.minter.max_buy_per_tx,
+                "unit_price": context.minter.unit_price,
+                "max_supply_for_mint": context.minter.max_supply_for_mint,
+                "reserved_supply_for_mint": context.minter.reserved_supply_for_mint,
             },
         ).contract_address
 
         # Externalize required variables
         ids.carbonable_minter = context.carbonable_minter_contract
-        ids.merkle_root = context.whitelist_merkle_root
+        ids.merkle_root = context.whitelist.merkle_root
     %}
 
     # Transfer project nft ownershop from admin to minter
@@ -340,7 +337,7 @@ namespace admin_instance:
 
     func get_address() -> (address : felt):
         tempvar admin
-        %{ ids.admin = context.user_admin %}
+        %{ ids.admin = context.signers.admin %}
         return (admin)
     end
 
@@ -508,19 +505,19 @@ namespace anyone_instance:
 
     func get_address() -> (address : felt):
         tempvar anyone
-        %{ ids.anyone = context.user_anyone %}
+        %{ ids.anyone = context.signers.anyone %}
         return (anyone)
     end
 
     func get_slots() -> (slots : felt):
         tempvar slots
-        %{ ids.slots = context.whitelist_slots %}
+        %{ ids.slots = context.whitelist.slots %}
         return (slots)
     end
 
     func get_proof_len() -> (proof_len : felt):
         tempvar proof_len
-        %{ ids.proof_len = context.whitelist_merkle_proof_len %}
+        %{ ids.proof_len = context.whitelist.merkle_proof_len %}
         return (proof_len)
     end
 
@@ -528,7 +525,7 @@ namespace anyone_instance:
         alloc_locals
         let (local proof : felt*) = alloc()
         %{
-            for index, node in enumerate(context.whitelist_merkle_proof):
+            for index, node in enumerate(context.whitelist.merkle_proof):
                 memory[ids.proof + index] = node
         %}
         return (proof)
