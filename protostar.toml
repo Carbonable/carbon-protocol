@@ -9,8 +9,8 @@ cairo_path = ["./lib/cairo_contracts/src", "src"]
 cairopen_path = ["./lib/cairopen_contracts/src", "src"]
 
 ["protostar.contracts"]
-CarbonableProjectNFT = [
-    "./src/nft/project/CarbonableProjectNFT.cairo",
+CarbonableProject = [
+    "./src/project/project.cairo",
 ]
 
 CarbonableMinter = [
