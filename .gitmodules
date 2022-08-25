@@ -5,6 +5,3 @@
 [submodule "lib/cairopen_contracts"]
 	path = lib/cairopen_contracts
 	url = https://github.com/CairOpen/cairopen-contracts
-[submodule "lib/cairo_merkle_distributor"]
-	path = lib/cairo_merkle_distributor
-	url = https://github.com/ncitron/cairo-merkle-distributor

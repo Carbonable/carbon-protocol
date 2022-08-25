@@ -1,5 +1,0 @@
-cairo-lang
-openzeppelin-cairo-contracts
-marshmallow-dataclass==8.5.3
-black
-pylint
