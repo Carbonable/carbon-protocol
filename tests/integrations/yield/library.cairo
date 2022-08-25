@@ -17,7 +17,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 
         # ERC-721 deployment
         context.project_nft_contract = deploy_contract(
-            "./src/nft/project/CarbonableProjectNFT.cairo",
+            context.sources.project,
             {
                 "name": context.project.name,
                 "symbol": context.project.symbol,
@@ -27,7 +27,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 
         # Reward token ERC-20 deployment
         context.reward_token_contract = deploy_contract(
-            "./tests/mocks/token/erc20.cairo",
+            context.sources.token,
             {
                 "name": context.token.name,
                 "symbol": context.token.symbol,
@@ -39,7 +39,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 
         # Carbonable token ERC-20 deployment
         context.carbonable_token_contract = deploy_contract(
-            "./tests/mocks/token/erc20.cairo",
+            context.sources.token,
             {
                 "name": context.carbonable_token.name,
                 "symbol": context.carbonable_token.symbol,
@@ -51,7 +51,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 
         # Yield Manager deployment
         context.yield_manager_contract = deploy_contract(
-            "./src/yield/yield_manager.cairo",
+            context.sources.yielder,
             {
                 "owner": context.signers.admin,
                 "project_nft_address": context.project_nft_contract,

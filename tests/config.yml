@@ -1,3 +1,9 @@
 signers:
   admin: 1000
   anyone: 1001
+
+sources:
+  project: ./src/project/project.cairo
+  token: ./tests/mocks/token/erc20.cairo
+  minter: ./src/mint/minter.cairo
+  yielder: ./src/yield/yield_manager.cairo

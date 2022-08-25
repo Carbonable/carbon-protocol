@@ -15,7 +15,7 @@ from openzeppelin.security.safemath import SafeUint256
 
 # Project dependencies
 from interfaces.minter import ICarbonableMinter
-from interfaces.CarbonableProjectNFT import IERC721, IERC721_Enumerable, ICarbonableProjectNFT
+from interfaces.project import IERC721, IERC721_Enumerable, ICarbonableProject
 
 func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     alloc_locals
@@ -30,7 +30,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 
         # ERC-721 deployment
         context.project_nft_contract = deploy_contract(
-            "./src/nft/project/CarbonableProjectNFT.cairo",
+            context.sources.project,
             {
                 "name": context.project.name,
                 "symbol": context.project.symbol,
@@ -40,7 +40,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 
         # ERC-20 deployment
         context.payment_token_contract = deploy_contract(
-            "./tests/mocks/token/erc20.cairo",
+            context.sources.token,
             {
                 "name": context.token.name,
                 "symbol": context.token.symbol,
@@ -52,7 +52,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 
         # Minter deployment
         context.carbonable_minter_contract = deploy_contract(
-            "./src/mint/minter.cairo",
+            context.sources.minter,
             {
                 "owner": context.signers.admin,
                 "project_nft_address": context.project_nft_contract,
@@ -92,7 +92,7 @@ namespace project_nft_instance:
     func owner{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
     }() -> (owner : felt):
-        let (owner : felt) = ICarbonableProjectNFT.owner(project_nft)
+        let (owner : felt) = ICarbonableProject.owner(project_nft)
         return (owner)
     end
 
@@ -116,7 +116,7 @@ namespace project_nft_instance:
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
     }(newOwner : felt, caller : felt):
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.project_nft) %}
-        ICarbonableProjectNFT.transferOwnership(project_nft, newOwner)
+        ICarbonableProject.transferOwnership(project_nft, newOwner)
         %{ stop_prank() %}
         return ()
     end
