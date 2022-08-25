@@ -5,8 +5,11 @@ protostar_version = "0.3.2"
 libs_path = "lib"
 
 ["protostar.shared_command_configs"]
-cairo_path = ["./lib/cairo_contracts/src", "src"]
-cairopen_path = ["./lib/cairopen_contracts/src", "src"]
+cairo_path = [
+    "./lib/cairo_contracts/src",
+    "./lib/cairopen_contracts/src",
+    "src"
+]
 
 ["protostar.contracts"]
 CarbonableProject = [

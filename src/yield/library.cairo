@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: MIT
-# Carbonable smart contracts written in Cairo v0.1.0 (mint/library.cairo)
+# Carbonable smart contracts written in Cairo v0.1.0 (library.cairo)
 
 %lang starknet
+
 # Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
