@@ -9,7 +9,7 @@ from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import (
 )
 
 @contract_interface
-namespace ICarbonableProjectNFT:
+namespace ICarbonableProject:
     func owner() -> (owner : felt):
     end
 
