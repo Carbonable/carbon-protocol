@@ -2,6 +2,6 @@
 	url = https://github.com/OpenZeppelin/cairo-contracts
 	path = lib/cairo_contracts
 	branch = refs/heads/v0.2.1
-[submodule "lib/cairopen_contracts"]
+[submodule "cairopen_contracts"]
+	url = https://github.com/CairOpen/cairopen-contracts.git
 	path = lib/cairopen_contracts
-	url = https://github.com/CairOpen/cairopen-contracts
