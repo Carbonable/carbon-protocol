@@ -4,6 +4,7 @@
 %lang starknet
 
 # Starkware dependencies
+from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 # Project dependencies
@@ -17,9 +18,9 @@ from src.project.library import CarbonableProject
 #
 
 @view
-func image_url{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-    image_url_len : felt, image_url : felt*
-):
+func image_url{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}() -> (image_url_len : felt, image_url : felt*):
     return CarbonableProject.image_url()
 end
 
@@ -28,8 +29,8 @@ end
 #
 
 @external
-func set_image_url{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    image_url_len : felt, image_url : felt*
-) -> ():
+func set_image_url{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}(image_url_len : felt, image_url : felt*) -> ():
     return CarbonableProject.set_image_url(image_url_len, image_url)
 end
