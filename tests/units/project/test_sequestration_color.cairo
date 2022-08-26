@@ -3,11 +3,14 @@
 
 %lang starknet
 
+# Starkware dependencies
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
+# Project dependencies
 from cairopen.string.ASCII import StringCodec
 
+# Local dependencies
 from tests.units.project.library import setup, prepare, CarbonableProject
 from tests.library import assert_string
 
@@ -31,7 +34,9 @@ func test_sequestration_color{
     let ss = 'blue'
     let (str) = StringCodec.ss_to_string(ss)
 
-    CarbonableProject.set_sequestration_color(sequestration_color_len=str.len, sequestration_color=str.data)
+    CarbonableProject.set_sequestration_color(
+        sequestration_color_len=str.len, sequestration_color=str.data
+    )
 
     let (len, array) = CarbonableProject.sequestration_color()
     let (returned_str) = StringCodec.ss_arr_to_string(len, array)

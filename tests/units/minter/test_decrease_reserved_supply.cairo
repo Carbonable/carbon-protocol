@@ -8,10 +8,10 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.bool import TRUE, FALSE
 
-# OZ dependencies
+# Project dependencies
 from openzeppelin.security.safemath import SafeUint256
 
-# Project dependencies
+# Local dependencies
 from tests.units.minter.library import setup, prepare, CarbonableMinter
 
 @view

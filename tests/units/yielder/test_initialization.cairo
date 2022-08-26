@@ -3,9 +3,11 @@
 
 %lang starknet
 
+# Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
 
+# Local dependencies
 from tests.units.yielder.library import setup, prepare, YieldManager
 
 @view

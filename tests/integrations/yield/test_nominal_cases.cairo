@@ -7,7 +7,7 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
 
-# Project dependencies
+# Local dependencies
 from tests.integrations.yield.library import setup
 
 @view

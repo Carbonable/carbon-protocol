@@ -15,6 +15,10 @@ from cairopen.string.ASCII import StringCodec
 from interfaces.project import ICarbonableProject
 from tests.library import assert_string
 
+#
+# Functions
+#
+
 func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     %{
         # Load config
@@ -456,7 +460,9 @@ namespace carbonable_project_instance:
         carbonable_project : felt,
     }(background_color_len : felt, background_color : felt*, caller : felt):
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
-        ICarbonableProject.set_background_color(carbonable_project, background_color_len, background_color)
+        ICarbonableProject.set_background_color(
+            carbonable_project, background_color_len, background_color
+        )
         %{ stop_prank() %}
         return ()
     end
@@ -584,7 +590,9 @@ namespace admin_instance:
         let (str) = StringCodec.ss_to_string(holder)
 
         with carbonable_project:
-            carbonable_project_instance.set_holder(holder_len=str.len, holder=str.data, caller=caller)
+            carbonable_project_instance.set_holder(
+                holder_len=str.len, holder=str.data, caller=caller
+            )
             let (len, array) = carbonable_project_instance.holder()
             let (returned_str) = StringCodec.ss_arr_to_string(len, array)
             assert_string(returned_str, str)
@@ -676,7 +684,9 @@ namespace admin_instance:
         let (str) = StringCodec.ss_to_string(country)
 
         with carbonable_project:
-            carbonable_project_instance.set_country(country_len=str.len, country=str.data, caller=caller)
+            carbonable_project_instance.set_country(
+                country_len=str.len, country=str.data, caller=caller
+            )
             let (len, array) = carbonable_project_instance.country()
             let (returned_str) = StringCodec.ss_arr_to_string(len, array)
             assert_string(returned_str, str)

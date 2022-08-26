@@ -11,7 +11,10 @@ from starkware.cairo.common.bool import TRUE, FALSE
 # Project dependencies
 from cairopen.string.string import String
 
+#
 # Functions
+#
+
 func assert_string{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(string1 : String, string2 : String):

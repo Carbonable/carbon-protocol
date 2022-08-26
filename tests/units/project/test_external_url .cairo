@@ -3,11 +3,14 @@
 
 %lang starknet
 
+# Starkware dependencies
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
+# Project dependencies
 from cairopen.string.ASCII import StringCodec
 
+# Local dependencies
 from tests.units.project.library import setup, prepare, CarbonableProject
 from tests.library import assert_string
 

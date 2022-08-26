@@ -28,9 +28,26 @@ func carbonable_token_address_() -> (res : felt):
 end
 
 namespace YieldManager:
-    # -----
-    # VIEWS
-    # -----
+    #
+    # Constructor
+    #
+
+    func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        owner : felt,
+        carbonable_project_address : felt,
+        carbonable_token_address : felt,
+        reward_token_address : felt,
+    ):
+        Ownable.initializer(owner)
+        carbonable_project_address_.write(carbonable_project_address)
+        carbonable_token_address_.write(carbonable_token_address)
+        reward_token_address_.write(reward_token_address)
+        return ()
+    end
+
+    #
+    # Getters
+    #
 
     func carbonable_project_address{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
@@ -50,21 +67,5 @@ namespace YieldManager:
     }() -> (carbonable_token_address : felt):
         let (carbonable_token_address) = carbonable_token_address_.read()
         return (carbonable_token_address)
-    end
-
-    # ------
-    # CONSTRUCTOR
-    # ------
-    func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        owner : felt,
-        carbonable_project_address : felt,
-        carbonable_token_address : felt,
-        reward_token_address : felt,
-    ):
-        Ownable.initializer(owner)
-        carbonable_project_address_.write(carbonable_project_address)
-        carbonable_token_address_.write(carbonable_token_address)
-        reward_token_address_.write(reward_token_address)
-        return ()
     end
 end
