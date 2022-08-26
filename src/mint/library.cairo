@@ -34,7 +34,7 @@ end
 
 # Address of the project NFT contract
 @storage_var
-func project_nft_address_() -> (res : felt):
+func carbonable_project_address_() -> (res : felt):
 end
 
 # Address of the project NFT contract
@@ -82,10 +82,11 @@ namespace CarbonableMinter:
     # VIEWS
     # -----
 
-    func project_nft_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> (project_nft_address : felt):
-        let (project_nft_address) = project_nft_address_.read()
-        return (project_nft_address)
+    func carbonable_project_address{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }() -> (carbonable_project_address : felt):
+        let (carbonable_project_address) = carbonable_project_address_.read()
+        return (carbonable_project_address)
     end
 
     func payment_token_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -165,7 +166,7 @@ namespace CarbonableMinter:
 
     func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         owner : felt,
-        project_nft_address : felt,
+        carbonable_project_address : felt,
         payment_token_address : felt,
         public_sale_open : felt,
         max_buy_per_tx : felt,
@@ -174,7 +175,7 @@ namespace CarbonableMinter:
         reserved_supply_for_mint : Uint256,
     ):
         Ownable.initializer(owner)
-        project_nft_address_.write(project_nft_address)
+        carbonable_project_address_.write(carbonable_project_address)
         payment_token_address_.write(payment_token_address)
         public_sale_open_.write(public_sale_open)
         max_buy_per_tx_.write(max_buy_per_tx)
@@ -260,10 +261,10 @@ namespace CarbonableMinter:
         end
 
         # Get storage variables
-        let (project_nft_address) = project_nft_address_.read()
+        let (carbonable_project_address) = carbonable_project_address_.read()
 
         # Check if enough NFTs available
-        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
+        let (total_supply) = IERC721_Enumerable.totalSupply(carbonable_project_address)
         let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
         let (max_supply_for_mint) = max_supply_for_mint_.read()
         let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
@@ -280,7 +281,7 @@ namespace CarbonableMinter:
 
         # Do the actual NFT mint
         let starting_index = total_supply
-        mint_n(project_nft_address, to, starting_index, quantity_uint256)
+        mint_n(carbonable_project_address, to, starting_index, quantity_uint256)
 
         # Remove the minted quantity from the reserved supply
         let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
@@ -402,7 +403,7 @@ namespace CarbonableMinter:
         end
 
         # Get storage variables
-        let (project_nft_address) = project_nft_address_.read()
+        let (carbonable_project_address) = carbonable_project_address_.read()
         let (unit_price) = unit_price_.read()
         let (payment_token_address) = payment_token_address_.read()
         let (max_buy_per_tx) = max_buy_per_tx_.read()
@@ -414,7 +415,7 @@ namespace CarbonableMinter:
         end
 
         # Check if enough NFTs available
-        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft_address)
+        let (total_supply) = IERC721_Enumerable.totalSupply(carbonable_project_address)
         let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
         let (max_supply_for_mint) = max_supply_for_mint_.read()
         let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()
@@ -439,7 +440,7 @@ namespace CarbonableMinter:
 
         # Do the actual NFT mint
         let starting_index = total_supply
-        mint_n(project_nft_address, caller, starting_index, quantity_uint256)
+        mint_n(carbonable_project_address, caller, starting_index, quantity_uint256)
         # Success
         return (TRUE)
     end

@@ -14,7 +14,7 @@ from openzeppelin.access.ownable import Ownable
 
 # Address of the project NFT contract
 @storage_var
-func project_nft_address_() -> (res : felt):
+func carbonable_project_address_() -> (res : felt):
 end
 
 # Address of the reward token contract
@@ -32,10 +32,11 @@ namespace YieldManager:
     # VIEWS
     # -----
 
-    func project_nft_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> (project_nft_address : felt):
-        let (project_nft_address) = project_nft_address_.read()
-        return (project_nft_address)
+    func carbonable_project_address{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+    }() -> (carbonable_project_address : felt):
+        let (carbonable_project_address) = carbonable_project_address_.read()
+        return (carbonable_project_address)
     end
 
     func reward_token_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -56,12 +57,12 @@ namespace YieldManager:
     # ------
     func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         owner : felt,
-        project_nft_address : felt,
+        carbonable_project_address : felt,
         carbonable_token_address : felt,
         reward_token_address : felt,
     ):
         Ownable.initializer(owner)
-        project_nft_address_.write(project_nft_address)
+        carbonable_project_address_.write(carbonable_project_address)
         carbonable_token_address_.write(carbonable_token_address)
         reward_token_address_.write(reward_token_address)
         return ()

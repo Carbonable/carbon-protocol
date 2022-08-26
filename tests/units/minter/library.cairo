@@ -18,7 +18,7 @@ struct Signers:
 end
 
 struct Mocks:
-    member project_nft_address : felt
+    member carbonable_project_address : felt
     member payment_token_address : felt
 end
 
@@ -60,7 +60,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     # Extract context variables
     local admin
     local anyone
-    local project_nft_address
+    local carbonable_project_address
     local payment_token_address
     local slots
     local merkle_root
@@ -69,7 +69,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
-        ids.project_nft_address = context.mocks.project_nft_address
+        ids.carbonable_project_address = context.mocks.carbonable_project_address
         ids.payment_token_address = context.mocks.payment_token_address
         ids.slots = context.whitelist.slots
         ids.merkle_root = context.whitelist.merkle_root
@@ -81,7 +81,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     # Instantiate minter
     CarbonableMinter.constructor(
         owner=admin,
-        project_nft_address=project_nft_address,
+        carbonable_project_address=carbonable_project_address,
         payment_token_address=payment_token_address,
         public_sale_open=public_sale_open,
         max_buy_per_tx=max_buy_per_tx,
@@ -94,7 +94,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     local signers : Signers = Signers(admin=admin, anyone=anyone)
 
     local mocks : Mocks = Mocks(
-        project_nft_address=project_nft_address,
+        carbonable_project_address=carbonable_project_address,
         payment_token_address=payment_token_address,
         )
 

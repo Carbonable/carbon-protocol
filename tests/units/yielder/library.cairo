@@ -17,7 +17,7 @@ struct Signers:
 end
 
 struct Mocks:
-    member project_nft_address : felt
+    member carbonable_project_address : felt
     member carbonable_token_address : felt
     member reward_token_address : felt
 end
@@ -48,13 +48,13 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     # Extract context variables
     local admin
     local anyone
-    local project_nft_address
+    local carbonable_project_address
     local carbonable_token_address
     local reward_token_address
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
-        ids.project_nft_address = context.mocks.project_nft_address
+        ids.carbonable_project_address = context.mocks.carbonable_project_address
         ids.carbonable_token_address = context.mocks.carbonable_token_address
         ids.reward_token_address = context.mocks.reward_token_address
     %}
@@ -62,7 +62,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     # Instantiate yielder
     YieldManager.constructor(
         owner=admin,
-        project_nft_address=project_nft_address,
+        carbonable_project_address=carbonable_project_address,
         carbonable_token_address=carbonable_token_address,
         reward_token_address=reward_token_address,
     )
@@ -71,7 +71,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     local signers : Signers = Signers(admin=admin, anyone=anyone)
 
     local mocks : Mocks = Mocks(
-        project_nft_address=project_nft_address,
+        carbonable_project_address=carbonable_project_address,
         carbonable_token_address=carbonable_token_address,
         reward_token_address=reward_token_address,
         )

@@ -16,7 +16,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         load("./tests/integrations/yield/config.yml", context)
 
         # ERC-721 deployment
-        context.project_nft_contract = deploy_contract(
+        context.carbonable_project_contract = deploy_contract(
             context.sources.project,
             {
                 "name": context.project.name,
@@ -54,7 +54,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
             context.sources.yielder,
             {
                 "owner": context.signers.admin,
-                "project_nft_address": context.project_nft_contract,
+                "carbonable_project_address": context.carbonable_project_contract,
                 "carbonable_token_address": context.carbonable_token_contract,
                 "reward_token_address": context.reward_token_contract,
             },

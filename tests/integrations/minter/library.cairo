@@ -29,7 +29,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         load("./tests/integrations/minter/config.yml", context)
 
         # ERC-721 deployment
-        context.project_nft_contract = deploy_contract(
+        context.carbonable_project_contract = deploy_contract(
             context.sources.project,
             {
                 "name": context.project.name,
@@ -55,7 +55,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
             context.sources.minter,
             {
                 "owner": context.signers.admin,
-                "project_nft_address": context.project_nft_contract,
+                "carbonable_project_address": context.carbonable_project_contract,
                 "payment_token_address": context.payment_token_contract,
                 "public_sale_open": context.minter.public_sale_open,
                 "max_buy_per_tx": context.minter.max_buy_per_tx,
@@ -70,7 +70,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         ids.merkle_root = context.whitelist.merkle_root
     %}
 
-    # Transfer project nft ownershop from admin to minter
+    # Transfer project ownership from admin to minter
     admin_instance.transferOwnership(carbonable_minter)
     # Set merkle tree root to minter contract
     admin_instance.set_whitelist_merkle_root(merkle_root)
@@ -78,45 +78,45 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     return ()
 end
 
-namespace project_nft_instance:
+namespace carbonable_project_instance:
     # Internals
 
-    func deployed() -> (project_nft_contract : felt):
-        tempvar project_nft_contract
-        %{ ids.project_nft_contract = context.project_nft_contract %}
-        return (project_nft_contract)
+    func deployed() -> (carbonable_project_contract : felt):
+        tempvar carbonable_project_contract
+        %{ ids.carbonable_project_contract = context.carbonable_project_contract %}
+        return (carbonable_project_contract)
     end
 
     # Views
 
     func owner{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_project : felt
     }() -> (owner : felt):
-        let (owner : felt) = ICarbonableProject.owner(project_nft)
+        let (owner : felt) = ICarbonableProject.owner(carbonable_project)
         return (owner)
     end
 
     func balanceOf{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_project : felt
     }(owner : felt) -> (balance : Uint256):
-        let (balance) = IERC721.balanceOf(project_nft, owner)
+        let (balance) = IERC721.balanceOf(carbonable_project, owner)
         return (balance)
     end
 
     func totalSupply{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_project : felt
     }() -> (totalSupply : Uint256):
-        let (total_supply) = IERC721_Enumerable.totalSupply(project_nft)
+        let (total_supply) = IERC721_Enumerable.totalSupply(carbonable_project)
         return (total_supply)
     end
 
     # Externals
 
     func transferOwnership{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, project_nft : felt
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_project : felt
     }(newOwner : felt, caller : felt):
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.project_nft) %}
-        ICarbonableProject.transferOwnership(project_nft, newOwner)
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        ICarbonableProject.transferOwnership(carbonable_project, newOwner)
         %{ stop_prank() %}
         return ()
     end
@@ -170,11 +170,13 @@ namespace carbonable_minter_instance:
 
     # Views
 
-    func project_nft_address{
+    func carbonable_project_address{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_minter : felt
-    }() -> (project_nft_address : felt):
-        let (project_nft_address) = ICarbonableMinter.project_nft_address(carbonable_minter)
-        return (project_nft_address)
+    }() -> (carbonable_project_address : felt):
+        let (carbonable_project_address) = ICarbonableMinter.carbonable_project_address(
+            carbonable_minter
+        )
+        return (carbonable_project_address)
     end
 
     func payment_token_address{
@@ -444,11 +446,11 @@ namespace admin_instance:
     func transferOwnership{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         newOwner : felt
     ):
-        let (project_nft) = project_nft_instance.deployed()
+        let (carbonable_project) = carbonable_project_instance.deployed()
         let (caller) = admin_instance.get_address()
-        with project_nft:
-            project_nft_instance.transferOwnership(newOwner=newOwner, caller=caller)
-            let (owner) = project_nft_instance.owner()
+        with carbonable_project:
+            carbonable_project_instance.transferOwnership(newOwner=newOwner, caller=caller)
+            let (owner) = carbonable_project_instance.owner()
             assert owner = newOwner
         end
         return ()
@@ -459,14 +461,14 @@ namespace admin_instance:
     ):
         alloc_locals
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (project_nft) = project_nft_instance.deployed()
+        let (carbonable_project) = carbonable_project_instance.deployed()
         let (caller) = admin_instance.get_address()
         let quantity_uint256 = Uint256(quantity, 0)
 
         # get user nft and payment token balances to check after buy
-        with project_nft:
-            let (initial_quantity) = project_nft_instance.balanceOf(owner=caller)
-            let (intial_total_supply) = project_nft_instance.totalSupply()
+        with carbonable_project:
+            let (initial_quantity) = carbonable_project_instance.balanceOf(owner=caller)
+            let (intial_total_supply) = carbonable_project_instance.totalSupply()
         end
 
         # make the user to buy the quantity
@@ -484,14 +486,14 @@ namespace admin_instance:
         end
 
         # check total supply and user nft quantity after buy
-        with project_nft:
-            let (returned_total_supply) = project_nft_instance.totalSupply()
+        with carbonable_project:
+            let (returned_total_supply) = carbonable_project_instance.totalSupply()
             let (expected_total_supply) = SafeUint256.sub_le(
                 returned_total_supply, intial_total_supply
             )
             assert expected_total_supply = quantity_uint256
 
-            let (returned_quantity) = project_nft_instance.balanceOf(owner=caller)
+            let (returned_quantity) = carbonable_project_instance.balanceOf(owner=caller)
             let (expected_quantity) = SafeUint256.sub_le(returned_quantity, initial_quantity)
             assert expected_quantity = quantity_uint256
         end
@@ -562,7 +564,7 @@ namespace anyone_instance:
     ):
         alloc_locals
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (project_nft) = project_nft_instance.deployed()
+        let (carbonable_project) = carbonable_project_instance.deployed()
         let (payment_token) = payment_token_instance.deployed()
         let (caller) = anyone_instance.get_address()
         let (slots) = anyone_instance.get_slots()
@@ -570,9 +572,9 @@ namespace anyone_instance:
         let (proof) = anyone_instance.get_proof()
 
         # get user nft and payment token balances to check after buy
-        with project_nft:
-            let (initial_quantity) = project_nft_instance.balanceOf(owner=caller)
-            let (intial_total_supply) = project_nft_instance.totalSupply()
+        with carbonable_project:
+            let (initial_quantity) = carbonable_project_instance.balanceOf(owner=caller)
+            let (intial_total_supply) = carbonable_project_instance.totalSupply()
         end
         with payment_token:
             let (initial_balance) = payment_token_instance.balanceOf(account=caller)
@@ -589,14 +591,14 @@ namespace anyone_instance:
         end
 
         # check total supply and user nft quantity after buy
-        with project_nft:
-            let (returned_total_supply) = project_nft_instance.totalSupply()
+        with carbonable_project:
+            let (returned_total_supply) = carbonable_project_instance.totalSupply()
             let (expected_total_supply) = SafeUint256.sub_le(
                 returned_total_supply, intial_total_supply
             )
             assert expected_total_supply = Uint256(quantity, 0)
 
-            let (returned_quantity) = project_nft_instance.balanceOf(owner=caller)
+            let (returned_quantity) = carbonable_project_instance.balanceOf(owner=caller)
             let (expected_quantity) = SafeUint256.sub_le(returned_quantity, initial_quantity)
             assert expected_quantity = Uint256(quantity, 0)
         end
@@ -616,14 +618,14 @@ namespace anyone_instance:
     ):
         alloc_locals
         let (carbonable_minter) = carbonable_minter_instance.deployed()
-        let (project_nft) = project_nft_instance.deployed()
+        let (carbonable_project) = carbonable_project_instance.deployed()
         let (payment_token) = payment_token_instance.deployed()
         let (caller) = anyone_instance.get_address()
 
         # get user nft and payment token balances to check after buy
-        with project_nft:
-            let (initial_quantity) = project_nft_instance.balanceOf(owner=caller)
-            let (intial_total_supply) = project_nft_instance.totalSupply()
+        with carbonable_project:
+            let (initial_quantity) = carbonable_project_instance.balanceOf(owner=caller)
+            let (intial_total_supply) = carbonable_project_instance.totalSupply()
         end
         with payment_token:
             let (initial_balance) = payment_token_instance.balanceOf(account=caller)
@@ -637,14 +639,14 @@ namespace anyone_instance:
         end
 
         # check total supply and user nft quantity after buy
-        with project_nft:
-            let (returned_total_supply) = project_nft_instance.totalSupply()
+        with carbonable_project:
+            let (returned_total_supply) = carbonable_project_instance.totalSupply()
             let (expected_total_supply) = SafeUint256.sub_le(
                 returned_total_supply, intial_total_supply
             )
             assert expected_total_supply = Uint256(quantity, 0)
 
-            let (returned_quantity) = project_nft_instance.balanceOf(owner=caller)
+            let (returned_quantity) = carbonable_project_instance.balanceOf(owner=caller)
             let (expected_quantity) = SafeUint256.sub_le(returned_quantity, initial_quantity)
             assert expected_quantity = Uint256(quantity, 0)
         end

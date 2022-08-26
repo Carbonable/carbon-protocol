@@ -62,8 +62,8 @@ func test_whitelist_buy_nominal_case{
 
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
-    %{ mock_call(context.mocks.project_nft_address, "mint", []) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     let (success) = CarbonableMinter.whitelist_buy(
         slots=context.whitelist.slots,
@@ -106,7 +106,7 @@ func test_buy_user_whitelisted_but_not_enough_slots{
 
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [3, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [3, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough whitelisted slots available") %}
     CarbonableMinter.whitelist_buy(
@@ -151,9 +151,9 @@ func test_buy_user_whitelisted_but_not_enough_slots_after_claim{
     %{ stop=start_prank(context.signers.anyone) %}
 
     # Mock
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [3, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [3, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.project_nft_address, "mint", []) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
 
     # First buy
     # Call whitelist_buy
@@ -209,7 +209,7 @@ func test_buy_revert_not_whitelisted{
 
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: caller address is not whitelisted") %}
     CarbonableMinter.whitelist_buy(

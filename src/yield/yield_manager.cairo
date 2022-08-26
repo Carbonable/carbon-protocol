@@ -11,10 +11,10 @@ from src.yield.library import YieldManager
 # -----
 
 @view
-func project_nft_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-    project_nft_address : felt
+func carbonable_project_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    carbonable_project_address : felt
 ):
-    return YieldManager.project_nft_address()
+    return YieldManager.carbonable_project_address()
 end
 
 @view
@@ -37,11 +37,11 @@ end
 @constructor
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     owner : felt,
-    project_nft_address : felt,
+    carbonable_project_address : felt,
     carbonable_token_address : felt,
     reward_token_address : felt,
 ):
     return YieldManager.constructor(
-        owner, project_nft_address, carbonable_token_address, reward_token_address
+        owner, carbonable_project_address, carbonable_token_address, reward_token_address
     )
 end
