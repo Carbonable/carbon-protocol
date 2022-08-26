@@ -224,7 +224,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(external_url_len, external_url)
-        return (str.len, str.data)
+        StringCodec.write('external_url', str)
+        return ()
     end
 
     func set_description{
@@ -236,7 +237,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(description_len, description)
-        return (str.len, str.data)
+        StringCodec.write('description', str)
+        return ()
     end
 
     func set_holder{
@@ -248,7 +250,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(holder_len, holder)
-        return (str.len, str.data)
+        StringCodec.write('holder', str)
+        return ()
     end
 
     func set_certifier{
@@ -260,7 +263,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(certifier_len, certifier)
-        return (str.len, str.data)
+        StringCodec.write('certifier', str)
+        return ()
     end
 
     func set_land{
@@ -272,7 +276,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(land_len, land)
-        return (str.len, str.data)
+        StringCodec.write('land', str)
+        return ()
     end
 
     func set_unit_land_surface{
@@ -284,7 +289,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(unit_land_surface_len, unit_land_surface)
-        return (str.len, str.data)
+        StringCodec.write('unit_land_surface', str)
+        return ()
     end
 
     func set_country{
@@ -296,7 +302,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(country_len, country)
-        return (str.len, str.data)
+        StringCodec.write('country', str)
+        return ()
     end
 
     func set_expiration{
@@ -308,7 +315,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(expiration_len, expiration)
-        return (str.len, str.data)
+        StringCodec.write('expiration', str)
+        return ()
     end
 
     func set_total_co2_sequestration{
@@ -320,7 +328,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(total_co2_sequestration_len, total_co2_sequestration)
-        return (str.len, str.data)
+        StringCodec.write('total_co2_sequestration', str)
+        return ()
     end
 
     func set_unit_co2_sequestration{
@@ -332,7 +341,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(unit_co2_sequestration_len, unit_co2_sequestration)
-        return (str.len, str.data)
+        StringCodec.write('unit_co2_sequestration', str)
+        return ()
     end
 
     func set_sequestration_color{
@@ -344,7 +354,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(sequestration_color_len, sequestration_color)
-        return (str.len, str.data)
+        StringCodec.write('sequestration_color', str)
+        return ()
     end
 
     func set_sequestration_type{
@@ -356,7 +367,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(sequestration_type_len, sequestration_type)
-        return (str.len, str.data)
+        StringCodec.write('sequestration_type', str)
+        return ()
     end
 
     func set_sequestration_category{
@@ -368,7 +380,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(sequestration_category_len, sequestration_category)
-        return (str.len, str.data)
+        StringCodec.write('sequestration_category', str)
+        return ()
     end
 
     func set_background_color{
@@ -380,7 +393,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(background_color_len, background_color)
-        return (str.len, str.data)
+        StringCodec.write('background_color', str)
+        return ()
     end
 
     func set_animation_url{
@@ -392,7 +406,8 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(animation_url_len, animation_url)
-        return (str.len, str.data)
+        StringCodec.write('animation_url', str)
+        return ()
     end
 
     func set_youtube_url{
@@ -404,6 +419,7 @@ namespace CarbonableProject:
         alloc_locals
 
         let (str) = StringCodec.ss_arr_to_string(youtube_url_len, youtube_url)
-        return (str.len, str.data)
+        StringCodec.write('youtube_url', str)
+        return ()
     end
 end

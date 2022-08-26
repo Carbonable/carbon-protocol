@@ -75,7 +75,7 @@ wait_for_acceptance() {
 str_to_felt() {
     str_val=$1
     hex_bytes=$(echo $str_val | xxd -p)
-    hex_bytes=0x$(echo $hex_bytes | rev | cut -c2- | rev)
+    hex_bytes=0x$(echo $hex_bytes | rev | cut -c3- | rev)
     echo $hex_bytes
 }
 
@@ -140,7 +140,7 @@ deploy_all_contracts() {
         erc721_name=$(str_to_felt "$ERC721_NAME")
         erc721_symbol=$(str_to_felt "$ERC721_SYMBOL")
         log_info "Deploying ERC-721 contract..."
-        ERC721_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProjectNFT.json --inputs $erc721_name $erc721_symbol $ADMIN_ADDRESS"` || exit_error
+        ERC721_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProject.json --inputs $erc721_name $erc721_symbol $ADMIN_ADDRESS"` || exit_error
     fi
 
     # Deploy Minter contract
@@ -151,7 +151,7 @@ deploy_all_contracts() {
         MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT"` || exit_error
         # Transfer ownership
         log_info "Transfer ERC-721 ontract ownership..."
-        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProjectNFT_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT"` || exit_error
+        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT"` || exit_error
     fi    
 
     # Save values in cache file

@@ -17,7 +17,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 @external
-func test_image_url{
+func test_external_url{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }():
     alloc_locals
@@ -28,12 +28,12 @@ func test_image_url{
     # run scenario
     %{ stop=start_prank(context.signers.admin) %}
 
-    let ss = 'https://image.com'
+    let ss = 'https://external.com'
     let (str) = StringCodec.ss_to_string(ss)
 
-    CarbonableProject.set_image_url(image_url_len=str.len, image_url=str.data)
+    CarbonableProject.set_external_url(external_url_len=str.len, external_url=str.data)
 
-    let (len, array) = CarbonableProject.image_url()
+    let (len, array) = CarbonableProject.external_url()
     let (returned_str) = StringCodec.ss_arr_to_string(len, array)
 
     assert_string(returned_str, str)

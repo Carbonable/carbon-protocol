@@ -151,110 +151,110 @@ end
 func set_external_url{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(external_url_len : felt, external_url : felt*):
-    return CarbonableProject.set_image_url(external_url_len, external_url)
+    return CarbonableProject.set_external_url(external_url_len, external_url)
 end
 
 @external
 func set_description{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(description_len : felt, description : felt*):
-    return CarbonableProject.set_image_url(description_len, description)
+    return CarbonableProject.set_description(description_len, description)
 end
 
 @external
 func set_holder{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(holder_len : felt, holder : felt*):
-    return CarbonableProject.set_image_url(holder_len, holder)
+    return CarbonableProject.set_holder(holder_len, holder)
 end
 
 @external
 func set_certifier{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(certifier_len : felt, certifier : felt*):
-    return CarbonableProject.set_image_url(certifier_len, certifier)
+    return CarbonableProject.set_certifier(certifier_len, certifier)
 end
 
 @external
 func set_land{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(land_len : felt, land : felt*):
-    return CarbonableProject.set_image_url(land_len, land)
+    return CarbonableProject.set_land(land_len, land)
 end
 
 @external
 func set_unit_land_surface{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(unit_land_surface_len : felt, unit_land_surface : felt*):
-    return CarbonableProject.set_image_url(unit_land_surface_len, unit_land_surface)
+    return CarbonableProject.set_unit_land_surface(unit_land_surface_len, unit_land_surface)
 end
 
 @external
 func set_country{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(country_len : felt, country : felt*):
-    return CarbonableProject.set_image_url(country_len, country)
+    return CarbonableProject.set_country(country_len, country)
 end
 
 @external
 func set_expiration{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(expiration_len : felt, expiration : felt*):
-    return CarbonableProject.set_image_url(expiration_len, expiration)
+    return CarbonableProject.set_expiration(expiration_len, expiration)
 end
 
 @external
 func set_total_co2_sequestration{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(total_co2_sequestration_len : felt, total_co2_sequestration : felt*):
-    return CarbonableProject.set_image_url(total_co2_sequestration_len, total_co2_sequestration)
+    return CarbonableProject.set_total_co2_sequestration(total_co2_sequestration_len, total_co2_sequestration)
 end
 
 @external
 func set_unit_co2_sequestration{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(unit_co2_sequestration_len : felt, unit_co2_sequestration : felt*):
-    return CarbonableProject.set_image_url(unit_co2_sequestration_len, unit_co2_sequestration)
+    return CarbonableProject.set_unit_co2_sequestration(unit_co2_sequestration_len, unit_co2_sequestration)
 end
 
 @external
 func set_sequestration_color{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(sequestration_color_len : felt, sequestration_color : felt*):
-    return CarbonableProject.set_image_url(sequestration_color_len, sequestration_color)
+    return CarbonableProject.set_sequestration_color(sequestration_color_len, sequestration_color)
 end
 
 @external
 func set_sequestration_type{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(sequestration_type_len : felt, sequestration_type : felt*):
-    return CarbonableProject.set_image_url(sequestration_type_len, sequestration_type)
+    return CarbonableProject.set_sequestration_type(sequestration_type_len, sequestration_type)
 end
 
 @external
 func set_sequestration_category{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(sequestration_category_len : felt, sequestration_category : felt*):
-    return CarbonableProject.set_image_url(sequestration_category_len, sequestration_category)
+    return CarbonableProject.set_sequestration_category(sequestration_category_len, sequestration_category)
 end
 
 @external
 func set_background_color{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(background_color_len : felt, background_color : felt*):
-    return CarbonableProject.set_image_url(background_color_len, background_color)
+    return CarbonableProject.set_background_color(background_color_len, background_color)
 end
 
 @external
 func set_animation_url{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(animation_url_len : felt, animation_url : felt*):
-    return CarbonableProject.set_image_url(animation_url_len, animation_url)
+    return CarbonableProject.set_animation_url(animation_url_len, animation_url)
 end
 
 @external
 func set_youtube_url{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(youtube_url_len : felt, youtube_url : felt*):
-    return CarbonableProject.set_image_url(youtube_url_len, youtube_url)
+    return CarbonableProject.set_youtube_url(youtube_url_len, youtube_url)
 end

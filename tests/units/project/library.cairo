@@ -4,8 +4,10 @@
 %lang starknet
 
 # Starkware dependencies
+from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.bool import TRUE, FALSE
 
 # Local dependencies
 from src.project.library import CarbonableProject
@@ -33,8 +35,9 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     return ()
 end
 
-func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-) -> (test_context : TestContext):
+func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    test_context : TestContext
+):
     alloc_locals
 
     # Extract context variables

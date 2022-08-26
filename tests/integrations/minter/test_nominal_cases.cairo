@@ -7,7 +7,7 @@
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
-# Project dependencies
+# Local dependencies
 from tests.integrations.minter.library import (
     setup,
     admin_instance as admin,

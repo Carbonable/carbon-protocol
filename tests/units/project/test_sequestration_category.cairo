@@ -17,7 +17,7 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 @external
-func test_image_url{
+func test_sequestration_category{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }():
     alloc_locals
@@ -28,12 +28,14 @@ func test_image_url{
     # run scenario
     %{ stop=start_prank(context.signers.admin) %}
 
-    let ss = 'https://image.com'
+    let ss = 'regeneration'
     let (str) = StringCodec.ss_to_string(ss)
 
-    CarbonableProject.set_image_url(image_url_len=str.len, image_url=str.data)
+    CarbonableProject.set_sequestration_category(
+        sequestration_category_len=str.len, sequestration_category=str.data
+    )
 
-    let (len, array) = CarbonableProject.image_url()
+    let (len, array) = CarbonableProject.sequestration_category()
     let (returned_str) = StringCodec.ss_arr_to_string(len, array)
 
     assert_string(returned_str, str)

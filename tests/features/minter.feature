@@ -8,7 +8,7 @@ Feature: Minter
     And an admin with address 1000
     And an anyone with address 1001
     Given a deployed project nft contact
-    And owned by admin
+    And owned by the minter contract
     Given a deployed payment token contact
     And owned by admin
     And a total supply set to 1,000,000
