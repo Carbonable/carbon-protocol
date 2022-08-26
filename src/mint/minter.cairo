@@ -12,10 +12,9 @@ from src.mint.library import CarbonableMinter
 # -----
 
 @view
-func project_nft_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-    project_nft_address : felt
-):
-    return CarbonableMinter.project_nft_address()
+func carbonable_project_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ) -> (carbonable_project_address : felt):
+    return CarbonableMinter.carbonable_project_address()
 end
 
 @view
@@ -93,7 +92,7 @@ end
 @constructor
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     owner : felt,
-    project_nft_address : felt,
+    carbonable_project_address : felt,
     payment_token_address : felt,
     public_sale_open : felt,
     max_buy_per_tx : felt,
@@ -103,7 +102,7 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
 ):
     return CarbonableMinter.constructor(
         owner,
-        project_nft_address,
+        carbonable_project_address,
         payment_token_address,
         public_sale_open,
         max_buy_per_tx,

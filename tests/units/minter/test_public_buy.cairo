@@ -39,8 +39,8 @@ func test_buy_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
 
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
-    %{ mock_call(context.mocks.project_nft_address, "mint", []) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     let (success) = CarbonableMinter.public_buy(2)
     assert success = TRUE
@@ -73,7 +73,7 @@ func test_buy_revert_not_enough_nfts_available{
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [10, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [10, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.public_buy(quantity)
@@ -106,7 +106,7 @@ func test_buy_revert_not_enough_free_nfts{
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [0, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.public_buy(quantity)
@@ -139,7 +139,7 @@ func test_buy_revert_transfer_failed{
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: transfer failed") %}
     CarbonableMinter.public_buy(quantity)
@@ -172,7 +172,7 @@ func test_buy_revert_mint_not_open{
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: public sale is not open") %}
     CarbonableMinter.public_buy(quantity)

@@ -22,8 +22,8 @@ func test_initialization{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
 
     # run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    let (project_nft_address) = YieldManager.project_nft_address()
-    assert project_nft_address = context.mocks.project_nft_address
+    let (carbonable_project_address) = YieldManager.carbonable_project_address()
+    assert carbonable_project_address = context.mocks.carbonable_project_address
 
     let (carbonable_token_address) = YieldManager.carbonable_token_address()
     assert carbonable_token_address = context.mocks.carbonable_token_address

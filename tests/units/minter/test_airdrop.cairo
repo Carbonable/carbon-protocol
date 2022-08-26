@@ -35,8 +35,8 @@ func test_airdrop_nominal_case{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
 
     # run scenario
     %{ stop=start_prank(context.signers.admin) %}
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [5, 0]) %}
-    %{ mock_call(context.mocks.project_nft_address, "mint", []) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
     CarbonableMinter.airdrop(to=context.signers.anyone, quantity=5)
     %{ stop() %}
     return ()
@@ -89,7 +89,7 @@ func test_airdrop_revert_not_enough_nfts_available{
 
     # run scenario
     %{ stop=start_prank(context.signers.admin) %}
-    %{ mock_call(context.mocks.project_nft_address, "totalSupply", [6, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [6, 0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.airdrop(to=context.signers.anyone, quantity=5)
     CarbonableMinter.airdrop(to=context.signers.anyone, quantity=1)

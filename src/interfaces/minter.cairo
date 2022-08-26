@@ -12,7 +12,7 @@ namespace ICarbonableMinter:
     # @param vesting_id the vesting identifier
     # @return the amount of releasable tokens
     ###
-    func project_nft_address() -> (project_nft_address : felt):
+    func carbonable_project_address() -> (carbonable_project_address : felt):
     end
 
     func payment_token_address() -> (payment_token_address : felt):
