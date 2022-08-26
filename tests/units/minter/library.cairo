@@ -8,10 +8,13 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
-# Project dependencies
+# Local dependencies
 from src.mint.library import CarbonableMinter
 
+#
 # Structs
+#
+
 struct Signers:
     member admin : felt
     member anyone : felt
@@ -35,7 +38,10 @@ struct TestContext:
     member whitelist : Whitelist
 end
 
+#
 # Functions
+#
+
 func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     %{
         # Load config

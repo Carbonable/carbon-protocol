@@ -12,7 +12,10 @@ from starkware.cairo.common.bool import TRUE, FALSE
 # Local dependencies
 from src.project.library import CarbonableProject
 
+#
 # Structs
+#
+
 struct Signers:
     member admin : felt
     member anyone : felt
@@ -22,7 +25,10 @@ struct TestContext:
     member signers : Signers
 end
 
+#
 # Functions
+#
+
 func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     %{
         # Load config

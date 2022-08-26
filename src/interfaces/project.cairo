@@ -3,6 +3,7 @@
 
 %lang starknet
 
+# Project dependencies
 from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import (
     IERC721,
     IERC721_Enumerable,

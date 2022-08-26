@@ -28,9 +28,9 @@ namespace IERC721Mintable:
     end
 end
 
-# ------
-# STORAGE
-# ------
+#
+# Storage
+#
 
 # Address of the project NFT contract
 @storage_var
@@ -78,9 +78,34 @@ func claimed_slots_(account : felt) -> (slots : felt):
 end
 
 namespace CarbonableMinter:
-    # -----
-    # VIEWS
-    # -----
+    #
+    # Constructor
+    #
+
+    func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        owner : felt,
+        carbonable_project_address : felt,
+        payment_token_address : felt,
+        public_sale_open : felt,
+        max_buy_per_tx : felt,
+        unit_price : Uint256,
+        max_supply_for_mint : Uint256,
+        reserved_supply_for_mint : Uint256,
+    ):
+        Ownable.initializer(owner)
+        carbonable_project_address_.write(carbonable_project_address)
+        payment_token_address_.write(payment_token_address)
+        public_sale_open_.write(public_sale_open)
+        max_buy_per_tx_.write(max_buy_per_tx)
+        unit_price_.write(unit_price)
+        max_supply_for_mint_.write(max_supply_for_mint)
+        reserved_supply_for_mint_.write(reserved_supply_for_mint)
+        return ()
+    end
+
+    #
+    # Getters
+    #
 
     func carbonable_project_address{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
@@ -160,34 +185,9 @@ namespace CarbonableMinter:
         return (slots)
     end
 
-    # ------
-    # CONSTRUCTOR
-    # ------
-
-    func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        owner : felt,
-        carbonable_project_address : felt,
-        payment_token_address : felt,
-        public_sale_open : felt,
-        max_buy_per_tx : felt,
-        unit_price : Uint256,
-        max_supply_for_mint : Uint256,
-        reserved_supply_for_mint : Uint256,
-    ):
-        Ownable.initializer(owner)
-        carbonable_project_address_.write(carbonable_project_address)
-        payment_token_address_.write(payment_token_address)
-        public_sale_open_.write(public_sale_open)
-        max_buy_per_tx_.write(max_buy_per_tx)
-        unit_price_.write(unit_price)
-        max_supply_for_mint_.write(max_supply_for_mint)
-        reserved_supply_for_mint_.write(reserved_supply_for_mint)
-        return ()
-    end
-
-    # ------------------
-    # EXTERNAL FUNCTIONS
-    # ------------------
+    #
+    # Externals
+    #
 
     func set_whitelist_merkle_root{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
@@ -386,6 +386,10 @@ namespace CarbonableMinter:
         let (success) = buy(quantity)
         return (success)
     end
+
+    #
+    # Internals
+    #
 
     func buy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         quantity : felt

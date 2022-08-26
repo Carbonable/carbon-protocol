@@ -7,10 +7,13 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
-# Project dependencies
+# Local dependencies
 from src.yield.library import YieldManager
 
+#
 # Structs
+#
+
 struct Signers:
     member admin : felt
     member anyone : felt
@@ -27,7 +30,10 @@ struct TestContext:
     member mocks : Mocks
 end
 
+#
 # Functions
+#
+
 func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     %{
         # Load config

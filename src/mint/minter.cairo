@@ -3,13 +3,41 @@
 
 %lang starknet
 
+# Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from src.mint.library import CarbonableMinter
 
-# -----
-# VIEWS
-# -----
+#
+# Constructor
+#
+
+@constructor
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    owner : felt,
+    carbonable_project_address : felt,
+    payment_token_address : felt,
+    public_sale_open : felt,
+    max_buy_per_tx : felt,
+    unit_price : Uint256,
+    max_supply_for_mint : Uint256,
+    reserved_supply_for_mint : Uint256,
+):
+    return CarbonableMinter.constructor(
+        owner,
+        carbonable_project_address,
+        payment_token_address,
+        public_sale_open,
+        max_buy_per_tx,
+        unit_price,
+        max_supply_for_mint,
+        reserved_supply_for_mint,
+    )
+end
+
+#
+# Getters
+#
 
 @view
 func carbonable_project_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -85,36 +113,10 @@ func claimed_slots{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
 ) -> (slots : felt):
     return CarbonableMinter.claimed_slots(account)
 end
-# ------
-# CONSTRUCTOR
-# ------
 
-@constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    owner : felt,
-    carbonable_project_address : felt,
-    payment_token_address : felt,
-    public_sale_open : felt,
-    max_buy_per_tx : felt,
-    unit_price : Uint256,
-    max_supply_for_mint : Uint256,
-    reserved_supply_for_mint : Uint256,
-):
-    return CarbonableMinter.constructor(
-        owner,
-        carbonable_project_address,
-        payment_token_address,
-        public_sale_open,
-        max_buy_per_tx,
-        unit_price,
-        max_supply_for_mint,
-        reserved_supply_for_mint,
-    )
-end
-
-# ------------------
-# EXTERNAL FUNCTIONS
-# ------------------
+#
+# Externals
+#
 
 @external
 func set_whitelist_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
