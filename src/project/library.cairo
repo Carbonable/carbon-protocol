@@ -214,4 +214,196 @@ namespace CarbonableProject:
         StringCodec.write('image_url', str)
         return ()
     end
+
+    func set_external_url{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(external_url_len : felt, external_url : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(external_url_len, external_url)
+        return (str.len, str.data)
+    end
+
+    func set_description{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(description_len : felt, description : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(description_len, description)
+        return (str.len, str.data)
+    end
+
+    func set_holder{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(holder_len : felt, holder : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(holder_len, holder)
+        return (str.len, str.data)
+    end
+
+    func set_certifier{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(certifier_len : felt, certifier : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(certifier_len, certifier)
+        return (str.len, str.data)
+    end
+
+    func set_land{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(land_len : felt, land : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(land_len, land)
+        return (str.len, str.data)
+    end
+
+    func set_unit_land_surface{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(unit_land_surface_len : felt, unit_land_surface : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(unit_land_surface_len, unit_land_surface)
+        return (str.len, str.data)
+    end
+
+    func set_country{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(country_len : felt, country : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(country_len, country)
+        return (str.len, str.data)
+    end
+
+    func set_expiration{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(expiration_len : felt, expiration : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(expiration_len, expiration)
+        return (str.len, str.data)
+    end
+
+    func set_total_co2_sequestration{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(total_co2_sequestration_len : felt, total_co2_sequestration : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(total_co2_sequestration_len, total_co2_sequestration)
+        return (str.len, str.data)
+    end
+
+    func set_unit_co2_sequestration{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(unit_co2_sequestration_len : felt, unit_co2_sequestration : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(unit_co2_sequestration_len, unit_co2_sequestration)
+        return (str.len, str.data)
+    end
+
+    func set_sequestration_color{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(sequestration_color_len : felt, sequestration_color : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(sequestration_color_len, sequestration_color)
+        return (str.len, str.data)
+    end
+
+    func set_sequestration_type{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(sequestration_type_len : felt, sequestration_type : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(sequestration_type_len, sequestration_type)
+        return (str.len, str.data)
+    end
+
+    func set_sequestration_category{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(sequestration_category_len : felt, sequestration_category : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(sequestration_category_len, sequestration_category)
+        return (str.len, str.data)
+    end
+
+    func set_background_color{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(background_color_len : felt, background_color : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(background_color_len, background_color)
+        return (str.len, str.data)
+    end
+
+    func set_animation_url{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(animation_url_len : felt, animation_url : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(animation_url_len, animation_url)
+        return (str.len, str.data)
+    end
+
+    func set_youtube_url{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(youtube_url_len : felt, youtube_url : felt*):
+        alloc_locals
+
+        let (str) = StringCodec.ss_arr_to_string(youtube_url_len, youtube_url)
+        return (str.len, str.data)
+    end
 end
