@@ -1,0 +1,18 @@
+project:
+  image_url: https://image.com
+  external_url: https://external.com
+  description: This is a description
+  holder: Holder
+  certifier: Certifier
+  land: Land
+  unit_land_surface: "100"
+  country: Country
+  expiration: "2042"
+  total_co2_sequestration: "3603"
+  unit_co2_sequestration: "0.5004"
+  sequestration_color: blue
+  sequestration_type: mangrove
+  sequestration_category: regeneration
+  background_color: green
+  animation_url: https://animation.com
+  youtube_url: https://youtube.com
