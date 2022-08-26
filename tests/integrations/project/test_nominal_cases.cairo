@@ -26,6 +26,22 @@ func test_setters{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }():
     # When admin set up the image url
+    # And admin set up the external url
+    # And admin set up the description
+    # And admin set up the holder
+    # And admin set up the certifier
+    # And admin set up the land
+    # And admin set up the unit land surface
+    # And admin set up the country
+    # And admin set up the expiration
+    # And admin set up the total co2 sequestration
+    # And admin set up the unit co2 sequestration
+    # And admin set up the sequestration color
+    # And admin set up the sequestration type
+    # And admin set up the sequestration category
+    # And admin set up the background color
+    # And admin set up the animation url
+    # And admin set up the youtube url
     # Then no failed transactions expected
 
     admin.set_image_url('https://image.com')
