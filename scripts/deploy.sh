@@ -151,7 +151,7 @@ deploy_all_contracts() {
         MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT"` || exit_error
         # Transfer ownership
         log_info "Transfer ERC-721 ontract ownership..."
-        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT"` || exit_error
+        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT"` || exit_error
     fi    
 
     # Save values in cache file
