@@ -33,9 +33,8 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     return ()
 end
 
-func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-    test_context : TestContext
-):
+func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+) -> (test_context : TestContext):
     alloc_locals
 
     # Extract context variables
@@ -45,6 +44,9 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
     %}
+
+    # Instantiate project
+    CarbonableProject.constructor(owner=admin)
 
     # Instantiate context, useful to avoid many hints in tests
     local signers : Signers = Signers(admin=admin, anyone=anyone)
