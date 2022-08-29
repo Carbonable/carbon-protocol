@@ -1,0 +1,132 @@
+[
+	{
+		"name": "Status: Ready",
+		"description": "",
+		"color": "0e8a16"
+	},
+	{
+		"name": "Status: Blocked",
+		"description": "",
+		"color": "FC8264"
+	},
+	{
+		"name": "Status: In Progress",
+		"description": "",
+		"color": "EAE435"
+	},
+	{
+		"name": "Status: Approved",
+		"description": "",
+		"color": "91CA55"
+	},
+	{
+		"name": "Type: Epic",
+		"description": "",
+		"color": "BFD4F2"
+	},
+	{
+		"name": "Type: Question",
+		"description": "",
+		"color": "FF6DD9"
+	},
+	{
+		"name": "Type: Security",
+		"description": "",
+		"color": "D73A4A"
+	},
+	{
+		"name": "Type: Fix",
+		"description": "",
+		"color": "91CA55"
+	},
+	{
+		"name": "Type: Feature",
+		"description": "",
+		"color": "6DFF6D"
+	},
+	{
+		"name": "Type: Docs",
+		"description": "",
+		"color": "6DE6FF"
+	},
+	{
+		"name": "Type: Bug",
+		"description": "",
+		"color": "ff2222"
+	},
+	{
+		"name": "Priority: Critical",
+		"description": "",
+		"color": "ff2222"
+	},
+	{
+		"name": "Priority: High",
+		"description": "",
+		"color": "FF7922"
+	},
+	{
+		"name": "Priority: Medium",
+		"description": "",
+		"color": "fbca04"
+	},
+	{
+		"name": "Priority: Low",
+		"description": "",
+		"color": "c2e0c6"
+	},
+	{
+		"name": "For: Backend",
+		"description": "",
+		"color": "5319e7"
+	},
+	{
+		"name": "For: Frontend",
+		"description": "",
+		"color": "AC97F2"
+	},
+	{
+		"name": "For: DevOps",
+		"description": "",
+		"color": "1d76db"
+	},
+	{
+		"name": "For: Smart Contract",
+		"description": "",
+		"color": "5ebeff"
+	},
+	{
+		"name": "For: Documentation",
+		"description": "",
+		"color": "BABABA"
+	},
+	{
+		"name": "For: UI/UX",
+		"description": "",
+		"color": "7ED321"
+	},
+	{
+		"name": "For: Business",
+		"description": "",
+		"color": "006b75"
+	},
+	{
+		"name": "Work: Obvious",
+		"description": "",
+		"color": "91ca55"
+	},
+	{
+		"name": "Work: Complicated",
+		"description": "",
+		"color": "FBCA04"
+	},
+	{
+		"name": "Work: Complex",
+		"description": "",
+		"color": "D93F0B"
+	},
+	{
+		"name": "Work: Chaotic",
+		"description": "",
+		"color": "fbca04"
+	}
+]
