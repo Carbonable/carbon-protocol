@@ -46,3 +46,28 @@ func test_unit_land_surface{
 
     return ()
 end
+
+@external
+func test_unit_land_surface_revert_not_owner{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}():
+    alloc_locals
+
+    # prepare project instance
+    let (local context) = prepare()
+
+    # run scenario
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    let ss = '100'
+    let (str) = StringCodec.ss_to_string(ss)
+
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableProject.set_unit_land_surface(
+        unit_land_surface_len=str.len, unit_land_surface=str.data
+    )
+
+    %{ stop() %}
+
+    return ()
+end
