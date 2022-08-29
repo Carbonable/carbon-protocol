@@ -1,13 +1,13 @@
 Feature: Minter
 
-  Feature Description: Minter contract provides functionnalities to allow a user to buy project NFTs.
+  Feature Description: Minter contract provides functionnalities to allow a user to buy projects.
   All corresponding actions must work as expected.
 
   Background:
     Given a deployed user contracts
     And an admin with address 1000
     And an anyone with address 1001
-    Given a deployed project nft contact
+    Given a deployed project contact
     And owned by the minter contract
     Given a deployed payment token contact
     And owned by admin
