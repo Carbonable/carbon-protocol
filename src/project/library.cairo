@@ -223,6 +223,7 @@ namespace CarbonableProject:
     }(external_url_len : felt, external_url : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(external_url_len, external_url)
         StringCodec.write('external_url', str)
         return ()
@@ -236,6 +237,7 @@ namespace CarbonableProject:
     }(description_len : felt, description : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(description_len, description)
         StringCodec.write('description', str)
         return ()
@@ -249,6 +251,7 @@ namespace CarbonableProject:
     }(holder_len : felt, holder : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(holder_len, holder)
         StringCodec.write('holder', str)
         return ()
@@ -262,6 +265,7 @@ namespace CarbonableProject:
     }(certifier_len : felt, certifier : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(certifier_len, certifier)
         StringCodec.write('certifier', str)
         return ()
@@ -275,6 +279,7 @@ namespace CarbonableProject:
     }(land_len : felt, land : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(land_len, land)
         StringCodec.write('land', str)
         return ()
@@ -288,6 +293,7 @@ namespace CarbonableProject:
     }(unit_land_surface_len : felt, unit_land_surface : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(unit_land_surface_len, unit_land_surface)
         StringCodec.write('unit_land_surface', str)
         return ()
@@ -301,6 +307,7 @@ namespace CarbonableProject:
     }(country_len : felt, country : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(country_len, country)
         StringCodec.write('country', str)
         return ()
@@ -314,6 +321,7 @@ namespace CarbonableProject:
     }(expiration_len : felt, expiration : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(expiration_len, expiration)
         StringCodec.write('expiration', str)
         return ()
@@ -327,6 +335,7 @@ namespace CarbonableProject:
     }(total_co2_sequestration_len : felt, total_co2_sequestration : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(total_co2_sequestration_len, total_co2_sequestration)
         StringCodec.write('total_co2_sequestration', str)
         return ()
@@ -340,6 +349,7 @@ namespace CarbonableProject:
     }(unit_co2_sequestration_len : felt, unit_co2_sequestration : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(unit_co2_sequestration_len, unit_co2_sequestration)
         StringCodec.write('unit_co2_sequestration', str)
         return ()
@@ -353,6 +363,7 @@ namespace CarbonableProject:
     }(sequestration_color_len : felt, sequestration_color : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(sequestration_color_len, sequestration_color)
         StringCodec.write('sequestration_color', str)
         return ()
@@ -366,6 +377,7 @@ namespace CarbonableProject:
     }(sequestration_type_len : felt, sequestration_type : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(sequestration_type_len, sequestration_type)
         StringCodec.write('sequestration_type', str)
         return ()
@@ -379,6 +391,7 @@ namespace CarbonableProject:
     }(sequestration_category_len : felt, sequestration_category : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(sequestration_category_len, sequestration_category)
         StringCodec.write('sequestration_category', str)
         return ()
@@ -392,6 +405,7 @@ namespace CarbonableProject:
     }(background_color_len : felt, background_color : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(background_color_len, background_color)
         StringCodec.write('background_color', str)
         return ()
@@ -405,6 +419,7 @@ namespace CarbonableProject:
     }(animation_url_len : felt, animation_url : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(animation_url_len, animation_url)
         StringCodec.write('animation_url', str)
         return ()
@@ -418,6 +433,7 @@ namespace CarbonableProject:
     }(youtube_url_len : felt, youtube_url : felt*):
         alloc_locals
 
+        Ownable.assert_only_owner()
         let (str) = StringCodec.ss_arr_to_string(youtube_url_len, youtube_url)
         StringCodec.write('youtube_url', str)
         return ()

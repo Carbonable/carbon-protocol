@@ -44,3 +44,26 @@ func test_country{
 
     return ()
 end
+
+@external
+func test_country_revert_not_owner{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}():
+    alloc_locals
+
+    # prepare project instance
+    let (local context) = prepare()
+
+    # run scenario
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    let ss = 'Country'
+    let (str) = StringCodec.ss_to_string(ss)
+
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableProject.set_country(country_len=str.len, country=str.data)
+
+    %{ stop() %}
+
+    return ()
+end

@@ -44,3 +44,26 @@ func test_description{
 
     return ()
 end
+
+@external
+func test_description_revert_not_owner{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}():
+    alloc_locals
+
+    # prepare project instance
+    let (local context) = prepare()
+
+    # run scenario
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    let ss = 'This is a description'
+    let (str) = StringCodec.ss_to_string(ss)
+
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    CarbonableProject.set_description(description_len=str.len, description=str.data)
+
+    %{ stop() %}
+
+    return ()
+end
