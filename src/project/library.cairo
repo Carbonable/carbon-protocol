@@ -16,6 +16,7 @@ namespace CarbonableProject:
     # Constructor
     #
 
+    # This constructor is used only by unit tests since the deployed contract uses the OZ constructor by inheritance
     func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         owner : felt
     ):
