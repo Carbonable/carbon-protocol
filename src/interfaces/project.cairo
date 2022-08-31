@@ -20,6 +20,9 @@ namespace ICarbonableProject:
     func image_url() -> (image_url_len : felt, image_url : felt*):
     end
 
+    func image_data() -> (image_data_len : felt, image_data : felt*):
+    end
+
     func external_url() -> (external_url_len : felt, external_url : felt*):
     end
 
@@ -75,6 +78,9 @@ namespace ICarbonableProject:
     end
 
     func set_image_url(image_url_len : felt, image_url : felt*) -> ():
+    end
+
+    func set_image_data(image_data_len : felt, image_data : felt*) -> ():
     end
 
     func set_external_url(external_url_len : felt, external_url : felt*):

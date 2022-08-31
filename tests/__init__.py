@@ -30,7 +30,7 @@ def load(path: str, context: object):
     # load config
     path = Path(path)
     config = {}
-    for parent in path.parents:
+    for parent in reversed(path.parents):
         config_path = parent / path.name
         if not config_path.exists():
             continue
