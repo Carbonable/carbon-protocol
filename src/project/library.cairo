@@ -13,18 +13,6 @@ from openzeppelin.access.ownable import Ownable
 
 namespace CarbonableProject:
     #
-    # Constructor
-    #
-
-    # This constructor is used only by unit tests since the deployed contract uses the OZ constructor by inheritance
-    func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        owner : felt
-    ):
-        Ownable.initializer(owner)
-        return ()
-    end
-
-    #
     # Getters
     #
 
@@ -35,6 +23,16 @@ namespace CarbonableProject:
         range_check_ptr,
     }() -> (image_url_len : felt, image_url : felt*):
         let (str) = StringCodec.read('image_url')
+        return (str.len, str.data)
+    end
+
+    func image_data{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }() -> (image_data_len : felt, image_data : felt*):
+        let (str) = StringCodec.read('image_data')
         return (str.len, str.data)
     end
 
@@ -216,6 +214,20 @@ namespace CarbonableProject:
         return ()
     end
 
+    func set_image_data{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        bitwise_ptr : BitwiseBuiltin*,
+        range_check_ptr,
+    }(image_data_len : felt, image_data : felt*):
+        alloc_locals
+
+        Ownable.assert_only_owner()
+        let (str) = StringCodec.ss_arr_to_string(image_data_len, image_data)
+        StringCodec.write('image_data', str)
+        return ()
+    end
+
     func set_external_url{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
@@ -337,7 +349,9 @@ namespace CarbonableProject:
         alloc_locals
 
         Ownable.assert_only_owner()
-        let (str) = StringCodec.ss_arr_to_string(total_co2_sequestration_len, total_co2_sequestration)
+        let (str) = StringCodec.ss_arr_to_string(
+            total_co2_sequestration_len, total_co2_sequestration
+        )
         StringCodec.write('total_co2_sequestration', str)
         return ()
     end

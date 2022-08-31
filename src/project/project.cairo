@@ -25,6 +25,13 @@ func image_url{
 end
 
 @view
+func image_data{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}() -> (image_data_len : felt, image_data : felt*):
+    return CarbonableProject.image_data()
+end
+
+@view
 func external_url{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }() -> (external_url_len : felt, external_url : felt*):
@@ -145,6 +152,13 @@ func set_image_url{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(image_url_len : felt, image_url : felt*) -> ():
     return CarbonableProject.set_image_url(image_url_len, image_url)
+end
+
+@external
+func set_image_data{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}(image_data_len : felt, image_data : felt*) -> ():
+    return CarbonableProject.set_image_data(image_data_len, image_data)
 end
 
 @external
