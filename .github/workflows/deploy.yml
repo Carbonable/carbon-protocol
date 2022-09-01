@@ -84,19 +84,14 @@ jobs:
 
       - name: Deploy carbonable project contract
         run: |
-          source ./scripts/utils.sh && \
-          source ./scripts/logging.sh && \
-          source ./scripts/tools.sh $$ \
-          echo $(str_to_felt ${{ inputs.project_name }}) && \
-          echo $(str_to_felt ${{ inputs.project_symbol }}) && \
-          echo $(get_account_address ${{ inputs.alias }} "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
-          echo $NETWORK && \
-          echo $PROJECT_NAME && \
-          echo $PROJECT_SYMBOL && \
-          echo $ADMIN_ADDRESS
+          source ./scripts/library.sh
+          /home/runner/.protostar/dist/protostar/protostar \
+          --profile ${{ inputs.network }} \
+          deploy ./build/CarbonableProject.json \
+          --inputs \
+            $(str_to_felt ${{ inputs.project_name }}) \
+            $(str_to_felt ${{ inputs.project_symbol }}) \
+            $(get_account_address ${{ inputs.alias }} "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
         env:
           NETWORK: ${{ inputs.network }}
           STARKNET_WALLET: ${{ inputs.wallet }}
-          PROJECT_NAME: $(str_to_felt ${{ inputs.project_name }})
-          PROJECT_SYMBOL: $(str_to_felt ${{ inputs.project_symbol }})
-          ADMIN_ADDRESS: $(get_account_address ${{ inputs.alias }} "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
