@@ -1,4 +1,4 @@
-name: Build and deploy a Carbonable Project
+name: Deploy a Carbonable Project
 on:
   workflow_dispatch:
     inputs:
@@ -26,7 +26,7 @@ on:
         type: choice
         options:
         - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
-        
+
       project_name:
         description: 'Carbonable project name'
         default: 'Carbonable ERC-721 Test'
@@ -42,9 +42,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  build:workflow_call
     steps:
       - uses: actions/checkout@v3
 
