@@ -9,7 +9,7 @@ on:
         default: 'testnet'
         type: choice
         options:
-        - testnet'
+        - testnet
         - mainnet
 
 permissions:
