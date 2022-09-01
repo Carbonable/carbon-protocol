@@ -26,7 +26,7 @@ on:
         type: choice
         options:
         - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
-
+        
       project_name:
         description: 'Carbonable project name'
         default: 'Carbonable ERC-721 Test'
@@ -42,7 +42,9 @@ permissions:
   contents: read
 
 jobs:
-  build:workflow_call
+  build:
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
