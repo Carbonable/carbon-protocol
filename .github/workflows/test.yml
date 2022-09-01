@@ -1,6 +1,6 @@
 name: CI Tests
 
-on: [push, pull_request, pull_request_target]
+on: [pull_request, pull_request_target]
 
 jobs:
   protostar-tests:
