@@ -89,7 +89,6 @@ jobs:
           source ./scripts/tools.sh
 
       - name: Deploy carbonable project contract
-        id: 
         run: |
           /home/runner/.protostar/dist/protostar/protostar \
           --profile $NETWORK \
