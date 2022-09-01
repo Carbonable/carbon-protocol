@@ -106,12 +106,6 @@ send_transaction() {
 
 # Deploy all contracts and log the deployed addresses in the cache file
 deploy_all_contracts() {
-    [ -f $CACHE_FILE ] && {
-        source $CACHE_FILE
-        log_info "Found those deployed accounts:"
-        cat $CACHE_FILE
-        ask "Do you want to deploy missing contracts and initialize them" || return 
-    }
 
     print Profile: $PROFILE
     print Account alias: $ACCOUNT
