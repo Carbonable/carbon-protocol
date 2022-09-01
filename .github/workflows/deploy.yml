@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir /home/runner/.starknet_accounts && \
           echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json" && \
-          chmod 664 home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json
+          chmod 664 /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json
         env:
           ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
 
