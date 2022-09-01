@@ -38,12 +38,6 @@ get_network() {
     grep profile.$profile $PROTOSTAR_TOML_FILE -A3 -m1 | sed -n 's@^.*[network=|gateway_url=]"\(.*\)".*$@\1@p'
 }
 
-# check starknet binary presence
-check_starknet() {
-    which starknet &> /dev/null
-    [ $? -ne 0 ] && exit_error "Unable to locate starknet binary. Did you activate your virtual env ?"
-}
-
 # make sure wallet variable is set
 check_wallet() {
     [ -z $WALLET ] && exit_error "Please provide the wallet to use (option -w or environment variable STARKNET_WALLET)"
@@ -149,9 +143,6 @@ deploy_all_contracts() {
         project_nft_address=$ERC721_ADDRESS
         log_info "Deploying Minter contract..."
         MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT"` || exit_error
-        # Transfer ownership
-        log_info "Transfer ERC-721 ontract ownership..."
-        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT --wallet $WALLET"` || exit_error
     fi    
 
     # Save values in cache file
@@ -187,7 +178,6 @@ CONFIG_FILE=$ROOT/scripts/configs/$PROFILE.config
 
 ### PRE_CONDITIONS
 check_wallet
-check_starknet
 
 ### BUSINESS LOGIC
 
