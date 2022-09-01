@@ -17,6 +17,13 @@ usage() {
     print "$0 [-a ACCOUNT_ADDRESS] [-p PROFILE] [-n NETWORK] [-x ADMIN_ADDRESS] [-w WALLET]"
 }
 
+# build the protostar project
+build() {
+    log_info "Building project to generate latest version of the ABI"
+    execute protostar build
+    if [ $? -ne 0 ]; then exit_error "Problem during build"; fi
+}
+
 # get the account address from the account alias in protostar accounts file
 # $1 - account alias (optional). __default__ if not provided
 get_account_address() {
@@ -29,6 +36,12 @@ get_account_address() {
 get_network() {
     profile=$1
     grep profile.$profile $PROTOSTAR_TOML_FILE -A3 -m1 | sed -n 's@^.*[network=|gateway_url=]"\(.*\)".*$@\1@p'
+}
+
+# check starknet binary presence
+check_starknet() {
+    which starknet &> /dev/null
+    [ $? -ne 0 ] && exit_error "Unable to locate starknet binary. Did you activate your virtual env ?"
 }
 
 # make sure wallet variable is set
@@ -106,6 +119,12 @@ send_transaction() {
 
 # Deploy all contracts and log the deployed addresses in the cache file
 deploy_all_contracts() {
+    [ -f $CACHE_FILE ] && {
+        source $CACHE_FILE
+        log_info "Found those deployed accounts:"
+        cat $CACHE_FILE
+        ask "Do you want to deploy missing contracts and initialize them" || return 
+    }
 
     print Profile: $PROFILE
     print Account alias: $ACCOUNT
@@ -130,6 +149,9 @@ deploy_all_contracts() {
         project_nft_address=$ERC721_ADDRESS
         log_info "Deploying Minter contract..."
         MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT"` || exit_error
+        # Transfer ownership
+        log_info "Transfer ERC-721 ontract ownership..."
+        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT --wallet $WALLET"` || exit_error
     fi    
 
     # Save values in cache file
@@ -165,9 +187,11 @@ CONFIG_FILE=$ROOT/scripts/configs/$PROFILE.config
 
 ### PRE_CONDITIONS
 check_wallet
+check_starknet
 
 ### BUSINESS LOGIC
 
+build # Need to generate ABI and compiled contracts
 deploy_all_contracts
 
 exit_success
