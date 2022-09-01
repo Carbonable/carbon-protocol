@@ -84,8 +84,8 @@ jobs:
 
       - name: Load deployement tools
         run: |
-          source ./scripts/utils.sh
-          source ./scripts/logging.sh
+          source ./scripts/utils.sh && \
+          source ./scripts/logging.sh && \
           source ./scripts/tools.sh
 
       - name: Deploy carbonable project contract
