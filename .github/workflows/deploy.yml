@@ -38,8 +38,6 @@ jobs:
         run: /home/runner/.protostar/dist/protostar/protostar build
 
   deploy:
-    permissions:
-      contents: none
     runs-on: ubuntu-latest
     needs: build
 
