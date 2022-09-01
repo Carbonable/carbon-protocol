@@ -1,6 +1,7 @@
 name: Build and deploy contracts to testnet
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       network:
@@ -46,7 +47,8 @@ jobs:
       - name: Setup admin account
         run: |
           mkdir /home/runner/.starknet_accounts && \
-          echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+          echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json" && \
+          chmod 664 home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json
         env:
           ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
 
