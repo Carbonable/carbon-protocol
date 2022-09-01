@@ -1,0 +1,85 @@
+name: Build and deploy a Carbonable Project
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: 'Network'
+        required: true
+        default: 'testnet'
+        type: choice
+        options:
+        - testnet
+        - mainnet
+
+      alias:
+        description: 'Account alias'
+        required: true
+        default: 'carbonable'
+        type: choice
+        options:
+        - carbonable
+
+      wallet:
+        description: 'Wallet type'
+        required: true
+        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        type: choice
+        options:
+        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+        
+      project_name:
+        description: 'Carbonable project name'
+        default: 'Carbonable ERC-721 Test'
+        required: true
+        type: string 
+      project_symbol:
+        description: 'Carbonable project symbol'
+        default: 'CET'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install protostar
+        run: |
+          curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION
+        env:
+          PROTOSTAR_VERSION: ${{ secrets.protostar_version }}
+
+      - name: Update env variables
+        run: source /home/runner/.bashrc | bash
+
+      - name: Install protostar dependencies
+        run: /home/runner/.protostar/dist/protostar/protostar install
+        
+      - name: Compile smart contracts
+        run: /home/runner/.protostar/dist/protostar/protostar build
+
+      - name: Setup admin account
+        run: |
+          mkdir /home/runner/.starknet_accounts && \
+          echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+        env:
+          ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
+
+      - name: Deploy carbonable project contract
+        run: |
+          source ./scripts/library.sh
+          name=$(str_to_felt ${{ inputs.project_name }})
+          symbol=$(str_to_felt ${{ inputs.project_symbol }})
+          owner=$(get_account_address ${{ inputs.alias }} /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json)"
+          options="--profile $NETWORK deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
+          echo "protostar $options"
+          /home/runner/.protostar/dist/protostar/protostar $options
+        env:
+          NETWORK: ${{ inputs.network }}
+          STARKNET_WALLET: ${{ inputs.wallet }}
+          COMPILED_SOURCE: ./build/CarbonableProject.json
