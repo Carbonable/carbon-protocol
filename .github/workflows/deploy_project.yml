@@ -31,7 +31,8 @@ on:
         description: 'Carbonable project name'
         default: 'Carbonable ERC-721 Test'
         required: true
-        type: string 
+        type: string
+
       project_symbol:
         description: 'Carbonable project symbol'
         default: 'CET'
@@ -75,7 +76,7 @@ jobs:
           source ./scripts/library.sh
           name=$(str_to_felt ${{ inputs.project_name }})
           symbol=$(str_to_felt ${{ inputs.project_symbol }})
-          owner=$(get_account_address ${{ inputs.alias }} /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json)"
+          owner=$(get_account_address ${{ inputs.alias }} /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json)
           options="--profile $NETWORK deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
           echo "protostar $options"
           /home/runner/.protostar/dist/protostar/protostar $options
