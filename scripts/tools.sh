@@ -1,8 +1,5 @@
 #!/bin/bash
 
-SCRIPT_DIR=`readlink -f $0 | xargs dirname`
-. $SCRIPT_DIR/logging.sh
-
 # print a red error message and exit
 # $* - messages to print
 exit_error() {
