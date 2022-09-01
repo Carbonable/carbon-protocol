@@ -17,13 +17,6 @@ usage() {
     print "$0 [-a ACCOUNT_ADDRESS] [-p PROFILE] [-n NETWORK] [-x ADMIN_ADDRESS] [-w WALLET]"
 }
 
-# build the protostar project
-build() {
-    log_info "Building project to generate latest version of the ABI"
-    execute protostar build
-    if [ $? -ne 0 ]; then exit_error "Problem during build"; fi
-}
-
 # get the account address from the account alias in protostar accounts file
 # $1 - account alias (optional). __default__ if not provided
 get_account_address() {
@@ -181,7 +174,6 @@ check_wallet
 
 ### BUSINESS LOGIC
 
-build # Need to generate ABI and compiled contracts
 deploy_all_contracts
 
 exit_success
