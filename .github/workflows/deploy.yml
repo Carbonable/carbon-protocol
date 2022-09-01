@@ -91,9 +91,12 @@ jobs:
       - name: Deploy carbonable project contract
         run: |
           /home/runner/.protostar/dist/protostar/protostar \
-          --profile $NETWORK \
+          --profile ${{ inputs.network }} \
           deploy ./build/CarbonableProject.json \
-          --inputs $PROJECT_NAME $PROJECT_SYMBOL $ADMIN_ADDRESS
+          --inputs \
+            $(str_to_felt ${{ inputs.project_name }}) \
+            $(str_to_felt ${{ inputs.project_symbol }}) \
+            $(get_account_address ${{ inputs.alias }} "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
         env:
           NETWORK: ${{ inputs.network }}
           STARKNET_WALLET: ${{ inputs.wallet }}
