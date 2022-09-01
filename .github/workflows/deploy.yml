@@ -44,18 +44,14 @@ jobs:
     needs: build
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Setup admin account
         run: |
           mkdir /home/runner/.starknet_accounts && \
           echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json"
         env:
           ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
-
-      - name: debug1
-        run: ls
-
-      - name: debug2
-        run: pwd
 
       - name: Deploy contracts
         run: ./scripts/deploy.sh -p $NETWORK | bash
