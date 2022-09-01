@@ -179,9 +179,6 @@ done
 CONFIG_FILE=$ROOT/scripts/configs/$PROFILE.config
 [ -f $CONFIG_FILE ] && source $CONFIG_FILE || exit_error "$CONFIG_FILE file not found"
 
-echo "$ACCOUNT"
-echo "$STARKNET_ACCOUNTS_FILE"
-
 [ -z $ADMIN_ADDRESS ] && ADMIN_ADDRESS=`get_account_address $ACCOUNT`
 [ -z $ADMIN_ADDRESS ] && exit_error "Unable to determine account address"
 
