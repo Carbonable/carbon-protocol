@@ -2,8 +2,8 @@ name: Deploy a Carbonable Project
 on:
   workflow_dispatch:
     inputs:
-      network:
-        description: 'Network'
+      profile:
+        description: 'Profile'
         required: true
         default: 'testnet'
         type: choice
@@ -89,12 +89,14 @@ jobs:
           name=$(str_to_felt "${{ inputs.project_name }}")
           symbol=$(str_to_felt "${{ inputs.project_symbol }}")
           owner=$(get_account_address "${{ inputs.alias }}" "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
-          options="--profile $NETWORK deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
+          options="--profile $PROFILE deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
           command="/home/runner/.protostar/dist/protostar/protostar $options"
           echo $command
-          contract_address=$(send_transaction "$command" "$NETWORK") || exit_error
+          network=$(get_network "$PROFILE" "$PROTOSTAR_TOML_FILE")
+          contract_address=$(send_transaction "$command" "$network") || exit_error
           echo $contract_address
         env:
-          NETWORK: ${{ inputs.network }}
+          PROFILE: ${{ inputs.network }}
           STARKNET_WALLET: ${{ inputs.wallet }}
           COMPILED_SOURCE: ./build/CarbonableProject.json
+          PROTOSTAR_TOML_FILE: ./protostar.toml
