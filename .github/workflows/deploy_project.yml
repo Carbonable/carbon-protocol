@@ -1,5 +1,46 @@
 name: Deploy a Carbonable Project
 on:
+  workflow_call:
+    inputs:
+      profile:
+        description: 'Profile'
+        required: true
+        default: 'testnet'
+        type: string
+
+      alias:
+        description: 'Account alias'
+        required: true
+        default: 'carbonable'
+        type: choice
+        options:
+        - carbonable
+
+      wallet:
+        description: 'Wallet type'
+        required: true
+        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        type: choice
+        options:
+        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+        
+      project_name:
+        description: 'Carbonable project name'
+        default: 'Carbonable ERC-721 Test'
+        required: true
+        type: string
+
+      project_symbol:
+        description: 'Carbonable project symbol'
+        default: 'CET'
+        required: true
+        type: string
+
+    ouputs:
+      contract_address:
+        description: Carbonable project contract address
+        value: ${{ jobs.deploy.outputs.contract }}
+
   workflow_dispatch:
     inputs:
       profile:
@@ -43,8 +84,11 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
+    outputs:
+      contract: ${{ steps.deploy.outputs.contract }}
 
     steps:
       - uses: actions/checkout@v3
@@ -54,14 +98,14 @@ jobs:
         with:
           python-version: "3.7"
 
-      - name: Install dependencies
+      - name: Install python dependencies
         run: |
           sudo apt install -y libgmp3-dev
           python -m pip install --upgrade pip
           pip install cairo-lang
           which starknet
 
-      - name: Install protostar
+      - name: Set up protostar
         run: |
           curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION
         env:
@@ -70,17 +114,18 @@ jobs:
       - name: Install protostar dependencies
         run: /home/runner/.protostar/dist/protostar/protostar install
         
-      - name: Compile smart contracts
+      - name: Compile smart contract
         run: /home/runner/.protostar/dist/protostar/protostar build
 
-      - name: Setup admin account
+      - name: Set up admin account
         run: |
           mkdir /home/runner/.starknet_accounts
           echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json"
         env:
           ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
 
-      - name: Deploy carbonable project contract
+      - name: Deploy smart contract
+        id: deploy
         run: |
           source ./scripts/logging.sh
           source ./scripts/tools.sh
@@ -94,7 +139,7 @@ jobs:
           echo $command
           network=$(get_network "$PROFILE" "$PROTOSTAR_TOML_FILE")
           contract_address=$(send_transaction "$command" "$network") || exit_error
-          echo $contract_address
+          echo "::set-output name=contract::$contract_address"
         env:
           PROFILE: ${{ inputs.profile }}
           STARKNET_WALLET: ${{ inputs.wallet }}
