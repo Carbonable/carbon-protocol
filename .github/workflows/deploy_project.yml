@@ -81,7 +81,7 @@ jobs:
 
       - name: Deploy carbonable project contract
         run: |
-          source ./scripts/library.sh
+          source ./scripts/library.sh | bash
           name=$(str_to_felt ${{ inputs.project_name }})
           symbol=$(str_to_felt ${{ inputs.project_symbol }})
           owner=$(get_account_address ${{ inputs.alias }} /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json)

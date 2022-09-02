@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./logging.sh
-source ./tools.sh
-source ./converter.sh
-source ./starknet.sh
+source ./logging.sh | bash
+source ./tools.sh | bash
+source ./converter.sh | bash
+source ./starknet.sh | bash
