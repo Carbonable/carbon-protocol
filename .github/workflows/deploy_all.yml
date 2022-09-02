@@ -28,16 +28,17 @@ on:
         - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
         
       project:
-        description: >-
-          Carbonable project inputs (;-sep)
-          - Name
-          - Symbol
+        description: |
+          Carbonable project inputs (;-sep):
+          Name, Symbol
         default: 'name;symbol'
         required: false
         type: string
         
       minter:
-        description: 'Carbonable minter inputs (;-sep)'
+        description: |
+          Carbonable minter inputs (;-sep):
+          Payment token address, Public sale open, Max buy per tx, Unit price, Max supply for mint, Reserved supply for mint
         default: '0x1234;0;5;10;10;3'
         required: false
         type: string
