@@ -32,7 +32,7 @@ on:
           Carbonable project inputs (;-sep):
           Name, Symbol
         default: 'name;symbol'
-        required: false
+        required: true
         type: string
         
       minter:
@@ -40,7 +40,7 @@ on:
           Carbonable minter inputs (;-sep):
           Payment token address, Public sale open, Max buy per tx, Unit price, Max supply for mint, Reserved supply for mint
         default: '0x1234;0;5;10;10;3'
-        required: false
+        required: true
         type: string
 
       transfer:

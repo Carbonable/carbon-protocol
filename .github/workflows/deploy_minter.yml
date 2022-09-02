@@ -198,9 +198,8 @@ jobs:
           reserved=$(felt_to_uint256 "${{ inputs.minter_reserved_supply_for_mint }}")
           options="--profile $PROFILE deploy $COMPILED_SOURCE --inputs $owner $project $token $public $max_buy $unit_price $max_supply $reserved"
           command="/home/runner/.protostar/dist/protostar/protostar $options"
-          echo $command
           network=$(get_network "$PROFILE" "$PROTOSTAR_TOML_FILE")
-          contract_address=$(send_transaction "$command" "$network") || exit_error
+          contract_address=$(send_transaction "$command" "$network")
           echo "::set-output name=contract::$contract_address"
         env:
           PROFILE: ${{ inputs.profile }}
