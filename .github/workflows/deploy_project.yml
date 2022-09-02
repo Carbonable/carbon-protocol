@@ -96,7 +96,7 @@ jobs:
           contract_address=$(send_transaction "$command" "$network") || exit_error
           echo $contract_address
         env:
-          PROFILE: ${{ inputs.network }}
+          PROFILE: ${{ inputs.profile }}
           STARKNET_WALLET: ${{ inputs.wallet }}
           COMPILED_SOURCE: ./build/CarbonableProject.json
           PROTOSTAR_TOML_FILE: ./protostar.toml
