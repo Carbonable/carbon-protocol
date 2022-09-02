@@ -38,6 +38,7 @@ permissions:
 
 jobs:
   parser:
+    runs-on: ubuntu-latest
     outputs:
       project_name: ${{ steps.project.outputs.name }}
       project_symbol: ${{ steps.project.outputs.symbol }}
