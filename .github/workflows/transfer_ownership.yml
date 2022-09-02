@@ -121,7 +121,7 @@ jobs:
           project=${{ inputs.project_contract }}
           minter=${{ inputs.minter_contract }}
           network=$(get_network "$PROFILE" "$PROTOSTAR_TOML_FILE")
-          send_transaction "starknet invoke --address $project --abi $PROJECT_ABI --function $FUNCTION --inputs $minter --network $network --account $account"
+          send_transaction "starknet invoke --address $project --abi $PROJECT_ABI --function $FUNCTION --inputs $minter --network $network --account $account" "$network"
         env:
           PROFILE: ${{ inputs.profile }}
           STARKNET_WALLET: ${{ inputs.wallet }}
