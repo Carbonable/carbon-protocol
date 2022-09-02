@@ -3,32 +3,22 @@ on:
   workflow_call:
     inputs:
       profile:
-        description: 'Profile'
         required: true
-        default: 'testnet'
         type: string
 
       alias:
-        description: 'Account alias'
         required: true
-        default: 'carbonable'
         type: string
 
       wallet:
-        description: 'Wallet type'
         required: true
-        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
         type: string
         
       project_name:
-        description: 'Carbonable project name'
-        default: 'Carbonable ERC-721 Test'
         required: true
         type: string
 
       project_symbol:
-        description: 'Carbonable project symbol'
-        default: 'CET'
         required: true
         type: string
 
