@@ -29,9 +29,9 @@ on:
         
       project:
         description: |
-          'Carbonable project inputs (;-sep)
-          '- Name'
-          '- Symbol'
+          Carbonable project inputs (;-sep)
+          - Name
+          - Symbol
         default: 'name;symbol'
         required: false
         type: string
