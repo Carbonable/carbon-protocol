@@ -51,6 +51,7 @@ jobs:
       wallet: ${{ inputs.wallet }}
       project_name: ${{ inputs.project_name }}
       project_symbol: ${{ inputs.project_symbol }}
+    secrets: inherit
 
   log:
     runs-on: ubuntu-latest
