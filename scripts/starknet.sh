@@ -48,8 +48,6 @@ wait_for_acceptance() {
 send_transaction() {
     transaction=$1
     network=$2
-    echo $transaction
-    echo $network
     while true
     do
         execute $transaction || exit_error "Error when sending transaction"
