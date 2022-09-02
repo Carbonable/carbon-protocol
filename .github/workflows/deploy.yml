@@ -43,7 +43,7 @@ jobs:
       project_symbol: ${{ steps.project.outputs.symbol }}
     steps:
       - name: Parse project
-      - id: project
+        id: project
         run: |
           IFS=';' read -ra args <<< ${{ inputs.project }}
           echo "::set-output name=name::${args[0]}"
