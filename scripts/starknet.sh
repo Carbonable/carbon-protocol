@@ -59,7 +59,7 @@ send_transaction() {
 
         case $? in
             0) log_success "\nTransaction accepted!"; break;;
-            1) log_warning "\nTransaction rejected!"; ask "Do you want to retry";;
+            1) log_warning "\nTransaction rejected!"; break;;
         esac
     done || exit_error
 
