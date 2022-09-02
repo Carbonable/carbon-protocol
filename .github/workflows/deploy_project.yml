@@ -32,7 +32,7 @@ on:
         required: true
         type: string
 
-    ouputs:
+    outputs:
       contract_address:
         description: Carbonable project contract address
         value: ${{ jobs.deploy.outputs.contract }}
