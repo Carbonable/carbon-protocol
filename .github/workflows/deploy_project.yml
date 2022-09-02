@@ -59,7 +59,6 @@ jobs:
           sudo apt install -y libgmp3-dev
           python -m pip install --upgrade pip
           pip install cairo-lang
-          which starknet
 
       - name: Install protostar
         run: |
@@ -82,13 +81,14 @@ jobs:
 
       - name: Deploy carbonable project contract
         run: |
-          source ./scripts/library.sh
+          source ./scripts/load.sh
           name=$(str_to_felt ${{ inputs.project_name }})
           symbol=$(str_to_felt ${{ inputs.project_symbol }})
           owner=$(get_account_address ${{ inputs.alias }} /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json)
           options="--profile $NETWORK deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
-          echo "protostar $options"
-          /home/runner/.protostar/dist/protostar/protostar $options
+          command="/home/runner/.protostar/dist/protostar/protostar $options"
+          contract_address=`send_transaction "command"` || exit_error
+          echo contract_address
         env:
           NETWORK: ${{ inputs.network }}
           STARKNET_WALLET: ${{ inputs.wallet }}
