@@ -30,7 +30,7 @@ on:
       project:
         description: |
           Carbonable project inputs (;-sep):
-          Name, Symbol
+          Name - Symbol
         default: 'name;symbol'
         required: true
         type: string
@@ -38,7 +38,7 @@ on:
       minter:
         description: |
           Carbonable minter inputs (;-sep):
-          Payment token address, Public sale open, Max buy per tx, Unit price, Max supply for mint, Reserved supply for mint
+          Payment token address - Public sale open - Max buy per tx - Unit price - Max supply for mint - Reserved supply for mint
         default: '0x1234;0;5;10;10;3'
         required: true
         type: string
@@ -121,4 +121,20 @@ jobs:
       minter_contract: ${{ needs.minter.outputs.contract_address }}
     secrets: inherit
 
-    
+  report:
+    runs-on: ubuntu-latest
+    needs: [project, minter]
+    steps:
+      - name: Show results
+        run: |
+          project=${{ needs.project.outputs.contract_address }}
+          minter=${{ needs.minter.outputs.contract_address }}
+          if [ $profile = "testnet" ]
+          then base=https://goerli.voyager.online/contract/
+          elif [ $profile = "mainnet" ]
+          then base=https://voyager.online/contract/
+          fi
+          echo "Contract name|Contract address|Link" > data.txt
+          echo "Carbonable project|$project|$base$project" >> data.txt
+          echo "Carbonable minter|$minter|$base$minter" >> data.txt
+          cat data.txt | column -t -s "|"
