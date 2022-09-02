@@ -75,7 +75,7 @@ env:
   PROTOSTAR_TOML_FILE: ./protostar.toml
 
 jobs:
-  deploy:
+  transfer:
     runs-on: ubuntu-latest
 
     steps:
@@ -117,11 +117,11 @@ jobs:
           source ./scripts/tools.sh
           source ./scripts/converter.sh
           source ./scripts/starknet.sh
-          owner=$(get_account_address "${{ inputs.alias }}" "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
+          account=${{ inputs.alias }}
           project=${{ inputs.project_contract }}
           minter=${{ inputs.minter_contract }}
           network=$(get_network "$PROFILE" "$PROTOSTAR_TOML_FILE")
-          send_transaction "starknet invoke --address $project --abi $PROJECT_ABI --function $FUNCTION --inputs $minter --network $network --account $owner"
+          send_transaction "starknet invoke --address $project --abi $PROJECT_ABI --function $FUNCTION --inputs $minter --network $network --account $account"
         env:
           PROFILE: ${{ inputs.profile }}
           STARKNET_WALLET: ${{ inputs.wallet }}
