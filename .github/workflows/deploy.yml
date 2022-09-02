@@ -55,7 +55,7 @@ jobs:
   log:
     runs-on: ubuntu-latest
     needs: deploy
-        steps:
-        - run: echo ${{ needs.deploy.outputs.contract_address }}
+    steps:
+    - run: echo ${{ needs.deploy.outputs.contract_address }}
 
     
