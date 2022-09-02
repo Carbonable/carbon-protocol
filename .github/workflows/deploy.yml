@@ -44,7 +44,7 @@ permissions:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/deploy_project.yml@main
+    uses: ./.github/workflows/deploy_project.yml
     with:
       profile: {{ inputs.profile }}
       alias: {{ inputs.alias }}
