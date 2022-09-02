@@ -6,26 +6,19 @@ on:
         description: 'Profile'
         required: true
         default: 'testnet'
-        type: choice
-        options:
-        - testnet
-        - mainnet
+        type: string
 
       alias:
         description: 'Account alias'
         required: true
         default: 'carbonable'
-        type: choice
-        options:
-        - carbonable
+        type: string
 
       wallet:
         description: 'Wallet type'
         required: true
         default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
-        type: choice
-        options:
-        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+        type: string
         
       project_name:
         description: 'Carbonable project name'
