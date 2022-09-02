@@ -42,10 +42,12 @@ wait_for_acceptance() {
 }
 
 # send a transaction
-# $* - command line to execute
+# $1 - command line to execute
+# $2 - network
 # return The contract address
 send_transaction() {
-    transaction=$*
+    transaction=$1
+    network=$2
 
     while true
     do
@@ -54,7 +56,7 @@ send_transaction() {
         contract_address=`sed -n 's@Contract address: \(.*\)@\1@p' logs.json`
         tx_hash=`sed -n 's@Transaction hash: \(.*\)@\1@p' logs.json`
 
-        wait_for_acceptance $tx_hash
+        wait_for_acceptance $tx_hash $network
 
         case $? in
             0) log_success "\nTransaction accepted!"; break;;

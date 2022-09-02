@@ -74,7 +74,7 @@ jobs:
 
       - name: Setup admin account
         run: |
-          mkdir /home/runner/.starknet_accounts && \
+          mkdir /home/runner/.starknet_accounts
           echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json"
         env:
           ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
@@ -87,7 +87,7 @@ jobs:
           owner=$(get_account_address ${{ inputs.alias }} /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json)
           options="--profile $NETWORK deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
           command="/home/runner/.protostar/dist/protostar/protostar $options"
-          contract_address=`send_transaction "command"` || exit_error
+          contract_address=`send_transaction "$command" "$NETWORK"` || exit_error
           echo contract_address
         env:
           NETWORK: ${{ inputs.network }}
