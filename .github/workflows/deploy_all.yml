@@ -28,10 +28,10 @@ on:
         - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
         
       project:
-        description: |
-          <div>Carbonable project inputs (;-sep)</div>
-          <div>- Name</div>
-          <div>- Symbol</div>
+        description: >-
+          Carbonable project inputs (;-sep)
+          - Name
+          - Symbol
         default: 'name;symbol'
         required: false
         type: string
