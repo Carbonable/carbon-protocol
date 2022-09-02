@@ -28,7 +28,10 @@ on:
         - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
         
       project:
-        description: 'Carbonable project inputs (;-sep)'
+        description: |
+          'Carbonable project inputs (;-sep)
+          '- Name'
+          '- Symbol'
         default: 'name;symbol'
         required: false
         type: string
