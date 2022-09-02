@@ -46,7 +46,7 @@ jobs:
       - name: Parse project
         id: project
         run: |
-          IFS=';' read -ra args <<< "${{ inputs.project }}""
+          IFS=';' read -ra args <<< "${{ inputs.project }}"
           echo "::set-output name=name::${args[0]}"
           echo "::set-output name=symbol::${args[1]}"
 
