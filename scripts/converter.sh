@@ -22,3 +22,16 @@ felt_to_hex() {
     felt=`echo "obase=16; ibase=10; $1" | BC_LINE_LENGTH=0 bc`
     echo 0x$felt
 }
+
+# convert felt to uint256
+# $1 - felt value
+felt_to_uint256() {
+    echo "$1 0"
+}
+
+# convert bool to felt
+# $1 - felt value
+bool_to_felt() {
+    if [ $1 = true ] ; then felt=1 ; else felt=0; fi
+    echo $felt
+}
