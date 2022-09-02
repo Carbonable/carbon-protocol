@@ -90,8 +90,10 @@ jobs:
           symbol=$(str_to_felt ${{ inputs.project_symbol }})
           owner=$(get_account_address ${{ inputs.alias }} /home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json)
           options="--profile $NETWORK deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
-          echo "protostar $options"
-          /home/runner/.protostar/dist/protostar/protostar $options
+          command="/home/runner/.protostar/dist/protostar/protostar $options"
+          echo $command
+          contract_address=$(send_transaction $command $NETWORK) || exit_error
+          echo $contract_address
         env:
           NETWORK: ${{ inputs.network }}
           STARKNET_WALLET: ${{ inputs.wallet }}
