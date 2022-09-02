@@ -27,30 +27,37 @@ on:
         options:
         - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
         
-      project_name:
-        description: 'Carbonable project name'
-        default: 'Carbonable ERC-721 Test'
-        required: true
-        type: string
-
-      project_symbol:
-        description: 'Carbonable project symbol'
-        default: 'CET'
-        required: true
+      project:
+        description: 'Carbonable project inputs (;-sep)'
+        default: 'name;symbol'
+        required: false
         type: string
 
 permissions:
   contents: read
 
 jobs:
-  deploy:
+  parser:
+    outputs:
+      project_name: ${{ steps.project.outputs.name }}
+      project_symbol: ${{ steps.project.outputs.symbol }}
+    steps:
+      - name: Parse project
+      - id: project
+        run: |
+          IFS=';' read -ra args <<< ${{ inputs.project }}
+          echo "::set-output name=name::${args[0]}"
+          echo "::set-output name=symbol::${args[1]}"
+
+  project:
+    needs: parser
     uses: ./.github/workflows/deploy_project.yml
     with:
       profile: ${{ inputs.profile }}
       alias: ${{ inputs.alias }}
       wallet: ${{ inputs.wallet }}
-      project_name: ${{ inputs.project_name }}
-      project_symbol: ${{ inputs.project_symbol }}
+      project_name: ${{ needs.parser.outputs.project_name }}
+      project_symbol: ${{ needs.parser.outputs.project_symbol }}
     secrets: inherit
 
   log:
