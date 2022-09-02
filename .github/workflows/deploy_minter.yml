@@ -1,4 +1,4 @@
-name: Deploy a Carbonable Project
+name: Deploy a Carbonable Minter
 on:
   workflow_call:
     inputs:
