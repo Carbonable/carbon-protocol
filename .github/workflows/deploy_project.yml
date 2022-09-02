@@ -6,7 +6,10 @@ on:
         description: 'Profile'
         required: true
         default: 'testnet'
-        type: string
+        type: choice
+        options:
+        - testnet
+        - mainnet
 
       alias:
         description: 'Account alias'
