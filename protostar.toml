@@ -1,5 +1,5 @@
 ["protostar.config"]
-protostar_version = "0.3.2"
+protostar_version = "0.3.3"
 
 ["protostar.project"]
 libs_path = "lib"
@@ -32,7 +32,7 @@ target = ["tests"]
 gateway_url="http://127.0.0.1:5050/"
 
 [profile.testnet.protostar.deploy]
-network="alpha-goerli"
+network="testnet"
 
 [profile.mainnet.protostar.deploy]
-network="alpha-mainnet"
+network="mainnet"
