@@ -127,7 +127,7 @@ jobs:
     steps:
       - name: Show results
         run: |
-          profile: ${{ inputs.profile }}
+          profile=${{ inputs.profile }}
           project=${{ needs.project.outputs.contract_address }}
           minter=${{ needs.minter.outputs.contract_address }}
           if [ $profile = "testnet" ]
