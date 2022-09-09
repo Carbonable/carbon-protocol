@@ -15,21 +15,7 @@ get_account_address() {
 get_network() {
     profile=$1
     protostar_toml_file=$2
-    network=$(grep profile.$profile $protostar_toml_file -A3 -m1 | sed -n 's@^.*[network=|gateway_url=]"\(.*\)".*$@\1@p')
-    echo $(get_legacy_network "$network")
-}
-
-# get the legacy network name from the network
-# $1 - network
-get_legacy_network() {
-    network=$1
-    if [[ "$network" == "testnet" ]]; then
-        echo "alpha-goerli"
-    elif [[ "$network" == "mainnet" ]]; then
-        echo "alpha-mainnet"
-    else
-        echo $network
-    fi
+    grep profile.$profile $protostar_toml_file -A3 -m1 | sed -n 's@^.*[network=|gateway_url=]"\(.*\)".*$@\1@p'
 }
 
 # wait for a transaction to be received
