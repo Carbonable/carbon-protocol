@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Carbonable Contracts for Cairo v0.9.1 (badge.cairo)
+# Carbonable Contracts written in Cairo v0.9.1 (badge.cairo)
 
 %lang starknet
 
