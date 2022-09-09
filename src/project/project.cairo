@@ -8,7 +8,9 @@ from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 # Project dependencies
-from openzeppelin.token.erc721_enumerable.ERC721_Enumerable_Mintable_Burnable import constructor
+from openzeppelin.token.erc721.enumerable.presets.ERC721EnumerableMintableBurnable import (
+    constructor,
+)
 
 # Local dependencies
 from src.project.library import CarbonableProject
@@ -221,14 +223,18 @@ end
 func set_total_co2_sequestration{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(total_co2_sequestration_len : felt, total_co2_sequestration : felt*):
-    return CarbonableProject.set_total_co2_sequestration(total_co2_sequestration_len, total_co2_sequestration)
+    return CarbonableProject.set_total_co2_sequestration(
+        total_co2_sequestration_len, total_co2_sequestration
+    )
 end
 
 @external
 func set_unit_co2_sequestration{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(unit_co2_sequestration_len : felt, unit_co2_sequestration : felt*):
-    return CarbonableProject.set_unit_co2_sequestration(unit_co2_sequestration_len, unit_co2_sequestration)
+    return CarbonableProject.set_unit_co2_sequestration(
+        unit_co2_sequestration_len, unit_co2_sequestration
+    )
 end
 
 @external
@@ -249,7 +255,9 @@ end
 func set_sequestration_category{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }(sequestration_category_len : felt, sequestration_category : felt*):
-    return CarbonableProject.set_sequestration_category(sequestration_category_len, sequestration_category)
+    return CarbonableProject.set_sequestration_category(
+        sequestration_category_len, sequestration_category
+    )
 end
 
 @external

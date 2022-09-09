@@ -10,12 +10,12 @@ from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.uint256 import Uint256
 
 # Project dependencies
-from openzeppelin.token.erc20.interfaces.IERC20 import IERC20
-from openzeppelin.security.safemath import SafeUint256
+from openzeppelin.token.erc20.IERC20 import IERC20
+from openzeppelin.security.safemath.library import SafeUint256
 
 # Local dependencies
 from interfaces.minter import ICarbonableMinter
-from interfaces.project import IERC721, IERC721_Enumerable, ICarbonableProject
+from interfaces.project import IERC721, IERC721Enumerable, ICarbonableProject
 
 #
 # Functions
@@ -110,7 +110,7 @@ namespace carbonable_project_instance:
     func totalSupply{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_project : felt
     }() -> (totalSupply : Uint256):
-        let (total_supply) = IERC721_Enumerable.totalSupply(carbonable_project)
+        let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project)
         return (total_supply)
     end
 

@@ -120,8 +120,8 @@ jobs:
           source ./scripts/tools.sh
           source ./scripts/converter.sh
           source ./scripts/starknet.sh
-          name=$(str_to_felt "${{ inputs.project_name }}")
-          symbol=$(str_to_felt "${{ inputs.project_symbol }}")
+          name=$(str_to_hex "${{ inputs.project_name }}")
+          symbol=$(str_to_hex "${{ inputs.project_symbol }}")
           owner=$(get_account_address "${{ inputs.alias }}" "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
           options="--profile $PROFILE deploy $COMPILED_SOURCE --inputs $name $symbol $owner"
           command="/home/runner/.protostar/dist/protostar/protostar $options"

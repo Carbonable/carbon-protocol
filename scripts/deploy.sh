@@ -41,10 +41,18 @@ deploy_all_contracts() {
 
     [ ! -z $PROFILE ] && PROFILE_OPT="--profile $PROFILE"
 
+    # Deploy Badge contract
+    if [ -z $ERC1155_ADDRESS ]; then
+        owner=$ADMIN_ADDRESS
+        erc1155_uri=$(str_to_hex "$ERC1155_URI")
+        log_info "Deploying Badge contract..."
+        ERC1155_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableBadge.json --inputs $erc1155_uri $owner" "$NETWORK"` || exit_error
+    fi 
+
     # Deploy ERC-721 token contract
     if [ -z $ERC721_ADDRESS ]; then
-        erc721_name=$(str_to_felt "$ERC721_NAME")
-        erc721_symbol=$(str_to_felt "$ERC721_SYMBOL")
+        erc721_name=$(str_to_hex "$ERC721_NAME")
+        erc721_symbol=$(str_to_hex "$ERC721_SYMBOL")
         log_info "Deploying ERC-721 contract..."
         ERC721_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProject.json --inputs $erc721_name $erc721_symbol $ADMIN_ADDRESS" "$NETWORK"` || exit_error
     fi
@@ -62,8 +70,9 @@ deploy_all_contracts() {
 
     # Save values in cache file
     (
-        echo "MINTER_ADDRESS=$MINTER_ADDRESS"
+        echo "ERC1155_ADDRESS=$ERC1155_ADDRESS"
         echo "ERC721_ADDRESS=$ERC721_ADDRESS"
+        echo "MINTER_ADDRESS=$MINTER_ADDRESS"
     ) | tee >&2 $CACHE_FILE
 }
 

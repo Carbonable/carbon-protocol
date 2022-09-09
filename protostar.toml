@@ -12,6 +12,10 @@ cairo_path = [
 ]
 
 ["protostar.contracts"]
+CarbonableBadge = [
+    "./src/badge/badge.cairo",
+]
+
 CarbonableProject = [
     "./src/project/project.cairo",
 ]

@@ -9,7 +9,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 # Project dependencies
 from cairopen.string.ASCII import StringCodec
-from openzeppelin.access.ownable import Ownable
+from openzeppelin.access.ownable.library import Ownable
 
 namespace CarbonableProject:
     #

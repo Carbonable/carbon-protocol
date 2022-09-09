@@ -8,9 +8,9 @@ from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 # Project dependencies
-from openzeppelin.security.safemath import SafeUint256
-from openzeppelin.token.erc20.interfaces.IERC20 import IERC20
-from openzeppelin.access.ownable import Ownable
+from openzeppelin.security.safemath.library import SafeUint256
+from openzeppelin.token.erc20.IERC20 import IERC20
+from openzeppelin.access.ownable.library import Ownable
 
 # Address of the project NFT contract
 @storage_var
