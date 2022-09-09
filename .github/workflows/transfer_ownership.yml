@@ -1,0 +1,128 @@
+name: Transfer ownership
+on:
+  workflow_call:
+    inputs:
+      profile:
+        description: 'Profile'
+        required: true
+        default: 'testnet'
+        type: string
+
+      alias:
+        description: 'Account alias'
+        required: true
+        default: 'carbonable'
+        type: string
+
+      wallet:
+        description: 'Wallet type'
+        required: true
+        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        type: string
+        
+      project_contract:
+        description: 'Carbonable project contract address'
+        required: true
+        type: string
+
+      minter_contract:
+        description: 'Carbonable minter contract address'
+        required: true
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: 'Profile'
+        required: true
+        default: 'testnet'
+        type: choice
+        options:
+        - testnet
+        - mainnet
+
+      alias:
+        description: 'Account alias'
+        required: true
+        default: 'carbonable'
+        type: choice
+        options:
+        - carbonable
+
+      wallet:
+        description: 'Wallet type'
+        required: true
+        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        type: choice
+        options:
+        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+        
+      project_contract:
+        description: 'Carbonable project contract address'
+        required: true
+        type: string
+
+      minter_contract:
+        description: 'Carbonable minter contract address'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_ABI: ./build/CarbonableProject_abi.json
+  PROTOSTAR_TOML_FILE: ./protostar.toml
+
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.7"
+
+      - name: Install python dependencies
+        run: |
+          sudo apt install -y libgmp3-dev
+          python -m pip install --upgrade pip
+          pip install cairo-lang==0.9.1
+
+      - name: Set up protostar
+        run: |
+          curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION
+        env:
+          PROTOSTAR_VERSION: ${{ secrets.protostar_version }}
+
+      - name: Install protostar dependencies
+        run: /home/runner/.protostar/dist/protostar/protostar install
+        
+      - name: Compile smart contract
+        run: /home/runner/.protostar/dist/protostar/protostar build
+
+      - name: Set up admin account
+        run: |
+          mkdir /home/runner/.starknet_accounts
+          echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+        env:
+          ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
+
+      - name: Invoke smart contract
+        run: |
+          source ./scripts/logging.sh
+          source ./scripts/tools.sh
+          source ./scripts/converter.sh
+          source ./scripts/starknet.sh
+          account=${{ inputs.alias }}
+          project=${{ inputs.project_contract }}
+          minter=${{ inputs.minter_contract }}
+          network=$(get_network "$PROFILE" "$PROTOSTAR_TOML_FILE")
+          send_transaction "starknet invoke --address $project --abi $PROJECT_ABI --function $FUNCTION --inputs $minter --network $network --account $account" "$network"
+        env:
+          PROFILE: ${{ inputs.profile }}
+          STARKNET_WALLET: ${{ inputs.wallet }}
+          FUNCTION: transferOwnership

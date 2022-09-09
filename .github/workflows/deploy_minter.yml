@@ -1,0 +1,187 @@
+name: Deploy a Carbonable Minter
+on:
+  workflow_call:
+    inputs:
+      profile:
+        required: true
+        type: string
+
+      alias:
+        required: true
+        type: string
+
+      wallet:
+        required: true
+        type: string
+        
+      minter_carbonable_project_address:
+        required: true
+        type: string
+        
+      minter_payment_token_address:
+        required: true
+        type: string
+
+      minter_public_sale_open:
+        required: true
+        type: string
+        
+      minter_max_buy_per_tx:
+        required: true
+        type: string
+        
+      minter_unit_price:
+        required: true
+        type: string
+        
+      minter_max_supply_for_mint:
+        required: true
+        type: string
+        
+      minter_reserved_supply_for_mint:
+        required: true
+        type: string
+
+    outputs:
+      contract_address:
+        description: Carbonable minter contract address
+        value: ${{ jobs.deploy.outputs.contract }}
+
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: 'Profile'
+        required: true
+        default: 'testnet'
+        type: choice
+        options:
+        - testnet
+        - mainnet
+
+      alias:
+        description: 'Account alias'
+        required: true
+        default: 'carbonable'
+        type: choice
+        options:
+        - carbonable
+
+      wallet:
+        description: 'Wallet type'
+        required: true
+        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        type: choice
+        options:
+        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+        
+      minter_carbonable_project_address:
+        description: 'Carbonable project address'
+        required: true
+        type: string
+        
+      minter_payment_token_address:
+        description: 'Payment token address'
+        default: '0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10'
+        required: true
+        type: string
+
+      minter_public_sale_open:
+        description: 'Public sale open'
+        default: false
+        required: true
+        type: boolean
+        
+      minter_max_buy_per_tx:
+        description: 'Max buy per tx'
+        default: 5
+        required: true
+        type: number
+        
+      minter_unit_price:
+        description: 'Unit price (wei)'
+        default: 10
+        required: true
+        type: number
+        
+      minter_max_supply_for_mint:
+        description: 'Max supply for mint'
+        default: 10
+        required: true
+        type: number
+        
+      minter_reserved_supply_for_mint:
+        description: 'Reserved supply for mint'
+        default: 3
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+env:
+  COMPILED_SOURCE: ./build/CarbonableMinter.json
+  PROTOSTAR_TOML_FILE: ./protostar.toml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    outputs:
+      contract: ${{ steps.deploy.outputs.contract }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.7"
+
+      - name: Install python dependencies
+        run: |
+          sudo apt install -y libgmp3-dev
+          python -m pip install --upgrade pip
+          pip install cairo-lang==0.9.1
+
+      - name: Set up protostar
+        run: |
+          curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION
+        env:
+          PROTOSTAR_VERSION: ${{ secrets.protostar_version }}
+
+      - name: Install protostar dependencies
+        run: /home/runner/.protostar/dist/protostar/protostar install
+        
+      - name: Compile smart contract
+        run: /home/runner/.protostar/dist/protostar/protostar build
+
+      - name: Set up admin account
+        run: |
+          mkdir /home/runner/.starknet_accounts
+          echo "$ACCOUNT" > "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+        env:
+          ACCOUNT: ${{ secrets.ADMIN_ACCOUNT }}
+
+      - name: Deploy smart contract
+        id: deploy
+        run: |
+          source ./scripts/logging.sh
+          source ./scripts/tools.sh
+          source ./scripts/converter.sh
+          source ./scripts/starknet.sh
+          owner=$(get_account_address "${{ inputs.alias }}" "/home/runner/.starknet_accounts/starknet_open_zeppelin_accounts.json")
+          project=${{ inputs.minter_carbonable_project_address }}
+          token=${{ inputs.minter_payment_token_address }}
+          public=$(bool_to_felt "${{ inputs.minter_public_sale_open }}")
+          max_buy=${{ inputs.minter_max_buy_per_tx }}
+          unit_price=$(felt_to_uint256 "${{ inputs.minter_unit_price }}")
+          max_supply=$(felt_to_uint256 "${{ inputs.minter_max_supply_for_mint }}")
+          reserved=$(felt_to_uint256 "${{ inputs.minter_reserved_supply_for_mint }}")
+          options="--profile $PROFILE deploy $COMPILED_SOURCE --inputs $owner $project $token $public $max_buy $unit_price $max_supply $reserved"
+          command="/home/runner/.protostar/dist/protostar/protostar $options"
+          network=$(get_network "$PROFILE" "$PROTOSTAR_TOML_FILE")
+          contract_address=$(send_transaction "$command" "$network")
+          echo "::set-output name=contract::$contract_address"
+        env:
+          PROFILE: ${{ inputs.profile }}
+          STARKNET_WALLET: ${{ inputs.wallet }}

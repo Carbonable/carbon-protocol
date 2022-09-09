@@ -7,15 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - name: Install protostar
         run: |
-          curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v 0.3.2
-      - name: Update env variables
-        run: |
-          source /home/runner/.bashrc | bash
+          curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION
+        env:
+          PROTOSTAR_VERSION: ${{ secrets.protostar_version }}
+
       - name: Install protostar dependencies
         run: /home/runner/.protostar/dist/protostar/protostar install
+
       - name: Compile smart contracts
         run: /home/runner/.protostar/dist/protostar/protostar build
+
       - name: Run protostar tests
         run: /home/runner/.protostar/dist/protostar/protostar test
