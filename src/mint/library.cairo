@@ -13,11 +13,11 @@ from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le, uin
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 
 # Project dependencies
-from openzeppelin.security.safemath import SafeUint256
-from openzeppelin.token.erc20.interfaces.IERC20 import IERC20
-from openzeppelin.token.erc721.interfaces.IERC721 import IERC721
-from openzeppelin.token.erc721_enumerable.interfaces.IERC721_Enumerable import IERC721_Enumerable
-from openzeppelin.access.ownable import Ownable
+from openzeppelin.security.safemath.library import SafeUint256
+from openzeppelin.token.erc20.IERC20 import IERC20
+from openzeppelin.token.erc721.IERC721 import IERC721
+from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
+from openzeppelin.access.ownable.library import Ownable
 
 # Local dependencies
 from src.mint.merkletree import MerkleTree
@@ -264,7 +264,7 @@ namespace CarbonableMinter:
         let (carbonable_project_address) = carbonable_project_address_.read()
 
         # Check if enough NFTs available
-        let (total_supply) = IERC721_Enumerable.totalSupply(carbonable_project_address)
+        let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project_address)
         let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
         let (max_supply_for_mint) = max_supply_for_mint_.read()
         let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint)
@@ -419,7 +419,7 @@ namespace CarbonableMinter:
         end
 
         # Check if enough NFTs available
-        let (total_supply) = IERC721_Enumerable.totalSupply(carbonable_project_address)
+        let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project_address)
         let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256)
         let (max_supply_for_mint) = max_supply_for_mint_.read()
         let (reserved_supply_for_mint) = reserved_supply_for_mint_.read()

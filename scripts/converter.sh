@@ -2,7 +2,7 @@
 
 # convert an ASCII string to felt
 # $1 - string value
-str_to_felt() {
+str_to_hex() {
     str_val=$1
     hex_bytes=$(echo $str_val | xxd -p)
     hex_bytes=0x$(echo $hex_bytes | rev | cut -c3- | rev)
@@ -19,8 +19,8 @@ hex_to_felt() {
 # convert felt to hex
 # $1 - felt value
 felt_to_hex() {
-    felt=`echo "obase=16; ibase=10; $1" | BC_LINE_LENGTH=0 bc`
-    echo 0x$felt
+    hex=`echo "obase=16; ibase=10; $1" | BC_LINE_LENGTH=0 bc`
+    echo 0x$hex
 }
 
 # convert felt to uint256
