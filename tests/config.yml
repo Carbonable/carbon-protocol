@@ -3,6 +3,7 @@ signers:
   anyone: 1001
 
 sources:
+  badge: ./src/badge/badge.cairo
   project: ./src/project/project.cairo
   token: ./tests/mocks/token/erc20.cairo
   minter: ./src/mint/minter.cairo

@@ -22,26 +22,26 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 @external
-func test_initialization{
+func test_set_uri{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
 }():
     alloc_locals
 
     # prepare minter instance
-    let (str) = StringCodec.ss_to_string('ipfs://carbonable/{id}.json')
+    let (str) = StringCodec.ss_to_string('ipfs://carbonalbe/{id}.json')
     let name = 'Badge'
     let (local context) = prepare(uri_len=str.len, uri=str.data, name=name)
 
     # run scenario
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{ stop=start_prank(context.signers.admin) %}
+
+    let (new_str) = StringCodec.ss_to_string('ipfs://carbonable/{id}.json')
+    CarbonableBadge.set_uri(uri_len=new_str.len, uri=new_str.data)
 
     let id_uint256 = Uint256(0, 0)
     let (len, array) = CarbonableBadge.uri(id_uint256)
     let (returned_str) = StringCodec.ss_arr_to_string(len, array)
-    assert_string(returned_str, str)
-
-    let (returned_name) = CarbonableBadge.name()
-    assert returned_name = name
+    assert_string(returned_str, new_str)
 
     %{ stop() %}
 

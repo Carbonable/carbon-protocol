@@ -1,3 +1,7 @@
+badge:
+  uri: ipfs://carbonable/{id}.json
+  name: badge
+
 project:
   name: Project
   symbol: NFT

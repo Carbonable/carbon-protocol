@@ -33,7 +33,7 @@ end
 #
 
 @storage_var
-func ERC5192_locked(id : Uint256) -> (locked : felt):
+func CarbonableBadge_locked(id : Uint256) -> (locked : felt):
 end
 
 @storage_var
@@ -71,12 +71,7 @@ namespace CarbonableBadge:
 
         uint256_check(id)
 
-        let (str_uri) = StringCodec.read('uri')
-        let (str_id) = StringCodec.felt_to_string(id.low)
-        let (str_ext) = StringCodec.ss_to_string('.json')
-
-        let (prestr) = StringUtil.concat(str_uri, str_id)
-        let (str) = StringUtil.concat(prestr, str_ext)
+        let (str) = StringCodec.read('uri')
         return (str.len, str.data)
     end
 
@@ -90,7 +85,7 @@ namespace CarbonableBadge:
     ) -> (locked : felt):
         uint256_check(id)
 
-        let (locked_status) = ERC5192_locked.read(id)
+        let (locked_status) = CarbonableBadge_locked.read(id)
         return (locked_status)
     end
 
@@ -116,9 +111,9 @@ namespace CarbonableBadge:
     ) -> ():
         uint256_check(id)
 
-        ERC5192_locked.write(id, TRUE)
+        CarbonableBadge_locked.write(id, TRUE)
         Locked.emit(id)
-        
+
         return ()
     end
 
@@ -127,9 +122,9 @@ namespace CarbonableBadge:
     ) -> ():
         uint256_check(id)
 
-        ERC5192_locked.write(id, FALSE)
+        CarbonableBadge_locked.write(id, FALSE)
         Unlocked.emit(id)
-        
+
         return ()
     end
 
