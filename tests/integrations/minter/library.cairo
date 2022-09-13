@@ -5,17 +5,19 @@
 
 # Starkware dependencies
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 # Project dependencies
 from openzeppelin.token.erc20.IERC20 import IERC20
+from openzeppelin.token.erc721.IERC721 import IERC721
+from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
 from openzeppelin.security.safemath.library import SafeUint256
 
 # Local dependencies
 from interfaces.minter import ICarbonableMinter
-from interfaces.project import IERC721, IERC721Enumerable, ICarbonableProject
+from interfaces.project import ICarbonableProject
 
 #
 # Functions

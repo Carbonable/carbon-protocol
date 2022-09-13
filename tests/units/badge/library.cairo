@@ -7,6 +7,9 @@
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
+# Project dependencies
+from openzeppelin.access.ownable.library import Ownable
+
 # Local dependencies
 from src.badge.library import CarbonableBadge
 
@@ -52,6 +55,7 @@ func prepare{
         ids.anyone = context.signers.anyone
     %}
 
+    Ownable.initializer(admin)
     CarbonableBadge.initializer(uri_len, uri, name)
 
     local signers : Signers = Signers(admin=admin, anyone=anyone)

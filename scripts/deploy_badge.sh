@@ -3,7 +3,7 @@
 ### CONSTANTS
 SCRIPT_DIR=`readlink -f $0 | xargs dirname`
 ROOT=`readlink -f $SCRIPT_DIR/..`
-CACHE_FILE=$ROOT/build/deployed_contracts.txt
+CACHE_FILE=$ROOT/build/deployed_badge_contracts.txt
 STARKNET_ACCOUNTS_FILE=$HOME/.starknet_accounts/starknet_open_zeppelin_accounts.json
 PROTOSTAR_TOML_FILE=$ROOT/protostar.toml
 NETWORK=
@@ -41,30 +41,19 @@ deploy_all_contracts() {
 
     [ ! -z $PROFILE ] && PROFILE_OPT="--profile $PROFILE"
 
-    # Deploy ERC-721 token contract
-    if [ -z $ERC721_ADDRESS ]; then
-        erc721_name=$(str_to_hex "$ERC721_NAME")
-        erc721_symbol=$(str_to_hex "$ERC721_SYMBOL")
-        log_info "Deploying ERC-721 contract..."
-        ERC721_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProject.json --inputs $erc721_name $erc721_symbol $ADMIN_ADDRESS" "$NETWORK"` || exit_error
-    fi
-
-    # Deploy Minter contract
-    if [ -z $MINTER_ADDRESS ]; then
+    # Deploy Badge contract
+    if [ -z $ERC1155_ADDRESS ]; then
         owner=$ADMIN_ADDRESS
-        project_nft_address=$ERC721_ADDRESS
-        log_info "Deploying Minter contract..."
-        MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT" "$NETWORK"` || exit_error
-        # Transfer ownership
-        log_info "Transfer ERC-721 ontract ownership..."
-        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT --wallet $WALLET" "$NETWORK"` || exit_error
-    fi    
+        erc1155_len=${#ERC1155_URI}
+        erc1155_uri=$(str_to_hexs "$ERC1155_URI")
+        erc1155_name=$(str_to_hex "$ERC1155_NAME")
+        log_info "Deploying Badge contract..."
+        ERC1155_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableBadge.json --inputs $erc1155_len $erc1155_uri $erc1155_name $owner" "$NETWORK"` || exit_error
+    fi
 
     # Save values in cache file
     (
         echo "ERC1155_ADDRESS=$ERC1155_ADDRESS"
-        echo "ERC721_ADDRESS=$ERC721_ADDRESS"
-        echo "MINTER_ADDRESS=$MINTER_ADDRESS"
     ) | tee >&2 $CACHE_FILE
 }
 

@@ -3,10 +3,6 @@
 
 %lang starknet
 
-# Project dependencies
-from openzeppelin.token.erc721.IERC721 import IERC721
-from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
-
 @contract_interface
 namespace ICarbonableProject:
     func owner() -> (owner : felt):
