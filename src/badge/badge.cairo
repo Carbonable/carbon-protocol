@@ -3,24 +3,33 @@
 
 %lang starknet
 
+# Starkware dependencies
+from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.math import assert_not_zero
 
+# Project dependencies
 from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.token.erc1155.library import ERC1155
 from openzeppelin.introspection.erc165.library import ERC165
+
+# Local dependencies
+from src.badge.library import CarbonableBadge
 
 #
 # Constructor
 #
 
 @constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    uri : felt, owner : felt
-):
-    ERC1155.initializer(uri)
+func constructor{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}(uri_len : felt, uri : felt*, name : felt, owner : felt):
+    alloc_locals
+
+    ERC1155.initializer(0)
+    CarbonableBadge.initializer(uri_len, uri, name)
     Ownable.initializer(owner)
     return ()
 end
@@ -37,10 +46,10 @@ func supportsInterface{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
 end
 
 @view
-func uri{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(id : Uint256) -> (
-    uri : felt
-):
-    return ERC1155.uri(id)
+func uri{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}(id : Uint256) -> (uri_len : felt, uri : felt*):
+    return CarbonableBadge.uri(id)
 end
 
 @view
@@ -64,16 +73,14 @@ func owner{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() 
     return (owner)
 end
 
+@view
+func name{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (name : felt):
+    return CarbonableBadge.name()
+end
+
 #
 # Externals
 #
-
-@external
-func setURI{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(uri : felt):
-    Ownable.assert_only_owner()
-    ERC1155._set_uri(uri)
-    return ()
-end
 
 @external
 func mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

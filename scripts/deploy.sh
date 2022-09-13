@@ -44,9 +44,11 @@ deploy_all_contracts() {
     # Deploy Badge contract
     if [ -z $ERC1155_ADDRESS ]; then
         owner=$ADMIN_ADDRESS
-        erc1155_uri=$(str_to_hex "$ERC1155_URI")
+        erc1155_len=${#ERC1155_URI}
+        erc1155_uri=$(str_to_hexs "$ERC1155_URI")
+        erc1155_name=$(str_to_hex "$ERC1155_NAME")
         log_info "Deploying Badge contract..."
-        ERC1155_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableBadge.json --inputs $erc1155_uri $owner" "$NETWORK"` || exit_error
+        ERC1155_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableBadge.json --inputs $erc1155_len $erc1155_uri $erc1155_name $owner" "$NETWORK"` || exit_error
     fi 
 
     # Deploy ERC-721 token contract
