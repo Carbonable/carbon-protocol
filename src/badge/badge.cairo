@@ -68,6 +68,14 @@ func balanceOfBatch{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @view
+func isApprovedForAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    account : felt, operator : felt
+) -> (isApproved : felt):
+    let (is_approved) = ERC1155.is_approved_for_all(account, operator)
+    return (is_approved)
+end
+
+@view
 func owner{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (owner : felt):
     let (owner : felt) = Ownable.owner()
     return (owner)
@@ -81,6 +89,62 @@ end
 #
 # Externals
 #
+
+@external
+func setURI{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
+}(uri_len : felt, uri : felt*):
+    Ownable.assert_only_owner()
+    CarbonableBadge.set_uri(uri_len, uri)
+    return ()
+end
+
+@external
+func setLocked{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(id : Uint256):
+    Ownable.assert_only_owner()
+    CarbonableBadge.set_locked(id)
+    return ()
+end
+
+@external
+func setUnlocked{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(id : Uint256):
+    Ownable.assert_only_owner()
+    CarbonableBadge.set_unlocked(id)
+    return ()
+end
+
+@external
+func setApprovalForAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    operator : felt, approved : felt
+):
+    ERC1155.set_approval_for_all(operator, approved)
+    return ()
+end
+
+@external
+func safeTransferFrom{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    from_ : felt, to : felt, id : Uint256, amount : Uint256, data_len : felt, data : felt*
+):
+    CarbonableBadge.assert_unlocked(id)
+    ERC1155.safe_transfer_from(from_, to, id, amount, data_len, data)
+    return ()
+end
+
+@external
+func safeBatchTransferFrom{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    from_ : felt,
+    to : felt,
+    ids_len : felt,
+    ids : Uint256*,
+    amounts_len : felt,
+    amounts : Uint256*,
+    data_len : felt,
+    data : felt*,
+):
+    CarbonableBadge.assert_unlocked_batch(ids_len, ids)
+    ERC1155.safe_batch_transfer_from(from_, to, ids_len, ids, amounts_len, amounts, data_len, data)
+    return ()
+end
 
 @external
 func mint{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
