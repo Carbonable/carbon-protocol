@@ -4,10 +4,8 @@
 %lang starknet
 
 # Project dependencies
-from openzeppelin.token.erc721.enumerable.interfaces.Ierc721.enumerable import (
-    IERC721,
-    Ierc721.enumerable,
-)
+from openzeppelin.token.erc721.IERC721 import IERC721
+from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
 
 @contract_interface
 namespace ICarbonableProject:
