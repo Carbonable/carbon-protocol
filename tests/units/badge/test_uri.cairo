@@ -28,20 +28,26 @@ func test_set_uri{
     alloc_locals
 
     # prepare minter instance
-    let (str) = StringCodec.ss_to_string('ipfs://carbonalbe/{id}.json')
+    let (str) = StringCodec.ss_to_string('ipfs://carbonalbe/')
     let name = 'Badge'
     let (local context) = prepare(uri_len=str.len, uri=str.data, name=name)
 
     # run scenario
     %{ stop=start_prank(context.signers.admin) %}
 
-    let (new_str) = StringCodec.ss_to_string('ipfs://carbonable/{id}.json')
+    let (new_str) = StringCodec.ss_to_string('ipfs://carbonable/')
     CarbonableBadge.set_uri(uri_len=new_str.len, uri=new_str.data)
 
-    let id_uint256 = Uint256(0, 0)
-    let (len, array) = CarbonableBadge.uri(id_uint256)
+    let id = 0
+    let (len, array) = CarbonableBadge.uri(Uint256(id, 0))
     let (returned_str) = StringCodec.ss_arr_to_string(len, array)
-    assert_string(returned_str, new_str)
+
+    let (id_str) = StringCodec.felt_to_string(id)
+    let (ext_str) = StringCodec.ss_to_string('.json')
+    let (pre_str) = StringUtil.concat(new_str, id_str)
+    let (expected_str) = StringUtil.concat(pre_str, ext_str)
+
+    assert_string(returned_str, expected_str)
 
     %{ stop() %}
 
