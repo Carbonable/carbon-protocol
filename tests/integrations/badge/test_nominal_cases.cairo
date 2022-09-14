@@ -28,6 +28,26 @@ func __setup__{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 @view
+func test_mint_and_transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # When admin mints a token to anyone
+    # And anyone tries to transfer the token
+    # Then no failed transactions expected
+    # When admin locks token
+    # And anyone tries to transfer the token
+    # Then a failed transactions expected
+    alloc_locals
+    let (anyone_address) = anyone.get_address()
+    let (admin_address) = admin.get_address()
+
+    admin.mint(to=anyone_address, id=0, amount=2)
+    anyone.transfer(to=admin_address, id=0, amount=1)
+    admin.lock(id=0)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: transfer is locked") %}
+    anyone.transfer(to=admin_address, id=0, amount=1)
+    return ()
+end
+
+@view
 func test_mint_not_owner{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     # When anyone mints a token to anyone
     # Then a failed transactions expected

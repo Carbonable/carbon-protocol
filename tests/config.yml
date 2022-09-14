@@ -5,6 +5,7 @@ signers:
 sources:
   badge: ./src/badge/badge.cairo
   project: ./src/project/project.cairo
-  token: ./tests/mocks/token/erc20.cairo
+  token: ./tests/mocks/erc20.cairo
+  account: ./tests/mocks/account.cairo
   minter: ./src/mint/minter.cairo
   yielder: ./src/yield/yield_manager.cairo

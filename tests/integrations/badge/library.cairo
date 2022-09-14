@@ -32,14 +32,29 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         from tests import load
         load("./tests/integrations/badge/config.yml", context)
 
-        # ERC-721 deployment
+        # Admin account deployment
+        context.admin_account_contract = deploy_contract(
+            context.sources.account,
+            {
+                "public_key": context.signers.admin,
+            },
+        ).contract_address
+
+        # Admin account deployment
+        context.anyone_account_contract = deploy_contract(
+            context.sources.account,
+            {
+                "public_key": context.signers.anyone,
+            },
+        ).contract_address
+
+        # ERC-1155 deployment
         context.carbonable_badge_contract = deploy_contract(
             context.sources.badge,
             {
                 "uri": [char for char in context.badge.uri],
                 "name": context.badge.name,
-                "owner": context.signers.admin,
-                "owner": context.signers.admin,
+                "owner": context.admin_account_contract,
             },
         ).contract_address
     %}
@@ -116,6 +131,14 @@ namespace carbonable_badge_instance:
         alloc_locals
         let (name) = ICarbonableBadge.name(carbonable_badge)
         return (name)
+    end
+
+    func locked{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, carbonable_badge : felt
+    }(id : Uint256) -> (is_locked : felt):
+        alloc_locals
+        let (is_locked) = ICarbonableBadge.locked(carbonable_badge, id)
+        return (is_locked)
     end
 
     #
@@ -235,7 +258,7 @@ namespace admin_instance:
 
     func get_address() -> (address : felt):
         tempvar admin
-        %{ ids.admin = context.signers.admin %}
+        %{ ids.admin = context.admin_account_contract %}
         return (admin)
     end
 
@@ -256,7 +279,6 @@ namespace admin_instance:
 
         with carbonable_badge:
             let (initial_balance) = carbonable_badge_instance.balanceOf(account=to, id=id_uint256)
-            %{ stop_mock = mock_call(ids.caller, "supportsInterface", [1]) %}
             carbonable_badge_instance.mint(
                 to=to,
                 id=id_uint256,
@@ -265,10 +287,41 @@ namespace admin_instance:
                 data=data,
                 caller=caller,
             )
-            %{ stop_mock() %}
             let (expected_balance) = SafeUint256.add(initial_balance, amount_uint256)
             let (returned_balance) = carbonable_badge_instance.balanceOf(account=to, id=id_uint256)
             assert returned_balance = expected_balance
+        end
+
+        return ()
+    end
+
+    func lock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(id : felt):
+        alloc_locals
+
+        let (carbonable_badge) = carbonable_badge_instance.deployed()
+        let (caller) = admin_instance.get_address()
+        let id_uint256 = Uint256(id, 0)
+
+        with carbonable_badge:
+            carbonable_badge_instance.setLocked(id=id_uint256, caller=caller)
+            let (returned_locked) = carbonable_badge_instance.locked(id=id_uint256)
+            assert returned_locked = TRUE
+        end
+
+        return ()
+    end
+
+    func unlock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(id : felt):
+        alloc_locals
+
+        let (carbonable_badge) = carbonable_badge_instance.deployed()
+        let (caller) = admin_instance.get_address()
+        let id_uint256 = Uint256(id, 0)
+
+        with carbonable_badge:
+            carbonable_badge_instance.setUnlocked(id=id_uint256, caller=caller)
+            let (returned_locked) = carbonable_badge_instance.locked(id=id_uint256)
+            assert returned_locked = FALSE
         end
 
         return ()
@@ -280,7 +333,7 @@ namespace anyone_instance:
 
     func get_address() -> (address : felt):
         tempvar anyone
-        %{ ids.anyone = context.signers.anyone %}
+        %{ ids.anyone = context.anyone_account_contract %}
         return (anyone)
     end
 
@@ -301,7 +354,6 @@ namespace anyone_instance:
 
         with carbonable_badge:
             let (initial_balance) = carbonable_badge_instance.balanceOf(account=to, id=id_uint256)
-            %{ stop_mock = mock_call(ids.caller, "supportsInterface", [1]) %}
             carbonable_badge_instance.mint(
                 to=to,
                 id=id_uint256,
@@ -310,7 +362,38 @@ namespace anyone_instance:
                 data=data,
                 caller=caller,
             )
-            %{ stop_mock() %}
+            let (expected_balance) = SafeUint256.add(initial_balance, amount_uint256)
+            let (returned_balance) = carbonable_badge_instance.balanceOf(account=to, id=id_uint256)
+            assert returned_balance = expected_balance
+        end
+
+        return ()
+    end
+
+    func transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        to : felt, id : felt, amount : felt
+    ):
+        alloc_locals
+
+        let (carbonable_badge) = carbonable_badge_instance.deployed()
+        let (caller) = anyone_instance.get_address()
+        let id_uint256 = Uint256(id, 0)
+        let amount_uint256 = Uint256(amount, 0)
+        let (local data : felt*) = alloc()
+        assert data[0] = 0
+        let data_len = 1
+
+        with carbonable_badge:
+            let (initial_balance) = carbonable_badge_instance.balanceOf(account=to, id=id_uint256)
+            carbonable_badge_instance.safeTransferFrom(
+                from_=caller,
+                to=to,
+                id=id_uint256,
+                amount=amount_uint256,
+                data_len=data_len,
+                data=data,
+                caller=caller,
+            )
             let (expected_balance) = SafeUint256.add(initial_balance, amount_uint256)
             let (returned_balance) = carbonable_badge_instance.balanceOf(account=to, id=id_uint256)
             assert returned_balance = expected_balance

@@ -82,11 +82,11 @@ namespace CarbonableBadge:
 
     func locked{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         id : Uint256
-    ) -> (locked : felt):
+    ) -> (is_locked : felt):
         uint256_check(id)
 
-        let (locked_status) = CarbonableBadge_locked.read(id)
-        return (locked_status)
+        let (is_locked) = CarbonableBadge_locked.read(id)
+        return (is_locked)
     end
 
     #
@@ -137,9 +137,9 @@ namespace CarbonableBadge:
     ) -> ():
         uint256_check(id)
 
-        let (locked_status) = locked(id)
+        let (is_locked) = locked(id)
         with_attr error_message("CarbonableBadge: transfer is locked"):
-            assert locked_status = FALSE
+            assert is_locked = FALSE
         end
         return ()
     end

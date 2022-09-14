@@ -14,6 +14,9 @@ namespace ICarbonableBadge:
     func name() -> (name : felt):
     end
 
+    func locked(id : Uint256) -> (is_locked : felt):
+    end
+
     func owner() -> (owner : felt):
     end
 
