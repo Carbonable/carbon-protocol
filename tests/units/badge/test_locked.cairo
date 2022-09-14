@@ -40,20 +40,20 @@ func test_set_locked{
     %{ stop=start_prank(context.signers.admin) %}
 
     let (locked_status) = CarbonableBadge.locked(zero)
+    assert locked_status = TRUE
+
+    CarbonableBadge.set_unlocked(zero)
+
+    let (locked_status) = CarbonableBadge.locked(zero)
     assert locked_status = FALSE
 
-    CarbonableBadge.set_locked(zero)
+    CarbonableBadge.set_unlocked(zero)
 
     let (locked_status) = CarbonableBadge.locked(zero)
-    assert locked_status = TRUE
-
-    CarbonableBadge.set_locked(zero)
-
-    let (locked_status) = CarbonableBadge.locked(zero)
-    assert locked_status = TRUE
+    assert locked_status = FALSE
 
     let (locked_status) = CarbonableBadge.locked(one)
-    assert locked_status = FALSE
+    assert locked_status = TRUE
 
     %{ stop() %}
 
@@ -78,11 +78,21 @@ func test_set_unlocked{
     %{ stop=start_prank(context.signers.admin) %}
 
     let (locked_status) = CarbonableBadge.locked(zero)
-    assert locked_status = FALSE
+    assert locked_status = TRUE
+
+    CarbonableBadge.set_locked(zero)
+
+    let (locked_status) = CarbonableBadge.locked(zero)
+    assert locked_status = TRUE
 
     CarbonableBadge.set_unlocked(zero)
 
     let (locked_status) = CarbonableBadge.locked(zero)
+    assert locked_status = FALSE
+
+    CarbonableBadge.set_unlocked(one)
+
+    let (locked_status) = CarbonableBadge.locked(one)
     assert locked_status = FALSE
 
     CarbonableBadge.set_locked(zero)
@@ -90,18 +100,8 @@ func test_set_unlocked{
     let (locked_status) = CarbonableBadge.locked(zero)
     assert locked_status = TRUE
 
-    CarbonableBadge.set_locked(one)
-
     let (locked_status) = CarbonableBadge.locked(one)
-    assert locked_status = TRUE
-
-    CarbonableBadge.set_unlocked(zero)
-
-    let (locked_status) = CarbonableBadge.locked(zero)
     assert locked_status = FALSE
-
-    let (locked_status) = CarbonableBadge.locked(one)
-    assert locked_status = TRUE
 
     %{ stop() %}
 

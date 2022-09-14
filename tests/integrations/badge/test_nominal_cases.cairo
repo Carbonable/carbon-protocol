@@ -40,9 +40,9 @@ func test_mint_and_transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (admin_address) = admin.get_address()
 
     admin.mint(to=anyone_address, id=0, amount=2)
-    anyone.transfer(to=admin_address, id=0, amount=1)
-    admin.lock(id=0)
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: transfer is locked") %}
+    anyone.transfer(to=admin_address, id=0, amount=1)
+    admin.unlock(id=0)
     anyone.transfer(to=admin_address, id=0, amount=1)
     return ()
 end
