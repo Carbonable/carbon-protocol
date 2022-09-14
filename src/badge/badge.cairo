@@ -86,6 +86,13 @@ func name{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -
     return CarbonableBadge.name()
 end
 
+@view
+func locked{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(id : Uint256) -> (
+    is_locked : felt
+):
+    return CarbonableBadge.locked(id)
+end
+
 #
 # Externals
 #
