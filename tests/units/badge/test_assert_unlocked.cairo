@@ -39,10 +39,10 @@ func test_assert_unlocked{
     # run scenario
     %{ stop=start_prank(context.signers.admin) %}
 
-    CarbonableBadge.assert_unlocked(zero)
-    CarbonableBadge.set_locked(zero)
-
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: transfer is locked") %}
+    CarbonableBadge.assert_unlocked(zero)
+
+    CarbonableBadge.set_unlocked(zero)
     CarbonableBadge.assert_unlocked(zero)
 
     %{ stop() %}
@@ -70,14 +70,6 @@ func test_assert_unlocked_batch{
     # run scenario
     %{ stop=start_prank(context.signers.admin) %}
 
-    CarbonableBadge.assert_unlocked_batch(2, ids)
-    CarbonableBadge.set_locked(zero)
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: transfer is locked") %}
-    CarbonableBadge.assert_unlocked_batch(2, ids)
-
-    CarbonableBadge.set_locked(one)
-
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: transfer is locked") %}
     CarbonableBadge.assert_unlocked_batch(2, ids)
 
@@ -87,6 +79,14 @@ func test_assert_unlocked_batch{
     CarbonableBadge.assert_unlocked_batch(2, ids)
 
     CarbonableBadge.set_unlocked(one)
+    CarbonableBadge.assert_unlocked_batch(2, ids)
+
+    CarbonableBadge.set_locked(zero)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: transfer is locked") %}
+    CarbonableBadge.assert_unlocked_batch(2, ids)
+
+    CarbonableBadge.set_locked(one)
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: transfer is locked") %}
     CarbonableBadge.assert_unlocked_batch(2, ids)
 
     %{ stop() %}

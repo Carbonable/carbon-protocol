@@ -33,7 +33,7 @@ end
 #
 
 @storage_var
-func CarbonableBadge_locked(id : Uint256) -> (locked : felt):
+func CarbonableBadge_unlocked(id : Uint256) -> (unlocked : felt):
 end
 
 @storage_var
@@ -91,8 +91,8 @@ namespace CarbonableBadge:
     ) -> (is_locked : felt):
         uint256_check(id)
 
-        let (is_locked) = CarbonableBadge_locked.read(id)
-        return (is_locked)
+        let (is_unlocked) = CarbonableBadge_unlocked.read(id)
+        return (1 - is_unlocked)
     end
 
     #
@@ -117,7 +117,7 @@ namespace CarbonableBadge:
     ) -> ():
         uint256_check(id)
 
-        CarbonableBadge_locked.write(id, TRUE)
+        CarbonableBadge_unlocked.write(id, FALSE)
         Locked.emit(id)
 
         return ()
@@ -128,7 +128,7 @@ namespace CarbonableBadge:
     ) -> ():
         uint256_check(id)
 
-        CarbonableBadge_locked.write(id, FALSE)
+        CarbonableBadge_unlocked.write(id, TRUE)
         Unlocked.emit(id)
 
         return ()
