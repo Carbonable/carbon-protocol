@@ -57,7 +57,7 @@ func test_assert_unlocked_batch{
     alloc_locals
 
     # prepare minter instance
-    let (str) = StringCodec.ss_to_string('ipfs://carbonalbe/{id}.json')
+    let (str) = StringCodec.ss_to_string('ipfs://carbonable/')
     let name = 'Badge'
     let (local context) = prepare(uri_len=str.len, uri=str.data, name=name)
 

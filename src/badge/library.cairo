@@ -71,7 +71,13 @@ namespace CarbonableBadge:
 
         uint256_check(id)
 
-        let (str) = StringCodec.read('uri')
+        let (uri_str) = StringCodec.read('uri')
+        let (id_str) = StringCodec.felt_to_string(id.low)
+        let (ext_str) = StringCodec.ss_to_string('.json')
+
+        let (pre_str) = StringUtil.concat(uri_str, id_str)
+        let (str) = StringUtil.concat(pre_str, ext_str)
+
         return (str.len, str.data)
     end
 
