@@ -1,17 +1,17 @@
-# SPDX-License-Identifier: MIT
-# Carbonable Contracts written in Cairo v0.9.1 (library.cairo)
+// SPDX-License-Identifier: MIT
+// Carbonable Contracts written in Cairo v0.9.1 (library.cairo)
 
 %lang starknet
 
-# Starkware dependencies
+// Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
 
-#
-# Functions
-#
+//
+// Functions
+//
 
-func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     %{
         # Load config
         import sys
@@ -19,13 +19,29 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         from tests import load
         load("./tests/integrations/yield/config.yml", context)
 
-        # ERC-721 deployment
+        # Admin account deployment
+        context.admin_account_contract = deploy_contract(
+            context.sources.account,
+            {
+                "public_key": context.signers.admin,
+            },
+        ).contract_address
+
+        # Anyone account deployment
+        context.anyone_account_contract = deploy_contract(
+            context.sources.account,
+            {
+                "public_key": context.signers.anyone,
+            },
+        ).contract_address
+
+        # Carbonable project deployment
         context.carbonable_project_contract = deploy_contract(
             context.sources.project,
             {
                 "name": context.project.name,
                 "symbol": context.project.symbol,
-                "owner": context.signers.admin,
+                "owner": context.admin_account_contract,
             },
         ).contract_address
 
@@ -37,7 +53,7 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
                 "symbol": context.token.symbol,
                 "decimals": context.token.decimals,
                 "initial_supply": context.token.initial_supply,
-                "recipient": context.signers.anyone
+                "recipient": context.anyone_account_contract
             },
         ).contract_address
 
@@ -49,15 +65,15 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
                 "symbol": context.carbonable_token.symbol,
                 "decimals": context.carbonable_token.decimals,
                 "initial_supply": context.carbonable_token.initial_supply,
-                "recipient": context.signers.anyone
+                "recipient": context.anyone_account_contract
             },
         ).contract_address
 
-        # Yield Manager deployment
+        # Carbonable yielder deployment
         context.yield_manager_contract = deploy_contract(
             context.sources.yielder,
             {
-                "owner": context.signers.admin,
+                "owner": context.admin_account_contract,
                 "carbonable_project_address": context.carbonable_project_contract,
                 "carbonable_token_address": context.carbonable_token_contract,
                 "reward_token_address": context.reward_token_contract,
@@ -65,5 +81,5 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         ).contract_address
     %}
 
-    return ()
-end
+    return ();
+}

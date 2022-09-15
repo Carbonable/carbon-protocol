@@ -1,48 +1,48 @@
-# SPDX-License-Identifier: MIT
-# Carbonable Contracts written in Cairo v0.9.1 (library.cairo)
+// SPDX-License-Identifier: MIT
+// Carbonable Contracts written in Cairo v0.9.1 (library.cairo)
 
 %lang starknet
 
-# Starkware dependencies
+// Starkware dependencies
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
-# Local dependencies
+// Local dependencies
 from src.mint.library import CarbonableMinter
 
-#
-# Structs
-#
+//
+// Structs
+//
 
-struct Signers:
-    member admin : felt
-    member anyone : felt
-end
+struct Signers {
+    admin: felt,
+    anyone: felt,
+}
 
-struct Mocks:
-    member carbonable_project_address : felt
-    member payment_token_address : felt
-end
+struct Mocks {
+    carbonable_project_address: felt,
+    payment_token_address: felt,
+}
 
-struct Whitelist:
-    member slots : felt
-    member merkle_root : felt
-    member merkle_proof : felt*
-    member merkle_proof_len : felt
-end
+struct Whitelist {
+    slots: felt,
+    merkle_root: felt,
+    merkle_proof: felt*,
+    merkle_proof_len: felt,
+}
 
-struct TestContext:
-    member signers : Signers
-    member mocks : Mocks
-    member whitelist : Whitelist
-end
+struct TestContext {
+    signers: Signers,
+    mocks: Mocks,
+    whitelist: Whitelist,
+}
 
-#
-# Functions
-#
+//
+// Functions
+//
 
-func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     %{
         # Load config
         import sys
@@ -51,27 +51,27 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         load("./tests/units/minter/config.yml", context)
     %}
 
-    return ()
-end
+    return ();
+}
 
-func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    public_sale_open : felt,
-    max_buy_per_tx : felt,
-    unit_price : Uint256,
-    max_supply_for_mint : Uint256,
-    reserved_supply_for_mint : Uint256,
-) -> (test_context : TestContext):
-    alloc_locals
+func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    public_sale_open: felt,
+    max_buy_per_tx: felt,
+    unit_price: Uint256,
+    max_supply_for_mint: Uint256,
+    reserved_supply_for_mint: Uint256,
+) -> (test_context: TestContext) {
+    alloc_locals;
 
-    # Extract context variables
-    local admin
-    local anyone
-    local carbonable_project_address
-    local payment_token_address
-    local slots
-    local merkle_root
-    local merkle_proof_len
-    let (local merkle_proof : felt*) = alloc()
+    // Extract context variables
+    local admin;
+    local anyone;
+    local carbonable_project_address;
+    local payment_token_address;
+    local slots;
+    local merkle_root;
+    local merkle_proof_len;
+    let (local merkle_proof: felt*) = alloc();
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
@@ -84,7 +84,7 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
             memory[ids.merkle_proof + index] = node
     %}
 
-    # Instantiate minter
+    // Instantiate minter
     CarbonableMinter.constructor(
         owner=admin,
         carbonable_project_address=carbonable_project_address,
@@ -94,24 +94,24 @@ func prepare{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         unit_price=unit_price,
         max_supply_for_mint=max_supply_for_mint,
         reserved_supply_for_mint=reserved_supply_for_mint,
-    )
+    );
 
-    # Instantiate context, useful to avoid many hints in tests
-    local signers : Signers = Signers(admin=admin, anyone=anyone)
+    // Instantiate context, useful to avoid many hints in tests
+    local signers: Signers = Signers(admin=admin, anyone=anyone);
 
-    local mocks : Mocks = Mocks(
+    local mocks: Mocks = Mocks(
         carbonable_project_address=carbonable_project_address,
         payment_token_address=payment_token_address,
-        )
+        );
 
-    local whitelist : Whitelist = Whitelist(
+    local whitelist: Whitelist = Whitelist(
         slots=slots,
         merkle_root=merkle_root,
         merkle_proof=merkle_proof,
         merkle_proof_len=merkle_proof_len,
-        )
+        );
 
-    local context : TestContext = TestContext(signers=signers, mocks=mocks, whitelist=whitelist)
+    local context: TestContext = TestContext(signers=signers, mocks=mocks, whitelist=whitelist);
 
-    return (context)
-end
+    return (context,);
+}
