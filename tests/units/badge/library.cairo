@@ -1,36 +1,36 @@
-# SPDX-License-Identifier: MIT
-# Carbonable Contracts written in Cairo v0.9.1 (library.cairo)
+// SPDX-License-Identifier: MIT
+// Carbonable Contracts written in Cairo v0.9.1 (library.cairo)
 
 %lang starknet
 
-# Starkware dependencies
+// Starkware dependencies
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
-# Project dependencies
+// Project dependencies
 from openzeppelin.access.ownable.library import Ownable
 
-# Local dependencies
+// Local dependencies
 from src.badge.library import CarbonableBadge
 
-#
-# Structs
-#
+//
+// Structs
+//
 
-struct Signers:
-    member admin : felt
-    member anyone : felt
-end
+struct Signers {
+    admin: felt,
+    anyone: felt,
+}
 
-struct TestContext:
-    member signers : Signers
-end
+struct TestContext {
+    signers: Signers,
+}
 
-#
-# Functions
-#
+//
+// Functions
+//
 
-func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     %{
         # Load config
         import sys
@@ -39,26 +39,26 @@ func setup{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
         load("./tests/units/badge/config.yml", context)
     %}
 
-    return ()
-end
+    return ();
+}
 
 func prepare{
-    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, bitwise_ptr : BitwiseBuiltin*, range_check_ptr
-}(uri_len : felt, uri : felt*, name : felt) -> (test_context : TestContext):
-    alloc_locals
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(uri_len: felt, uri: felt*, name: felt) -> (test_context: TestContext) {
+    alloc_locals;
 
-    # Extract context variables
-    local admin
-    local anyone
+    // Extract context variables
+    local admin;
+    local anyone;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
     %}
 
-    Ownable.initializer(admin)
-    CarbonableBadge.initializer(uri_len, uri, name)
+    Ownable.initializer(admin);
+    CarbonableBadge.initializer(uri_len, uri, name);
 
-    local signers : Signers = Signers(admin=admin, anyone=anyone)
-    local context : TestContext = TestContext(signers=signers)
-    return (test_context=context)
-end
+    local signers: Signers = Signers(admin=admin, anyone=anyone);
+    local context: TestContext = TestContext(signers=signers);
+    return (test_context=context);
+}
