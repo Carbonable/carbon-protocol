@@ -1,0 +1,17 @@
+{
+    "description": "Carbonable badge",
+    "external_url": "https://carbonable.io/",
+    "youtube_url": "https://www.youtube.com/watch?v=5dZrROBmfKU&ab_channel=Carbonable",
+    "image": "ipfs://bafybeigsolf5qc6vtyxak5pyxupnj6iymylwz44vbz4avam5bp3in2exf4/level-2.png",
+    "name": "Level 2",
+    "attributes": [
+        {
+            "trait_type": "Role",
+            "value": "User"
+        },
+        {
+            "trait_type": "Level",
+            "value": 2
+        }
+    ]
+}
