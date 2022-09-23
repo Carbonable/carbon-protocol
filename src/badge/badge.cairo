@@ -25,6 +25,20 @@ from src.badge.library import CarbonableBadge
 func constructor{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(uri_len: felt, uri: felt*, name: felt, owner: felt) {
+    // Desc:
+    //   Initialize the contract
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   bitwise_ptr(BitwiseBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   uri_len(felt): uri array length
+    //   uri(felt*): uri characters as a felt array
+    //   name(felt): name of the badge collection
+    //   owner(felt): owner address
+    // Returns:
+    //   None
     alloc_locals;
 
     ERC1155.initializer(0);
