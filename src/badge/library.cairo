@@ -74,8 +74,23 @@ namespace CarbonableBadge {
         let (id_str) = StringCodec.felt_to_string(id.low);
         let (ext_str) = StringCodec.ss_to_string('.json');
 
-        let (pre_str) = StringUtil.concat(uri_str, id_str);
-        let (str) = StringUtil.concat(pre_str, ext_str);
+        let (json_str) = StringUtil.concat(id_str, ext_str);
+        let (str) = StringUtil.path_join(uri_str, json_str);
+
+        return (str.len, str.data);
+    }
+
+    func contract_uri{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        bitwise_ptr: BitwiseBuiltin*,
+        range_check_ptr,
+    }() -> (uri_len: felt, uri: felt*) {
+        alloc_locals;
+
+        let (uri_str) = StringCodec.read('uri');
+        let (json_str) = StringCodec.ss_to_string('metadata.json');
+        let (str) = StringUtil.path_join(uri_str, json_str);
 
         return (str.len, str.data);
     }

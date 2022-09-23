@@ -88,6 +88,18 @@ namespace carbonable_badge_instance {
         return (len, array);
     }
 
+    func contract_uri{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        bitwise_ptr: BitwiseBuiltin*,
+        range_check_ptr,
+        carbonable_badge: felt,
+    }() -> (uri_len: felt, uri: felt*) {
+        alloc_locals;
+        let (len, array) = ICarbonableBadge.contractURI(carbonable_badge);
+        return (len, array);
+    }
+
     func owner{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_badge: felt
     }() -> (owner: felt) {

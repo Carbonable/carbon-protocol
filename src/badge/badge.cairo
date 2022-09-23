@@ -52,6 +52,13 @@ func uri{
 }
 
 @view
+func contractURI{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}() -> (uri_len: felt, uri: felt*) {
+    return CarbonableBadge.contract_uri();
+}
+
+@view
 func balanceOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt, id: Uint256
 ) -> (balance: Uint256) {
