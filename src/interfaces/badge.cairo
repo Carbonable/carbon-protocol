@@ -10,6 +10,9 @@ namespace ICarbonableBadge {
     func uri(id: Uint256) -> (uri_len: felt, uri: felt*) {
     }
 
+    func contractURI() -> (uri_len: felt, uri: felt*) {
+    }
+
     func name() -> (name: felt) {
     }
 
