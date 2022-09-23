@@ -1,6 +1,6 @@
 # Summary
 
-* [Introduction](index.md)
+* [StarkNet Smart Contracts](index.md)
 
 ## Starknet Smart Contracts
 
