@@ -1,0 +1,670 @@
+- attributeName: constructor
+  functionName:
+    name: constructor
+    charIndex:
+      start: 679
+      end: 690
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: felt
+        type: ''
+    returns:
+      - name: uri array length
+        type: ''
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract
+        charIndex:
+          start: 22
+          end: 45
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 78
+          end: 96
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 106
+          end: 132
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+        desc: ''
+        charIndex:
+          start: 142
+          end: 170
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 180
+          end: 195
+    explicitArgs:
+      - name: uri_len
+        type: felt
+        desc: uri array length
+        charIndex:
+          start: 227
+          end: 258
+      - name: uri
+        type: felt*
+        desc: uri characters as a felt array
+        charIndex:
+          start: 268
+          end: 310
+      - name: name
+        type: felt
+        desc: name of the badge collection
+        charIndex:
+          start: 320
+          end: 360
+      - name: owner
+        type: felt
+        desc: owner address
+        charIndex:
+          start: 370
+          end: 396
+    returns: null
+    raises: null
+    charIndex:
+      start: 845
+      end: 1271
+- attributeName: view
+  functionName:
+    name: supportsInterface
+    charIndex:
+      start: 1451
+      end: 1468
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: interfaceId
+        type: felt
+    returns:
+      - name: success
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: uri
+    charIndex:
+      start: 1645
+      end: 1648
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: contractURI
+    charIndex:
+      start: 1846
+      end: 1857
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: balanceOf
+    charIndex:
+      start: 2051
+      end: 2060
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: account
+        type: felt
+      - name: id
+        type: Uint256
+    returns:
+      - name: balance
+        type: Uint256
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: balanceOfBatch
+    charIndex:
+      start: 2242
+      end: 2256
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: balances_len
+        type: ''
+      - name: balances
+        type: ''
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: isApprovedForAll
+    charIndex:
+      start: 2591
+      end: 2607
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: account
+        type: felt
+      - name: operator
+        type: felt
+    returns:
+      - name: isApproved
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: owner
+    charIndex:
+      start: 2847
+      end: 2852
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: name
+    charIndex:
+      start: 3015
+      end: 3019
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: name
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: locked
+    charIndex:
+      start: 3154
+      end: 3160
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns:
+      - name: is_locked
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: setURI
+    charIndex:
+      start: 3345
+      end: 3351
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: setLocked
+    charIndex:
+      start: 3591
+      end: 3600
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: setUnlocked
+    charIndex:
+      start: 3783
+      end: 3794
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: setApprovalForAll
+    charIndex:
+      start: 3979
+      end: 3996
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: operator
+        type: felt
+      - name: approved
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: safeTransferFrom
+    charIndex:
+      start: 4189
+      end: 4205
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: safeBatchTransferFrom
+    charIndex:
+      start: 4506
+      end: 4527
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: mint
+    charIndex:
+      start: 4941
+      end: 4945
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: mintBatch
+    charIndex:
+      start: 5205
+      end: 5214
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: burn
+    charIndex:
+      start: 5567
+      end: 5571
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: from_
+        type: felt
+      - name: id
+        type: Uint256
+      - name: amount
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: burnBatch
+    charIndex:
+      start: 5957
+      end: 5966
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: transferOwnership
+    charIndex:
+      start: 6420
+      end: 6437
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: newOwner
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: renounceOwnership
+    charIndex:
+      start: 6602
+      end: 6619
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
