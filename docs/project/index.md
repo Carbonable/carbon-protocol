@@ -24,16 +24,16 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - name(felt)  
-  - symbol(felt)  
-  - owner(felt)
+<font color="orange">  - name(felt)</font>  
+<font color="orange">  - symbol(felt)</font>  
+<font color="orange">  - owner(felt)</font>
 
 
 ### returns
@@ -48,9 +48,9 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -59,7 +59,7 @@ This is a description
 
 ### returns
   
-  - totalSupply(Uint256)
+<font color="blue">  - totalSupply(Uint256)</font>
 
 
 ## tokenByIndex
@@ -70,19 +70,19 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - index(Uint256)
+<font color="orange">  - index(Uint256)</font>
 
 
 ### returns
   
-  - tokenId(Uint256)
+<font color="blue">  - tokenId(Uint256)</font>
 
 
 ## tokenOfOwnerByIndex
@@ -93,20 +93,20 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - owner(felt)  
-  - index(Uint256)
+<font color="orange">  - owner(felt)</font>  
+<font color="orange">  - index(Uint256)</font>
 
 
 ### returns
   
-  - tokenId(Uint256)
+<font color="blue">  - tokenId(Uint256)</font>
 
 
 ## supportsInterface
@@ -117,19 +117,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - interfaceId(felt)
+<font color="orange">  - interfaceId(felt)</font>
 
 
 ### returns
   
-  - success(felt)
+<font color="blue">  - success(felt)</font>
 
 
 ## name
@@ -140,9 +140,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -151,7 +151,7 @@ This is a description
 
 ### returns
   
-  - name(felt)
+<font color="blue">  - name(felt)</font>
 
 
 ## symbol
@@ -162,9 +162,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -173,7 +173,7 @@ This is a description
 
 ### returns
   
-  - symbol(felt)
+<font color="blue">  - symbol(felt)</font>
 
 
 ## balanceOf
@@ -184,19 +184,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - owner(felt)
+<font color="orange">  - owner(felt)</font>
 
 
 ### returns
   
-  - balance(Uint256)
+<font color="blue">  - balance(Uint256)</font>
 
 
 ## ownerOf
@@ -207,19 +207,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - tokenId(Uint256)
+<font color="orange">  - tokenId(Uint256)</font>
 
 
 ### returns
   
-  - owner(felt)
+<font color="blue">  - owner(felt)</font>
 
 
 ## getApproved
@@ -230,19 +230,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - tokenId(Uint256)
+<font color="orange">  - tokenId(Uint256)</font>
 
 
 ### returns
   
-  - approved(felt)
+<font color="blue">  - approved(felt)</font>
 
 
 ## isApprovedForAll
@@ -253,20 +253,20 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - owner(felt)  
-  - operator(felt)
+<font color="orange">  - owner(felt)</font>  
+<font color="orange">  - operator(felt)</font>
 
 
 ### returns
   
-  - isApproved(felt)
+<font color="blue">  - isApproved(felt)</font>
 
 
 ## tokenURI
@@ -277,19 +277,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - tokenId(Uint256)
+<font color="orange">  - tokenId(Uint256)</font>
 
 
 ### returns
   
-  - tokenURI(felt)
+<font color="blue">  - tokenURI(felt)</font>
 
 
 ## owner
@@ -300,9 +300,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -311,7 +311,7 @@ This is a description
 
 ### returns
   
-  - owner(felt)
+<font color="blue">  - owner(felt)</font>
 
 
 ## image_url
@@ -322,10 +322,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -334,8 +334,8 @@ This is a description
 
 ### returns
   
-  - image_url_len(felt)  
-  - image_url(felt)
+<font color="blue">  - image_url_len(felt)</font>  
+<font color="blue">  - image_url(felt)</font>
 
 
 ## image_data
@@ -346,10 +346,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -358,8 +358,8 @@ This is a description
 
 ### returns
   
-  - image_data_len(felt)  
-  - image_data(felt)
+<font color="blue">  - image_data_len(felt)</font>  
+<font color="blue">  - image_data(felt)</font>
 
 
 ## external_url
@@ -370,10 +370,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -382,8 +382,8 @@ This is a description
 
 ### returns
   
-  - external_url_len(felt)  
-  - external_url(felt)
+<font color="blue">  - external_url_len(felt)</font>  
+<font color="blue">  - external_url(felt)</font>
 
 
 ## description
@@ -394,10 +394,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -406,8 +406,8 @@ This is a description
 
 ### returns
   
-  - description_len(felt)  
-  - description(felt)
+<font color="blue">  - description_len(felt)</font>  
+<font color="blue">  - description(felt)</font>
 
 
 ## holder
@@ -418,10 +418,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -430,8 +430,8 @@ This is a description
 
 ### returns
   
-  - holder_len(felt)  
-  - holder(felt)
+<font color="blue">  - holder_len(felt)</font>  
+<font color="blue">  - holder(felt)</font>
 
 
 ## certifier
@@ -442,10 +442,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -454,8 +454,8 @@ This is a description
 
 ### returns
   
-  - certifier_len(felt)  
-  - certifier(felt)
+<font color="blue">  - certifier_len(felt)</font>  
+<font color="blue">  - certifier(felt)</font>
 
 
 ## land
@@ -466,10 +466,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -478,8 +478,8 @@ This is a description
 
 ### returns
   
-  - land_len(felt)  
-  - land(felt)
+<font color="blue">  - land_len(felt)</font>  
+<font color="blue">  - land(felt)</font>
 
 
 ## unit_land_surface
@@ -490,10 +490,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -502,8 +502,8 @@ This is a description
 
 ### returns
   
-  - unit_land_surface_len(felt)  
-  - unit_land_surface(felt)
+<font color="blue">  - unit_land_surface_len(felt)</font>  
+<font color="blue">  - unit_land_surface(felt)</font>
 
 
 ## country
@@ -514,10 +514,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -526,8 +526,8 @@ This is a description
 
 ### returns
   
-  - country_len(felt)  
-  - country(felt)
+<font color="blue">  - country_len(felt)</font>  
+<font color="blue">  - country(felt)</font>
 
 
 ## expiration
@@ -538,10 +538,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -550,8 +550,8 @@ This is a description
 
 ### returns
   
-  - expiration_len(felt)  
-  - expiration(felt)
+<font color="blue">  - expiration_len(felt)</font>  
+<font color="blue">  - expiration(felt)</font>
 
 
 ## total_co2_sequestration
@@ -562,10 +562,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -574,8 +574,8 @@ This is a description
 
 ### returns
   
-  - total_co2_sequestration_len(felt)  
-  - total_co2_sequestration(felt)
+<font color="blue">  - total_co2_sequestration_len(felt)</font>  
+<font color="blue">  - total_co2_sequestration(felt)</font>
 
 
 ## unit_co2_sequestration
@@ -586,10 +586,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -598,8 +598,8 @@ This is a description
 
 ### returns
   
-  - unit_co2_sequestration_len(felt)  
-  - unit_co2_sequestration(felt)
+<font color="blue">  - unit_co2_sequestration_len(felt)</font>  
+<font color="blue">  - unit_co2_sequestration(felt)</font>
 
 
 ## sequestration_color
@@ -610,10 +610,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -622,8 +622,8 @@ This is a description
 
 ### returns
   
-  - sequestration_color_len(felt)  
-  - sequestration_color(felt)
+<font color="blue">  - sequestration_color_len(felt)</font>  
+<font color="blue">  - sequestration_color(felt)</font>
 
 
 ## sequestration_type
@@ -634,10 +634,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -646,8 +646,8 @@ This is a description
 
 ### returns
   
-  - sequestration_type_len(felt)  
-  - sequestration_type(felt)
+<font color="blue">  - sequestration_type_len(felt)</font>  
+<font color="blue">  - sequestration_type(felt)</font>
 
 
 ## sequestration_category
@@ -658,10 +658,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -670,8 +670,8 @@ This is a description
 
 ### returns
   
-  - sequestration_category_len(felt)  
-  - sequestration_category(felt)
+<font color="blue">  - sequestration_category_len(felt)</font>  
+<font color="blue">  - sequestration_category(felt)</font>
 
 
 ## background_color
@@ -682,10 +682,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -694,8 +694,8 @@ This is a description
 
 ### returns
   
-  - background_color_len(felt)  
-  - background_color(felt)
+<font color="blue">  - background_color_len(felt)</font>  
+<font color="blue">  - background_color(felt)</font>
 
 
 ## animation_url
@@ -706,10 +706,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -718,8 +718,8 @@ This is a description
 
 ### returns
   
-  - animation_url_len(felt)  
-  - animation_url(felt)
+<font color="blue">  - animation_url_len(felt)</font>  
+<font color="blue">  - animation_url(felt)</font>
 
 
 ## youtube_url
@@ -730,10 +730,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -742,8 +742,8 @@ This is a description
 
 ### returns
   
-  - youtube_url_len(felt)  
-  - youtube_url(felt)
+<font color="blue">  - youtube_url_len(felt)</font>  
+<font color="blue">  - youtube_url(felt)</font>
 
 
 ## approve
@@ -754,15 +754,15 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - to(felt)  
-  - tokenId(Uint256)
+<font color="orange">  - to(felt)</font>  
+<font color="orange">  - tokenId(Uint256)</font>
 
 
 ### returns
@@ -777,15 +777,15 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - operator(felt)  
-  - approved(felt)
+<font color="orange">  - operator(felt)</font>  
+<font color="orange">  - approved(felt)</font>
 
 
 ### returns
@@ -800,16 +800,16 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - from_(felt)  
-  - to(felt)  
-  - tokenId(Uint256)
+<font color="orange">  - from_(felt)</font>  
+<font color="orange">  - to(felt)</font>  
+<font color="orange">  - tokenId(Uint256)</font>
 
 
 ### returns
@@ -824,9 +824,9 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -845,15 +845,15 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - to(felt)  
-  - tokenId(Uint256)
+<font color="orange">  - to(felt)</font>  
+<font color="orange">  - tokenId(Uint256)</font>
 
 
 ### returns
@@ -868,14 +868,14 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - tokenId(Uint256)
+<font color="orange">  - tokenId(Uint256)</font>
 
 
 ### returns
@@ -890,15 +890,15 @@ This is a description
 
 ### implicitArgs
   
-  - pedersen_ptr(HashBuiltin*)  
-  - syscall_ptr(felt*)  
-  - range_check_ptr
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - tokenId(Uint256)  
-  - tokenURI(felt)
+<font color="orange">  - tokenId(Uint256)</font>  
+<font color="orange">  - tokenURI(felt)</font>
 
 
 ### returns
@@ -913,14 +913,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - newOwner(felt)
+<font color="orange">  - newOwner(felt)</font>
 
 
 ### returns
@@ -935,9 +935,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -956,10 +956,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -978,10 +978,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1000,10 +1000,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1022,10 +1022,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1044,10 +1044,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1066,10 +1066,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1088,10 +1088,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1110,10 +1110,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1132,10 +1132,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1154,10 +1154,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1176,10 +1176,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1198,10 +1198,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1220,10 +1220,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1242,10 +1242,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1264,10 +1264,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1286,10 +1286,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1308,10 +1308,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -1330,10 +1330,10 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs

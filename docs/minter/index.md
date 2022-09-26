@@ -24,22 +24,22 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - owner(felt)  
-  - carbonable_project_address(felt)  
-  - payment_token_address(felt)  
-  - public_sale_open(felt)  
-  - max_buy_per_tx(felt)  
-  - unit_price(Uint256)  
-  - max_supply_for_mint(Uint256)  
-  - reserved_supply_for_mint(Uint256)  
-  - 
+<font color="orange">  - owner(felt)</font>  
+<font color="orange">  - carbonable_project_address(felt)</font>  
+<font color="orange">  - payment_token_address(felt)</font>  
+<font color="orange">  - public_sale_open(felt)</font>  
+<font color="orange">  - max_buy_per_tx(felt)</font>  
+<font color="orange">  - unit_price(Uint256)</font>  
+<font color="orange">  - max_supply_for_mint(Uint256)</font>  
+<font color="orange">  - reserved_supply_for_mint(Uint256)</font>  
+<font color="orange">  - </font>
 
 
 ### returns
@@ -54,19 +54,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - 
+<font color="orange">  - </font>
 
 
 ### returns
   
-  - carbonable_project_address(felt)
+<font color="blue">  - carbonable_project_address(felt)</font>
 
 
 ## payment_token_address
@@ -77,9 +77,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -88,7 +88,7 @@ This is a description
 
 ### returns
   
-  - payment_token_address(felt)
+<font color="blue">  - payment_token_address(felt)</font>
 
 
 ## whitelisted_sale_open
@@ -99,9 +99,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -110,7 +110,7 @@ This is a description
 
 ### returns
   
-  - whitelisted_sale_open(felt)
+<font color="blue">  - whitelisted_sale_open(felt)</font>
 
 
 ## public_sale_open
@@ -121,9 +121,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -132,7 +132,7 @@ This is a description
 
 ### returns
   
-  - public_sale_open(felt)
+<font color="blue">  - public_sale_open(felt)</font>
 
 
 ## max_buy_per_tx
@@ -143,9 +143,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -154,7 +154,7 @@ This is a description
 
 ### returns
   
-  - max_buy_per_tx(felt)
+<font color="blue">  - max_buy_per_tx(felt)</font>
 
 
 ## unit_price
@@ -165,9 +165,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -176,7 +176,7 @@ This is a description
 
 ### returns
   
-  - unit_price(Uint256)
+<font color="blue">  - unit_price(Uint256)</font>
 
 
 ## reserved_supply_for_mint
@@ -187,19 +187,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - 
+<font color="orange">  - </font>
 
 
 ### returns
   
-  - reserved_supply_for_mint(Uint256)
+<font color="blue">  - reserved_supply_for_mint(Uint256)</font>
 
 
 ## max_supply_for_mint
@@ -210,9 +210,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -221,7 +221,7 @@ This is a description
 
 ### returns
   
-  - max_supply_for_mint(Uint256)
+<font color="blue">  - max_supply_for_mint(Uint256)</font>
 
 
 ## whitelist_merkle_root
@@ -232,9 +232,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -243,7 +243,7 @@ This is a description
 
 ### returns
   
-  - whitelist_merkle_root(felt)
+<font color="blue">  - whitelist_merkle_root(felt)</font>
 
 
 ## whitelisted_slots
@@ -254,14 +254,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - slots(felt)
+<font color="orange">  - slots(felt)</font>
 
 
 ### returns
@@ -276,19 +276,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - account(felt)
+<font color="orange">  - account(felt)</font>
 
 
 ### returns
   
-  - slots(felt)
+<font color="blue">  - slots(felt)</font>
 
 
 ## set_whitelist_merkle_root
@@ -299,14 +299,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - whitelist_merkle_root(felt)
+<font color="orange">  - whitelist_merkle_root(felt)</font>
 
 
 ### returns
@@ -321,14 +321,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - public_sale_open(felt)
+<font color="orange">  - public_sale_open(felt)</font>
 
 
 ### returns
@@ -343,14 +343,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - max_buy_per_tx(felt)
+<font color="orange">  - max_buy_per_tx(felt)</font>
 
 
 ### returns
@@ -365,14 +365,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - unit_price(Uint256)
+<font color="orange">  - unit_price(Uint256)</font>
 
 
 ### returns
@@ -387,14 +387,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - slots(Uint256)
+<font color="orange">  - slots(Uint256)</font>
 
 
 ### returns
@@ -409,20 +409,20 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - to(felt)  
-  - quantity(felt)
+<font color="orange">  - to(felt)</font>  
+<font color="orange">  - quantity(felt)</font>
 
 
 ### returns
   
-  - success(felt)
+<font color="blue">  - success(felt)</font>
 
 
 ## withdraw
@@ -433,9 +433,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -444,7 +444,7 @@ This is a description
 
 ### returns
   
-  - success(felt)
+<font color="blue">  - success(felt)</font>
 
 
 ## transfer
@@ -455,21 +455,21 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - token_address(felt)  
-  - recipient(felt)  
-  - amount(Uint256)
+<font color="orange">  - token_address(felt)</font>  
+<font color="orange">  - recipient(felt)</font>  
+<font color="orange">  - amount(Uint256)</font>
 
 
 ### returns
   
-  - success(felt)
+<font color="blue">  - success(felt)</font>
 
 
 ## whitelist_buy
@@ -480,14 +480,14 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - success(felt)
+<font color="orange">  - success(felt)</font>
 
 
 ### returns
@@ -502,17 +502,17 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - quantity(felt)
+<font color="orange">  - quantity(felt)</font>
 
 
 ### returns
   
-  - success(felt)
+<font color="blue">  - success(felt)</font>
 

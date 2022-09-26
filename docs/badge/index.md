@@ -24,20 +24,20 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - felt
+<font color="orange">  - felt</font>
 
 
 ### returns
   
-  - uri array length
+<font color="blue">  - uri array length</font>
 
 
 ## supportsInterface
@@ -48,19 +48,19 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - interfaceId(felt)
+<font color="orange">  - interfaceId(felt)</font>
 
 
 ### returns
   
-  - success(felt)
+<font color="blue">  - success(felt)</font>
 
 
 ## uri
@@ -71,21 +71,21 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - id(Uint256)
+<font color="orange">  - id(Uint256)</font>
 
 
 ### returns
   
-  - uri_len(felt)  
-  - uri(felt)
+<font color="blue">  - uri_len(felt)</font>  
+<font color="blue">  - uri(felt)</font>
 
 
 ## contractURI
@@ -96,10 +96,10 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -108,8 +108,8 @@ Initialize the contract
 
 ### returns
   
-  - uri_len(felt)  
-  - uri(felt)
+<font color="blue">  - uri_len(felt)</font>  
+<font color="blue">  - uri(felt)</font>
 
 
 ## balanceOf
@@ -120,20 +120,20 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - account(felt)  
-  - id(Uint256)
+<font color="orange">  - account(felt)</font>  
+<font color="orange">  - id(Uint256)</font>
 
 
 ### returns
   
-  - balance(Uint256)
+<font color="blue">  - balance(Uint256)</font>
 
 
 ## balanceOfBatch
@@ -144,15 +144,15 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - balances_len  
-  - balances
+<font color="orange">  - balances_len</font>  
+<font color="orange">  - balances</font>
 
 
 ### returns
@@ -167,20 +167,20 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - account(felt)  
-  - operator(felt)
+<font color="orange">  - account(felt)</font>  
+<font color="orange">  - operator(felt)</font>
 
 
 ### returns
   
-  - isApproved(felt)
+<font color="blue">  - isApproved(felt)</font>
 
 
 ## owner
@@ -191,9 +191,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -202,7 +202,7 @@ Initialize the contract
 
 ### returns
   
-  - owner(felt)
+<font color="blue">  - owner(felt)</font>
 
 
 ## name
@@ -213,9 +213,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -224,7 +224,7 @@ Initialize the contract
 
 ### returns
   
-  - name(felt)
+<font color="blue">  - name(felt)</font>
 
 
 ## locked
@@ -235,19 +235,19 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - id(Uint256)
+<font color="orange">  - id(Uint256)</font>
 
 
 ### returns
   
-  - is_locked(felt)
+<font color="blue">  - is_locked(felt)</font>
 
 
 ## setURI
@@ -258,10 +258,10 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - bitwise_ptr(BitwiseBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -280,14 +280,14 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - id(Uint256)
+<font color="orange">  - id(Uint256)</font>
 
 
 ### returns
@@ -302,14 +302,14 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - id(Uint256)
+<font color="orange">  - id(Uint256)</font>
 
 
 ### returns
@@ -324,15 +324,15 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - operator(felt)  
-  - approved(felt)
+<font color="orange">  - operator(felt)</font>  
+<font color="orange">  - approved(felt)</font>
 
 
 ### returns
@@ -347,9 +347,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -368,9 +368,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -389,9 +389,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -410,9 +410,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -431,16 +431,16 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - from_(felt)  
-  - id(Uint256)  
-  - amount(Uint256)
+<font color="orange">  - from_(felt)</font>  
+<font color="orange">  - id(Uint256)</font>  
+<font color="orange">  - amount(Uint256)</font>
 
 
 ### returns
@@ -455,9 +455,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -476,14 +476,14 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - newOwner(felt)
+<font color="orange">  - newOwner(felt)</font>
 
 
 ### returns
@@ -498,9 +498,9 @@ Initialize the contract
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs

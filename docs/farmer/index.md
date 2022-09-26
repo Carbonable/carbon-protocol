@@ -24,18 +24,18 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - owner(felt)  
-  - carbonable_project_address(felt)  
-  - carbonable_token_address(felt)  
-  - reward_token_address(felt)  
-  - 
+<font color="orange">  - owner(felt)</font>  
+<font color="orange">  - carbonable_project_address(felt)</font>  
+<font color="orange">  - carbonable_token_address(felt)</font>  
+<font color="orange">  - reward_token_address(felt)</font>  
+<font color="orange">  - </font>
 
 
 ### returns
@@ -50,19 +50,19 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - 
+<font color="orange">  - </font>
 
 
 ### returns
   
-  - carbonable_project_address(felt)
+<font color="blue">  - carbonable_project_address(felt)</font>
 
 
 ## reward_token_address
@@ -73,9 +73,9 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
@@ -84,7 +84,7 @@ This is a description
 
 ### returns
   
-  - reward_token_address(felt)
+<font color="blue">  - reward_token_address(felt)</font>
 
 
 ## carbonable_token_address
@@ -95,17 +95,17 @@ This is a description
 
 ### implicitArgs
   
-  - syscall_ptr(felt*)  
-  - pedersen_ptr(HashBuiltin*)  
-  - range_check_ptr
+<font color="green">  - syscall_ptr(felt*)</font>  
+<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
+<font color="green">  - range_check_ptr</font>
 
 
 ### explicitArgs
   
-  - 
+<font color="orange">  - </font>
 
 
 ### returns
   
-  - carbonable_token_address(felt)
+<font color="blue">  - carbonable_token_address(felt)</font>
 

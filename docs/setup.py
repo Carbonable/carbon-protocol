@@ -11,6 +11,7 @@ for filepath in path.glob("**/*.yaml"):
     with open(filepath, "r") as yamlpath:
         documents.setdefault(filepath.stem, yaml.safe_load(yamlpath))
 
+colors = ["green", "orange", "blue", "purple"]
 
 for (contract, document) in documents.items():
 
@@ -46,7 +47,9 @@ for (contract, document) in documents.items():
         markdown.new_paragraph(description)
         markdown.new_paragraph()
 
-        for argtype, args in function_signature.items():
+        for index, (argtype, args) in enumerate(function_signature.items()):
+            color = colors[index]
+
             markdown.new_header(level=3, title=argtype)
             if args is None:
                 args = {}
@@ -55,7 +58,8 @@ for (contract, document) in documents.items():
 
                 argtype = arg.get('type')
                 typestr = f"({argtype})" if argtype else ''
-                markdown.new_line(f"  - {arg.get('name')}{typestr}")
+                markdown.new_line(
+                    f"  - {arg.get('name')}{typestr}", color=color)
 
             markdown.new_paragraph()
 
