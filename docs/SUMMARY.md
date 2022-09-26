@@ -8,3 +8,4 @@
 * [Carbonable Badge](badge/index.md)
 * [Carbonable Minter](minter/index.md)
 * [Carbonable Farmer](farmer/index.md)
+* [HTML](html/index.html)
