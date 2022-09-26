@@ -18,10 +18,7 @@ for (contract, document) in documents.items():
     if file_name.exists():
         file_name.unlink()
 
-    markdown = MdUtils(
-        file_name=file_name.as_posix(),
-        title=contract.capitalize(),
-    )
+    markdown = MdUtils(file_name=file_name.as_posix())
 
     markdown.new_header(level=1, title="Introduction")
     markdown.new_paragraph("This is an introduction")
@@ -47,5 +44,19 @@ for (contract, document) in documents.items():
 
         markdown.new_header(level=2, title=function_name.get("name"))
         markdown.new_paragraph(description)
+        markdown.new_paragraph()
+
+        for argtype, args in function_signature.items():
+            markdown.new_header(level=3, title=argtype)
+            if args is None:
+                args = {}
+
+            for arg in args:
+
+                argtype = arg.get('type')
+                typestr = f"({argtype})" if argtype else ''
+                markdown.new_line(f"  - {arg.get('name')}{typestr}")
+
+            markdown.new_paragraph()
 
     markdown.create_md_file()
