@@ -21,25 +21,33 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - owner(felt)</font>  
-<font color="orange">  - carbonable_project_address(felt)</font>  
-<font color="orange">  - carbonable_token_address(felt)</font>  
-<font color="orange">  - reward_token_address(felt)</font>  
-<font color="orange">  - </font>
+```cairo
+owner(felt)
+carbonable_project_address(felt)
+carbonable_token_address(felt)
+reward_token_address(felt)
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-### returns
+```cairo
 
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## carbonable_project_address
@@ -47,22 +55,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - </font>
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-### returns
-  
-<font color="blue">  - carbonable_project_address(felt)</font>
+```cairo
+carbonable_project_address(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## reward_token_address
@@ -70,21 +85,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - reward_token_address(felt)</font>
+```cairo
+reward_token_address(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## carbonable_token_address
@@ -92,20 +115,27 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - </font>
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-### returns
-  
-<font color="blue">  - carbonable_token_address(felt)</font>
+```cairo
+carbonable_token_address(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 

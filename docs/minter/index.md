@@ -21,29 +21,37 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - owner(felt)</font>  
-<font color="orange">  - carbonable_project_address(felt)</font>  
-<font color="orange">  - payment_token_address(felt)</font>  
-<font color="orange">  - public_sale_open(felt)</font>  
-<font color="orange">  - max_buy_per_tx(felt)</font>  
-<font color="orange">  - unit_price(Uint256)</font>  
-<font color="orange">  - max_supply_for_mint(Uint256)</font>  
-<font color="orange">  - reserved_supply_for_mint(Uint256)</font>  
-<font color="orange">  - </font>
+```cairo
+owner(felt)
+carbonable_project_address(felt)
+payment_token_address(felt)
+public_sale_open(felt)
+max_buy_per_tx(felt)
+unit_price(Uint256)
+max_supply_for_mint(Uint256)
+reserved_supply_for_mint(Uint256)
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-### returns
+```cairo
 
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## carbonable_project_address
@@ -51,22 +59,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - </font>
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-### returns
-  
-<font color="blue">  - carbonable_project_address(felt)</font>
+```cairo
+carbonable_project_address(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## payment_token_address
@@ -74,21 +89,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - payment_token_address(felt)</font>
+```cairo
+payment_token_address(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## whitelisted_sale_open
@@ -96,21 +119,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - whitelisted_sale_open(felt)</font>
+```cairo
+whitelisted_sale_open(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## public_sale_open
@@ -118,21 +149,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - public_sale_open(felt)</font>
+```cairo
+public_sale_open(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## max_buy_per_tx
@@ -140,21 +179,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - max_buy_per_tx(felt)</font>
+```cairo
+max_buy_per_tx(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## unit_price
@@ -162,21 +209,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - unit_price(Uint256)</font>
+```cairo
+unit_price(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## reserved_supply_for_mint
@@ -184,22 +239,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - </font>
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-### returns
-  
-<font color="blue">  - reserved_supply_for_mint(Uint256)</font>
+```cairo
+reserved_supply_for_mint(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## max_supply_for_mint
@@ -207,21 +269,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - max_supply_for_mint(Uint256)</font>
+```cairo
+max_supply_for_mint(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## whitelist_merkle_root
@@ -229,21 +299,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - whitelist_merkle_root(felt)</font>
+```cairo
+whitelist_merkle_root(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## whitelisted_slots
@@ -251,21 +329,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - slots(felt)</font>
+```cairo
+slots(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## claimed_slots
@@ -273,22 +359,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - account(felt)</font>
+```cairo
+account(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - slots(felt)</font>
+```cairo
+slots(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_whitelist_merkle_root
@@ -296,21 +389,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - whitelist_merkle_root(felt)</font>
+```cairo
+whitelist_merkle_root(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_public_sale_open
@@ -318,21 +419,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - public_sale_open(felt)</font>
+```cairo
+public_sale_open(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_max_buy_per_tx
@@ -340,21 +449,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - max_buy_per_tx(felt)</font>
+```cairo
+max_buy_per_tx(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_unit_price
@@ -362,21 +479,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - unit_price(Uint256)</font>
+```cairo
+unit_price(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## decrease_reserved_supply_for_mint
@@ -384,21 +509,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - slots(Uint256)</font>
+```cairo
+slots(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## airdrop
@@ -406,23 +539,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - to(felt)</font>  
-<font color="orange">  - quantity(felt)</font>
+```cairo
+to(felt)
+quantity(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - success(felt)</font>
+```cairo
+success(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## withdraw
@@ -430,21 +570,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - success(felt)</font>
+```cairo
+success(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## transfer
@@ -452,24 +600,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - token_address(felt)</font>  
-<font color="orange">  - recipient(felt)</font>  
-<font color="orange">  - amount(Uint256)</font>
+```cairo
+token_address(felt)
+recipient(felt)
+amount(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - success(felt)</font>
+```cairo
+success(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## whitelist_buy
@@ -477,21 +632,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - success(felt)</font>
+```cairo
+success(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## public_buy
@@ -499,20 +662,27 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - quantity(felt)</font>
+```cairo
+quantity(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - success(felt)</font>
+```cairo
+success(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 

@@ -21,23 +21,30 @@ This is a description
 
 Initialize the contract
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - felt</font>
+```cairo
+felt
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - uri array length</font>
+```cairo
+uri array length
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## supportsInterface
@@ -45,22 +52,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - interfaceId(felt)</font>
+```cairo
+interfaceId(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - success(felt)</font>
+```cairo
+success(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## uri
@@ -68,24 +82,31 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - id(Uint256)</font>
+```cairo
+id(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - uri_len(felt)</font>  
-<font color="blue">  - uri(felt)</font>
+```cairo
+uri_len(felt)
+uri(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## contractURI
@@ -93,23 +114,31 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - uri_len(felt)</font>  
-<font color="blue">  - uri(felt)</font>
+```cairo
+uri_len(felt)
+uri(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## balanceOf
@@ -117,23 +146,30 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - account(felt)</font>  
-<font color="orange">  - id(Uint256)</font>
+```cairo
+account(felt)
+id(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - balance(Uint256)</font>
+```cairo
+balance(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## balanceOfBatch
@@ -141,22 +177,30 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - balances_len</font>  
-<font color="orange">  - balances</font>
+```cairo
+balances_len
+balances
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## isApprovedForAll
@@ -164,23 +208,30 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - account(felt)</font>  
-<font color="orange">  - operator(felt)</font>
+```cairo
+account(felt)
+operator(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - isApproved(felt)</font>
+```cairo
+isApproved(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## owner
@@ -188,21 +239,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - owner(felt)</font>
+```cairo
+owner(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## name
@@ -210,21 +269,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - name(felt)</font>
+```cairo
+name(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## locked
@@ -232,22 +299,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - id(Uint256)</font>
+```cairo
+id(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - is_locked(felt)</font>
+```cairo
+is_locked(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## setURI
@@ -255,21 +329,30 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## setLocked
@@ -277,21 +360,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - id(Uint256)</font>
+```cairo
+id(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## setUnlocked
@@ -299,21 +390,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - id(Uint256)</font>
+```cairo
+id(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## setApprovalForAll
@@ -321,22 +420,30 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - operator(felt)</font>  
-<font color="orange">  - approved(felt)</font>
+```cairo
+operator(felt)
+approved(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## safeTransferFrom
@@ -344,20 +451,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## safeBatchTransferFrom
@@ -365,20 +481,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## mint
@@ -386,20 +511,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## mintBatch
@@ -407,20 +541,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## burn
@@ -428,23 +571,31 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - from_(felt)</font>  
-<font color="orange">  - id(Uint256)</font>  
-<font color="orange">  - amount(Uint256)</font>
+```cairo
+from_(felt)
+id(Uint256)
+amount(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## burnBatch
@@ -452,20 +603,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## transferOwnership
@@ -473,21 +633,29 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - newOwner(felt)</font>
+```cairo
+newOwner(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## renounceOwnership
@@ -495,18 +663,27 @@ Initialize the contract
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 

@@ -21,23 +21,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - name(felt)</font>  
-<font color="orange">  - symbol(felt)</font>  
-<font color="orange">  - owner(felt)</font>
+```cairo
+name(felt)
+symbol(felt)
+owner(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## totalSupply
@@ -45,21 +53,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - totalSupply(Uint256)</font>
+```cairo
+totalSupply(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## tokenByIndex
@@ -67,22 +83,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - index(Uint256)</font>
+```cairo
+index(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - tokenId(Uint256)</font>
+```cairo
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## tokenOfOwnerByIndex
@@ -90,23 +113,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - owner(felt)</font>  
-<font color="orange">  - index(Uint256)</font>
+```cairo
+owner(felt)
+index(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - tokenId(Uint256)</font>
+```cairo
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## supportsInterface
@@ -114,22 +144,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - interfaceId(felt)</font>
+```cairo
+interfaceId(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - success(felt)</font>
+```cairo
+success(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## name
@@ -137,21 +174,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - name(felt)</font>
+```cairo
+name(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## symbol
@@ -159,21 +204,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - symbol(felt)</font>
+```cairo
+symbol(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## balanceOf
@@ -181,22 +234,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - owner(felt)</font>
+```cairo
+owner(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - balance(Uint256)</font>
+```cairo
+balance(Uint256)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## ownerOf
@@ -204,22 +264,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - tokenId(Uint256)</font>
+```cairo
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - owner(felt)</font>
+```cairo
+owner(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## getApproved
@@ -227,22 +294,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - tokenId(Uint256)</font>
+```cairo
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - approved(felt)</font>
+```cairo
+approved(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## isApprovedForAll
@@ -250,23 +324,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - owner(felt)</font>  
-<font color="orange">  - operator(felt)</font>
+```cairo
+owner(felt)
+operator(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - isApproved(felt)</font>
+```cairo
+isApproved(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## tokenURI
@@ -274,22 +355,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - tokenId(Uint256)</font>
+```cairo
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - tokenURI(felt)</font>
+```cairo
+tokenURI(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## owner
@@ -297,21 +385,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - owner(felt)</font>
+```cairo
+owner(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## image_url
@@ -319,23 +415,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - image_url_len(felt)</font>  
-<font color="blue">  - image_url(felt)</font>
+```cairo
+image_url_len(felt)
+image_url(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## image_data
@@ -343,23 +447,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - image_data_len(felt)</font>  
-<font color="blue">  - image_data(felt)</font>
+```cairo
+image_data_len(felt)
+image_data(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## external_url
@@ -367,23 +479,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - external_url_len(felt)</font>  
-<font color="blue">  - external_url(felt)</font>
+```cairo
+external_url_len(felt)
+external_url(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## description
@@ -391,23 +511,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - description_len(felt)</font>  
-<font color="blue">  - description(felt)</font>
+```cairo
+description_len(felt)
+description(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## holder
@@ -415,23 +543,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - holder_len(felt)</font>  
-<font color="blue">  - holder(felt)</font>
+```cairo
+holder_len(felt)
+holder(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## certifier
@@ -439,23 +575,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - certifier_len(felt)</font>  
-<font color="blue">  - certifier(felt)</font>
+```cairo
+certifier_len(felt)
+certifier(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## land
@@ -463,23 +607,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - land_len(felt)</font>  
-<font color="blue">  - land(felt)</font>
+```cairo
+land_len(felt)
+land(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## unit_land_surface
@@ -487,23 +639,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - unit_land_surface_len(felt)</font>  
-<font color="blue">  - unit_land_surface(felt)</font>
+```cairo
+unit_land_surface_len(felt)
+unit_land_surface(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## country
@@ -511,23 +671,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - country_len(felt)</font>  
-<font color="blue">  - country(felt)</font>
+```cairo
+country_len(felt)
+country(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## expiration
@@ -535,23 +703,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - expiration_len(felt)</font>  
-<font color="blue">  - expiration(felt)</font>
+```cairo
+expiration_len(felt)
+expiration(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## total_co2_sequestration
@@ -559,23 +735,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - total_co2_sequestration_len(felt)</font>  
-<font color="blue">  - total_co2_sequestration(felt)</font>
+```cairo
+total_co2_sequestration_len(felt)
+total_co2_sequestration(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## unit_co2_sequestration
@@ -583,23 +767,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - unit_co2_sequestration_len(felt)</font>  
-<font color="blue">  - unit_co2_sequestration(felt)</font>
+```cairo
+unit_co2_sequestration_len(felt)
+unit_co2_sequestration(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## sequestration_color
@@ -607,23 +799,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - sequestration_color_len(felt)</font>  
-<font color="blue">  - sequestration_color(felt)</font>
+```cairo
+sequestration_color_len(felt)
+sequestration_color(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## sequestration_type
@@ -631,23 +831,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - sequestration_type_len(felt)</font>  
-<font color="blue">  - sequestration_type(felt)</font>
+```cairo
+sequestration_type_len(felt)
+sequestration_type(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## sequestration_category
@@ -655,23 +863,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - sequestration_category_len(felt)</font>  
-<font color="blue">  - sequestration_category(felt)</font>
+```cairo
+sequestration_category_len(felt)
+sequestration_category(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## background_color
@@ -679,23 +895,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - background_color_len(felt)</font>  
-<font color="blue">  - background_color(felt)</font>
+```cairo
+background_color_len(felt)
+background_color(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## animation_url
@@ -703,23 +927,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - animation_url_len(felt)</font>  
-<font color="blue">  - animation_url(felt)</font>
+```cairo
+animation_url_len(felt)
+animation_url(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## youtube_url
@@ -727,23 +959,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
-
-### returns
-  
-<font color="blue">  - youtube_url_len(felt)</font>  
-<font color="blue">  - youtube_url(felt)</font>
+```cairo
+youtube_url_len(felt)
+youtube_url(felt)
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## approve
@@ -751,22 +991,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - to(felt)</font>  
-<font color="orange">  - tokenId(Uint256)</font>
+```cairo
+to(felt)
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## setApprovalForAll
@@ -774,22 +1022,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - operator(felt)</font>  
-<font color="orange">  - approved(felt)</font>
+```cairo
+operator(felt)
+approved(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## transferFrom
@@ -797,23 +1053,31 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - from_(felt)</font>  
-<font color="orange">  - to(felt)</font>  
-<font color="orange">  - tokenId(Uint256)</font>
+```cairo
+from_(felt)
+to(felt)
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## safeTransferFrom
@@ -821,20 +1085,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## mint
@@ -842,22 +1115,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - to(felt)</font>  
-<font color="orange">  - tokenId(Uint256)</font>
+```cairo
+to(felt)
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## burn
@@ -865,21 +1146,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - tokenId(Uint256)</font>
+```cairo
+tokenId(Uint256)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## setTokenURI
@@ -887,22 +1176,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+pedersen_ptr(HashBuiltin*)
+syscall_ptr(felt*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - tokenId(Uint256)</font>  
-<font color="orange">  - tokenURI(felt)</font>
+```cairo
+tokenId(Uint256)
+tokenURI(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## transferOwnership
@@ -910,21 +1207,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
-  
-<font color="orange">  - newOwner(felt)</font>
+```cairo
+newOwner(felt)
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## renounceOwnership
@@ -932,20 +1237,29 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_image_url
@@ -953,21 +1267,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_image_data
@@ -975,21 +1298,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_external_url
@@ -997,21 +1329,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_description
@@ -1019,21 +1360,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_holder
@@ -1041,21 +1391,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_certifier
@@ -1063,21 +1422,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_land
@@ -1085,21 +1453,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_unit_land_surface
@@ -1107,21 +1484,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_country
@@ -1129,21 +1515,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_expiration
@@ -1151,21 +1546,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_total_co2_sequestration
@@ -1173,21 +1577,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_unit_co2_sequestration
@@ -1195,21 +1608,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_sequestration_color
@@ -1217,21 +1639,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_sequestration_type
@@ -1239,21 +1670,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_sequestration_category
@@ -1261,21 +1701,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_background_color
@@ -1283,21 +1732,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_animation_url
@@ -1305,21 +1763,30 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 
 
 ## set_youtube_url
@@ -1327,19 +1794,28 @@ This is a description
 
 
 
-
-### implicitArgs
   
-<font color="green">  - syscall_ptr(felt*)</font>  
-<font color="green">  - pedersen_ptr(HashBuiltin*)</font>  
-<font color="green">  - bitwise_ptr(BitwiseBuiltin*)</font>  
-<font color="green">  - range_check_ptr</font>
+{% tabs %}  
+{% tab title="Implicit args" %}
 
+```cairo
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+{% endtab %}  
+{% tab title="Explicit args" %}
 
-### explicitArgs
+```cairo
 
+```  
+{% endtab %}  
+{% tab title="Returns" %}
 
+```cairo
 
-### returns
-
+```  
+{% endtab %}  
+{% endtabs %}
 

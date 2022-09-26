@@ -11,7 +11,6 @@ for filepath in path.glob("**/*.yaml"):
     with open(filepath, "r") as yamlpath:
         documents.setdefault(filepath.stem, yaml.safe_load(yamlpath))
 
-colors = ["green", "orange", "blue", "purple"]
 
 for (contract, document) in documents.items():
 
@@ -47,20 +46,27 @@ for (contract, document) in documents.items():
         markdown.new_paragraph(description)
         markdown.new_paragraph()
 
-        for index, (argtype, args) in enumerate(function_signature.items()):
-            color = colors[index]
+        markdown.new_line('{% tabs %}')
 
-            markdown.new_header(level=3, title=argtype)
+        for argtype, args in function_signature.items():
+            #markdown.new_header(level=3, title=argtype)
+            title = argtype.replace('Args', ' args').capitalize()
+            markdown.new_line(f'{{% tab title="{title}" %}}')
+
             if args is None:
                 args = {}
 
+            codes = []
             for arg in args:
-
                 argtype = arg.get('type')
                 typestr = f"({argtype})" if argtype else ''
-                markdown.new_line(
-                    f"  - {arg.get('name')}{typestr}", color=color)
+                codes.append(f"{arg.get('name')}{typestr}")
+            code_block = "\n".join(codes)
 
-            markdown.new_paragraph()
+            markdown.insert_code(code_block, language="cairo")
+            markdown.new_line('{% endtab %}')
+
+        markdown.new_line('{% endtabs %}')
+        markdown.new_paragraph()
 
     markdown.create_md_file()
