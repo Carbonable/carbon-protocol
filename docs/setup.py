@@ -11,6 +11,8 @@ for filepath in path.glob("**/*.yaml"):
     with open(filepath, "r") as yamlpath:
         documents.setdefault(filepath.stem, yaml.safe_load(yamlpath))
 
+count = 0
+
 
 for (contract, document) in documents.items():
 
@@ -51,7 +53,8 @@ for (contract, document) in documents.items():
         for argtype, args in function_signature.items():
             #markdown.new_header(level=3, title=argtype)
             title = argtype.replace('Args', ' args').capitalize()
-            markdown.new_line(f'{{% tab title="{title}" %}}')
+            count += 1
+            markdown.new_line(f'{{% tab title="{title}_{count}" %}}')
 
             if args is None:
                 args = {}

@@ -23,7 +23,7 @@ Initialize the contract
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_253" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -32,13 +32,13 @@ bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_254" %}
 
 ```cairo
 felt
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_255" %}
 
 ```cairo
 uri array length
@@ -54,7 +54,7 @@ uri array length
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_256" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -62,13 +62,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_257" %}
 
 ```cairo
 interfaceId(felt)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_258" %}
 
 ```cairo
 success(felt)
@@ -84,7 +84,7 @@ success(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_259" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -93,13 +93,13 @@ bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_260" %}
 
 ```cairo
 id(Uint256)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_261" %}
 
 ```cairo
 uri_len(felt)
@@ -116,7 +116,7 @@ uri(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_262" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -125,13 +125,13 @@ bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_263" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_264" %}
 
 ```cairo
 uri_len(felt)
@@ -148,7 +148,7 @@ uri(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_265" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -156,14 +156,14 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_266" %}
 
 ```cairo
 account(felt)
 id(Uint256)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_267" %}
 
 ```cairo
 balance(Uint256)
@@ -179,7 +179,7 @@ balance(Uint256)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_268" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -187,14 +187,14 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_269" %}
 
 ```cairo
 balances_len
 balances
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_270" %}
 
 ```cairo
 
@@ -210,7 +210,7 @@ balances
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_271" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -218,14 +218,14 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_272" %}
 
 ```cairo
 account(felt)
 operator(felt)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_273" %}
 
 ```cairo
 isApproved(felt)
@@ -241,7 +241,7 @@ isApproved(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_274" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -249,13 +249,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_275" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_276" %}
 
 ```cairo
 owner(felt)
@@ -271,7 +271,7 @@ owner(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_277" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -279,13 +279,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_278" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_279" %}
 
 ```cairo
 name(felt)
@@ -301,7 +301,7 @@ name(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_280" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -309,13 +309,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_281" %}
 
 ```cairo
 id(Uint256)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_282" %}
 
 ```cairo
 is_locked(felt)
@@ -331,7 +331,7 @@ is_locked(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_283" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -340,13 +340,13 @@ bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_284" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_285" %}
 
 ```cairo
 
@@ -362,7 +362,7 @@ range_check_ptr
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_286" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -370,13 +370,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_287" %}
 
 ```cairo
 id(Uint256)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_288" %}
 
 ```cairo
 
@@ -392,7 +392,7 @@ id(Uint256)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_289" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -400,13 +400,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_290" %}
 
 ```cairo
 id(Uint256)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_291" %}
 
 ```cairo
 
@@ -422,7 +422,7 @@ id(Uint256)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_292" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -430,14 +430,14 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_293" %}
 
 ```cairo
 operator(felt)
 approved(felt)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_294" %}
 
 ```cairo
 
@@ -453,7 +453,7 @@ approved(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_295" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -461,13 +461,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_296" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_297" %}
 
 ```cairo
 
@@ -483,7 +483,7 @@ range_check_ptr
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_298" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -491,13 +491,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_299" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_300" %}
 
 ```cairo
 
@@ -513,7 +513,7 @@ range_check_ptr
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_301" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -521,13 +521,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_302" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_303" %}
 
 ```cairo
 
@@ -543,7 +543,7 @@ range_check_ptr
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_304" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -551,13 +551,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_305" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_306" %}
 
 ```cairo
 
@@ -573,7 +573,7 @@ range_check_ptr
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_307" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -581,7 +581,7 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_308" %}
 
 ```cairo
 from_(felt)
@@ -589,7 +589,7 @@ id(Uint256)
 amount(Uint256)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_309" %}
 
 ```cairo
 
@@ -605,7 +605,7 @@ amount(Uint256)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_310" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -613,13 +613,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_311" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_312" %}
 
 ```cairo
 
@@ -635,7 +635,7 @@ range_check_ptr
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_313" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -643,13 +643,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_314" %}
 
 ```cairo
 newOwner(felt)
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_315" %}
 
 ```cairo
 
@@ -665,7 +665,7 @@ newOwner(felt)
 
   
 {% tabs %}  
-{% tab title="Implicit args" %}
+{% tab title="Implicit args_316" %}
 
 ```cairo
 syscall_ptr(felt*)
@@ -673,13 +673,13 @@ pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 {% endtab %}  
-{% tab title="Explicit args" %}
+{% tab title="Explicit args_317" %}
 
 ```cairo
 
 ```  
 {% endtab %}  
-{% tab title="Returns" %}
+{% tab title="Returns_318" %}
 
 ```cairo
 
