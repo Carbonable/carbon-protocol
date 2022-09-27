@@ -3,58 +3,86 @@ from pathlib import Path
 
 from mdutils.mdutils import MdUtils
 
-root = Path(".")
-path = root / "data"
-documents = {}
-for filepath in path.glob("**/*.yaml"):
-    print(filepath)
-    with open(filepath, "r") as yamlpath:
-        documents.setdefault(filepath.stem, yaml.safe_load(yamlpath))
 
-count = 0
+class Document():
 
+    def __init__(self, root: Path, name: str, header: str, data: dict) -> None:
+        self._root = root
+        self._name = name
+        self._header = header
+        self._data = data
 
-for (contract, document) in documents.items():
+        self._functions = {}
+        self._functions.update(self.constructors)
+        self._functions.update(self.views)
+        self._functions.update(self.externals)
 
-    file_name = root / contract / "index"
-    if file_name.exists():
-        file_name.unlink()
+    @classmethod
+    def from_yaml(cls, root, path):
+        name = path.stem
+        header = f"Carbonable {name.capitalize()}"
+        with open(path.with_suffix(".yaml"), "r") as yamlpath:
+            data = yaml.safe_load(yamlpath)
+        return cls(root, name, header, data)
 
-    markdown = MdUtils(file_name=file_name.as_posix())
+    @staticmethod
+    def filter(data, key):
+        return {
+            key: [
+                func
+                for func in data
+                if func.get("attributeName") == key
+            ]
+        }
 
-    markdown.new_header(level=1, title="Introduction")
-    markdown.new_paragraph("This is an introduction")
-    markdown.new_paragraph()
+    @property
+    def constructors(self):
+        functype = "constructor"
+        return self.filter(self._data, functype)
 
-    markdown.new_header(level=1, title="Description")
-    markdown.new_paragraph("This is a description")
-    markdown.new_paragraph()
+    @property
+    def views(self):
+        functype = "view"
+        return self.filter(self._data, functype)
 
-    markdown.new_header(level=1, title="API Documentation")
+    @property
+    def externals(self):
+        functype = "external"
+        return self.filter(self._data, functype)
 
-    for function in document:
-        attribute_name = function.get("attributeName")
-        function_name = function.get("functionName")
-        function_signature = function.get("functionSignature")
-        function_comment = function.get("functionComment")
-
-        title = f"{contract}.{function_name.get('name')}"
-        descriptions = function_comment.get("desc") or []
-        description = '  '.join(
-            [info.get("desc") for info in descriptions]
-        ) or ''
-
-        markdown.new_header(level=2, title=function_name.get("name"))
+    def create_description(self, description):
+        filepath = self._root / self._name / "index"
+        markdown = MdUtils(file_name=filepath.as_posix())
+        markdown.new_header(level=1, title=self._header)
         markdown.new_paragraph(description)
         markdown.new_paragraph()
+        markdown.create_md_file()
 
-        markdown.new_line('{% tabs %}')
+    def create_api_page(self):
+        for functype, functions in self._functions.items():
+            filepath = self._root / self._name / functype
+
+            markdown = MdUtils(file_name=filepath.as_posix())
+            markdown.new_header(level=1, title=functype.capitalize())
+
+            for function in functions:
+                attribute_name = function.get("attributeName")
+                function_name = function.get("functionName")
+                function_signature = function.get("functionSignature")
+                function_comment = function.get("functionComment")
+                self.add_function(markdown, function_name, function_signature)
+
+            markdown.create_md_file()
+
+    def add_function(self, markdown, function_name, function_signature):
+        name = function_name.get("name")
+
+        markdown.new_line("<details>")
+        markdown.new_line(f"<summary>{name}</summary>")
 
         for argtype, args in function_signature.items():
-            #markdown.new_header(level=3, title=argtype)
             title = argtype.replace('Args', ' args').capitalize()
-            count += 1
-            markdown.new_line(f'{{% tab title="{title}_{count}" %}}')
+            markdown.new_line(title, bold_italics_code="b")
 
             if args is None:
                 args = {}
@@ -65,11 +93,14 @@ for (contract, document) in documents.items():
                 typestr = f"({argtype})" if argtype else ''
                 codes.append(f"{arg.get('name')}{typestr}")
             code_block = "\n".join(codes)
+            markdown.insert_code(code_block, language="python")
 
-            markdown.insert_code(code_block, language="cairo")
-            markdown.new_line('{% endtab %}')
-
-        markdown.new_line('{% endtabs %}')
+        markdown.new_line("</details>")
         markdown.new_paragraph()
 
-    markdown.create_md_file()
+
+root = Path(__file__).parent
+for path in root.glob("**/*.yaml"):
+    document = Document.from_yaml(root, path)
+    document.create_description("This is a description")
+    document.create_api_page()
