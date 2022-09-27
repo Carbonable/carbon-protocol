@@ -2,9 +2,18 @@
 Constructor
 ===========
   
-{% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %}  
+{% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %} 
+
+```python
+print("a")
+```
+
 {% swagger-description %}  
-Initialize the contract  
+Initialize the contract
+
+```python
+print("b")
+```
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -30,4 +39,8 @@ name of the badge collection
 {% swagger-parameter in="path" type="{explicit}" required="true" name="owner(felt)" %}  
 owner address  
 {% endswagger-parameter %}  
+
+```python
+print("c")
+```
 {% endswagger %}
