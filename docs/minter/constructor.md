@@ -39,4 +39,4 @@ Constructor
 {% swagger-parameter in="path" type="{explicit}" required="false" name="" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }
+{% endswagger %}

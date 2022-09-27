@@ -15,7 +15,7 @@ External
 {% swagger-parameter in="path" type="{explicit}" required="false" name="whitelist_merkle_root(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "set_public_sale_open" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -29,7 +29,7 @@ External
 {% swagger-parameter in="path" type="{explicit}" required="false" name="public_sale_open(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "set_max_buy_per_tx" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -43,7 +43,7 @@ External
 {% swagger-parameter in="path" type="{explicit}" required="false" name="max_buy_per_tx(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "set_unit_price" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -57,7 +57,7 @@ External
 {% swagger-parameter in="path" type="{explicit}" required="false" name="unit_price(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "decrease_reserved_supply_for_mint" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -71,7 +71,7 @@ External
 {% swagger-parameter in="path" type="{explicit}" required="false" name="slots(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "airdrop" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -91,7 +91,7 @@ External
 {% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "withdraw" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -105,7 +105,7 @@ External
 {% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "transfer" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -128,7 +128,7 @@ External
 {% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "whitelist_buy" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -154,7 +154,7 @@ External
 {% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "external" path = "public_buy" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -171,4 +171,4 @@ External
 {% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }
+{% endswagger %}

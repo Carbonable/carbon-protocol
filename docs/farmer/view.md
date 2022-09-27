@@ -18,7 +18,7 @@ View
 {% swagger-parameter in="path" type="{returns}" required="false" name="carbonable_project_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "view" path = "reward_token_address" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -32,7 +32,7 @@ View
 {% swagger-parameter in="path" type="{returns}" required="false" name="reward_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }  
+{% endswagger %}  
 {% swagger method = "view" path = "carbonable_token_address" baseUrl = " " summary = "" %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -49,4 +49,4 @@ View
 {% swagger-parameter in="path" type="{returns}" required="false" name="carbonable_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }
+{% endswagger %}

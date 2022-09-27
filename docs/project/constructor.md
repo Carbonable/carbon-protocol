@@ -21,4 +21,4 @@ Constructor
 {% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% endswagger % }
+{% endswagger %}

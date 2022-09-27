@@ -27,4 +27,4 @@ name of the badge collection
 {% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
 owner address  
 {% endswagger-parameter %}  
-{% endswagger % }
+{% endswagger %}

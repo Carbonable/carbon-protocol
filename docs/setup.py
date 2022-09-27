@@ -7,7 +7,7 @@ from mdutils.mdutils import MdUtils
 class Document():
 
     swagger_open = '{{% swagger method = "{method}" path = "{name}" baseUrl = " " summary = "{description}" %}}'
-    swagger_close = '{% endswagger % }'
+    swagger_close = '{% endswagger %}'
     swagger_description_open = '{{% swagger-description %}}'
     swagger_description_close = '{% endswagger-description %}'
     swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" required="false" name="{name}" %}}'
