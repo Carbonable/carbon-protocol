@@ -8,14 +8,14 @@
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 owner(felt)
 carbonable_project_address(felt)
 payment_token_address(felt)
@@ -28,7 +28,7 @@ reserved_supply_for_mint(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>

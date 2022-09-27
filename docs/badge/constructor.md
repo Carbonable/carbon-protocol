@@ -8,7 +8,7 @@
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -16,12 +16,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 felt
 ```  
 **Returns**
 
-```python
+```rust
 uri array length
 ```  
 </details>

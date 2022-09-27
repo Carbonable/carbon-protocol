@@ -8,19 +8,19 @@
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 whitelist_merkle_root(felt)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -31,19 +31,19 @@ whitelist_merkle_root(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 public_sale_open(felt)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -54,19 +54,19 @@ public_sale_open(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 max_buy_per_tx(felt)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -77,19 +77,19 @@ max_buy_per_tx(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 unit_price(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -100,19 +100,19 @@ unit_price(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 slots(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -123,20 +123,20 @@ slots(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 to(felt)
 quantity(felt)
 ```  
 **Returns**
 
-```python
+```rust
 success(felt)
 ```  
 </details>
@@ -147,19 +147,19 @@ success(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 success(felt)
 ```  
 </details>
@@ -170,21 +170,21 @@ success(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 token_address(felt)
 recipient(felt)
 amount(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 success(felt)
 ```  
 </details>
@@ -195,19 +195,19 @@ success(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 success(felt)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -218,19 +218,19 @@ success(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 quantity(felt)
 ```  
 **Returns**
 
-```python
+```rust
 success(felt)
 ```  
 </details>

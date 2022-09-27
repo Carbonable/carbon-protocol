@@ -91,7 +91,7 @@ class Document():
                 typestr = f"({argtype})" if argtype else ''
                 codes.append(f"{arg.get('name')}{typestr}")
             code_block = "\n".join(codes)
-            markdown.insert_code(code_block, language="python")
+            markdown.insert_code(code_block, language="rust")
 
         markdown.new_line("</details>\n")
 

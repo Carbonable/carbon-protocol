@@ -8,19 +8,19 @@
   
 **Implicit args**
 
-```python
+```rust
 pedersen_ptr(HashBuiltin*)
 syscall_ptr(felt*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 totalSupply(Uint256)
 ```  
 </details>
@@ -31,19 +31,19 @@ totalSupply(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 pedersen_ptr(HashBuiltin*)
 syscall_ptr(felt*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 index(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 tokenId(Uint256)
 ```  
 </details>
@@ -54,20 +54,20 @@ tokenId(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 pedersen_ptr(HashBuiltin*)
 syscall_ptr(felt*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 owner(felt)
 index(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 tokenId(Uint256)
 ```  
 </details>
@@ -78,19 +78,19 @@ tokenId(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 interfaceId(felt)
 ```  
 **Returns**
 
-```python
+```rust
 success(felt)
 ```  
 </details>
@@ -101,19 +101,19 @@ success(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 name(felt)
 ```  
 </details>
@@ -124,19 +124,19 @@ name(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 symbol(felt)
 ```  
 </details>
@@ -147,19 +147,19 @@ symbol(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 owner(felt)
 ```  
 **Returns**
 
-```python
+```rust
 balance(Uint256)
 ```  
 </details>
@@ -170,19 +170,19 @@ balance(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 tokenId(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 owner(felt)
 ```  
 </details>
@@ -193,19 +193,19 @@ owner(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 tokenId(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 approved(felt)
 ```  
 </details>
@@ -216,20 +216,20 @@ approved(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 owner(felt)
 operator(felt)
 ```  
 **Returns**
 
-```python
+```rust
 isApproved(felt)
 ```  
 </details>
@@ -240,19 +240,19 @@ isApproved(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 tokenId(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 tokenURI(felt)
 ```  
 </details>
@@ -263,19 +263,19 @@ tokenURI(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 owner(felt)
 ```  
 </details>
@@ -286,7 +286,7 @@ owner(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -294,12 +294,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 image_url_len(felt)
 image_url(felt)
 ```  
@@ -311,7 +311,7 @@ image_url(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -319,12 +319,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 image_data_len(felt)
 image_data(felt)
 ```  
@@ -336,7 +336,7 @@ image_data(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -344,12 +344,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 external_url_len(felt)
 external_url(felt)
 ```  
@@ -361,7 +361,7 @@ external_url(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -369,12 +369,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 description_len(felt)
 description(felt)
 ```  
@@ -386,7 +386,7 @@ description(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -394,12 +394,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 holder_len(felt)
 holder(felt)
 ```  
@@ -411,7 +411,7 @@ holder(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -419,12 +419,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 certifier_len(felt)
 certifier(felt)
 ```  
@@ -436,7 +436,7 @@ certifier(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -444,12 +444,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 land_len(felt)
 land(felt)
 ```  
@@ -461,7 +461,7 @@ land(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -469,12 +469,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 unit_land_surface_len(felt)
 unit_land_surface(felt)
 ```  
@@ -486,7 +486,7 @@ unit_land_surface(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -494,12 +494,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 country_len(felt)
 country(felt)
 ```  
@@ -511,7 +511,7 @@ country(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -519,12 +519,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 expiration_len(felt)
 expiration(felt)
 ```  
@@ -536,7 +536,7 @@ expiration(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -544,12 +544,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 total_co2_sequestration_len(felt)
 total_co2_sequestration(felt)
 ```  
@@ -561,7 +561,7 @@ total_co2_sequestration(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -569,12 +569,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 unit_co2_sequestration_len(felt)
 unit_co2_sequestration(felt)
 ```  
@@ -586,7 +586,7 @@ unit_co2_sequestration(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -594,12 +594,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 sequestration_color_len(felt)
 sequestration_color(felt)
 ```  
@@ -611,7 +611,7 @@ sequestration_color(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -619,12 +619,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 sequestration_type_len(felt)
 sequestration_type(felt)
 ```  
@@ -636,7 +636,7 @@ sequestration_type(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -644,12 +644,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 sequestration_category_len(felt)
 sequestration_category(felt)
 ```  
@@ -661,7 +661,7 @@ sequestration_category(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -669,12 +669,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 background_color_len(felt)
 background_color(felt)
 ```  
@@ -686,7 +686,7 @@ background_color(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -694,12 +694,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 animation_url_len(felt)
 animation_url(felt)
 ```  
@@ -711,7 +711,7 @@ animation_url(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -719,12 +719,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 youtube_url_len(felt)
 youtube_url(felt)
 ```  

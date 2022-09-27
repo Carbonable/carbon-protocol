@@ -8,19 +8,19 @@
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 interfaceId(felt)
 ```  
 **Returns**
 
-```python
+```rust
 success(felt)
 ```  
 </details>
@@ -31,7 +31,7 @@ success(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -39,12 +39,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 id(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 uri_len(felt)
 uri(felt)
 ```  
@@ -56,7 +56,7 @@ uri(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
@@ -64,12 +64,12 @@ range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 uri_len(felt)
 uri(felt)
 ```  
@@ -81,20 +81,20 @@ uri(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 account(felt)
 id(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 balance(Uint256)
 ```  
 </details>
@@ -105,20 +105,20 @@ balance(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 balances_len
 balances
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -129,20 +129,20 @@ balances
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 account(felt)
 operator(felt)
 ```  
 **Returns**
 
-```python
+```rust
 isApproved(felt)
 ```  
 </details>
@@ -153,19 +153,19 @@ isApproved(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 owner(felt)
 ```  
 </details>
@@ -176,19 +176,19 @@ owner(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 name(felt)
 ```  
 </details>
@@ -199,19 +199,19 @@ name(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 id(Uint256)
 ```  
 **Returns**
 
-```python
+```rust
 is_locked(felt)
 ```  
 </details>

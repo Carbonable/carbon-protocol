@@ -8,21 +8,21 @@
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 name(felt)
 symbol(felt)
 owner(felt)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>

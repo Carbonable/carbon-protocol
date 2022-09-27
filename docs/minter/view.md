@@ -8,19 +8,19 @@
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 carbonable_project_address(felt)
 ```  
 </details>
@@ -31,19 +31,19 @@ carbonable_project_address(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 payment_token_address(felt)
 ```  
 </details>
@@ -54,19 +54,19 @@ payment_token_address(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 whitelisted_sale_open(felt)
 ```  
 </details>
@@ -77,19 +77,19 @@ whitelisted_sale_open(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 public_sale_open(felt)
 ```  
 </details>
@@ -100,19 +100,19 @@ public_sale_open(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 max_buy_per_tx(felt)
 ```  
 </details>
@@ -123,19 +123,19 @@ max_buy_per_tx(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 unit_price(Uint256)
 ```  
 </details>
@@ -146,19 +146,19 @@ unit_price(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 reserved_supply_for_mint(Uint256)
 ```  
 </details>
@@ -169,19 +169,19 @@ reserved_supply_for_mint(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 max_supply_for_mint(Uint256)
 ```  
 </details>
@@ -192,19 +192,19 @@ max_supply_for_mint(Uint256)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 
 ```  
 **Returns**
 
-```python
+```rust
 whitelist_merkle_root(felt)
 ```  
 </details>
@@ -215,19 +215,19 @@ whitelist_merkle_root(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 slots(felt)
 ```  
 **Returns**
 
-```python
+```rust
 
 ```  
 </details>
@@ -238,19 +238,19 @@ slots(felt)
   
 **Implicit args**
 
-```python
+```rust
 syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
 **Explicit args**
 
-```python
+```rust
 account(felt)
 ```  
 **Returns**
 
-```python
+```rust
 slots(felt)
 ```  
 </details>
