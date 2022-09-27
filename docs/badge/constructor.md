@@ -3,10 +3,10 @@
 
   
 <details>
-  
-<summary>constructor</summary>
 
 Initialize the contract  
+  
+<summary>constructor</summary>
   
 **Implicit args**
 
