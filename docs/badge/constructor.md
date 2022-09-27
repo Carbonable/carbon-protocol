@@ -1,12 +1,14 @@
 
 
 
+
+# Constructor
   
 <details>
-
-Initialize the contract  
   
 <summary>constructor</summary>
+
+Initialize the contract  
   
 **Implicit args**
 
