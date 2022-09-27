@@ -92,14 +92,22 @@ class Document():
             markdown.new_line()
             markdown.new_line(title, bold_italics_code="b")
 
+            argcoms = {
+                arg.get("name"): arg
+                for arg in (function_comment.get(argtype) or [])
+            }
+
             if args is None:
                 args = {}
 
             codes = []
             for arg in args:
+                arg.update(argcoms.get(arg.get('name'), {}))
+                argname = arg.get('name')
                 argtype = arg.get('type')
+                argdesc = arg.get('desc', '')
                 typestr = f"({argtype})" if argtype else ''
-                codes.append(f"{arg.get('name')}{typestr}")
+                codes.append(f"{argname}{typestr}: {argdesc}")
             code_block = "\n".join(codes)
             markdown.insert_code(code_block, language="rust")
 

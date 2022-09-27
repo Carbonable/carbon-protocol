@@ -15,11 +15,15 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: felt
-        type: ''
-    returns:
-      - name: uri array length
-        type: ''
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+      - name: name
+        type: felt
+      - name: owner
+        type: felt
+    returns: null
   functionComment:
     desc:
       - name: ''
@@ -135,7 +139,7 @@
       - name: uri_len
         type: felt
       - name: uri
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -166,7 +170,7 @@
       - name: uri_len
         type: felt
       - name: uri
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -222,11 +226,19 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
+      - name: accounts_len
+        type: felt
+      - name: accounts
+        type: felt*
+      - name: ids_len
+        type: felt
+      - name: ids
+        type: Uint256*
+    returns:
       - name: balances_len
-        type: ''
+        type: felt
       - name: balances
-        type: ''
-    returns: null
+        type: Uint256*
   functionComment:
     desc: null
     implicitArgs: null
@@ -366,7 +378,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -474,7 +490,19 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: from_
+        type: felt
+      - name: to
+        type: felt
+      - name: id
+        type: Uint256
+      - name: amount
+        type: Uint256
+      - name: data_len
+        type: felt
+      - name: data
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -499,7 +527,25 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: from_
+        type: felt
+      - name: to
+        type: felt
+      - name: ids_len
+        type: felt
+      - name: ids
+        type: Uint256*
+      - name: amounts_len
+        type: felt
+      - name: amounts
+        type: Uint256*
+      - name: data_len
+        type: felt
+      - name: data
+        type: felt*
+      - name: ''
+        type: ''
     returns: null
   functionComment:
     desc: null
@@ -524,7 +570,17 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: to
+        type: felt
+      - name: id
+        type: Uint256
+      - name: amount
+        type: Uint256
+      - name: data_len
+        type: felt
+      - name: data
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -549,7 +605,23 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: to
+        type: felt
+      - name: ids_len
+        type: felt
+      - name: ids
+        type: Uint256*
+      - name: amounts_len
+        type: felt
+      - name: amounts
+        type: Uint256*
+      - name: data_len
+        type: felt
+      - name: data
+        type: felt*
+      - name: ''
+        type: ''
     returns: null
   functionComment:
     desc: null
@@ -605,7 +677,17 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: from_
+        type: felt
+      - name: ids_len
+        type: felt
+      - name: ids
+        type: Uint256*
+      - name: amounts_len
+        type: felt
+      - name: amounts
+        type: Uint256*
     returns: null
   functionComment:
     desc: null

@@ -303,9 +303,17 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
+      - name: account
+        type: felt
       - name: slots
         type: felt
-    returns: null
+      - name: proof_len
+        type: felt
+      - name: proof
+        type: felt*
+    returns:
+      - name: slots
+        type: felt
   functionComment:
     desc: null
     implicitArgs: null
@@ -585,9 +593,17 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
+      - name: slots
+        type: felt
+      - name: proof_len
+        type: felt
+      - name: proof
+        type: felt*
+      - name: quantity
+        type: felt
+    returns:
       - name: success
         type: felt
-    returns: null
   functionComment:
     desc: null
     implicitArgs: null

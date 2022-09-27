@@ -11,21 +11,21 @@ View
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+: 
 ```  
   
 **Returns**
 
 ```rust
-carbonable_project_address(felt)
+carbonable_project_address(felt): 
 ```  
 </details>
   
@@ -38,9 +38,9 @@ carbonable_project_address(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -52,7 +52,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-reward_token_address(felt)
+reward_token_address(felt): 
 ```  
 </details>
   
@@ -65,20 +65,20 @@ reward_token_address(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+: 
 ```  
   
 **Returns**
 
 ```rust
-carbonable_token_address(felt)
+carbonable_token_address(felt): 
 ```  
 </details>

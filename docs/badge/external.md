@@ -11,16 +11,17 @@ External
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-bitwise_ptr(BitwiseBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+bitwise_ptr(BitwiseBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+uri_len(felt): 
+uri(felt*): 
 ```  
   
 **Returns**
@@ -39,15 +40,15 @@ range_check_ptr
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-id(Uint256)
+id(Uint256): 
 ```  
   
 **Returns**
@@ -66,15 +67,15 @@ id(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-id(Uint256)
+id(Uint256): 
 ```  
   
 **Returns**
@@ -93,16 +94,16 @@ id(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-operator(felt)
-approved(felt)
+operator(felt): 
+approved(felt): 
 ```  
   
 **Returns**
@@ -121,15 +122,20 @@ approved(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+from_(felt): 
+to(felt): 
+id(Uint256): 
+amount(Uint256): 
+data_len(felt): 
+data(felt*): 
 ```  
   
 **Returns**
@@ -148,15 +154,23 @@ range_check_ptr
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+from_(felt): 
+to(felt): 
+ids_len(felt): 
+ids(Uint256*): 
+amounts_len(felt): 
+amounts(Uint256*): 
+data_len(felt): 
+data(felt*): 
+: 
 ```  
   
 **Returns**
@@ -175,15 +189,19 @@ range_check_ptr
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+to(felt): 
+id(Uint256): 
+amount(Uint256): 
+data_len(felt): 
+data(felt*): 
 ```  
   
 **Returns**
@@ -202,15 +220,22 @@ range_check_ptr
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+to(felt): 
+ids_len(felt): 
+ids(Uint256*): 
+amounts_len(felt): 
+amounts(Uint256*): 
+data_len(felt): 
+data(felt*): 
+: 
 ```  
   
 **Returns**
@@ -229,17 +254,17 @@ range_check_ptr
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-from_(felt)
-id(Uint256)
-amount(Uint256)
+from_(felt): 
+id(Uint256): 
+amount(Uint256): 
 ```  
   
 **Returns**
@@ -258,15 +283,19 @@ amount(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+from_(felt): 
+ids_len(felt): 
+ids(Uint256*): 
+amounts_len(felt): 
+amounts(Uint256*): 
 ```  
   
 **Returns**
@@ -285,15 +314,15 @@ range_check_ptr
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-newOwner(felt)
+newOwner(felt): 
 ```  
   
 **Returns**
@@ -312,9 +341,9 @@ newOwner(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**

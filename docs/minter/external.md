@@ -11,15 +11,15 @@ External
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-whitelist_merkle_root(felt)
+whitelist_merkle_root(felt): 
 ```  
   
 **Returns**
@@ -38,15 +38,15 @@ whitelist_merkle_root(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-public_sale_open(felt)
+public_sale_open(felt): 
 ```  
   
 **Returns**
@@ -65,15 +65,15 @@ public_sale_open(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-max_buy_per_tx(felt)
+max_buy_per_tx(felt): 
 ```  
   
 **Returns**
@@ -92,15 +92,15 @@ max_buy_per_tx(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-unit_price(Uint256)
+unit_price(Uint256): 
 ```  
   
 **Returns**
@@ -119,15 +119,15 @@ unit_price(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-slots(Uint256)
+slots(Uint256): 
 ```  
   
 **Returns**
@@ -146,22 +146,22 @@ slots(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-to(felt)
-quantity(felt)
+to(felt): 
+quantity(felt): 
 ```  
   
 **Returns**
 
 ```rust
-success(felt)
+success(felt): 
 ```  
 </details>
   
@@ -174,9 +174,9 @@ success(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -188,7 +188,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-success(felt)
+success(felt): 
 ```  
 </details>
   
@@ -201,23 +201,23 @@ success(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-token_address(felt)
-recipient(felt)
-amount(Uint256)
+token_address(felt): 
+recipient(felt): 
+amount(Uint256): 
 ```  
   
 **Returns**
 
 ```rust
-success(felt)
+success(felt): 
 ```  
 </details>
   
@@ -230,21 +230,24 @@ success(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-success(felt)
+slots(felt): 
+proof_len(felt): 
+proof(felt*): 
+quantity(felt): 
 ```  
   
 **Returns**
 
 ```rust
-
+success(felt): 
 ```  
 </details>
   
@@ -257,20 +260,20 @@ success(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-quantity(felt)
+quantity(felt): 
 ```  
   
 **Returns**
 
 ```rust
-success(felt)
+success(felt): 
 ```  
 </details>

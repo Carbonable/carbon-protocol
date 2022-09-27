@@ -11,21 +11,21 @@ View
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+: 
 ```  
   
 **Returns**
 
 ```rust
-carbonable_project_address(felt)
+carbonable_project_address(felt): 
 ```  
 </details>
   
@@ -38,9 +38,9 @@ carbonable_project_address(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -52,7 +52,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-payment_token_address(felt)
+payment_token_address(felt): 
 ```  
 </details>
   
@@ -65,9 +65,9 @@ payment_token_address(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -79,7 +79,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-whitelisted_sale_open(felt)
+whitelisted_sale_open(felt): 
 ```  
 </details>
   
@@ -92,9 +92,9 @@ whitelisted_sale_open(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -106,7 +106,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-public_sale_open(felt)
+public_sale_open(felt): 
 ```  
 </details>
   
@@ -119,9 +119,9 @@ public_sale_open(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -133,7 +133,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-max_buy_per_tx(felt)
+max_buy_per_tx(felt): 
 ```  
 </details>
   
@@ -146,9 +146,9 @@ max_buy_per_tx(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -160,7 +160,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-unit_price(Uint256)
+unit_price(Uint256): 
 ```  
 </details>
   
@@ -173,21 +173,21 @@ unit_price(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-
+: 
 ```  
   
 **Returns**
 
 ```rust
-reserved_supply_for_mint(Uint256)
+reserved_supply_for_mint(Uint256): 
 ```  
 </details>
   
@@ -200,9 +200,9 @@ reserved_supply_for_mint(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -214,7 +214,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-max_supply_for_mint(Uint256)
+max_supply_for_mint(Uint256): 
 ```  
 </details>
   
@@ -227,9 +227,9 @@ max_supply_for_mint(Uint256)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
@@ -241,7 +241,7 @@ range_check_ptr
 **Returns**
 
 ```rust
-whitelist_merkle_root(felt)
+whitelist_merkle_root(felt): 
 ```  
 </details>
   
@@ -254,21 +254,24 @@ whitelist_merkle_root(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-slots(felt)
+account(felt): 
+slots(felt): 
+proof_len(felt): 
+proof(felt*): 
 ```  
   
 **Returns**
 
 ```rust
-
+slots(felt): 
 ```  
 </details>
   
@@ -281,20 +284,20 @@ slots(felt)
 **Implicit args**
 
 ```rust
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-range_check_ptr
+syscall_ptr(felt*): 
+pedersen_ptr(HashBuiltin*): 
+range_check_ptr: 
 ```  
   
 **Explicit args**
 
 ```rust
-account(felt)
+account(felt): 
 ```  
   
 **Returns**
 
 ```rust
-slots(felt)
+slots(felt): 
 ```  
 </details>

@@ -394,7 +394,7 @@
       - name: image_url_len
         type: felt
       - name: image_url
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -425,7 +425,7 @@
       - name: image_data_len
         type: felt
       - name: image_data
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -456,7 +456,7 @@
       - name: external_url_len
         type: felt
       - name: external_url
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -487,7 +487,7 @@
       - name: description_len
         type: felt
       - name: description
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -518,7 +518,7 @@
       - name: holder_len
         type: felt
       - name: holder
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -549,7 +549,7 @@
       - name: certifier_len
         type: felt
       - name: certifier
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -580,7 +580,7 @@
       - name: land_len
         type: felt
       - name: land
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -611,7 +611,7 @@
       - name: unit_land_surface_len
         type: felt
       - name: unit_land_surface
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -642,7 +642,7 @@
       - name: country_len
         type: felt
       - name: country
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -673,7 +673,7 @@
       - name: expiration_len
         type: felt
       - name: expiration
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -704,7 +704,7 @@
       - name: total_co2_sequestration_len
         type: felt
       - name: total_co2_sequestration
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -735,7 +735,7 @@
       - name: unit_co2_sequestration_len
         type: felt
       - name: unit_co2_sequestration
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -766,7 +766,7 @@
       - name: sequestration_color_len
         type: felt
       - name: sequestration_color
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -797,7 +797,7 @@
       - name: sequestration_type_len
         type: felt
       - name: sequestration_type
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -828,7 +828,7 @@
       - name: sequestration_category_len
         type: felt
       - name: sequestration_category
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -859,7 +859,7 @@
       - name: background_color_len
         type: felt
       - name: background_color
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -890,7 +890,7 @@
       - name: animation_url_len
         type: felt
       - name: animation_url
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -921,7 +921,7 @@
       - name: youtube_url_len
         type: felt
       - name: youtube_url
-        type: felt
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -1034,7 +1034,17 @@
         type: felt*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: from_
+        type: felt
+      - name: to
+        type: felt
+      - name: tokenId
+        type: Uint256
+      - name: data_len
+        type: felt
+      - name: data
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1198,7 +1208,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: image_url_len
+        type: felt
+      - name: image_url
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1225,7 +1239,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: image_data_len
+        type: felt
+      - name: image_data
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1252,7 +1270,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: external_url_len
+        type: felt
+      - name: external_url
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1279,7 +1301,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: description_len
+        type: felt
+      - name: description
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1306,7 +1332,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: holder_len
+        type: felt
+      - name: holder
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1333,7 +1363,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: certifier_len
+        type: felt
+      - name: certifier
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1360,7 +1394,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: land_len
+        type: felt
+      - name: land
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1387,7 +1425,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: unit_land_surface_len
+        type: felt
+      - name: unit_land_surface
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1414,7 +1456,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: country_len
+        type: felt
+      - name: country
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1441,7 +1487,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: expiration_len
+        type: felt
+      - name: expiration
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1468,7 +1518,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: total_co2_sequestration_len
+        type: felt
+      - name: total_co2_sequestration
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1495,7 +1549,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: unit_co2_sequestration_len
+        type: felt
+      - name: unit_co2_sequestration
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1522,7 +1580,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: sequestration_color_len
+        type: felt
+      - name: sequestration_color
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1549,7 +1611,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: sequestration_type_len
+        type: felt
+      - name: sequestration_type
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1576,7 +1642,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: sequestration_category_len
+        type: felt
+      - name: sequestration_category
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1603,7 +1673,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: background_color_len
+        type: felt
+      - name: background_color
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1630,7 +1704,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: animation_url_len
+        type: felt
+      - name: animation_url
+        type: felt*
     returns: null
   functionComment:
     desc: null
@@ -1657,7 +1735,11 @@
         type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: youtube_url_len
+        type: felt
+      - name: youtube_url
+        type: felt*
     returns: null
   functionComment:
     desc: null
