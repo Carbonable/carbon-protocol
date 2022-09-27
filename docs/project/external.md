@@ -2,7 +2,10 @@
 External
 ========
   
-{% swagger method = "external" path = "approve" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "approve" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
@@ -19,7 +22,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "setApprovalForAll" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setApprovalForAll" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -36,7 +42,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "transferFrom" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transferFrom" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
@@ -56,7 +65,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "safeTransferFrom" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "safeTransferFrom" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
@@ -82,7 +94,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "mint" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "mint" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
@@ -99,7 +114,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "burn" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "burn" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
@@ -113,7 +131,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "setTokenURI" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setTokenURI" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
@@ -130,7 +151,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "transferOwnership" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -144,7 +168,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "renounceOwnership" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "renounceOwnership" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -155,7 +182,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_image_url" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_image_url" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -175,7 +205,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_image_data" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_image_data" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -195,7 +228,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_external_url" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_external_url" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -215,7 +251,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_description" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_description" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -235,7 +274,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_holder" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_holder" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -255,7 +297,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_certifier" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_certifier" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -275,7 +320,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_land" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_land" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -295,7 +343,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_unit_land_surface" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_unit_land_surface" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -315,7 +366,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_country" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_country" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -335,7 +389,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_expiration" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_expiration" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -355,7 +412,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_total_co2_sequestration" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_total_co2_sequestration" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -375,7 +435,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_unit_co2_sequestration" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_unit_co2_sequestration" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -395,7 +458,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_sequestration_color" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_sequestration_color" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -415,7 +481,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_sequestration_type" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_sequestration_type" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -435,7 +504,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_sequestration_category" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_sequestration_category" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -455,7 +527,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_background_color" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_background_color" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -475,7 +550,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_animation_url" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_animation_url" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -495,7 +573,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_youtube_url" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_youtube_url" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  

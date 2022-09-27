@@ -2,7 +2,10 @@
 External
 ========
   
-{% swagger method = "external" path = "set_whitelist_merkle_root" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_whitelist_merkle_root" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -16,7 +19,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_public_sale_open" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_public_sale_open" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -30,7 +36,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_max_buy_per_tx" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_max_buy_per_tx" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -44,7 +53,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "set_unit_price" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_unit_price" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -58,7 +70,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "decrease_reserved_supply_for_mint" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "decrease_reserved_supply_for_mint" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -72,7 +87,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "airdrop" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "airdrop" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -92,7 +110,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "withdraw" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "withdraw" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -106,7 +127,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "transfer" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transfer" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -129,7 +153,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "whitelist_buy" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "whitelist_buy" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -155,7 +182,10 @@ External
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = "public_buy" baseUrl = " " summary = "" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "public_buy" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  

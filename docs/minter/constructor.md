@@ -2,7 +2,10 @@
 Constructor
 ===========
   
-{% swagger method = "c0nstruct0r" path = "constructor" baseUrl = " " summary = "" %}  
+{% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  

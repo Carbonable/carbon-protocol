@@ -2,7 +2,10 @@
 Constructor
 ===========
   
-{% swagger method = "c0nstruct0r" path = "constructor" baseUrl = " " summary = "Initialize the contract" %}  
+{% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %}  
+{% swagger-description %}  
+Initialize the contract  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  

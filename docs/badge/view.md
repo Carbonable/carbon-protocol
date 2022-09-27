@@ -2,7 +2,10 @@
 View
 ====
   
-{% swagger method = "view" path = "supportsInterface" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "supportsInterface" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -19,7 +22,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "uri" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "uri" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -42,7 +48,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "contractURI" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "contractURI" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -62,7 +71,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "balanceOf" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "balanceOf" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -82,7 +94,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "balanceOfBatch" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "balanceOfBatch" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -111,7 +126,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "isApprovedForAll" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "isApprovedForAll" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -131,7 +149,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "owner" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -145,7 +166,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "name" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "name" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -159,7 +183,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "locked" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "locked" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  

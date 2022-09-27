@@ -2,7 +2,10 @@
 View
 ====
   
-{% swagger method = "view" path = "carbonable_project_address" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -19,7 +22,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "payment_token_address" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "payment_token_address" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -33,7 +39,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "whitelisted_sale_open" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "whitelisted_sale_open" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -47,7 +56,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "public_sale_open" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "public_sale_open" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -61,7 +73,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "max_buy_per_tx" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "max_buy_per_tx" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -75,7 +90,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "unit_price" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "unit_price" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -89,7 +107,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "reserved_supply_for_mint" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "reserved_supply_for_mint" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -106,7 +127,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "max_supply_for_mint" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "max_supply_for_mint" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -120,7 +144,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "whitelist_merkle_root" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "whitelist_merkle_root" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -134,7 +161,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "whitelisted_slots" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "whitelisted_slots" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
@@ -160,7 +190,10 @@ View
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "view" path = "claimed_slots" baseUrl = " " summary = "" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "claimed_slots" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  

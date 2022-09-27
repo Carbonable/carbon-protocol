@@ -6,9 +6,9 @@ from mdutils.mdutils import MdUtils
 
 class Document():
 
-    swagger_open = '{{% swagger method = "{method}" path = "{name}" baseUrl = " " summary = "{description}" %}}'
+    swagger_open = '{{% swagger method = "{method}" path = " " baseUrl = " " summary = "{name}" %}}'
     swagger_close = '{% endswagger %}'
-    swagger_description_open = '{{% swagger-description %}}'
+    swagger_description_open = '{% swagger-description %}'
     swagger_description_close = '{% endswagger-description %}'
     swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" required="false" name="{name}" %}}'
     swagger_parameter_close = '{% endswagger-parameter %}'
@@ -93,7 +93,11 @@ class Document():
         description = " ".join(desc.get("desc") for desc in descriptions)
 
         markdown.new_line(Document.swagger_open.format(
-            method=attribute_name.replace("o", "0"), name=name, description=description))
+            method=attribute_name.replace("o", "0"), name=name))
+
+        markdown.new_line(Document.swagger_description_open)
+        markdown.new_line(description)
+        markdown.new_line(Document.swagger_description_close)
 
         for method, args in function_signature.items():
             if args is None:
