@@ -18,10 +18,10 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="uri_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="uri_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="uri(felt*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="uri(felt*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -38,7 +38,7 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -55,7 +55,7 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -72,10 +72,10 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="operator(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="operator(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="approved(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="approved(felt)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -92,22 +92,22 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amount(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -124,31 +124,31 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="ids_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="ids(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amounts_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amounts(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -165,19 +165,19 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amount(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -194,28 +194,28 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="ids_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="ids(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amounts_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amounts(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -232,13 +232,13 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amount(Uint256)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -255,19 +255,19 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="ids_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="ids(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amounts_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="amounts(Uint256*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -284,7 +284,7 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="newOwner(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="newOwner(felt)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  

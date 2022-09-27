@@ -15,31 +15,31 @@ Constructor
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="carbonable_project_address(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="carbonable_project_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="payment_token_address(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="payment_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="public_sale_open(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="public_sale_open(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="max_buy_per_tx(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="max_buy_per_tx(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="unit_price(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="unit_price(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="max_supply_for_mint(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="max_supply_for_mint(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="reserved_supply_for_mint(Uint256)" %}  
+{% swagger-parameter in="path" type="" required="true" name="reserved_supply_for_mint(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

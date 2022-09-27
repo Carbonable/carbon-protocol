@@ -109,7 +109,6 @@ class Document():
                 arg.get("name"): arg
                 for arg in (function_comment.get(method) or [])
             }
-            argscope = f"{{{method.replace('Args', '')}}}"
 
             for arg in args:
                 arg.update(argcoms.get(arg.get('name'), {}))
@@ -117,6 +116,9 @@ class Document():
                 argdesc = arg.get('desc', '')
                 typestr = f"({argtype})" if argtype else ''
                 argname = f"{arg.get('name')}{typestr}"
+                is_explicit = "explicit" in method.lower()
+                required = str(is_explicit).lower()
+                argscope = "" if is_explicit else "{implicit}"
 
                 # returns
                 if "return" in argscope:
@@ -127,7 +129,6 @@ class Document():
                     continue
 
                 # implicit / explicit args
-                required = str("explicit" in argscope).lower()
                 markdown.new_line(Document.swagger_parameter_open.format(
                     scope=argscope, required=required, name=argname))
                 markdown.new_line(argdesc)

@@ -15,11 +15,12 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="carbonable_project_address(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="carbonable_project_address(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "payment_token_address" %}  
 {% swagger-description %}  
@@ -34,8 +35,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="payment_token_address(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="payment_token_address(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "whitelisted_sale_open" %}  
 {% swagger-description %}  
@@ -50,8 +52,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="whitelisted_sale_open(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="whitelisted_sale_open(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "public_sale_open" %}  
 {% swagger-description %}  
@@ -66,8 +69,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="public_sale_open(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="public_sale_open(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "max_buy_per_tx" %}  
 {% swagger-description %}  
@@ -82,8 +86,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="max_buy_per_tx(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="max_buy_per_tx(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "unit_price" %}  
 {% swagger-description %}  
@@ -98,8 +103,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="unit_price(Uint256)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="unit_price(Uint256)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "reserved_supply_for_mint" %}  
 {% swagger-description %}  
@@ -114,11 +120,12 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="reserved_supply_for_mint(Uint256)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="reserved_supply_for_mint(Uint256)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "max_supply_for_mint" %}  
 {% swagger-description %}  
@@ -133,8 +140,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="max_supply_for_mint(Uint256)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="max_supply_for_mint(Uint256)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "whitelist_merkle_root" %}  
 {% swagger-description %}  
@@ -149,8 +157,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="whitelist_merkle_root(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="whitelist_merkle_root(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "whitelisted_slots" %}  
 {% swagger-description %}  
@@ -165,20 +174,21 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="account(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="account(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="slots(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="slots(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="proof_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="proof_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="proof(felt*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="proof(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="slots(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="slots(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "claimed_slots" %}  
 {% swagger-description %}  
@@ -193,9 +203,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="account(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="account(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="slots(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="slots(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}

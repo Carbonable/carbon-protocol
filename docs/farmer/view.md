@@ -15,11 +15,12 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="carbonable_project_address(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="carbonable_project_address(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "reward_token_address" %}  
 {% swagger-description %}  
@@ -34,8 +35,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="reward_token_address(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="reward_token_address(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "carbonable_token_address" %}  
 {% swagger-description %}  
@@ -50,9 +52,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="carbonable_token_address(felt)" description="" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="carbonable_token_address(felt)" %}  
+  
+{% endswagger-parameter %}  
 {% endswagger %}

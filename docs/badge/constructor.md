@@ -2,18 +2,9 @@
 Constructor
 ===========
   
-{% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %} 
-
-```python
-print("a")
-```
-
+{% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %}  
 {% swagger-description %}  
-Initialize the contract
-
-```python
-print("b")
-```
+Initialize the contract  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
@@ -27,20 +18,16 @@ print("b")
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="uri_len(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="uri_len(felt)" %}  
 uri array length  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="uri(felt*)" %}  
+{% swagger-parameter in="path" type="" required="true" name="uri(felt*)" %}  
 uri characters as a felt array  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="name(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="name(felt)" %}  
 name of the badge collection  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="owner(felt)" %}  
 owner address  
 {% endswagger-parameter %}  
-
-```python
-print("c")
-```
 {% endswagger %}

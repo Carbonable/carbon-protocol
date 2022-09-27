@@ -15,19 +15,19 @@ Constructor
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="carbonable_project_address(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="carbonable_project_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="carbonable_token_address(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="carbonable_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="reward_token_address(felt)" %}  
+{% swagger-parameter in="path" type="" required="true" name="reward_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
+{% swagger-parameter in="path" type="" required="true" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}
