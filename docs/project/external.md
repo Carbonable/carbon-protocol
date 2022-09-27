@@ -2,777 +2,516 @@
 External
 ========
   
-<details>
-  
-<summary>approve</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-pedersen_ptr(HashBuiltin*): 
-syscall_ptr(felt*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-to(felt): 
-tokenId(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>setApprovalForAll</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-operator(felt): 
-approved(felt): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>transferFrom</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-pedersen_ptr(HashBuiltin*): 
-syscall_ptr(felt*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-from_(felt): 
-to(felt): 
-tokenId(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>safeTransferFrom</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-pedersen_ptr(HashBuiltin*): 
-syscall_ptr(felt*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-from_(felt): 
-to(felt): 
-tokenId(Uint256): 
-data_len(felt): 
-data(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>mint</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-pedersen_ptr(HashBuiltin*): 
-syscall_ptr(felt*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-to(felt): 
-tokenId(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>burn</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-pedersen_ptr(HashBuiltin*): 
-syscall_ptr(felt*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-tokenId(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>setTokenURI</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-pedersen_ptr(HashBuiltin*): 
-syscall_ptr(felt*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-tokenId(Uint256): 
-tokenURI(felt): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>transferOwnership</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-newOwner(felt): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>renounceOwnership</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_image_url</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-image_url_len(felt): 
-image_url(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_image_data</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-image_data_len(felt): 
-image_data(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_external_url</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-external_url_len(felt): 
-external_url(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_description</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-description_len(felt): 
-description(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_holder</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-holder_len(felt): 
-holder(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_certifier</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-certifier_len(felt): 
-certifier(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_land</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-land_len(felt): 
-land(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_unit_land_surface</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-unit_land_surface_len(felt): 
-unit_land_surface(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_country</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-country_len(felt): 
-country(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_expiration</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-expiration_len(felt): 
-expiration(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_total_co2_sequestration</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-total_co2_sequestration_len(felt): 
-total_co2_sequestration(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_unit_co2_sequestration</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-unit_co2_sequestration_len(felt): 
-unit_co2_sequestration(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_sequestration_color</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-sequestration_color_len(felt): 
-sequestration_color(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_sequestration_type</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-sequestration_type_len(felt): 
-sequestration_type(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_sequestration_category</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-sequestration_category_len(felt): 
-sequestration_category(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_background_color</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-background_color_len(felt): 
-background_color(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_animation_url</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-animation_url_len(felt): 
-animation_url(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>set_youtube_url</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-youtube_url_len(felt): 
-youtube_url(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
+{% swagger method = "external" path = "approve" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "setApprovalForAll" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="operator(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="approved(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "transferFrom" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="from_(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "safeTransferFrom" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="from_(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "mint" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "burn" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "setTokenURI" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenURI(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "transferOwnership" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="newOwner(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "renounceOwnership" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_image_url" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="image_url_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="image_url(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_image_data" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="image_data_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="image_data(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_external_url" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="external_url_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="external_url(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_description" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="description_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="description(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_holder" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="holder_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="holder(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_certifier" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="certifier_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="certifier(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_land" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="land_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="land(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_unit_land_surface" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="unit_land_surface_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="unit_land_surface(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_country" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="country_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="country(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_expiration" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="expiration_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="expiration(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_total_co2_sequestration" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="total_co2_sequestration_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="total_co2_sequestration(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_unit_co2_sequestration" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="unit_co2_sequestration_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="unit_co2_sequestration(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_sequestration_color" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="sequestration_color_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="sequestration_color(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_sequestration_type" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="sequestration_type_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="sequestration_type(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_sequestration_category" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="sequestration_category_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="sequestration_category(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_background_color" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="background_color_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="background_color(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_animation_url" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="animation_url_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="animation_url(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_youtube_url" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="youtube_url_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="youtube_url(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}

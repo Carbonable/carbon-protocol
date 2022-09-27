@@ -2,83 +2,51 @@
 View
 ====
   
-<details>
+{% swagger method = "view" path = "carbonable_project_address" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>carbonable_project_address</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="" %}  
   
-**Explicit args**
-
-```rust
-: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="carbonable_project_address(felt)" %}  
   
-**Returns**
-
-```rust
-carbonable_project_address(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "reward_token_address" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-<summary>reward_token_address</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="reward_token_address(felt)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "carbonable_token_address" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Explicit args**
-
-```rust
-
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Returns**
-
-```rust
-reward_token_address(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="" %}  
   
-<summary>carbonable_token_address</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="carbonable_token_address(felt)" %}  
   
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-: 
-```  
-  
-**Returns**
-
-```rust
-carbonable_token_address(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}

@@ -2,255 +2,177 @@
 View
 ====
   
-<details>
+{% swagger method = "view" path = "supportsInterface" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>supportsInterface</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="interfaceId(felt)" %}  
   
-**Explicit args**
-
-```rust
-interfaceId(felt): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
-**Returns**
-
-```rust
-success(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "uri" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-<summary>uri</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
   
-**Explicit args**
-
-```rust
-id(Uint256): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="uri_len(felt)" %}  
   
-**Returns**
-
-```rust
-uri_len(felt): 
-uri(felt*): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="uri(felt*)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "contractURI" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>contractURI</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Explicit args**
-
-```rust
-
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="uri_len(felt)" %}  
   
-**Returns**
-
-```rust
-uri_len(felt): 
-uri(felt*): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="uri(felt*)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "balanceOf" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>balanceOf</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="account(felt)" %}  
   
-**Explicit args**
-
-```rust
-account(felt): 
-id(Uint256): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
   
-**Returns**
-
-```rust
-balance(Uint256): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="balance(Uint256)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "balanceOfBatch" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>balanceOfBatch</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="accounts_len(felt)" %}  
   
-**Explicit args**
-
-```rust
-accounts_len(felt): 
-accounts(felt*): 
-ids_len(felt): 
-ids(Uint256*): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="accounts(felt*)" %}  
   
-**Returns**
-
-```rust
-balances_len(felt): 
-balances(Uint256*): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids_len(felt)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids(Uint256*)" %}  
   
-<summary>isApprovedForAll</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="balances_len(felt)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="balances(Uint256*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "isApprovedForAll" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Explicit args**
-
-```rust
-account(felt): 
-operator(felt): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Returns**
-
-```rust
-isApproved(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="account(felt)" %}  
   
-<summary>owner</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="operator(felt)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="isApproved(felt)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "owner" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Explicit args**
-
-```rust
-
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Returns**
-
-```rust
-owner(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="owner(felt)" %}  
   
-<summary>name</summary>
-
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "name" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Explicit args**
-
-```rust
-
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="name(felt)" %}  
   
-**Returns**
-
-```rust
-name(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "view" path = "locked" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-<summary>locked</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="is_locked(felt)" %}  
   
-**Explicit args**
-
-```rust
-id(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-is_locked(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}

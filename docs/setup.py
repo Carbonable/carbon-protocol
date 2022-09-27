@@ -6,6 +6,13 @@ from mdutils.mdutils import MdUtils
 
 class Document():
 
+    swagger_open = '{{% swagger method = "{method}" path = "{name}" baseUrl = " " summary = "{description}" %}}'
+    swagger_close = '{{% endswagger % }}'
+    swagger_description_open = '{{% swagger-description %}}'
+    swagger_description_close = '{{% endswagger-description %}}'
+    swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" required="false" name="{name}" %}}'
+    swagger_parameter_close = '{{% endswagger-parameter %}}'
+
     def __init__(self, root: Path, name: str, header: str, data: dict) -> None:
         self._root = root
         self._name = name
@@ -65,11 +72,13 @@ class Document():
                                title=functype.capitalize())
 
             for function in functions:
+                attribute_name = function.get("attributeName")
                 function_name = function.get("functionName")
                 function_signature = function.get("functionSignature")
                 function_comment = function.get("functionComment")
                 self.add_function(
                     markdown,
+                    attribute_name,
                     function_name,
                     function_signature,
                     function_comment
@@ -77,41 +86,38 @@ class Document():
 
             markdown.create_md_file()
 
-    def add_function(self, markdown, function_name, function_signature, function_comment):
+    def add_function(self, markdown, attribute_name, function_name, function_signature, function_comment):
         name = function_name.get("name")
 
-        markdown.new_line("<details>\n")
-        markdown.new_line(f"<summary>{name}</summary>")
-
         descriptions = function_comment.get("desc") or []
-        description = "  ".join(desc.get("desc") for desc in descriptions)
-        markdown.new_paragraph(description)
+        description = " ".join(desc.get("desc") for desc in descriptions)
 
-        for argtype, args in function_signature.items():
-            title = argtype.replace('Args', ' args').capitalize()
-            markdown.new_line()
-            markdown.new_line(title, bold_italics_code="b")
+        markdown.new_line(Document.swagger_open.format(
+            method=attribute_name.replace("o", "0"), name=name, description=description))
+
+        for method, args in function_signature.items():
+            if args is None:
+                continue
 
             argcoms = {
                 arg.get("name"): arg
-                for arg in (function_comment.get(argtype) or [])
+                for arg in (function_comment.get(method) or [])
             }
+            argscope = f"{{{method.replace('Args', '')}}}"
 
-            if args is None:
-                args = {}
-
-            codes = []
             for arg in args:
                 arg.update(argcoms.get(arg.get('name'), {}))
-                argname = arg.get('name')
                 argtype = arg.get('type')
                 argdesc = arg.get('desc', '')
                 typestr = f"({argtype})" if argtype else ''
-                codes.append(f"{argname}{typestr}: {argdesc}")
-            code_block = "\n".join(codes)
-            markdown.insert_code(code_block, language="rust")
+                argname = f"{arg.get('name')}{typestr}"
 
-        markdown.new_line("</details>\n")
+                markdown.new_line(Document.swagger_parameter_open.format(
+                    scope=argscope, name=argname))
+                markdown.new_line(argdesc)
+                markdown.new_line(Document.swagger_parameter_close)
+
+        markdown.new_line(Document.swagger_close)
 
 
 root = Path(__file__).parent

@@ -2,33 +2,29 @@
 Constructor
 ===========
   
-<details>
+{% swagger method = "c0nstruct0r" path = "constructor" baseUrl = " " summary = "Initialize the contract" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>constructor</summary>
-
-Initialize the contract  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
-**Explicit args**
-
-```rust
-uri_len(felt): uri array length
-uri(felt*): uri characters as a felt array
-name(felt): name of the badge collection
-owner(felt): owner address
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="uri_len(felt)" %}  
+uri array length  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="uri(felt*)" %}  
+uri characters as a felt array  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="name(felt)" %}  
+name of the badge collection  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
+owner address  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}

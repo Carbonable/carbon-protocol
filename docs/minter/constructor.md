@@ -2,37 +2,41 @@
 Constructor
 ===========
   
-<details>
+{% swagger method = "c0nstruct0r" path = "constructor" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>constructor</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
   
-**Explicit args**
-
-```rust
-owner(felt): 
-carbonable_project_address(felt): 
-payment_token_address(felt): 
-public_sale_open(felt): 
-max_buy_per_tx(felt): 
-unit_price(Uint256): 
-max_supply_for_mint(Uint256): 
-reserved_supply_for_mint(Uint256): 
-: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="carbonable_project_address(felt)" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="payment_token_address(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="public_sale_open(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="max_buy_per_tx(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="unit_price(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="max_supply_for_mint(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="reserved_supply_for_mint(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}

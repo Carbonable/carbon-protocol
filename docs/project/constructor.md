@@ -2,31 +2,23 @@
 Constructor
 ===========
   
-<details>
+{% swagger method = "c0nstruct0r" path = "constructor" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>constructor</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="name(felt)" %}  
   
-**Explicit args**
-
-```rust
-name(felt): 
-symbol(felt): 
-owner(felt): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="symbol(felt)" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}

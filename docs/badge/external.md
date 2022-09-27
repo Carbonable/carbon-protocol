@@ -2,359 +2,267 @@
 External
 ========
   
-<details>
-  
-<summary>setURI</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-bitwise_ptr(BitwiseBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-uri_len(felt): 
-uri(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>setLocked</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-id(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>setUnlocked</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-id(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>setApprovalForAll</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-operator(felt): 
-approved(felt): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>safeTransferFrom</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-from_(felt): 
-to(felt): 
-id(Uint256): 
-amount(Uint256): 
-data_len(felt): 
-data(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>safeBatchTransferFrom</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-from_(felt): 
-to(felt): 
-ids_len(felt): 
-ids(Uint256*): 
-amounts_len(felt): 
-amounts(Uint256*): 
-data_len(felt): 
-data(felt*): 
-: 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>mint</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-to(felt): 
-id(Uint256): 
-amount(Uint256): 
-data_len(felt): 
-data(felt*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>mintBatch</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-to(felt): 
-ids_len(felt): 
-ids(Uint256*): 
-amounts_len(felt): 
-amounts(Uint256*): 
-data_len(felt): 
-data(felt*): 
-: 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>burn</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-from_(felt): 
-id(Uint256): 
-amount(Uint256): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>burnBatch</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-from_(felt): 
-ids_len(felt): 
-ids(Uint256*): 
-amounts_len(felt): 
-amounts(Uint256*): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>transferOwnership</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-newOwner(felt): 
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
-  
-<details>
-  
-<summary>renounceOwnership</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-
-```  
-  
-**Returns**
-
-```rust
-
-```  
-</details>
+{% swagger method = "external" path = "setURI" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="uri_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="uri(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "setLocked" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "setUnlocked" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "setApprovalForAll" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="operator(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="approved(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "safeTransferFrom" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="from_(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amount(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "safeBatchTransferFrom" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="from_(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids(Uint256*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amounts_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amounts(Uint256*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "mint" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amount(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "mintBatch" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids(Uint256*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amounts_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amounts(Uint256*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="data(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "burn" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="from_(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="id(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amount(Uint256)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "burnBatch" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="from_(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="ids(Uint256*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amounts_len(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amounts(Uint256*)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "transferOwnership" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="newOwner(felt)" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "renounceOwnership" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}

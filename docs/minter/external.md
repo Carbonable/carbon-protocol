@@ -2,278 +2,173 @@
 External
 ========
   
-<details>
+{% swagger method = "external" path = "set_whitelist_merkle_root" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>set_whitelist_merkle_root</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="whitelist_merkle_root(felt)" %}  
   
-**Explicit args**
-
-```rust
-whitelist_merkle_root(felt): 
-```  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_public_sale_open" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-<summary>set_public_sale_open</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="public_sale_open(felt)" %}  
   
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_max_buy_per_tx" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Explicit args**
-
-```rust
-public_sale_open(felt): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="max_buy_per_tx(felt)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "set_unit_price" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>set_max_buy_per_tx</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="unit_price(Uint256)" %}  
   
-**Explicit args**
-
-```rust
-max_buy_per_tx(felt): 
-```  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "decrease_reserved_supply_for_mint" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-<summary>set_unit_price</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="slots(Uint256)" %}  
   
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "airdrop" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Explicit args**
-
-```rust
-unit_price(Uint256): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="to(felt)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="quantity(felt)" %}  
   
-<summary>decrease_reserved_supply_for_mint</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "withdraw" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Explicit args**
-
-```rust
-slots(Uint256): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Returns**
-
-```rust
-
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "transfer" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-<summary>airdrop</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="token_address(felt)" %}  
   
-**Explicit args**
-
-```rust
-to(felt): 
-quantity(felt): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="recipient(felt)" %}  
   
-**Returns**
-
-```rust
-success(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="amount(Uint256)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
-<summary>withdraw</summary>
-
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "whitelist_buy" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-**Explicit args**
-
-```rust
-
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="slots(felt)" %}  
   
-**Returns**
-
-```rust
-success(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="proof_len(felt)" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="proof(felt*)" %}  
   
-<summary>transfer</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="quantity(felt)" %}  
   
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
+{{% endswagger-parameter %}}  
+{{% endswagger % }}  
+{% swagger method = "external" path = "public_buy" baseUrl = " " summary = "" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
-**Explicit args**
-
-```rust
-token_address(felt): 
-recipient(felt): 
-amount(Uint256): 
-```  
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
-**Returns**
-
-```rust
-success(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
-<details>
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{explicit}" required="false" name="quantity(felt)" %}  
   
-<summary>whitelist_buy</summary>
-
+{{% endswagger-parameter %}}  
+{% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
   
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-slots(felt): 
-proof_len(felt): 
-proof(felt*): 
-quantity(felt): 
-```  
-  
-**Returns**
-
-```rust
-success(felt): 
-```  
-</details>
-  
-<details>
-  
-<summary>public_buy</summary>
-
-  
-  
-**Implicit args**
-
-```rust
-syscall_ptr(felt*): 
-pedersen_ptr(HashBuiltin*): 
-range_check_ptr: 
-```  
-  
-**Explicit args**
-
-```rust
-quantity(felt): 
-```  
-  
-**Returns**
-
-```rust
-success(felt): 
-```  
-</details>
+{{% endswagger-parameter %}}  
+{{% endswagger % }}
