@@ -5,6 +5,8 @@
 <details>
   
 <summary>constructor</summary>
+
+  
   
 **Implicit args**
 
@@ -13,6 +15,7 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
@@ -26,6 +29,7 @@ max_supply_for_mint(Uint256)
 reserved_supply_for_mint(Uint256)
 
 ```  
+  
 **Returns**
 
 ```rust

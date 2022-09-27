@@ -5,6 +5,8 @@
 <details>
   
 <summary>constructor</summary>
+
+  
   
 **Implicit args**
 
@@ -13,6 +15,7 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
@@ -22,6 +25,7 @@ carbonable_token_address(felt)
 reward_token_address(felt)
 
 ```  
+  
 **Returns**
 
 ```rust

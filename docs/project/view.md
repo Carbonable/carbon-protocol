@@ -5,6 +5,8 @@
 <details>
   
 <summary>totalSupply</summary>
+
+  
   
 **Implicit args**
 
@@ -13,11 +15,13 @@ pedersen_ptr(HashBuiltin*)
 syscall_ptr(felt*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -28,6 +32,8 @@ totalSupply(Uint256)
 <details>
   
 <summary>tokenByIndex</summary>
+
+  
   
 **Implicit args**
 
@@ -36,11 +42,13 @@ pedersen_ptr(HashBuiltin*)
 syscall_ptr(felt*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 index(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -51,6 +59,8 @@ tokenId(Uint256)
 <details>
   
 <summary>tokenOfOwnerByIndex</summary>
+
+  
   
 **Implicit args**
 
@@ -59,12 +69,14 @@ pedersen_ptr(HashBuiltin*)
 syscall_ptr(felt*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 owner(felt)
 index(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -75,6 +87,8 @@ tokenId(Uint256)
 <details>
   
 <summary>supportsInterface</summary>
+
+  
   
 **Implicit args**
 
@@ -83,11 +97,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 interfaceId(felt)
 ```  
+  
 **Returns**
 
 ```rust
@@ -98,6 +114,8 @@ success(felt)
 <details>
   
 <summary>name</summary>
+
+  
   
 **Implicit args**
 
@@ -106,11 +124,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -121,6 +141,8 @@ name(felt)
 <details>
   
 <summary>symbol</summary>
+
+  
   
 **Implicit args**
 
@@ -129,11 +151,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -144,6 +168,8 @@ symbol(felt)
 <details>
   
 <summary>balanceOf</summary>
+
+  
   
 **Implicit args**
 
@@ -152,11 +178,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 owner(felt)
 ```  
+  
 **Returns**
 
 ```rust
@@ -167,6 +195,8 @@ balance(Uint256)
 <details>
   
 <summary>ownerOf</summary>
+
+  
   
 **Implicit args**
 
@@ -175,11 +205,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 tokenId(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -190,6 +222,8 @@ owner(felt)
 <details>
   
 <summary>getApproved</summary>
+
+  
   
 **Implicit args**
 
@@ -198,11 +232,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 tokenId(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -213,6 +249,8 @@ approved(felt)
 <details>
   
 <summary>isApprovedForAll</summary>
+
+  
   
 **Implicit args**
 
@@ -221,12 +259,14 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 owner(felt)
 operator(felt)
 ```  
+  
 **Returns**
 
 ```rust
@@ -237,6 +277,8 @@ isApproved(felt)
 <details>
   
 <summary>tokenURI</summary>
+
+  
   
 **Implicit args**
 
@@ -245,11 +287,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 tokenId(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -260,6 +304,8 @@ tokenURI(felt)
 <details>
   
 <summary>owner</summary>
+
+  
   
 **Implicit args**
 
@@ -268,11 +314,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -283,6 +331,8 @@ owner(felt)
 <details>
   
 <summary>image_url</summary>
+
+  
   
 **Implicit args**
 
@@ -292,11 +342,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -308,6 +360,8 @@ image_url(felt)
 <details>
   
 <summary>image_data</summary>
+
+  
   
 **Implicit args**
 
@@ -317,11 +371,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -333,6 +389,8 @@ image_data(felt)
 <details>
   
 <summary>external_url</summary>
+
+  
   
 **Implicit args**
 
@@ -342,11 +400,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -358,6 +418,8 @@ external_url(felt)
 <details>
   
 <summary>description</summary>
+
+  
   
 **Implicit args**
 
@@ -367,11 +429,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -383,6 +447,8 @@ description(felt)
 <details>
   
 <summary>holder</summary>
+
+  
   
 **Implicit args**
 
@@ -392,11 +458,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -408,6 +476,8 @@ holder(felt)
 <details>
   
 <summary>certifier</summary>
+
+  
   
 **Implicit args**
 
@@ -417,11 +487,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -433,6 +505,8 @@ certifier(felt)
 <details>
   
 <summary>land</summary>
+
+  
   
 **Implicit args**
 
@@ -442,11 +516,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -458,6 +534,8 @@ land(felt)
 <details>
   
 <summary>unit_land_surface</summary>
+
+  
   
 **Implicit args**
 
@@ -467,11 +545,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -483,6 +563,8 @@ unit_land_surface(felt)
 <details>
   
 <summary>country</summary>
+
+  
   
 **Implicit args**
 
@@ -492,11 +574,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -508,6 +592,8 @@ country(felt)
 <details>
   
 <summary>expiration</summary>
+
+  
   
 **Implicit args**
 
@@ -517,11 +603,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -533,6 +621,8 @@ expiration(felt)
 <details>
   
 <summary>total_co2_sequestration</summary>
+
+  
   
 **Implicit args**
 
@@ -542,11 +632,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -558,6 +650,8 @@ total_co2_sequestration(felt)
 <details>
   
 <summary>unit_co2_sequestration</summary>
+
+  
   
 **Implicit args**
 
@@ -567,11 +661,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -583,6 +679,8 @@ unit_co2_sequestration(felt)
 <details>
   
 <summary>sequestration_color</summary>
+
+  
   
 **Implicit args**
 
@@ -592,11 +690,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -608,6 +708,8 @@ sequestration_color(felt)
 <details>
   
 <summary>sequestration_type</summary>
+
+  
   
 **Implicit args**
 
@@ -617,11 +719,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -633,6 +737,8 @@ sequestration_type(felt)
 <details>
   
 <summary>sequestration_category</summary>
+
+  
   
 **Implicit args**
 
@@ -642,11 +748,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -658,6 +766,8 @@ sequestration_category(felt)
 <details>
   
 <summary>background_color</summary>
+
+  
   
 **Implicit args**
 
@@ -667,11 +777,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -683,6 +795,8 @@ background_color(felt)
 <details>
   
 <summary>animation_url</summary>
+
+  
   
 **Implicit args**
 
@@ -692,11 +806,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -708,6 +824,8 @@ animation_url(felt)
 <details>
   
 <summary>youtube_url</summary>
+
+  
   
 **Implicit args**
 
@@ -717,11 +835,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust

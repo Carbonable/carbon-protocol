@@ -5,6 +5,8 @@
 <details>
   
 <summary>setURI</summary>
+
+  
   
 **Implicit args**
 
@@ -14,11 +16,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -29,6 +33,8 @@ range_check_ptr
 <details>
   
 <summary>setLocked</summary>
+
+  
   
 **Implicit args**
 
@@ -37,11 +43,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 id(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -52,6 +60,8 @@ id(Uint256)
 <details>
   
 <summary>setUnlocked</summary>
+
+  
   
 **Implicit args**
 
@@ -60,11 +70,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 id(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -75,6 +87,8 @@ id(Uint256)
 <details>
   
 <summary>setApprovalForAll</summary>
+
+  
   
 **Implicit args**
 
@@ -83,12 +97,14 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 operator(felt)
 approved(felt)
 ```  
+  
 **Returns**
 
 ```rust
@@ -99,6 +115,8 @@ approved(felt)
 <details>
   
 <summary>safeTransferFrom</summary>
+
+  
   
 **Implicit args**
 
@@ -107,11 +125,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -122,6 +142,8 @@ range_check_ptr
 <details>
   
 <summary>safeBatchTransferFrom</summary>
+
+  
   
 **Implicit args**
 
@@ -130,11 +152,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -145,6 +169,8 @@ range_check_ptr
 <details>
   
 <summary>mint</summary>
+
+  
   
 **Implicit args**
 
@@ -153,11 +179,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -168,6 +196,8 @@ range_check_ptr
 <details>
   
 <summary>mintBatch</summary>
+
+  
   
 **Implicit args**
 
@@ -176,11 +206,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -191,6 +223,8 @@ range_check_ptr
 <details>
   
 <summary>burn</summary>
+
+  
   
 **Implicit args**
 
@@ -199,6 +233,7 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
@@ -206,6 +241,7 @@ from_(felt)
 id(Uint256)
 amount(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -216,6 +252,8 @@ amount(Uint256)
 <details>
   
 <summary>burnBatch</summary>
+
+  
   
 **Implicit args**
 
@@ -224,11 +262,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -239,6 +279,8 @@ range_check_ptr
 <details>
   
 <summary>transferOwnership</summary>
+
+  
   
 **Implicit args**
 
@@ -247,11 +289,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 newOwner(felt)
 ```  
+  
 **Returns**
 
 ```rust
@@ -262,6 +306,8 @@ newOwner(felt)
 <details>
   
 <summary>renounceOwnership</summary>
+
+  
   
 **Implicit args**
 
@@ -270,11 +316,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust

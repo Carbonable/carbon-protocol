@@ -5,6 +5,8 @@
 <details>
   
 <summary>supportsInterface</summary>
+
+  
   
 **Implicit args**
 
@@ -13,11 +15,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 interfaceId(felt)
 ```  
+  
 **Returns**
 
 ```rust
@@ -28,6 +32,8 @@ success(felt)
 <details>
   
 <summary>uri</summary>
+
+  
   
 **Implicit args**
 
@@ -37,11 +43,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 id(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -53,6 +61,8 @@ uri(felt)
 <details>
   
 <summary>contractURI</summary>
+
+  
   
 **Implicit args**
 
@@ -62,11 +72,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -78,6 +90,8 @@ uri(felt)
 <details>
   
 <summary>balanceOf</summary>
+
+  
   
 **Implicit args**
 
@@ -86,12 +100,14 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 account(felt)
 id(Uint256)
 ```  
+  
 **Returns**
 
 ```rust
@@ -102,6 +118,8 @@ balance(Uint256)
 <details>
   
 <summary>balanceOfBatch</summary>
+
+  
   
 **Implicit args**
 
@@ -110,12 +128,14 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 balances_len
 balances
 ```  
+  
 **Returns**
 
 ```rust
@@ -126,6 +146,8 @@ balances
 <details>
   
 <summary>isApprovedForAll</summary>
+
+  
   
 **Implicit args**
 
@@ -134,12 +156,14 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 account(felt)
 operator(felt)
 ```  
+  
 **Returns**
 
 ```rust
@@ -150,6 +174,8 @@ isApproved(felt)
 <details>
   
 <summary>owner</summary>
+
+  
   
 **Implicit args**
 
@@ -158,11 +184,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -173,6 +201,8 @@ owner(felt)
 <details>
   
 <summary>name</summary>
+
+  
   
 **Implicit args**
 
@@ -181,11 +211,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 
 ```  
+  
 **Returns**
 
 ```rust
@@ -196,6 +228,8 @@ name(felt)
 <details>
   
 <summary>locked</summary>
+
+  
   
 **Implicit args**
 
@@ -204,11 +238,13 @@ syscall_ptr(felt*)
 pedersen_ptr(HashBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 id(Uint256)
 ```  
+  
 **Returns**
 
 ```rust

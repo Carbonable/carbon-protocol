@@ -5,6 +5,8 @@
 <details>
   
 <summary>constructor</summary>
+
+Initialize the contract  
   
 **Implicit args**
 
@@ -14,11 +16,13 @@ pedersen_ptr(HashBuiltin*)
 bitwise_ptr(BitwiseBuiltin*)
 range_check_ptr
 ```  
+  
 **Explicit args**
 
 ```rust
 felt
 ```  
+  
 **Returns**
 
 ```rust

@@ -64,22 +64,31 @@ class Document():
             markdown = MdUtils(file_name=filepath.as_posix())
 
             for function in functions:
-                attribute_name = function.get("attributeName")
                 function_name = function.get("functionName")
                 function_signature = function.get("functionSignature")
                 function_comment = function.get("functionComment")
-                self.add_function(markdown, function_name, function_signature)
+                self.add_function(
+                    markdown,
+                    function_name,
+                    function_signature,
+                    function_comment
+                )
 
             markdown.create_md_file()
 
-    def add_function(self, markdown, function_name, function_signature):
+    def add_function(self, markdown, function_name, function_signature, function_comment):
         name = function_name.get("name")
 
         markdown.new_line("<details>\n")
-        markdown.new_line(f"<summary>{name}</summary>\n")
+        markdown.new_line(f"<summary>{name}</summary>")
+
+        descriptions = function_comment.get("desc") or []
+        description = "  ".join(desc.get("desc") for desc in descriptions)
+        markdown.new_paragraph(description)
 
         for argtype, args in function_signature.items():
             title = argtype.replace('Args', ' args').capitalize()
+            markdown.new_line()
             markdown.new_line(title, bold_italics_code="b")
 
             if args is None:
