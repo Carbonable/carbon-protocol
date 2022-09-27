@@ -1,11 +1,11 @@
 
 
 
-
-# External
   
-<details>  
-<summary>set_whitelist_merkle_root</summary>  
+<details>
+  
+<summary>set_whitelist_merkle_root</summary>
+  
 **Implicit args**
 
 ```python
@@ -24,10 +24,11 @@ whitelist_merkle_root(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_public_sale_open</summary>  
+<details>
+  
+<summary>set_public_sale_open</summary>
+  
 **Implicit args**
 
 ```python
@@ -46,10 +47,11 @@ public_sale_open(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_max_buy_per_tx</summary>  
+<details>
+  
+<summary>set_max_buy_per_tx</summary>
+  
 **Implicit args**
 
 ```python
@@ -68,10 +70,11 @@ max_buy_per_tx(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_unit_price</summary>  
+<details>
+  
+<summary>set_unit_price</summary>
+  
 **Implicit args**
 
 ```python
@@ -90,10 +93,11 @@ unit_price(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>decrease_reserved_supply_for_mint</summary>  
+<details>
+  
+<summary>decrease_reserved_supply_for_mint</summary>
+  
 **Implicit args**
 
 ```python
@@ -112,10 +116,11 @@ slots(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>airdrop</summary>  
+<details>
+  
+<summary>airdrop</summary>
+  
 **Implicit args**
 
 ```python
@@ -135,10 +140,11 @@ quantity(felt)
 success(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>withdraw</summary>  
+<details>
+  
+<summary>withdraw</summary>
+  
 **Implicit args**
 
 ```python
@@ -157,10 +163,11 @@ range_check_ptr
 success(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>transfer</summary>  
+<details>
+  
+<summary>transfer</summary>
+  
 **Implicit args**
 
 ```python
@@ -181,10 +188,11 @@ amount(Uint256)
 success(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>whitelist_buy</summary>  
+<details>
+  
+<summary>whitelist_buy</summary>
+  
 **Implicit args**
 
 ```python
@@ -203,10 +211,11 @@ success(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>public_buy</summary>  
+<details>
+  
+<summary>public_buy</summary>
+  
 **Implicit args**
 
 ```python
@@ -225,4 +234,3 @@ quantity(felt)
 success(felt)
 ```  
 </details>
-

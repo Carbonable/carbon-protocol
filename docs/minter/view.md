@@ -1,11 +1,11 @@
 
 
 
-
-# View
   
-<details>  
-<summary>carbonable_project_address</summary>  
+<details>
+  
+<summary>carbonable_project_address</summary>
+  
 **Implicit args**
 
 ```python
@@ -24,10 +24,11 @@ range_check_ptr
 carbonable_project_address(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>payment_token_address</summary>  
+<details>
+  
+<summary>payment_token_address</summary>
+  
 **Implicit args**
 
 ```python
@@ -46,10 +47,11 @@ range_check_ptr
 payment_token_address(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>whitelisted_sale_open</summary>  
+<details>
+  
+<summary>whitelisted_sale_open</summary>
+  
 **Implicit args**
 
 ```python
@@ -68,10 +70,11 @@ range_check_ptr
 whitelisted_sale_open(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>public_sale_open</summary>  
+<details>
+  
+<summary>public_sale_open</summary>
+  
 **Implicit args**
 
 ```python
@@ -90,10 +93,11 @@ range_check_ptr
 public_sale_open(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>max_buy_per_tx</summary>  
+<details>
+  
+<summary>max_buy_per_tx</summary>
+  
 **Implicit args**
 
 ```python
@@ -112,10 +116,11 @@ range_check_ptr
 max_buy_per_tx(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>unit_price</summary>  
+<details>
+  
+<summary>unit_price</summary>
+  
 **Implicit args**
 
 ```python
@@ -134,10 +139,11 @@ range_check_ptr
 unit_price(Uint256)
 ```  
 </details>
-
   
-<details>  
-<summary>reserved_supply_for_mint</summary>  
+<details>
+  
+<summary>reserved_supply_for_mint</summary>
+  
 **Implicit args**
 
 ```python
@@ -156,10 +162,11 @@ range_check_ptr
 reserved_supply_for_mint(Uint256)
 ```  
 </details>
-
   
-<details>  
-<summary>max_supply_for_mint</summary>  
+<details>
+  
+<summary>max_supply_for_mint</summary>
+  
 **Implicit args**
 
 ```python
@@ -178,10 +185,11 @@ range_check_ptr
 max_supply_for_mint(Uint256)
 ```  
 </details>
-
   
-<details>  
-<summary>whitelist_merkle_root</summary>  
+<details>
+  
+<summary>whitelist_merkle_root</summary>
+  
 **Implicit args**
 
 ```python
@@ -200,10 +208,11 @@ range_check_ptr
 whitelist_merkle_root(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>whitelisted_slots</summary>  
+<details>
+  
+<summary>whitelisted_slots</summary>
+  
 **Implicit args**
 
 ```python
@@ -222,10 +231,11 @@ slots(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>claimed_slots</summary>  
+<details>
+  
+<summary>claimed_slots</summary>
+  
 **Implicit args**
 
 ```python
@@ -244,4 +254,3 @@ account(felt)
 slots(felt)
 ```  
 </details>
-

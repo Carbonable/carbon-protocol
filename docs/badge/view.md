@@ -1,11 +1,11 @@
 
 
 
-
-# View
   
-<details>  
-<summary>supportsInterface</summary>  
+<details>
+  
+<summary>supportsInterface</summary>
+  
 **Implicit args**
 
 ```python
@@ -24,10 +24,11 @@ interfaceId(felt)
 success(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>uri</summary>  
+<details>
+  
+<summary>uri</summary>
+  
 **Implicit args**
 
 ```python
@@ -48,10 +49,11 @@ uri_len(felt)
 uri(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>contractURI</summary>  
+<details>
+  
+<summary>contractURI</summary>
+  
 **Implicit args**
 
 ```python
@@ -72,10 +74,11 @@ uri_len(felt)
 uri(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>balanceOf</summary>  
+<details>
+  
+<summary>balanceOf</summary>
+  
 **Implicit args**
 
 ```python
@@ -95,10 +98,11 @@ id(Uint256)
 balance(Uint256)
 ```  
 </details>
-
   
-<details>  
-<summary>balanceOfBatch</summary>  
+<details>
+  
+<summary>balanceOfBatch</summary>
+  
 **Implicit args**
 
 ```python
@@ -118,10 +122,11 @@ balances
 
 ```  
 </details>
-
   
-<details>  
-<summary>isApprovedForAll</summary>  
+<details>
+  
+<summary>isApprovedForAll</summary>
+  
 **Implicit args**
 
 ```python
@@ -141,10 +146,11 @@ operator(felt)
 isApproved(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>owner</summary>  
+<details>
+  
+<summary>owner</summary>
+  
 **Implicit args**
 
 ```python
@@ -163,10 +169,11 @@ range_check_ptr
 owner(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>name</summary>  
+<details>
+  
+<summary>name</summary>
+  
 **Implicit args**
 
 ```python
@@ -185,10 +192,11 @@ range_check_ptr
 name(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>locked</summary>  
+<details>
+  
+<summary>locked</summary>
+  
 **Implicit args**
 
 ```python
@@ -207,4 +215,3 @@ id(Uint256)
 is_locked(felt)
 ```  
 </details>
-

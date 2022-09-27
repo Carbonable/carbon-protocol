@@ -1,11 +1,11 @@
 
 
 
-
-# View
   
-<details>  
-<summary>carbonable_project_address</summary>  
+<details>
+  
+<summary>carbonable_project_address</summary>
+  
 **Implicit args**
 
 ```python
@@ -24,10 +24,11 @@ range_check_ptr
 carbonable_project_address(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>reward_token_address</summary>  
+<details>
+  
+<summary>reward_token_address</summary>
+  
 **Implicit args**
 
 ```python
@@ -46,10 +47,11 @@ range_check_ptr
 reward_token_address(felt)
 ```  
 </details>
-
   
-<details>  
-<summary>carbonable_token_address</summary>  
+<details>
+  
+<summary>carbonable_token_address</summary>
+  
 **Implicit args**
 
 ```python
@@ -68,4 +70,3 @@ range_check_ptr
 carbonable_token_address(felt)
 ```  
 </details>
-

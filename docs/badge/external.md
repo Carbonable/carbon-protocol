@@ -1,11 +1,11 @@
 
 
 
-
-# External
   
-<details>  
-<summary>setURI</summary>  
+<details>
+  
+<summary>setURI</summary>
+  
 **Implicit args**
 
 ```python
@@ -25,10 +25,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>setLocked</summary>  
+<details>
+  
+<summary>setLocked</summary>
+  
 **Implicit args**
 
 ```python
@@ -47,10 +48,11 @@ id(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>setUnlocked</summary>  
+<details>
+  
+<summary>setUnlocked</summary>
+  
 **Implicit args**
 
 ```python
@@ -69,10 +71,11 @@ id(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>setApprovalForAll</summary>  
+<details>
+  
+<summary>setApprovalForAll</summary>
+  
 **Implicit args**
 
 ```python
@@ -92,10 +95,11 @@ approved(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>safeTransferFrom</summary>  
+<details>
+  
+<summary>safeTransferFrom</summary>
+  
 **Implicit args**
 
 ```python
@@ -114,10 +118,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>safeBatchTransferFrom</summary>  
+<details>
+  
+<summary>safeBatchTransferFrom</summary>
+  
 **Implicit args**
 
 ```python
@@ -136,10 +141,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>mint</summary>  
+<details>
+  
+<summary>mint</summary>
+  
 **Implicit args**
 
 ```python
@@ -158,10 +164,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>mintBatch</summary>  
+<details>
+  
+<summary>mintBatch</summary>
+  
 **Implicit args**
 
 ```python
@@ -180,10 +187,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>burn</summary>  
+<details>
+  
+<summary>burn</summary>
+  
 **Implicit args**
 
 ```python
@@ -204,10 +212,11 @@ amount(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>burnBatch</summary>  
+<details>
+  
+<summary>burnBatch</summary>
+  
 **Implicit args**
 
 ```python
@@ -226,10 +235,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>transferOwnership</summary>  
+<details>
+  
+<summary>transferOwnership</summary>
+  
 **Implicit args**
 
 ```python
@@ -248,10 +258,11 @@ newOwner(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>renounceOwnership</summary>  
+<details>
+  
+<summary>renounceOwnership</summary>
+  
 **Implicit args**
 
 ```python
@@ -270,4 +281,3 @@ range_check_ptr
 
 ```  
 </details>
-

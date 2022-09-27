@@ -1,11 +1,11 @@
 
 
 
-
-# Constructor
   
-<details>  
-<summary>constructor</summary>  
+<details>
+  
+<summary>constructor</summary>
+  
 **Implicit args**
 
 ```python
@@ -26,4 +26,3 @@ owner(felt)
 
 ```  
 </details>
-

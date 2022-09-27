@@ -1,11 +1,11 @@
 
 
 
-
-# Constructor
   
-<details>  
-<summary>constructor</summary>  
+<details>
+  
+<summary>constructor</summary>
+  
 **Implicit args**
 
 ```python
@@ -25,4 +25,3 @@ felt
 uri array length
 ```  
 </details>
-

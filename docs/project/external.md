@@ -1,11 +1,11 @@
 
 
 
-
-# External
   
-<details>  
-<summary>approve</summary>  
+<details>
+  
+<summary>approve</summary>
+  
 **Implicit args**
 
 ```python
@@ -25,10 +25,11 @@ tokenId(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>setApprovalForAll</summary>  
+<details>
+  
+<summary>setApprovalForAll</summary>
+  
 **Implicit args**
 
 ```python
@@ -48,10 +49,11 @@ approved(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>transferFrom</summary>  
+<details>
+  
+<summary>transferFrom</summary>
+  
 **Implicit args**
 
 ```python
@@ -72,10 +74,11 @@ tokenId(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>safeTransferFrom</summary>  
+<details>
+  
+<summary>safeTransferFrom</summary>
+  
 **Implicit args**
 
 ```python
@@ -94,10 +97,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>mint</summary>  
+<details>
+  
+<summary>mint</summary>
+  
 **Implicit args**
 
 ```python
@@ -117,10 +121,11 @@ tokenId(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>burn</summary>  
+<details>
+  
+<summary>burn</summary>
+  
 **Implicit args**
 
 ```python
@@ -139,10 +144,11 @@ tokenId(Uint256)
 
 ```  
 </details>
-
   
-<details>  
-<summary>setTokenURI</summary>  
+<details>
+  
+<summary>setTokenURI</summary>
+  
 **Implicit args**
 
 ```python
@@ -162,10 +168,11 @@ tokenURI(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>transferOwnership</summary>  
+<details>
+  
+<summary>transferOwnership</summary>
+  
 **Implicit args**
 
 ```python
@@ -184,10 +191,11 @@ newOwner(felt)
 
 ```  
 </details>
-
   
-<details>  
-<summary>renounceOwnership</summary>  
+<details>
+  
+<summary>renounceOwnership</summary>
+  
 **Implicit args**
 
 ```python
@@ -206,33 +214,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_image_url</summary>  
-**Implicit args**
-
-```python
-syscall_ptr(felt*)
-pedersen_ptr(HashBuiltin*)
-bitwise_ptr(BitwiseBuiltin*)
-range_check_ptr
-```  
-**Explicit args**
-
-```python
-
-```  
-**Returns**
-
-```python
-
-```  
-</details>
-
+<details>
   
-<details>  
-<summary>set_image_data</summary>  
+<summary>set_image_url</summary>
+  
 **Implicit args**
 
 ```python
@@ -252,10 +238,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_external_url</summary>  
+<details>
+  
+<summary>set_image_data</summary>
+  
 **Implicit args**
 
 ```python
@@ -275,10 +262,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_description</summary>  
+<details>
+  
+<summary>set_external_url</summary>
+  
 **Implicit args**
 
 ```python
@@ -298,10 +286,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_holder</summary>  
+<details>
+  
+<summary>set_description</summary>
+  
 **Implicit args**
 
 ```python
@@ -321,10 +310,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_certifier</summary>  
+<details>
+  
+<summary>set_holder</summary>
+  
 **Implicit args**
 
 ```python
@@ -344,10 +334,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_land</summary>  
+<details>
+  
+<summary>set_certifier</summary>
+  
 **Implicit args**
 
 ```python
@@ -367,10 +358,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_unit_land_surface</summary>  
+<details>
+  
+<summary>set_land</summary>
+  
 **Implicit args**
 
 ```python
@@ -390,10 +382,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_country</summary>  
+<details>
+  
+<summary>set_unit_land_surface</summary>
+  
 **Implicit args**
 
 ```python
@@ -413,10 +406,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_expiration</summary>  
+<details>
+  
+<summary>set_country</summary>
+  
 **Implicit args**
 
 ```python
@@ -436,10 +430,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_total_co2_sequestration</summary>  
+<details>
+  
+<summary>set_expiration</summary>
+  
 **Implicit args**
 
 ```python
@@ -459,10 +454,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_unit_co2_sequestration</summary>  
+<details>
+  
+<summary>set_total_co2_sequestration</summary>
+  
 **Implicit args**
 
 ```python
@@ -482,10 +478,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_sequestration_color</summary>  
+<details>
+  
+<summary>set_unit_co2_sequestration</summary>
+  
 **Implicit args**
 
 ```python
@@ -505,10 +502,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_sequestration_type</summary>  
+<details>
+  
+<summary>set_sequestration_color</summary>
+  
 **Implicit args**
 
 ```python
@@ -528,10 +526,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_sequestration_category</summary>  
+<details>
+  
+<summary>set_sequestration_type</summary>
+  
 **Implicit args**
 
 ```python
@@ -551,10 +550,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_background_color</summary>  
+<details>
+  
+<summary>set_sequestration_category</summary>
+  
 **Implicit args**
 
 ```python
@@ -574,10 +574,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_animation_url</summary>  
+<details>
+  
+<summary>set_background_color</summary>
+  
 **Implicit args**
 
 ```python
@@ -597,10 +598,11 @@ range_check_ptr
 
 ```  
 </details>
-
   
-<details>  
-<summary>set_youtube_url</summary>  
+<details>
+  
+<summary>set_animation_url</summary>
+  
 **Implicit args**
 
 ```python
@@ -620,4 +622,27 @@ range_check_ptr
 
 ```  
 </details>
+  
+<details>
+  
+<summary>set_youtube_url</summary>
+  
+**Implicit args**
 
+```python
+syscall_ptr(felt*)
+pedersen_ptr(HashBuiltin*)
+bitwise_ptr(BitwiseBuiltin*)
+range_check_ptr
+```  
+**Explicit args**
+
+```python
+
+```  
+**Returns**
+
+```python
+
+```  
+</details>

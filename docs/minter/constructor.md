@@ -1,11 +1,11 @@
 
 
 
-
-# Constructor
   
-<details>  
-<summary>constructor</summary>  
+<details>
+  
+<summary>constructor</summary>
+  
 **Implicit args**
 
 ```python
@@ -32,4 +32,3 @@ reserved_supply_for_mint(Uint256)
 
 ```  
 </details>
-

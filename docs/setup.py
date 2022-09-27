@@ -61,9 +61,7 @@ class Document():
     def create_api_page(self):
         for functype, functions in self._functions.items():
             filepath = self._root / self._name / functype
-
             markdown = MdUtils(file_name=filepath.as_posix())
-            markdown.new_header(level=1, title=functype.capitalize())
 
             for function in functions:
                 attribute_name = function.get("attributeName")
@@ -77,8 +75,8 @@ class Document():
     def add_function(self, markdown, function_name, function_signature):
         name = function_name.get("name")
 
-        markdown.new_line("<details>")
-        markdown.new_line(f"<summary>{name}</summary>")
+        markdown.new_line("<details>\n")
+        markdown.new_line(f"<summary>{name}</summary>\n")
 
         for argtype, args in function_signature.items():
             title = argtype.replace('Args', ' args').capitalize()
@@ -95,8 +93,7 @@ class Document():
             code_block = "\n".join(codes)
             markdown.insert_code(code_block, language="python")
 
-        markdown.new_line("</details>")
-        markdown.new_paragraph()
+        markdown.new_line("</details>\n")
 
 
 root = Path(__file__).parent

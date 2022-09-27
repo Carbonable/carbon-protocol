@@ -1,11 +1,11 @@
 
 
 
-
-# Constructor
   
-<details>  
-<summary>constructor</summary>  
+<details>
+  
+<summary>constructor</summary>
+  
 **Implicit args**
 
 ```python
@@ -28,4 +28,3 @@ reward_token_address(felt)
 
 ```  
 </details>
-
