@@ -61,8 +61,8 @@ class Document():
     def create_api_page(self):
         for functype, functions in self._functions.items():
             filepath = self._root / self._name / functype
-            markdown = MdUtils(file_name=filepath.as_posix())
-            markdown.new_header(level=1, title=functype.capitalize())
+            markdown = MdUtils(file_name=filepath.as_posix(),
+                               title=functype.capitalize())
 
             for function in functions:
                 function_name = function.get("functionName")

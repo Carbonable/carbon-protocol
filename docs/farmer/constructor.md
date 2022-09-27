@@ -1,8 +1,6 @@
 
-
-
-
-# Constructor
+Constructor
+===========
   
 <details>
   

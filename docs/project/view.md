@@ -1,8 +1,6 @@
 
-
-
-
-# View
+View
+====
   
 <details>
   

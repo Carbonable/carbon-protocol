@@ -1,8 +1,6 @@
 
-
-
-
-# External
+External
+========
   
 <details>
   
