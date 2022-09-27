@@ -121,7 +121,7 @@ class Document():
                 argscope = "" if is_explicit else "{implicit}"
 
                 # returns
-                if "return" in argscope:
+                if "return" in method.lower():
                     markdown.new_line(Document.swagger_response_open.format(
                         name=argname, description=argdesc))
                     # markdown.new_line(example)  # TODO: add example

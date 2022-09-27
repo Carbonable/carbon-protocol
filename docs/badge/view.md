@@ -18,9 +18,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="interfaceId(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "uri" %}  
 {% swagger-description %}  
@@ -41,12 +40,10 @@ View
 {% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="uri_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="uri(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="uri_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="uri(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "contractURI" %}  
 {% swagger-description %}  
@@ -64,12 +61,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="uri_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="uri(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="uri_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="uri(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balanceOf" %}  
 {% swagger-description %}  
@@ -90,9 +85,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="balance(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="balance(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balanceOfBatch" %}  
 {% swagger-description %}  
@@ -119,12 +113,10 @@ View
 {% swagger-parameter in="path" type="" required="true" name="ids(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="balances_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="balances(Uint256*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="balances_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="balances(Uint256*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "isApprovedForAll" %}  
 {% swagger-description %}  
@@ -145,9 +137,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="operator(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="isApproved(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="isApproved(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
 {% swagger-description %}  
@@ -162,9 +153,8 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="owner(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="owner(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "name" %}  
 {% swagger-description %}  
@@ -179,9 +169,8 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="name(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="name(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "locked" %}  
 {% swagger-description %}  
@@ -199,7 +188,6 @@ View
 {% swagger-parameter in="path" type="" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="is_locked(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="is_locked(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}

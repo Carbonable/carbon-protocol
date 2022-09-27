@@ -106,9 +106,8 @@ External
 {% swagger-parameter in="path" type="" required="true" name="quantity(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "withdraw" %}  
 {% swagger-description %}  
@@ -123,9 +122,8 @@ External
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "transfer" %}  
 {% swagger-description %}  
@@ -149,9 +147,8 @@ External
 {% swagger-parameter in="path" type="" required="true" name="amount(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "whitelist_buy" %}  
 {% swagger-description %}  
@@ -178,9 +175,8 @@ External
 {% swagger-parameter in="path" type="" required="true" name="quantity(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "public_buy" %}  
 {% swagger-description %}  
@@ -198,7 +194,6 @@ External
 {% swagger-parameter in="path" type="" required="true" name="quantity(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}

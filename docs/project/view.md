@@ -15,9 +15,8 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="totalSupply(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="totalSupply(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "tokenByIndex" %}  
 {% swagger-description %}  
@@ -35,9 +34,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="index(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="tokenId(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="tokenId(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "tokenOfOwnerByIndex" %}  
 {% swagger-description %}  
@@ -58,9 +56,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="index(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="tokenId(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="tokenId(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "supportsInterface" %}  
 {% swagger-description %}  
@@ -78,9 +75,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="interfaceId(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "name" %}  
 {% swagger-description %}  
@@ -95,9 +91,8 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="name(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="name(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "symbol" %}  
 {% swagger-description %}  
@@ -112,9 +107,8 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="symbol(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="symbol(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balanceOf" %}  
 {% swagger-description %}  
@@ -132,9 +126,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="balance(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="balance(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "ownerOf" %}  
 {% swagger-description %}  
@@ -152,9 +145,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="tokenId(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="owner(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="owner(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getApproved" %}  
 {% swagger-description %}  
@@ -172,9 +164,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="tokenId(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="approved(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="approved(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "isApprovedForAll" %}  
 {% swagger-description %}  
@@ -195,9 +186,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="operator(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="isApproved(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="isApproved(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "tokenURI" %}  
 {% swagger-description %}  
@@ -215,9 +205,8 @@ View
 {% swagger-parameter in="path" type="" required="true" name="tokenId(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="tokenURI(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="tokenURI(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
 {% swagger-description %}  
@@ -232,9 +221,8 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="owner(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="owner(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "image_url" %}  
 {% swagger-description %}  
@@ -252,12 +240,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="image_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="image_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="image_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="image_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "image_data" %}  
 {% swagger-description %}  
@@ -275,12 +261,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="image_data_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="image_data(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="image_data_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="image_data(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "external_url" %}  
 {% swagger-description %}  
@@ -298,12 +282,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="external_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="external_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="external_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="external_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "description" %}  
 {% swagger-description %}  
@@ -321,12 +303,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="description_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="description(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="description_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="description(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "holder" %}  
 {% swagger-description %}  
@@ -344,12 +324,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="holder_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="holder(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="holder_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="holder(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "certifier" %}  
 {% swagger-description %}  
@@ -367,12 +345,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="certifier_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="certifier(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="certifier_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="certifier(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "land" %}  
 {% swagger-description %}  
@@ -390,12 +366,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="land_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="land(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="land_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="land(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "unit_land_surface" %}  
 {% swagger-description %}  
@@ -413,12 +387,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="unit_land_surface_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="unit_land_surface(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="unit_land_surface_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="unit_land_surface(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "country" %}  
 {% swagger-description %}  
@@ -436,12 +408,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="country_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="country(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="country_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="country(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "expiration" %}  
 {% swagger-description %}  
@@ -459,12 +429,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="expiration_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="expiration(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="expiration_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="expiration(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "total_co2_sequestration" %}  
 {% swagger-description %}  
@@ -482,12 +450,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="total_co2_sequestration_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="total_co2_sequestration(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="total_co2_sequestration_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="total_co2_sequestration(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "unit_co2_sequestration" %}  
 {% swagger-description %}  
@@ -505,12 +471,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="unit_co2_sequestration_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="unit_co2_sequestration(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="unit_co2_sequestration_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="unit_co2_sequestration(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "sequestration_color" %}  
 {% swagger-description %}  
@@ -528,12 +492,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="sequestration_color_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="sequestration_color(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="sequestration_color_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="sequestration_color(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "sequestration_type" %}  
 {% swagger-description %}  
@@ -551,12 +513,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="sequestration_type_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="sequestration_type(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="sequestration_type_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="sequestration_type(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "sequestration_category" %}  
 {% swagger-description %}  
@@ -574,12 +534,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="sequestration_category_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="sequestration_category(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="sequestration_category_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="sequestration_category(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "background_color" %}  
 {% swagger-description %}  
@@ -597,12 +555,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="background_color_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="background_color(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="background_color_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="background_color(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "animation_url" %}  
 {% swagger-description %}  
@@ -620,12 +576,10 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="animation_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="animation_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="animation_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="animation_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "youtube_url" %}  
 {% swagger-description %}  
@@ -643,10 +597,8 @@ View
 {% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="youtube_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="youtube_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="youtube_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="youtube_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}
