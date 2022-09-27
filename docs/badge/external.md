@@ -6,22 +6,22 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="uri_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="uri_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="uri(felt*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="uri(felt*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -29,16 +29,16 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -46,16 +46,16 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -63,19 +63,19 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="operator(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="operator(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="approved(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="approved(felt)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -83,31 +83,31 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="to(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amount(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -115,40 +115,40 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="to(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="ids_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="ids(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -156,28 +156,28 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="to(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amount(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -185,37 +185,37 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="to(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="to(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="ids_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="ids(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -223,22 +223,22 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amount(Uint256)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -246,28 +246,28 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="from_(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="ids_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="ids(Uint256*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="amounts(Uint256*)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -275,16 +275,16 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="newOwner(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="newOwner(felt)" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -292,13 +292,13 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

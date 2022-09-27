@@ -6,28 +6,28 @@ Constructor
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="carbonable_project_address(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="carbonable_project_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="carbonable_token_address(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="carbonable_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="reward_token_address(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="reward_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="True" name="" %}  
+{% swagger-parameter in="path" type="{explicit}" required="true" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

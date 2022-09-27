@@ -127,7 +127,7 @@ class Document():
                     continue
 
                 # implicit / explicit args
-                required = "explicit" in argscope
+                required = str("explicit" in argscope).lower()
                 markdown.new_line(Document.swagger_parameter_open.format(
                     scope=argscope, required=required, name=argname))
                 markdown.new_line(argdesc)
