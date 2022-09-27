@@ -80,7 +80,7 @@ cairo-format -i src/**/*.cairo tests/**/**/*.cairo
 ```bash
 cd docs
 kapper generate ../src ./data
-python setup.py
+python build.py
 ```
 
 ## 🚀 Deployment
