@@ -6,28 +6,28 @@ Constructor
 {% swagger-description %}  
 Initialize the contract  
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="uri_len(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="uri_len(felt)" %}  
 uri array length  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="uri(felt*)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="uri(felt*)" %}  
 uri characters as a felt array  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="name(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="name(felt)" %}  
 name of the badge collection  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="owner(felt)" %}  
 owner address  
 {% endswagger-parameter %}  
 {% endswagger %}

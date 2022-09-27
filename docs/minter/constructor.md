@@ -6,40 +6,40 @@ Constructor
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="carbonable_project_address(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="carbonable_project_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="payment_token_address(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="payment_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="public_sale_open(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="public_sale_open(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="max_buy_per_tx(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="max_buy_per_tx(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="unit_price(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="unit_price(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="max_supply_for_mint(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="max_supply_for_mint(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="reserved_supply_for_mint(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="reserved_supply_for_mint(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

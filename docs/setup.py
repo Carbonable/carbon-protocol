@@ -10,8 +10,10 @@ class Document():
     swagger_close = '{% endswagger %}'
     swagger_description_open = '{% swagger-description %}'
     swagger_description_close = '{% endswagger-description %}'
-    swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" required="false" name="{name}" %}}'
+    swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" required="{required}" name="{name}" %}}'
     swagger_parameter_close = '{% endswagger-parameter %}'
+    swagger_response_open = '{{% swagger-response status="{name}" description="{description}" %}}'
+    swagger_response_close = '{% endswagger-response %}'
 
     def __init__(self, root: Path, name: str, header: str, data: dict) -> None:
         self._root = root
@@ -116,8 +118,18 @@ class Document():
                 typestr = f"({argtype})" if argtype else ''
                 argname = f"{arg.get('name')}{typestr}"
 
+                # returns
+                if "return" in argscope:
+                    markdown.new_line(Document.swagger_response_open.format(
+                        name=argname, description=argdesc))
+                    # markdown.new_line(example)  # TODO: add example
+                    markdown.new_line(Document.swagger_response_close)
+                    continue
+
+                # implicit / explicit args
+                required = "explicit" in argscope
                 markdown.new_line(Document.swagger_parameter_open.format(
-                    scope=argscope, name=argname))
+                    scope=argscope, required=required, name=argname))
                 markdown.new_line(argdesc)
                 markdown.new_line(Document.swagger_parameter_close)
 

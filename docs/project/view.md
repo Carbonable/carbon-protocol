@@ -6,647 +6,599 @@ View
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="totalSupply(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="totalSupply(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "tokenByIndex" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="index(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="index(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="tokenId(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="tokenId(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "tokenOfOwnerByIndex" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="index(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="index(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="tokenId(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="tokenId(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "supportsInterface" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="interfaceId(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="interfaceId(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="success(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "name" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="name(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="name(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "symbol" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="symbol(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="symbol(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balanceOf" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="balance(Uint256)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="balance(Uint256)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "ownerOf" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="tokenId(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="owner(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="owner(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getApproved" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="tokenId(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="approved(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="approved(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "isApprovedForAll" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="operator(felt)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="operator(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="isApproved(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="isApproved(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "tokenURI" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{explicit}" required="false" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="{explicit}" required="True" name="tokenId(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="tokenURI(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="tokenURI(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="owner(felt)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="owner(felt)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "image_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="image_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="image_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="image_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="image_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "image_data" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="image_data_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="image_data(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="image_data_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="image_data(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "external_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="external_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="external_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="external_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="external_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "description" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="description_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="description(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="description_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="description(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "holder" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="holder_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="holder(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="holder_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="holder(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "certifier" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="certifier_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="certifier(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="certifier_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="certifier(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "land" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="land_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="land(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="land_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="land(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "unit_land_surface" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="unit_land_surface_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="unit_land_surface(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="unit_land_surface_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="unit_land_surface(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "country" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="country_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="country(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="country_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="country(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "expiration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="expiration_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="expiration(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="expiration_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="expiration(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "total_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="total_co2_sequestration_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="total_co2_sequestration(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="total_co2_sequestration_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="total_co2_sequestration(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "unit_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="unit_co2_sequestration_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="unit_co2_sequestration(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="unit_co2_sequestration_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="unit_co2_sequestration(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "sequestration_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="sequestration_color_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="sequestration_color(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="sequestration_color_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="sequestration_color(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "sequestration_type" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="sequestration_type_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="sequestration_type(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="sequestration_type_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="sequestration_type(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "sequestration_category" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="sequestration_category_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="sequestration_category(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="sequestration_category_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="sequestration_category(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "background_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="background_color_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="background_color(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="background_color_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="background_color(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "animation_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="animation_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="animation_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="animation_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="animation_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "youtube_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="syscall_ptr(felt*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="syscall_ptr(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="pedersen_ptr(HashBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="bitwise_ptr(BitwiseBuiltin*)" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="bitwise_ptr(BitwiseBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" required="false" name="range_check_ptr" %}  
+{% swagger-parameter in="path" type="{implicit}" required="False" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="youtube_url_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{returns}" required="false" name="youtube_url(felt*)" %}  
-  
-{% endswagger-parameter %}  
+{% swagger-response status="youtube_url_len(felt)" description="" %}  
+{% endswagger-response %}  
+{% swagger-response status="youtube_url(felt*)" description="" %}  
+{% endswagger-response %}  
 {% endswagger %}
