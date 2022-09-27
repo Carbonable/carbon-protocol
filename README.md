@@ -67,6 +67,22 @@ See also starknet [documentation](https://www.cairo-lang.org/docs/hello_starknet
 cairo-format -i src/**/*.cairo tests/**/**/*.cairo
 ```
 
+### 📝 Documentation
+
+#### Requirements
+
+- python environment (python >=3.9)
+- [`mdutils`](https://pypi.org/project/mdutils/) dependency installed
+- [`kapper-cli`](https://github.com/onlydustxyz/kaaper) installed
+
+#### Generation
+
+```bash
+cd docs
+kapper generate ../src ./data
+python setup.py
+```
+
 ## 🚀 Deployment
 
 ```bash
