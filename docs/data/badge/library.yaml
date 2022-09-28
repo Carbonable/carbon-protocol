@@ -1,0 +1,473 @@
+- attributeName: event
+  functionName:
+    name: Locked
+    charIndex:
+      start: 560
+      end: 566
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: token_id
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: event
+  functionName:
+    name: Unlocked
+    charIndex:
+      start: 603
+      end: 611
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: token_id
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableBadge_unlocked
+    charIndex:
+      start: 672
+      end: 696
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns:
+      - name: unlocked
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableBadge_name
+    charIndex:
+      start: 753
+      end: 773
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: name
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 824
+      end: 880
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: initializer
+    charIndex:
+      start: 868
+      end: 879
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+      - name: name
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract with the given uri and symbol
+        charIndex:
+          start: 31
+          end: 84
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 124
+          end: 142
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 156
+          end: 182
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+        desc: ''
+        charIndex:
+          start: 196
+          end: 224
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 238
+          end: 253
+    explicitArgs:
+      - name: uri_len
+        type: felt
+        desc: uri array length
+        charIndex:
+          start: 293
+          end: 324
+      - name: uri
+        type: felt*
+        desc: uri characters as a felt array
+        charIndex:
+          start: 338
+          end: 380
+      - name: name
+        type: felt
+        desc: name of the badge collection
+        charIndex:
+          start: 394
+          end: 434
+    returns: null
+    raises: null
+    charIndex:
+      start: 1054
+      end: 1526
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: uri
+    charIndex:
+      start: 1713
+      end: 1716
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: contract_uri
+    charIndex:
+      start: 2291
+      end: 2303
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: name
+    charIndex:
+      start: 2727
+      end: 2731
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: name
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: locked
+    charIndex:
+      start: 2907
+      end: 2913
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns:
+      - name: is_locked
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: set_uri
+    charIndex:
+      start: 3203
+      end: 3210
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: set_locked
+    charIndex:
+      start: 3535
+      end: 3545
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: set_unlocked
+    charIndex:
+      start: 3786
+      end: 3798
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: assert_unlocked
+    charIndex:
+      start: 4072
+      end: 4087
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: id
+        type: Uint256
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: assert_unlocked_batch
+    charIndex:
+      start: 4410
+      end: 4431
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: ids_len
+        type: felt
+      - name: ids
+        type: Uint256*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableBadge
+  functionName:
+    name: _assert_unlocked_iter
+    charIndex:
+      start: 4641
+      end: 4662
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: ids_len
+        type: felt
+      - name: ids
+        type: Uint256*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0

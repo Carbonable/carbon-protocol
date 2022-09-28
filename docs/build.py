@@ -10,7 +10,7 @@ class Document():
     swagger_close = '{% endswagger %}'
     swagger_description_open = '{% swagger-description %}'
     swagger_description_close = '{% endswagger-description %}'
-    swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" required="{required}" name="{name}" %}}'
+    swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" name="{name}" %}}'
     swagger_parameter_close = '{% endswagger-parameter %}'
     swagger_response_open = '{{% swagger-response status="{name}" description="{description}" %}}'
     swagger_response_close = '{% endswagger-response %}'
@@ -22,9 +22,12 @@ class Document():
         self._data = data
 
         self._functions = {}
-        self._functions.update(self.constructors)
-        self._functions.update(self.views)
-        self._functions.update(self.externals)
+        if (self._name == "library"):  # internal
+            self._functions.update(self.internals)
+        else:  # contract
+            self._functions.update(self.constructors)
+            self._functions.update(self.views)
+            self._functions.update(self.externals)
 
     @classmethod
     def from_yaml(cls, root, path):
@@ -32,7 +35,7 @@ class Document():
         header = f"Carbonable {name.capitalize()}"
         with open(path.with_suffix(".yaml"), "r") as yamlpath:
             data = yaml.safe_load(yamlpath)
-        return cls(root, name, header, data)
+        return cls(root / path.parent.name, name, header, data)
 
     @staticmethod
     def filter(data, key):
@@ -59,8 +62,13 @@ class Document():
         functype = "external"
         return self.filter(self._data, functype)
 
+    @property
+    def internals(self):
+        functype = "internal"
+        return {functype: self._data}
+
     def create_description(self, description):
-        filepath = self._root / self._name / "index"
+        filepath = self._root / "index"
         markdown = MdUtils(file_name=filepath.as_posix())
         markdown.new_header(level=1, title=self._header)
         markdown.new_paragraph(description)
@@ -69,7 +77,7 @@ class Document():
 
     def create_api_page(self):
         for functype, functions in self._functions.items():
-            filepath = self._root / self._name / functype
+            filepath = self._root / functype
             markdown = MdUtils(file_name=filepath.as_posix(),
                                title=functype.capitalize())
 
@@ -117,7 +125,6 @@ class Document():
                 typestr = f"({argtype})" if argtype else ''
                 argname = f"{arg.get('name')}{typestr}"
                 is_explicit = "explicit" in method.lower()
-                required = str(is_explicit).lower()
                 argscope = "" if is_explicit else "{implicit}"
 
                 # returns
@@ -130,7 +137,7 @@ class Document():
 
                 # implicit / explicit args
                 markdown.new_line(Document.swagger_parameter_open.format(
-                    scope=argscope, required=required, name=argname))
+                    scope=argscope, name=argname))
                 markdown.new_line(argdesc)
                 markdown.new_line(Document.swagger_parameter_close)
 

@@ -1,8 +1,8 @@
 
-View
-====
+External
+========
   
-{% swagger method = "view" path = " " baseUrl = " " summary = "supportsInterface" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_whitelist_merkle_root" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -15,13 +15,101 @@ View
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="interfaceId(felt)" %}  
+{% swagger-parameter in="path" type="" name="whitelist_merkle_root(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_public_sale_open" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="public_sale_open(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_max_buy_per_tx" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="max_buy_per_tx(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_unit_price" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="unit_price(Uint256)" %}  
+  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "decrease_reserved_supply_for_mint" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="slots(Uint256)" %}  
+  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "airdrop" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="to(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="quantity(felt)" %}  
   
 {% endswagger-parameter %}  
 {% swagger-response status="success(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "uri" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "withdraw" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -31,21 +119,13 @@ View
 {% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="uri_len(felt)" description="" %}  
-{% endswagger-response %}  
-{% swagger-response status="uri(felt*)" description="" %}  
+{% swagger-response status="success(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "contractURI" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transfer" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -55,18 +135,22 @@ View
 {% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="uri_len(felt)" description="" %}  
-{% endswagger-response %}  
-{% swagger-response status="uri(felt*)" description="" %}  
+{% swagger-parameter in="path" type="" name="token_address(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="recipient(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="amount(Uint256)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "balanceOf" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "whitelist_buy" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -79,16 +163,22 @@ View
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="account(felt)" %}  
+{% swagger-parameter in="path" type="" name="slots(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="" name="proof_len(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="balance(Uint256)" description="" %}  
+{% swagger-parameter in="path" type="" name="proof(felt*)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="quantity(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-response status="success(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "balanceOfBatch" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "public_buy" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -101,93 +191,9 @@ View
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="accounts_len(felt)" %}  
+{% swagger-parameter in="path" type="" name="quantity(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="accounts(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids_len(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids(Uint256*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="balances_len(felt)" description="" %}  
-{% endswagger-response %}  
-{% swagger-response status="balances(Uint256*)" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "isApprovedForAll" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="account(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="operator(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="isApproved(felt)" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="owner(felt)" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "name" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="name(felt)" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "locked" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="is_locked(felt)" description="" %}  
+{% swagger-response status="success(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}

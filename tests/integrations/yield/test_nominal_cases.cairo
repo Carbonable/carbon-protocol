@@ -7,7 +7,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
 
 // Local dependencies
-from tests.integrations.yield.library import setup
+from tests.integrations.farmer.library import setup
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -24,7 +24,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // And owned by admin
     // And a total supply set to 1,000,000
     // And anyone owns the whole supply
-    // Given a deployed yielder contract
+    // Given a deployed farmer contract
     // And owned by admin
     return setup();
 }

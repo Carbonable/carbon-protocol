@@ -15,13 +15,19 @@ Constructor
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="name(felt)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="symbol(felt)" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="owner(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="carbonable_project_address(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="carbonable_token_address(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="reward_token_address(felt)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

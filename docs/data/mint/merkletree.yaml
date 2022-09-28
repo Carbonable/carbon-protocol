@@ -1,0 +1,68 @@
+- attributeName: namespace MerkleTree
+  functionName:
+    name: verify
+    charIndex:
+      start: 499
+      end: 505
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: leaf
+        type: felt
+      - name: merkle_root
+        type: felt
+      - name: proof_len
+        type: felt
+      - name: proof
+        type: felt*
+    returns:
+      - name: res
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace MerkleTree
+  functionName:
+    name: calculate_root
+    charIndex:
+      start: 1153
+      end: 1167
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: curr
+        type: felt
+      - name: proof_len
+        type: felt
+      - name: proof
+        type: felt*
+    returns:
+      - name: res
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0

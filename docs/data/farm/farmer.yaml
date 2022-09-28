@@ -2,8 +2,8 @@
   functionName:
     name: constructor
     charIndex:
-      start: 244
-      end: 255
+      start: 247
+      end: 258
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -37,8 +37,8 @@
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 615
-      end: 641
+      start: 622
+      end: 648
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -66,8 +66,8 @@
   functionName:
     name: reward_token_address
     charIndex:
-      start: 822
-      end: 842
+      start: 833
+      end: 853
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -93,8 +93,8 @@
   functionName:
     name: carbonable_token_address
     charIndex:
-      start: 1012
-      end: 1036
+      start: 1027
+      end: 1051
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

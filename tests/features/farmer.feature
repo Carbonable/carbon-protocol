@@ -1,6 +1,6 @@
-Feature: Yielder
+Feature: Farmer
 
-  Feature Description: Yield manager contract provides functionnalities to distribute reward tokens to stackers.
+  Feature Description: Farmer contract provides functionnalities to distribute reward tokens to stackers.
   All corresponding actions must work as expected.
 
   Background:
@@ -17,5 +17,5 @@ Feature: Yielder
     And owned by admin
     And a total supply set to 1,000,000
     And anyone owns the whole supply
-    Given a deployed yielder contract
+    Given a deployed farmer contract
     And owned by admin

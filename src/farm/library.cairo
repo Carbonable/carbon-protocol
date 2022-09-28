@@ -26,7 +26,7 @@ func reward_token_address_() -> (res: felt) {
 func carbonable_token_address_() -> (res: felt) {
 }
 
-namespace YieldManager {
+namespace CarbonableFarmer {
     //
     // Constructor
     //
