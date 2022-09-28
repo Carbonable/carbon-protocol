@@ -128,11 +128,12 @@ class Document():
         markdown.new_line(Document.swagger_description_close)
 
         for method, args in function_signature.items():
-            if args is None:
+            # hide implicit arguments
+            if args is None or method.startswith("implicit"):
                 continue
 
-            args = [arg for arg in args if arg.get(
-                "name")]  # remove empty names
+            # remove empty names
+            args = [arg for arg in args if arg.get("name")]
 
             argcoms = {
                 arg.get("name"): arg

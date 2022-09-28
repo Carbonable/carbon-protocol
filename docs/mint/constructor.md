@@ -6,15 +6,6 @@ Constructor
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="owner(felt)" %}  
   
 {% endswagger-parameter %}  

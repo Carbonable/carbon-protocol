@@ -6,18 +6,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="image_url_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="image_url(felt*)" description="" %}  
@@ -27,18 +15,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="image_data_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="image_data(felt*)" description="" %}  
@@ -48,18 +24,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="external_url_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="external_url(felt*)" description="" %}  
@@ -69,18 +33,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="description_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="description(felt*)" description="" %}  
@@ -90,18 +42,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="holder_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="holder(felt*)" description="" %}  
@@ -111,18 +51,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="certifier_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="certifier(felt*)" description="" %}  
@@ -132,18 +60,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="land_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="land(felt*)" description="" %}  
@@ -153,18 +69,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="unit_land_surface_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="unit_land_surface(felt*)" description="" %}  
@@ -174,18 +78,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="country_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="country(felt*)" description="" %}  
@@ -195,18 +87,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="expiration_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="expiration(felt*)" description="" %}  
@@ -216,18 +96,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="total_co2_sequestration_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="total_co2_sequestration(felt*)" description="" %}  
@@ -237,18 +105,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="unit_co2_sequestration_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="unit_co2_sequestration(felt*)" description="" %}  
@@ -258,18 +114,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="sequestration_color_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="sequestration_color(felt*)" description="" %}  
@@ -279,18 +123,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="sequestration_type_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="sequestration_type(felt*)" description="" %}  
@@ -300,18 +132,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="sequestration_category_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="sequestration_category(felt*)" description="" %}  
@@ -321,18 +141,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="background_color_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="background_color(felt*)" description="" %}  
@@ -342,18 +150,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="animation_url_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="animation_url(felt*)" description="" %}  
@@ -363,18 +159,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="youtube_url_len(felt)" description="" %}  
 {% endswagger-response %}  
 {% swagger-response status="youtube_url(felt*)" description="" %}  
@@ -384,18 +168,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="image_url_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -407,18 +179,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="image_data_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -430,18 +190,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="external_url_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -453,18 +201,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="description_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -476,18 +212,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="holder_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -499,18 +223,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="certifier_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -522,18 +234,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="land_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -545,18 +245,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="unit_land_surface_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -568,18 +256,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="country_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -591,18 +267,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="expiration_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -614,18 +278,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="total_co2_sequestration_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -637,18 +289,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="unit_co2_sequestration_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -660,18 +300,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="sequestration_color_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -683,18 +311,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="sequestration_type_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -706,18 +322,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="sequestration_category_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -729,18 +333,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="background_color_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -752,18 +344,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="animation_url_len(felt)" %}  
   
 {% endswagger-parameter %}  
@@ -775,18 +355,6 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="syscall_ptr(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="pedersen_ptr(HashBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="bitwise_ptr(BitwiseBuiltin*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="youtube_url_len(felt)" %}  
   
 {% endswagger-parameter %}  
