@@ -101,13 +101,12 @@ class Document():
                                title=functype.capitalize())
 
             for function in functions:
-                attribute_name = function.get("attributeName")
                 function_name = function.get("functionName")
                 function_signature = function.get("functionSignature")
                 function_comment = function.get("functionComment")
                 self.add_function(
                     markdown,
-                    attribute_name,
+                    functype,
                     function_name,
                     function_signature,
                     function_comment
@@ -115,14 +114,14 @@ class Document():
 
             markdown.create_md_file()
 
-    def add_function(self, markdown, attribute_name, function_name, function_signature, function_comment):
+    def add_function(self, markdown, functype, function_name, function_signature, function_comment):
         name = function_name.get("name")
 
         descriptions = function_comment.get("desc") or []
         description = " ".join(desc.get("desc") for desc in descriptions)
 
         markdown.new_line(Document.swagger_open.format(
-            method=attribute_name.replace("o", "0"), name=name))
+            method=functype.replace("o", "0"), name=name))
 
         markdown.new_line(Document.swagger_description_open)
         markdown.new_line(description)
