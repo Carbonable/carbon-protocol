@@ -15,9 +15,6 @@ View
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="carbonable_project_address(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
@@ -112,9 +109,6 @@ View
   
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
   
 {% endswagger-parameter %}  
 {% swagger-response status="reserved_supply_for_mint(Uint256)" description="" %}  

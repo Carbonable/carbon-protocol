@@ -27,7 +27,4 @@ Constructor
 {% swagger-parameter in="path" type="" name="reward_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
-  
-{% endswagger-parameter %}  
 {% endswagger %}

@@ -39,7 +39,4 @@ Constructor
 {% swagger-parameter in="path" type="" name="reserved_supply_for_mint(Uint256)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
-  
-{% endswagger-parameter %}  
 {% endswagger %}

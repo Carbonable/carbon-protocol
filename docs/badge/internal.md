@@ -18,9 +18,6 @@ Initialize the contract with the given uri and symbol
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="uri_len(felt)" %}  
 uri array length  
 {% endswagger-parameter %}  
@@ -47,9 +44,6 @@ name of the badge collection
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
@@ -72,9 +66,6 @@ name of the badge collection
   
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
   
 {% endswagger-parameter %}  
 {% swagger-response status="uri_len(felt)" description="" %}  
@@ -131,9 +122,6 @@ name of the badge collection
   
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
   
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="uri_len(felt)" %}  

@@ -6,9 +6,6 @@ Storage
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="id(Uint256)" %}  
   
 {% endswagger-parameter %}  
@@ -19,9 +16,6 @@ Storage
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="name(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}

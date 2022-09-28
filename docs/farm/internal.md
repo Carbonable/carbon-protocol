@@ -27,9 +27,6 @@ Internal
 {% swagger-parameter in="path" type="" name="reward_token_address(felt)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
-  
-{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "namespace Carb0nableFarmer" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
 {% swagger-description %}  
@@ -60,9 +57,6 @@ Internal
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="reward_token_address(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
@@ -77,9 +71,6 @@ Internal
   
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
   
 {% endswagger-parameter %}  
 {% swagger-response status="carbonable_token_address(felt)" description="" %}  

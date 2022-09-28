@@ -15,9 +15,6 @@ View
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="carbonable_project_address(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
@@ -48,9 +45,6 @@ View
   
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="{implicit}" name="range_check_ptr" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
   
 {% endswagger-parameter %}  
 {% swagger-response status="carbonable_token_address(felt)" description="" %}  

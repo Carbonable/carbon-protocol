@@ -132,6 +132,9 @@ class Document():
             if args is None:
                 continue
 
+            args = [arg for arg in args if arg.get(
+                "name")]  # remove empty names
+
             argcoms = {
                 arg.get("name"): arg
                 for arg in (function_comment.get(method) or [])

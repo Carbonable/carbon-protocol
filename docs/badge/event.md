@@ -6,9 +6,6 @@ Event
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="token_id(Uint256)" %}  
   
 {% endswagger-parameter %}  
@@ -17,9 +14,6 @@ Event
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="token_id(Uint256)" %}  
   
 {% endswagger-parameter %}  

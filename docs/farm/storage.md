@@ -6,9 +6,6 @@ Storage
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="res(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
@@ -16,9 +13,6 @@ Storage
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="res(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
@@ -26,9 +20,6 @@ Storage
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
 {% swagger-response status="res(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}

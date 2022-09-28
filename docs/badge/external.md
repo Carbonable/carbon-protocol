@@ -148,9 +148,6 @@ External
 {% swagger-parameter in="path" type="" name="data(felt*)" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
-  
-{% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "mint" %}  
 {% swagger-description %}  
@@ -213,9 +210,6 @@ External
   
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="" name="data(felt*)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
