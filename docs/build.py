@@ -148,8 +148,9 @@ class Document():
 
                 # returns
                 if "return" in method.lower():
+                    argstr = f"{argname}({argtype})"
                     markdown.new_line(Document.swagger_response_open.format(
-                        name=argname, description=argdesc))
+                        name=argstr, description=argdesc))
                     # markdown.new_line(example)  # TODO: add example
                     markdown.new_line(Document.swagger_response_close)
                     continue

@@ -18,7 +18,7 @@ Internal
 {% swagger-parameter in="path" type="felt*" name="proof" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="res" description="" %}  
+{% swagger-response status="res(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "calculate_root" %}  
@@ -34,6 +34,6 @@ Internal
 {% swagger-parameter in="path" type="felt*" name="proof" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="res" description="" %}  
+{% swagger-response status="res(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}

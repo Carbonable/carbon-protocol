@@ -23,25 +23,25 @@ name of the badge collection
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="uri_len" description="" %}  
+{% swagger-response status="uri_len(felt)" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri" description="" %}  
+{% swagger-response status="uri(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "contract_uri" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="uri_len" description="" %}  
+{% swagger-response status="uri_len(felt)" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri" description="" %}  
+{% swagger-response status="uri(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "name" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="name" description="" %}  
+{% swagger-response status="name(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "locked" %}  
@@ -51,7 +51,7 @@ name of the badge collection
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="is_locked" description="" %}  
+{% swagger-response status="is_locked(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "set_uri" %}  
