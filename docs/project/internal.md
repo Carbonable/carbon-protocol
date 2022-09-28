@@ -2,7 +2,7 @@
 Internal
 ========
   
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "image_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "image_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -23,7 +23,7 @@ Internal
 {% swagger-response status="image_url(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "image_data" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "image_data" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -44,7 +44,7 @@ Internal
 {% swagger-response status="image_data(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "external_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "external_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -65,7 +65,7 @@ Internal
 {% swagger-response status="external_url(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "description" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "description" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -86,7 +86,7 @@ Internal
 {% swagger-response status="description(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "holder" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "holder" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -107,7 +107,7 @@ Internal
 {% swagger-response status="holder(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "certifier" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "certifier" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -128,7 +128,7 @@ Internal
 {% swagger-response status="certifier(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "land" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "land" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -149,7 +149,7 @@ Internal
 {% swagger-response status="land(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "unit_land_surface" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "unit_land_surface" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -170,7 +170,7 @@ Internal
 {% swagger-response status="unit_land_surface(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "country" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "country" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -191,7 +191,7 @@ Internal
 {% swagger-response status="country(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "expiration" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "expiration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -212,7 +212,7 @@ Internal
 {% swagger-response status="expiration(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "total_co2_sequestration" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "total_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -233,7 +233,7 @@ Internal
 {% swagger-response status="total_co2_sequestration(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "unit_co2_sequestration" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "unit_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -254,7 +254,7 @@ Internal
 {% swagger-response status="unit_co2_sequestration(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "sequestration_color" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "sequestration_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -275,7 +275,7 @@ Internal
 {% swagger-response status="sequestration_color(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "sequestration_type" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "sequestration_type" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -296,7 +296,7 @@ Internal
 {% swagger-response status="sequestration_type(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "sequestration_category" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "sequestration_category" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -317,7 +317,7 @@ Internal
 {% swagger-response status="sequestration_category(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "background_color" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "background_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -338,7 +338,7 @@ Internal
 {% swagger-response status="background_color(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "animation_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "animation_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -359,7 +359,7 @@ Internal
 {% swagger-response status="animation_url(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "youtube_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "youtube_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -380,7 +380,7 @@ Internal
 {% swagger-response status="youtube_url(felt*)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_image_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_image_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -403,7 +403,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_image_data" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_image_data" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -426,7 +426,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_external_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_external_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -449,7 +449,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_description" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_description" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -472,7 +472,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_holder" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_holder" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -495,7 +495,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_certifier" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_certifier" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -518,7 +518,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_land" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_land" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -541,7 +541,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_unit_land_surface" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_unit_land_surface" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -564,7 +564,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_country" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_country" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -587,7 +587,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_expiration" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_expiration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -610,7 +610,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_total_co2_sequestration" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_total_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -633,7 +633,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_unit_co2_sequestration" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_unit_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -656,7 +656,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_sequestration_color" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_sequestration_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -679,7 +679,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_sequestration_type" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_sequestration_type" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -702,7 +702,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_sequestration_category" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_sequestration_category" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -725,7 +725,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_background_color" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_background_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -748,7 +748,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_animation_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_animation_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -771,7 +771,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nablePr0ject" path = " " baseUrl = " " summary = "set_youtube_url" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "set_youtube_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  

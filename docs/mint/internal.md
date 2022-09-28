@@ -2,7 +2,7 @@
 Internal
 ========
   
-{% swagger method = "namespace MerkleTree" path = " " baseUrl = " " summary = "verify" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "verify" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -30,7 +30,7 @@ Internal
 {% swagger-response status="res(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace MerkleTree" path = " " baseUrl = " " summary = "calculate_root" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "calculate_root" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  

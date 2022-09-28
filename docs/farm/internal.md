@@ -2,7 +2,7 @@
 Internal
 ========
   
-{% swagger method = "namespace Carb0nableFarmer" path = " " baseUrl = " " summary = "constructor" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "constructor" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -28,7 +28,7 @@ Internal
   
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nableFarmer" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -44,7 +44,7 @@ Internal
 {% swagger-response status="carbonable_project_address(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nableFarmer" path = " " baseUrl = " " summary = "reward_token_address" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "reward_token_address" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -60,7 +60,7 @@ Internal
 {% swagger-response status="reward_token_address(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "namespace Carb0nableFarmer" path = " " baseUrl = " " summary = "carbonable_token_address" %}  
+{% swagger method = "internal" path = " " baseUrl = " " summary = "carbonable_token_address" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  

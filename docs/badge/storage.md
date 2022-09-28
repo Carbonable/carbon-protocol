@@ -2,7 +2,7 @@
 Storage
 =======
   
-{% swagger method = "st0rage_var" path = " " baseUrl = " " summary = "CarbonableBadge_unlocked" %}  
+{% swagger method = "st0rage" path = " " baseUrl = " " summary = "CarbonableBadge_unlocked" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
@@ -12,7 +12,7 @@ Storage
 {% swagger-response status="unlocked(felt)" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "st0rage_var" path = " " baseUrl = " " summary = "CarbonableBadge_name" %}  
+{% swagger method = "st0rage" path = " " baseUrl = " " summary = "CarbonableBadge_name" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
