@@ -6,10 +6,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="uri_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="uri_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="uri(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="uri" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -17,7 +17,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -25,7 +25,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -33,10 +33,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="operator(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="operator" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="approved(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="approved" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -44,22 +44,22 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="from_" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="amount" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="data_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="data" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -67,28 +67,28 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="from_" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="ids_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="ids" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="amounts_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="amounts" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="data_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="data" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -96,19 +96,19 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="amount" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="data_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="data" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -116,25 +116,25 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="ids_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="ids" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="amounts_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="amounts" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="data_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="data" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -142,13 +142,13 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="from_" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="amount" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -156,19 +156,19 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="from_" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="ids_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="ids" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amounts_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="amounts_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amounts(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="amounts" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -176,7 +176,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="newOwner(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="newOwner" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  

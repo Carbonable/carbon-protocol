@@ -6,34 +6,34 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="leaf(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="leaf" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="merkle_root(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="merkle_root" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="proof_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="proof_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="proof(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="proof" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="res(felt)" description="" %}  
+{% swagger-response status="res" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "calculate_root" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="curr(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="curr" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="proof_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="proof_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="proof(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="proof" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="res(felt)" description="" %}  
+{% swagger-response status="res" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}

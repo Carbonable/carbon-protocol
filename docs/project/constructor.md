@@ -6,13 +6,13 @@ Constructor
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="name(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="name" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="symbol(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="symbol" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="owner" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

@@ -10,7 +10,7 @@ class Document():
     swagger_close = '{% endswagger %}'
     swagger_description_open = '{% swagger-description %}'
     swagger_description_close = '{% endswagger-description %}'
-    swagger_parameter_open = '{{% swagger-parameter in="path" type="{scope}" name="{name}" %}}'
+    swagger_parameter_open = '{{% swagger-parameter in="path" type="{argtype}" name="{name}" %}}'
     swagger_parameter_close = '{% endswagger-parameter %}'
     swagger_response_open = '{{% swagger-response status="{name}" description="{description}" %}}'
     swagger_response_close = '{% endswagger-response %}'
@@ -144,10 +144,7 @@ class Document():
                 arg.update(argcoms.get(arg.get('name'), {}))
                 argtype = arg.get('type')
                 argdesc = arg.get('desc', '')
-                typestr = f"({argtype})" if argtype else ''
-                argname = f"{arg.get('name')}{typestr}"
-                is_explicit = "explicit" in method.lower()
-                argscope = "" if is_explicit else "{implicit}"
+                argname = arg.get('name')
 
                 # returns
                 if "return" in method.lower():
@@ -159,7 +156,7 @@ class Document():
 
                 # implicit / explicit args
                 markdown.new_line(Document.swagger_parameter_open.format(
-                    scope=argscope, name=argname))
+                    argtype=argtype, name=argname))
                 markdown.new_line(argdesc)
                 markdown.new_line(Document.swagger_parameter_close)
 

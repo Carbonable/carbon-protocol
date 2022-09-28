@@ -6,7 +6,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="whitelist_merkle_root(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="whitelist_merkle_root" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -14,7 +14,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="public_sale_open(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="public_sale_open" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -22,7 +22,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="max_buy_per_tx(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="max_buy_per_tx" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -30,7 +30,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="unit_price(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="unit_price" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -38,7 +38,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="slots(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="slots" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -46,64 +46,64 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="quantity(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="quantity" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "withdraw" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "transfer" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="token_address(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="token_address" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="recipient(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="recipient" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="amount(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="amount" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "whitelist_buy" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="slots(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="slots" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="proof_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="proof_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="proof(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="proof" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="quantity(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="quantity" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "public_buy" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="quantity(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="quantity" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}

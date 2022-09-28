@@ -6,10 +6,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="tokenId" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -17,10 +17,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="operator(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="operator" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="approved(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="approved" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -28,13 +28,13 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="from_" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="tokenId" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -42,19 +42,19 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="from_(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="from_" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="tokenId" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="data_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="data(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="data" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -62,10 +62,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="to(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="to" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="tokenId" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -73,7 +73,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="tokenId" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -81,10 +81,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="tokenId(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="tokenId" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="tokenURI(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="tokenURI" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -92,7 +92,7 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="newOwner(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="newOwner" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -105,10 +105,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="image_url_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="image_url_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="image_url(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="image_url" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -116,10 +116,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="image_data_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="image_data_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="image_data(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="image_data" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -127,10 +127,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="external_url_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="external_url_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="external_url(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="external_url" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -138,10 +138,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="description_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="description_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="description(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="description" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -149,10 +149,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="holder_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="holder_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="holder(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="holder" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -160,10 +160,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="certifier_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="certifier_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="certifier(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="certifier" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -171,10 +171,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="land_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="land_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="land(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="land" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -182,10 +182,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="unit_land_surface_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="unit_land_surface_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="unit_land_surface(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="unit_land_surface" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -193,10 +193,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="country_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="country_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="country(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="country" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -204,10 +204,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="expiration_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="expiration_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="expiration(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="expiration" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -215,10 +215,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="total_co2_sequestration_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="total_co2_sequestration_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="total_co2_sequestration(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="total_co2_sequestration" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -226,10 +226,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="unit_co2_sequestration_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="unit_co2_sequestration_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="unit_co2_sequestration(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="unit_co2_sequestration" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -237,10 +237,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="sequestration_color_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="sequestration_color_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="sequestration_color(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="sequestration_color" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -248,10 +248,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="sequestration_type_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="sequestration_type_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="sequestration_type(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="sequestration_type" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -259,10 +259,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="sequestration_category_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="sequestration_category_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="sequestration_category(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="sequestration_category" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -270,10 +270,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="background_color_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="background_color_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="background_color(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="background_color" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -281,10 +281,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="animation_url_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="animation_url_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="animation_url(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="animation_url" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -292,10 +292,10 @@ External
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="youtube_url_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="youtube_url_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="youtube_url(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="youtube_url" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

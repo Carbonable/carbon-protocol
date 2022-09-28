@@ -6,16 +6,16 @@ Constructor
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="owner(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="owner" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="carbonable_project_address(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="carbonable_project_address" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="carbonable_token_address(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="carbonable_token_address" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="reward_token_address(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="reward_token_address" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}

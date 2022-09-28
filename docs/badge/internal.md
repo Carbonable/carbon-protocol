@@ -6,13 +6,13 @@ Internal
 {% swagger-description %}  
 Initialize the contract with the given uri and symbol  
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="uri_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="uri_len" %}  
 uri array length  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="uri(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="uri" %}  
 uri characters as a felt array  
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="name(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="name" %}  
 name of the badge collection  
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -20,48 +20,48 @@ name of the badge collection
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="uri_len(felt)" description="" %}  
+{% swagger-response status="uri_len" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri(felt*)" description="" %}  
+{% swagger-response status="uri" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "contract_uri" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="uri_len(felt)" description="" %}  
+{% swagger-response status="uri_len" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri(felt*)" description="" %}  
+{% swagger-response status="uri" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "name" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="name(felt)" description="" %}  
+{% swagger-response status="name" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "locked" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="is_locked(felt)" description="" %}  
+{% swagger-response status="is_locked" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "set_uri" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="uri_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="uri_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="uri(felt*)" %}  
+{% swagger-parameter in="path" type="felt*" name="uri" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -69,7 +69,7 @@ name of the badge collection
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -77,7 +77,7 @@ name of the badge collection
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -85,7 +85,7 @@ name of the badge collection
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+{% swagger-parameter in="path" type="Uint256" name="id" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -93,10 +93,10 @@ name of the badge collection
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="ids_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="ids" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}  
@@ -104,10 +104,10 @@ name of the badge collection
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="" name="ids_len(felt)" %}  
+{% swagger-parameter in="path" type="felt" name="ids_len" %}  
   
 {% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="ids(Uint256*)" %}  
+{% swagger-parameter in="path" type="Uint256*" name="ids" %}  
   
 {% endswagger-parameter %}  
 {% endswagger %}
