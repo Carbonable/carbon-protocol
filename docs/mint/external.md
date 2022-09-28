@@ -52,14 +52,14 @@ External
 {% swagger-parameter in="path" type="felt" name="quantity" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success ( felt )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "withdraw" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success ( felt )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "transfer" %}  
@@ -75,7 +75,7 @@ External
 {% swagger-parameter in="path" type="Uint256" name="amount" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success ( felt )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "whitelist_buy" %}  
@@ -94,7 +94,7 @@ External
 {% swagger-parameter in="path" type="felt" name="quantity" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success ( felt )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "public_buy" %}  
@@ -104,6 +104,6 @@ External
 {% swagger-parameter in="path" type="felt" name="quantity" %}  
   
 {% endswagger-parameter %}  
-{% swagger-response status="success(felt)" description="" %}  
+{% swagger-response status="success ( felt )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}

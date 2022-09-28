@@ -6,162 +6,162 @@ Internal
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="image_url_len(felt)" description="" %}  
+{% swagger-response status="image_url_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="image_url(felt*)" description="" %}  
+{% swagger-response status="image_url ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "image_data" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="image_data_len(felt)" description="" %}  
+{% swagger-response status="image_data_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="image_data(felt*)" description="" %}  
+{% swagger-response status="image_data ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "external_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="external_url_len(felt)" description="" %}  
+{% swagger-response status="external_url_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="external_url(felt*)" description="" %}  
+{% swagger-response status="external_url ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "description" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="description_len(felt)" description="" %}  
+{% swagger-response status="description_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="description(felt*)" description="" %}  
+{% swagger-response status="description ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "holder" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="holder_len(felt)" description="" %}  
+{% swagger-response status="holder_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="holder(felt*)" description="" %}  
+{% swagger-response status="holder ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "certifier" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="certifier_len(felt)" description="" %}  
+{% swagger-response status="certifier_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="certifier(felt*)" description="" %}  
+{% swagger-response status="certifier ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "land" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="land_len(felt)" description="" %}  
+{% swagger-response status="land_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="land(felt*)" description="" %}  
+{% swagger-response status="land ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "unit_land_surface" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="unit_land_surface_len(felt)" description="" %}  
+{% swagger-response status="unit_land_surface_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="unit_land_surface(felt*)" description="" %}  
+{% swagger-response status="unit_land_surface ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "country" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="country_len(felt)" description="" %}  
+{% swagger-response status="country_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="country(felt*)" description="" %}  
+{% swagger-response status="country ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "expiration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="expiration_len(felt)" description="" %}  
+{% swagger-response status="expiration_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="expiration(felt*)" description="" %}  
+{% swagger-response status="expiration ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "total_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="total_co2_sequestration_len(felt)" description="" %}  
+{% swagger-response status="total_co2_sequestration_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="total_co2_sequestration(felt*)" description="" %}  
+{% swagger-response status="total_co2_sequestration ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "unit_co2_sequestration" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="unit_co2_sequestration_len(felt)" description="" %}  
+{% swagger-response status="unit_co2_sequestration_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="unit_co2_sequestration(felt*)" description="" %}  
+{% swagger-response status="unit_co2_sequestration ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "sequestration_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="sequestration_color_len(felt)" description="" %}  
+{% swagger-response status="sequestration_color_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="sequestration_color(felt*)" description="" %}  
+{% swagger-response status="sequestration_color ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "sequestration_type" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="sequestration_type_len(felt)" description="" %}  
+{% swagger-response status="sequestration_type_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="sequestration_type(felt*)" description="" %}  
+{% swagger-response status="sequestration_type ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "sequestration_category" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="sequestration_category_len(felt)" description="" %}  
+{% swagger-response status="sequestration_category_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="sequestration_category(felt*)" description="" %}  
+{% swagger-response status="sequestration_category ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "background_color" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="background_color_len(felt)" description="" %}  
+{% swagger-response status="background_color_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="background_color(felt*)" description="" %}  
+{% swagger-response status="background_color ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "animation_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="animation_url_len(felt)" description="" %}  
+{% swagger-response status="animation_url_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="animation_url(felt*)" description="" %}  
+{% swagger-response status="animation_url ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "youtube_url" %}  
 {% swagger-description %}  
   
 {% endswagger-description %}  
-{% swagger-response status="youtube_url_len(felt)" description="" %}  
+{% swagger-response status="youtube_url_len ( felt )" description="" %}  
 {% endswagger-response %}  
-{% swagger-response status="youtube_url(felt*)" description="" %}  
+{% swagger-response status="youtube_url ( felt* )" description="" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "internal" path = " " baseUrl = " " summary = "set_image_url" %}  
