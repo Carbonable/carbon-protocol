@@ -2,51 +2,6 @@
 Internal
 ========
   
-{% swagger method = "event" path = " " baseUrl = " " summary = "Locked" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="token_id(Uint256)" %}  
-  
-{% endswagger-parameter %}  
-{% endswagger %}  
-{% swagger method = "event" path = " " baseUrl = " " summary = "Unlocked" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="token_id(Uint256)" %}  
-  
-{% endswagger-parameter %}  
-{% endswagger %}  
-{% swagger method = "st0rage_var" path = " " baseUrl = " " summary = "CarbonableBadge_unlocked" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="unlocked(felt)" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "st0rage_var" path = " " baseUrl = " " summary = "CarbonableBadge_name" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="{implicit}" name="" %}  
-  
-{% endswagger-parameter %}  
-{% swagger-response status="name(felt)" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
 {% swagger method = "namespace Carb0nableBadge" path = " " baseUrl = " " summary = "initializer" %}  
 {% swagger-description %}  
 Initialize the contract with the given uri and symbol  

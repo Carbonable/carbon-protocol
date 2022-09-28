@@ -15,6 +15,11 @@ class Document():
     swagger_response_open = '{{% swagger-response status="{name}" description="{description}" %}}'
     swagger_response_close = '{% endswagger-response %}'
 
+    prettier = {
+        "storage_var": "storage",
+        "namespace": "internal",
+    }
+
     def __init__(self, root: Path, name: str, header: str, data: dict) -> None:
         self._root = root
         self._name = name
@@ -22,12 +27,12 @@ class Document():
         self._data = data
 
         self._functions = {}
-        if (self._name == "library"):  # internal
-            self._functions.update(self.internals)
-        else:  # contract
-            self._functions.update(self.constructors)
-            self._functions.update(self.views)
-            self._functions.update(self.externals)
+        self._functions.update(self.constructors)
+        self._functions.update(self.views)
+        self._functions.update(self.externals)
+        self._functions.update(self.events)
+        self._functions.update(self.storages)
+        self._functions.update(self.internals)
 
     @classmethod
     def from_yaml(cls, root, path):
@@ -39,11 +44,12 @@ class Document():
 
     @staticmethod
     def filter(data, key):
+        keyword = Document.prettier.get(key, key)
         return {
-            key: [
+            keyword: [
                 func
                 for func in data
-                if func.get("attributeName") == key
+                if func.get("attributeName").startswith(key)
             ]
         }
 
@@ -63,9 +69,19 @@ class Document():
         return self.filter(self._data, functype)
 
     @property
+    def events(self):
+        functype = "event"
+        return self.filter(self._data, functype)
+
+    @property
+    def storages(self):
+        functype = "storage_var"
+        return self.filter(self._data, functype)
+
+    @property
     def internals(self):
-        functype = "internal"
-        return {functype: self._data}
+        functype = "namespace"
+        return self.filter(self._data, functype)
 
     def create_description(self, description):
         filepath = self._root / "index"
@@ -77,6 +93,9 @@ class Document():
 
     def create_api_page(self):
         for functype, functions in self._functions.items():
+            if not functions:
+                continue
+
             filepath = self._root / functype
             markdown = MdUtils(file_name=filepath.as_posix(),
                                title=functype.capitalize())

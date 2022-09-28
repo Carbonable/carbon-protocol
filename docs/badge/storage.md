@@ -1,0 +1,27 @@
+
+Storage
+=======
+  
+{% swagger method = "st0rage_var" path = " " baseUrl = " " summary = "CarbonableBadge_unlocked" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="{implicit}" name="" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="" name="id(Uint256)" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-response status="unlocked(felt)" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "st0rage_var" path = " " baseUrl = " " summary = "CarbonableBadge_name" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="{implicit}" name="" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-response status="name(felt)" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}
