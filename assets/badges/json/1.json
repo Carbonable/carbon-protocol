@@ -1,13 +1,13 @@
 {
-    "description": "Carbonable badge",
+    "description": "The Carbonable Helper Badge. This badge illustrates your precious help to the Carbonable adventure as a member of the helpers crew. It also represents your positive contribution to the Carbonable ecosystem and to the rewilding of planet Earth.",
     "external_url": "https://carbonable.io/",
     "youtube_url": "https://www.youtube.com/watch?v=5dZrROBmfKU&ab_channel=Carbonable",
-    "image": "ipfs://bafybeigsolf5qc6vtyxak5pyxupnj6iymylwz44vbz4avam5bp3in2exf4/helper.png",
-    "name": "Helper",
+    "image": "ipfs://bafybeibo66ppjus66jeiy5xnuuoonw4v6codah4hfejrzgsfbc2cgeo2ta/helper.jpg",
+    "name": "Carbz Helper",
     "attributes": [
         {
             "trait_type": "Role",
-            "value": "Helper"
+            "value": "Carbz Helper"
         }
     ]
 }

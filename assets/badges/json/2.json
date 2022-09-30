@@ -1,17 +1,17 @@
 {
-    "description": "Carbonable badge",
+    "description": "The Carbonable Shoots Badge Level 2! Get to the next level here : https://discord.gg/gKcButQnKb. This badge represents your positive contribution to the Carbonable ecosystem and to the rewilding of planet Earth.",
     "external_url": "https://carbonable.io/",
     "youtube_url": "https://www.youtube.com/watch?v=5dZrROBmfKU&ab_channel=Carbonable",
-    "image": "ipfs://bafybeigsolf5qc6vtyxak5pyxupnj6iymylwz44vbz4avam5bp3in2exf4/level-1.png",
-    "name": "Level 1",
+    "image": "ipfs://bafybeibo66ppjus66jeiy5xnuuoonw4v6codah4hfejrzgsfbc2cgeo2ta/level-2.jpg",
+    "name": "Carbz Shoots - Level 2",
     "attributes": [
         {
             "trait_type": "Role",
-            "value": "User"
+            "value": "Carbz Shoots"
         },
         {
             "trait_type": "Level",
-            "value": 1
+            "value": 2
         }
     ]
 }
