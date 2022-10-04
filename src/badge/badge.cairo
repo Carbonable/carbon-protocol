@@ -118,7 +118,7 @@ func balanceOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   account(felt): The addresses of the token holder
     //   id(Uint256): Token id
     // Returns:
-    //   balance(Uint256): The account's balance of the token types requested (i-e balance for each (owner, id) pair)
+    //   balance(Uint256): The account-s balance of the token types requested (i-e balance for each (owner, id) pair)
     return ERC1155.balance_of(account, id);
 }
 
@@ -139,7 +139,7 @@ func balanceOfBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   ids(Uint256*): Token ids
     // Returns:
     //   balances_len(felt): The balances array length
-    //   balances(Uint256*): The accounts balance of the token types requested (i.e. balance for each (account, id) pair)
+    //   balances(Uint256*): The accounts balance of the token types requested (i-e balance for each (account, id) pair)
     let (balances_len, balances) = ERC1155.balance_of_batch(accounts_len, accounts, ids_len, ids);
     return (balances_len, balances);
 }
@@ -269,7 +269,7 @@ func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     operator: felt, approved: felt
 ) {
     // Desc:
-    //   Enable or disable approval for a third party ("operator") to manage all of the caller's tokens (EIP 1155)
+    //   Enable or disable approval for a third party (operator) to manage all of the caller-s tokens (EIP 1155)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -345,7 +345,7 @@ func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     to: felt, id: Uint256, amount: Uint256, data_len: felt, data: felt*
 ) {
     // Desc:
-    //   Mint amount of token id to the 'to' address specified
+    //   Mint amount of token id to the -to- address specified
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -374,7 +374,7 @@ func mintBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     data: felt*,
 ) {
     // Desc:
-    //   Mint amounts of token ids to the 'to' address specified
+    //   Mint amounts of token ids to the -to- address specified
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -399,7 +399,7 @@ func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, id: Uint256, amount: Uint256
 ) {
     // Desc:
-    //   Burn amount of token id from the 'from_' address specified
+    //   Burn amount of token id from the -from_- address specified
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -426,7 +426,7 @@ func burnBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, ids_len: felt, ids: Uint256*, amounts_len: felt, amounts: Uint256*
 ) {
     // Desc:
-    //   Burn amounts of token ids from the 'from_' address specified
+    //   Burn amounts of token ids from the -from_- address specified
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)

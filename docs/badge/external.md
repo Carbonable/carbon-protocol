@@ -31,13 +31,13 @@ Token id to unlock
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setApprovalForAll" %}  
 {% swagger-description %}  
-Enable or disable approval for a third party  
+Enable or disable approval for a third party (operator) to manage all of the caller-s tokens (EIP 1155)  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="operator" %}  
-  
+Address to add to the set of authorized operators  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="approved" %}  
-  
+1 if the operator is approved, 0 to revoke approval  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "safeTransferFrom" %}  
@@ -94,82 +94,82 @@ Additional data with no specified format
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "mint" %}  
 {% swagger-description %}  
-Mint amount of token id to the  
+Mint amount of token id to the -to- address specified  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="to" %}  
-  
+Target address  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
-  
+Token id  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256" name="amount" %}  
-  
+Mint amount  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="data_len" %}  
-  
+Data array len  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt*" name="data" %}  
-  
+Additional data with no specified format  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "mintBatch" %}  
 {% swagger-description %}  
-Mint amounts of token ids to the  
+Mint amounts of token ids to the -to- address specified  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="to" %}  
-  
+Target address  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="ids_len" %}  
-  
+Token ids array length  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256*" name="ids" %}  
-  
+Token ids of each token type (order and length must match amounts array)  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="amounts_len" %}  
-  
+Amounts array length  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256*" name="amounts" %}  
-  
+Mint amounts per token type (order and length must match ids array)  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="data_len" %}  
-  
+Data array len  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt*" name="data" %}  
-  
+Additional data with no specified format  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "burn" %}  
 {% swagger-description %}  
-Burn amount of token id from the  
+Burn amount of token id from the -from_- address specified  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="from_" %}  
-  
+Address of the token holder  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
-  
+Token id  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256" name="amount" %}  
-  
+Burn amount  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "burnBatch" %}  
 {% swagger-description %}  
-Burn amounts of token ids from the  
+Burn amounts of token ids from the -from_- address specified  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="from_" %}  
-  
+Address of the token holder  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="ids_len" %}  
-  
+Token ids array length  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256*" name="ids" %}  
-  
+Token ids of each token type (order and length must match amounts array)  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="amounts_len" %}  
-  
+Amounts array length  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="Uint256*" name="amounts" %}  
-  
+Burn amounts per token type (order and length must match ids array)  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  

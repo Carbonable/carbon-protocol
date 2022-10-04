@@ -43,7 +43,7 @@ The addresses of the token holder
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
 Token id  
 {% endswagger-parameter %}  
-{% swagger-response status="balance ( Uint256 )" description="The" %}  
+{% swagger-response status="balance ( Uint256 )" description="The account-s balance of the token types requested (i-e balance for each (owner, id) pair)" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balanceOfBatch" %}  
@@ -64,7 +64,7 @@ Token ids
 {% endswagger-parameter %}  
 {% swagger-response status="balances_len ( felt )" description="The balances array length" %}  
 {% endswagger-response %}  
-{% swagger-response status="balances ( Uint256* )" description="The accounts balance of the token types requested" %}  
+{% swagger-response status="balances ( Uint256* )" description="The accounts balance of the token types requested (i-e balance for each (account, id) pair)" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "isApprovedForAll" %}  

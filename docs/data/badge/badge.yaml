@@ -371,14 +371,16 @@
     returns:
       - name: balance
         type: Uint256
-        desc: The
+        desc: >-
+          The account-s balance of the token types requested (i-e balance for
+          each (owner, id) pair)
         charIndex:
           start: 329
-          end: 351
+          end: 437
     raises: null
     charIndex:
       start: 3175
-      end: 3526
+      end: 3612
 - attributeName: view
   functionName:
     name: balanceOfBatch
@@ -468,20 +470,22 @@
           end: 478
       - name: balances
         type: Uint256*
-        desc: The accounts balance of the token types requested
+        desc: >-
+          The accounts balance of the token types requested (i-e balance for
+          each (account, id) pair)
         charIndex:
           start: 488
-          end: 558
+          end: 599
     raises: null
     charIndex:
       start: 3869
-      end: 4427
+      end: 4468
 - attributeName: view
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 4620
-      end: 4636
+      start: 4619
+      end: 4635
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -549,14 +553,14 @@
           end: 414
     raises: null
     charIndex:
-      start: 4762
-      end: 5176
+      start: 4761
+      end: 5175
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 5290
-      end: 5295
+      start: 5289
+      end: 5294
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -606,14 +610,14 @@
           end: 215
     raises: null
     charIndex:
-      start: 5381
-      end: 5596
+      start: 5380
+      end: 5595
 - attributeName: view
   functionName:
     name: name
     charIndex:
-      start: 5673
-      end: 5677
+      start: 5672
+      end: 5676
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -663,14 +667,14 @@
           end: 223
     raises: null
     charIndex:
-      start: 5762
-      end: 5985
+      start: 5761
+      end: 5984
 - attributeName: view
   functionName:
     name: locked
     charIndex:
-      start: 6035
-      end: 6041
+      start: 6034
+      end: 6040
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -728,14 +732,14 @@
           end: 286
     raises: null
     charIndex:
-      start: 6148
-      end: 6434
+      start: 6147
+      end: 6433
 - attributeName: external
   functionName:
     name: setURI
     charIndex:
-      start: 6512
-      end: 6518
+      start: 6511
+      end: 6517
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -801,14 +805,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 6648
-      end: 6944
+      start: 6647
+      end: 6943
 - attributeName: external
   functionName:
     name: setLocked
     charIndex:
-      start: 7054
-      end: 7063
+      start: 7053
+      end: 7062
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -858,14 +862,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7143
-      end: 7399
+      start: 7142
+      end: 7398
 - attributeName: external
   functionName:
     name: setUnlocked
     charIndex:
-      start: 7502
-      end: 7513
+      start: 7501
+      end: 7512
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -915,14 +919,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7593
-      end: 7852
+      start: 7592
+      end: 7851
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 7957
-      end: 7974
+      start: 7956
+      end: 7973
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -941,23 +945,55 @@
     desc:
       - name: ''
         type: ''
-        desc: Enable or disable approval for a third party
+        desc: >-
+          Enable or disable approval for a third party (operator) to manage all
+          of the caller-s tokens (EIP 1155)
         charIndex:
           start: 23
-          end: 68
-    implicitArgs: null
-    explicitArgs: null
+          end: 126
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 158
+          end: 176
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 186
+          end: 212
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 222
+          end: 237
+    explicitArgs:
+      - name: operator
+        type: felt
+        desc: Address to add to the set of authorized operators
+        charIndex:
+          start: 269
+          end: 334
+      - name: approved
+        type: felt
+        desc: 1 if the operator is approved, 0 to revoke approval
+        charIndex:
+          start: 344
+          end: 411
     returns: null
     raises: null
     charIndex:
-      start: 8079
-      end: 8147
+      start: 8078
+      end: 8519
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 8610
-      end: 8626
+      start: 8607
+      end: 8623
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1047,14 +1083,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8781
-      end: 9280
+      start: 8778
+      end: 9277
 - attributeName: external
   functionName:
     name: safeBatchTransferFrom
     charIndex:
-      start: 9426
-      end: 9447
+      start: 9423
+      end: 9444
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1168,14 +1204,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 9669
-      end: 10431
+      start: 9666
+      end: 10428
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 10623
-      end: 10627
+      start: 10620
+      end: 10624
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1200,23 +1236,71 @@
     desc:
       - name: ''
         type: ''
-        desc: Mint amount of token id to the
+        desc: Mint amount of token id to the -to- address specified
         charIndex:
           start: 23
-          end: 54
-    implicitArgs: null
-    explicitArgs: null
+          end: 76
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 126
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 136
+          end: 162
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 172
+          end: 187
+    explicitArgs:
+      - name: to
+        type: felt
+        desc: Target address
+        charIndex:
+          start: 219
+          end: 243
+      - name: id
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 253
+          end: 274
+      - name: amount
+        type: Uint256
+        desc: Mint amount
+        charIndex:
+          start: 284
+          end: 312
+      - name: data_len
+        type: felt
+        desc: Data array len
+        charIndex:
+          start: 322
+          end: 352
+      - name: data
+        type: felt*
+        desc: Additional data with no specified format
+        charIndex:
+          start: 362
+          end: 415
     returns: null
     raises: null
     charIndex:
-      start: 10769
-      end: 10823
+      start: 10766
+      end: 11211
 - attributeName: external
   functionName:
     name: mintBatch
     charIndex:
-      start: 11332
-      end: 11341
+      start: 11329
+      end: 11338
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1247,23 +1331,85 @@
     desc:
       - name: ''
         type: ''
-        desc: Mint amounts of token ids to the
+        desc: Mint amounts of token ids to the -to- address specified
         charIndex:
           start: 23
-          end: 56
-    implicitArgs: null
-    explicitArgs: null
+          end: 78
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 110
+          end: 128
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 138
+          end: 164
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 174
+          end: 189
+    explicitArgs:
+      - name: to
+        type: felt
+        desc: Target address
+        charIndex:
+          start: 221
+          end: 245
+      - name: ids_len
+        type: felt
+        desc: Token ids array length
+        charIndex:
+          start: 255
+          end: 292
+      - name: ids
+        type: Uint256*
+        desc: >-
+          Token ids of each token type (order and length must match amounts
+          array)
+        charIndex:
+          start: 302
+          end: 389
+      - name: amounts_len
+        type: felt
+        desc: Amounts array length
+        charIndex:
+          start: 399
+          end: 438
+      - name: amounts
+        type: Uint256*
+        desc: Mint amounts per token type (order and length must match ids array)
+        charIndex:
+          start: 448
+          end: 534
+      - name: data_len
+        type: felt
+        desc: Data array len
+        charIndex:
+          start: 544
+          end: 574
+      - name: data
+        type: felt*
+        desc: Additional data with no specified format
+        charIndex:
+          start: 584
+          end: 637
     returns: null
     raises: null
     charIndex:
-      start: 11546
-      end: 11602
+      start: 11543
+      end: 12210
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 12361
-      end: 12365
+      start: 12358
+      end: 12362
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1284,23 +1430,71 @@
     desc:
       - name: ''
         type: ''
-        desc: Burn amount of token id from the
+        desc: Burn amount of token id from the -from_- address specified
         charIndex:
           start: 23
-          end: 56
-    implicitArgs: null
-    explicitArgs: null
+          end: 81
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 113
+          end: 131
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 141
+          end: 167
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 177
+          end: 192
+    explicitArgs:
+      - name: from_
+        type: felt
+        desc: Address of the token holder
+        charIndex:
+          start: 224
+          end: 264
+      - name: id
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 274
+          end: 295
+      - name: amount
+        type: Uint256
+        desc: Burn amount
+        charIndex:
+          start: 305
+          end: 333
+      - name: data_len
+        type: felt
+        desc: Data array len
+        charIndex:
+          start: 343
+          end: 373
+      - name: data
+        type: felt*
+        desc: Additional data with no specified format
+        charIndex:
+          start: 383
+          end: 436
     returns: null
     raises: null
     charIndex:
-      start: 12481
-      end: 12537
+      start: 12478
+      end: 12944
 - attributeName: external
   functionName:
     name: burnBatch
     charIndex:
-      start: 13217
-      end: 13226
+      start: 13214
+      end: 13223
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1325,23 +1519,85 @@
     desc:
       - name: ''
         type: ''
-        desc: Burn amounts of token ids from the
+        desc: Burn amounts of token ids from the -from_- address specified
         charIndex:
           start: 23
-          end: 58
-    implicitArgs: null
-    explicitArgs: null
+          end: 83
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 115
+          end: 133
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 143
+          end: 169
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 179
+          end: 194
+    explicitArgs:
+      - name: from_
+        type: felt
+        desc: Address of the token holder
+        charIndex:
+          start: 226
+          end: 266
+      - name: ids_len
+        type: felt
+        desc: Token ids array length
+        charIndex:
+          start: 276
+          end: 313
+      - name: ids
+        type: Uint256*
+        desc: >-
+          Token ids of each token type (order and length must match amounts
+          array)
+        charIndex:
+          start: 323
+          end: 410
+      - name: amounts_len
+        type: felt
+        desc: Amounts array length
+        charIndex:
+          start: 420
+          end: 459
+      - name: amounts
+        type: Uint256*
+        desc: Burn amounts per token type (order and length must match ids array)
+        charIndex:
+          start: 469
+          end: 555
+      - name: data_len
+        type: felt
+        desc: Data array len
+        charIndex:
+          start: 565
+          end: 595
+      - name: data
+        type: felt*
+        desc: Additional data with no specified format
+        charIndex:
+          start: 605
+          end: 658
     returns: null
     raises: null
     charIndex:
-      start: 13380
-      end: 13438
+      start: 13377
+      end: 14065
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 14368
-      end: 14385
+      start: 14365
+      end: 14382
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1391,14 +1647,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 14474
-      end: 14743
+      start: 14471
+      end: 14740
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 14819
-      end: 14836
+      start: 14816
+      end: 14833
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1440,5 +1696,5 @@
     returns: null
     raises: null
     charIndex:
-      start: 14905
-      end: 15087
+      start: 14902
+      end: 15084
