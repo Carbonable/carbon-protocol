@@ -56,7 +56,7 @@ func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     interfaceId: felt
 ) -> (success: felt) {
     // Desc:
-    //   Return the ability status to support the provided interface (EIP 165).
+    //   Return the ability status to support the provided interface (EIP 165)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -73,7 +73,7 @@ func uri{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(id: Uint256) -> (uri_len: felt, uri: felt*) {
     // Desc:
-    //   Return the URI per token id.
+    //   Return the URI per token id
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -92,7 +92,7 @@ func contractURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }() -> (uri_len: felt, uri: felt*) {
     // Desc:
-    //   Return the contract URI.
+    //   Return the contract uri
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)

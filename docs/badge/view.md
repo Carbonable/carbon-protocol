@@ -4,33 +4,33 @@ View
   
 {% swagger method = "view" path = " " baseUrl = " " summary = "supportsInterface" %}  
 {% swagger-description %}  
-Return the ability status to support the provided interface (EIP  
+Return the ability status to support the provided interface (EIP 165)  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="interfaceId" %}  
-  
+the interface id to check  
 {% endswagger-parameter %}  
-{% swagger-response status="success ( felt )" description="" %}  
+{% swagger-response status="success ( felt )" description="true if the contract supports this interface else false" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "uri" %}  
 {% swagger-description %}  
-Return the URI per token  
+Return the URI per token id  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
-  
+the corresponding token id  
 {% endswagger-parameter %}  
-{% swagger-response status="uri_len ( felt )" description="" %}  
+{% swagger-response status="uri_len ( felt )" description="uri array length" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri ( felt* )" description="" %}  
+{% swagger-response status="uri ( felt* )" description="uri characters as a felt array" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "contractURI" %}  
 {% swagger-description %}  
-Return the contract  
+Return the contract uri  
 {% endswagger-description %}  
-{% swagger-response status="uri_len ( felt )" description="" %}  
+{% swagger-response status="uri_len ( felt )" description="uri array length" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri ( felt* )" description="" %}  
+{% swagger-response status="uri ( felt* )" description="uri characters as a felt array" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balanceOf" %}  

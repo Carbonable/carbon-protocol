@@ -111,23 +111,53 @@
     desc:
       - name: ''
         type: ''
-        desc: Return the ability status to support the provided interface (EIP
+        desc: Return the ability status to support the provided interface (EIP 165)
         charIndex:
           start: 23
-          end: 88
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+          end: 92
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 124
+          end: 142
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 152
+          end: 178
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 188
+          end: 203
+    explicitArgs:
+      - name: interfaceId
+        type: felt
+        desc: the interface id to check
+        charIndex:
+          start: 235
+          end: 279
+    returns:
+      - name: success
+        type: felt
+        desc: true if the contract supports this interface else false
+        charIndex:
+          start: 305
+          end: 375
     raises: null
     charIndex:
       start: 1579
-      end: 1667
+      end: 1954
 - attributeName: view
   functionName:
     name: uri
     charIndex:
-      start: 2021
-      end: 2024
+      start: 2020
+      end: 2023
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -150,23 +180,65 @@
     desc:
       - name: ''
         type: ''
-        desc: Return the URI per token
+        desc: Return the URI per token id
         charIndex:
           start: 23
-          end: 48
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+          end: 50
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 82
+          end: 100
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 110
+          end: 136
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+        desc: ''
+        charIndex:
+          start: 146
+          end: 174
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 184
+          end: 199
+    explicitArgs:
+      - name: id
+        type: Uint256
+        desc: the corresponding token id
+        charIndex:
+          start: 231
+          end: 270
+    returns:
+      - name: uri_len
+        type: felt
+        desc: uri array length
+        charIndex:
+          start: 296
+          end: 327
+      - name: uri
+        type: felt*
+        desc: uri characters as a felt array
+        charIndex:
+          start: 337
+          end: 379
     raises: null
     charIndex:
-      start: 2171
-      end: 2219
+      start: 2170
+      end: 2549
 - attributeName: view
   functionName:
     name: contractURI
     charIndex:
-      start: 2602
-      end: 2613
+      start: 2600
+      end: 2611
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -187,23 +259,59 @@
     desc:
       - name: ''
         type: ''
-        desc: Return the contract
+        desc: Return the contract uri
         charIndex:
           start: 23
-          end: 43
-    implicitArgs: null
+          end: 46
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 78
+          end: 96
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 106
+          end: 132
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+        desc: ''
+        charIndex:
+          start: 142
+          end: 170
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 180
+          end: 195
     explicitArgs: null
-    returns: null
+    returns:
+      - name: uri_len
+        type: felt
+        desc: uri array length
+        charIndex:
+          start: 221
+          end: 252
+      - name: uri
+        type: felt*
+        desc: uri characters as a felt array
+        charIndex:
+          start: 262
+          end: 304
     raises: null
     charIndex:
-      start: 2749
-      end: 2792
+      start: 2747
+      end: 3051
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 3112
-      end: 3121
+      start: 3109
+      end: 3118
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -233,8 +341,8 @@
   functionName:
     name: balanceOfBatch
     charIndex:
-      start: 3303
-      end: 3317
+      start: 3300
+      end: 3314
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -270,8 +378,8 @@
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 3652
-      end: 3668
+      start: 3649
+      end: 3665
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -301,8 +409,8 @@
   functionName:
     name: owner
     charIndex:
-      start: 3908
-      end: 3913
+      start: 3905
+      end: 3910
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -328,8 +436,8 @@
   functionName:
     name: name
     charIndex:
-      start: 4076
-      end: 4080
+      start: 4073
+      end: 4077
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -355,8 +463,8 @@
   functionName:
     name: locked
     charIndex:
-      start: 4215
-      end: 4221
+      start: 4212
+      end: 4218
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -384,8 +492,8 @@
   functionName:
     name: setURI
     charIndex:
-      start: 4406
-      end: 4412
+      start: 4403
+      end: 4409
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -415,8 +523,8 @@
   functionName:
     name: setLocked
     charIndex:
-      start: 4652
-      end: 4661
+      start: 4649
+      end: 4658
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -442,8 +550,8 @@
   functionName:
     name: setUnlocked
     charIndex:
-      start: 4844
-      end: 4855
+      start: 4841
+      end: 4852
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -469,8 +577,8 @@
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 5040
-      end: 5057
+      start: 5037
+      end: 5054
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -498,8 +606,8 @@
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 5250
-      end: 5266
+      start: 5247
+      end: 5263
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -535,8 +643,8 @@
   functionName:
     name: safeBatchTransferFrom
     charIndex:
-      start: 5567
-      end: 5588
+      start: 5564
+      end: 5585
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -578,8 +686,8 @@
   functionName:
     name: mint
     charIndex:
-      start: 6002
-      end: 6006
+      start: 5999
+      end: 6003
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -613,8 +721,8 @@
   functionName:
     name: mintBatch
     charIndex:
-      start: 6266
-      end: 6275
+      start: 6263
+      end: 6272
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -654,8 +762,8 @@
   functionName:
     name: burn
     charIndex:
-      start: 6628
-      end: 6632
+      start: 6625
+      end: 6629
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -685,8 +793,8 @@
   functionName:
     name: burnBatch
     charIndex:
-      start: 7018
-      end: 7027
+      start: 7015
+      end: 7024
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -720,8 +828,8 @@
   functionName:
     name: transferOwnership
     charIndex:
-      start: 7481
-      end: 7498
+      start: 7478
+      end: 7495
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -747,8 +855,8 @@
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 7663
-      end: 7680
+      start: 7660
+      end: 7677
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
