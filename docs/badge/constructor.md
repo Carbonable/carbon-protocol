@@ -7,15 +7,15 @@ Constructor
 Initialize the contract  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="uri_len" %}  
-uri array length  
+Uri array length  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt*" name="uri" %}  
-uri characters as a felt array  
+Uri characters  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="name" %}  
-name of the badge collection  
+Name of the badge collection  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="owner" %}  
-owner address  
+Owner address  
 {% endswagger-parameter %}  
 {% endswagger %}

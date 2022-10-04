@@ -33,10 +33,10 @@ func constructor{
     //   bitwise_ptr(BitwiseBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   uri_len(felt): uri array length
-    //   uri(felt*): uri characters as a felt array
-    //   name(felt): name of the badge collection
-    //   owner(felt): owner address
+    //   uri_len(felt): Uri array length
+    //   uri(felt*): Uri characters
+    //   name(felt): Name of the badge collection
+    //   owner(felt): Owner address
     // Returns:
     //   None
     alloc_locals;
@@ -62,9 +62,9 @@ func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   interfaceId(felt): the interface id to check
+    //   interfaceId(felt): Interface id
     // Returns:
-    //   success(felt): true if the contract supports this interface else false
+    //   success(felt): 1 if supported else 0
     return ERC165.supports_interface(interfaceId);
 }
 
@@ -73,17 +73,17 @@ func uri{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(id: Uint256) -> (uri_len: felt, uri: felt*) {
     // Desc:
-    //   Return the URI per token id
+    //   Return the URI corresponding to the specified token id (OpenSea)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   bitwise_ptr(BitwiseBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   id(Uint256): the corresponding token id
+    //   id(Uint256): Token id
     // Returns:
-    //   uri_len(felt): uri array length
-    //   uri(felt*): uri characters as a felt array
+    //   uri_len(felt): Uri array length
+    //   uri(felt*): Uri characters
     return CarbonableBadge.uri(id);
 }
 
@@ -92,15 +92,15 @@ func contractURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }() -> (uri_len: felt, uri: felt*) {
     // Desc:
-    //   Return the contract uri
+    //   Return the contract uri (OpenSea)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   bitwise_ptr(BitwiseBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   uri_len(felt): uri array length
-    //   uri(felt*): uri characters as a felt array
+    //   uri_len(felt): Uri array length
+    //   uri(felt*): Uri characters
     return CarbonableBadge.contract_uri();
 }
 
@@ -108,6 +108,17 @@ func contractURI{
 func balanceOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt, id: Uint256
 ) -> (balance: Uint256) {
+    // Desc:
+    //   Get the balance of multiple account/token pairs (EIP 1155)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   account(felt): The addresses of the token holder
+    //   id(Uint256): Token id
+    // Returns:
+    //   balance(Uint256): The account's balance of the token types requested (i-e balance for each (owner, id) pair)
     return ERC1155.balance_of(account, id);
 }
 
@@ -115,6 +126,20 @@ func balanceOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func balanceOfBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     accounts_len: felt, accounts: felt*, ids_len: felt, ids: Uint256*
 ) -> (balances_len: felt, balances: Uint256*) {
+    // Desc:
+    //   Get the balance of multiple account/token pairs (EIP 1155)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   accounts_len(felt): Accounts array length
+    //   accounts(felt*): The addresses of the token holders
+    //   ids_len(felt): Token ids array length
+    //   ids(Uint256*): Token ids
+    // Returns:
+    //   balances_len(felt): The balances array length
+    //   balances(Uint256*): The accounts balance of the token types requested (i.e. balance for each (account, id) pair)
     let (balances_len, balances) = ERC1155.balance_of_batch(accounts_len, accounts, ids_len, ids);
     return (balances_len, balances);
 }
@@ -123,18 +148,45 @@ func balanceOfBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt, operator: felt
 ) -> (isApproved: felt) {
+    // Desc:
+    //   Queries the approval status of an operator for a given owner (EIP 1155)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   account(felt): The owner of the tokens
+    //   operator(felt): Address of authorized operator
+    // Returns:
+    //   isApproved(felt): 1 if the operator is approved, 0 if not
     let (is_approved) = ERC1155.is_approved_for_all(account, operator);
     return (is_approved,);
 }
 
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+    // Desc:
+    //   Return the contract owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   owner(felt): The owner address
     let (owner: felt) = Ownable.owner();
     return (owner,);
 }
 
 @view
 func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (name: felt) {
+    // Desc:
+    //   Return the contract name (OpenSea)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   name(felt): The contract name
     return CarbonableBadge.name();
 }
 
@@ -142,6 +194,16 @@ func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> 
 func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) -> (
     is_locked: felt
 ) {
+    // Desc:
+    //   Return the locked status of a token id
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   id(Uint256): Token id
+    // Returns:
+    //   is_locked(felt): 1 if locked else 0
     return CarbonableBadge.locked(id);
 }
 
@@ -153,6 +215,16 @@ func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id:
 func setURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(uri_len: felt, uri: felt*) {
+    // Desc:
+    //   Set the contract base URI
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   bitwise_ptr(BitwiseBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   uri_len(felt): Uri array length
+    //   uri(felt*): Uri characters
     Ownable.assert_only_owner();
     CarbonableBadge.set_uri(uri_len, uri);
     return ();
@@ -160,6 +232,16 @@ func setURI{
 
 @external
 func setLocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
+    // Desc:
+    //   Lock the corresponding token id
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   id(Uint256): Token id to lock
+    // Returns:
+    //   None
     Ownable.assert_only_owner();
     CarbonableBadge.set_locked(id);
     return ();
@@ -167,6 +249,16 @@ func setLocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 @external
 func setUnlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
+    // Desc:
+    //   Unock the corresponding token id
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   id(Uint256): Token id to unlock
+    // Returns:
+    //   None
     Ownable.assert_only_owner();
     CarbonableBadge.set_unlocked(id);
     return ();
@@ -176,6 +268,17 @@ func setUnlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     operator: felt, approved: felt
 ) {
+    // Desc:
+    //   Enable or disable approval for a third party ("operator") to manage all of the caller's tokens (EIP 1155)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   operator(felt): Address to add to the set of authorized operators
+    //   approved(felt): 1 if the operator is approved, 0 to revoke approval
+    // Returns:
+    //   None
     ERC1155.set_approval_for_all(operator, approved);
     return ();
 }
@@ -184,6 +287,21 @@ func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 func safeTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, to: felt, id: Uint256, amount: Uint256, data_len: felt, data: felt*
 ) {
+    // Desc:
+    //   Transfer an amount of token id from address to a target (EIP 1155)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   from_(felt): Source address
+    //   to(felt): Target address
+    //   id(Uint256): Token id
+    //   amount(Uint256): Transfer amount
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
     CarbonableBadge.assert_unlocked(id);
     ERC1155.safe_transfer_from(from_, to, id, amount, data_len, data);
     return ();
@@ -200,6 +318,23 @@ func safeBatchTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
     data_len: felt,
     data: felt*,
 ) {
+    // Desc:
+    //   Transfer amounts of token ids from the from address to the to address specified (with safety call) (EIP 1155)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   from_(felt): Source address
+    //   to(felt): Target address
+    //   ids_len(felt): Token ids array length
+    //   ids(Uint256*): Token ids of each token type (order and length must match amounts array)
+    //   amounts_len(felt): Amounts array length
+    //   amounts(Uint256*): Transfer amounts per token type (order and length must match ids array)
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
     CarbonableBadge.assert_unlocked_batch(ids_len, ids);
     ERC1155.safe_batch_transfer_from(from_, to, ids_len, ids, amounts_len, amounts, data_len, data);
     return ();
@@ -209,6 +344,20 @@ func safeBatchTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     to: felt, id: Uint256, amount: Uint256, data_len: felt, data: felt*
 ) {
+    // Desc:
+    //   Mint amount of token id to the 'to' address specified
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   to(felt): Target address
+    //   id(Uint256): Token id
+    //   amount(Uint256): Mint amount
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
     Ownable.assert_only_owner();
     ERC1155._mint(to, id, amount, data_len, data);
     return ();
@@ -224,6 +373,22 @@ func mintBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     data_len: felt,
     data: felt*,
 ) {
+    // Desc:
+    //   Mint amounts of token ids to the 'to' address specified
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   to(felt): Target address
+    //   ids_len(felt): Token ids array length
+    //   ids(Uint256*): Token ids of each token type (order and length must match amounts array)
+    //   amounts_len(felt): Amounts array length
+    //   amounts(Uint256*): Mint amounts per token type (order and length must match ids array)
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
     Ownable.assert_only_owner();
     ERC1155._mint_batch(to, ids_len, ids, amounts_len, amounts, data_len, data);
     return ();
@@ -233,6 +398,20 @@ func mintBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, id: Uint256, amount: Uint256
 ) {
+    // Desc:
+    //   Burn amount of token id from the 'from_' address specified
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   from_(felt): Address of the token holder
+    //   id(Uint256): Token id
+    //   amount(Uint256): Burn amount
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
     ERC1155.assert_owner_or_approved(owner=from_);
     let (caller) = get_caller_address();
     with_attr error_message("ERC1155: called from zero address") {
@@ -246,6 +425,22 @@ func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func burnBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, ids_len: felt, ids: Uint256*, amounts_len: felt, amounts: Uint256*
 ) {
+    // Desc:
+    //   Burn amounts of token ids from the 'from_' address specified
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   from_(felt): Address of the token holder
+    //   ids_len(felt): Token ids array length
+    //   ids(Uint256*): Token ids of each token type (order and length must match amounts array)
+    //   amounts_len(felt): Amounts array length
+    //   amounts(Uint256*): Burn amounts per token type (order and length must match ids array)
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
     ERC1155.assert_owner_or_approved(owner=from_);
     let (caller) = get_caller_address();
     with_attr error_message("ERC1155: called from zero address") {
@@ -259,12 +454,30 @@ func burnBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
 ) {
+    // Desc:
+    //   Transfer ownership to a new owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   newOwner(felt): Address of the new owner
+    // Returns:
+    //   None
     Ownable.transfer_ownership(newOwner);
     return ();
 }
 
 @external
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
     Ownable.renounce_ownership();
     return ();
 }
