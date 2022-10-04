@@ -83,14 +83,6 @@ class Document():
         functype = "namespace"
         return self.filter(self._data, functype)
 
-    def create_description(self, description):
-        filepath = self._root / "index"
-        markdown = MdUtils(file_name=filepath.as_posix())
-        markdown.new_header(level=1, title=self._header)
-        markdown.new_paragraph(description)
-        markdown.new_paragraph()
-        markdown.create_md_file()
-
     def create_api_page(self):
         for functype, functions in self._functions.items():
             if not functions:
@@ -167,5 +159,4 @@ class Document():
 root = Path(__file__).parent
 for path in root.glob("**/*.yaml"):
     document = Document.from_yaml(root, path)
-    document.create_description("This is a description")
     document.create_api_page()
