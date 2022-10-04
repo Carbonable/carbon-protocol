@@ -108,20 +108,26 @@
       - name: success
         type: felt
   functionComment:
-    desc: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the ability status to support the provided interface (EIP
+        charIndex:
+          start: 23
+          end: 88
     implicitArgs: null
     explicitArgs: null
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 1579
+      end: 1667
 - attributeName: view
   functionName:
     name: uri
     charIndex:
-      start: 1645
-      end: 1648
+      start: 2021
+      end: 2024
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -141,20 +147,26 @@
       - name: uri
         type: felt*
   functionComment:
-    desc: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the URI per token
+        charIndex:
+          start: 23
+          end: 48
     implicitArgs: null
     explicitArgs: null
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2171
+      end: 2219
 - attributeName: view
   functionName:
     name: contractURI
     charIndex:
-      start: 1846
-      end: 1857
+      start: 2602
+      end: 2613
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -172,20 +184,26 @@
       - name: uri
         type: felt*
   functionComment:
-    desc: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the contract
+        charIndex:
+          start: 23
+          end: 43
     implicitArgs: null
     explicitArgs: null
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2749
+      end: 2792
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 2051
-      end: 2060
+      start: 3112
+      end: 3121
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -215,8 +233,8 @@
   functionName:
     name: balanceOfBatch
     charIndex:
-      start: 2242
-      end: 2256
+      start: 3303
+      end: 3317
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -252,8 +270,8 @@
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 2591
-      end: 2607
+      start: 3652
+      end: 3668
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -283,8 +301,8 @@
   functionName:
     name: owner
     charIndex:
-      start: 2847
-      end: 2852
+      start: 3908
+      end: 3913
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -310,8 +328,8 @@
   functionName:
     name: name
     charIndex:
-      start: 3015
-      end: 3019
+      start: 4076
+      end: 4080
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -337,8 +355,8 @@
   functionName:
     name: locked
     charIndex:
-      start: 3154
-      end: 3160
+      start: 4215
+      end: 4221
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -366,8 +384,8 @@
   functionName:
     name: setURI
     charIndex:
-      start: 3345
-      end: 3351
+      start: 4406
+      end: 4412
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -397,8 +415,8 @@
   functionName:
     name: setLocked
     charIndex:
-      start: 3591
-      end: 3600
+      start: 4652
+      end: 4661
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -424,8 +442,8 @@
   functionName:
     name: setUnlocked
     charIndex:
-      start: 3783
-      end: 3794
+      start: 4844
+      end: 4855
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -451,8 +469,8 @@
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 3979
-      end: 3996
+      start: 5040
+      end: 5057
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -480,8 +498,8 @@
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 4189
-      end: 4205
+      start: 5250
+      end: 5266
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -517,8 +535,8 @@
   functionName:
     name: safeBatchTransferFrom
     charIndex:
-      start: 4506
-      end: 4527
+      start: 5567
+      end: 5588
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -560,8 +578,8 @@
   functionName:
     name: mint
     charIndex:
-      start: 4941
-      end: 4945
+      start: 6002
+      end: 6006
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -595,8 +613,8 @@
   functionName:
     name: mintBatch
     charIndex:
-      start: 5205
-      end: 5214
+      start: 6266
+      end: 6275
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -636,8 +654,8 @@
   functionName:
     name: burn
     charIndex:
-      start: 5567
-      end: 5571
+      start: 6628
+      end: 6632
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -667,8 +685,8 @@
   functionName:
     name: burnBatch
     charIndex:
-      start: 5957
-      end: 5966
+      start: 7018
+      end: 7027
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -702,8 +720,8 @@
   functionName:
     name: transferOwnership
     charIndex:
-      start: 6420
-      end: 6437
+      start: 7481
+      end: 7498
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -729,8 +747,8 @@
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 6602
-      end: 6619
+      start: 7663
+      end: 7680
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

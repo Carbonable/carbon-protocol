@@ -4,7 +4,7 @@ View
   
 {% swagger method = "view" path = " " baseUrl = " " summary = "supportsInterface" %}  
 {% swagger-description %}  
-  
+Return the ability status to support the provided interface (EIP  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="interfaceId" %}  
   
@@ -14,7 +14,7 @@ View
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "uri" %}  
 {% swagger-description %}  
-  
+Return the URI per token  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
   
@@ -26,7 +26,7 @@ View
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "contractURI" %}  
 {% swagger-description %}  
-  
+Return the contract  
 {% endswagger-description %}  
 {% swagger-response status="uri_len ( felt )" description="" %}  
 {% endswagger-response %}  

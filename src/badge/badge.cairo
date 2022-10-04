@@ -55,6 +55,16 @@ func constructor{
 func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     interfaceId: felt
 ) -> (success: felt) {
+    // Desc:
+    //   Return the ability status to support the provided interface (EIP 165).
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   interfaceId(felt): the interface id to check
+    // Returns:
+    //   success(felt): true if the contract supports this interface else false
     return ERC165.supports_interface(interfaceId);
 }
 
@@ -62,6 +72,18 @@ func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 func uri{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(id: Uint256) -> (uri_len: felt, uri: felt*) {
+    // Desc:
+    //   Return the URI per token id.
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   bitwise_ptr(BitwiseBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   id(Uint256): the corresponding token id
+    // Returns:
+    //   uri_len(felt): uri array length
+    //   uri(felt*): uri characters as a felt array
     return CarbonableBadge.uri(id);
 }
 
@@ -69,6 +91,16 @@ func uri{
 func contractURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }() -> (uri_len: felt, uri: felt*) {
+    // Desc:
+    //   Return the contract URI.
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   bitwise_ptr(BitwiseBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   uri_len(felt): uri array length
+    //   uri(felt*): uri characters as a felt array
     return CarbonableBadge.contract_uri();
 }
 
