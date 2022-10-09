@@ -14,5 +14,5 @@ protostar build
 mkdir -p $OUTPUT_DIR
 for FILE in ./build/*.json
 do
-    thoth -f $FILE -call -format png -view False -output_callgraph_folder $OUTPUT_DIR
+    thoth -f $FILE -call -format svg -view False -output_callgraph_folder $OUTPUT_DIR
 done

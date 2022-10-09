@@ -15,3 +15,9 @@ Contracts include the following standard features:
 - 🔥 Burnable
 - 🌐 Metadata
 - 🪦 Soulbound
+
+## 📈 Callgraph
+
+See also the detailed [callgraph](../callgraphs/CarbonableBadge.gv) of the smart-contract.
+
+![callgraph](../callgraphs/CarbonableBadge.gv.svg)
