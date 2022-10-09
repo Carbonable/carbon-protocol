@@ -127,7 +127,7 @@ func max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   max_buy_per_tx(felt): max amount per tx
+    //   max_buy_per_tx(felt): Max amount per tx
     return CarbonableMinter.max_buy_per_tx();
 }
 
@@ -345,6 +345,7 @@ func airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   caller: caller is the zero address
     //   quantity: not enough available NFTs regarding max supply
     //   quantity: not enough available reserved NFTs regarding reserved supply
+    return CarbonableMinter.airdrop(to, quantity);
 }
 
 @external
