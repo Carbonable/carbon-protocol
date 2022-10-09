@@ -1,5 +1,9 @@
 # Carbonable Farmer
 
+## ✨ Presentation
 
-This is a description
+Presentation will come soon.
 
+## 📖 Description
+
+Description will come soon.

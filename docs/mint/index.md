@@ -1,5 +1,13 @@
 # Carbonable Minter
 
+## ✨ Presentation
+
+Through buying Carbonable NFTs, investors take part in the financing of a new nature-based decarbonization project, tied to an underlying CO2 sequestration capacity, and granting an ongoing financial reward resulting from the sales of carbon credit assets.
+
+The minter is the decentralized smart-contract providing a permissionless and trustless mean to invest into the projects.
+
+## 📖 Description
+
 The minter is a dedicated contract to a single carbonable project contract, each time a new project is created an associated minter is also deployed. The minter is the definitive owner of the project contract, thus giving a property of decentralization to the project.
 
 The purpose of the minter is to provide all required features required to make private, pre and public sales.
