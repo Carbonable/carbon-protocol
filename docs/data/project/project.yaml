@@ -21,20 +21,62 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract
+        charIndex:
+          start: 23
+          end: 46
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 78
+          end: 96
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 106
+          end: 132
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 142
+          end: 157
+    explicitArgs:
+      - name: name
+        type: felt
+        desc: Name of the collection
+        charIndex:
+          start: 189
+          end: 223
+      - name: symbol
+        type: felt
+        desc: Symbol of the collection
+        charIndex:
+          start: 233
+          end: 271
+      - name: owner
+        type: felt
+        desc: Owner address
+        charIndex:
+          start: 281
+          end: 307
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 759
+      end: 1096
 - attributeName: view
   functionName:
     name: totalSupply
     charIndex:
-      start: 913
-      end: 924
+      start: 1250
+      end: 1261
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -48,20 +90,52 @@
       - name: totalSupply
         type: Uint256
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Count NFTs tracked by this contract (EIP 721 - Enumeration extension)
+        charIndex:
+          start: 23
+          end: 92
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 124
+          end: 142
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 152
+          end: 178
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 188
+          end: 203
     explicitArgs: null
-    returns: null
+    returns:
+      - name: totalSupply
+        type: Uint256
+        desc: >-
+          A count of valid NFTs tracked by this contract, where each one of them
+          has an assigned and queryable owner not equal to the zero address
+        charIndex:
+          start: 229
+          end: 387
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 1362
+      end: 1749
 - attributeName: view
   functionName:
     name: tokenByIndex
     charIndex:
-      start: 1144
-      end: 1156
+      start: 1868
+      end: 1880
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -77,20 +151,62 @@
       - name: tokenId
         type: Uint256
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Enumerate valid NFTs (EIP 721 - Enumeration extension)
+        charIndex:
+          start: 23
+          end: 77
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 109
+          end: 127
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 137
+          end: 163
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 173
+          end: 188
+    explicitArgs:
+      - name: index
+        type: Uint256
+        desc: A counter less than -totalSupply()-
+        charIndex:
+          start: 220
+          end: 271
+    returns:
+      - name: tokenId
+        type: Uint256
+        desc: The token identifier for the -index-th NFT (sort order not specified)
+        charIndex:
+          start: 297
+          end: 384
+    raises:
+      - name: index
+        type: ''
+        desc: index ge than totalSupply
+        charIndex:
+          start: 409
+          end: 441
     charIndex:
-      start: 0
-      end: 0
+      start: 1991
+      end: 2432
 - attributeName: view
   functionName:
     name: tokenOfOwnerByIndex
     charIndex:
-      start: 1381
-      end: 1400
+      start: 2546
+      end: 2565
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -108,20 +224,64 @@
       - name: tokenId
         type: Uint256
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Enumerate NFTs assigned to an owner (EIP 721 - Enumeration extension)
+        charIndex:
+          start: 23
+          end: 92
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 124
+          end: 142
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 152
+          end: 178
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 188
+          end: 203
+    explicitArgs:
+      - name: owner
+        type: felt
+        desc: An address where we are interested in NFTs owned by them
+        charIndex:
+          start: 235
+          end: 304
+      - name: index
+        type: Uint256
+        desc: A counter less than -balanceOf(owner)-
+        charIndex:
+          start: 314
+          end: 368
+    returns:
+      - name: tokenId
+        type: Uint256
+        desc: >-
+          The token identifier for the -index-th NFT assigned to -owner- (sort
+          order not specified)
+        charIndex:
+          start: 394
+          end: 501
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2689
+      end: 3321
 - attributeName: view
   functionName:
     name: supportsInterface
     charIndex:
-      start: 1654
-      end: 1671
+      start: 3451
+      end: 3468
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -137,20 +297,56 @@
       - name: success
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the ability status to support the provided interface (EIP 165)
+        charIndex:
+          start: 23
+          end: 92
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 124
+          end: 142
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 152
+          end: 178
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 188
+          end: 203
+    explicitArgs:
+      - name: interfaceId
+        type: felt
+        desc: Interface id
+        charIndex:
+          start: 235
+          end: 266
+    returns:
+      - name: success
+        type: felt
+        desc: 1 if supported else 0
+        charIndex:
+          start: 292
+          end: 328
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 3579
+      end: 3907
 - attributeName: view
   functionName:
     name: name
     charIndex:
-      start: 1848
-      end: 1852
+      start: 3973
+      end: 3977
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -164,20 +360,52 @@
       - name: name
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          A descriptive name for a collection of NFTs in this contract (EIP 721
+          - Metadata extension)
+        charIndex:
+          start: 23
+          end: 114
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 146
+          end: 164
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 174
+          end: 200
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 210
+          end: 225
     explicitArgs: null
-    returns: null
+    returns:
+      - name: name
+        type: felt
+        desc: The contract name
+        charIndex:
+          start: 251
+          end: 280
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 4062
+      end: 4342
 - attributeName: view
   functionName:
     name: symbol
     charIndex:
-      start: 1978
-      end: 1984
+      start: 4383
+      end: 4389
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -191,20 +419,52 @@
       - name: symbol
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          An abbreviated name for NFTs in this contract (EIP 721 - Metadata
+          extension)
+        charIndex:
+          start: 23
+          end: 99
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 131
+          end: 149
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 159
+          end: 185
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 195
+          end: 210
     explicitArgs: null
-    returns: null
+    returns:
+      - name: symbol
+        type: felt
+        desc: The contract symbol
+        charIndex:
+          start: 236
+          end: 269
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 4476
+      end: 4745
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 2114
-      end: 2123
+      start: 4788
+      end: 4797
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -220,20 +480,62 @@
       - name: balance
         type: Uint256
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Count all NFTs assigned to an owner (EIP 721)
+        charIndex:
+          start: 23
+          end: 68
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 100
+          end: 118
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 128
+          end: 154
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 164
+          end: 179
+    explicitArgs:
+      - name: owner
+        type: felt
+        desc: An address for whom to query the balance
+        charIndex:
+          start: 211
+          end: 264
+    returns:
+      - name: balance
+        type: Uint256
+        desc: The number of NFTs owned by -owner-, possibly zero
+        charIndex:
+          start: 290
+          end: 358
+    raises:
+      - name: owner
+        type: ''
+        desc: owner is null address
+        charIndex:
+          start: 383
+          end: 411
     charIndex:
-      start: 0
-      end: 0
+      start: 4905
+      end: 5316
 - attributeName: view
   functionName:
     name: ownerOf
     charIndex:
-      start: 2283
-      end: 2290
+      start: 5368
+      end: 5375
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -249,20 +551,56 @@
       - name: owner
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Find the owner of an NFT (EIP 721)
+        charIndex:
+          start: 23
+          end: 57
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 89
+          end: 107
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 117
+          end: 143
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 153
+          end: 168
+    explicitArgs:
+      - name: tokenId
+        type: Uint256
+        desc: The identifier for an NFT
+        charIndex:
+          start: 200
+          end: 243
+    returns:
+      - name: owner
+        type: felt
+        desc: The address of the owner of the NFT
+        charIndex:
+          start: 269
+          end: 317
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 5483
+      end: 5800
 - attributeName: view
   functionName:
     name: getApproved
     charIndex:
-      start: 2450
-      end: 2461
+      start: 5852
+      end: 5863
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -278,20 +616,64 @@
       - name: approved
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Get the approved address for a single NFT (EIP 721)
+        charIndex:
+          start: 23
+          end: 74
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 106
+          end: 124
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 134
+          end: 160
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 170
+          end: 185
+    explicitArgs:
+      - name: tokenId
+        type: Uint256
+        desc: The NFT to find the approved address for
+        charIndex:
+          start: 217
+          end: 275
+    returns:
+      - name: approved
+        type: felt
+        desc: >-
+          The approved address for this NFT, or the zero address if there is
+          none
+        charIndex:
+          start: 301
+          end: 388
+    raises:
+      - name: tokenId
+        type: ''
+        desc: tokenId is not a valid NFT
+        charIndex:
+          start: 413
+          end: 448
     charIndex:
-      start: 0
-      end: 0
+      start: 5974
+      end: 6422
 - attributeName: view
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 2628
-      end: 2644
+      start: 6478
+      end: 6494
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -309,20 +691,64 @@
       - name: isApproved
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Query if an address is an authorized operator for another address (EIP
+          721)
+        charIndex:
+          start: 23
+          end: 98
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 130
+          end: 148
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 158
+          end: 184
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 194
+          end: 209
+    explicitArgs:
+      - name: owner
+        type: felt
+        desc: The address that owns the NFTs
+        charIndex:
+          start: 241
+          end: 284
+      - name: operator
+        type: felt
+        desc: The address that acts on behalf of the owner
+        charIndex:
+          start: 294
+          end: 354
+    returns:
+      - name: isApproved
+        type: felt
+        desc: 1 if -operator- is an approved operator for -owner-, 0 otherwise
+        charIndex:
+          start: 380
+          end: 462
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 6618
+      end: 7080
 - attributeName: view
   functionName:
     name: tokenURI
     charIndex:
-      start: 2893
-      end: 2901
+      start: 7205
+      end: 7213
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -338,20 +764,64 @@
       - name: tokenURI
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          A distinct Uniform Resource Identifier (URI) for a given asset (EIP
+          721 - Metadata extension)
+        charIndex:
+          start: 23
+          end: 116
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 148
+          end: 166
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 176
+          end: 202
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 212
+          end: 227
+    explicitArgs:
+      - name: tokenId
+        type: Uint256
+        desc: The NFT to find the URI for
+        charIndex:
+          start: 259
+          end: 304
+    returns:
+      - name: tokenURI
+        type: felt
+        desc: The URI associated to the specified NFT
+        charIndex:
+          start: 330
+          end: 385
+    raises:
+      - name: tokenId
+        type: ''
+        desc: tokenId is not a valid NFT
+        charIndex:
+          start: 410
+          end: 445
     charIndex:
-      start: 0
-      end: 0
+      start: 7324
+      end: 7769
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 3113
-      end: 3118
+      start: 7870
+      end: 7875
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -365,20 +835,50 @@
       - name: owner
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the contract owner
+        charIndex:
+          start: 23
+          end: 48
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 80
+          end: 98
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 134
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 144
+          end: 159
     explicitArgs: null
-    returns: null
+    returns:
+      - name: owner
+        type: felt
+        desc: The owner address
+        charIndex:
+          start: 185
+          end: 215
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 7961
+      end: 8176
 - attributeName: view
   functionName:
     name: image_url
     charIndex:
-      start: 3247
-      end: 3256
+      start: 8219
+      end: 8228
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -408,8 +908,8 @@
   functionName:
     name: image_data
     charIndex:
-      start: 3461
-      end: 3471
+      start: 8433
+      end: 8443
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -439,8 +939,8 @@
   functionName:
     name: external_url
     charIndex:
-      start: 3679
-      end: 3691
+      start: 8651
+      end: 8663
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -470,8 +970,8 @@
   functionName:
     name: description
     charIndex:
-      start: 3905
-      end: 3916
+      start: 8877
+      end: 8888
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -501,8 +1001,8 @@
   functionName:
     name: holder
     charIndex:
-      start: 4127
-      end: 4133
+      start: 9099
+      end: 9105
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -532,8 +1032,8 @@
   functionName:
     name: certifier
     charIndex:
-      start: 4329
-      end: 4338
+      start: 9301
+      end: 9310
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -563,8 +1063,8 @@
   functionName:
     name: land
     charIndex:
-      start: 4543
-      end: 4547
+      start: 9515
+      end: 9519
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -594,8 +1094,8 @@
   functionName:
     name: unit_land_surface
     charIndex:
-      start: 4737
-      end: 4754
+      start: 9709
+      end: 9726
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -625,8 +1125,8 @@
   functionName:
     name: country
     charIndex:
-      start: 4983
-      end: 4990
+      start: 9955
+      end: 9962
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -656,8 +1156,8 @@
   functionName:
     name: expiration
     charIndex:
-      start: 5189
-      end: 5199
+      start: 10161
+      end: 10171
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -687,8 +1187,8 @@
   functionName:
     name: total_co2_sequestration
     charIndex:
-      start: 5407
-      end: 5430
+      start: 10379
+      end: 10402
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -718,8 +1218,8 @@
   functionName:
     name: unit_co2_sequestration
     charIndex:
-      start: 5677
-      end: 5699
+      start: 10649
+      end: 10671
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -749,8 +1249,8 @@
   functionName:
     name: sequestration_color
     charIndex:
-      start: 5943
-      end: 5962
+      start: 10915
+      end: 10934
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -780,8 +1280,8 @@
   functionName:
     name: sequestration_type
     charIndex:
-      start: 6197
-      end: 6215
+      start: 11169
+      end: 11187
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -811,8 +1311,8 @@
   functionName:
     name: sequestration_category
     charIndex:
-      start: 6447
-      end: 6469
+      start: 11419
+      end: 11441
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -842,8 +1342,8 @@
   functionName:
     name: background_color
     charIndex:
-      start: 6713
-      end: 6729
+      start: 11685
+      end: 11701
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -873,8 +1373,8 @@
   functionName:
     name: animation_url
     charIndex:
-      start: 6955
-      end: 6968
+      start: 11927
+      end: 11940
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -904,8 +1404,8 @@
   functionName:
     name: youtube_url
     charIndex:
-      start: 7185
-      end: 7196
+      start: 12157
+      end: 12168
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -935,8 +1435,8 @@
   functionName:
     name: approve
     charIndex:
-      start: 7431
-      end: 7438
+      start: 12403
+      end: 12410
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -952,20 +1452,56 @@
         type: Uint256
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Change or reaffirm the approved address for an NFT (EIP 721)
+        charIndex:
+          start: 23
+          end: 83
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 115
+          end: 133
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 143
+          end: 169
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 179
+          end: 194
+    explicitArgs:
+      - name: to
+        type: felt
+        desc: The new approved NFT controller
+        charIndex:
+          start: 226
+          end: 267
+      - name: tokenId
+        type: Uint256
+        desc: The NFT to approve
+        charIndex:
+          start: 277
+          end: 313
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 12511
+      end: 12849
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 7606
-      end: 7623
+      start: 13015
+      end: 13032
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -981,20 +1517,28 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Enable or disable approval for a third party -operator- to manage all
+          of
+        charIndex:
+          start: 23
+          end: 96
     implicitArgs: null
     explicitArgs: null
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 13137
+      end: 13233
 - attributeName: external
   functionName:
     name: transferFrom
     charIndex:
-      start: 7815
-      end: 7827
+      start: 13635
+      end: 13647
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1012,20 +1556,62 @@
         type: Uint256
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer ownership of an NFT (EIP 721)
+        charIndex:
+          start: 23
+          end: 61
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 93
+          end: 111
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 121
+          end: 147
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 157
+          end: 172
+    explicitArgs:
+      - name: from_
+        type: felt
+        desc: The current owner of the NFT
+        charIndex:
+          start: 204
+          end: 245
+      - name: to
+        type: felt
+        desc: The new owner
+        charIndex:
+          start: 255
+          end: 278
+      - name: tokenId
+        type: Uint256
+        desc: The NFT to transfer
+        charIndex:
+          start: 288
+          end: 325
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 13761
+      end: 14111
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 8031
-      end: 8047
+      start: 14439
+      end: 14455
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1047,20 +1633,76 @@
         type: felt*
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Transfers the ownership of an NFT from one address to another address
+          (EIP 721)
+        charIndex:
+          start: 23
+          end: 102
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 134
+          end: 152
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 162
+          end: 188
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 198
+          end: 213
+    explicitArgs:
+      - name: from_
+        type: felt
+        desc: The current owner of the NFT
+        charIndex:
+          start: 245
+          end: 286
+      - name: to
+        type: felt
+        desc: The new owner
+        charIndex:
+          start: 296
+          end: 319
+      - name: tokenId
+        type: Uint256
+        desc: The NFT to transfer
+        charIndex:
+          start: 329
+          end: 366
+      - name: data_len
+        type: felt
+        desc: The data array length
+        charIndex:
+          start: 376
+          end: 413
+      - name: data
+        type: felt*
+        desc: Additional data with no specified format, sent in call to -to-
+        charIndex:
+          start: 423
+          end: 498
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 14598
+      end: 15121
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 8301
-      end: 8305
+      start: 15560
+      end: 15564
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1076,20 +1718,56 @@
         type: Uint256
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Mint the token id to the specified -to- address
+        charIndex:
+          start: 23
+          end: 70
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 102
+          end: 120
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 130
+          end: 156
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 166
+          end: 181
+    explicitArgs:
+      - name: to
+        type: felt
+        desc: Target address
+        charIndex:
+          start: 213
+          end: 237
+      - name: tokenId
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 247
+          end: 273
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 15665
+      end: 15993
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 8514
-      end: 8518
+      start: 16273
+      end: 16277
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1103,20 +1781,56 @@
         type: Uint256
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Burn the specified token
+        charIndex:
+          start: 23
+          end: 47
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 79
+          end: 97
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 133
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 143
+          end: 158
+    explicitArgs:
+      - name: tokenId
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 190
+          end: 216
     returns: null
-    raises: null
+    raises:
+      - name: tokenId
+        type: ''
+        desc: tokenId is not a valid Uint256
+        charIndex:
+          start: 271
+          end: 310
     charIndex:
-      start: 0
-      end: 0
+      start: 16362
+      end: 16672
 - attributeName: external
   functionName:
     name: setTokenURI
     charIndex:
-      start: 8719
-      end: 8730
+      start: 16788
+      end: 16799
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1132,20 +1846,64 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Set the token URI of the specified token id (EIP 721 - Metadata
+          extension)
+        charIndex:
+          start: 23
+          end: 97
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 129
+          end: 147
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 157
+          end: 183
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 193
+          end: 208
+    explicitArgs:
+      - name: tokenId
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 240
+          end: 266
+      - name: tokenURI
+        type: felt
+        desc: The Uri to set
+        charIndex:
+          start: 276
+          end: 306
     returns: null
-    raises: null
+    raises:
+      - name: tokenId
+        type: ''
+        desc: tokenId does not exist
+        charIndex:
+          start: 331
+          end: 362
     charIndex:
-      start: 0
-      end: 0
+      start: 16906
+      end: 17268
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 8950
-      end: 8967
+      start: 17381
+      end: 17398
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1159,20 +1917,50 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer ownership to a new owner
+        charIndex:
+          start: 23
+          end: 56
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 88
+          end: 106
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 142
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 152
+          end: 167
+    explicitArgs:
+      - name: newOwner
+        type: felt
+        desc: Address of the new owner
+        charIndex:
+          start: 199
+          end: 239
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 17487
+      end: 17781
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 9132
-      end: 9149
+      start: 17954
+      end: 17971
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1184,20 +1972,44 @@
     explicitArgs: null
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Renounce ownership
+        charIndex:
+          start: 23
+          end: 41
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 73
+          end: 91
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 127
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 137
+          end: 152
     explicitArgs: null
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 18040
+      end: 18247
 - attributeName: external
   functionName:
     name: set_image_url
     charIndex:
-      start: 9286
-      end: 9299
+      start: 18363
+      end: 18376
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1227,8 +2039,8 @@
   functionName:
     name: set_image_data
     charIndex:
-      start: 9536
-      end: 9550
+      start: 18613
+      end: 18627
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1258,8 +2070,8 @@
   functionName:
     name: set_external_url
     charIndex:
-      start: 9792
-      end: 9808
+      start: 18869
+      end: 18885
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1289,8 +2101,8 @@
   functionName:
     name: set_description
     charIndex:
-      start: 10054
-      end: 10069
+      start: 19131
+      end: 19146
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1320,8 +2132,8 @@
   functionName:
     name: set_holder
     charIndex:
-      start: 10310
-      end: 10320
+      start: 19387
+      end: 19397
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1351,8 +2163,8 @@
   functionName:
     name: set_certifier
     charIndex:
-      start: 10536
-      end: 10549
+      start: 19613
+      end: 19626
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1382,8 +2194,8 @@
   functionName:
     name: set_land
     charIndex:
-      start: 10780
-      end: 10788
+      start: 19857
+      end: 19865
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1413,8 +2225,8 @@
   functionName:
     name: set_unit_land_surface
     charIndex:
-      start: 10994
-      end: 11015
+      start: 20071
+      end: 20092
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1444,8 +2256,8 @@
   functionName:
     name: set_country
     charIndex:
-      start: 11286
-      end: 11297
+      start: 20363
+      end: 20374
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1475,8 +2287,8 @@
   functionName:
     name: set_expiration
     charIndex:
-      start: 11518
-      end: 11532
+      start: 20595
+      end: 20609
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1506,8 +2318,8 @@
   functionName:
     name: set_total_co2_sequestration
     charIndex:
-      start: 11768
-      end: 11795
+      start: 20845
+      end: 20872
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1537,8 +2349,8 @@
   functionName:
     name: set_unit_co2_sequestration
     charIndex:
-      start: 12110
-      end: 12136
+      start: 21187
+      end: 21213
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1568,8 +2380,8 @@
   functionName:
     name: set_sequestration_color
     charIndex:
-      start: 12446
-      end: 12469
+      start: 21523
+      end: 21546
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1599,8 +2411,8 @@
   functionName:
     name: set_sequestration_type
     charIndex:
-      start: 12750
-      end: 12772
+      start: 21827
+      end: 21849
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1630,8 +2442,8 @@
   functionName:
     name: set_sequestration_category
     charIndex:
-      start: 13048
-      end: 13074
+      start: 22125
+      end: 22151
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1661,8 +2473,8 @@
   functionName:
     name: set_background_color
     charIndex:
-      start: 13384
-      end: 13404
+      start: 22461
+      end: 22481
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1692,8 +2504,8 @@
   functionName:
     name: set_animation_url
     charIndex:
-      start: 13670
-      end: 13687
+      start: 22747
+      end: 22764
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1723,8 +2535,8 @@
   functionName:
     name: set_youtube_url
     charIndex:
-      start: 13938
-      end: 13953
+      start: 23015
+      end: 23030
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

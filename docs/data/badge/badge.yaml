@@ -634,47 +634,47 @@
     desc:
       - name: ''
         type: ''
-        desc: Return the contract name (OpenSea)
+        desc: A descriptive name for a collection of NFTs in this contract (OpenSea)
         charIndex:
           start: 23
-          end: 57
+          end: 93
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 89
-          end: 107
+          start: 125
+          end: 143
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 117
-          end: 143
+          start: 153
+          end: 179
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 153
-          end: 168
+          start: 189
+          end: 204
     explicitArgs: null
     returns:
       - name: name
         type: felt
         desc: The contract name
         charIndex:
-          start: 194
-          end: 223
+          start: 230
+          end: 259
     raises: null
     charIndex:
       start: 5761
-      end: 5984
+      end: 6020
 - attributeName: view
   functionName:
     name: locked
     charIndex:
-      start: 6034
-      end: 6040
+      start: 6070
+      end: 6076
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -732,14 +732,14 @@
           end: 286
     raises: null
     charIndex:
-      start: 6147
-      end: 6433
+      start: 6183
+      end: 6469
 - attributeName: external
   functionName:
     name: setURI
     charIndex:
-      start: 6511
-      end: 6517
+      start: 6547
+      end: 6553
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -805,14 +805,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 6647
-      end: 6943
+      start: 6683
+      end: 6979
 - attributeName: external
   functionName:
     name: setLocked
     charIndex:
-      start: 7053
-      end: 7062
+      start: 7089
+      end: 7098
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -862,14 +862,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7142
-      end: 7398
+      start: 7178
+      end: 7434
 - attributeName: external
   functionName:
     name: setUnlocked
     charIndex:
-      start: 7501
-      end: 7512
+      start: 7537
+      end: 7548
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -919,14 +919,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7592
-      end: 7851
+      start: 7628
+      end: 7887
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 7956
-      end: 7973
+      start: 7992
+      end: 8009
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -986,14 +986,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8078
-      end: 8519
+      start: 8114
+      end: 8555
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 8607
-      end: 8623
+      start: 8643
+      end: 8659
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1083,14 +1083,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8778
-      end: 9277
+      start: 8814
+      end: 9313
 - attributeName: external
   functionName:
     name: safeBatchTransferFrom
     charIndex:
-      start: 9423
-      end: 9444
+      start: 9459
+      end: 9480
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1204,14 +1204,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 9666
-      end: 10428
+      start: 9702
+      end: 10464
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 10620
-      end: 10624
+      start: 10656
+      end: 10660
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1293,14 +1293,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 10766
-      end: 11211
+      start: 10802
+      end: 11247
 - attributeName: external
   functionName:
     name: mintBatch
     charIndex:
-      start: 11329
-      end: 11338
+      start: 11365
+      end: 11374
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1402,14 +1402,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 11543
-      end: 12210
+      start: 11579
+      end: 12246
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 12358
-      end: 12362
+      start: 12394
+      end: 12398
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1487,14 +1487,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 12478
-      end: 12944
+      start: 12514
+      end: 12980
 - attributeName: external
   functionName:
     name: burnBatch
     charIndex:
-      start: 13214
-      end: 13223
+      start: 13250
+      end: 13259
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1590,14 +1590,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 13377
-      end: 14065
+      start: 13413
+      end: 14101
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 14365
-      end: 14382
+      start: 14401
+      end: 14418
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1647,14 +1647,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 14471
-      end: 14740
+      start: 14507
+      end: 14776
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 14816
-      end: 14833
+      start: 14852
+      end: 14869
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1696,5 +1696,5 @@
     returns: null
     raises: null
     charIndex:
-      start: 14902
-      end: 15084
+      start: 14938
+      end: 15120

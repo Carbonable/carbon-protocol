@@ -5,51 +5,71 @@
       start: 560
       end: 566
   functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
+    implicitArgs: null
     explicitArgs:
       - name: token_id
         type: Uint256
     returns: null
   functionComment:
-    desc: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Emit event when a token id is locked for transfer
+        charIndex:
+          start: 23
+          end: 72
     implicitArgs: null
-    explicitArgs: null
+    explicitArgs:
+      - name: token_id
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 104
+          end: 131
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 587
+      end: 718
 - attributeName: event
   functionName:
     name: Unlocked
     charIndex:
-      start: 603
-      end: 611
+      start: 734
+      end: 742
   functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
+    implicitArgs: null
     explicitArgs:
       - name: token_id
         type: Uint256
     returns: null
   functionComment:
-    desc: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Emit event when a token id is unlocked for transfer
+        charIndex:
+          start: 23
+          end: 74
     implicitArgs: null
-    explicitArgs: null
+    explicitArgs:
+      - name: token_id
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 106
+          end: 133
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 763
+      end: 896
 - attributeName: storage_var
   functionName:
     name: CarbonableBadge_unlocked
     charIndex:
-      start: 672
-      end: 696
+      start: 936
+      end: 960
   functionSignature:
     implicitArgs:
       - name: ''
@@ -73,8 +93,8 @@
   functionName:
     name: CarbonableBadge_name
     charIndex:
-      start: 753
-      end: 773
+      start: 1017
+      end: 1037
   functionSignature:
     implicitArgs:
       - name: ''
@@ -90,14 +110,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 824
-      end: 880
+      start: 1088
+      end: 1144
 - attributeName: namespace CarbonableBadge
   functionName:
     name: initializer
     charIndex:
-      start: 868
-      end: 879
+      start: 1132
+      end: 1143
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -173,14 +193,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 1054
-      end: 1526
+      start: 1318
+      end: 1790
 - attributeName: namespace CarbonableBadge
   functionName:
     name: uri
     charIndex:
-      start: 1713
-      end: 1716
+      start: 1977
+      end: 1980
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -214,8 +234,8 @@
   functionName:
     name: contract_uri
     charIndex:
-      start: 2291
-      end: 2303
+      start: 2555
+      end: 2567
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -247,8 +267,8 @@
   functionName:
     name: name
     charIndex:
-      start: 2727
-      end: 2731
+      start: 2991
+      end: 2995
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -274,8 +294,8 @@
   functionName:
     name: locked
     charIndex:
-      start: 2907
-      end: 2913
+      start: 3171
+      end: 3177
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -303,8 +323,8 @@
   functionName:
     name: set_uri
     charIndex:
-      start: 3203
-      end: 3210
+      start: 3467
+      end: 3474
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -336,8 +356,8 @@
   functionName:
     name: set_locked
     charIndex:
-      start: 3535
-      end: 3545
+      start: 3799
+      end: 3809
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -363,8 +383,8 @@
   functionName:
     name: set_unlocked
     charIndex:
-      start: 3786
-      end: 3798
+      start: 4050
+      end: 4062
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -390,8 +410,8 @@
   functionName:
     name: assert_unlocked
     charIndex:
-      start: 4072
-      end: 4087
+      start: 4336
+      end: 4351
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -417,8 +437,8 @@
   functionName:
     name: assert_unlocked_batch
     charIndex:
-      start: 4410
-      end: 4431
+      start: 4674
+      end: 4695
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -446,8 +466,8 @@
   functionName:
     name: _assert_unlocked_iter
     charIndex:
-      start: 4641
-      end: 4662
+      start: 4905
+      end: 4926
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

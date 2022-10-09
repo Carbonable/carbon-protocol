@@ -89,7 +89,7 @@ Return the contract owner
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "name" %}  
 {% swagger-description %}  
-Return the contract name (OpenSea)  
+A descriptive name for a collection of NFTs in this contract (OpenSea)  
 {% endswagger-description %}  
 {% swagger-response status="name ( felt )" description="The contract name" %}  
 {% endswagger-response %}  

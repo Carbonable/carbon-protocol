@@ -21,10 +21,18 @@ const IERC5192_ID = 0xb45a3c0e;
 
 @event
 func Locked(token_id: Uint256) {
+    // Desc:
+    //   Emit event when a token id is locked for transfer
+    // Explicit args:
+    //   token_id(Uint256): Token id
 }
 
 @event
 func Unlocked(token_id: Uint256) {
+    // Desc:
+    //   Emit event when a token id is unlocked for transfer
+    // Explicit args:
+    //   token_id(Uint256): Token id
 }
 
 //

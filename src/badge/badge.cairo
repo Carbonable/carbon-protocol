@@ -180,7 +180,7 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
 @view
 func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (name: felt) {
     // Desc:
-    //   Return the contract name (OpenSea)
+    //   A descriptive name for a collection of NFTs in this contract (OpenSea)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
