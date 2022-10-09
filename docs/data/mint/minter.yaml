@@ -33,20 +33,94 @@
         type: ''
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract
+        charIndex:
+          start: 23
+          end: 46
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 78
+          end: 96
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 106
+          end: 132
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 142
+          end: 157
+    explicitArgs:
+      - name: owner
+        type: felt
+        desc: Owner address
+        charIndex:
+          start: 189
+          end: 215
+      - name: carbonable_project_address
+        type: felt
+        desc: Address of the corresponding Carbonable project
+        charIndex:
+          start: 225
+          end: 306
+      - name: payment_token_address
+        type: felt
+        desc: Address of the ERC20 token that will be used during sales
+        charIndex:
+          start: 316
+          end: 402
+      - name: public_sale_open
+        type: felt
+        desc: 1 to open the public sale right after deployment, 0 otherwise
+        charIndex:
+          start: 412
+          end: 497
+      - name: max_buy_per_tx
+        type: felt
+        desc: Max number of NFTs that can be purchased in a single tx
+        charIndex:
+          start: 507
+          end: 584
+      - name: unit_price
+        type: Uint256
+        desc: >-
+          Price per token (based on ERC20 token defined as
+          -payment_token_address-)
+        charIndex:
+          start: 594
+          end: 688
+      - name: max_supply_for_mint
+        type: Uint256
+        desc: Max supply available whatever the way to mint
+        charIndex:
+          start: 698
+          end: 773
+      - name: reserved_supply_for_mint
+        type: Uint256
+        desc: Supply reserved to be airdropped
+        charIndex:
+          start: 783
+          end: 850
     returns: null
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 619
+      end: 1499
 - attributeName: view
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 915
-      end: 941
+      start: 1795
+      end: 1821
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -62,20 +136,50 @@
       - name: carbonable_project_address
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the associated carbonable project
+        charIndex:
+          start: 23
+          end: 63
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 95
+          end: 113
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 123
+          end: 149
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 159
+          end: 174
     explicitArgs: null
-    returns: null
+    returns:
+      - name: carbonable_project_address
+        type: felt
+        desc: Address of the corresponding Carbonable project
+        charIndex:
+          start: 200
+          end: 281
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 1933
+      end: 2214
 - attributeName: view
   functionName:
     name: payment_token_address
     charIndex:
-      start: 1126
-      end: 1147
+      start: 2287
+      end: 2308
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -89,20 +193,50 @@
       - name: payment_token_address
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the associated payment token
+        charIndex:
+          start: 23
+          end: 58
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 90
+          end: 108
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 118
+          end: 144
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 154
+          end: 169
     explicitArgs: null
-    returns: null
+    returns:
+      - name: payment_token_address
+        type: felt
+        desc: Address of the ERC20 token that will be used during sales
+        charIndex:
+          start: 195
+          end: 281
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2416
+      end: 2697
 - attributeName: view
   functionName:
     name: whitelisted_sale_open
     charIndex:
-      start: 1323
-      end: 1344
+      start: 2765
+      end: 2786
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -116,20 +250,50 @@
       - name: whitelisted_sale_open
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the whitelisted sale status
+        charIndex:
+          start: 23
+          end: 57
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 89
+          end: 107
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 117
+          end: 143
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 153
+          end: 168
     explicitArgs: null
-    returns: null
+    returns:
+      - name: whitelisted_sale_open
+        type: felt
+        desc: 1 if presale is open, 0 otherwise
+        charIndex:
+          start: 194
+          end: 256
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2894
+      end: 3150
 - attributeName: view
   functionName:
     name: public_sale_open
     charIndex:
-      start: 1520
-      end: 1536
+      start: 3218
+      end: 3234
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -143,20 +307,50 @@
       - name: public_sale_open
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the public sale status
+        charIndex:
+          start: 23
+          end: 52
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 84
+          end: 102
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 112
+          end: 138
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 148
+          end: 163
     explicitArgs: null
-    returns: null
+    returns:
+      - name: public_sale_open
+        type: felt
+        desc: 1 if public sale is open, 0 otherwise
+        charIndex:
+          start: 189
+          end: 250
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 3337
+      end: 3587
 - attributeName: view
   functionName:
     name: max_buy_per_tx
     charIndex:
-      start: 1702
-      end: 1716
+      start: 3650
+      end: 3664
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -170,20 +364,50 @@
       - name: max_buy_per_tx
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the max amount that can be purchased in a single tx
+        charIndex:
+          start: 23
+          end: 81
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 113
+          end: 131
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 141
+          end: 167
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 177
+          end: 192
     explicitArgs: null
-    returns: null
+    returns:
+      - name: max_buy_per_tx
+        type: felt
+        desc: max amount per tx
+        charIndex:
+          start: 218
+          end: 257
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 3765
+      end: 4022
 - attributeName: view
   functionName:
     name: unit_price
     charIndex:
-      start: 1878
-      end: 1888
+      start: 4083
+      end: 4093
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -197,20 +421,50 @@
       - name: unit_price
         type: Uint256
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the unit price per token
+        charIndex:
+          start: 23
+          end: 54
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 86
+          end: 104
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 114
+          end: 140
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 150
+          end: 165
     explicitArgs: null
-    returns: null
+    returns:
+      - name: unit_price
+        type: Uint256
+        desc: Unit price
+        charIndex:
+          start: 191
+          end: 222
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 4193
+      end: 4415
 - attributeName: view
   functionName:
     name: reserved_supply_for_mint
     charIndex:
-      start: 2045
-      end: 2069
+      start: 4472
+      end: 4496
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -226,20 +480,50 @@
       - name: reserved_supply_for_mint
         type: Uint256
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the reserved supply available for airdrops
+        charIndex:
+          start: 23
+          end: 72
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 104
+          end: 122
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 132
+          end: 158
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 168
+          end: 183
     explicitArgs: null
-    returns: null
+    returns:
+      - name: reserved_supply_for_mint
+        type: Uint256
+        desc: Reserved supply
+        charIndex:
+          start: 209
+          end: 259
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 4609
+      end: 4868
 - attributeName: view
   functionName:
     name: max_supply_for_mint
     charIndex:
-      start: 2253
-      end: 2272
+      start: 4939
+      end: 4958
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -253,20 +537,50 @@
       - name: max_supply_for_mint
         type: Uint256
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the max supply available
+        charIndex:
+          start: 23
+          end: 54
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 86
+          end: 104
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 114
+          end: 140
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 150
+          end: 165
     explicitArgs: null
-    returns: null
+    returns:
+      - name: max_supply_for_mint
+        type: Uint256
+        desc: Max supply
+        charIndex:
+          start: 191
+          end: 231
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 5067
+      end: 5298
 - attributeName: view
   functionName:
     name: whitelist_merkle_root
     charIndex:
-      start: 2447
-      end: 2468
+      start: 5364
+      end: 5385
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -280,20 +594,50 @@
       - name: whitelist_merkle_root
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the whitelist merkle root, 0 means it has not been set yet
+        charIndex:
+          start: 23
+          end: 88
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 120
+          end: 138
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 148
+          end: 174
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 184
+          end: 199
     explicitArgs: null
-    returns: null
+    returns:
+      - name: whitelist_merkle_root
+        type: felt
+        desc: The merkle root
+        charIndex:
+          start: 225
+          end: 269
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 5493
+      end: 5762
 - attributeName: view
   functionName:
     name: whitelisted_slots
     charIndex:
-      start: 2644
-      end: 2661
+      start: 5830
+      end: 5847
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -315,20 +659,74 @@
       - name: slots
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the whitelist merkle root, 0 means it has not been set yet
+        charIndex:
+          start: 23
+          end: 88
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 120
+          end: 138
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 148
+          end: 174
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 184
+          end: 199
+    explicitArgs:
+      - name: account
+        type: felt
+        desc: Account associated to slots
+        charIndex:
+          start: 231
+          end: 273
+      - name: slots
+        type: felt
+        desc: Associated slots recorded in the merkle root
+        charIndex:
+          start: 283
+          end: 340
+      - name: proof_len
+        type: felt
+        desc: proof array length
+        charIndex:
+          start: 350
+          end: 385
+      - name: proof
+        type: felt
+        desc: Merkle proof associated to the account and slots
+        charIndex:
+          start: 395
+          end: 456
+    returns:
+      - name: slots
+        type: felt
+        desc: 0 if not whitelisted, amount of slots otherwise
+        charIndex:
+          start: 482
+          end: 542
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 5996
+      end: 6538
 - attributeName: view
   functionName:
     name: claimed_slots
     charIndex:
-      start: 2906
-      end: 2919
+      start: 6634
+      end: 6647
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -344,20 +742,56 @@
       - name: slots
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the slots already minted by an account using whitelist slots
+        charIndex:
+          start: 23
+          end: 90
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 122
+          end: 140
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 150
+          end: 176
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 186
+          end: 201
+    explicitArgs:
+      - name: account
+        type: felt
+        desc: Account address
+        charIndex:
+          start: 233
+          end: 263
+    returns:
+      - name: slots
+        type: felt
+        desc: amount of claimed slots
+        charIndex:
+          start: 289
+          end: 325
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 6752
+      end: 7077
 - attributeName: external
   functionName:
     name: set_whitelist_merkle_root
     charIndex:
-      start: 3115
-      end: 3140
+      start: 7168
+      end: 7193
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -371,20 +805,58 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Set a new merkle root, providing a not null merkle root opens the
+          whitelist sale
+        charIndex:
+          start: 23
+          end: 103
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 135
+          end: 153
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 163
+          end: 189
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 199
+          end: 214
+    explicitArgs:
+      - name: whitelist_merkle_root
+        type: felt
+        desc: New merkle root
+        charIndex:
+          start: 246
+          end: 290
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 345
+          end: 385
     charIndex:
-      start: 0
-      end: 0
+      start: 7295
+      end: 7680
 - attributeName: external
   functionName:
     name: set_public_sale_open
     charIndex:
-      start: 3339
-      end: 3359
+      start: 7777
+      end: 7797
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -398,20 +870,56 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Set a new public sale status (1 to open, 0 otherwise)
+        charIndex:
+          start: 23
+          end: 76
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 126
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 136
+          end: 162
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 172
+          end: 187
+    explicitArgs:
+      - name: public_sale_open
+        type: felt
+        desc: Public sale status
+        charIndex:
+          start: 219
+          end: 261
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 316
+          end: 356
     charIndex:
-      start: 0
-      end: 0
+      start: 7894
+      end: 8250
 - attributeName: external
   functionName:
     name: set_max_buy_per_tx
     charIndex:
-      start: 3543
-      end: 3561
+      start: 8337
+      end: 8355
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -425,20 +933,56 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Set a new max amount per tx during purchase
+        charIndex:
+          start: 23
+          end: 66
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 98
+          end: 116
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 126
+          end: 152
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 162
+          end: 177
+    explicitArgs:
+      - name: max_buy_per_tx
+        type: felt
+        desc: Max amount per tx
+        charIndex:
+          start: 209
+          end: 248
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 303
+          end: 343
     charIndex:
-      start: 0
-      end: 0
+      start: 8450
+      end: 8793
 - attributeName: external
   functionName:
     name: set_unit_price
     charIndex:
-      start: 3739
-      end: 3753
+      start: 8876
+      end: 8890
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -452,20 +996,56 @@
         type: Uint256
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Set a new unit price per token
+        charIndex:
+          start: 23
+          end: 53
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 85
+          end: 103
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 113
+          end: 139
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 149
+          end: 164
+    explicitArgs:
+      - name: unit_price
+        type: Uint256
+        desc: Unit price
+        charIndex:
+          start: 196
+          end: 227
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 282
+          end: 322
     charIndex:
-      start: 0
-      end: 0
+      start: 8984
+      end: 9306
 - attributeName: external
   functionName:
     name: decrease_reserved_supply_for_mint
     charIndex:
-      start: 3922
-      end: 3955
+      start: 9381
+      end: 9414
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -479,20 +1059,58 @@
         type: Uint256
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Decrease the reserved supply for airdrops by the providing amount of
+          slots
+        charIndex:
+          start: 23
+          end: 97
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 129
+          end: 147
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 157
+          end: 183
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 193
+          end: 208
+    explicitArgs:
+      - name: slots
+        type: Uint256
+        desc: Amount of slots to substract to the reserved supply
+        charIndex:
+          start: 240
+          end: 307
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 362
+          end: 402
     charIndex:
-      start: 0
-      end: 0
+      start: 9503
+      end: 9905
 - attributeName: external
   functionName:
     name: airdrop
     charIndex:
-      start: 4133
-      end: 4140
+      start: 9994
+      end: 10001
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -510,20 +1128,82 @@
       - name: success
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Decrease the reserved supply for airdrops by the providing amount of
+          slots
+        charIndex:
+          start: 23
+          end: 97
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 129
+          end: 147
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 157
+          end: 183
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 193
+          end: 208
+    explicitArgs:
+      - name: slots
+        type: Uint256
+        desc: Amount of slots to substract to the reserved supply
+        charIndex:
+          start: 240
+          end: 307
+    returns:
+      - name: success
+        type: felt
+        desc: 1 if it succeeded, 0 otherwise
+        charIndex:
+          start: 333
+          end: 378
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 403
+          end: 443
+      - name: caller
+        type: ''
+        desc: caller is the zero address
+        charIndex:
+          start: 453
+          end: 487
+      - name: quantity
+        type: ''
+        desc: not enough available NFTs regarding max supply
+        charIndex:
+          start: 497
+          end: 553
+      - name: quantity
+        type: ''
+        desc: not enough available reserved NFTs regarding reserved supply
+        charIndex:
+          start: 563
+          end: 633
     charIndex:
-      start: 0
-      end: 0
+      start: 10119
+      end: 10752
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 4328
-      end: 4336
+      start: 10771
+      end: 10779
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -537,20 +1217,56 @@
       - name: success
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer the smart contract balance to the contract owner
+        charIndex:
+          start: 23
+          end: 80
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 112
+          end: 130
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 140
+          end: 166
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 176
+          end: 191
     explicitArgs: null
-    returns: null
-    raises: null
+    returns:
+      - name: success
+        type: felt
+        desc: 1 if it succeeded, 0 otherwise
+        charIndex:
+          start: 217
+          end: 262
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 287
+          end: 327
     charIndex:
-      start: 0
-      end: 0
+      start: 10873
+      end: 11200
 - attributeName: external
   functionName:
     name: transfer
     charIndex:
-      start: 4489
-      end: 4497
+      start: 11259
+      end: 11267
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -570,20 +1286,82 @@
       - name: success
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Transfer an amount of tokens specified by -token_address- to
+          -recipient-
+        charIndex:
+          start: 23
+          end: 95
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 127
+          end: 145
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 155
+          end: 181
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 191
+          end: 206
+    explicitArgs:
+      - name: token_address
+        type: felt
+        desc: Token address to transfer
+        charIndex:
+          start: 238
+          end: 284
+      - name: recipient
+        type: felt
+        desc: Address to receive tokens
+        charIndex:
+          start: 294
+          end: 336
+      - name: amount
+        type: Uint256
+        desc: Amount of token to transfer
+        charIndex:
+          start: 346
+          end: 390
+    returns:
+      - name: success
+        type: felt
+        desc: 1 if it succeeded, 0 otherwise
+        charIndex:
+          start: 416
+          end: 461
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 486
+          end: 526
+      - name: transfer
+        type: ''
+        desc: transfer fails
+        charIndex:
+          start: 536
+          end: 560
     charIndex:
-      start: 0
-      end: 0
+      start: 11414
+      end: 11974
 - attributeName: external
   functionName:
     name: whitelist_buy
     charIndex:
-      start: 4735
-      end: 4748
+      start: 12065
+      end: 12078
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -605,20 +1383,118 @@
       - name: success
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Purchase -quantity- tokens while proving the caller is part of the
+          merkle tree while whitelist sale is open
+        charIndex:
+          start: 23
+          end: 130
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 162
+          end: 180
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 190
+          end: 216
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 226
+          end: 241
+    explicitArgs:
+      - name: slots
+        type: felt
+        desc: Associated slots recorded in the merkle root
+        charIndex:
+          start: 273
+          end: 330
+      - name: proof_len
+        type: felt
+        desc: proof array length
+        charIndex:
+          start: 340
+          end: 375
+      - name: proof
+        type: felt
+        desc: Merkle proof associated to the account and slots
+        charIndex:
+          start: 385
+          end: 446
+      - name: quantity
+        type: felt
+        desc: Quantity of tokens to buy
+        charIndex:
+          start: 456
+          end: 497
+    returns:
+      - name: success
+        type: felt
+        desc: 1 if it succeeded, 0 otherwise
+        charIndex:
+          start: 523
+          end: 568
+    raises:
+      - name: contract
+        type: ''
+        desc: whitelist sale is not open
+        charIndex:
+          start: 593
+          end: 629
+      - name: caller
+        type: ''
+        desc: caller address is not whitelisted
+        charIndex:
+          start: 639
+          end: 680
+      - name: caller
+        type: ''
+        desc: caller is the zero address
+        charIndex:
+          start: 690
+          end: 724
+      - name: quantity
+        type: ''
+        desc: not enough whitelisted slots available
+        charIndex:
+          start: 734
+          end: 782
+      - name: quantity
+        type: ''
+        desc: quantity not allowed
+        charIndex:
+          start: 792
+          end: 822
+      - name: quantity
+        type: ''
+        desc: not enough available NFTs
+        charIndex:
+          start: 832
+          end: 867
+      - name: transfer
+        type: ''
+        desc: transfer failed
+        charIndex:
+          start: 877
+          end: 902
     charIndex:
-      start: 0
-      end: 0
+      start: 12230
+      end: 13132
 - attributeName: external
   functionName:
     name: public_buy
     charIndex:
-      start: 4997
-      end: 5007
+      start: 13229
+      end: 13239
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -634,11 +1510,77 @@
       - name: success
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Purchase -quantity- tokens while public sale is open
+        charIndex:
+          start: 23
+          end: 75
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 125
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 135
+          end: 161
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 171
+          end: 186
+    explicitArgs:
+      - name: quantity
+        type: felt
+        desc: Quantity of tokens to buy
+        charIndex:
+          start: 218
+          end: 259
+    returns:
+      - name: success
+        type: felt
+        desc: 1 if it succeeded, 0 otherwise
+        charIndex:
+          start: 285
+          end: 330
+    raises:
+      - name: contract
+        type: ''
+        desc: public sale is not open
+        charIndex:
+          start: 355
+          end: 388
+      - name: caller
+        type: ''
+        desc: caller is the zero address
+        charIndex:
+          start: 398
+          end: 432
+      - name: quantity
+        type: ''
+        desc: quantity not allowed
+        charIndex:
+          start: 442
+          end: 472
+      - name: quantity
+        type: ''
+        desc: not enough available NFTs
+        charIndex:
+          start: 482
+          end: 517
+      - name: transfer
+        type: ''
+        desc: transfer failed
+        charIndex:
+          start: 527
+          end: 552
     charIndex:
-      start: 0
-      end: 0
+      start: 13347
+      end: 13899

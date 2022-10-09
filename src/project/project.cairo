@@ -398,7 +398,7 @@ func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     //   to(felt): The new approved NFT controller
     //   tokenId(Uint256): The NFT to approve
     // Raises:
-    //   msg.sender: msg.sender is not the current NFT owner, or an authorized operator of the current owner
+    //   caller: caller is not the current NFT owner, or an authorized operator of the current owner
     ERC721.approve(to, tokenId);
     return ();
 }
@@ -408,7 +408,7 @@ func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     operator: felt, approved: felt
 ) {
     // Desc:
-    //   Enable or disable approval for a third party -operator- to manage all of -msg.sender-s assets (EIP 721)
+    //   Enable or disable approval for a third party -operator- to manage all of -caller-s assets (EIP 721)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -435,9 +435,9 @@ func transferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_pt
     //   to(felt): The new owner
     //   tokenId(Uint256): The NFT to transfer
     // Raises:
-    //   msg.sender: msg.sender is not the current owner, an authorized operator, or the approved address for this NFT
+    //   caller: caller is not the current owner or an authorized operator or the approved address for this NFT
     //   from_: from_ is not the current owner
-    //   to: to is the zero address.
+    //   to: to is the zero address
     //   tokenId: tokenId is not a valid NFT
     ERC721Enumerable.transfer_from(from_, to, tokenId);
     return ();
@@ -458,13 +458,13 @@ func safeTransferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_chec
     //   to(felt): The new owner
     //   tokenId(Uint256): The NFT to transfer
     //   data_len(felt): The data array length
-    //   data(felt*): Additional data with no specified format, sent in call to -to-
+    //   data(felt*): Additional data with no specified format sent in call to -to-
     // Raises:
-    //   msg.sender: msg.sender is not the current owner, an authorized operator, or the approved address for this NFT
+    //   caller: caller is not the current owner or an authorized operator or the approved address for this NFT
     //   from_: from_ is not the current owner
-    //   to: to is the zero address.
+    //   to: to is the zero address
     //   tokenId: tokenId is not a valid NFT
-    //   to: to is not a contract account neither implements -onERC721Received- correctly
+    //   to: to is not a contract account neither implements onERC721Received correctly
     ERC721Enumerable.safe_transfer_from(from_, to, tokenId, data_len, data);
     return ();
 }
@@ -485,7 +485,7 @@ func mint{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     // Returns:
     //   None
     // Raises:
-    //   msg.sender: msg.sender is not the contract owner
+    //   caller: caller is not the contract owner
     //   to: to is the zero address
     //   tokenId: tokenId is not a valid Uint256
     //   tokenId: token already minted
@@ -548,7 +548,7 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     // Returns:
     //   None
     // Raises:
-    //   msg.sender: msg.sender is not the contract owner
+    //   caller: caller is not the contract owner
     //   newOwner: new owner is the zero address
     Ownable.transfer_ownership(newOwner);
     return ();
@@ -565,7 +565,7 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     // Returns:
     //   None
     // Raises:
-    //   msg.sender: msg.sender is not the contract owner
+    //   caller: caller is not the contract owner
     Ownable.renounce_ownership();
     return ();
 }

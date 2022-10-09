@@ -1495,13 +1495,13 @@
     raises: null
     charIndex:
       start: 12511
-      end: 12849
+      end: 12940
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 13015
-      end: 13032
+      start: 13007
+      end: 13024
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1522,23 +1522,53 @@
         type: ''
         desc: >-
           Enable or disable approval for a third party -operator- to manage all
-          of
+          of -caller-s assets (EIP 721)
         charIndex:
           start: 23
-          end: 96
-    implicitArgs: null
-    explicitArgs: null
+          end: 122
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 154
+          end: 172
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 182
+          end: 208
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 218
+          end: 233
+    explicitArgs:
+      - name: operator
+        type: felt
+        desc: Address to add to the set of authorized operators
+        charIndex:
+          start: 265
+          end: 330
+      - name: approved
+        type: felt
+        desc: 1 if the operator is approved, 0 to revoke approval
+        charIndex:
+          start: 340
+          end: 407
     returns: null
     raises: null
     charIndex:
-      start: 13137
-      end: 13233
+      start: 13129
+      end: 13536
 - attributeName: external
   functionName:
     name: transferFrom
     charIndex:
-      start: 13635
-      end: 13647
+      start: 13623
+      end: 13635
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1602,16 +1632,42 @@
           start: 288
           end: 325
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: >-
+          caller is not the current owner or an authorized operator or the
+          approved address for this NFT
+        charIndex:
+          start: 350
+          end: 452
+      - name: from_
+        type: ''
+        desc: from_ is not the current owner
+        charIndex:
+          start: 462
+          end: 499
+      - name: to
+        type: ''
+        desc: to is the zero address
+        charIndex:
+          start: 509
+          end: 535
+      - name: tokenId
+        type: ''
+        desc: tokenId is not a valid NFT
+        charIndex:
+          start: 545
+          end: 580
     charIndex:
-      start: 13761
-      end: 14111
+      start: 13749
+      end: 14329
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 14439
-      end: 14455
+      start: 14419
+      end: 14435
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1688,21 +1744,55 @@
           end: 413
       - name: data
         type: felt*
-        desc: Additional data with no specified format, sent in call to -to-
+        desc: Additional data with no specified format sent in call to -to-
         charIndex:
           start: 423
-          end: 498
+          end: 497
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: >-
+          caller is not the current owner or an authorized operator or the
+          approved address for this NFT
+        charIndex:
+          start: 522
+          end: 624
+      - name: from_
+        type: ''
+        desc: from_ is not the current owner
+        charIndex:
+          start: 634
+          end: 671
+      - name: to
+        type: ''
+        desc: to is the zero address
+        charIndex:
+          start: 681
+          end: 707
+      - name: tokenId
+        type: ''
+        desc: tokenId is not a valid NFT
+        charIndex:
+          start: 717
+          end: 752
+      - name: to
+        type: ''
+        desc: >-
+          to is not a contract account neither implements onERC721Received
+          correctly
+        charIndex:
+          start: 762
+          end: 840
     charIndex:
-      start: 14598
-      end: 15121
+      start: 14578
+      end: 15418
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 15560
-      end: 15564
+      start: 15529
+      end: 15533
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1758,16 +1848,40 @@
           start: 247
           end: 273
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 328
+          end: 368
+      - name: to
+        type: ''
+        desc: to is the zero address
+        charIndex:
+          start: 378
+          end: 404
+      - name: tokenId
+        type: ''
+        desc: tokenId is not a valid Uint256
+        charIndex:
+          start: 414
+          end: 453
+      - name: tokenId
+        type: ''
+        desc: token already minted
+        charIndex:
+          start: 463
+          end: 492
     charIndex:
-      start: 15665
-      end: 15993
+      start: 15634
+      end: 16126
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 16273
-      end: 16277
+      start: 16234
+      end: 16238
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1823,14 +1937,14 @@
           start: 271
           end: 310
     charIndex:
-      start: 16362
-      end: 16672
+      start: 16323
+      end: 16633
 - attributeName: external
   functionName:
     name: setTokenURI
     charIndex:
-      start: 16788
-      end: 16799
+      start: 16749
+      end: 16760
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1896,14 +2010,14 @@
           start: 331
           end: 362
     charIndex:
-      start: 16906
-      end: 17268
+      start: 16867
+      end: 17229
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 17381
-      end: 17398
+      start: 17342
+      end: 17359
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1951,16 +2065,28 @@
           start: 199
           end: 239
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 294
+          end: 334
+      - name: newOwner
+        type: ''
+        desc: new owner is the zero address
+        charIndex:
+          start: 344
+          end: 383
     charIndex:
-      start: 17487
-      end: 17781
+      start: 17448
+      end: 17831
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 17954
-      end: 17971
+      start: 17907
+      end: 17924
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2000,16 +2126,22 @@
           end: 152
     explicitArgs: null
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 207
+          end: 247
     charIndex:
-      start: 18040
-      end: 18247
+      start: 17993
+      end: 18240
 - attributeName: external
   functionName:
     name: set_image_url
     charIndex:
-      start: 18363
-      end: 18376
+      start: 18308
+      end: 18321
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2039,8 +2171,8 @@
   functionName:
     name: set_image_data
     charIndex:
-      start: 18613
-      end: 18627
+      start: 18558
+      end: 18572
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2070,8 +2202,8 @@
   functionName:
     name: set_external_url
     charIndex:
-      start: 18869
-      end: 18885
+      start: 18814
+      end: 18830
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2101,8 +2233,8 @@
   functionName:
     name: set_description
     charIndex:
-      start: 19131
-      end: 19146
+      start: 19076
+      end: 19091
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2132,8 +2264,8 @@
   functionName:
     name: set_holder
     charIndex:
-      start: 19387
-      end: 19397
+      start: 19332
+      end: 19342
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2163,8 +2295,8 @@
   functionName:
     name: set_certifier
     charIndex:
-      start: 19613
-      end: 19626
+      start: 19558
+      end: 19571
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2194,8 +2326,8 @@
   functionName:
     name: set_land
     charIndex:
-      start: 19857
-      end: 19865
+      start: 19802
+      end: 19810
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2225,8 +2357,8 @@
   functionName:
     name: set_unit_land_surface
     charIndex:
-      start: 20071
-      end: 20092
+      start: 20016
+      end: 20037
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2256,8 +2388,8 @@
   functionName:
     name: set_country
     charIndex:
-      start: 20363
-      end: 20374
+      start: 20308
+      end: 20319
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2287,8 +2419,8 @@
   functionName:
     name: set_expiration
     charIndex:
-      start: 20595
-      end: 20609
+      start: 20540
+      end: 20554
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2318,8 +2450,8 @@
   functionName:
     name: set_total_co2_sequestration
     charIndex:
-      start: 20845
-      end: 20872
+      start: 20790
+      end: 20817
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2349,8 +2481,8 @@
   functionName:
     name: set_unit_co2_sequestration
     charIndex:
-      start: 21187
-      end: 21213
+      start: 21132
+      end: 21158
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2380,8 +2512,8 @@
   functionName:
     name: set_sequestration_color
     charIndex:
-      start: 21523
-      end: 21546
+      start: 21468
+      end: 21491
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2411,8 +2543,8 @@
   functionName:
     name: set_sequestration_type
     charIndex:
-      start: 21827
-      end: 21849
+      start: 21772
+      end: 21794
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2442,8 +2574,8 @@
   functionName:
     name: set_sequestration_category
     charIndex:
-      start: 22125
-      end: 22151
+      start: 22070
+      end: 22096
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2473,8 +2605,8 @@
   functionName:
     name: set_background_color
     charIndex:
-      start: 22461
-      end: 22481
+      start: 22406
+      end: 22426
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2504,8 +2636,8 @@
   functionName:
     name: set_animation_url
     charIndex:
-      start: 22747
-      end: 22764
+      start: 22692
+      end: 22709
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2535,8 +2667,8 @@
   functionName:
     name: set_youtube_url
     charIndex:
-      start: 23015
-      end: 23030
+      start: 22960
+      end: 22975
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

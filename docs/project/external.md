@@ -15,13 +15,13 @@ The NFT to approve
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setApprovalForAll" %}  
 {% swagger-description %}  
-Enable or disable approval for a third party -operator- to manage all of  
+Enable or disable approval for a third party -operator- to manage all of -caller-s assets (EIP 721)  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="operator" %}  
-  
+Address to add to the set of authorized operators  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="approved" %}  
-  
+1 if the operator is approved, 0 to revoke approval  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "transferFrom" %}  
@@ -55,7 +55,7 @@ The NFT to transfer
 The data array length  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt*" name="data" %}  
-Additional data with no specified format, sent in call to -to-  
+Additional data with no specified format sent in call to -to-  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "mint" %}  

@@ -14,7 +14,7 @@ The purpose of the minter is to provide all required features required to make p
 
 ## 🔒 Private sale
 
-The private sale is managed by handling a reserved supply substracted from the total supply that can only be airdropped to recipients.
+The private sale is managed by handling a reserved supply substracted from the max supply that can only be airdropped to recipients.
 
 Reserved supply can be called at any time and can only be decreased after the initial deployment.
 
@@ -22,7 +22,7 @@ Reserved supply can be called at any time and can only be decreased after the in
 
 The presale is reserved to whitelisted addresses, this step is managed by a merkle tree mechanism (to save on-chain storage).
 
-The total amount of token that can be purchased during this step relies on total supply, reserved supply but also whitelisted slots associated for each whitelisted addresses (handled during the merkle root generation).
+The total amount of token that can be purchased during this step relies on max supply, reserved supply but also whitelisted slots associated for each whitelisted addresses (handled during the merkle root generation).
 
 The presale starts when the the merkle root is set to a not null value and continue while this condition is verified.
 
@@ -30,4 +30,4 @@ The presale starts when the the merkle root is set to a not null value and conti
 
 The public sale starts when the corresponding storage boolean becomes true.
 
-The total amount of token that can be purchased during this step is the total supply minus the reserved supply.
+The total amount of token that can be purchased during this step is the max supply minus the reserved supply minus the supply already minted.
