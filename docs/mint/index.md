@@ -36,4 +36,4 @@ The total amount of token that can be purchased during this step is the max supp
 
 See also the detailed [callgraph](../callgraphs/CarbonableMinter.gv) of the smart-contract.
 
-![callgraph](../callgraphs/CarbonableMinter.gv.svg)
+![Figure - Carbonable Minter Callgraph](../callgraphs/CarbonableMinter.gv.svg)

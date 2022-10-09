@@ -12,4 +12,4 @@ Description will come soon.
 
 See also the detailed [callgraph](../callgraphs/CarbonableFarmer.gv) of the smart-contract.
 
-![callgraph](../callgraphs/CarbonableFarmer.gv.svg)
+![Figure - Carbonable Farmer Callgraph](../callgraphs/CarbonableFarmer.gv.svg)

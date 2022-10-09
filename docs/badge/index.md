@@ -20,4 +20,4 @@ Contracts include the following standard features:
 
 See also the detailed [callgraph](../callgraphs/CarbonableBadge.gv) of the smart-contract.
 
-![callgraph](../callgraphs/CarbonableBadge.gv.svg)
+![Figure - Carbonable Badge Callgraph](../callgraphs/CarbonableBadge.gv.svg)

@@ -24,4 +24,4 @@ Contracts include the following standard features:
 
 See also the detailed [callgraph](../callgraphs/CarbonableProject.gv) of the smart-contract.
 
-![callgraph](../callgraphs/CarbonableProject.gv.svg)
+![Figure - Carbonable Project Callgraph](../callgraphs/CarbonableProject.gv.svg)
