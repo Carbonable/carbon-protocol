@@ -1,0 +1,266 @@
+- attributeName: constructor
+  functionName:
+    name: constructor
+    charIndex:
+      start: 247
+      end: 258
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: owner
+        type: felt
+      - name: carbonable_project_address
+        type: felt
+      - name: carbonable_token_address
+        type: felt
+      - name: reward_token_address
+        type: felt
+      - name: ''
+        type: ''
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract with the given parameters -
+        charIndex:
+          start: 23
+          end: 74
+      - name: ''
+        type: ''
+        desc: >-
+          This constructor uses a dedicated initializer that mainly stores the
+          inputs
+        charIndex:
+          start: 84
+          end: 159
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 191
+          end: 209
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 219
+          end: 245
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 255
+          end: 270
+    explicitArgs:
+      - name: owner
+        type: felt
+        desc: Owner address
+        charIndex:
+          start: 302
+          end: 328
+      - name: carbonable_project_address
+        type: felt
+        desc: Address of the corresponding Carbonable project
+        charIndex:
+          start: 338
+          end: 419
+      - name: carbonable_token_address
+        type: felt
+        desc: Address of the Carbonable token
+        charIndex:
+          start: 429
+          end: 492
+      - name: reward_token_address
+        type: felt
+        desc: Address of the reward token
+        charIndex:
+          start: 502
+          end: 557
+    returns: null
+    raises: null
+    charIndex:
+      start: 451
+      end: 1038
+- attributeName: view
+  functionName:
+    name: carbonable_project_address
+    charIndex:
+      start: 1209
+      end: 1235
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: ''
+        type: ''
+    returns:
+      - name: carbonable_project_address
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the associated carbonable project
+        charIndex:
+          start: 23
+          end: 63
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 95
+          end: 113
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 123
+          end: 149
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 159
+          end: 174
+    explicitArgs: null
+    returns:
+      - name: carbonable_project_address
+        type: felt
+        desc: Address of the corresponding Carbonable project
+        charIndex:
+          start: 200
+          end: 281
+    raises: null
+    charIndex:
+      start: 1347
+      end: 1628
+- attributeName: view
+  functionName:
+    name: reward_token_address
+    charIndex:
+      start: 1701
+      end: 1721
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: reward_token_address
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the associated reward token
+        charIndex:
+          start: 23
+          end: 57
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 89
+          end: 107
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 117
+          end: 143
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 153
+          end: 168
+    explicitArgs: null
+    returns:
+      - name: reward_token_address
+        type: felt
+        desc: Address of the reward token
+        charIndex:
+          start: 194
+          end: 249
+    raises: null
+    charIndex:
+      start: 1828
+      end: 2077
+- attributeName: view
+  functionName:
+    name: carbonable_token_address
+    charIndex:
+      start: 2144
+      end: 2168
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: ''
+        type: ''
+    returns:
+      - name: carbonable_token_address
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the associated carbonable token
+        charIndex:
+          start: 23
+          end: 61
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 93
+          end: 111
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 121
+          end: 147
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 157
+          end: 172
+    explicitArgs: null
+    returns:
+      - name: carbonable_token_address
+        type: felt
+        desc: Address of the Carbonable token
+        charIndex:
+          start: 198
+          end: 261
+    raises: null
+    charIndex:
+      start: 2278
+      end: 2539

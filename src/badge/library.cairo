@@ -21,10 +21,18 @@ const IERC5192_ID = 0xb45a3c0e;
 
 @event
 func Locked(token_id: Uint256) {
+    // Desc:
+    //   Emit event when a token id is locked for transfer
+    // Explicit args:
+    //   token_id(Uint256): Token id
 }
 
 @event
 func Unlocked(token_id: Uint256) {
+    // Desc:
+    //   Emit event when a token id is unlocked for transfer
+    // Explicit args:
+    //   token_id(Uint256): Token id
 }
 
 //
@@ -50,6 +58,19 @@ namespace CarbonableBadge {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }(uri_len: felt, uri: felt*, name: felt) {
+        // Desc:
+        //   Initialize the contract with the given uri and symbol
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   bitwise_ptr(BitwiseBuiltin*)
+        //   range_check_ptr
+        // Explicit args:
+        //   uri_len(felt): uri array length
+        //   uri(felt*): uri characters as a felt array
+        //   name(felt): name of the badge collection
+        // Returns:
+        //   None
         set_uri(uri_len, uri);
         ERC165.register_interface(IERC5192_ID);
         CarbonableBadge_name.write(name);

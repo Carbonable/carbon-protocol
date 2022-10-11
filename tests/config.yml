@@ -8,4 +8,4 @@ sources:
   token: ./tests/mocks/erc20.cairo
   account: ./tests/mocks/account.cairo
   minter: ./src/mint/minter.cairo
-  yielder: ./src/yield/yield_manager.cairo
+  farmer: ./src/farm/farmer.cairo
