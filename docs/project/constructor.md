@@ -4,7 +4,7 @@ Constructor
   
 {% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %}  
 {% swagger-description %}  
-Initialize the contract  
+Initialize the contract with the given name, symbol and owner - This constructor uses the standard OZ ERC721 initializer, the standard OZ ERC721Enumerable initializer and the OZ Ownable initializer  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="name" %}  
 Name of the collection  

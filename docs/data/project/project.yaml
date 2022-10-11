@@ -24,59 +24,77 @@
     desc:
       - name: ''
         type: ''
-        desc: Initialize the contract
+        desc: Initialize the contract with the given name, symbol and owner -
         charIndex:
           start: 23
-          end: 46
+          end: 86
+      - name: ''
+        type: ''
+        desc: This constructor uses the standard OZ ERC721 initializer,
+        charIndex:
+          start: 96
+          end: 153
+      - name: ''
+        type: ''
+        desc: the standard OZ ERC721Enumerable initializer and
+        charIndex:
+          start: 163
+          end: 211
+      - name: ''
+        type: ''
+        desc: the OZ Ownable initializer
+        charIndex:
+          start: 221
+          end: 247
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 78
-          end: 96
+          start: 279
+          end: 297
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 106
-          end: 132
+          start: 307
+          end: 333
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 142
-          end: 157
+          start: 343
+          end: 358
     explicitArgs:
       - name: name
         type: felt
         desc: Name of the collection
         charIndex:
-          start: 189
-          end: 223
+          start: 390
+          end: 424
       - name: symbol
         type: felt
         desc: Symbol of the collection
         charIndex:
-          start: 233
-          end: 271
+          start: 434
+          end: 472
       - name: owner
         type: felt
         desc: Owner address
         charIndex:
-          start: 281
-          end: 307
+          start: 482
+          end: 508
     returns: null
     raises: null
     charIndex:
       start: 759
-      end: 1096
+      end: 1297
 - attributeName: view
   functionName:
     name: totalSupply
     charIndex:
-      start: 1250
-      end: 1261
+      start: 1451
+      end: 1462
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -128,14 +146,14 @@
           end: 387
     raises: null
     charIndex:
-      start: 1362
-      end: 1749
+      start: 1563
+      end: 1950
 - attributeName: view
   functionName:
     name: tokenByIndex
     charIndex:
-      start: 1868
-      end: 1880
+      start: 2069
+      end: 2081
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -199,14 +217,14 @@
           start: 409
           end: 441
     charIndex:
-      start: 1991
-      end: 2432
+      start: 2192
+      end: 2633
 - attributeName: view
   functionName:
     name: tokenOfOwnerByIndex
     charIndex:
-      start: 2546
-      end: 2565
+      start: 2747
+      end: 2766
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -274,14 +292,14 @@
           end: 501
     raises: null
     charIndex:
-      start: 2689
-      end: 3321
+      start: 2890
+      end: 3522
 - attributeName: view
   functionName:
     name: supportsInterface
     charIndex:
-      start: 3451
-      end: 3468
+      start: 3652
+      end: 3669
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -339,14 +357,14 @@
           end: 328
     raises: null
     charIndex:
-      start: 3579
-      end: 3907
+      start: 3780
+      end: 4108
 - attributeName: view
   functionName:
     name: name
     charIndex:
-      start: 3973
-      end: 3977
+      start: 4174
+      end: 4178
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -398,14 +416,14 @@
           end: 280
     raises: null
     charIndex:
-      start: 4062
-      end: 4342
+      start: 4263
+      end: 4543
 - attributeName: view
   functionName:
     name: symbol
     charIndex:
-      start: 4383
-      end: 4389
+      start: 4584
+      end: 4590
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -457,14 +475,14 @@
           end: 269
     raises: null
     charIndex:
-      start: 4476
-      end: 4745
+      start: 4677
+      end: 4946
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 4788
-      end: 4797
+      start: 4989
+      end: 4998
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -528,14 +546,14 @@
           start: 383
           end: 411
     charIndex:
-      start: 4905
-      end: 5316
+      start: 5106
+      end: 5517
 - attributeName: view
   functionName:
     name: ownerOf
     charIndex:
-      start: 5368
-      end: 5375
+      start: 5569
+      end: 5576
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -593,14 +611,14 @@
           end: 317
     raises: null
     charIndex:
-      start: 5483
-      end: 5800
+      start: 5684
+      end: 6001
 - attributeName: view
   functionName:
     name: getApproved
     charIndex:
-      start: 5852
-      end: 5863
+      start: 6053
+      end: 6064
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -666,14 +684,14 @@
           start: 413
           end: 448
     charIndex:
-      start: 5974
-      end: 6422
+      start: 6175
+      end: 6623
 - attributeName: view
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 6478
-      end: 6494
+      start: 6679
+      end: 6695
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -741,14 +759,14 @@
           end: 462
     raises: null
     charIndex:
-      start: 6618
-      end: 7080
+      start: 6819
+      end: 7281
 - attributeName: view
   functionName:
     name: tokenURI
     charIndex:
-      start: 7205
-      end: 7213
+      start: 7406
+      end: 7414
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -814,14 +832,14 @@
           start: 410
           end: 445
     charIndex:
-      start: 7324
-      end: 7769
+      start: 7525
+      end: 7970
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 7870
-      end: 7875
+      start: 8071
+      end: 8076
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -871,14 +889,14 @@
           end: 215
     raises: null
     charIndex:
-      start: 7961
-      end: 8176
+      start: 8162
+      end: 8377
 - attributeName: view
   functionName:
     name: image_url
     charIndex:
-      start: 8219
-      end: 8228
+      start: 8420
+      end: 8429
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -908,8 +926,8 @@
   functionName:
     name: image_data
     charIndex:
-      start: 8433
-      end: 8443
+      start: 8634
+      end: 8644
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -939,8 +957,8 @@
   functionName:
     name: external_url
     charIndex:
-      start: 8651
-      end: 8663
+      start: 8852
+      end: 8864
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -970,8 +988,8 @@
   functionName:
     name: description
     charIndex:
-      start: 8877
-      end: 8888
+      start: 9078
+      end: 9089
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1001,8 +1019,8 @@
   functionName:
     name: holder
     charIndex:
-      start: 9099
-      end: 9105
+      start: 9300
+      end: 9306
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1032,8 +1050,8 @@
   functionName:
     name: certifier
     charIndex:
-      start: 9301
-      end: 9310
+      start: 9502
+      end: 9511
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1063,8 +1081,8 @@
   functionName:
     name: land
     charIndex:
-      start: 9515
-      end: 9519
+      start: 9716
+      end: 9720
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1094,8 +1112,8 @@
   functionName:
     name: unit_land_surface
     charIndex:
-      start: 9709
-      end: 9726
+      start: 9910
+      end: 9927
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1125,8 +1143,8 @@
   functionName:
     name: country
     charIndex:
-      start: 9955
-      end: 9962
+      start: 10156
+      end: 10163
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1156,8 +1174,8 @@
   functionName:
     name: expiration
     charIndex:
-      start: 10161
-      end: 10171
+      start: 10362
+      end: 10372
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1187,8 +1205,8 @@
   functionName:
     name: total_co2_sequestration
     charIndex:
-      start: 10379
-      end: 10402
+      start: 10580
+      end: 10603
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1218,8 +1236,8 @@
   functionName:
     name: unit_co2_sequestration
     charIndex:
-      start: 10649
-      end: 10671
+      start: 10850
+      end: 10872
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1249,8 +1267,8 @@
   functionName:
     name: sequestration_color
     charIndex:
-      start: 10915
-      end: 10934
+      start: 11116
+      end: 11135
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1280,8 +1298,8 @@
   functionName:
     name: sequestration_type
     charIndex:
-      start: 11169
-      end: 11187
+      start: 11370
+      end: 11388
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1311,8 +1329,8 @@
   functionName:
     name: sequestration_category
     charIndex:
-      start: 11419
-      end: 11441
+      start: 11620
+      end: 11642
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1342,8 +1360,8 @@
   functionName:
     name: background_color
     charIndex:
-      start: 11685
-      end: 11701
+      start: 11886
+      end: 11902
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1373,8 +1391,8 @@
   functionName:
     name: animation_url
     charIndex:
-      start: 11927
-      end: 11940
+      start: 12128
+      end: 12141
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1404,8 +1422,8 @@
   functionName:
     name: youtube_url
     charIndex:
-      start: 12157
-      end: 12168
+      start: 12358
+      end: 12369
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1435,8 +1453,8 @@
   functionName:
     name: approve
     charIndex:
-      start: 12403
-      end: 12410
+      start: 12604
+      end: 12611
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1494,14 +1512,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 12511
-      end: 12940
+      start: 12712
+      end: 13141
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 13007
-      end: 13024
+      start: 13208
+      end: 13225
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1561,14 +1579,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 13129
-      end: 13536
+      start: 13330
+      end: 13737
 - attributeName: external
   functionName:
     name: transferFrom
     charIndex:
-      start: 13623
-      end: 13635
+      start: 13824
+      end: 13836
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1660,14 +1678,14 @@
           start: 545
           end: 580
     charIndex:
-      start: 13749
-      end: 14329
+      start: 13950
+      end: 14530
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 14419
-      end: 14435
+      start: 14620
+      end: 14636
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1785,14 +1803,14 @@
           start: 762
           end: 840
     charIndex:
-      start: 14578
-      end: 15418
+      start: 14779
+      end: 15619
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 15529
-      end: 15533
+      start: 15730
+      end: 15734
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1874,14 +1892,14 @@
           start: 463
           end: 492
     charIndex:
-      start: 15634
-      end: 16126
+      start: 15835
+      end: 16327
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 16234
-      end: 16238
+      start: 16435
+      end: 16439
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1937,14 +1955,14 @@
           start: 271
           end: 310
     charIndex:
-      start: 16323
-      end: 16633
+      start: 16524
+      end: 16834
 - attributeName: external
   functionName:
     name: setTokenURI
     charIndex:
-      start: 16749
-      end: 16760
+      start: 16950
+      end: 16961
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -2010,14 +2028,14 @@
           start: 331
           end: 362
     charIndex:
-      start: 16867
-      end: 17229
+      start: 17068
+      end: 17430
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 17342
-      end: 17359
+      start: 17543
+      end: 17560
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2079,14 +2097,14 @@
           start: 344
           end: 383
     charIndex:
-      start: 17448
-      end: 17831
+      start: 17649
+      end: 18032
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 17907
-      end: 17924
+      start: 18108
+      end: 18125
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2134,14 +2152,14 @@
           start: 207
           end: 247
     charIndex:
-      start: 17993
-      end: 18240
+      start: 18194
+      end: 18441
 - attributeName: external
   functionName:
     name: set_image_url
     charIndex:
-      start: 18308
-      end: 18321
+      start: 18509
+      end: 18522
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2171,8 +2189,8 @@
   functionName:
     name: set_image_data
     charIndex:
-      start: 18558
-      end: 18572
+      start: 18759
+      end: 18773
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2202,8 +2220,8 @@
   functionName:
     name: set_external_url
     charIndex:
-      start: 18814
-      end: 18830
+      start: 19015
+      end: 19031
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2233,8 +2251,8 @@
   functionName:
     name: set_description
     charIndex:
-      start: 19076
-      end: 19091
+      start: 19277
+      end: 19292
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2264,8 +2282,8 @@
   functionName:
     name: set_holder
     charIndex:
-      start: 19332
-      end: 19342
+      start: 19533
+      end: 19543
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2295,8 +2313,8 @@
   functionName:
     name: set_certifier
     charIndex:
-      start: 19558
-      end: 19571
+      start: 19759
+      end: 19772
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2326,8 +2344,8 @@
   functionName:
     name: set_land
     charIndex:
-      start: 19802
-      end: 19810
+      start: 20003
+      end: 20011
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2357,8 +2375,8 @@
   functionName:
     name: set_unit_land_surface
     charIndex:
-      start: 20016
-      end: 20037
+      start: 20217
+      end: 20238
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2388,8 +2406,8 @@
   functionName:
     name: set_country
     charIndex:
-      start: 20308
-      end: 20319
+      start: 20509
+      end: 20520
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2419,8 +2437,8 @@
   functionName:
     name: set_expiration
     charIndex:
-      start: 20540
-      end: 20554
+      start: 20741
+      end: 20755
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2450,8 +2468,8 @@
   functionName:
     name: set_total_co2_sequestration
     charIndex:
-      start: 20790
-      end: 20817
+      start: 20991
+      end: 21018
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2481,8 +2499,8 @@
   functionName:
     name: set_unit_co2_sequestration
     charIndex:
-      start: 21132
-      end: 21158
+      start: 21333
+      end: 21359
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2512,8 +2530,8 @@
   functionName:
     name: set_sequestration_color
     charIndex:
-      start: 21468
-      end: 21491
+      start: 21669
+      end: 21692
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2543,8 +2561,8 @@
   functionName:
     name: set_sequestration_type
     charIndex:
-      start: 21772
-      end: 21794
+      start: 21973
+      end: 21995
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2574,8 +2592,8 @@
   functionName:
     name: set_sequestration_category
     charIndex:
-      start: 22070
-      end: 22096
+      start: 22271
+      end: 22297
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2605,8 +2623,8 @@
   functionName:
     name: set_background_color
     charIndex:
-      start: 22406
-      end: 22426
+      start: 22607
+      end: 22627
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2636,8 +2654,8 @@
   functionName:
     name: set_animation_url
     charIndex:
-      start: 22692
-      end: 22709
+      start: 22893
+      end: 22910
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2667,8 +2685,8 @@
   functionName:
     name: set_youtube_url
     charIndex:
-      start: 22960
-      end: 22975
+      start: 23161
+      end: 23176
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

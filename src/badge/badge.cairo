@@ -26,7 +26,10 @@ func constructor{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(uri_len: felt, uri: felt*, name: felt, owner: felt) {
     // Desc:
-    //   Initialize the contract
+    //   Initialize the contract with the given uri, name and owner -
+    //   This constructor ignores the standard OZ ERC1155 initializer (which require the uri only as single felt) in favor of
+    //   a dedicated initialize handling the uri (as a felt*) and a name to be compliant with most markplaces, finally the OZ
+    //   Ownable initializer is used
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)

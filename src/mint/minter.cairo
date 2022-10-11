@@ -25,7 +25,8 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     reserved_supply_for_mint: Uint256,
 ) {
     // Desc:
-    //   Initialize the contract
+    //   Initialize the contract with the given parameters -
+    //   This constructor uses a dedicated initializer that mainly stores the inputs
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)

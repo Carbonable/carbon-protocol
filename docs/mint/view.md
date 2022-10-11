@@ -34,7 +34,7 @@ Return the public sale status
 {% swagger-description %}  
 Return the max amount that can be purchased in a single tx  
 {% endswagger-description %}  
-{% swagger-response status="max_buy_per_tx ( felt )" description="max amount per tx" %}  
+{% swagger-response status="max_buy_per_tx ( felt )" description="Max amount per tx" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "unit_price" %}  

@@ -25,7 +25,10 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     name: felt, symbol: felt, owner: felt
 ) {
     // Desc:
-    //   Initialize the contract
+    //   Initialize the contract with the given name, symbol and owner -
+    //   This constructor uses the standard OZ ERC721 initializer,
+    //   the standard OZ ERC721Enumerable initializer and
+    //   the OZ Ownable initializer
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)

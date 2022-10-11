@@ -28,71 +28,93 @@
     desc:
       - name: ''
         type: ''
-        desc: Initialize the contract
+        desc: Initialize the contract with the given uri, name and owner -
         charIndex:
           start: 23
-          end: 46
+          end: 83
+      - name: ''
+        type: ''
+        desc: >-
+          This constructor ignores the standard OZ ERC1155 initializer (which
+          require the uri only as single felt) in favor of
+        charIndex:
+          start: 93
+          end: 209
+      - name: ''
+        type: ''
+        desc: >-
+          a dedicated initialize handling the uri (as a felt*) and a name to be
+          compliant with most markplaces, finally the OZ
+        charIndex:
+          start: 219
+          end: 335
+      - name: ''
+        type: ''
+        desc: Ownable initializer is used
+        charIndex:
+          start: 345
+          end: 372
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 78
-          end: 96
+          start: 404
+          end: 422
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 106
-          end: 132
+          start: 432
+          end: 458
       - name: bitwise_ptr
         type: BitwiseBuiltin*
         desc: ''
         charIndex:
-          start: 142
-          end: 170
+          start: 468
+          end: 496
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 180
-          end: 195
+          start: 506
+          end: 521
     explicitArgs:
       - name: uri_len
         type: felt
         desc: Uri array length
         charIndex:
-          start: 227
-          end: 258
+          start: 553
+          end: 584
       - name: uri
         type: felt*
         desc: Uri characters
         charIndex:
-          start: 268
-          end: 294
+          start: 594
+          end: 620
       - name: name
         type: felt
         desc: Name of the badge collection
         charIndex:
-          start: 304
-          end: 344
+          start: 630
+          end: 670
       - name: owner
         type: felt
         desc: Owner address
         charIndex:
-          start: 354
-          end: 380
+          start: 680
+          end: 706
     returns: null
     raises: null
     charIndex:
       start: 845
-      end: 1255
+      end: 1581
 - attributeName: view
   functionName:
     name: supportsInterface
     charIndex:
-      start: 1435
-      end: 1452
+      start: 1761
+      end: 1778
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -150,14 +172,14 @@
           end: 328
     raises: null
     charIndex:
-      start: 1563
-      end: 1891
+      start: 1889
+      end: 2217
 - attributeName: view
   functionName:
     name: uri
     charIndex:
-      start: 1957
-      end: 1960
+      start: 2283
+      end: 2286
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -231,14 +253,14 @@
           end: 382
     raises: null
     charIndex:
-      start: 2107
-      end: 2489
+      start: 2433
+      end: 2815
 - attributeName: view
   functionName:
     name: contractURI
     charIndex:
-      start: 2540
-      end: 2551
+      start: 2866
+      end: 2877
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -304,14 +326,14 @@
           end: 298
     raises: null
     charIndex:
-      start: 2687
-      end: 2985
+      start: 3013
+      end: 3311
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 3043
-      end: 3052
+      start: 3369
+      end: 3378
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -379,14 +401,14 @@
           end: 437
     raises: null
     charIndex:
-      start: 3175
-      end: 3612
+      start: 3501
+      end: 3938
 - attributeName: view
   functionName:
     name: balanceOfBatch
     charIndex:
-      start: 3671
-      end: 3685
+      start: 3997
+      end: 4011
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -478,14 +500,14 @@
           end: 599
     raises: null
     charIndex:
-      start: 3869
-      end: 4468
+      start: 4195
+      end: 4794
 - attributeName: view
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 4619
-      end: 4635
+      start: 4945
+      end: 4961
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -553,14 +575,14 @@
           end: 414
     raises: null
     charIndex:
-      start: 4761
-      end: 5175
+      start: 5087
+      end: 5501
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 5289
-      end: 5294
+      start: 5615
+      end: 5620
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -610,14 +632,14 @@
           end: 215
     raises: null
     charIndex:
-      start: 5380
-      end: 5595
+      start: 5706
+      end: 5921
 - attributeName: view
   functionName:
     name: name
     charIndex:
-      start: 5672
-      end: 5676
+      start: 5998
+      end: 6002
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -667,14 +689,14 @@
           end: 259
     raises: null
     charIndex:
-      start: 5761
-      end: 6020
+      start: 6087
+      end: 6346
 - attributeName: view
   functionName:
     name: locked
     charIndex:
-      start: 6070
-      end: 6076
+      start: 6396
+      end: 6402
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -732,14 +754,14 @@
           end: 286
     raises: null
     charIndex:
-      start: 6183
-      end: 6469
+      start: 6509
+      end: 6795
 - attributeName: external
   functionName:
     name: setURI
     charIndex:
-      start: 6547
-      end: 6553
+      start: 6873
+      end: 6879
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -805,14 +827,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 6683
-      end: 6979
+      start: 7009
+      end: 7305
 - attributeName: external
   functionName:
     name: setLocked
     charIndex:
-      start: 7089
-      end: 7098
+      start: 7415
+      end: 7424
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -862,14 +884,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7178
-      end: 7434
+      start: 7504
+      end: 7760
 - attributeName: external
   functionName:
     name: setUnlocked
     charIndex:
-      start: 7537
-      end: 7548
+      start: 7863
+      end: 7874
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -919,14 +941,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7628
-      end: 7887
+      start: 7954
+      end: 8213
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 7992
-      end: 8009
+      start: 8318
+      end: 8335
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -986,14 +1008,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8114
-      end: 8555
+      start: 8440
+      end: 8881
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 8643
-      end: 8659
+      start: 8969
+      end: 8985
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1083,14 +1105,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8814
-      end: 9313
+      start: 9140
+      end: 9639
 - attributeName: external
   functionName:
     name: safeBatchTransferFrom
     charIndex:
-      start: 9459
-      end: 9480
+      start: 9785
+      end: 9806
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1204,14 +1226,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 9702
-      end: 10464
+      start: 10028
+      end: 10790
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 10656
-      end: 10660
+      start: 10982
+      end: 10986
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1293,14 +1315,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 10802
-      end: 11247
+      start: 11128
+      end: 11573
 - attributeName: external
   functionName:
     name: mintBatch
     charIndex:
-      start: 11365
-      end: 11374
+      start: 11691
+      end: 11700
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1402,14 +1424,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 11579
-      end: 12246
+      start: 11905
+      end: 12572
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 12394
-      end: 12398
+      start: 12720
+      end: 12724
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1487,14 +1509,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 12514
-      end: 12980
+      start: 12840
+      end: 13306
 - attributeName: external
   functionName:
     name: burnBatch
     charIndex:
-      start: 13250
-      end: 13259
+      start: 13576
+      end: 13585
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1590,14 +1612,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 13413
-      end: 14101
+      start: 13739
+      end: 14427
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 14401
-      end: 14418
+      start: 14727
+      end: 14744
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1647,14 +1669,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 14507
-      end: 14776
+      start: 14833
+      end: 15102
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 14852
-      end: 14869
+      start: 15178
+      end: 15195
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1696,5 +1718,5 @@
     returns: null
     raises: null
     charIndex:
-      start: 14938
-      end: 15120
+      start: 15264
+      end: 15446

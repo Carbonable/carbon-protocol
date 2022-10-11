@@ -31,8 +31,8 @@ class Document():
         self._functions.update(self.views)
         self._functions.update(self.externals)
         self._functions.update(self.events)
-        self._functions.update(self.storages)
-        self._functions.update(self.internals)
+        # self._functions.update(self.storages)
+        # self._functions.update(self.internals)
 
     @classmethod
     def from_yaml(cls, root, path):
