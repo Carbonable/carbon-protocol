@@ -3,67 +3,67 @@ on:
   workflow_call:
     inputs:
       profile:
-        description: 'Profile'
+        description: "Profile"
         required: true
-        default: 'testnet'
+        default: "testnet"
         type: string
 
       alias:
-        description: 'Account alias'
+        description: "Account alias"
         required: true
-        default: 'carbonable'
+        default: "carbonable"
         type: string
 
       wallet:
-        description: 'Wallet type'
+        description: "Wallet type"
         required: true
-        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        default: "starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount"
         type: string
-        
+
       project_contract:
-        description: 'Carbonable project contract address'
+        description: "Carbonable project contract address"
         required: true
         type: string
 
       minter_contract:
-        description: 'Carbonable minter contract address'
+        description: "Carbonable minter contract address"
         required: true
         type: string
 
   workflow_dispatch:
     inputs:
       profile:
-        description: 'Profile'
+        description: "Profile"
         required: true
-        default: 'testnet'
+        default: "testnet"
         type: choice
         options:
-        - testnet
-        - mainnet
+          - testnet
+          - mainnet
 
       alias:
-        description: 'Account alias'
+        description: "Account alias"
         required: true
-        default: 'carbonable'
+        default: "carbonable"
         type: choice
         options:
-        - carbonable
+          - carbonable
 
       wallet:
-        description: 'Wallet type'
+        description: "Wallet type"
         required: true
-        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        default: "starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount"
         type: choice
         options:
-        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
-        
+          - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+
       project_contract:
-        description: 'Carbonable project contract address'
+        description: "Carbonable project contract address"
         required: true
         type: string
 
       minter_contract:
-        description: 'Carbonable minter contract address'
+        description: "Carbonable minter contract address"
         required: true
         type: string
 
@@ -73,7 +73,7 @@ permissions:
 env:
   PROJECT_ABI: ./build/CarbonableProject_abi.json
   PROTOSTAR_TOML_FILE: ./protostar.toml
-  PROTOSTAR_VERSION: 0.4.2
+  PROTOSTAR_VERSION: 0.5.0
 
 jobs:
   transfer:
@@ -99,7 +99,7 @@ jobs:
 
       - name: Install protostar dependencies
         run: /home/runner/.protostar/dist/protostar/protostar install
-        
+
       - name: Compile smart contract
         run: /home/runner/.protostar/dist/protostar/protostar build
 
