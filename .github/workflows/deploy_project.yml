@@ -13,7 +13,7 @@ on:
       wallet:
         required: true
         type: string
-        
+
       project_name:
         required: true
         type: string
@@ -30,39 +30,39 @@ on:
   workflow_dispatch:
     inputs:
       profile:
-        description: 'Profile'
+        description: "Profile"
         required: true
-        default: 'testnet'
+        default: "testnet"
         type: choice
         options:
-        - testnet
-        - mainnet
+          - testnet
+          - mainnet
 
       alias:
-        description: 'Account alias'
+        description: "Account alias"
         required: true
-        default: 'carbonable'
+        default: "carbonable"
         type: choice
         options:
-        - carbonable
+          - carbonable
 
       wallet:
-        description: 'Wallet type'
+        description: "Wallet type"
         required: true
-        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        default: "starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount"
         type: choice
         options:
-        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
-        
+          - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+
       project_name:
-        description: 'Carbonable project name'
-        default: 'Carbonable ERC-721 Test'
+        description: "Carbonable project name"
+        default: "Carbonable ERC-721 Test"
         required: true
         type: string
 
       project_symbol:
-        description: 'Carbonable project symbol'
-        default: 'CET'
+        description: "Carbonable project symbol"
+        default: "CET"
         required: true
         type: string
 
@@ -72,7 +72,7 @@ permissions:
 env:
   COMPILED_SOURCE: ./build/CarbonableProject.json
   PROTOSTAR_TOML_FILE: ./protostar.toml
-  PROTOSTAR_VERSION: 0.4.2
+  PROTOSTAR_VERSION: 0.5.0
 
 jobs:
   deploy:
@@ -101,7 +101,7 @@ jobs:
 
       - name: Install protostar dependencies
         run: /home/runner/.protostar/dist/protostar/protostar install
-        
+
       - name: Compile smart contract
         run: /home/runner/.protostar/dist/protostar/protostar build
 

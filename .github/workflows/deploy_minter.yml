@@ -13,11 +13,11 @@ on:
       wallet:
         required: true
         type: string
-        
+
       minter_carbonable_project_address:
         required: true
         type: string
-        
+
       minter_payment_token_address:
         required: true
         type: string
@@ -25,19 +25,19 @@ on:
       minter_public_sale_open:
         required: true
         type: string
-        
+
       minter_max_buy_per_tx:
         required: true
         type: string
-        
+
       minter_unit_price:
         required: true
         type: string
-        
+
       minter_max_supply_for_mint:
         required: true
         type: string
-        
+
       minter_reserved_supply_for_mint:
         required: true
         type: string
@@ -50,67 +50,67 @@ on:
   workflow_dispatch:
     inputs:
       profile:
-        description: 'Profile'
+        description: "Profile"
         required: true
-        default: 'testnet'
+        default: "testnet"
         type: choice
         options:
-        - testnet
-        - mainnet
+          - testnet
+          - mainnet
 
       alias:
-        description: 'Account alias'
+        description: "Account alias"
         required: true
-        default: 'carbonable'
+        default: "carbonable"
         type: choice
         options:
-        - carbonable
+          - carbonable
 
       wallet:
-        description: 'Wallet type'
+        description: "Wallet type"
         required: true
-        default: 'starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount'
+        default: "starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount"
         type: choice
         options:
-        - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
-        
+          - starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+
       minter_carbonable_project_address:
-        description: 'Carbonable project address'
+        description: "Carbonable project address"
         required: true
         type: string
-        
+
       minter_payment_token_address:
-        description: 'Payment token address'
-        default: '0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10'
+        description: "Payment token address"
+        default: "0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10"
         required: true
         type: string
 
       minter_public_sale_open:
-        description: 'Public sale open'
+        description: "Public sale open"
         default: false
         required: true
         type: boolean
-        
+
       minter_max_buy_per_tx:
-        description: 'Max buy per tx'
+        description: "Max buy per tx"
         default: 5
         required: true
         type: number
-        
+
       minter_unit_price:
-        description: 'Unit price (wei)'
+        description: "Unit price (wei)"
         default: 10
         required: true
         type: number
-        
+
       minter_max_supply_for_mint:
-        description: 'Max supply for mint'
+        description: "Max supply for mint"
         default: 10
         required: true
         type: number
-        
+
       minter_reserved_supply_for_mint:
-        description: 'Reserved supply for mint'
+        description: "Reserved supply for mint"
         default: 3
         required: true
         type: number
@@ -121,7 +121,7 @@ permissions:
 env:
   COMPILED_SOURCE: ./build/CarbonableMinter.json
   PROTOSTAR_TOML_FILE: ./protostar.toml
-  PROTOSTAR_VERSION: 0.4.2
+  PROTOSTAR_VERSION: 0.5.0
 
 jobs:
   deploy:
@@ -150,7 +150,7 @@ jobs:
 
       - name: Install protostar dependencies
         run: /home/runner/.protostar/dist/protostar/protostar install
-        
+
       - name: Compile smart contract
         run: /home/runner/.protostar/dist/protostar/protostar build
 

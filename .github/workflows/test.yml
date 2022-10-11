@@ -3,14 +3,14 @@ name: CI Tests
 on: [push, pull_request, pull_request_target]
 
 env:
-  PROTOSTAR_VERSION: 0.4.2
+  PROTOSTAR_VERSION: 0.5.0
 
 jobs:
   protostar-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install protostar
         run: |
           curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION

@@ -62,7 +62,6 @@ deploy_all_contracts() {
 
     # Save values in cache file
     (
-        echo "ERC1155_ADDRESS=$ERC1155_ADDRESS"
         echo "ERC721_ADDRESS=$ERC721_ADDRESS"
         echo "MINTER_ADDRESS=$MINTER_ADDRESS"
     ) | tee >&2 $CACHE_FILE
