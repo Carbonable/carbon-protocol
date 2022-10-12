@@ -56,8 +56,13 @@ deploy_all_contracts() {
         log_info "Deploying Minter contract..."
         MINTER_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableMinter.json --inputs $owner $project_nft_address $PAYMENT_TOKEN_ADDRESS $PUBLIC_SALE_OPEN $MAX_BUY_PER_TX $UNIT_PRICE $MAX_SUPPLY_FOR_MINT $RESERVED_SUPPLY_FOR_MINT" "$NETWORK"` || exit_error
         # Transfer ownership
-        log_info "Transfer ERC-721 ontract ownership..."
-        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT --wallet $WALLET" "$NETWORK"` || exit_error
+        log_info "Transfer ERC-721 contract ownership..."
+        # ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject_abi.json --function transferOwnership --inputs $MINTER_ADDRESS --network $NETWORK --account $ACCOUNT --wallet $WALLET" "$NETWORK"` || exit_error
+        # Set uri
+        erc721_len=${#ERC721_URI}
+        erc721_uri=$(str_to_hexs "$ERC721_URI")
+        log_info "Set ERC-721 contract uri..."
+        ERC721_ADDRESS=`send_transaction "starknet invoke --address $ERC721_ADDRESS --abi ./build/CarbonableProject_abi.json --function setURI --inputs $erc721_len $erc721_uri --network $NETWORK --account $ACCOUNT --wallet $WALLET" "$NETWORK"` || exit_error
     fi    
 
     # Save values in cache file
@@ -97,7 +102,7 @@ check_starknet
 
 ### BUSINESS LOGIC
 
-build # Need to generate ABI and compiled contracts
+# build # Need to generate ABI and compiled contracts
 deploy_all_contracts
 
 exit_success

@@ -5,7 +5,6 @@
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
 from cairopen.string.ASCII import StringCodec
@@ -21,7 +20,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_uri{
+func test_contract_uri{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }() {
     alloc_locals;
@@ -34,39 +33,18 @@ func test_uri{
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
 
-    let id = 0;
-    let (len, array) = CarbonableBadge.uri(Uint256(id, 0));
+    let (new_str) = StringCodec.ss_to_string('ipfs://carbonable/');
+    CarbonableBadge.set_uri(uri_len=new_str.len, uri=new_str.data);
+
+    let (len, array) = CarbonableBadge.contract_uri();
     let (returned_str) = StringCodec.ss_arr_to_string(len, array);
 
-    let (id_str) = StringCodec.felt_to_string(id);
+    let (metadata_str) = StringCodec.ss_to_string('metadata');
     let (ext_str) = StringCodec.ss_to_string('.json');
-    let (pre_str) = StringUtil.concat(str, id_str);
+    let (pre_str) = StringUtil.concat(new_str, metadata_str);
     let (expected_str) = StringUtil.concat(pre_str, ext_str);
 
     assert_string(returned_str, expected_str);
-
-    %{ stop() %}
-
-    return ();
-}
-
-@external
-func test_uri_revert_invalid_uint256{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    // prepare minter instance
-    let (str) = StringCodec.ss_to_string('ipfs://carbonalbe/');
-    let name = 'Badge';
-    let (local context) = prepare(uri_len=str.len, uri=str.data, name=name);
-
-    // run scenario
-    %{ stop=start_prank(context.signers.admin) %}
-
-    let invalid = Uint256(0, -1);
-    %{ expect_revert("TRANSACTION_FAILED", "Metadata: token_id is not a valid Uint256") %}
-    let (len, array) = CarbonableBadge.uri(invalid);
 
     %{ stop() %}
 

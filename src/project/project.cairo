@@ -4,8 +4,8 @@
 
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
-from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
@@ -225,9 +225,9 @@ func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 @view
-func tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    tokenId: Uint256
-) -> (tokenURI: felt) {
+func tokenURI{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
     // Desc:
     //   A distinct Uniform Resource Identifier (URI) for a given asset (EIP 721 - Metadata extension)
     // Implicit args:
@@ -237,11 +237,30 @@ func tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Explicit args:
     //   tokenId(Uint256): The NFT to find the URI for
     // Returns:
-    //   tokenURI(felt): The URI associated to the specified NFT
+    //   uri_len(felt): URI array length
+    //   uri(felt*): The URI characters associated to the specified NFT
     // Raises:
-    //   tokenId: tokenId is not a valid NFT
-    let (tokenURI: felt) = ERC721.token_uri(tokenId);
-    return (tokenURI=tokenURI);
+    //   tokenId: tokenId is not a valid Uint256
+    let (uri_len: felt, uri: felt*) = CarbonableProject.token_uri(tokenId);
+    return (uri_len=uri_len, uri=uri);
+}
+
+@view
+func contractURI{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}() -> (uri_len: felt, uri: felt*) {
+    // Desc:
+    //   Return the contract uri (OpenSea)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   bitwise_ptr(BitwiseBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   uri_len(felt): URI array length
+    //   uri(felt*): URI characters
+    let (uri_len: felt, uri: felt*) = CarbonableProject.contract_uri();
+    return (uri_len=uri_len, uri=uri);
 }
 
 @view
@@ -255,132 +274,6 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
     // Returns:
     //   owner(felt): The owner address
     return Ownable.owner();
-}
-
-@view
-func image_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (image_url_len: felt, image_url: felt*) {
-    return CarbonableProject.image_url();
-}
-
-@view
-func image_data{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (image_data_len: felt, image_data: felt*) {
-    return CarbonableProject.image_data();
-}
-
-@view
-func external_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (external_url_len: felt, external_url: felt*) {
-    return CarbonableProject.external_url();
-}
-
-@view
-func description{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (description_len: felt, description: felt*) {
-    return CarbonableProject.description();
-}
-
-@view
-func holder{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (holder_len: felt, holder: felt*) {
-    return CarbonableProject.holder();
-}
-
-@view
-func certifier{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (certifier_len: felt, certifier: felt*) {
-    return CarbonableProject.certifier();
-}
-
-@view
-func land{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (land_len: felt, land: felt*) {
-    return CarbonableProject.land();
-}
-
-@view
-func unit_land_surface{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (unit_land_surface_len: felt, unit_land_surface: felt*) {
-    return CarbonableProject.unit_land_surface();
-}
-
-@view
-func country{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (country_len: felt, country: felt*) {
-    return CarbonableProject.country();
-}
-
-@view
-func expiration{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (expiration_len: felt, expiration: felt*) {
-    return CarbonableProject.expiration();
-}
-
-@view
-func total_co2_sequestration{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (total_co2_sequestration_len: felt, total_co2_sequestration: felt*) {
-    return CarbonableProject.total_co2_sequestration();
-}
-
-@view
-func unit_co2_sequestration{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (unit_co2_sequestration_len: felt, unit_co2_sequestration: felt*) {
-    return CarbonableProject.unit_co2_sequestration();
-}
-
-@view
-func sequestration_color{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (sequestration_color_len: felt, sequestration_color: felt*) {
-    return CarbonableProject.sequestration_color();
-}
-
-@view
-func sequestration_type{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (sequestration_type_len: felt, sequestration_type: felt*) {
-    return CarbonableProject.sequestration_type();
-}
-
-@view
-func sequestration_category{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (sequestration_category_len: felt, sequestration_category: felt*) {
-    return CarbonableProject.sequestration_category();
-}
-
-@view
-func background_color{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (background_color_len: felt, background_color: felt*) {
-    return CarbonableProject.background_color();
-}
-
-@view
-func animation_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (animation_url_len: felt, animation_url: felt*) {
-    return CarbonableProject.animation_url();
-}
-
-@view
-func youtube_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (youtube_url_len: felt, youtube_url: felt*) {
-    return CarbonableProject.youtube_url();
 }
 
 //
@@ -521,18 +414,39 @@ func setTokenURI{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr
     tokenId: Uint256, tokenURI: felt
 ) {
     // Desc:
-    //   Set the token URI of the specified token id (EIP 721 - Metadata extension)
+    //   Set the token URI of the specified token id (EIP 721 - Metadata extension) -
+    //   This function is deprecated since the token uri is generated by the contract according
+    //   to the token id by default (see the setURI function instead)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
     //   tokenId(Uint256): Token id
-    //   tokenURI(felt): The Uri to set
+    //   tokenURI(felt): The URI to set
     // Raises:
     //   tokenId: tokenId does not exist
     Ownable.assert_only_owner();
-    ERC721._set_token_uri(tokenId, tokenURI);
+    // ERC721._set_token_uri(tokenId, tokenURI);
+    return ();
+}
+
+@external
+func setURI{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(uri_len: felt, uri: felt*) {
+    // Desc:
+    //   Set the contract base URI
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   bitwise_ptr(BitwiseBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   uri_len(felt): URI array length
+    //   uri(felt*): URI characters
+    Ownable.assert_only_owner();
+    CarbonableProject.set_uri(uri_len, uri);
     return ();
 }
 
@@ -571,136 +485,4 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     //   caller: caller is not the contract owner
     Ownable.renounce_ownership();
     return ();
-}
-
-@external
-func set_image_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(image_url_len: felt, image_url: felt*) -> () {
-    return CarbonableProject.set_image_url(image_url_len, image_url);
-}
-
-@external
-func set_image_data{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(image_data_len: felt, image_data: felt*) -> () {
-    return CarbonableProject.set_image_data(image_data_len, image_data);
-}
-
-@external
-func set_external_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(external_url_len: felt, external_url: felt*) {
-    return CarbonableProject.set_external_url(external_url_len, external_url);
-}
-
-@external
-func set_description{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(description_len: felt, description: felt*) {
-    return CarbonableProject.set_description(description_len, description);
-}
-
-@external
-func set_holder{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(holder_len: felt, holder: felt*) {
-    return CarbonableProject.set_holder(holder_len, holder);
-}
-
-@external
-func set_certifier{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(certifier_len: felt, certifier: felt*) {
-    return CarbonableProject.set_certifier(certifier_len, certifier);
-}
-
-@external
-func set_land{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(land_len: felt, land: felt*) {
-    return CarbonableProject.set_land(land_len, land);
-}
-
-@external
-func set_unit_land_surface{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(unit_land_surface_len: felt, unit_land_surface: felt*) {
-    return CarbonableProject.set_unit_land_surface(unit_land_surface_len, unit_land_surface);
-}
-
-@external
-func set_country{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(country_len: felt, country: felt*) {
-    return CarbonableProject.set_country(country_len, country);
-}
-
-@external
-func set_expiration{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(expiration_len: felt, expiration: felt*) {
-    return CarbonableProject.set_expiration(expiration_len, expiration);
-}
-
-@external
-func set_total_co2_sequestration{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(total_co2_sequestration_len: felt, total_co2_sequestration: felt*) {
-    return CarbonableProject.set_total_co2_sequestration(
-        total_co2_sequestration_len, total_co2_sequestration
-    );
-}
-
-@external
-func set_unit_co2_sequestration{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(unit_co2_sequestration_len: felt, unit_co2_sequestration: felt*) {
-    return CarbonableProject.set_unit_co2_sequestration(
-        unit_co2_sequestration_len, unit_co2_sequestration
-    );
-}
-
-@external
-func set_sequestration_color{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(sequestration_color_len: felt, sequestration_color: felt*) {
-    return CarbonableProject.set_sequestration_color(sequestration_color_len, sequestration_color);
-}
-
-@external
-func set_sequestration_type{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(sequestration_type_len: felt, sequestration_type: felt*) {
-    return CarbonableProject.set_sequestration_type(sequestration_type_len, sequestration_type);
-}
-
-@external
-func set_sequestration_category{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(sequestration_category_len: felt, sequestration_category: felt*) {
-    return CarbonableProject.set_sequestration_category(
-        sequestration_category_len, sequestration_category
-    );
-}
-
-@external
-func set_background_color{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(background_color_len: felt, background_color: felt*) {
-    return CarbonableProject.set_background_color(background_color_len, background_color);
-}
-
-@external
-func set_animation_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(animation_url_len: felt, animation_url: felt*) {
-    return CarbonableProject.set_animation_url(animation_url_len, animation_url);
-}
-
-@external
-func set_youtube_url{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(youtube_url_len: felt, youtube_url: felt*) {
-    return CarbonableProject.set_youtube_url(youtube_url_len, youtube_url);
 }

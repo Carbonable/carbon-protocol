@@ -8,6 +8,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 // Project dependencies
 from cairopen.string.ASCII import StringCodec
+from cairopen.string.utils import StringUtil
 
 // Local dependencies
 from tests.units.project.library import setup, prepare, CarbonableProject
@@ -19,48 +20,29 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_country{
+func test_contract_uri{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }() {
     alloc_locals;
 
-    // prepare project instance
+    // prepare minter instance
     let (local context) = prepare();
 
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
 
-    let ss = 'Country';
-    let (str) = StringCodec.ss_to_string(ss);
+    let (str) = StringCodec.ss_to_string('ipfs://carbonable/');
+    CarbonableProject.set_uri(uri_len=str.len, uri=str.data);
 
-    CarbonableProject.set_country(country_len=str.len, country=str.data);
-
-    let (len, array) = CarbonableProject.country();
+    let (len, array) = CarbonableProject.contract_uri();
     let (returned_str) = StringCodec.ss_arr_to_string(len, array);
 
-    assert_string(returned_str, str);
-    %{ stop() %}
+    let (metadata_str) = StringCodec.ss_to_string('metadata');
+    let (ext_str) = StringCodec.ss_to_string('.json');
+    let (pre_str) = StringUtil.concat(str, metadata_str);
+    let (expected_str) = StringUtil.concat(pre_str, ext_str);
 
-    return ();
-}
-
-@external
-func test_country_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    // prepare project instance
-    let (local context) = prepare();
-
-    // run scenario
-    %{ stop=start_prank(context.signers.anyone) %}
-
-    let ss = 'Country';
-    let (str) = StringCodec.ss_to_string(ss);
-
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    CarbonableProject.set_country(country_len=str.len, country=str.data);
+    assert_string(returned_str, expected_str);
 
     %{ stop() %}
 

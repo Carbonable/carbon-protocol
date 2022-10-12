@@ -13,6 +13,9 @@ from cairopen.string.ASCII import StringCodec
 from cairopen.string.utils import StringUtil
 from openzeppelin.introspection.erc165.library import ERC165
 
+// Local dependencies
+from src.utils.metadata.library import Metadata
+
 const IERC5192_ID = 0xb45a3c0e;
 
 //
@@ -59,7 +62,7 @@ namespace CarbonableBadge {
         range_check_ptr,
     }(uri_len: felt, uri: felt*, name: felt) {
         // Desc:
-        //   Initialize the contract with the given uri and symbol
+        //   Initialize the contract with the given uri and name
         // Implicit args:
         //   syscall_ptr(felt*)
         //   pedersen_ptr(HashBuiltin*)
@@ -71,7 +74,7 @@ namespace CarbonableBadge {
         //   name(felt): name of the badge collection
         // Returns:
         //   None
-        set_uri(uri_len, uri);
+        Metadata.set_uri(uri_len, uri);
         ERC165.register_interface(IERC5192_ID);
         CarbonableBadge_name.write(name);
         return ();
@@ -87,18 +90,8 @@ namespace CarbonableBadge {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }(id: Uint256) -> (uri_len: felt, uri: felt*) {
-        alloc_locals;
-
-        uint256_check(id);
-
-        let (uri_str) = StringCodec.read('uri');
-        let (id_str) = StringCodec.felt_to_string(id.low);
-        let (ext_str) = StringCodec.ss_to_string('.json');
-
-        let (json_str) = StringUtil.concat(id_str, ext_str);
-        let (str) = StringUtil.path_join(uri_str, json_str);
-
-        return (str.len, str.data);
+        let (uri_len: felt, uri: felt*) = Metadata.token_uri(id);
+        return (uri_len=uri_len, uri=uri);
     }
 
     func contract_uri{
@@ -107,13 +100,8 @@ namespace CarbonableBadge {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }() -> (uri_len: felt, uri: felt*) {
-        alloc_locals;
-
-        let (uri_str) = StringCodec.read('uri');
-        let (json_str) = StringCodec.ss_to_string('metadata.json');
-        let (str) = StringUtil.path_join(uri_str, json_str);
-
-        return (str.len, str.data);
+        let (uri_len: felt, uri: felt*) = Metadata.contract_uri();
+        return (uri_len=uri_len, uri=uri);
     }
 
     func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (name: felt) {
@@ -140,10 +128,7 @@ namespace CarbonableBadge {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }(uri_len: felt, uri: felt*) {
-        alloc_locals;
-
-        let (str) = StringCodec.ss_arr_to_string(uri_len, uri);
-        StringCodec.write('uri', str);
+        Metadata.set_uri(uri_len, uri);
         return ();
     }
 

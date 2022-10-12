@@ -12,10 +12,7 @@ from starkware.cairo.common.uint256 import Uint256, uint256_check
 from cairopen.string.ASCII import StringCodec
 from cairopen.string.utils import StringUtil
 
-// Local dependencies
-from src.utils.metadata.library import Metadata
-
-namespace CarbonableProject {
+namespace Metadata {
     //
     // Getters
     //
@@ -26,8 +23,20 @@ namespace CarbonableProject {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }(token_id: Uint256) -> (uri_len: felt, uri: felt*) {
-        let (uri_len: felt, uri: felt*) = Metadata.token_uri(token_id);
-        return (uri_len=uri_len, uri=uri);
+        alloc_locals;
+
+        with_attr error_message("Metadata: token_id is not a valid Uint256") {
+            uint256_check(token_id);
+        }
+
+        let (uri_str) = StringCodec.read('uri');
+        let (token_id_str) = StringCodec.felt_to_string(token_id.low);
+        let (ext_str) = StringCodec.ss_to_string('.json');
+
+        let (json_str) = StringUtil.concat(token_id_str, ext_str);
+        let (str) = StringUtil.path_join(uri_str, json_str);
+
+        return (str.len, str.data);
     }
 
     func contract_uri{
@@ -36,8 +45,13 @@ namespace CarbonableProject {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }() -> (uri_len: felt, uri: felt*) {
-        let (uri_len: felt, uri: felt*) = Metadata.contract_uri();
-        return (uri_len=uri_len, uri=uri);
+        alloc_locals;
+
+        let (uri_str) = StringCodec.read('uri');
+        let (json_str) = StringCodec.ss_to_string('metadata.json');
+        let (str) = StringUtil.path_join(uri_str, json_str);
+
+        return (str.len, str.data);
     }
 
     //
@@ -50,7 +64,10 @@ namespace CarbonableProject {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }(uri_len: felt, uri: felt*) {
-        Metadata.set_uri(uri_len, uri);
+        alloc_locals;
+
+        let (str) = StringCodec.ss_arr_to_string(uri_len, uri);
+        StringCodec.write('uri', str);
         return ();
     }
 }
