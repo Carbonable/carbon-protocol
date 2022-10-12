@@ -21,45 +21,10 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
-func test_setters{
+func test_uri{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }() {
-    // When admin set up the image url
-    // And admin set up the external url
-    // And admin set up the description
-    // And admin set up the holder
-    // And admin set up the certifier
-    // And admin set up the land
-    // And admin set up the unit land surface
-    // And admin set up the country
-    // And admin set up the expiration
-    // And admin set up the total co2 sequestration
-    // And admin set up the unit co2 sequestration
-    // And admin set up the sequestration color
-    // And admin set up the sequestration type
-    // And admin set up the sequestration category
-    // And admin set up the background color
-    // And admin set up the animation url
-    // And admin set up the youtube url
-    // Then no failed transactions expected
-
-    admin.set_image_url('https://image.com');
-    admin.set_external_url('https://external.com');
-    admin.set_description('This is a description');
-    admin.set_holder('Holder');
-    admin.set_certifier('Certifier');
-    admin.set_land('Land');
-    admin.set_unit_land_surface('100');
-    admin.set_country('Country');
-    admin.set_expiration('2042');
-    admin.set_total_co2_sequestration('3603');
-    admin.set_unit_co2_sequestration('0.5004');
-    admin.set_sequestration_color('blue');
-    admin.set_sequestration_type('mangrove');
-    admin.set_sequestration_category('regeneration');
-    admin.set_background_color('green');
-    admin.set_animation_url('https://animation.com');
-    admin.set_youtube_url('https://youtube.com');
+    // When
 
     return ();
 }

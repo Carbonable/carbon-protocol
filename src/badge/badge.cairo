@@ -36,8 +36,8 @@ func constructor{
     //   bitwise_ptr(BitwiseBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   uri_len(felt): Uri array length
-    //   uri(felt*): Uri characters
+    //   uri_len(felt): URI array length
+    //   uri(felt*): URI characters
     //   name(felt): Name of the badge collection
     //   owner(felt): Owner address
     // Returns:
@@ -85,8 +85,10 @@ func uri{
     // Explicit args:
     //   id(Uint256): Token id
     // Returns:
-    //   uri_len(felt): Uri array length
-    //   uri(felt*): Uri characters
+    //   uri_len(felt): URI array length
+    //   uri(felt*): The URI characters
+    // Raises:
+    //   id: id is not a valid Uint256
     return CarbonableBadge.uri(id);
 }
 
@@ -102,8 +104,8 @@ func contractURI{
     //   bitwise_ptr(BitwiseBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   uri_len(felt): Uri array length
-    //   uri(felt*): Uri characters
+    //   uri_len(felt): URI array length
+    //   uri(felt*): The URI characters
     return CarbonableBadge.contract_uri();
 }
 
@@ -226,8 +228,8 @@ func setURI{
     //   bitwise_ptr(BitwiseBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   uri_len(felt): Uri array length
-    //   uri(felt*): Uri characters
+    //   uri_len(felt): URI array length
+    //   uri(felt*): URI characters
     Ownable.assert_only_owner();
     CarbonableBadge.set_uri(uri_len, uri);
     return ();
