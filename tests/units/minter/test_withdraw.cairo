@@ -56,28 +56,3 @@ func test_withdraw_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     %{ stop() %}
     return ();
 }
-
-@external
-func test_withdraw_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When anyone withdraws funds
-    // Then 'caller is not the owner' failed transaction happens
-    alloc_locals;
-
-    // prepare minter instance
-    let (local context) = prepare(
-        public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
-    );
-
-    // run scenario
-    %{ stop=start_prank(context.signers.anyone) %}
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    CarbonableMinter.withdraw();
-    %{ stop() %}
-    return ();
-}

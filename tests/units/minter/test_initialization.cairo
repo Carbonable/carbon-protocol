@@ -60,3 +60,78 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 
     return ();
 }
+
+@external
+func test_initialization_revert_unit_price_invalid{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare minter instance
+    let public_sale_open = FALSE;
+    let max_buy_per_tx = 5;
+    let unit_price = Uint256(10, -1);
+    let max_supply_for_mint = Uint256(10, 0);
+    let reserved_supply_for_mint = Uint256(5, 0);
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: unit_price is not a valid Uint256") %}
+    let (local context) = prepare(
+        public_sale_open=public_sale_open,
+        max_buy_per_tx=max_buy_per_tx,
+        unit_price=unit_price,
+        max_supply_for_mint=max_supply_for_mint,
+        reserved_supply_for_mint=reserved_supply_for_mint,
+    );
+
+    return ();
+}
+
+@external
+func test_initialization_revert_max_supply_for_mint_invalid{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare minter instance
+    let public_sale_open = FALSE;
+    let max_buy_per_tx = 5;
+    let unit_price = Uint256(10, 0);
+    let max_supply_for_mint = Uint256(10, -1);
+    let reserved_supply_for_mint = Uint256(5, 0);
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: max_supply_for_mint is not a valid Uint256") %}
+    let (local context) = prepare(
+        public_sale_open=public_sale_open,
+        max_buy_per_tx=max_buy_per_tx,
+        unit_price=unit_price,
+        max_supply_for_mint=max_supply_for_mint,
+        reserved_supply_for_mint=reserved_supply_for_mint,
+    );
+
+    return ();
+}
+
+@external
+func test_initialization_revert_reserved_supply_for_mint_invalid{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare minter instance
+    let public_sale_open = FALSE;
+    let max_buy_per_tx = 5;
+    let unit_price = Uint256(10, 0);
+    let max_supply_for_mint = Uint256(10, 0);
+    let reserved_supply_for_mint = Uint256(5, -1);
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: reserved_supply_for_mint is not a valid Uint256") %}
+    let (local context) = prepare(
+        public_sale_open=public_sale_open,
+        max_buy_per_tx=max_buy_per_tx,
+        unit_price=unit_price,
+        max_supply_for_mint=max_supply_for_mint,
+        reserved_supply_for_mint=reserved_supply_for_mint,
+    );
+
+    return ();
+}

@@ -16,35 +16,29 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_set_whitelist_merkle_root_nominal_case{
+func test_set_unit_price_nominal_case{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     alloc_locals;
 
     // prepare minter instance
+    let public_sale_open = FALSE;
     let (local context) = prepare(
-        public_sale_open=FALSE,
+        public_sale_open=public_sale_open,
         max_buy_per_tx=5,
         unit_price=Uint256(10, 0),
         max_supply_for_mint=Uint256(10, 0),
         reserved_supply_for_mint=Uint256(0, 0),
     );
 
-    // admin sets whitelist merkle root
-    %{ stop=start_prank(context.signers.admin) %}
-    CarbonableMinter.set_whitelist_merkle_root(context.whitelist.merkle_root);
-    %{ stop() %}
-
     // run scenario
-    %{ stop=start_prank(context.signers.admin) %}
-    CarbonableMinter.set_whitelist_merkle_root(context.whitelist.merkle_root);
-    let (returned_slots) = CarbonableMinter.whitelisted_slots(
-        account=context.signers.anyone,
-        slots=context.whitelist.slots,
-        proof_len=context.whitelist.merkle_proof_len,
-        proof=context.whitelist.merkle_proof,
-    );
-    assert returned_slots = context.whitelist.slots;
-    %{ stop() %}
+    let (initial_value) = CarbonableMinter.public_sale_open();
+    assert initial_value = public_sale_open;
+
+    let new_value = TRUE;
+    CarbonableMinter.set_public_sale_open(new_value);
+    let (returned_value) = CarbonableMinter.public_sale_open();
+    assert returned_value = new_value;
+
     return ();
 }

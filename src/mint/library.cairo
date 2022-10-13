@@ -8,24 +8,25 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.math_cmp import is_le, is_le_felt, is_not_zero
-from starkware.cairo.common.uint256 import Uint256, uint256_mul, uint256_le, uint256_eq
+from starkware.cairo.common.uint256 import (
+    Uint256,
+    uint256_check,
+    uint256_mul,
+    uint256_le,
+    uint256_eq,
+)
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 
 // Project dependencies
-from openzeppelin.security.safemath.library import SafeUint256
 from openzeppelin.token.erc20.IERC20 import IERC20
 from openzeppelin.token.erc721.IERC721 import IERC721
 from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
-from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
+from openzeppelin.security.safemath.library import SafeUint256
 
 // Local dependencies
+from src.interfaces.project import ICarbonableProject
 from src.mint.merkletree import MerkleTree
-
-@contract_interface
-namespace IERC721Mintable {
-    func mint(to: felt, token_id: Uint256) {
-    }
-}
 
 //
 // Storage
@@ -81,8 +82,7 @@ namespace CarbonableMinter {
     // Constructor
     //
 
-    func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        owner: felt,
+    func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         carbonable_project_address: felt,
         payment_token_address: felt,
         public_sale_open: felt,
@@ -91,7 +91,18 @@ namespace CarbonableMinter {
         max_supply_for_mint: Uint256,
         reserved_supply_for_mint: Uint256,
     ) {
-        Ownable.initializer(owner);
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableMinter: unit_price is not a valid Uint256") {
+            uint256_check(unit_price);
+        }
+        with_attr error_message("CarbonableMinter: max_supply_for_mint is not a valid Uint256") {
+            uint256_check(max_supply_for_mint);
+        }
+        with_attr error_message(
+                "CarbonableMinter: reserved_supply_for_mint is not a valid Uint256") {
+            uint256_check(reserved_supply_for_mint);
+        }
+
         carbonable_project_address_.write(carbonable_project_address);
         payment_token_address_.write(payment_token_address);
         public_sale_open_.write(public_sale_open);
@@ -192,7 +203,6 @@ namespace CarbonableMinter {
         whitelist_merkle_root: felt
     ) {
         // Access control check
-        Ownable.assert_only_owner();
         whitelist_merkle_root_.write(whitelist_merkle_root);
         return ();
     }
@@ -201,7 +211,6 @@ namespace CarbonableMinter {
         public_sale_open: felt
     ) {
         // Access control check
-        Ownable.assert_only_owner();
         public_sale_open_.write(public_sale_open);
         return ();
     }
@@ -210,7 +219,6 @@ namespace CarbonableMinter {
         max_buy_per_tx: felt
     ) {
         // Access control check
-        Ownable.assert_only_owner();
         max_buy_per_tx_.write(max_buy_per_tx);
         return ();
     }
@@ -218,8 +226,12 @@ namespace CarbonableMinter {
     func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         unit_price: Uint256
     ) {
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableMinter: unit_price is not a valid Uint256") {
+            uint256_check(unit_price);
+        }
+
         // Access control check
-        Ownable.assert_only_owner();
         unit_price_.write(unit_price);
         return ();
     }
@@ -229,8 +241,11 @@ namespace CarbonableMinter {
     }(slots: Uint256) {
         alloc_locals;
 
-        // Access control check
-        Ownable.assert_only_owner();
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableMinter: slots is not a valid Uint256") {
+            uint256_check(slots);
+        }
+
         let (reserved_supply_for_mint) = reserved_supply_for_mint_.read();
         let (enough_slots) = uint256_le(slots, reserved_supply_for_mint);
         with_attr error_message("CarbonableMinter: not enough reserved slots") {
@@ -245,8 +260,6 @@ namespace CarbonableMinter {
         to: felt, quantity: felt
     ) -> (success: felt) {
         alloc_locals;
-        // Access control check
-        Ownable.assert_only_owner();
 
         // Get variables through system calls
         let (caller) = get_caller_address();
@@ -280,7 +293,7 @@ namespace CarbonableMinter {
 
         // Do the actual NFT mint
         let starting_index = total_supply;
-        mint_n(carbonable_project_address, to, starting_index, quantity_uint256);
+        mint_iter(carbonable_project_address, to, starting_index, quantity_uint256);
 
         // Remove the minted quantity from the reserved supply
         let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
@@ -295,9 +308,6 @@ namespace CarbonableMinter {
     func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         success: felt
     ) {
-        // Access control check
-        Ownable.assert_only_owner();
-
         // Get storage variables
         let (caller) = get_caller_address();
         let (contract_address) = get_contract_address();
@@ -317,8 +327,10 @@ namespace CarbonableMinter {
     func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_address: felt, recipient: felt, amount: Uint256
     ) -> (success: felt) {
-        // Access control check
-        Ownable.assert_only_owner();
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableMinter: amount is not a valid Uint256") {
+            uint256_check(amount);
+        }
 
         // Do ERC20 transfer
         let (transfer_success) = IERC20.transfer(
@@ -394,6 +406,10 @@ namespace CarbonableMinter {
         success: felt
     ) {
         alloc_locals;
+
+        // Start reetrancy guard
+        ReentrancyGuard._start();
+
         // Get variables through system calls
         let (caller) = get_caller_address();
         let (contract_address) = get_contract_address();
@@ -405,7 +421,7 @@ namespace CarbonableMinter {
             assert_not_zero(caller);
         }
 
-        // Get storage variables
+        // Read storage variables
         let (carbonable_project_address) = carbonable_project_address_.read();
         let (unit_price) = unit_price_.read();
         let (payment_token_address) = payment_token_address_.read();
@@ -443,33 +459,40 @@ namespace CarbonableMinter {
 
         // Do the actual NFT mint
         let starting_index = total_supply;
-        mint_n(carbonable_project_address, caller, starting_index, quantity_uint256);
+        mint_iter(carbonable_project_address, caller, starting_index, quantity_uint256);
+
+        // End reetrancy guard
+        ReentrancyGuard._end();
+
         // Success
         return (TRUE,);
     }
 
-    //##
-    // Mint a number of NFTs to a recipient.
+    // @notice Mint a number of NFTs to a recipient.
     // @param nft_contract_address the address of the NFT contract
     // @param to the address of the recipient
     // @param starting_index the starting index
     // @param quantity the quantity to mint
-    //##
-    func mint_n{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func mint_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         nft_contract_address: felt, to: felt, starting_index: Uint256, quantity: Uint256
     ) {
         alloc_locals;
+
         let (no_more_left) = uint256_eq(quantity, Uint256(0, 0));
+
+        // Stop condition
         if (no_more_left == TRUE) {
             return ();
         }
+
         let one = Uint256(1, 0);
         let (token_id) = SafeUint256.add(starting_index, one);
+
         // Mint
-        IERC721Mintable.mint(nft_contract_address, to, token_id);
+        ICarbonableProject.mint(nft_contract_address, to, token_id);
 
         let (new_quantity) = SafeUint256.sub_le(quantity, one);
-        mint_n(nft_contract_address, to, token_id, new_quantity);
+        mint_iter(nft_contract_address, to, token_id, new_quantity);
         return ();
     }
 }

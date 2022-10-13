@@ -63,20 +63,11 @@ func test_e2e_not_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
     // And anyone approves minter for 1 token equivalent nft
     // And anyone makes 1 whitelist buy
     // Then 'caller address is not whitelisted' failed transaction happens
-    // When admin open the public sale
-    // And anyone approves minter for 5 token equivalent nfts
-    // And anyone makes 5 public buy
-    // And admin withdraw minter contract balance
-    // Then no failed transactions expected
 
     admin.set_whitelist_merkle_root(123);
     anyone.approve(quantity=1);
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: caller address is not whitelisted") %}
     anyone.whitelist_buy(quantity=1);
-    admin.set_public_sale_open(TRUE);
-    anyone.approve(quantity=5);
-    anyone.public_buy(quantity=5);
-    admin.withdraw();
 
     return ();
 }
@@ -87,11 +78,7 @@ func test_e2e_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // And anyone makes 5 whitelist buy
     // And admin open the public sale
     // And anyone approves minter for 2 token equivalent nfts
-    // And anyone makes 2 public buy
-    // Then 'not enough available NFTs' failed transaction happens
-    // When admin airdrops 5 nfts to anyone
-    // Then 'not enough available reserved NFTs' failed transaction happens
-    // When admin airdrops 3 nfts to anyone
+    // And admin airdrops 3 nfts to anyone
     // And admin decreases reserved supply by 1
     // And anyone makes 1 public buy
     // And admin withdraw minter contract balance
@@ -102,15 +89,56 @@ func test_e2e_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     anyone.approve(quantity=5);
     anyone.whitelist_buy(quantity=5);
     admin.set_public_sale_open(TRUE);
+    admin.airdrop(to=anyone_address, quantity=3);
+    admin.decrease_reserved_supply_for_mint(slots=1);
+    anyone.approve(quantity=1);
+    anyone.public_buy(quantity=1);
+    admin.withdraw();
+
+    return ();
+}
+
+@view
+func test_e2e_public_buy_not_enough_available_nfts{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When anyone approves minter for 5 token equivalent nfts
+    // And anyone makes 5 whitelist buy
+    // And admin open the public sale
+    // And anyone approves minter for 2 token equivalent nfts
+    // And anyone makes 2 public buy
+    // Then 'not enough available NFTs' failed transaction happens
+    alloc_locals;
+    let (anyone_address) = anyone.get_address();
+
+    anyone.approve(quantity=5);
+    anyone.whitelist_buy(quantity=5);
+    admin.set_public_sale_open(TRUE);
     anyone.approve(quantity=2);
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     anyone.public_buy(quantity=2);
+
+    return ();
+}
+
+@view
+func test_e2e_airdrop_not_enough_available_reserved_nfts{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When anyone approves minter for 5 token equivalent nfts
+    // And anyone makes 5 whitelist buy
+    // And admin open the public sale
+    // And anyone approves minter for 2 token equivalent nfts
+    // And admin airdrops 5 nfts to anyone
+    // Then 'not enough available reserved NFTs' failed transaction happens
+    alloc_locals;
+    let (anyone_address) = anyone.get_address();
+
+    anyone.approve(quantity=5);
+    anyone.whitelist_buy(quantity=5);
+    admin.set_public_sale_open(TRUE);
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
     admin.airdrop(to=anyone_address, quantity=5);
-    admin.airdrop(to=anyone_address, quantity=3);
-    admin.decrease_reserved_supply_for_mint(slots=1);
-    anyone.public_buy(quantity=1);
-    admin.withdraw();
 
     return ();
 }
@@ -124,6 +152,48 @@ func test_e2e_over_airdropped{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     admin.airdrop(to=anyone_address, quantity=11);
+
+    return ();
+}
+
+@view
+func test_e2e_revert_set_public_sale_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When anyone closes the public sale
+    // Then 'caller is not the owner' failed transaction happens
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.set_public_sale_open(FALSE);
+
+    return ();
+}
+
+@view
+func test_e2e_revert_set_max_buy_per_tx_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When anyone set the max buy per tx
+    // Then 'caller is not the owner' failed transaction happens
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.set_max_buy_per_tx(3);
+
+    return ();
+}
+
+@view
+func test_e2e_revert_set_unit_price_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When anyone set the unit price
+    // Then 'caller is not the owner' failed transaction happens
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.set_unit_price(2);
 
     return ();
 }
