@@ -5,6 +5,9 @@
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
+// Project dependencies
+from openzeppelin.access.ownable.library import Ownable
+
 // Local dependencies
 from src.farm.library import CarbonableFarmer
 
@@ -33,9 +36,11 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   reward_token_address(felt): Address of the reward token
     // Returns:
     //   None
-    return CarbonableFarmer.constructor(
-        owner, carbonable_project_address, carbonable_token_address, reward_token_address
+    CarbonableFarmer.initializer(
+        carbonable_project_address, carbonable_token_address, reward_token_address
     );
+    Ownable.initializer(owner);
+    return ();
 }
 
 //
