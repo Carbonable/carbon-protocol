@@ -112,7 +112,10 @@ namespace CarbonableBadge {
     func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) -> (
         is_locked: felt
     ) {
-        uint256_check(id);
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
+            uint256_check(id);
+        }
 
         let (is_unlocked) = CarbonableBadge_unlocked.read(id);
         return (1 - is_unlocked,);
@@ -135,7 +138,10 @@ namespace CarbonableBadge {
     func set_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         id: Uint256
     ) -> () {
-        uint256_check(id);
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
+            uint256_check(id);
+        }
 
         CarbonableBadge_unlocked.write(id, FALSE);
         Locked.emit(id);
@@ -146,7 +152,10 @@ namespace CarbonableBadge {
     func set_unlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         id: Uint256
     ) -> () {
-        uint256_check(id);
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
+            uint256_check(id);
+        }
 
         CarbonableBadge_unlocked.write(id, TRUE);
         Unlocked.emit(id);
@@ -161,7 +170,10 @@ namespace CarbonableBadge {
     func assert_unlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         id: Uint256
     ) -> () {
-        uint256_check(id);
+        // Check Uint256 inputs
+        with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
+            uint256_check(id);
+        }
 
         let (is_locked) = locked(id);
         with_attr error_message("CarbonableBadge: transfer is locked") {
@@ -182,6 +194,10 @@ namespace CarbonableBadge {
     ) -> () {
         if (ids_len == 0) {
             return ();
+        }
+
+        with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
+            uint256_check([ids]);
         }
 
         assert_unlocked([ids]);

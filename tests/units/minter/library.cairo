@@ -84,8 +84,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %}
 
     // Instantiate minter
-    CarbonableMinter.constructor(
-        owner=admin,
+    CarbonableMinter.initializer(
         carbonable_project_address=carbonable_project_address,
         payment_token_address=payment_token_address,
         public_sale_open=public_sale_open,

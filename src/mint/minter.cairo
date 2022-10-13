@@ -6,6 +6,9 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
+// Project dependencies
+from openzeppelin.access.ownable.library import Ownable
+
 // Local dependencies
 from src.mint.library import CarbonableMinter
 
@@ -42,8 +45,11 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   reserved_supply_for_mint(Uint256): Supply reserved to be airdropped
     // Returns:
     //   None
-    return CarbonableMinter.constructor(
-        owner,
+    // Raises:
+    //   unit_price: unit_price is not a valid Uint256
+    //   max_supply_for_mint: max_supply_for_mint is not a valid Uint256
+    //   reserved_supply_for_mint: reserved_supply_for_mint is not a valid Uint256
+    CarbonableMinter.initializer(
         carbonable_project_address,
         payment_token_address,
         public_sale_open,
@@ -52,6 +58,8 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         max_supply_for_mint,
         reserved_supply_for_mint,
     );
+    Ownable.initializer(owner);
+    return ();
 }
 
 //
@@ -248,6 +256,7 @@ func set_whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     //   None
     // Raises:
     //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
     return CarbonableMinter.set_whitelist_merkle_root(whitelist_merkle_root);
 }
 
@@ -267,6 +276,7 @@ func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     //   None
     // Raises:
     //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
     return CarbonableMinter.set_public_sale_open(public_sale_open);
 }
 
@@ -286,6 +296,7 @@ func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     //   None
     // Raises:
     //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
     return CarbonableMinter.set_max_buy_per_tx(max_buy_per_tx);
 }
 
@@ -305,6 +316,7 @@ func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   None
     // Raises:
     //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
     return CarbonableMinter.set_unit_price(unit_price);
 }
 
@@ -324,6 +336,7 @@ func decrease_reserved_supply_for_mint{
     //   None
     // Raises:
     //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
     return CarbonableMinter.decrease_reserved_supply_for_mint(slots);
 }
 
@@ -346,6 +359,7 @@ func airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   caller: caller is the zero address
     //   quantity: not enough available NFTs regarding max supply
     //   quantity: not enough available reserved NFTs regarding reserved supply
+    Ownable.assert_only_owner();
     return CarbonableMinter.airdrop(to, quantity);
 }
 
@@ -363,6 +377,7 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     //   success(felt): 1 if it succeeded, 0 otherwise
     // Raises:
     //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
     return CarbonableMinter.withdraw();
 }
 
@@ -385,6 +400,7 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Raises:
     //   caller: caller is not the contract owner
     //   transfer: transfer fails
+    Ownable.assert_only_owner();
     return CarbonableMinter.transfer(token_address, recipient, amount);
 }
 

@@ -351,7 +351,7 @@ namespace admin_instance {
     func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         let (carbonable_minter) = carbonable_minter_instance.deployed();
         let (payment_token) = payment_token_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
         with payment_token {
             let (initial_balance) = payment_token_instance.balanceOf(account=caller);
             let (contract_balance) = payment_token_instance.balanceOf(account=carbonable_minter);
@@ -372,7 +372,7 @@ namespace admin_instance {
         whitelist_merkle_root: felt
     ) {
         let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_whitelist_merkle_root(
                 whitelist_merkle_root=whitelist_merkle_root, caller=caller
@@ -388,7 +388,7 @@ namespace admin_instance {
         public_sale_open: felt
     ) {
         let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_public_sale_open(
                 public_sale_open=public_sale_open, caller=caller
@@ -403,7 +403,7 @@ namespace admin_instance {
         max_buy_per_tx: felt
     ) {
         let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_max_buy_per_tx(
                 max_buy_per_tx=max_buy_per_tx, caller=caller
@@ -415,14 +415,15 @@ namespace admin_instance {
     }
 
     func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        unit_price: Uint256
+        unit_price: felt
     ) {
         let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
+        let unit_price_uint256 = Uint256(unit_price, 0);
         with carbonable_minter {
-            carbonable_minter_instance.set_unit_price(unit_price=unit_price, caller=caller);
+            carbonable_minter_instance.set_unit_price(unit_price=unit_price_uint256, caller=caller);
             let (returned_unit_price) = carbonable_minter_instance.unit_price();
-            assert returned_unit_price = unit_price;
+            assert returned_unit_price = unit_price_uint256;
         }
         return ();
     }
@@ -432,7 +433,7 @@ namespace admin_instance {
     }(slots: felt) {
         alloc_locals;
         let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
         let slots_uint256 = Uint256(slots, 0);
         with carbonable_minter {
             let (initial_supply) = carbonable_minter_instance.reserved_supply_for_mint();
@@ -450,7 +451,7 @@ namespace admin_instance {
         newOwner: felt
     ) {
         let (carbonable_project) = carbonable_project_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
         with carbonable_project {
             carbonable_project_instance.transferOwnership(newOwner=newOwner, caller=caller);
             let (owner) = carbonable_project_instance.owner();
@@ -465,12 +466,12 @@ namespace admin_instance {
         alloc_locals;
         let (carbonable_minter) = carbonable_minter_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
-        let (caller) = admin_instance.get_address();
+        let (caller) = get_address();
         let quantity_uint256 = Uint256(quantity, 0);
 
         // get user nft and payment token balances to check after buy
         with carbonable_project {
-            let (initial_quantity) = carbonable_project_instance.balanceOf(owner=caller);
+            let (initial_quantity) = carbonable_project_instance.balanceOf(owner=to);
             let (intial_total_supply) = carbonable_project_instance.totalSupply();
         }
 
@@ -496,7 +497,7 @@ namespace admin_instance {
             );
             assert expected_total_supply = quantity_uint256;
 
-            let (returned_quantity) = carbonable_project_instance.balanceOf(owner=caller);
+            let (returned_quantity) = carbonable_project_instance.balanceOf(owner=to);
             let (expected_quantity) = SafeUint256.sub_le(returned_quantity, initial_quantity);
             assert expected_quantity = quantity_uint256;
         }
@@ -538,11 +539,55 @@ namespace anyone_instance {
 
     // Externals
 
+    func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        public_sale_open: felt
+    ) {
+        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (caller) = get_address();
+        with carbonable_minter {
+            carbonable_minter_instance.set_public_sale_open(
+                public_sale_open=public_sale_open, caller=caller
+            );
+            let (returned_public_sale_open) = carbonable_minter_instance.public_sale_open();
+            assert returned_public_sale_open = public_sale_open;
+        }
+        return ();
+    }
+
+    func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        max_buy_per_tx: felt
+    ) {
+        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (caller) = get_address();
+        with carbonable_minter {
+            carbonable_minter_instance.set_max_buy_per_tx(
+                max_buy_per_tx=max_buy_per_tx, caller=caller
+            );
+            let (returned_max_buy_per_tx) = carbonable_minter_instance.max_buy_per_tx();
+            assert returned_max_buy_per_tx = max_buy_per_tx;
+        }
+        return ();
+    }
+
+    func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        unit_price: felt
+    ) {
+        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (caller) = get_address();
+        let unit_price_uint256 = Uint256(unit_price, 0);
+        with carbonable_minter {
+            carbonable_minter_instance.set_unit_price(unit_price=unit_price_uint256, caller=caller);
+            let (returned_unit_price) = carbonable_minter_instance.unit_price();
+            assert returned_unit_price = unit_price_uint256;
+        }
+        return ();
+    }
+
     func approve{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) {
         alloc_locals;
         let (carbonable_minter) = carbonable_minter_instance.deployed();
         let (payment_token) = payment_token_instance.deployed();
-        let (caller) = anyone_instance.get_address();
+        let (caller) = get_address();
         with carbonable_minter {
             let (unit_price) = carbonable_minter_instance.unit_price();
             let (allowance) = SafeUint256.mul(Uint256(quantity, 0), unit_price);
@@ -567,10 +612,10 @@ namespace anyone_instance {
         let (carbonable_minter) = carbonable_minter_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (payment_token) = payment_token_instance.deployed();
-        let (caller) = anyone_instance.get_address();
-        let (slots) = anyone_instance.get_slots();
-        let (proof_len) = anyone_instance.get_proof_len();
-        let (proof) = anyone_instance.get_proof();
+        let (caller) = get_address();
+        let (slots) = get_slots();
+        let (proof_len) = get_proof_len();
+        let (proof) = get_proof();
 
         // get user nft and payment token balances to check after buy
         with carbonable_project {
@@ -621,7 +666,7 @@ namespace anyone_instance {
         let (carbonable_minter) = carbonable_minter_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (payment_token) = payment_token_instance.deployed();
-        let (caller) = anyone_instance.get_address();
+        let (caller) = get_address();
 
         // get user nft and payment token balances to check after buy
         with carbonable_project {
