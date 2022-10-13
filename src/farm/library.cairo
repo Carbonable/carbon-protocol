@@ -9,7 +9,6 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 // Project dependencies
 from openzeppelin.security.safemath.library import SafeUint256
 from openzeppelin.token.erc20.IERC20 import IERC20
-from openzeppelin.access.ownable.library import Ownable
 
 // Address of the project NFT contract
 @storage_var
@@ -31,13 +30,9 @@ namespace CarbonableFarmer {
     // Constructor
     //
 
-    func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        owner: felt,
-        carbonable_project_address: felt,
-        carbonable_token_address: felt,
-        reward_token_address: felt,
+    func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        carbonable_project_address: felt, carbonable_token_address: felt, reward_token_address: felt
     ) {
-        Ownable.initializer(owner);
         carbonable_project_address_.write(carbonable_project_address);
         carbonable_token_address_.write(carbonable_token_address);
         reward_token_address_.write(reward_token_address);

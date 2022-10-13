@@ -65,8 +65,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     %}
 
     // Instantiate farmer
-    CarbonableFarmer.constructor(
-        owner=admin,
+    CarbonableFarmer.initializer(
         carbonable_project_address=carbonable_project_address,
         carbonable_token_address=carbonable_token_address,
         reward_token_address=reward_token_address,
