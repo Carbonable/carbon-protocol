@@ -377,6 +377,7 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     //   success(felt): 1 if it succeeded, 0 otherwise
     // Raises:
     //   caller: caller is not the contract owner
+    //   transfer: transfer fails
     Ownable.assert_only_owner();
     return CarbonableMinter.withdraw();
 }
@@ -399,6 +400,7 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   success(felt): 1 if it succeeded, 0 otherwise
     // Raises:
     //   caller: caller is not the contract owner
+    //   amount: amount is not a valid Uint256
     //   transfer: transfer fails
     Ownable.assert_only_owner();
     return CarbonableMinter.transfer(token_address, recipient, amount);

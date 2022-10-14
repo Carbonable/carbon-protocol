@@ -25,14 +25,15 @@ namespace Metadata {
     }(token_id: Uint256) -> (uri_len: felt, uri: felt*) {
         alloc_locals;
 
+        // [Check] Uint256 compliance
         with_attr error_message("Metadata: token_id is not a valid Uint256") {
             uint256_check(token_id);
         }
 
+        // [Effect] Compute and return corresponding token URI
         let (uri_str) = StringCodec.read('uri');
         let (token_id_str) = StringCodec.felt_to_string(token_id.low);
         let (ext_str) = StringCodec.ss_to_string('.json');
-
         let (json_str) = StringUtil.concat(token_id_str, ext_str);
         let (str) = StringUtil.path_join(uri_str, json_str);
 
@@ -47,6 +48,7 @@ namespace Metadata {
     }() -> (uri_len: felt, uri: felt*) {
         alloc_locals;
 
+        // [Effect] Compute and return contract URI
         let (uri_str) = StringCodec.read('uri');
         let (json_str) = StringCodec.ss_to_string('metadata.json');
         let (str) = StringUtil.path_join(uri_str, json_str);
@@ -66,6 +68,7 @@ namespace Metadata {
     }(uri_len: felt, uri: felt*) {
         alloc_locals;
 
+        // [Effect] Set base URI
         let (str) = StringCodec.ss_arr_to_string(uri_len, uri);
         StringCodec.write('uri', str);
         return ();
