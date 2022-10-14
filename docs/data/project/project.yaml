@@ -773,14 +773,18 @@
         type: felt*
       - name: pedersen_ptr
         type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
       - name: range_check_ptr
         type: ''
     explicitArgs:
       - name: tokenId
         type: Uint256
     returns:
-      - name: tokenURI
+      - name: uri_len
         type: felt
+      - name: uri
+        type: felt*
   functionComment:
     desc:
       - name: ''
@@ -818,28 +822,107 @@
           start: 259
           end: 304
     returns:
-      - name: tokenURI
+      - name: uri_len
         type: felt
-        desc: The URI associated to the specified NFT
+        desc: URI array length
         charIndex:
           start: 330
-          end: 385
+          end: 361
+      - name: uri
+        type: felt*
+        desc: The URI characters associated to the specified NFT
+        charIndex:
+          start: 371
+          end: 433
     raises:
       - name: tokenId
         type: ''
-        desc: tokenId is not a valid NFT
+        desc: tokenId is not a valid Uint256
         charIndex:
-          start: 410
-          end: 445
+          start: 458
+          end: 497
     charIndex:
-      start: 7525
-      end: 7970
+      start: 7566
+      end: 8063
+- attributeName: view
+  functionName:
+    name: contractURI
+    charIndex:
+      start: 8193
+      end: 8204
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the contract uri (OpenSea)
+        charIndex:
+          start: 23
+          end: 56
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 88
+          end: 106
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 142
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+        desc: ''
+        charIndex:
+          start: 152
+          end: 180
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 190
+          end: 205
+    explicitArgs: null
+    returns:
+      - name: uri_len
+        type: felt
+        desc: URI array length
+        charIndex:
+          start: 231
+          end: 262
+      - name: uri
+        type: felt*
+        desc: URI characters
+        charIndex:
+          start: 272
+          end: 298
+    raises: null
+    charIndex:
+      start: 8340
+      end: 8638
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 8071
-      end: 8076
+      start: 8764
+      end: 8769
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -889,572 +972,14 @@
           end: 215
     raises: null
     charIndex:
-      start: 8162
-      end: 8377
-- attributeName: view
-  functionName:
-    name: image_url
-    charIndex:
-      start: 8420
-      end: 8429
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: image_url_len
-        type: felt
-      - name: image_url
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: image_data
-    charIndex:
-      start: 8634
-      end: 8644
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: image_data_len
-        type: felt
-      - name: image_data
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: external_url
-    charIndex:
-      start: 8852
-      end: 8864
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: external_url_len
-        type: felt
-      - name: external_url
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: description
-    charIndex:
-      start: 9078
-      end: 9089
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: description_len
-        type: felt
-      - name: description
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: holder
-    charIndex:
-      start: 9300
-      end: 9306
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: holder_len
-        type: felt
-      - name: holder
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: certifier
-    charIndex:
-      start: 9502
-      end: 9511
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: certifier_len
-        type: felt
-      - name: certifier
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: land
-    charIndex:
-      start: 9716
-      end: 9720
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: land_len
-        type: felt
-      - name: land
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: unit_land_surface
-    charIndex:
-      start: 9910
-      end: 9927
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: unit_land_surface_len
-        type: felt
-      - name: unit_land_surface
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: country
-    charIndex:
-      start: 10156
-      end: 10163
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: country_len
-        type: felt
-      - name: country
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: expiration
-    charIndex:
-      start: 10362
-      end: 10372
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: expiration_len
-        type: felt
-      - name: expiration
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: total_co2_sequestration
-    charIndex:
-      start: 10580
-      end: 10603
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: total_co2_sequestration_len
-        type: felt
-      - name: total_co2_sequestration
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: unit_co2_sequestration
-    charIndex:
-      start: 10850
-      end: 10872
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: unit_co2_sequestration_len
-        type: felt
-      - name: unit_co2_sequestration
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: sequestration_color
-    charIndex:
-      start: 11116
-      end: 11135
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: sequestration_color_len
-        type: felt
-      - name: sequestration_color
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: sequestration_type
-    charIndex:
-      start: 11370
-      end: 11388
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: sequestration_type_len
-        type: felt
-      - name: sequestration_type
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: sequestration_category
-    charIndex:
-      start: 11620
-      end: 11642
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: sequestration_category_len
-        type: felt
-      - name: sequestration_category
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: background_color
-    charIndex:
-      start: 11886
-      end: 11902
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: background_color_len
-        type: felt
-      - name: background_color
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: animation_url
-    charIndex:
-      start: 12128
-      end: 12141
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: animation_url_len
-        type: felt
-      - name: animation_url
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: view
-  functionName:
-    name: youtube_url
-    charIndex:
-      start: 12358
-      end: 12369
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: youtube_url_len
-        type: felt
-      - name: youtube_url
-        type: felt*
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
+      start: 8855
+      end: 9070
 - attributeName: external
   functionName:
     name: approve
     charIndex:
-      start: 12604
-      end: 12611
+      start: 9137
+      end: 9144
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1512,14 +1037,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 12712
-      end: 13141
+      start: 9245
+      end: 9674
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 13208
-      end: 13225
+      start: 9741
+      end: 9758
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1579,14 +1104,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 13330
-      end: 13737
+      start: 9863
+      end: 10270
 - attributeName: external
   functionName:
     name: transferFrom
     charIndex:
-      start: 13824
-      end: 13836
+      start: 10357
+      end: 10369
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1678,14 +1203,14 @@
           start: 545
           end: 580
     charIndex:
-      start: 13950
-      end: 14530
+      start: 10483
+      end: 11063
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 14620
-      end: 14636
+      start: 11153
+      end: 11169
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1803,14 +1328,14 @@
           start: 762
           end: 840
     charIndex:
-      start: 14779
-      end: 15619
+      start: 11312
+      end: 12152
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 15730
-      end: 15734
+      start: 12263
+      end: 12267
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1892,14 +1417,14 @@
           start: 463
           end: 492
     charIndex:
-      start: 15835
-      end: 16327
+      start: 12368
+      end: 12860
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 16435
-      end: 16439
+      start: 12968
+      end: 12972
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1955,14 +1480,14 @@
           start: 271
           end: 310
     charIndex:
-      start: 16524
-      end: 16834
+      start: 13057
+      end: 13367
 - attributeName: external
   functionName:
     name: setTokenURI
     charIndex:
-      start: 16950
-      end: 16961
+      start: 13483
+      end: 13494
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1983,59 +1508,146 @@
         type: ''
         desc: >-
           Set the token URI of the specified token id (EIP 721 - Metadata
-          extension)
+          extension) -
         charIndex:
           start: 23
-          end: 97
+          end: 99
+      - name: ''
+        type: ''
+        desc: >-
+          This function is deprecated since the token uri is generated by the
+          contract according
+        charIndex:
+          start: 109
+          end: 195
+      - name: ''
+        type: ''
+        desc: to the token id by default (see the setURI function instead)
+        charIndex:
+          start: 205
+          end: 265
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 129
-          end: 147
+          start: 297
+          end: 315
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 157
-          end: 183
+          start: 325
+          end: 351
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 193
-          end: 208
+          start: 361
+          end: 376
     explicitArgs:
       - name: tokenId
         type: Uint256
         desc: Token id
         charIndex:
-          start: 240
-          end: 266
+          start: 408
+          end: 434
       - name: tokenURI
         type: felt
-        desc: The Uri to set
+        desc: The URI to set
         charIndex:
-          start: 276
-          end: 306
+          start: 444
+          end: 474
     returns: null
     raises:
       - name: tokenId
         type: ''
         desc: tokenId does not exist
         charIndex:
-          start: 331
-          end: 362
+          start: 499
+          end: 530
     charIndex:
-      start: 17068
-      end: 17430
+      start: 13601
+      end: 14131
+- attributeName: external
+  functionName:
+    name: setURI
+    charIndex:
+      start: 14247
+      end: 14253
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Set the contract base URI
+        charIndex:
+          start: 23
+          end: 48
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 80
+          end: 98
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 134
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+        desc: ''
+        charIndex:
+          start: 144
+          end: 172
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 182
+          end: 197
+    explicitArgs:
+      - name: uri_len
+        type: felt
+        desc: URI array length
+        charIndex:
+          start: 229
+          end: 260
+      - name: uri
+        type: felt*
+        desc: URI characters
+        charIndex:
+          start: 270
+          end: 296
+    returns: null
+    raises: null
+    charIndex:
+      start: 14383
+      end: 14679
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 17543
-      end: 17560
+      start: 14791
+      end: 14808
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2097,14 +1709,14 @@
           start: 344
           end: 383
     charIndex:
-      start: 17649
-      end: 18032
+      start: 14897
+      end: 15280
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 18108
-      end: 18125
+      start: 15356
+      end: 15373
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -2152,563 +1764,5 @@
           start: 207
           end: 247
     charIndex:
-      start: 18194
-      end: 18441
-- attributeName: external
-  functionName:
-    name: set_image_url
-    charIndex:
-      start: 18509
-      end: 18522
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: image_url_len
-        type: felt
-      - name: image_url
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_image_data
-    charIndex:
-      start: 18759
-      end: 18773
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: image_data_len
-        type: felt
-      - name: image_data
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_external_url
-    charIndex:
-      start: 19015
-      end: 19031
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: external_url_len
-        type: felt
-      - name: external_url
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_description
-    charIndex:
-      start: 19277
-      end: 19292
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: description_len
-        type: felt
-      - name: description
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_holder
-    charIndex:
-      start: 19533
-      end: 19543
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: holder_len
-        type: felt
-      - name: holder
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_certifier
-    charIndex:
-      start: 19759
-      end: 19772
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: certifier_len
-        type: felt
-      - name: certifier
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_land
-    charIndex:
-      start: 20003
-      end: 20011
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: land_len
-        type: felt
-      - name: land
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_unit_land_surface
-    charIndex:
-      start: 20217
-      end: 20238
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: unit_land_surface_len
-        type: felt
-      - name: unit_land_surface
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_country
-    charIndex:
-      start: 20509
-      end: 20520
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: country_len
-        type: felt
-      - name: country
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_expiration
-    charIndex:
-      start: 20741
-      end: 20755
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: expiration_len
-        type: felt
-      - name: expiration
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_total_co2_sequestration
-    charIndex:
-      start: 20991
-      end: 21018
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: total_co2_sequestration_len
-        type: felt
-      - name: total_co2_sequestration
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_unit_co2_sequestration
-    charIndex:
-      start: 21333
-      end: 21359
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: unit_co2_sequestration_len
-        type: felt
-      - name: unit_co2_sequestration
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_sequestration_color
-    charIndex:
-      start: 21669
-      end: 21692
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: sequestration_color_len
-        type: felt
-      - name: sequestration_color
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_sequestration_type
-    charIndex:
-      start: 21973
-      end: 21995
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: sequestration_type_len
-        type: felt
-      - name: sequestration_type
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_sequestration_category
-    charIndex:
-      start: 22271
-      end: 22297
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: sequestration_category_len
-        type: felt
-      - name: sequestration_category
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_background_color
-    charIndex:
-      start: 22607
-      end: 22627
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: background_color_len
-        type: felt
-      - name: background_color
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_animation_url
-    charIndex:
-      start: 22893
-      end: 22910
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: animation_url_len
-        type: felt
-      - name: animation_url
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_youtube_url
-    charIndex:
-      start: 23161
-      end: 23176
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: bitwise_ptr
-        type: BitwiseBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: youtube_url_len
-        type: felt
-      - name: youtube_url
-        type: felt*
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
+      start: 15442
+      end: 15689

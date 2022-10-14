@@ -82,13 +82,13 @@
     explicitArgs:
       - name: uri_len
         type: felt
-        desc: Uri array length
+        desc: URI array length
         charIndex:
           start: 553
           end: 584
       - name: uri
         type: felt*
-        desc: Uri characters
+        desc: URI characters
         charIndex:
           start: 594
           end: 620
@@ -241,26 +241,32 @@
     returns:
       - name: uri_len
         type: felt
-        desc: Uri array length
+        desc: URI array length
         charIndex:
           start: 315
           end: 346
       - name: uri
         type: felt*
-        desc: Uri characters
+        desc: The URI characters
         charIndex:
           start: 356
-          end: 382
-    raises: null
+          end: 386
+    raises:
+      - name: id
+        type: ''
+        desc: id is not a valid Uint256
+        charIndex:
+          start: 411
+          end: 440
     charIndex:
       start: 2433
-      end: 2815
+      end: 2873
 - attributeName: view
   functionName:
     name: contractURI
     charIndex:
-      start: 2866
-      end: 2877
+      start: 2924
+      end: 2935
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -314,26 +320,26 @@
     returns:
       - name: uri_len
         type: felt
-        desc: Uri array length
+        desc: URI array length
         charIndex:
           start: 231
           end: 262
       - name: uri
         type: felt*
-        desc: Uri characters
+        desc: The URI characters
         charIndex:
           start: 272
-          end: 298
+          end: 302
     raises: null
     charIndex:
-      start: 3013
-      end: 3311
+      start: 3071
+      end: 3373
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 3369
-      end: 3378
+      start: 3431
+      end: 3440
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -401,14 +407,14 @@
           end: 437
     raises: null
     charIndex:
-      start: 3501
-      end: 3938
+      start: 3563
+      end: 4000
 - attributeName: view
   functionName:
     name: balanceOfBatch
     charIndex:
-      start: 3997
-      end: 4011
+      start: 4059
+      end: 4073
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -500,14 +506,14 @@
           end: 599
     raises: null
     charIndex:
-      start: 4195
-      end: 4794
+      start: 4257
+      end: 4856
 - attributeName: view
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 4945
-      end: 4961
+      start: 5007
+      end: 5023
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -575,14 +581,14 @@
           end: 414
     raises: null
     charIndex:
-      start: 5087
-      end: 5501
+      start: 5149
+      end: 5563
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 5615
-      end: 5620
+      start: 5677
+      end: 5682
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -632,14 +638,14 @@
           end: 215
     raises: null
     charIndex:
-      start: 5706
-      end: 5921
+      start: 5768
+      end: 5983
 - attributeName: view
   functionName:
     name: name
     charIndex:
-      start: 5998
-      end: 6002
+      start: 6060
+      end: 6064
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -689,14 +695,14 @@
           end: 259
     raises: null
     charIndex:
-      start: 6087
-      end: 6346
+      start: 6149
+      end: 6408
 - attributeName: view
   functionName:
     name: locked
     charIndex:
-      start: 6396
-      end: 6402
+      start: 6458
+      end: 6464
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -754,14 +760,14 @@
           end: 286
     raises: null
     charIndex:
-      start: 6509
-      end: 6795
+      start: 6571
+      end: 6857
 - attributeName: external
   functionName:
     name: setURI
     charIndex:
-      start: 6873
-      end: 6879
+      start: 6935
+      end: 6941
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -814,27 +820,27 @@
     explicitArgs:
       - name: uri_len
         type: felt
-        desc: Uri array length
+        desc: URI array length
         charIndex:
           start: 229
           end: 260
       - name: uri
         type: felt*
-        desc: Uri characters
+        desc: URI characters
         charIndex:
           start: 270
           end: 296
     returns: null
     raises: null
     charIndex:
-      start: 7009
-      end: 7305
+      start: 7071
+      end: 7367
 - attributeName: external
   functionName:
     name: setLocked
     charIndex:
-      start: 7415
-      end: 7424
+      start: 7477
+      end: 7486
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -884,14 +890,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7504
-      end: 7760
+      start: 7566
+      end: 7822
 - attributeName: external
   functionName:
     name: setUnlocked
     charIndex:
-      start: 7863
-      end: 7874
+      start: 7925
+      end: 7936
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -941,14 +947,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7954
-      end: 8213
+      start: 8016
+      end: 8275
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 8318
-      end: 8335
+      start: 8380
+      end: 8397
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1008,14 +1014,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8440
-      end: 8881
+      start: 8502
+      end: 8943
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 8969
-      end: 8985
+      start: 9031
+      end: 9047
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1105,14 +1111,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 9140
-      end: 9639
+      start: 9202
+      end: 9701
 - attributeName: external
   functionName:
     name: safeBatchTransferFrom
     charIndex:
-      start: 9785
-      end: 9806
+      start: 9847
+      end: 9868
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1226,14 +1232,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 10028
-      end: 10790
+      start: 10090
+      end: 10852
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 10982
-      end: 10986
+      start: 11044
+      end: 11048
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1315,14 +1321,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 11128
-      end: 11573
+      start: 11190
+      end: 11635
 - attributeName: external
   functionName:
     name: mintBatch
     charIndex:
-      start: 11691
-      end: 11700
+      start: 11753
+      end: 11762
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1424,14 +1430,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 11905
-      end: 12572
+      start: 11967
+      end: 12634
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 12720
-      end: 12724
+      start: 12782
+      end: 12786
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1509,14 +1515,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 12840
-      end: 13306
+      start: 12902
+      end: 13368
 - attributeName: external
   functionName:
     name: burnBatch
     charIndex:
-      start: 13576
-      end: 13585
+      start: 13638
+      end: 13647
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1612,14 +1618,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 13739
-      end: 14427
+      start: 13801
+      end: 14489
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 14727
-      end: 14744
+      start: 14789
+      end: 14806
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1669,14 +1675,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 14833
-      end: 15102
+      start: 14895
+      end: 15164
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 15178
-      end: 15195
+      start: 15240
+      end: 15257
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1718,5 +1724,5 @@
     returns: null
     raises: null
     charIndex:
-      start: 15264
-      end: 15446
+      start: 15326
+      end: 15508

@@ -2,8 +2,8 @@
   functionName:
     name: carbonable_project_address_
     charIndex:
-      start: 442
-      end: 469
+      start: 386
+      end: 413
   functionSignature:
     implicitArgs:
       - name: ''
@@ -25,8 +25,8 @@
   functionName:
     name: reward_token_address_
     charIndex:
-      start: 550
-      end: 571
+      start: 494
+      end: 515
   functionSignature:
     implicitArgs:
       - name: ''
@@ -48,8 +48,8 @@
   functionName:
     name: carbonable_token_address_
     charIndex:
-      start: 656
-      end: 681
+      start: 600
+      end: 625
   functionSignature:
     implicitArgs:
       - name: ''
@@ -69,10 +69,10 @@
       end: 0
 - attributeName: namespace CarbonableFarmer
   functionName:
-    name: constructor
+    name: initializer
     charIndex:
-      start: 776
-      end: 787
+      start: 720
+      end: 731
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -82,16 +82,12 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: owner
-        type: felt
       - name: carbonable_project_address
         type: felt
       - name: carbonable_token_address
         type: felt
       - name: reward_token_address
         type: felt
-      - name: ''
-        type: ''
     returns: null
   functionComment:
     desc: null
@@ -106,8 +102,8 @@
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 1299
-      end: 1325
+      start: 1169
+      end: 1195
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -133,8 +129,8 @@
   functionName:
     name: reward_token_address
     charIndex:
-      start: 1588
-      end: 1608
+      start: 1458
+      end: 1478
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -162,8 +158,8 @@
   functionName:
     name: carbonable_token_address
     charIndex:
-      start: 1842
-      end: 1866
+      start: 1712
+      end: 1736
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

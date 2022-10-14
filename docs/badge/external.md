@@ -7,10 +7,10 @@ External
 Set the contract base URI  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="uri_len" %}  
-Uri array length  
+URI array length  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt*" name="uri" %}  
-Uri characters  
+URI characters  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setLocked" %}  
