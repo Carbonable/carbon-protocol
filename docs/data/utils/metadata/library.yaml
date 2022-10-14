@@ -1,9 +1,9 @@
-- attributeName: namespace CarbonableProject
+- attributeName: namespace Metadata
   functionName:
     name: token_uri
     charIndex:
-      start: 570
-      end: 579
+      start: 490
+      end: 499
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -33,12 +33,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableProject
+- attributeName: namespace Metadata
   functionName:
     name: contract_uri
     charIndex:
-      start: 897
-      end: 909
+      start: 1297
+      end: 1309
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -66,12 +66,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableProject
+- attributeName: namespace Metadata
   functionName:
     name: set_uri
     charIndex:
-      start: 1237
-      end: 1244
+      start: 1817
+      end: 1824
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

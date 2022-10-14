@@ -19,18 +19,18 @@ Return the URI corresponding to the specified token id (OpenSea)
 {% swagger-parameter in="path" type="Uint256" name="id" %}  
 Token id  
 {% endswagger-parameter %}  
-{% swagger-response status="uri_len ( felt )" description="Uri array length" %}  
+{% swagger-response status="uri_len ( felt )" description="URI array length" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri ( felt* )" description="Uri characters" %}  
+{% swagger-response status="uri ( felt* )" description="The URI characters" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "contractURI" %}  
 {% swagger-description %}  
 Return the contract uri (OpenSea)  
 {% endswagger-description %}  
-{% swagger-response status="uri_len ( felt )" description="Uri array length" %}  
+{% swagger-response status="uri_len ( felt )" description="URI array length" %}  
 {% endswagger-response %}  
-{% swagger-response status="uri ( felt* )" description="Uri characters" %}  
+{% swagger-response status="uri ( felt* )" description="The URI characters" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balanceOf" %}  
