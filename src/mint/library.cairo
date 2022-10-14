@@ -19,7 +19,6 @@ from starkware.starknet.common.syscalls import get_caller_address, get_contract_
 
 // Project dependencies
 from openzeppelin.token.erc20.IERC20 import IERC20
-from openzeppelin.token.erc721.IERC721 import IERC721
 from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 from openzeppelin.security.safemath.library import SafeUint256
@@ -91,7 +90,7 @@ namespace CarbonableMinter {
         max_supply_for_mint: Uint256,
         reserved_supply_for_mint: Uint256,
     ) {
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableMinter: unit_price is not a valid Uint256") {
             uint256_check(unit_price);
         }
@@ -103,6 +102,7 @@ namespace CarbonableMinter {
             uint256_check(reserved_supply_for_mint);
         }
 
+        // [Effect] Set storage variables
         carbonable_project_address_.write(carbonable_project_address);
         payment_token_address_.write(payment_token_address);
         public_sale_open_.write(public_sale_open);
@@ -202,7 +202,6 @@ namespace CarbonableMinter {
     func set_whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         whitelist_merkle_root: felt
     ) {
-        // Access control check
         whitelist_merkle_root_.write(whitelist_merkle_root);
         return ();
     }
@@ -210,7 +209,6 @@ namespace CarbonableMinter {
     func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         public_sale_open: felt
     ) {
-        // Access control check
         public_sale_open_.write(public_sale_open);
         return ();
     }
@@ -218,7 +216,6 @@ namespace CarbonableMinter {
     func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         max_buy_per_tx: felt
     ) {
-        // Access control check
         max_buy_per_tx_.write(max_buy_per_tx);
         return ();
     }
@@ -226,12 +223,11 @@ namespace CarbonableMinter {
     func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         unit_price: Uint256
     ) {
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableMinter: unit_price is not a valid Uint256") {
             uint256_check(unit_price);
         }
 
-        // Access control check
         unit_price_.write(unit_price);
         return ();
     }
@@ -241,16 +237,19 @@ namespace CarbonableMinter {
     }(slots: Uint256) {
         alloc_locals;
 
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableMinter: slots is not a valid Uint256") {
             uint256_check(slots);
         }
 
+        // [Check] Enough reserved slots
         let (reserved_supply_for_mint) = reserved_supply_for_mint_.read();
         let (enough_slots) = uint256_le(slots, reserved_supply_for_mint);
         with_attr error_message("CarbonableMinter: not enough reserved slots") {
             assert enough_slots = TRUE;
         }
+
+        // [Effect] Decrease the reserved supply
         let (new_reserved_supply_for_mint) = SafeUint256.sub_le(reserved_supply_for_mint, slots);
         reserved_supply_for_mint_.write(new_reserved_supply_for_mint);
         return ();
@@ -261,21 +260,18 @@ namespace CarbonableMinter {
     ) -> (success: felt) {
         alloc_locals;
 
-        // Get variables through system calls
+        // [Security] Start reetrancy guard
+        ReentrancyGuard._start();
+
+        // [Check] Not zero address
         let (caller) = get_caller_address();
-        let (contract_address) = get_contract_address();
-
-        let quantity_uint256 = Uint256(quantity, 0);
-
-        // Check preconditions
         with_attr error_message("CarbonableMinter: caller is the zero address") {
             assert_not_zero(caller);
         }
 
-        // Get storage variables
+        // [Check] Enough NFTs available
+        let quantity_uint256 = Uint256(quantity, 0);
         let (carbonable_project_address) = carbonable_project_address_.read();
-
-        // Check if enough NFTs available
         let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project_address);
         let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256);
         let (max_supply_for_mint) = max_supply_for_mint_.read();
@@ -284,58 +280,65 @@ namespace CarbonableMinter {
             assert enough_left = TRUE;
         }
 
-        // Check if enough reserved NFTs available
+        // [Check] Enough reserved NFTs available
         let (reserved_supply_for_mint) = reserved_supply_for_mint_.read();
         let (enough_reserved_left) = uint256_le(quantity_uint256, reserved_supply_for_mint);
         with_attr error_message("CarbonableMinter: not enough available reserved NFTs") {
             assert enough_reserved_left = TRUE;
         }
 
-        // Do the actual NFT mint
-        let starting_index = total_supply;
-        mint_iter(carbonable_project_address, to, starting_index, quantity_uint256);
-
-        // Remove the minted quantity from the reserved supply
+        // [Effect] Remove the minted quantity from the reserved supply
         let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
             reserved_supply_for_mint, quantity_uint256
         );
         reserved_supply_for_mint_.write(new_reserved_supply_for_mint);
 
-        // Success
+        // [Interaction] Mint
+        let starting_index = total_supply;
+        mint_iter(carbonable_project_address, to, starting_index, quantity_uint256);
+
+        // [Security] End reetrancy guard
+        ReentrancyGuard._end();
+
         return (TRUE,);
     }
 
     func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         success: felt
     ) {
-        // Get storage variables
+        // [Interaction] ERC20 transfer
         let (caller) = get_caller_address();
         let (contract_address) = get_contract_address();
         let (payment_token_address) = payment_token_address_.read();
-
-        // Do ERC20 transfer
         let (balance) = IERC20.balanceOf(
             contract_address=payment_token_address, account=contract_address
         );
-        let (success) = transfer(
+        let (transfer_success) = transfer(
             token_address=payment_token_address, recipient=caller, amount=balance
         );
 
-        return (success,);
+        // [Check] Transfer successful
+        with_attr error_message("CarbonableMinter: transfer failed") {
+            assert transfer_success = TRUE;
+        }
+
+        return (transfer_success,);
     }
 
     func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_address: felt, recipient: felt, amount: Uint256
     ) -> (success: felt) {
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableMinter: amount is not a valid Uint256") {
             uint256_check(amount);
         }
 
-        // Do ERC20 transfer
+        // [Interaction] ERC20 transfer
         let (transfer_success) = IERC20.transfer(
             contract_address=token_address, recipient=recipient, amount=amount
         );
+
+        // [Check] Transfer successful
         with_attr error_message("CarbonableMinter: transfer failed") {
             assert transfer_success = TRUE;
         }
@@ -348,16 +351,17 @@ namespace CarbonableMinter {
     ) -> (success: felt) {
         alloc_locals;
 
-        // Get variables through system calls
-        let (caller) = get_caller_address();
+        // [Security] Start reetrancy guard
+        ReentrancyGuard._start();
 
-        // Check if at least whitelisted or public sale is open
+        // [Check] Whitelisted sale is open
         let (is_whitelist_open) = whitelisted_sale_open();
         with_attr error_message("CarbonableMinter: whitelist sale is not open") {
             assert_not_zero(is_whitelist_open);
         }
 
-        // Check if account is whitelisted
+        // [Check] Caller is whitelisted
+        let (caller) = get_caller_address();
         let (slots) = whitelisted_slots(
             account=caller, slots=slots, proof_len=proof_len, proof=proof
         );
@@ -365,22 +369,23 @@ namespace CarbonableMinter {
             assert_not_zero(slots);
         }
 
-        // Retrieve slots already claimed
+        // [Check] Caller has available whitelisted slots
         let (claimed_slots) = claimed_slots_.read(caller);
         let available_slots = slots - claimed_slots;
-
-        // Check if account has available whitelisted slots
         let enough_slots = is_le(quantity, available_slots);
         with_attr error_message("CarbonableMinter: not enough whitelisted slots available") {
             assert enough_slots = TRUE;
         }
 
-        // Buy NFTs
-        let (success) = buy(quantity);
-
-        // Update claimed slots
+        // [Effect] Update claimed slots
         let new_claimed_slots = claimed_slots + quantity;
         claimed_slots_.write(caller, new_claimed_slots);
+
+        // [Interaction] Buy
+        let (success) = buy(quantity);
+
+        // [Security] End reetrancy guard
+        ReentrancyGuard._end();
 
         return (success,);
     }
@@ -388,13 +393,21 @@ namespace CarbonableMinter {
     func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         quantity: felt
     ) -> (success: felt) {
-        // Check if at least whitelisted or public sale is open
+        // [Security] Start reetrancy guard
+        ReentrancyGuard._start();
+
+        // [Check] if at least whitelisted or public sale is open
         let (public_sale_open) = public_sale_open_.read();
         with_attr error_message("CarbonableMinter: public sale is not open") {
             assert_not_zero(public_sale_open);
         }
 
+        // [Interaction] Buy
         let (success) = buy(quantity);
+
+        // [Security] End reetrancy guard
+        ReentrancyGuard._end();
+
         return (success,);
     }
 
@@ -407,33 +420,22 @@ namespace CarbonableMinter {
     ) {
         alloc_locals;
 
-        // Start reetrancy guard
-        ReentrancyGuard._start();
-
-        // Get variables through system calls
+        // [Check] Not zero address
         let (caller) = get_caller_address();
-        let (contract_address) = get_contract_address();
-
-        let quantity_uint256 = Uint256(quantity, 0);
-
-        // Check preconditions
         with_attr error_message("CarbonableMinter: caller is the zero address") {
             assert_not_zero(caller);
         }
 
-        // Read storage variables
-        let (carbonable_project_address) = carbonable_project_address_.read();
-        let (unit_price) = unit_price_.read();
-        let (payment_token_address) = payment_token_address_.read();
+        // [Check] Desired quantity is lower than maximum allowed per transaction
         let (max_buy_per_tx) = max_buy_per_tx_.read();
-
-        // Check that desired quantity is lower than maximum allowed per transaction
         let quantity_allowed = is_le(quantity, max_buy_per_tx);
         with_attr error_message("CarbonableMinter: quantity not allowed") {
             assert quantity_allowed = TRUE;
         }
 
-        // Check if enough NFTs available
+        // [Check] Enough NFTs available
+        let (carbonable_project_address) = carbonable_project_address_.read();
+        let quantity_uint256 = Uint256(quantity, 0);
         let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project_address);
         let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256);
         let (max_supply_for_mint) = max_supply_for_mint_.read();
@@ -446,25 +448,24 @@ namespace CarbonableMinter {
             assert enough_left = TRUE;
         }
 
-        // Compute mint price
+        // [Interaction] ERC20 transfer
+        let (unit_price) = unit_price_.read();
         let (amount) = SafeUint256.mul(quantity_uint256, unit_price);
-
-        // Do ERC20 transfer
+        let (contract_address) = get_contract_address();
+        let (payment_token_address) = payment_token_address_.read();
         let (transfer_success) = IERC20.transferFrom(
             payment_token_address, caller, contract_address, amount
         );
+
+        // [Check] Transfer successful
         with_attr error_message("CarbonableMinter: transfer failed") {
             assert transfer_success = TRUE;
         }
 
-        // Do the actual NFT mint
+        // [Interaction] Mint
         let starting_index = total_supply;
         mint_iter(carbonable_project_address, caller, starting_index, quantity_uint256);
 
-        // End reetrancy guard
-        ReentrancyGuard._end();
-
-        // Success
         return (TRUE,);
     }
 
@@ -478,19 +479,18 @@ namespace CarbonableMinter {
     ) {
         alloc_locals;
 
+        // [Check] Stop condition
         let (no_more_left) = uint256_eq(quantity, Uint256(0, 0));
-
-        // Stop condition
         if (no_more_left == TRUE) {
             return ();
         }
 
+        // [Interaction] Mint
         let one = Uint256(1, 0);
         let (token_id) = SafeUint256.add(starting_index, one);
-
-        // Mint
         ICarbonableProject.mint(nft_contract_address, to, token_id);
 
+        // [Interaction] Call next mint
         let (new_quantity) = SafeUint256.sub_le(quantity, one);
         mint_iter(nft_contract_address, to, token_id, new_quantity);
         return ();

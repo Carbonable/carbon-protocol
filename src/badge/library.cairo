@@ -112,7 +112,7 @@ namespace CarbonableBadge {
     func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) -> (
         is_locked: felt
     ) {
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
             uint256_check(id);
         }
@@ -138,7 +138,7 @@ namespace CarbonableBadge {
     func set_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         id: Uint256
     ) -> () {
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
             uint256_check(id);
         }
@@ -152,7 +152,7 @@ namespace CarbonableBadge {
     func set_unlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         id: Uint256
     ) -> () {
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
             uint256_check(id);
         }
@@ -170,11 +170,12 @@ namespace CarbonableBadge {
     func assert_unlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         id: Uint256
     ) -> () {
-        // Check Uint256 inputs
+        // [Check] Uint256 compliance
         with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
             uint256_check(id);
         }
 
+        // [Check] Token is unlocked
         let (is_locked) = locked(id);
         with_attr error_message("CarbonableBadge: transfer is locked") {
             assert is_locked = FALSE;
@@ -192,14 +193,12 @@ namespace CarbonableBadge {
     func _assert_unlocked_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         ids_len: felt, ids: Uint256*
     ) -> () {
+        // [Check] Stop criteria
         if (ids_len == 0) {
             return ();
         }
 
-        with_attr error_message("CarbonableBadge: id is not a valid Uint256") {
-            uint256_check([ids]);
-        }
-
+        // [Check] Token is unlocked
         assert_unlocked([ids]);
         _assert_unlocked_iter(ids_len=ids_len - 1, ids=ids + 1);
 
