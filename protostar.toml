@@ -25,8 +25,12 @@ CarbonableMinter = [
     "./src/mint/minter.cairo",
 ]
 
-CarbonableFarmer = [
-    "./src/farm/farmer.cairo",
+CarbonableYielder = [
+    "./src/farm/yielder.cairo",
+]
+
+CarbonableOffseter = [
+    "./src/farm/offseter.cairo",
 ]
 
 ["protostar.test"]

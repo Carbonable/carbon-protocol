@@ -20,8 +20,6 @@ struct Signers {
 
 struct Mocks {
     carbonable_project_address: felt,
-    carbonable_token_address: felt,
-    reward_token_address: felt,
 }
 
 struct TestContext {
@@ -54,21 +52,19 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local admin;
     local anyone;
     local carbonable_project_address;
-    local carbonable_token_address;
-    local reward_token_address;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
-        ids.carbonable_token_address = context.mocks.carbonable_token_address
-        ids.reward_token_address = context.mocks.reward_token_address
     %}
 
     // Instantiate farmer
     CarbonableFarmer.initializer(
+        start=0,
+        end=0,
+        locked_duration=0,
+        period_duration=0,
         carbonable_project_address=carbonable_project_address,
-        carbonable_token_address=carbonable_token_address,
-        reward_token_address=reward_token_address,
     );
 
     // Instantiate context, useful to avoid many hints in tests
@@ -76,8 +72,6 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
 
     local mocks: Mocks = Mocks(
         carbonable_project_address=carbonable_project_address,
-        carbonable_token_address=carbonable_token_address,
-        reward_token_address=reward_token_address,
         );
 
     local context: TestContext = TestContext(signers=signers, mocks=mocks);

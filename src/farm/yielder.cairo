@@ -9,7 +9,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from openzeppelin.access.ownable.library import Ownable
 
 // Local dependencies
-from src.farm.library import CarbonableFarmer
+from src.farm.library import CarbonableFarmer, CarbonableYielder
 
 //
 // Constructor
@@ -17,10 +17,7 @@ from src.farm.library import CarbonableFarmer
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    owner: felt,
-    carbonable_project_address: felt,
-    carbonable_token_address: felt,
-    reward_token_address: felt,
+    owner: felt, carbonable_project_address: felt
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -37,7 +34,7 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     // Returns:
     //   None
     CarbonableFarmer.initializer(
-        carbonable_project_address, carbonable_token_address, reward_token_address
+        start, end, locked_duration, period_duration, carbonable_project_address
     );
     Ownable.initializer(owner);
     return ();
@@ -59,33 +56,4 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     // Returns:
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
     return CarbonableFarmer.carbonable_project_address();
-}
-
-@view
-func reward_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    reward_token_address: felt
-) {
-    // Desc:
-    //   Return the associated reward token
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   reward_token_address(felt): Address of the reward token
-    return CarbonableFarmer.reward_token_address();
-}
-
-@view
-func carbonable_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) -> (carbonable_token_address: felt) {
-    // Desc:
-    //   Return the associated carbonable token
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   carbonable_token_address(felt): Address of the Carbonable token
-    return CarbonableFarmer.carbonable_token_address();
 }
