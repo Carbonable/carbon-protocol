@@ -5,20 +5,20 @@
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import (
-    assert_not_zero,
-    assert_nn,
-    assert_le,
-    assert_in_range,
-    unsigned_div_rem,
+from starkware.cairo.common.math import assert_nn, assert_le
+from starkware.cairo.common.uint256 import (
+    Uint256,
+    uint256_check,
+    uint256_lt,
+    uint256_eq,
+    uint256_unsigned_div_rem,
 )
-from starkware.cairo.common.uint256 import Uint256, uint256_check, uint256_le
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
     get_caller_address,
     get_contract_address,
 )
-from starkware.cairo.common.math_cmp import is_le
+from starkware.cairo.common.math_cmp import is_le, is_not_zero
 
 // Project dependencies
 from openzeppelin.security.safemath.library import SafeUint256
@@ -40,14 +40,9 @@ func carbonable_project_address_() -> (res: felt) {
 func start_() -> (res: felt) {
 }
 
-// End timestamp
+// Unlocked duration
 @storage_var
-func end_() -> (res: felt) {
-}
-
-// Locked duration
-@storage_var
-func locked_duration_() -> (res: felt) {
+func unlocked_duration_() -> (res: felt) {
 }
 
 // Period duration
@@ -66,17 +61,8 @@ namespace CarbonableFarmer {
     //
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        start: felt,
-        end: felt,
-        locked_duration: felt,
-        period_duration: felt,
-        carbonable_project_address: felt,
+        carbonable_project_address: felt
     ) {
-        start_.write(start);
-        end_.write(end);
-        locked_duration_.write(locked_duration);
-        period_duration_.write(period_duration);
-
         carbonable_project_address_.write(carbonable_project_address);
         return ();
     }
@@ -96,7 +82,7 @@ namespace CarbonableFarmer {
         ) -> (carbonable_minter_address: felt) {
         let (carbonable_project_address) = carbonable_project_address_.read();
         let (carbonable_minter_address) = ICarbonableProject.owner(carbonable_project_address);
-        return (carbonable_minter_address,);
+        return (carbonable_minter_address=carbonable_minter_address,);
     }
 
     func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -104,59 +90,110 @@ namespace CarbonableFarmer {
     ) {
         alloc_locals;
 
-        // Get current timestamp
+        // [Compute] Absolute locked time
         let (current_time) = get_block_timestamp();
-
-        // Return FALSE if the current time is before the start period or after the end period
         let (start) = start_.read();
-        let (end) = end_.read();
-        let (is_before_start) = is_le(current_time, start);
-        let (is_after_end) = is_le(end, current_time);
-        let over = is_before_start + is_after_end;
+        let (unlocked_duration) = unlocked_duration_.read();
+        let locked_time = start + unlocked_duration;
+
+        // [Compute] Absolute end time
+        let (period_duration) = period_duration_.read();
+        let end = start + period_duration;
+
+        // [Evaluate] Boudaries and current time
+        let is_before_locked = is_le(current_time, locked_time);
+        let is_after_locked = is_le(end, current_time);
+        let over = is_before_locked + is_after_locked;
         if (over == TRUE) {
             return (status=FALSE,);
         }
-
-        // Compute the relative time in the current period
-        let (total_duration) = current_time - start;
-        let (period_duration) = period_duration_.read();
-        let (_, current_duration) = unsigned_div_rem(total_duration, period_duration);
-
-        // Returns FALSE if the relative time is before the end of the locked period else TRUE
-        let (locked_duration) = locked_duration_.read();
-        let (status) = is_le(current_duration, locked_duration);
-        return (status=status,);
+        return (status=TRUE,);
     }
 
     func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        count: felt
+        balance: Uint256
     ) {
         let (contract_address) = get_contract_address();
         let (carbonable_project_address) = carbonable_project_address_.read();
-        // TODO
 
-        return (count=count,);
+        let (balance) = IERC721.balanceOf(
+            contract_address=carbonable_project_address, owner=contract_address
+        );
+
+        return (balance=balance,);
     }
 
-    func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) -> (
-        share: felt
-    ) {
-        let share = 0;
+    func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt, precision: felt
+    ) -> (share: Uint256) {
+        alloc_locals;
+
+        let (total_deposite) = count(address);
+        let (total_contract) = total_locked();
+
+        let dividend = precision * total_deposite;
+        let dividend_uint256 = Uint256(low=dividend, high=0);
+        let (share, _) = uint256_unsigned_div_rem(dividend_uint256, total_contract);
         return (share=share,);
     }
 
-    func user{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) -> (
-        share: felt
-    ) {
-        let share = 0;
-        return (share=share,);
+    func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: Uint256
+    ) -> (address: felt) {
+        // [Check] Uint256 compliance
+        with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
+            uint256_check(token_id);
+        }
+        let (address) = registration_.read(token_id);
+        return (address=address,);
     }
 
     //
     // Externals
     //
 
-    func lock{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        unlocked_duration: felt, period_duration: felt
+    ) -> (success: felt) {
+        // [Check] Duration inputs validity
+        with_attr error_message("CarbonableFarmer: Invalid period duration") {
+            assert_nn(period_duration);
+        }
+        with_attr error_message("CarbonableFarmer: Invalid locked duration") {
+            assert_nn(unlocked_duration);
+            assert_le(unlocked_duration, period_duration);
+        }
+
+        // [Effect] Store period information
+        let (current_time) = get_block_timestamp();
+        start_.write(current_time);
+        period_duration_.write(period_duration);
+        unlocked_duration_.write(unlocked_duration);
+
+        return (success=TRUE,);
+    }
+
+    func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        success: felt
+    ) {
+        // [Check] Current period
+        let (current_time) = get_block_timestamp();
+        let (start) = start_.read();
+        let (period_duration) = period_duration_.read();
+        let end = start + period_duration;
+        with_attr error_message("CarbonableFarmer: No current period") {
+            assert_le(current_time, end);
+        }
+
+        // [Effect] Reset period information
+        start_.write(0);
+        period_duration_.write(0);
+        unlocked_duration_.write(0);
+
+        return (success=TRUE,);
+    }
+
+    func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: Uint256
     ) -> (success: felt) {
         alloc_locals;
@@ -169,27 +206,89 @@ namespace CarbonableFarmer {
             uint256_check(token_id);
         }
 
-        // [Interaction] Transfer token_id from caller to contract
+        // [Check] Caller is the token_id owner
         let (caller) = get_caller_address();
-        let (contract_address) = get_contract_address();
         let (carbonable_project_address) = carbonable_project_address_.read();
+        let (token_owner) = IERC721.ownerOf(
+            contract_address=carbonable_project_address, tokenId=token_id
+        );
+        with_attr error_message("CarbonableFarmer: contract is not the token_id owner") {
+            assert token_owner = caller;
+        }
+
+        // [Interaction] Transfer token_id from caller to contract
+        let (contract_address) = get_contract_address();
         IERC721.transferFrom(
-            contract=carbonable_project_address, from_=caller, to=contract_address, tokenId=token_id
+            contract_address=carbonable_project_address,
+            from_=caller,
+            to=contract_address,
+            tokenId=token_id,
         );
 
         // [Check] Transfer successful
-        let (owner) = IERC721.ownerOf(contract=carbonable_project_address, tokenId=token_id);
+        let (owner) = IERC721.ownerOf(
+            contract_address=carbonable_project_address, tokenId=token_id
+        );
         with_attr error_message("CarbonableFarmer: transfer failed") {
             assert owner = contract_address;
         }
 
-        // [Effect] Regesiter the caller with the token id
+        // [Effect] Register the caller with the token id
         registration_.write(token_id, caller);
 
         // [Security] End reetrancy guard
         ReentrancyGuard._end();
 
-        return (sucess=TRUE,);
+        return (success=TRUE,);
+    }
+
+    func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: Uint256
+    ) -> (success: felt) {
+        alloc_locals;
+
+        // [Security] Start reetrancy guard
+        ReentrancyGuard._start();
+
+        // [Check] Uint256 compliance
+        with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
+            uint256_check(token_id);
+        }
+
+        // [Check] Contract is the token_id owner
+        let (contract_address) = get_contract_address();
+        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (token_owner) = IERC721.ownerOf(
+            contract_address=carbonable_project_address, tokenId=token_id
+        );
+        with_attr error_message("CarbonableFarmer: contract is not the token_id owner") {
+            assert token_owner = contract_address;
+        }
+
+        // [Effect] Remove the caller from registration for the token id
+        registration_.write(token_id, 0);
+
+        // [Interaction] Transfer token_id from contract to call
+        let (caller) = get_caller_address();
+        IERC721.transferFrom(
+            contract_address=carbonable_project_address,
+            from_=contract_address,
+            to=caller,
+            tokenId=token_id,
+        );
+
+        // [Check] Transfer successful
+        let (owner) = IERC721.ownerOf(
+            contract_address=carbonable_project_address, tokenId=token_id
+        );
+        with_attr error_message("CarbonableFarmer: transfer failed") {
+            assert owner = caller;
+        }
+
+        // [Security] End reetrancy guard
+        ReentrancyGuard._end();
+
+        return (success=TRUE,);
     }
 
     //
@@ -202,47 +301,42 @@ namespace CarbonableFarmer {
         alloc_locals;
 
         let (carbonable_project_address) = carbonable_project_address_.read();
-        let (total_supply) = IERC721Enumerable.totalSupply(contract=carbonable_project_address);
+        let (total_supply) = IERC721Enumerable.totalSupply(
+            contract_address=carbonable_project_address
+        );
         let one = Uint256(1, 0);
 
-        let (is_le) = uint256_le(total_supply, one);
+        let (is_le) = uint256_lt(total_supply, one);
         if (is_le == TRUE) {
             return (count=0,);
         }
 
-        let (index) = SafeUint256.sub_le(total_supply, one);
-        let (count) = count_iter(contract=carbonable_project_address, address=address, index=index);
+        let (count) = count_iter(address=address, token_id=total_supply);
 
         return (count=count,);
     }
 
     func count_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        contract: felt, address: felt, index: Uint256
+        address: felt, token_id: Uint256
     ) -> (count: felt) {
         alloc_locals;
 
+        // Stop if token_id is null
         let zero = Uint256(0, 0);
-        let (token_id) = IERC721Enumerable.tokenByIndex(contract=contract, index=index);
-        // TODO
-    }
-}
+        let (is_zero) = uint256_eq(token_id, zero);
+        if (is_zero == TRUE) {
+            return (count=0);
+        }
 
-namespace CarbonableYielder {
-    //
-    // Constructor
-    //
+        // Increment the counter if owner is the specified address
+        let one = Uint256(1, 0);
+        let (next) = SafeUint256.sub_le(token_id, one);
+        let (count) = count_iter(address=address, token_id=next);
 
-    func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        return ();
-    }
-}
-
-namespace CarbonableOffseter {
-    //
-    // Constructor
-    //
-
-    func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        return ();
+        let (owner) = registration_.read(token_id);
+        if (owner == address) {
+            return (count=count + 1,);
+        }
+        return (count=count,);
     }
 }
