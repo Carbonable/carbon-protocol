@@ -59,13 +59,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     %}
 
     // Instantiate farmer
-    CarbonableFarmer.initializer(
-        start=0,
-        end=0,
-        locked_duration=0,
-        period_duration=0,
-        carbonable_project_address=carbonable_project_address,
-    );
+    CarbonableFarmer.initializer(carbonable_project_address=carbonable_project_address);
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);
