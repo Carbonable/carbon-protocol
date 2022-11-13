@@ -206,17 +206,9 @@ namespace CarbonableFarmer {
             uint256_check(token_id);
         }
 
-        // [Check] Caller is the token_id owner
-        let (caller) = get_caller_address();
-        let (carbonable_project_address) = carbonable_project_address_.read();
-        let (token_owner) = IERC721.ownerOf(
-            contract_address=carbonable_project_address, tokenId=token_id
-        );
-        with_attr error_message("CarbonableFarmer: contract is not the token_id owner") {
-            assert token_owner = caller;
-        }
-
         // [Interaction] Transfer token_id from caller to contract
+        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (caller) = get_caller_address();
         let (contract_address) = get_contract_address();
         IERC721.transferFrom(
             contract_address=carbonable_project_address,
@@ -255,20 +247,12 @@ namespace CarbonableFarmer {
             uint256_check(token_id);
         }
 
-        // [Check] Contract is the token_id owner
-        let (contract_address) = get_contract_address();
-        let (carbonable_project_address) = carbonable_project_address_.read();
-        let (token_owner) = IERC721.ownerOf(
-            contract_address=carbonable_project_address, tokenId=token_id
-        );
-        with_attr error_message("CarbonableFarmer: contract is not the token_id owner") {
-            assert token_owner = contract_address;
-        }
-
         // [Effect] Remove the caller from registration for the token id
         registration_.write(token_id, 0);
 
         // [Interaction] Transfer token_id from contract to call
+        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (contract_address) = get_contract_address();
         let (caller) = get_caller_address();
         IERC721.transferFrom(
             contract_address=carbonable_project_address,
@@ -300,10 +284,8 @@ namespace CarbonableFarmer {
     ) {
         alloc_locals;
 
-        let (carbonable_project_address) = carbonable_project_address_.read();
-        let (total_supply) = IERC721Enumerable.totalSupply(
-            contract_address=carbonable_project_address
-        );
+        let (contract_address) = carbonable_project_address_.read();
+        let (total_supply) = IERC721Enumerable.totalSupply(contract_address=contract_address);
         let one = Uint256(1, 0);
 
         let (is_le) = uint256_lt(total_supply, one);
@@ -311,32 +293,54 @@ namespace CarbonableFarmer {
             return (count=0,);
         }
 
-        let (count) = count_iter(address=address, token_id=total_supply);
+        let (index) = SafeUint256.sub_le(total_supply, one);
+        let (count) = count_iter(contract_address=contract_address, address=address, index=index);
 
         return (count=count,);
     }
 
     func count_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt, token_id: Uint256
+        contract_address: felt, address: felt, index: Uint256
     ) -> (count: felt) {
         alloc_locals;
 
-        // Stop if token_id is null
-        let zero = Uint256(0, 0);
-        let (is_zero) = uint256_eq(token_id, zero);
-        if (is_zero == TRUE) {
-            return (count=0);
-        }
+        let (token_id) = IERC721Enumerable.tokenByIndex(
+            contract_address=contract_address, index=index
+        );
 
         // Increment the counter if owner is the specified address
-        let one = Uint256(1, 0);
-        let (next) = SafeUint256.sub_le(token_id, one);
-        let (count) = count_iter(address=address, token_id=next);
-
         let (owner) = registration_.read(token_id);
+        let count = 0;
         if (owner == address) {
-            return (count=count + 1,);
+            tempvar count = count + 1;
+
+            // Stop if index is null
+            let zero = Uint256(0, 0);
+            let (is_zero) = uint256_eq(index, zero);
+            if (is_zero == TRUE) {
+                return (count=count,);
+            }
+
+            let one = Uint256(1, 0);
+            let (next) = SafeUint256.sub_le(index, one);
+            let (count) = count_iter(
+                contract_address=contract_address, address=address, index=next
+            );
+            return (count=count,);
+        } else {
+            // Stop if index is null
+            let zero = Uint256(0, 0);
+            let (is_zero) = uint256_eq(index, zero);
+            if (is_zero == TRUE) {
+                return (count=count,);
+            }
+
+            let one = Uint256(1, 0);
+            let (next) = SafeUint256.sub_le(index, one);
+            let (count) = count_iter(
+                contract_address=contract_address, address=address, index=next
+            );
+            return (count=count,);
         }
-        return (count=count,);
     }
 }

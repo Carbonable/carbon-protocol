@@ -9,13 +9,7 @@ Feature: Farmer
     And an anyone with address 1001
     Given a deployed project contact
     And owned by admin
-    Given a deployed reward token contact
-    And owned by admin
-    And a total supply set to 1,000,000
-    And anyone owns the whole supply
-    Given a deployed carbonable token contact
-    And owned by admin
-    And a total supply set to 1,000,000
-    And anyone owns the whole supply
+    And with 2 tokens owned by admin
+    And with 3 tokens owned by anyone
     Given a deployed farmer contract
     And owned by admin
