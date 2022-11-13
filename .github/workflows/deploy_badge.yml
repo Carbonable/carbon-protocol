@@ -71,7 +71,7 @@ permissions:
 env:
   COMPILED_SOURCE: ./build/CarbonableBadge.json
   PROTOSTAR_TOML_FILE: ./protostar.toml
-  PROTOSTAR_VERSION: 0.5.0
+  PROTOSTAR_VERSION: 0.7.0
 
 jobs:
   deploy:
