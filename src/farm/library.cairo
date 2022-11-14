@@ -201,6 +201,12 @@ namespace CarbonableFarmer {
         // [Security] Start reetrancy guard
         ReentrancyGuard._start();
 
+        // [Check] Locked status
+        let (status) = is_locked();
+        with_attr error_message("CarbonableFarmer: deposites are currently locked") {
+            assert status = FALSE;
+        }
+
         // [Check] Uint256 compliance
         with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
             uint256_check(token_id);
@@ -241,6 +247,12 @@ namespace CarbonableFarmer {
 
         // [Security] Start reetrancy guard
         ReentrancyGuard._start();
+
+        // [Check] Locked status
+        let (status) = is_locked();
+        with_attr error_message("CarbonableFarmer: withdrawals are currently locked") {
+            assert status = FALSE;
+        }
 
         // [Check] Uint256 compliance
         with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
@@ -310,37 +322,32 @@ namespace CarbonableFarmer {
 
         // Increment the counter if owner is the specified address
         let (owner) = registration_.read(token_id);
-        let count = 0;
+        let zero = Uint256(0, 0);
+        let (is_zero) = uint256_eq(index, zero);
         if (owner == address) {
-            tempvar count = count + 1;
+            let count = 1;
 
             // Stop if index is null
-            let zero = Uint256(0, 0);
-            let (is_zero) = uint256_eq(index, zero);
             if (is_zero == TRUE) {
                 return (count=count,);
             }
 
             let one = Uint256(1, 0);
             let (next) = SafeUint256.sub_le(index, one);
-            let (count) = count_iter(
-                contract_address=contract_address, address=address, index=next
-            );
-            return (count=count,);
+            let (add) = count_iter(contract_address=contract_address, address=address, index=next);
+            return (count=count + add,);
         } else {
+            let count = 0;
+
             // Stop if index is null
-            let zero = Uint256(0, 0);
-            let (is_zero) = uint256_eq(index, zero);
             if (is_zero == TRUE) {
                 return (count=count,);
             }
 
             let one = Uint256(1, 0);
             let (next) = SafeUint256.sub_le(index, one);
-            let (count) = count_iter(
-                contract_address=contract_address, address=address, index=next
-            );
-            return (count=count,);
+            let (add) = count_iter(contract_address=contract_address, address=address, index=next);
+            return (count=count + add,);
         }
     }
 }

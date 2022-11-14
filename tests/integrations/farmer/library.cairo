@@ -222,7 +222,7 @@ namespace carbonable_yielder_instance {
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(token_id: Uint256, caller: felt, carbonable_project: felt) -> (success: felt) {
         %{ stop_prank_yielder = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
-        %{ stop_prank_project = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        %{ stop_prank_project = start_prank(caller_address=ids.carbonable_yielder, target_contract_address=ids.carbonable_project) %}
         let (success) = ICarbonableYielder.deposite(carbonable_yielder, token_id);
         %{ stop_prank_yielder() %}
         %{ stop_prank_project() %}
@@ -233,7 +233,7 @@ namespace carbonable_yielder_instance {
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(token_id: Uint256, caller: felt, carbonable_project: felt) -> (success: felt) {
         %{ stop_prank_yielder = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
-        %{ stop_prank_project = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        %{ stop_prank_project = start_prank(caller_address=ids.carbonable_yielder, target_contract_address=ids.carbonable_project) %}
         let (success) = ICarbonableYielder.withdraw(carbonable_yielder, token_id);
         %{ stop_prank_yielder() %}
         %{ stop_prank_project() %}
@@ -385,11 +385,19 @@ namespace admin_instance {
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
         let token_id_uint256 = Uint256(low=token_id, high=0);
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = caller;
+        }
         with carbonable_yielder {
             let (success) = carbonable_yielder_instance.deposite(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;
+        }
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = carbonable_yielder;
         }
         return ();
     }
@@ -399,11 +407,19 @@ namespace admin_instance {
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
         let token_id_uint256 = Uint256(low=token_id, high=0);
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = carbonable_yielder;
+        }
         with carbonable_yielder {
             let (success) = carbonable_yielder_instance.withdraw(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;
+        }
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = caller;
         }
         return ();
     }
@@ -477,16 +493,38 @@ namespace anyone_instance {
 
     // Externals
 
+    func approve{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        approved: felt, token_id: felt
+    ) {
+        let (carbonable_project) = carbonable_project_instance.deployed();
+        let (caller) = get_address();
+        let token_id_uint256 = Uint256(low=token_id, high=0);
+        with carbonable_project {
+            carbonable_project_instance.approve(
+                approved=approved, token_id=token_id_uint256, caller=caller
+            );
+        }
+        return ();
+    }
+
     func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
         let (carbonable_yielder) = carbonable_yielder_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
         let token_id_uint256 = Uint256(low=token_id, high=0);
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = caller;
+        }
         with carbonable_yielder {
             let (success) = carbonable_yielder_instance.deposite(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;
+        }
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = carbonable_yielder;
         }
         return ();
     }
@@ -496,11 +534,19 @@ namespace anyone_instance {
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
         let token_id_uint256 = Uint256(low=token_id, high=0);
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = carbonable_yielder;
+        }
         with carbonable_yielder {
             let (success) = carbonable_yielder_instance.withdraw(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;
+        }
+        with carbonable_project {
+            let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
+            assert owner = caller;
         }
         return ();
     }

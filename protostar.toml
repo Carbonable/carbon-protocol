@@ -1,47 +1,23 @@
-["protostar.config"]
-protostar_version = "0.7.0"
+[project]
+protostar-version = "0.7.0"
+lib-path = "lib"
+cairo-path = ["./lib/cairopen_contracts/src", "./lib/cairo_contracts/src", "./lib/bal7hazar_contracts/src", "src"]
 
-["protostar.project"]
-libs_path = "lib"
+[contracts]
+CarbonableBadge = ["src/badge/badge.cairo"]
+CarbonableProject = ["src/project/project.cairo"]
+CarbonableMinter = ["src/mint/minter.cairo"]
+CarbonableYielder = ["src/farm/yielder.cairo"]
+CarbonableOffseter = ["src/farm/offseter.cairo"]
 
-["protostar.shared_command_configs"]
-cairo_path = [
-    "./lib/cairopen_contracts/src",
-    "./lib/cairo_contracts/src",
-    "./lib/bal7hazar_contracts/src",
-    "src"
-]
-
-["protostar.contracts"]
-CarbonableBadge = [
-    "./src/badge/badge.cairo",
-]
-
-CarbonableProject = [
-    "./src/project/project.cairo",
-]
-
-CarbonableMinter = [
-    "./src/mint/minter.cairo",
-]
-
-CarbonableYielder = [
-    "./src/farm/yielder.cairo",
-]
-
-CarbonableOffseter = [
-    "./src/farm/offseter.cairo",
-]
-
-["protostar.test"]
+[test]
 target = ["tests"]
 
-# https://github.com/Shard-Labs/starknet-devnet
-[profile.devnet.protostar.deploy]
-gateway_url="http://127.0.0.1:5050/"
+[profile.devnet.deploy]
+gateway_url = "http://127.0.0.1:5050/"
 
-[profile.testnet.protostar.deploy]
-network="testnet"
+[profile.testnet.deploy]
+network = "testnet"
 
-[profile.mainnet.protostar.deploy]
-network="mainnet"
+[profile.mainnet.deploy]
+network = "mainnet"
