@@ -77,8 +77,17 @@ func test_e2e_deposite_and_withdraw_while_unlock{
     admin.deposite(token_id=1);
     %{ stop_warp() %}
 
+    let (owner) = anyone.registred_owner_of(token_id=3);
+    assert owner = anyone_address;
+
+    let (owner) = anyone.registred_owner_of(token_id=1);
+    assert owner = admin_address;
+
     let (share) = anyone.share(anyone_address, precision=100);
     assert share = Uint256(low=66, high=0);
+
+    let (balance) = anyone.total_locked();
+    assert balance = Uint256(low=3, high=0);
 
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.yielder_address) %}
     anyone.withdraw(token_id=3);
@@ -97,6 +106,9 @@ func test_e2e_deposite_and_withdraw_while_unlock{
     let (share) = anyone.share(anyone_address, precision=100);
     assert share = Uint256(low=0, high=0);
 
+    let (owner) = anyone.registred_owner_of(token_id=1);
+    assert owner = 0;
+
     return ();
 }
 
@@ -106,13 +118,8 @@ func test_e2e_deposite_revert_locked{
 }() {
     // When admin start a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
-    // And anyone deposites token 3 to yielder at time 1
-    // And anyone withdraws token 3 from yielder at time 2
-    // Then anyone share is 50%
-    // When admin withdraws token 1 from yielder at time 11
-    // Then anyone share is 100%
-    // When anyone withdraws token 4 from yielder at time 12
-    // Then anyone share is 0%
+    // And anyone deposites token 3 to yielder at time 6
+    // Then a failed transactions expected
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
@@ -136,13 +143,9 @@ func test_e2e_withdraw_revert_locked{
 }() {
     // When admin start a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
-    // And anyone deposites token 3 to yielder at time 1
-    // And anyone withdraws token 3 from yielder at time 2
-    // Then anyone share is 50%
-    // When admin withdraws token 1 from yielder at time 11
-    // Then anyone share is 100%
-    // When anyone withdraws token 4 from yielder at time 12
-    // Then anyone share is 0%
+    // And anyone deposites token 3 to yielder at time 5
+    // And anyone withdraws token 3 from yielder at time 6
+    // Then a failed transactions expected
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
@@ -159,6 +162,26 @@ func test_e2e_withdraw_revert_locked{
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: withdrawals are currently locked") %}
     anyone.withdraw(token_id=3);
     %{ stop_warp() %}
+
+    return ();
+}
+
+@view
+func test_e2e_start_and_start_and_stop_period{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin start a 10s period with 5s unlock
+    // And admin start a 20s period with 10s unlock
+    // And admin stop the current period
+    // Then no failed transactions expected
+    alloc_locals;
+    let (admin_address) = admin.get_address();
+    let (anyone_address) = anyone.get_address();
+    let (yielder_address) = yielder.deployed();
+
+    admin.start_period(unlocked_duration=5, period_duration=10);
+    admin.start_period(unlocked_duration=10, period_duration=20);
+    admin.stop_period();
 
     return ();
 }

@@ -103,11 +103,10 @@ namespace CarbonableFarmer {
         // [Evaluate] Boudaries and current time
         let is_before_locked = is_le(current_time, locked_time);
         let is_after_locked = is_le(end, current_time);
-        let over = is_before_locked + is_after_locked;
-        if (over == TRUE) {
-            return (status=FALSE,);
-        }
-        return (status=TRUE,);
+        let over = is_not_zero(is_before_locked + is_after_locked);
+        let status = 1 - over;
+        
+        return (status=status,);
     }
 
     func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -160,7 +159,6 @@ namespace CarbonableFarmer {
             assert_nn(period_duration);
         }
         with_attr error_message("CarbonableFarmer: Invalid locked duration") {
-            assert_nn(unlocked_duration);
             assert_le(unlocked_duration, period_duration);
         }
 

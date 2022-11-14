@@ -211,7 +211,7 @@ namespace carbonable_yielder_instance {
 
     func stop_period{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
-    }() -> (success: felt, caller: felt) {
+    }(caller: felt) -> (success: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
         let (success) = ICarbonableYielder.stop_period(carbonable_yielder);
         %{ stop_prank() %}
