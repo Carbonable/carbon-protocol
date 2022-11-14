@@ -8,11 +8,11 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
-from tests.integrations.farmer.library import (
+from tests.integrations.offseter.library import (
     setup,
     admin_instance as admin,
     anyone_instance as anyone,
-    carbonable_yielder_instance as yielder,
+    carbonable_offseter_instance as offseter,
 )
 
 @view
@@ -37,43 +37,43 @@ func test_e2e_deposite_and_withdraw_while_unlock{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin start a 10s period with 5s unlock
-    // And anyone approves yielder for token 3 at time 5
-    // And anyone deposites token 3 to yielder at time 5
-    // And anyone withdraws token 3 from yielder at time 5
-    // And anyone approves yielder for token 3 at time 5
-    // And anyone deposites token 3 to yielder at time 5
-    // And anyone approves yielder for token 4 at time 5
-    // And anyone deposites token 4 to yielder at time 5
+    // And anyone approves offseter for token 3 at time 5
+    // And anyone deposites token 3 to offseter at time 5
+    // And anyone withdraws token 3 from offseter at time 5
+    // And anyone approves offseter for token 3 at time 5
+    // And anyone deposites token 3 to offseter at time 5
+    // And anyone approves offseter for token 4 at time 5
+    // And anyone deposites token 4 to offseter at time 5
     // Then anyone share is 100%
-    // When admin approves yielder for token 1 at time 5
-    // And admin deposites token 1 to yielder at time 5
+    // When admin approves offseter for token 1 at time 5
+    // And admin deposites token 1 to offseter at time 5
     // Then anyone share is 66%
-    // When anyone withdraws token 3 from yielder at time 10
+    // When anyone withdraws token 3 from offseter at time 10
     // Then anyone share is 50%
-    // When admin withdraws token 1 from yielder at time 10
+    // When admin withdraws token 1 from offseter at time 10
     // Then anyone share is 100%
-    // When anyone withdraws token 4 from yielder at time 10
+    // When anyone withdraws token 4 from offseter at time 10
     // Then anyone share is 0%
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (offseter_address) = offseter.deployed();
 
     admin.start_period(unlocked_duration=5, period_duration=10);
 
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
-    anyone.approve(approved=yielder_address, token_id=3);
+    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
+    anyone.approve(approved=offseter_address, token_id=3);
     anyone.deposite(token_id=3);
     anyone.withdraw(token_id=3);
-    anyone.approve(approved=yielder_address, token_id=3);
+    anyone.approve(approved=offseter_address, token_id=3);
     anyone.deposite(token_id=3);
-    anyone.approve(approved=yielder_address, token_id=4);
+    anyone.approve(approved=offseter_address, token_id=4);
     anyone.deposite(token_id=4);
 
     let (share) = anyone.share(anyone_address, precision=100);
     assert share = Uint256(low=100, high=0);
 
-    admin.approve(approved=yielder_address, token_id=1);
+    admin.approve(approved=offseter_address, token_id=1);
     admin.deposite(token_id=1);
     %{ stop_warp() %}
 
@@ -89,7 +89,7 @@ func test_e2e_deposite_and_withdraw_while_unlock{
     let (balance) = anyone.total_locked();
     assert balance = Uint256(low=3, high=0);
 
-    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.offseter_address) %}
     anyone.withdraw(token_id=3);
 
     let (share) = anyone.share(anyone_address, precision=100);
@@ -117,19 +117,19 @@ func test_e2e_deposite_revert_locked{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin start a 10s period with 5s unlock
-    // And anyone approves yielder for token 3 at time 1
-    // And anyone deposites token 3 to yielder at time 6
+    // And anyone approves offseter for token 3 at time 1
+    // And anyone deposites token 3 to offseter at time 6
     // Then a failed transactions expected
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (offseter_address) = offseter.deployed();
 
     admin.start_period(unlocked_duration=5, period_duration=10);
 
-    anyone.approve(approved=yielder_address, token_id=3);
+    anyone.approve(approved=offseter_address, token_id=3);
 
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposites are currently locked") %}
     anyone.deposite(token_id=3);
     %{ stop_warp() %}
@@ -142,23 +142,23 @@ func test_e2e_withdraw_revert_locked{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin start a 10s period with 5s unlock
-    // And anyone approves yielder for token 3 at time 1
-    // And anyone deposites token 3 to yielder at time 5
-    // And anyone withdraws token 3 from yielder at time 6
+    // And anyone approves offseter for token 3 at time 1
+    // And anyone deposites token 3 to offseter at time 5
+    // And anyone withdraws token 3 from offseter at time 6
     // Then a failed transactions expected
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (offseter_address) = offseter.deployed();
 
     admin.start_period(unlocked_duration=5, period_duration=10);
-    anyone.approve(approved=yielder_address, token_id=3);
+    anyone.approve(approved=offseter_address, token_id=3);
 
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
     anyone.deposite(token_id=3);
     %{ stop_warp() %}
 
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: withdrawals are currently locked") %}
     anyone.withdraw(token_id=3);
     %{ stop_warp() %}
@@ -177,7 +177,7 @@ func test_e2e_start_and_start_and_stop_period{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (offseter_address) = offseter.deployed();
 
     admin.start_period(unlocked_duration=5, period_duration=10);
     admin.start_period(unlocked_duration=10, period_duration=20);
