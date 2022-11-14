@@ -28,10 +28,8 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   owner(felt): Owner address
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
-    //   carbonable_token_address(felt): Address of the Carbonable token
-    //   reward_token_address(felt): Address of the reward token
+    //   owner(felt): Owner address
     // Returns:
     //   None
     CarbonableFarmer.initializer(carbonable_project_address);
@@ -62,13 +60,13 @@ func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     status: felt
 ) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Return the locked status of deposites and withdrawals
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   status(felt): Locked status
     return CarbonableFarmer.is_locked();
 }
 
@@ -77,13 +75,13 @@ func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     balance: Uint256
 ) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Return the current number of tokens locked in the contract
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   balance(Uint256): Total balance of locked tokens
     return CarbonableFarmer.total_locked();
 }
 
@@ -92,13 +90,16 @@ func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt, precision: felt
 ) -> (share: Uint256) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Return the current share of a specified address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   address(felt): Address
+    //   precision(felt): Decimal of the returned share
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   share(Uint256): Share associated to the address
     return CarbonableFarmer.share(address=address, precision=precision);
 }
 
@@ -107,13 +108,15 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     token_id: Uint256
 ) -> (address: felt) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Return the registred owner of a token id (0 if token is not locked in the contract)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   token_id(Uint256): Token id
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   address(felt): Registred owner address
     return CarbonableFarmer.registred_owner_of(token_id=token_id);
 }
 
@@ -126,13 +129,16 @@ func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     unlocked_duration: felt, period_duration: felt
 ) -> (success: felt) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Start a new period (erase the current one)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   unlocked_duration(felt): Unlocked duration in seconds
+    //   period_duration(felt): Period duration in seconds
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   success(felt): Success status
     Ownable.assert_only_owner();
     return CarbonableFarmer.start_period(
         unlocked_duration=unlocked_duration, period_duration=period_duration
@@ -144,13 +150,13 @@ func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     success: felt
 ) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Stop the current period
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   success(felt): Success status
     Ownable.assert_only_owner();
     return CarbonableFarmer.stop_period();
 }
@@ -160,13 +166,15 @@ func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (success: felt) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Deposite the specified token id into the contract (lock)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   token_id(Uint256): Token id
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   success(felt): Success status
     return CarbonableFarmer.deposite(token_id=token_id);
 }
 
@@ -175,12 +183,14 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (success: felt) {
     // Desc:
-    //   Return the associated carbonable project
+    //   Withdraw the specified token id into the contract
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   token_id(Uint256): Token id
     // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   success(felt): Success status
     return CarbonableFarmer.withdraw(token_id=token_id);
 }
