@@ -29,7 +29,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         import sys
         sys.path.append('.')
         from tests import load
-        load("./tests/integrations/farmer/config.yml", context)
+        load("./tests/integrations/yielder/config.yml", context)
 
         # Admin account deployment
         context.admin_account_contract = deploy_contract(
@@ -60,15 +60,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         # Carbonable yielder deployment
         context.carbonable_yielder_contract = deploy_contract(
             context.sources.yielder,
-            {
-                "owner": context.admin_account_contract,
-                "carbonable_project_address": context.carbonable_project_contract,
-            },
-        ).contract_address
-
-        # Carbonable offseter deployment
-        context.carbonable_offseter_contract = deploy_contract(
-            context.sources.offseter,
             {
                 "owner": context.admin_account_contract,
                 "carbonable_project_address": context.carbonable_project_contract,
