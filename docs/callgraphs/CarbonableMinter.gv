@@ -30,135 +30,140 @@ digraph CarbonableMinter {
 	409 [label="starkware.cairo.common.uint256.uint256_neg" color="" fillcolor=lightcoral shape=oval style=filled]
 	424 [label="starkware.cairo.common.uint256.uint256_sub" color="" fillcolor=lightcoral shape=oval style=filled]
 	440 [label="starkware.cairo.common.uint256.uint256_eq" color="" fillcolor=lightcoral shape=oval style=filled]
-	462 [label="openzeppelin.security.safemath.library.SafeUint256.add" color="" fillcolor=lightcoral shape=oval style=filled]
-	485 [label="openzeppelin.security.safemath.library.SafeUint256.sub_le" color="" fillcolor=lightcoral shape=oval style=filled]
-	517 [label="openzeppelin.security.safemath.library.SafeUint256.mul" color="" fillcolor=lightcoral shape=oval style=filled]
-	582 [label="openzeppelin.token.erc20.IERC20.IERC20.balanceOf" color="" fillcolor=lightcoral shape=oval style=filled]
-	606 [label="openzeppelin.token.erc20.IERC20.IERC20.transfer" color="" fillcolor=lightcoral shape=oval style=filled]
-	631 [label="openzeppelin.token.erc20.IERC20.IERC20.transferFrom" color="" fillcolor=lightcoral shape=oval style=filled]
-	657 [label="openzeppelin.token.erc721.enumerable.IERC721Enumerable.IERC721Enumerable.totalSupply" color="" fillcolor=lightcoral shape=oval style=filled]
-	678 [label="openzeppelin.access.ownable.library.OwnershipTransferred.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	703 [label="openzeppelin.access.ownable.library.Ownable_owner.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	708 [label="openzeppelin.access.ownable.library.Ownable_owner.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	721 [label="openzeppelin.access.ownable.library.Ownable_owner.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	733 [label="openzeppelin.access.ownable.library.Ownable.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
-	740 [label="openzeppelin.access.ownable.library.Ownable.assert_only_owner" color="" fillcolor=lightcoral shape=oval style=filled]
-	755 [label="openzeppelin.access.ownable.library.Ownable.owner" color="" fillcolor=lightcoral shape=oval style=filled]
-	761 [label="openzeppelin.access.ownable.library.Ownable._transfer_ownership" color="" fillcolor=lightcoral shape=oval style=filled]
-	782 [label="src.mint.merkletree.MerkleTree.verify" color="" fillcolor=lightcoral shape=oval style=filled]
-	807 [label="src.mint.merkletree.MerkleTree.calculate_root" color="" fillcolor=lightcoral shape=oval style=filled]
-	851 [label="src.mint.library.IERC721Mintable.mint" color="" fillcolor=lightcoral shape=oval style=filled]
-	872 [label="src.mint.library.carbonable_project_address_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	877 [label="src.mint.library.carbonable_project_address_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	890 [label="src.mint.library.carbonable_project_address_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	902 [label="src.mint.library.payment_token_address_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	907 [label="src.mint.library.payment_token_address_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	920 [label="src.mint.library.payment_token_address_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	932 [label="src.mint.library.public_sale_open_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	937 [label="src.mint.library.public_sale_open_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	950 [label="src.mint.library.public_sale_open_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	962 [label="src.mint.library.max_buy_per_tx_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	967 [label="src.mint.library.max_buy_per_tx_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	980 [label="src.mint.library.max_buy_per_tx_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	992 [label="src.mint.library.unit_price_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	997 [label="src.mint.library.unit_price_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	1016 [label="src.mint.library.unit_price_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	1033 [label="src.mint.library.max_supply_for_mint_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1038 [label="src.mint.library.max_supply_for_mint_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	1057 [label="src.mint.library.max_supply_for_mint_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	1074 [label="src.mint.library.reserved_supply_for_mint_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1079 [label="src.mint.library.reserved_supply_for_mint_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	1098 [label="src.mint.library.reserved_supply_for_mint_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	1115 [label="src.mint.library.whitelist_merkle_root_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1120 [label="src.mint.library.whitelist_merkle_root_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	1133 [label="src.mint.library.whitelist_merkle_root_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	1145 [label="src.mint.library.claimed_slots_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1159 [label="src.mint.library.claimed_slots_.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	1173 [label="src.mint.library.claimed_slots_.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	1186 [label="src.mint.library.CarbonableMinter.constructor" color="" fillcolor=lightcoral shape=oval style=filled]
-	1217 [label="src.mint.library.CarbonableMinter.carbonable_project_address" color="" fillcolor=lightcoral shape=oval style=filled]
-	1223 [label="src.mint.library.CarbonableMinter.payment_token_address" color="" fillcolor=lightcoral shape=oval style=filled]
-	1229 [label="src.mint.library.CarbonableMinter.whitelisted_sale_open" color="" fillcolor=lightcoral shape=oval style=filled]
-	1241 [label="src.mint.library.CarbonableMinter.public_sale_open" color="" fillcolor=lightcoral shape=oval style=filled]
-	1247 [label="src.mint.library.CarbonableMinter.max_buy_per_tx" color="" fillcolor=lightcoral shape=oval style=filled]
-	1253 [label="src.mint.library.CarbonableMinter.unit_price" color="" fillcolor=lightcoral shape=oval style=filled]
-	1259 [label="src.mint.library.CarbonableMinter.max_supply_for_mint" color="" fillcolor=lightcoral shape=oval style=filled]
-	1265 [label="src.mint.library.CarbonableMinter.reserved_supply_for_mint" color="" fillcolor=lightcoral shape=oval style=filled]
-	1271 [label="src.mint.library.CarbonableMinter.whitelist_merkle_root" color="" fillcolor=lightcoral shape=oval style=filled]
-	1277 [label="src.mint.library.CarbonableMinter.whitelisted_slots" color="" fillcolor=lightcoral shape=oval style=filled]
-	1301 [label="src.mint.library.CarbonableMinter.claimed_slots" color="" fillcolor=lightcoral shape=oval style=filled]
-	1308 [label="src.mint.library.CarbonableMinter.set_whitelist_merkle_root" color="" fillcolor=lightcoral shape=oval style=filled]
-	1317 [label="src.mint.library.CarbonableMinter.set_public_sale_open" color="" fillcolor=lightcoral shape=oval style=filled]
-	1326 [label="src.mint.library.CarbonableMinter.set_max_buy_per_tx" color="" fillcolor=lightcoral shape=oval style=filled]
-	1335 [label="src.mint.library.CarbonableMinter.set_unit_price" color="" fillcolor=lightcoral shape=oval style=filled]
-	1345 [label="src.mint.library.CarbonableMinter.decrease_reserved_supply_for_mint" color="" fillcolor=lightcoral shape=oval style=filled]
-	1375 [label="src.mint.library.CarbonableMinter.airdrop" color="" fillcolor=lightcoral shape=oval style=filled]
-	1466 [label="src.mint.library.CarbonableMinter.withdraw" color="" fillcolor=lightcoral shape=oval style=filled]
-	1498 [label="src.mint.library.CarbonableMinter.transfer" color="" fillcolor=lightcoral shape=oval style=filled]
-	1519 [label="src.mint.library.CarbonableMinter.whitelist_buy" color="" fillcolor=lightcoral shape=oval style=filled]
-	1572 [label="src.mint.library.CarbonableMinter.public_buy" color="" fillcolor=lightcoral shape=oval style=filled]
-	1586 [label="src.mint.library.CarbonableMinter.buy" color="" fillcolor=lightcoral shape=oval style=filled]
-	1709 [label="src.mint.library.CarbonableMinter.mint_n" color="" fillcolor=lightcoral shape=oval style=filled]
-	1770 [label="__main__.constructor\l['constructor']" color="" fillcolor=violet shape=oval style=filled]
-	1787 [label="__wrappers__.constructor\l['constructor']" color="" fillcolor=violet shape=doubleoctagon style=filled]
-	1815 [label="__main__.carbonable_project_address\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	1821 [label="__wrappers__.carbonable_project_address_encode_return" color="" fillcolor=white shape=oval style=solid]
-	1830 [label="__wrappers__.carbonable_project_address\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	1845 [label="__main__.payment_token_address\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	1851 [label="__wrappers__.payment_token_address_encode_return" color="" fillcolor=white shape=oval style=solid]
-	1860 [label="__wrappers__.payment_token_address\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	1875 [label="__main__.whitelisted_sale_open\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	1881 [label="__wrappers__.whitelisted_sale_open_encode_return" color="" fillcolor=white shape=oval style=solid]
-	1890 [label="__wrappers__.whitelisted_sale_open\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	1905 [label="__main__.public_sale_open\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	1911 [label="__wrappers__.public_sale_open_encode_return" color="" fillcolor=white shape=oval style=solid]
-	1920 [label="__wrappers__.public_sale_open\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	1935 [label="__main__.max_buy_per_tx\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	1941 [label="__wrappers__.max_buy_per_tx_encode_return" color="" fillcolor=white shape=oval style=solid]
-	1950 [label="__wrappers__.max_buy_per_tx\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	1965 [label="__main__.unit_price\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	1971 [label="__wrappers__.unit_price_encode_return" color="" fillcolor=white shape=oval style=solid]
-	1981 [label="__wrappers__.unit_price\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	1996 [label="__main__.reserved_supply_for_mint\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	2002 [label="__wrappers__.reserved_supply_for_mint_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2012 [label="__wrappers__.reserved_supply_for_mint\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	2027 [label="__main__.max_supply_for_mint\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	2033 [label="__wrappers__.max_supply_for_mint_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2043 [label="__wrappers__.max_supply_for_mint\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	2058 [label="__main__.whitelist_merkle_root\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	2064 [label="__wrappers__.whitelist_merkle_root_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2073 [label="__wrappers__.whitelist_merkle_root\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	2088 [label="__main__.whitelisted_slots\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	2098 [label="__wrappers__.whitelisted_slots_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2107 [label="__wrappers__.whitelisted_slots\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	2136 [label="__main__.claimed_slots\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	2143 [label="__wrappers__.claimed_slots_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2152 [label="__wrappers__.claimed_slots\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	2170 [label="__main__.set_whitelist_merkle_root\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2177 [label="__wrappers__.set_whitelist_merkle_root\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2195 [label="__main__.set_public_sale_open\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2202 [label="__wrappers__.set_public_sale_open\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2220 [label="__main__.set_max_buy_per_tx\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2227 [label="__wrappers__.set_max_buy_per_tx\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2245 [label="__main__.set_unit_price\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2253 [label="__wrappers__.set_unit_price\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2272 [label="__main__.decrease_reserved_supply_for_mint\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2280 [label="__wrappers__.decrease_reserved_supply_for_mint\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2299 [label="__main__.airdrop\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2307 [label="__wrappers__.airdrop_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2316 [label="__wrappers__.airdrop\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2335 [label="__main__.withdraw\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2341 [label="__wrappers__.withdraw_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2350 [label="__wrappers__.withdraw\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2365 [label="__main__.transfer\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2375 [label="__wrappers__.transfer_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2384 [label="__wrappers__.transfer\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2405 [label="__main__.whitelist_buy\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2415 [label="__wrappers__.whitelist_buy_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2424 [label="__wrappers__.whitelist_buy\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	2455 [label="__main__.public_buy\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	2462 [label="__wrappers__.public_buy_encode_return" color="" fillcolor=white shape=oval style=solid]
-	2471 [label="__wrappers__.public_buy\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	462 [label="openzeppelin.access.ownable.library.OwnershipTransferred.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	487 [label="openzeppelin.access.ownable.library.Ownable_owner.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	492 [label="openzeppelin.access.ownable.library.Ownable_owner.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	505 [label="openzeppelin.access.ownable.library.Ownable_owner.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	517 [label="openzeppelin.access.ownable.library.Ownable.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
+	524 [label="openzeppelin.access.ownable.library.Ownable.assert_only_owner" color="" fillcolor=lightcoral shape=oval style=filled]
+	539 [label="openzeppelin.access.ownable.library.Ownable.owner" color="" fillcolor=lightcoral shape=oval style=filled]
+	545 [label="openzeppelin.access.ownable.library.Ownable._transfer_ownership" color="" fillcolor=lightcoral shape=oval style=filled]
+	566 [label="openzeppelin.token.erc20.IERC20.IERC20.balanceOf" color="" fillcolor=lightcoral shape=oval style=filled]
+	590 [label="openzeppelin.token.erc20.IERC20.IERC20.transfer" color="" fillcolor=lightcoral shape=oval style=filled]
+	615 [label="openzeppelin.token.erc20.IERC20.IERC20.transferFrom" color="" fillcolor=lightcoral shape=oval style=filled]
+	641 [label="openzeppelin.token.erc721.enumerable.IERC721Enumerable.IERC721Enumerable.totalSupply" color="" fillcolor=lightcoral shape=oval style=filled]
+	662 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard_entered.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	667 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard_entered.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	680 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard_entered.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	692 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard._start" color="" fillcolor=lightcoral shape=oval style=filled]
+	707 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard._end" color="" fillcolor=lightcoral shape=oval style=filled]
+	715 [label="openzeppelin.security.safemath.library.SafeUint256.add" color="" fillcolor=lightcoral shape=oval style=filled]
+	738 [label="openzeppelin.security.safemath.library.SafeUint256.sub_le" color="" fillcolor=lightcoral shape=oval style=filled]
+	770 [label="openzeppelin.security.safemath.library.SafeUint256.mul" color="" fillcolor=lightcoral shape=oval style=filled]
+	835 [label="src.interfaces.project.ICarbonableProject.mint" color="" fillcolor=lightcoral shape=oval style=filled]
+	856 [label="src.mint.merkletree.MerkleTree.verify" color="" fillcolor=lightcoral shape=oval style=filled]
+	881 [label="src.mint.merkletree.MerkleTree.calculate_root" color="" fillcolor=lightcoral shape=oval style=filled]
+	925 [label="src.mint.library.carbonable_project_address_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	930 [label="src.mint.library.carbonable_project_address_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	943 [label="src.mint.library.carbonable_project_address_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	955 [label="src.mint.library.payment_token_address_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	960 [label="src.mint.library.payment_token_address_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	973 [label="src.mint.library.payment_token_address_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	985 [label="src.mint.library.public_sale_open_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	990 [label="src.mint.library.public_sale_open_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	1003 [label="src.mint.library.public_sale_open_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1015 [label="src.mint.library.max_buy_per_tx_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1020 [label="src.mint.library.max_buy_per_tx_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	1033 [label="src.mint.library.max_buy_per_tx_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1045 [label="src.mint.library.unit_price_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1050 [label="src.mint.library.unit_price_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	1069 [label="src.mint.library.unit_price_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1086 [label="src.mint.library.max_supply_for_mint_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1091 [label="src.mint.library.max_supply_for_mint_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	1110 [label="src.mint.library.max_supply_for_mint_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1127 [label="src.mint.library.reserved_supply_for_mint_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1132 [label="src.mint.library.reserved_supply_for_mint_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	1151 [label="src.mint.library.reserved_supply_for_mint_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1168 [label="src.mint.library.whitelist_merkle_root_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1173 [label="src.mint.library.whitelist_merkle_root_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	1186 [label="src.mint.library.whitelist_merkle_root_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1198 [label="src.mint.library.claimed_slots_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1212 [label="src.mint.library.claimed_slots_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	1226 [label="src.mint.library.claimed_slots_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1239 [label="src.mint.library.CarbonableMinter.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
+	1280 [label="src.mint.library.CarbonableMinter.carbonable_project_address" color="" fillcolor=lightcoral shape=oval style=filled]
+	1286 [label="src.mint.library.CarbonableMinter.payment_token_address" color="" fillcolor=lightcoral shape=oval style=filled]
+	1292 [label="src.mint.library.CarbonableMinter.whitelisted_sale_open" color="" fillcolor=lightcoral shape=oval style=filled]
+	1304 [label="src.mint.library.CarbonableMinter.public_sale_open" color="" fillcolor=lightcoral shape=oval style=filled]
+	1310 [label="src.mint.library.CarbonableMinter.max_buy_per_tx" color="" fillcolor=lightcoral shape=oval style=filled]
+	1316 [label="src.mint.library.CarbonableMinter.unit_price" color="" fillcolor=lightcoral shape=oval style=filled]
+	1322 [label="src.mint.library.CarbonableMinter.max_supply_for_mint" color="" fillcolor=lightcoral shape=oval style=filled]
+	1328 [label="src.mint.library.CarbonableMinter.reserved_supply_for_mint" color="" fillcolor=lightcoral shape=oval style=filled]
+	1334 [label="src.mint.library.CarbonableMinter.whitelist_merkle_root" color="" fillcolor=lightcoral shape=oval style=filled]
+	1340 [label="src.mint.library.CarbonableMinter.whitelisted_slots" color="" fillcolor=lightcoral shape=oval style=filled]
+	1364 [label="src.mint.library.CarbonableMinter.claimed_slots" color="" fillcolor=lightcoral shape=oval style=filled]
+	1371 [label="src.mint.library.CarbonableMinter.set_whitelist_merkle_root" color="" fillcolor=lightcoral shape=oval style=filled]
+	1378 [label="src.mint.library.CarbonableMinter.set_public_sale_open" color="" fillcolor=lightcoral shape=oval style=filled]
+	1385 [label="src.mint.library.CarbonableMinter.set_max_buy_per_tx" color="" fillcolor=lightcoral shape=oval style=filled]
+	1392 [label="src.mint.library.CarbonableMinter.set_unit_price" color="" fillcolor=lightcoral shape=oval style=filled]
+	1405 [label="src.mint.library.CarbonableMinter.decrease_reserved_supply_for_mint" color="" fillcolor=lightcoral shape=oval style=filled]
+	1438 [label="src.mint.library.CarbonableMinter.airdrop" color="" fillcolor=lightcoral shape=oval style=filled]
+	1525 [label="src.mint.library.CarbonableMinter.withdraw" color="" fillcolor=lightcoral shape=oval style=filled]
+	1554 [label="src.mint.library.CarbonableMinter.transfer" color="" fillcolor=lightcoral shape=oval style=filled]
+	1575 [label="src.mint.library.CarbonableMinter.whitelist_buy" color="" fillcolor=lightcoral shape=oval style=filled]
+	1631 [label="src.mint.library.CarbonableMinter.public_buy" color="" fillcolor=lightcoral shape=oval style=filled]
+	1653 [label="src.mint.library.CarbonableMinter.buy" color="" fillcolor=lightcoral shape=oval style=filled]
+	1774 [label="src.mint.library.CarbonableMinter.mint_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	1835 [label="__main__.constructor\l['constructor']" color="" fillcolor=violet shape=oval style=filled]
+	1854 [label="__wrappers__.constructor\l['constructor']" color="" fillcolor=violet shape=doubleoctagon style=filled]
+	1882 [label="__main__.carbonable_project_address\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1888 [label="__wrappers__.carbonable_project_address_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1897 [label="__wrappers__.carbonable_project_address\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1912 [label="__main__.payment_token_address\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1918 [label="__wrappers__.payment_token_address_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1927 [label="__wrappers__.payment_token_address\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1942 [label="__main__.whitelisted_sale_open\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1948 [label="__wrappers__.whitelisted_sale_open_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1957 [label="__wrappers__.whitelisted_sale_open\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1972 [label="__main__.public_sale_open\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1978 [label="__wrappers__.public_sale_open_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1987 [label="__wrappers__.public_sale_open\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2002 [label="__main__.max_buy_per_tx\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	2008 [label="__wrappers__.max_buy_per_tx_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2017 [label="__wrappers__.max_buy_per_tx\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2032 [label="__main__.unit_price\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	2038 [label="__wrappers__.unit_price_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2048 [label="__wrappers__.unit_price\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2063 [label="__main__.reserved_supply_for_mint\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	2069 [label="__wrappers__.reserved_supply_for_mint_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2079 [label="__wrappers__.reserved_supply_for_mint\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2094 [label="__main__.max_supply_for_mint\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	2100 [label="__wrappers__.max_supply_for_mint_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2110 [label="__wrappers__.max_supply_for_mint\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2125 [label="__main__.whitelist_merkle_root\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	2131 [label="__wrappers__.whitelist_merkle_root_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2140 [label="__wrappers__.whitelist_merkle_root\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2155 [label="__main__.whitelisted_slots\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	2165 [label="__wrappers__.whitelisted_slots_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2174 [label="__wrappers__.whitelisted_slots\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2203 [label="__main__.claimed_slots\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	2210 [label="__wrappers__.claimed_slots_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2219 [label="__wrappers__.claimed_slots\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	2237 [label="__main__.set_whitelist_merkle_root\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2246 [label="__wrappers__.set_whitelist_merkle_root\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2264 [label="__main__.set_public_sale_open\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2273 [label="__wrappers__.set_public_sale_open\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2291 [label="__main__.set_max_buy_per_tx\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2300 [label="__wrappers__.set_max_buy_per_tx\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2318 [label="__main__.set_unit_price\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2328 [label="__wrappers__.set_unit_price\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2347 [label="__main__.decrease_reserved_supply_for_mint\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2357 [label="__wrappers__.decrease_reserved_supply_for_mint\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2376 [label="__main__.airdrop\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2386 [label="__wrappers__.airdrop_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2395 [label="__wrappers__.airdrop\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2414 [label="__main__.withdraw\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2422 [label="__wrappers__.withdraw_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2431 [label="__wrappers__.withdraw\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2446 [label="__main__.transfer\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2458 [label="__wrappers__.transfer_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2467 [label="__wrappers__.transfer\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2488 [label="__main__.whitelist_buy\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2498 [label="__wrappers__.whitelist_buy_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2507 [label="__wrappers__.whitelist_buy\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2538 [label="__main__.public_buy\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	2545 [label="__wrappers__.public_buy_encode_return" color="" fillcolor=white shape=oval style=solid]
+	2554 [label="__wrappers__.public_buy\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
 	72 -> 27
 	83 -> 14 [label=4]
 	183 -> 27
@@ -173,227 +178,243 @@ digraph CarbonableMinter {
 	409 -> 246
 	424 -> 409
 	424 -> 246
-	462 -> 241 [label=2]
-	462 -> 246
-	485 -> 241 [label=2]
-	485 -> 389
-	485 -> 424
-	517 -> 241 [label=2]
-	517 -> 440 [label=2]
-	517 -> 284
-	582 -> 0
-	582 -> 123
-	606 -> 0
-	606 -> 123
-	631 -> 0
-	631 -> 123
-	657 -> 0
-	657 -> 123
-	678 -> 0 [label=2]
-	678 -> 165
-	708 -> 703
-	708 -> 149
-	721 -> 703
-	721 -> 157
-	733 -> 761
-	740 -> 755
-	740 -> 135
-	740 -> 9
-	755 -> 708
-	761 -> 755
-	761 -> 721
-	761 -> 678
-	782 -> 807
-	807 -> 221
-	807 -> 3 [label=2]
-	807 -> 807
-	851 -> 0
-	851 -> 123
-	877 -> 872
-	877 -> 149
-	890 -> 872
-	890 -> 157
-	907 -> 902
-	907 -> 149
-	920 -> 902
-	920 -> 157
-	937 -> 932
-	937 -> 149
-	950 -> 932
-	950 -> 157
-	967 -> 962
-	967 -> 149
-	980 -> 962
-	980 -> 157
-	997 -> 992
-	997 -> 149 [label=2]
-	1016 -> 992
-	1016 -> 157 [label=2]
-	1038 -> 1033
-	1038 -> 149 [label=2]
-	1057 -> 1033
-	1057 -> 157 [label=2]
-	1079 -> 1074
-	1079 -> 149 [label=2]
-	1098 -> 1074
-	1098 -> 157 [label=2]
-	1120 -> 1115
-	1120 -> 149
-	1133 -> 1115
-	1133 -> 157
-	1145 -> 3
-	1145 -> 83
-	1159 -> 1145
-	1159 -> 149
-	1173 -> 1145
-	1173 -> 157
-	1186 -> 733
-	1186 -> 890
-	1186 -> 920
-	1186 -> 950
-	1186 -> 980
-	1186 -> 1016
-	1186 -> 1057
-	1186 -> 1098
-	1217 -> 877
-	1223 -> 907
-	1229 -> 1120
-	1229 -> 175
-	1241 -> 937
-	1247 -> 967
-	1253 -> 997
-	1259 -> 1038
-	1265 -> 1079
-	1271 -> 1120
-	1277 -> 3
-	1277 -> 1120
-	1277 -> 782
-	1301 -> 1159
-	1308 -> 740
-	1308 -> 1133
-	1317 -> 740
-	1317 -> 950
-	1326 -> 740
-	1326 -> 980
-	1335 -> 740
-	1335 -> 1016
-	1345 -> 740
-	1345 -> 1079
-	1345 -> 389
-	1345 -> 485
-	1345 -> 1098
-	1375 -> 740
-	1375 -> 135
-	1375 -> 142
-	1375 -> 9
-	1375 -> 877
-	1375 -> 657
-	1375 -> 462
-	1375 -> 1038
-	1375 -> 389 [label=2]
-	1375 -> 1079
-	1375 -> 1709
-	1375 -> 485
-	1375 -> 1098
-	1466 -> 740
-	1466 -> 135
-	1466 -> 142
-	1466 -> 907
-	1466 -> 582
-	1466 -> 1498
-	1498 -> 740
-	1498 -> 606
-	1519 -> 135
-	1519 -> 1229
-	1519 -> 9 [label=2]
-	1519 -> 1277
-	1519 -> 1159
-	1519 -> 216
-	1519 -> 1586
-	1519 -> 1173
-	1572 -> 937
-	1572 -> 9
-	1572 -> 1586
-	1586 -> 135
-	1586 -> 142
-	1586 -> 9
-	1586 -> 877
-	1586 -> 997
-	1586 -> 907
-	1586 -> 967
-	1586 -> 216
-	1586 -> 657
-	1586 -> 462
-	1586 -> 1038
-	1586 -> 1079
-	1586 -> 485
-	1586 -> 389
-	1586 -> 517
-	1586 -> 631
-	1586 -> 1709
-	1709 -> 440
-	1709 -> 462
-	1709 -> 851
-	1709 -> 485
-	1709 -> 1709
-	1770 -> 1186
-	1787 -> 1770
-	1815 -> 1217
-	1830 -> 1815
-	1830 -> 1821
-	1845 -> 1223
-	1860 -> 1845
-	1860 -> 1851
-	1875 -> 1229
-	1890 -> 1875
-	1890 -> 1881
-	1905 -> 1241
-	1920 -> 1905
-	1920 -> 1911
-	1935 -> 1247
-	1950 -> 1935
-	1950 -> 1941
-	1965 -> 1253
-	1981 -> 1965
-	1981 -> 1971
-	1996 -> 1265
-	2012 -> 1996
-	2012 -> 2002
-	2027 -> 1259
-	2043 -> 2027
-	2043 -> 2033
-	2058 -> 1271
-	2073 -> 2058
-	2073 -> 2064
-	2088 -> 1277
-	2107 -> 2088
-	2107 -> 2098
-	2136 -> 1301
-	2152 -> 2136
-	2152 -> 2143
-	2170 -> 1308
-	2177 -> 2170
-	2195 -> 1317
-	2202 -> 2195
-	2220 -> 1326
-	2227 -> 2220
-	2245 -> 1335
-	2253 -> 2245
-	2272 -> 1345
-	2280 -> 2272
-	2299 -> 1375
-	2316 -> 2299
-	2316 -> 2307
-	2335 -> 1466
-	2350 -> 2335
-	2350 -> 2341
-	2365 -> 1498
-	2384 -> 2365
-	2384 -> 2375
-	2405 -> 1519
-	2424 -> 2405
-	2424 -> 2415
-	2455 -> 1572
-	2471 -> 2455
-	2471 -> 2462
+	462 -> 0 [label=2]
+	462 -> 165
+	492 -> 487
+	492 -> 149
+	505 -> 487
+	505 -> 157
+	517 -> 545
+	524 -> 539
+	524 -> 135
+	524 -> 9
+	539 -> 492
+	545 -> 539
+	545 -> 505
+	545 -> 462
+	566 -> 0
+	566 -> 123
+	590 -> 0
+	590 -> 123
+	615 -> 0
+	615 -> 123
+	641 -> 0
+	641 -> 123
+	667 -> 662
+	667 -> 149
+	680 -> 662
+	680 -> 157
+	692 -> 667
+	692 -> 680
+	707 -> 680
+	715 -> 241 [label=2]
+	715 -> 246
+	738 -> 241 [label=2]
+	738 -> 389
+	738 -> 424
+	770 -> 241 [label=2]
+	770 -> 440 [label=2]
+	770 -> 284
+	835 -> 0
+	835 -> 123
+	856 -> 881
+	881 -> 221
+	881 -> 3 [label=2]
+	881 -> 881
+	930 -> 925
+	930 -> 149
+	943 -> 925
+	943 -> 157
+	960 -> 955
+	960 -> 149
+	973 -> 955
+	973 -> 157
+	990 -> 985
+	990 -> 149
+	1003 -> 985
+	1003 -> 157
+	1020 -> 1015
+	1020 -> 149
+	1033 -> 1015
+	1033 -> 157
+	1050 -> 1045
+	1050 -> 149 [label=2]
+	1069 -> 1045
+	1069 -> 157 [label=2]
+	1091 -> 1086
+	1091 -> 149 [label=2]
+	1110 -> 1086
+	1110 -> 157 [label=2]
+	1132 -> 1127
+	1132 -> 149 [label=2]
+	1151 -> 1127
+	1151 -> 157 [label=2]
+	1173 -> 1168
+	1173 -> 149
+	1186 -> 1168
+	1186 -> 157
+	1198 -> 3
+	1198 -> 83
+	1212 -> 1198
+	1212 -> 149
+	1226 -> 1198
+	1226 -> 157
+	1239 -> 241 [label=3]
+	1239 -> 943
+	1239 -> 973
+	1239 -> 1003
+	1239 -> 1033
+	1239 -> 1069
+	1239 -> 1110
+	1239 -> 1151
+	1280 -> 930
+	1286 -> 960
+	1292 -> 1173
+	1292 -> 175
+	1304 -> 990
+	1310 -> 1020
+	1316 -> 1050
+	1322 -> 1091
+	1328 -> 1132
+	1334 -> 1173
+	1340 -> 3
+	1340 -> 1173
+	1340 -> 856
+	1364 -> 1212
+	1371 -> 1186
+	1378 -> 1003
+	1385 -> 1033
+	1392 -> 241
+	1392 -> 1069
+	1405 -> 241
+	1405 -> 1132
+	1405 -> 389
+	1405 -> 738
+	1405 -> 1151
+	1438 -> 692
+	1438 -> 135
+	1438 -> 9
+	1438 -> 930
+	1438 -> 641
+	1438 -> 715
+	1438 -> 1091
+	1438 -> 389 [label=2]
+	1438 -> 1132
+	1438 -> 738
+	1438 -> 1151
+	1438 -> 1774
+	1438 -> 707
+	1525 -> 135
+	1525 -> 142
+	1525 -> 960
+	1525 -> 566
+	1525 -> 1554
+	1554 -> 241
+	1554 -> 590
+	1575 -> 692
+	1575 -> 1292
+	1575 -> 9 [label=2]
+	1575 -> 135
+	1575 -> 1340
+	1575 -> 1212
+	1575 -> 216
+	1575 -> 1226
+	1575 -> 1653
+	1575 -> 707
+	1631 -> 692
+	1631 -> 990
+	1631 -> 9
+	1631 -> 1653
+	1631 -> 707
+	1653 -> 135
+	1653 -> 9
+	1653 -> 1020
+	1653 -> 216
+	1653 -> 930
+	1653 -> 641
+	1653 -> 715
+	1653 -> 1091
+	1653 -> 1132
+	1653 -> 738
+	1653 -> 389
+	1653 -> 1050
+	1653 -> 770
+	1653 -> 142
+	1653 -> 960
+	1653 -> 615
+	1653 -> 1774
+	1774 -> 440
+	1774 -> 715
+	1774 -> 835
+	1774 -> 738
+	1774 -> 1774
+	1835 -> 1239
+	1835 -> 517
+	1854 -> 1835
+	1882 -> 1280
+	1897 -> 1882
+	1897 -> 1888
+	1912 -> 1286
+	1927 -> 1912
+	1927 -> 1918
+	1942 -> 1292
+	1957 -> 1942
+	1957 -> 1948
+	1972 -> 1304
+	1987 -> 1972
+	1987 -> 1978
+	2002 -> 1310
+	2017 -> 2002
+	2017 -> 2008
+	2032 -> 1316
+	2048 -> 2032
+	2048 -> 2038
+	2063 -> 1328
+	2079 -> 2063
+	2079 -> 2069
+	2094 -> 1322
+	2110 -> 2094
+	2110 -> 2100
+	2125 -> 1334
+	2140 -> 2125
+	2140 -> 2131
+	2155 -> 1340
+	2174 -> 2155
+	2174 -> 2165
+	2203 -> 1364
+	2219 -> 2203
+	2219 -> 2210
+	2237 -> 524
+	2237 -> 1371
+	2246 -> 2237
+	2264 -> 524
+	2264 -> 1378
+	2273 -> 2264
+	2291 -> 524
+	2291 -> 1385
+	2300 -> 2291
+	2318 -> 524
+	2318 -> 1392
+	2328 -> 2318
+	2347 -> 524
+	2347 -> 1405
+	2357 -> 2347
+	2376 -> 524
+	2376 -> 1438
+	2395 -> 2376
+	2395 -> 2386
+	2414 -> 524
+	2414 -> 1525
+	2431 -> 2414
+	2431 -> 2422
+	2446 -> 524
+	2446 -> 1554
+	2467 -> 2446
+	2467 -> 2458
+	2488 -> 1575
+	2507 -> 2488
+	2507 -> 2498
+	2538 -> 1631
+	2554 -> 2538
+	2554 -> 2545
 }
