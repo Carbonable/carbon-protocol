@@ -66,7 +66,7 @@ func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   status(felt): Locked status
+    //   status(felt): Locked status (1 if locked else 0)
     return CarbonableFarmer.is_locked();
 }
 
