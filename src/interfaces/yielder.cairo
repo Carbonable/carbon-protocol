@@ -16,7 +16,7 @@ namespace ICarbonableYielder {
     func total_locked() -> (balance: Uint256) {
     }
 
-    func share(address: felt, precision: felt) -> (share: Uint256) {
+    func shares_of(address: felt, precision: felt) -> (share: Uint256) {
     }
 
     func registred_owner_of(token_id: Uint256) -> (address: felt) {
@@ -28,7 +28,7 @@ namespace ICarbonableYielder {
     func stop_period() -> (success: felt) {
     }
 
-    func deposite(token_id: Uint256) -> (success: felt) {
+    func deposit(token_id: Uint256) -> (success: felt) {
     }
 
     func withdraw(token_id: Uint256) -> (success: felt) {

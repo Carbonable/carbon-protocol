@@ -33,27 +33,27 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
-func test_e2e_deposite_and_withdraw_while_unlock{
+func test_e2e_deposit_and_withdraw_while_unlock{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 5
-    // And anyone deposites token 3 to yielder at time 5
+    // And anyone deposits token 3 to yielder at time 5
     // And anyone withdraws token 3 from yielder at time 5
     // And anyone approves yielder for token 3 at time 5
-    // And anyone deposites token 3 to yielder at time 5
+    // And anyone deposits token 3 to yielder at time 5
     // And anyone approves yielder for token 4 at time 5
-    // And anyone deposites token 4 to yielder at time 5
-    // Then anyone share is 100%
+    // And anyone deposits token 4 to yielder at time 5
+    // Then anyone shares is 100%
     // When admin approves yielder for token 1 at time 5
-    // And admin deposites token 1 to yielder at time 5
-    // Then anyone share is 66%
+    // And admin deposits token 1 to yielder at time 5
+    // Then anyone shares is 66%
     // When anyone withdraws token 3 from yielder at time 10
-    // Then anyone share is 50%
+    // Then anyone shares is 50%
     // When admin withdraws token 1 from yielder at time 10
-    // Then anyone share is 100%
+    // Then anyone shares is 100%
     // When anyone withdraws token 4 from yielder at time 10
-    // Then anyone share is 0%
+    // Then anyone shares is 0%
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
@@ -63,18 +63,18 @@ func test_e2e_deposite_and_withdraw_while_unlock{
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
     anyone.approve(approved=yielder_address, token_id=3);
-    anyone.deposite(token_id=3);
+    anyone.deposit(token_id=3);
     anyone.withdraw(token_id=3);
     anyone.approve(approved=yielder_address, token_id=3);
-    anyone.deposite(token_id=3);
+    anyone.deposit(token_id=3);
     anyone.approve(approved=yielder_address, token_id=4);
-    anyone.deposite(token_id=4);
+    anyone.deposit(token_id=4);
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=100, high=0);
+    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    assert shares = Uint256(low=100, high=0);
 
     admin.approve(approved=yielder_address, token_id=1);
-    admin.deposite(token_id=1);
+    admin.deposit(token_id=1);
     %{ stop_warp() %}
 
     let (owner) = anyone.registred_owner_of(token_id=3);
@@ -83,8 +83,8 @@ func test_e2e_deposite_and_withdraw_while_unlock{
     let (owner) = anyone.registred_owner_of(token_id=1);
     assert owner = admin_address;
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=66, high=0);
+    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    assert shares = Uint256(low=66, high=0);
 
     let (balance) = anyone.total_locked();
     assert balance = Uint256(low=3, high=0);
@@ -92,19 +92,19 @@ func test_e2e_deposite_and_withdraw_while_unlock{
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.yielder_address) %}
     anyone.withdraw(token_id=3);
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=50, high=0);
+    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    assert shares = Uint256(low=50, high=0);
 
     admin.withdraw(token_id=1);
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=100, high=0);
+    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    assert shares = Uint256(low=100, high=0);
 
     anyone.withdraw(token_id=4);
     %{ stop_warp() %}
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=0, high=0);
+    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    assert shares = Uint256(low=0, high=0);
 
     let (owner) = anyone.registred_owner_of(token_id=1);
     assert owner = 0;
@@ -113,12 +113,12 @@ func test_e2e_deposite_and_withdraw_while_unlock{
 }
 
 @view
-func test_e2e_deposite_revert_locked{
+func test_e2e_deposit_revert_locked{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
-    // And anyone deposites token 3 to yielder at time 6
+    // And anyone deposits token 3 to yielder at time 6
     // Then a failed transactions expected
     alloc_locals;
     let (admin_address) = admin.get_address();
@@ -130,8 +130,8 @@ func test_e2e_deposite_revert_locked{
     anyone.approve(approved=yielder_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposites are currently locked") %}
-    anyone.deposite(token_id=3);
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposits are currently locked") %}
+    anyone.deposit(token_id=3);
     %{ stop_warp() %}
 
     return ();
@@ -143,7 +143,7 @@ func test_e2e_withdraw_revert_locked{
 }() {
     // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
-    // And anyone deposites token 3 to yielder at time 5
+    // And anyone deposits token 3 to yielder at time 5
     // And anyone withdraws token 3 from yielder at time 6
     // Then a failed transactions expected
     alloc_locals;
@@ -155,7 +155,7 @@ func test_e2e_withdraw_revert_locked{
     anyone.approve(approved=yielder_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
-    anyone.deposite(token_id=3);
+    anyone.deposit(token_id=3);
     %{ stop_warp() %}
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}

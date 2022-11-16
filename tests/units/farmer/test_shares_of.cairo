@@ -17,27 +17,36 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
     let (local context) = prepare();
+    let zero = Uint256(low=0, high=0);
     let one = Uint256(low=1, high=0);
-    let two = Uint256(low=2, high=0);
+    let ten = Uint256(low=10, high=0);
+    let hundred = Uint256(low=100, high=0);
     let (contract_address) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
 
     %{ stop=start_prank(context.signers.anyone) %}
     let (success) = CarbonableFarmer.deposit(token_id=one);
     assert success = 1;
     %{ stop() %}
 
-    %{ stop=start_prank(context.signers.admin) %}
-    let (success) = CarbonableFarmer.deposit(token_id=two);
-    assert success = 1;
-    %{ stop() %}
+    let (shares) = CarbonableFarmer.shares_of(address=context.signers.anyone, precision=10);
+    assert shares = ten;  // 10 / 10 = 1 = 100%
+
+    let (shares) = CarbonableFarmer.shares_of(address=context.signers.anyone, precision=100);
+    assert shares = hundred;  // 100 / 100 = 1 = 100%
+
+    let (shares) = CarbonableFarmer.shares_of(address=context.signers.admin, precision=100);
+    assert shares = zero;  // 0 / 100 = 0 = 0%
 
     return ();
 }
