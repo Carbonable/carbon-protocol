@@ -122,78 +122,81 @@ digraph CarbonableBadge {
 	2534 [label="cairopen.string.libs.manipulation.manipulation_path_join" color="" fillcolor=lightcoral shape=oval style=filled]
 	2562 [label="cairopen.string.utils.StringUtil.concat" color="" fillcolor=lightcoral shape=oval style=filled]
 	2570 [label="cairopen.string.utils.StringUtil.path_join" color="" fillcolor=lightcoral shape=oval style=filled]
-	2578 [label="src.badge.library.Locked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	2603 [label="src.badge.library.Unlocked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	2628 [label="src.badge.library.CarbonableBadge_unlocked.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	2645 [label="src.badge.library.CarbonableBadge_unlocked.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2660 [label="src.badge.library.CarbonableBadge_unlocked.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2674 [label="src.badge.library.CarbonableBadge_name.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	2679 [label="src.badge.library.CarbonableBadge_name.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2692 [label="src.badge.library.CarbonableBadge_name.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2704 [label="src.badge.library.CarbonableBadge.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
-	2727 [label="src.badge.library.CarbonableBadge.uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2781 [label="src.badge.library.CarbonableBadge.contract_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2816 [label="src.badge.library.CarbonableBadge.name" color="" fillcolor=lightcoral shape=oval style=filled]
-	2822 [label="src.badge.library.CarbonableBadge.locked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2841 [label="src.badge.library.CarbonableBadge.set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2864 [label="src.badge.library.CarbonableBadge.set_locked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2888 [label="src.badge.library.CarbonableBadge.set_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2912 [label="src.badge.library.CarbonableBadge.assert_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2930 [label="src.badge.library.CarbonableBadge.assert_unlocked_batch" color="" fillcolor=lightcoral shape=oval style=filled]
-	2938 [label="src.badge.library.CarbonableBadge._assert_unlocked_iter" color="" fillcolor=lightcoral shape=oval style=filled]
-	2958 [label="__main__.constructor\l['constructor']" color="" fillcolor=violet shape=oval style=filled]
-	2988 [label="__wrappers__.constructor\l['constructor']" color="" fillcolor=violet shape=doubleoctagon style=filled]
-	3021 [label="__main__.supportsInterface\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3028 [label="__wrappers__.supportsInterface_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3037 [label="__wrappers__.supportsInterface\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3056 [label="__main__.uri\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3065 [label="__wrappers__.uri_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3084 [label="__wrappers__.uri\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3110 [label="__main__.contractURI\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3117 [label="__wrappers__.contractURI_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3136 [label="__wrappers__.contractURI\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3158 [label="__main__.balanceOf\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3167 [label="__wrappers__.balanceOf_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3177 [label="__wrappers__.balanceOf\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3198 [label="__main__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3208 [label="__wrappers__.balanceOfBatch_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3230 [label="__wrappers__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3274 [label="__main__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3282 [label="__wrappers__.isApprovedForAll_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3291 [label="__wrappers__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3311 [label="__main__.owner\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3317 [label="__wrappers__.owner_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3326 [label="__wrappers__.owner\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3342 [label="__main__.name\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3348 [label="__wrappers__.name_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3357 [label="__wrappers__.name\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3373 [label="__main__.locked\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3381 [label="__wrappers__.locked_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3390 [label="__wrappers__.locked\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3410 [label="__main__.setURI\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3424 [label="__wrappers__.setURI\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3453 [label="__main__.setLocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3463 [label="__wrappers__.setLocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3483 [label="__main__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3493 [label="__wrappers__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3513 [label="__main__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3521 [label="__wrappers__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3541 [label="__main__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3559 [label="__wrappers__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3593 [label="__main__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3611 [label="__wrappers__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3665 [label="__main__.mint\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3680 [label="__wrappers__.mint\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3713 [label="__main__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3728 [label="__wrappers__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3781 [label="__main__.burn\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3803 [label="__wrappers__.burn\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3826 [label="__main__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3848 [label="__wrappers__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3891 [label="__main__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3898 [label="__wrappers__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3917 [label="__main__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3923 [label="__wrappers__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	2578 [label="src.utils.metadata.library.Metadata.token_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2632 [label="src.utils.metadata.library.Metadata.contract_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2667 [label="src.utils.metadata.library.Metadata.set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2690 [label="src.badge.library.Locked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	2715 [label="src.badge.library.Unlocked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	2740 [label="src.badge.library.CarbonableBadge_unlocked.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	2757 [label="src.badge.library.CarbonableBadge_unlocked.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2772 [label="src.badge.library.CarbonableBadge_unlocked.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2786 [label="src.badge.library.CarbonableBadge_name.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	2791 [label="src.badge.library.CarbonableBadge_name.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2804 [label="src.badge.library.CarbonableBadge_name.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2816 [label="src.badge.library.CarbonableBadge.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
+	2839 [label="src.badge.library.CarbonableBadge.uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2848 [label="src.badge.library.CarbonableBadge.contract_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2855 [label="src.badge.library.CarbonableBadge.name" color="" fillcolor=lightcoral shape=oval style=filled]
+	2861 [label="src.badge.library.CarbonableBadge.locked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2880 [label="src.badge.library.CarbonableBadge.set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2889 [label="src.badge.library.CarbonableBadge.set_locked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2913 [label="src.badge.library.CarbonableBadge.set_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2937 [label="src.badge.library.CarbonableBadge.assert_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2955 [label="src.badge.library.CarbonableBadge.assert_unlocked_batch" color="" fillcolor=lightcoral shape=oval style=filled]
+	2963 [label="src.badge.library.CarbonableBadge._assert_unlocked_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	2983 [label="__main__.constructor\l['constructor']" color="" fillcolor=violet shape=oval style=filled]
+	3013 [label="__wrappers__.constructor\l['constructor']" color="" fillcolor=violet shape=doubleoctagon style=filled]
+	3046 [label="__main__.supportsInterface\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3053 [label="__wrappers__.supportsInterface_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3062 [label="__wrappers__.supportsInterface\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3081 [label="__main__.uri\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3090 [label="__wrappers__.uri_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3109 [label="__wrappers__.uri\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3135 [label="__main__.contractURI\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3142 [label="__wrappers__.contractURI_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3161 [label="__wrappers__.contractURI\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3183 [label="__main__.balanceOf\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3192 [label="__wrappers__.balanceOf_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3202 [label="__wrappers__.balanceOf\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3223 [label="__main__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3233 [label="__wrappers__.balanceOfBatch_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3255 [label="__wrappers__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3299 [label="__main__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3307 [label="__wrappers__.isApprovedForAll_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3316 [label="__wrappers__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3336 [label="__main__.owner\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3342 [label="__wrappers__.owner_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3351 [label="__wrappers__.owner\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3367 [label="__main__.name\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3373 [label="__wrappers__.name_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3382 [label="__wrappers__.name\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3398 [label="__main__.locked\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3406 [label="__wrappers__.locked_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3415 [label="__wrappers__.locked\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3435 [label="__main__.setURI\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3449 [label="__wrappers__.setURI\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3478 [label="__main__.setLocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3488 [label="__wrappers__.setLocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3508 [label="__main__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3518 [label="__wrappers__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3538 [label="__main__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3546 [label="__wrappers__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3566 [label="__main__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3584 [label="__wrappers__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3618 [label="__main__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3636 [label="__wrappers__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3690 [label="__main__.mint\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3705 [label="__wrappers__.mint\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3738 [label="__main__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3753 [label="__wrappers__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3806 [label="__main__.burn\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3828 [label="__wrappers__.burn\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3851 [label="__main__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3873 [label="__wrappers__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3916 [label="__main__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3923 [label="__wrappers__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3942 [label="__main__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3948 [label="__wrappers__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
 	25 -> 24
 	45 -> 41
 	108 -> 45
@@ -437,117 +440,120 @@ digraph CarbonableBadge {
 	2534 -> 2527
 	2562 -> 2519
 	2570 -> 2534
-	2578 -> 0 [label=2]
-	2578 -> 198
-	2603 -> 0 [label=2]
-	2603 -> 198
-	2628 -> 3 [label=2]
-	2628 -> 123
-	2645 -> 2628
-	2645 -> 182
-	2660 -> 2628
-	2660 -> 190
-	2679 -> 2674
-	2679 -> 182
-	2692 -> 2674
-	2692 -> 190
-	2704 -> 2841
-	2704 -> 597
-	2704 -> 2692
-	2727 -> 295
-	2727 -> 2448
-	2727 -> 2480
-	2727 -> 2490
-	2727 -> 2562
-	2727 -> 2570
-	2781 -> 2448
-	2781 -> 2490
-	2781 -> 2570
-	2816 -> 2679
-	2822 -> 295
-	2822 -> 2645
-	2841 -> 2504
-	2841 -> 2466
-	2864 -> 295
-	2864 -> 2660
-	2864 -> 2578
-	2888 -> 295
-	2888 -> 2660
-	2888 -> 2603
-	2912 -> 295
-	2912 -> 2822
-	2930 -> 2938
-	2938 -> 2912
-	2938 -> 2938
-	2958 -> 1009
-	2958 -> 2704
-	2958 -> 445
-	2988 -> 2958
-	3021 -> 580
-	3037 -> 3021
-	3037 -> 3028
-	3056 -> 2727
-	3065 -> 9
-	3084 -> 3056
-	3084 -> 3065
-	3110 -> 2781
-	3117 -> 9
-	3136 -> 3110
-	3136 -> 3117
-	3158 -> 1024
-	3177 -> 3158
-	3177 -> 3167
-	3198 -> 1041
-	3208 -> 9
-	3230 -> 3198
-	3230 -> 3208
-	3274 -> 1059
-	3291 -> 3274
-	3291 -> 3282
-	3311 -> 467
-	3326 -> 3311
-	3326 -> 3317
-	3342 -> 2816
-	3357 -> 3342
-	3357 -> 3348
-	3373 -> 2822
-	3390 -> 3373
-	3390 -> 3381
-	3410 -> 452
-	3410 -> 2841
-	3424 -> 3410
-	3453 -> 452
-	3453 -> 2864
-	3463 -> 3453
-	3483 -> 452
-	3483 -> 2888
-	3493 -> 3483
-	3513 -> 1067
-	3521 -> 3513
-	3541 -> 2912
-	3541 -> 1081
-	3559 -> 3541
-	3593 -> 2930
-	3593 -> 1103
-	3611 -> 3593
-	3665 -> 452
-	3665 -> 1244
-	3680 -> 3665
-	3713 -> 452
-	3713 -> 1297
-	3728 -> 3713
-	3781 -> 1473
-	3781 -> 175
-	3781 -> 30
-	3781 -> 1345
-	3803 -> 3781
-	3826 -> 1473
-	3826 -> 175
-	3826 -> 30
-	3826 -> 1400
-	3848 -> 3826
-	3891 -> 473
-	3898 -> 3891
-	3917 -> 485
-	3923 -> 3917
+	2578 -> 295
+	2578 -> 2448
+	2578 -> 2480
+	2578 -> 2490
+	2578 -> 2562
+	2578 -> 2570
+	2632 -> 2448
+	2632 -> 2490
+	2632 -> 2570
+	2667 -> 2504
+	2667 -> 2466
+	2690 -> 0 [label=2]
+	2690 -> 198
+	2715 -> 0 [label=2]
+	2715 -> 198
+	2740 -> 3 [label=2]
+	2740 -> 123
+	2757 -> 2740
+	2757 -> 182
+	2772 -> 2740
+	2772 -> 190
+	2791 -> 2786
+	2791 -> 182
+	2804 -> 2786
+	2804 -> 190
+	2816 -> 2667
+	2816 -> 597
+	2816 -> 2804
+	2839 -> 2578
+	2848 -> 2632
+	2855 -> 2791
+	2861 -> 295
+	2861 -> 2757
+	2880 -> 2667
+	2889 -> 295
+	2889 -> 2772
+	2889 -> 2690
+	2913 -> 295
+	2913 -> 2772
+	2913 -> 2715
+	2937 -> 295
+	2937 -> 2861
+	2955 -> 2963
+	2963 -> 2937
+	2963 -> 2963
+	2983 -> 1009
+	2983 -> 2816
+	2983 -> 445
+	3013 -> 2983
+	3046 -> 580
+	3062 -> 3046
+	3062 -> 3053
+	3081 -> 2839
+	3090 -> 9
+	3109 -> 3081
+	3109 -> 3090
+	3135 -> 2848
+	3142 -> 9
+	3161 -> 3135
+	3161 -> 3142
+	3183 -> 1024
+	3202 -> 3183
+	3202 -> 3192
+	3223 -> 1041
+	3233 -> 9
+	3255 -> 3223
+	3255 -> 3233
+	3299 -> 1059
+	3316 -> 3299
+	3316 -> 3307
+	3336 -> 467
+	3351 -> 3336
+	3351 -> 3342
+	3367 -> 2855
+	3382 -> 3367
+	3382 -> 3373
+	3398 -> 2861
+	3415 -> 3398
+	3415 -> 3406
+	3435 -> 452
+	3435 -> 2880
+	3449 -> 3435
+	3478 -> 452
+	3478 -> 2889
+	3488 -> 3478
+	3508 -> 452
+	3508 -> 2913
+	3518 -> 3508
+	3538 -> 1067
+	3546 -> 3538
+	3566 -> 2937
+	3566 -> 1081
+	3584 -> 3566
+	3618 -> 2955
+	3618 -> 1103
+	3636 -> 3618
+	3690 -> 452
+	3690 -> 1244
+	3705 -> 3690
+	3738 -> 452
+	3738 -> 1297
+	3753 -> 3738
+	3806 -> 1473
+	3806 -> 175
+	3806 -> 30
+	3806 -> 1345
+	3828 -> 3806
+	3851 -> 1473
+	3851 -> 175
+	3851 -> 30
+	3851 -> 1400
+	3873 -> 3851
+	3916 -> 473
+	3923 -> 3916
+	3942 -> 485
+	3948 -> 3942
 }

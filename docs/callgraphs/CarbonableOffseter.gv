@@ -1,0 +1,263 @@
+// Call flow graph
+digraph CarbonableOffseter {
+	graph [fontname="Helvetica,Arial,sans-serif" fontsize=20 layout=dot newrank=true rankdir=LR]
+	node [fontname="Helvetica,Arial,sans-serif" pencolor="#00000044" shape="rect, plaintext" style=filled]
+	edge [arrowsize=0.5 fontname="Helvetica,Arial,sans-serif" labeldistance=3 labelfontcolor="#00000080" penwidth=2]
+	0 [label="starkware.cairo.common.alloc.alloc" color="" fillcolor=lightcoral shape=oval style=filled]
+	3 [label="starkware.cairo.common.hash.hash2" color="" fillcolor=lightcoral shape=oval style=filled]
+	9 [label="starkware.cairo.common.math.assert_not_zero" color="" fillcolor=lightcoral shape=oval style=filled]
+	14 [label="starkware.cairo.common.math.assert_nn" color="" fillcolor=lightcoral shape=oval style=filled]
+	18 [label="starkware.cairo.common.math.assert_le" color="" fillcolor=lightcoral shape=oval style=filled]
+	23 [label="starkware.cairo.common.math.assert_250_bit\l['known_ap_change']" color="" fillcolor=yellow shape=oval style=filled]
+	36 [label="starkware.cairo.common.math.assert_le_felt\l['known_ap_change']" color="" fillcolor=yellow shape=oval style=filled]
+	81 [label="starkware.starknet.common.storage.normalize_address\l['known_ap_change']" color="" fillcolor=yellow shape=oval style=filled]
+	121 [label="starkware.starknet.common.syscalls.call_contract" color="" fillcolor=lightcoral shape=oval style=filled]
+	133 [label="starkware.starknet.common.syscalls.get_caller_address" color="" fillcolor=lightcoral shape=oval style=filled]
+	140 [label="starkware.starknet.common.syscalls.get_contract_address" color="" fillcolor=lightcoral shape=oval style=filled]
+	147 [label="starkware.starknet.common.syscalls.get_block_timestamp" color="" fillcolor=lightcoral shape=oval style=filled]
+	154 [label="starkware.starknet.common.syscalls.storage_read" color="" fillcolor=lightcoral shape=oval style=filled]
+	162 [label="starkware.starknet.common.syscalls.storage_write" color="" fillcolor=lightcoral shape=oval style=filled]
+	170 [label="starkware.starknet.common.syscalls.emit_event" color="" fillcolor=lightcoral shape=oval style=filled]
+	180 [label="starkware.cairo.common.math_cmp.is_not_zero\l['known_ap_change']" color="" fillcolor=yellow shape=oval style=filled]
+	188 [label="starkware.cairo.common.math_cmp.is_nn\l['known_ap_change']" color="" fillcolor=yellow shape=oval style=filled]
+	221 [label="starkware.cairo.common.math_cmp.is_le\l['known_ap_change']" color="" fillcolor=yellow shape=oval style=filled]
+	226 [label="starkware.cairo.common.uint256.uint256_check" color="" fillcolor=lightcoral shape=oval style=filled]
+	231 [label="starkware.cairo.common.uint256.uint256_add" color="" fillcolor=lightcoral shape=oval style=filled]
+	253 [label="starkware.cairo.common.uint256.uint256_lt" color="" fillcolor=lightcoral shape=oval style=filled]
+	270 [label="starkware.cairo.common.uint256.uint256_le" color="" fillcolor=lightcoral shape=oval style=filled]
+	282 [label="starkware.cairo.common.uint256.uint256_not" color="" fillcolor=lightcoral shape=oval style=filled]
+	290 [label="starkware.cairo.common.uint256.uint256_neg" color="" fillcolor=lightcoral shape=oval style=filled]
+	305 [label="starkware.cairo.common.uint256.uint256_sub" color="" fillcolor=lightcoral shape=oval style=filled]
+	321 [label="starkware.cairo.common.uint256.uint256_eq" color="" fillcolor=lightcoral shape=oval style=filled]
+	343 [label="openzeppelin.access.ownable.library.OwnershipTransferred.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	368 [label="openzeppelin.access.ownable.library.Ownable_owner.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	373 [label="openzeppelin.access.ownable.library.Ownable_owner.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	386 [label="openzeppelin.access.ownable.library.Ownable_owner.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	398 [label="openzeppelin.access.ownable.library.Ownable.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
+	405 [label="openzeppelin.access.ownable.library.Ownable.assert_only_owner" color="" fillcolor=lightcoral shape=oval style=filled]
+	420 [label="openzeppelin.access.ownable.library.Ownable.owner" color="" fillcolor=lightcoral shape=oval style=filled]
+	426 [label="openzeppelin.access.ownable.library.Ownable._transfer_ownership" color="" fillcolor=lightcoral shape=oval style=filled]
+	447 [label="openzeppelin.security.safemath.library.SafeUint256.sub_le" color="" fillcolor=lightcoral shape=oval style=filled]
+	479 [label="openzeppelin.token.erc721.IERC721.IERC721.balanceOf" color="" fillcolor=lightcoral shape=oval style=filled]
+	503 [label="openzeppelin.token.erc721.IERC721.IERC721.ownerOf" color="" fillcolor=lightcoral shape=oval style=filled]
+	527 [label="openzeppelin.token.erc721.IERC721.IERC721.transferFrom" color="" fillcolor=lightcoral shape=oval style=filled]
+	549 [label="openzeppelin.token.erc721.enumerable.IERC721Enumerable.IERC721Enumerable.totalSupply" color="" fillcolor=lightcoral shape=oval style=filled]
+	570 [label="openzeppelin.token.erc721.enumerable.IERC721Enumerable.IERC721Enumerable.tokenByIndex" color="" fillcolor=lightcoral shape=oval style=filled]
+	595 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard_entered.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	600 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard_entered.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	613 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard_entered.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	625 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard._start" color="" fillcolor=lightcoral shape=oval style=filled]
+	640 [label="openzeppelin.security.reentrancyguard.library.ReentrancyGuard._end" color="" fillcolor=lightcoral shape=oval style=filled]
+	648 [label="src.farm.library.carbonable_project_address_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	653 [label="src.farm.library.carbonable_project_address_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	666 [label="src.farm.library.carbonable_project_address_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	678 [label="src.farm.library.start_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	683 [label="src.farm.library.start_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	696 [label="src.farm.library.start_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	708 [label="src.farm.library.unlocked_duration_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	713 [label="src.farm.library.unlocked_duration_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	726 [label="src.farm.library.unlocked_duration_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	738 [label="src.farm.library.period_duration_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	743 [label="src.farm.library.period_duration_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	756 [label="src.farm.library.period_duration_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	768 [label="src.farm.library.registration_.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	785 [label="src.farm.library.registration_.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	800 [label="src.farm.library.registration_.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	814 [label="src.farm.library.CarbonableFarmer.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
+	821 [label="src.farm.library.CarbonableFarmer.carbonable_project_address" color="" fillcolor=lightcoral shape=oval style=filled]
+	827 [label="src.farm.library.CarbonableFarmer.is_locked" color="" fillcolor=lightcoral shape=oval style=filled]
+	867 [label="src.farm.library.CarbonableFarmer.total_locked" color="" fillcolor=lightcoral shape=oval style=filled]
+	887 [label="src.farm.library.CarbonableFarmer.balance_of" color="" fillcolor=lightcoral shape=oval style=filled]
+	896 [label="src.farm.library.CarbonableFarmer.registred_owner_of" color="" fillcolor=lightcoral shape=oval style=filled]
+	909 [label="src.farm.library.CarbonableFarmer.start_period" color="" fillcolor=lightcoral shape=oval style=filled]
+	935 [label="src.farm.library.CarbonableFarmer.stop_period" color="" fillcolor=lightcoral shape=oval style=filled]
+	971 [label="src.farm.library.CarbonableFarmer.deposit" color="" fillcolor=lightcoral shape=oval style=filled]
+	1026 [label="src.farm.library.CarbonableFarmer.withdraw" color="" fillcolor=lightcoral shape=oval style=filled]
+	1082 [label="src.farm.library.CarbonableFarmer.count" color="" fillcolor=lightcoral shape=oval style=filled]
+	1131 [label="src.farm.library.CarbonableFarmer.count_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	1229 [label="__main__.constructor\l['constructor']" color="" fillcolor=violet shape=oval style=filled]
+	1239 [label="__wrappers__.constructor\l['constructor']" color="" fillcolor=violet shape=doubleoctagon style=filled]
+	1258 [label="__main__.carbonable_project_address\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1264 [label="__wrappers__.carbonable_project_address_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1273 [label="__wrappers__.carbonable_project_address\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1288 [label="__main__.is_locked\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1294 [label="__wrappers__.is_locked_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1303 [label="__wrappers__.is_locked\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1318 [label="__main__.total_locked\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1324 [label="__wrappers__.total_locked_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1334 [label="__wrappers__.total_locked\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1349 [label="__main__.balance_of\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1356 [label="__wrappers__.balance_of_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1365 [label="__wrappers__.balance_of\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1383 [label="__main__.registred_owner_of\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	1391 [label="__wrappers__.registred_owner_of_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1400 [label="__wrappers__.registred_owner_of\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	1419 [label="__main__.start_period\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	1429 [label="__wrappers__.start_period_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1438 [label="__wrappers__.start_period\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	1457 [label="__main__.stop_period\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	1465 [label="__wrappers__.stop_period_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1474 [label="__wrappers__.stop_period\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	1489 [label="__main__.deposit\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	1497 [label="__wrappers__.deposit_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1506 [label="__wrappers__.deposit\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	1525 [label="__main__.withdraw\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	1533 [label="__wrappers__.withdraw_encode_return" color="" fillcolor=white shape=oval style=solid]
+	1542 [label="__wrappers__.withdraw\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	18 -> 14
+	81 -> 23 [label=4]
+	188 -> 36
+	221 -> 188
+	231 -> 226
+	253 -> 221 [label=2]
+	270 -> 253
+	290 -> 282
+	290 -> 231
+	305 -> 290
+	305 -> 231
+	343 -> 0 [label=2]
+	343 -> 170
+	373 -> 368
+	373 -> 154
+	386 -> 368
+	386 -> 162
+	398 -> 426
+	405 -> 420
+	405 -> 133
+	405 -> 9
+	420 -> 373
+	426 -> 420
+	426 -> 386
+	426 -> 343
+	447 -> 226 [label=2]
+	447 -> 270
+	447 -> 305
+	479 -> 0
+	479 -> 121
+	503 -> 0
+	503 -> 121
+	527 -> 0
+	527 -> 121
+	549 -> 0
+	549 -> 121
+	570 -> 0
+	570 -> 121
+	600 -> 595
+	600 -> 154
+	613 -> 595
+	613 -> 162
+	625 -> 600
+	625 -> 613
+	640 -> 613
+	653 -> 648
+	653 -> 154
+	666 -> 648
+	666 -> 162
+	683 -> 678
+	683 -> 154
+	696 -> 678
+	696 -> 162
+	713 -> 708
+	713 -> 154
+	726 -> 708
+	726 -> 162
+	743 -> 738
+	743 -> 154
+	756 -> 738
+	756 -> 162
+	768 -> 3 [label=2]
+	768 -> 81
+	785 -> 768
+	785 -> 154
+	800 -> 768
+	800 -> 162
+	814 -> 666
+	821 -> 653
+	827 -> 147
+	827 -> 683
+	827 -> 713
+	827 -> 743
+	827 -> 221 [label=2]
+	827 -> 180
+	867 -> 140
+	867 -> 653
+	867 -> 479
+	887 -> 1082
+	896 -> 226
+	896 -> 785
+	909 -> 14
+	909 -> 18
+	909 -> 147
+	909 -> 696
+	909 -> 756
+	909 -> 726
+	935 -> 147
+	935 -> 683
+	935 -> 743
+	935 -> 18
+	935 -> 696
+	935 -> 756
+	935 -> 726
+	971 -> 625
+	971 -> 827
+	971 -> 226
+	971 -> 653
+	971 -> 133
+	971 -> 140
+	971 -> 527
+	971 -> 503
+	971 -> 800
+	971 -> 640
+	1026 -> 625
+	1026 -> 827
+	1026 -> 226
+	1026 -> 800
+	1026 -> 653
+	1026 -> 140
+	1026 -> 133
+	1026 -> 527
+	1026 -> 503
+	1026 -> 640
+	1082 -> 653
+	1082 -> 549
+	1082 -> 253
+	1082 -> 447
+	1082 -> 1131
+	1131 -> 570
+	1131 -> 785
+	1131 -> 321
+	1131 -> 447 [label=2]
+	1131 -> 1131 [label=2]
+	1229 -> 814
+	1229 -> 398
+	1239 -> 1229
+	1258 -> 821
+	1273 -> 1258
+	1273 -> 1264
+	1288 -> 827
+	1303 -> 1288
+	1303 -> 1294
+	1318 -> 867
+	1334 -> 1318
+	1334 -> 1324
+	1349 -> 887
+	1365 -> 1349
+	1365 -> 1356
+	1383 -> 896
+	1400 -> 1383
+	1400 -> 1391
+	1419 -> 405
+	1419 -> 909
+	1438 -> 1419
+	1438 -> 1429
+	1457 -> 405
+	1457 -> 935
+	1474 -> 1457
+	1474 -> 1465
+	1489 -> 971
+	1506 -> 1489
+	1506 -> 1497
+	1525 -> 1026
+	1542 -> 1525
+	1542 -> 1533
+}
