@@ -185,3 +185,33 @@ func test_e2e_start_and_start_and_stop_period{
 
     return ();
 }
+
+@view
+func test_e2e_start_period_revert_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When anyone starts a 10s period with 5s unlock
+    // Then a failed transaction is expected
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.start_period(unlocked_duration=5, period_duration=10);
+
+    return ();
+}
+
+@view
+func test_e2e_stop_period_revert_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin starts a 10s period with 5s unlock
+    // And anyone stops the current period
+    // Then a failed transaction is expected
+    alloc_locals;
+
+    admin.start_period(unlocked_duration=5, period_duration=10);
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.stop_period();
+
+    return ();
+}

@@ -498,6 +498,30 @@ namespace anyone_instance {
         return ();
     }
 
+    func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        unlocked_duration: felt, period_duration: felt
+    ) {
+        let (carbonable_offseter) = carbonable_offseter_instance.deployed();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.start_period(
+                unlocked_duration=unlocked_duration, period_duration=period_duration, caller=caller
+            );
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_offseter) = carbonable_offseter_instance.deployed();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.stop_period(caller=caller);
+            assert success = TRUE;
+        }
+        return ();
+    }
+
     func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
