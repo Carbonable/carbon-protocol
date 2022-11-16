@@ -194,8 +194,8 @@ func test_e2e_start_period_revert_not_owner{
     // Then a failed transaction is expected
     alloc_locals;
 
-    anyone.start_period(unlocked_duration=5, period_duration=10);
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.start_period(unlocked_duration=5, period_duration=10);
 
     return ();
 }
