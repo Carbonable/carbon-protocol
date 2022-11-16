@@ -36,7 +36,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func test_e2e_deposite_and_withdraw_while_unlock{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
-    // When admin start a 10s period with 5s unlock
+    // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 5
     // And anyone deposites token 3 to yielder at time 5
     // And anyone withdraws token 3 from yielder at time 5
@@ -116,7 +116,7 @@ func test_e2e_deposite_and_withdraw_while_unlock{
 func test_e2e_deposite_revert_locked{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
-    // When admin start a 10s period with 5s unlock
+    // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
     // And anyone deposites token 3 to yielder at time 6
     // Then a failed transactions expected
@@ -141,7 +141,7 @@ func test_e2e_deposite_revert_locked{
 func test_e2e_withdraw_revert_locked{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
-    // When admin start a 10s period with 5s unlock
+    // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
     // And anyone deposites token 3 to yielder at time 5
     // And anyone withdraws token 3 from yielder at time 6
@@ -170,9 +170,9 @@ func test_e2e_withdraw_revert_locked{
 func test_e2e_start_and_start_and_stop_period{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
-    // When admin start a 10s period with 5s unlock
-    // And admin start a 20s period with 10s unlock
-    // And admin stop the current period
+    // When admin starts a 10s period with 5s unlock
+    // And admin starts a 20s period with 10s unlock
+    // And admin stops the current period
     // Then no failed transactions expected
     alloc_locals;
     let (admin_address) = admin.get_address();
@@ -182,6 +182,36 @@ func test_e2e_start_and_start_and_stop_period{
     admin.start_period(unlocked_duration=5, period_duration=10);
     admin.start_period(unlocked_duration=10, period_duration=20);
     admin.stop_period();
+
+    return ();
+}
+
+@view
+func test_e2e_start_period_revert_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When anyone starts a 10s period with 5s unlock
+    // Then a failed transaction is expected
+    alloc_locals;
+
+    anyone.start_period(unlocked_duration=5, period_duration=10);
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+
+    return ();
+}
+
+@view
+func test_e2e_stop_period_revert_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin starts a 10s period with 5s unlock
+    // And anyone stops the current period
+    // Then a failed transaction is expected
+    alloc_locals;
+
+    admin.start_period(unlocked_duration=5, period_duration=10);
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.stop_period();
 
     return ();
 }
