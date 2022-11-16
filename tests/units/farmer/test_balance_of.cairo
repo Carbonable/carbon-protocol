@@ -35,18 +35,15 @@ func test_share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
 
     %{ stop=start_prank(context.signers.anyone) %}
-    let (success) = CarbonableFarmer.deposite(token_id=one);
+    let (success) = CarbonableFarmer.deposit(token_id=one);
     assert success = 1;
     %{ stop() %}
 
-    let (share) = CarbonableFarmer.share(address=context.signers.anyone, precision=10);
-    assert share = ten;  // 10 / 10 = 1 = 100%
+    let (balance) = CarbonableFarmer.balance_of(address=context.signers.anyone);
+    assert balance = 1;
 
-    let (share) = CarbonableFarmer.share(address=context.signers.anyone, precision=100);
-    assert share = hundred;  // 100 / 100 = 1 = 100%
-
-    let (share) = CarbonableFarmer.share(address=context.signers.admin, precision=100);
-    assert share = zero;  // 0 / 100 = 0 = 0%
+    let (balance) = CarbonableFarmer.balance_of(address=context.signers.admin);
+    assert balance = 0;
 
     return ();
 }

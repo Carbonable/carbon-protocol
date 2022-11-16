@@ -60,7 +60,7 @@ func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     status: felt
 ) {
     // Desc:
-    //   Return the locked status of deposites and withdrawals
+    //   Return the locked status of deposits and withdrawals
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -86,9 +86,9 @@ func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 }
 
 @view
-func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt, precision: felt
-) -> (share: Uint256) {
+) -> (shares: Uint256) {
     // Desc:
     //   Return the current share of a specified address
     // Implicit args:
@@ -99,8 +99,8 @@ func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   address(felt): Address
     //   precision(felt): Decimal of the returned share
     // Returns:
-    //   share(Uint256): Share associated to the address
-    return CarbonableFarmer.share(address=address, precision=precision);
+    //   share(Uint256): Shares associated to the address
+    return CarbonableFarmer.shares_of(address=address, precision=precision);
 }
 
 @view
@@ -162,11 +162,11 @@ func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }
 
 @external
-func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (success: felt) {
     // Desc:
-    //   Deposite the specified token id into the contract (lock)
+    //   Deposit the specified token id into the contract (lock)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -175,7 +175,7 @@ func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   token_id(Uint256): Token id
     // Returns:
     //   success(felt): Success status
-    return CarbonableFarmer.deposite(token_id=token_id);
+    return CarbonableFarmer.deposit(token_id=token_id);
 }
 
 @external

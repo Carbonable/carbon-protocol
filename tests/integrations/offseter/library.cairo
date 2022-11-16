@@ -173,11 +173,11 @@ namespace carbonable_offseter_instance {
         return (balance=balance,);
     }
 
-    func share{
+    func balance_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
-    }(address: felt, precision: felt) -> (share: Uint256) {
-        let (share) = ICarbonableOffseter.share(carbonable_offseter, address, precision);
-        return (share=share,);
+    }(address: felt) -> (balance: felt) {
+        let (balance) = ICarbonableOffseter.balance_of(carbonable_offseter, address);
+        return (balance=balance,);
     }
 
     func registred_owner_of{
@@ -209,12 +209,12 @@ namespace carbonable_offseter_instance {
         return (success=success,);
     }
 
-    func deposite{
+    func deposit{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }(token_id: Uint256, caller: felt, carbonable_project: felt) -> (success: felt) {
         %{ stop_prank_offseter = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
         %{ stop_prank_project = start_prank(caller_address=ids.carbonable_offseter, target_contract_address=ids.carbonable_project) %}
-        let (success) = ICarbonableOffseter.deposite(carbonable_offseter, token_id);
+        let (success) = ICarbonableOffseter.deposit(carbonable_offseter, token_id);
         %{ stop_prank_offseter() %}
         %{ stop_prank_project() %}
         return (success=success,);
@@ -254,16 +254,6 @@ namespace admin_instance {
         return (owner=owner,);
     }
 
-    func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        owner: felt
-    ) -> (balance: Uint256) {
-        let (carbonable_project) = carbonable_project_instance.deployed();
-        with carbonable_project {
-            let (balance) = carbonable_project_instance.balanceOf(owner=owner);
-        }
-        return (balance=balance,);
-    }
-
     func carbonable_project_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }() -> (carbonable_project_address: felt) {
@@ -296,14 +286,14 @@ namespace admin_instance {
         return (balance=balance,);
     }
 
-    func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt, precision: felt
-    ) -> (share: Uint256) {
+    func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (balance: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.deployed();
         with carbonable_offseter {
-            let (share) = carbonable_offseter_instance.share(address=address, precision=precision);
+            let (balance) = carbonable_offseter_instance.balance_of(address=address);
         }
-        return (share=share,);
+        return (balance=balance,);
     }
 
     func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -371,7 +361,7 @@ namespace admin_instance {
         return ();
     }
 
-    func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
+    func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
@@ -381,7 +371,7 @@ namespace admin_instance {
             assert owner = caller;
         }
         with carbonable_offseter {
-            let (success) = carbonable_offseter_instance.deposite(
+            let (success) = carbonable_offseter_instance.deposit(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;
@@ -459,14 +449,14 @@ namespace anyone_instance {
         return (balance=balance,);
     }
 
-    func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt, precision: felt
-    ) -> (share: Uint256) {
+    func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (balance: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.deployed();
         with carbonable_offseter {
-            let (share) = carbonable_offseter_instance.share(address=address, precision=precision);
+            let (balance) = carbonable_offseter_instance.balance_of(address=address);
         }
-        return (share=share,);
+        return (balance=balance,);
     }
 
     func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -522,7 +512,7 @@ namespace anyone_instance {
         return ();
     }
 
-    func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
+    func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
@@ -532,7 +522,7 @@ namespace anyone_instance {
             assert owner = caller;
         }
         with carbonable_offseter {
-            let (success) = carbonable_offseter_instance.deposite(
+            let (success) = carbonable_offseter_instance.deposit(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;

@@ -33,27 +33,29 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
-func test_e2e_deposite_and_withdraw_while_unlock{
+func test_e2e_deposit_and_withdraw_while_unlock{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin start a 10s period with 5s unlock
     // And anyone approves offseter for token 3 at time 5
-    // And anyone deposites token 3 to offseter at time 5
+    // And anyone deposits token 3 to offseter at time 5
     // And anyone withdraws token 3 from offseter at time 5
     // And anyone approves offseter for token 3 at time 5
-    // And anyone deposites token 3 to offseter at time 5
+    // And anyone deposits token 3 to offseter at time 5
     // And anyone approves offseter for token 4 at time 5
-    // And anyone deposites token 4 to offseter at time 5
-    // Then anyone share is 100%
+    // And anyone deposits token 4 to offseter at time 5
+    // Then anyone balance is 2
     // When admin approves offseter for token 1 at time 5
-    // And admin deposites token 1 to offseter at time 5
-    // Then anyone share is 66%
+    // And admin deposits token 1 to offseter at time 5
+    // Then anyone balance is 2
+    // And admin balance is 1
     // When anyone withdraws token 3 from offseter at time 10
-    // Then anyone share is 50%
+    // Then anyone balance is 1
     // When admin withdraws token 1 from offseter at time 10
-    // Then anyone share is 100%
+    // Then admin balance is 0
+    // And anyone balance is 1
     // When anyone withdraws token 4 from offseter at time 10
-    // Then anyone share is 0%
+    // Then anyone balance is 0
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
@@ -63,18 +65,18 @@ func test_e2e_deposite_and_withdraw_while_unlock{
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
     anyone.approve(approved=offseter_address, token_id=3);
-    anyone.deposite(token_id=3);
+    anyone.deposit(token_id=3);
     anyone.withdraw(token_id=3);
     anyone.approve(approved=offseter_address, token_id=3);
-    anyone.deposite(token_id=3);
+    anyone.deposit(token_id=3);
     anyone.approve(approved=offseter_address, token_id=4);
-    anyone.deposite(token_id=4);
+    anyone.deposit(token_id=4);
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=100, high=0);
+    let (balance) = anyone.balance_of(anyone_address);
+    assert balance = 2;
 
     admin.approve(approved=offseter_address, token_id=1);
-    admin.deposite(token_id=1);
+    admin.deposit(token_id=1);
     %{ stop_warp() %}
 
     let (owner) = anyone.registred_owner_of(token_id=3);
@@ -83,28 +85,34 @@ func test_e2e_deposite_and_withdraw_while_unlock{
     let (owner) = anyone.registred_owner_of(token_id=1);
     assert owner = admin_address;
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=66, high=0);
+    let (balance) = anyone.balance_of(anyone_address);
+    assert balance = 2;
 
-    let (balance) = anyone.total_locked();
-    assert balance = Uint256(low=3, high=0);
+    let (balance) = anyone.balance_of(admin_address);
+    assert balance = 1;
+
+    let (total_balance) = anyone.total_locked();
+    assert total_balance = Uint256(low=3, high=0);
 
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.offseter_address) %}
     anyone.withdraw(token_id=3);
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=50, high=0);
+    let (balance) = anyone.balance_of(anyone_address);
+    assert balance = 1;
 
     admin.withdraw(token_id=1);
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=100, high=0);
+    let (balance) = anyone.balance_of(admin_address);
+    assert balance = 0;
+
+    let (balance) = anyone.balance_of(anyone_address);
+    assert balance = 1;
 
     anyone.withdraw(token_id=4);
     %{ stop_warp() %}
 
-    let (share) = anyone.share(anyone_address, precision=100);
-    assert share = Uint256(low=0, high=0);
+    let (balance) = anyone.balance_of(anyone_address);
+    assert balance = 0;
 
     let (owner) = anyone.registred_owner_of(token_id=1);
     assert owner = 0;
@@ -113,12 +121,12 @@ func test_e2e_deposite_and_withdraw_while_unlock{
 }
 
 @view
-func test_e2e_deposite_revert_locked{
+func test_e2e_deposit_revert_locked{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin start a 10s period with 5s unlock
     // And anyone approves offseter for token 3 at time 1
-    // And anyone deposites token 3 to offseter at time 6
+    // And anyone deposits token 3 to offseter at time 6
     // Then a failed transactions expected
     alloc_locals;
     let (admin_address) = admin.get_address();
@@ -130,8 +138,8 @@ func test_e2e_deposite_revert_locked{
     anyone.approve(approved=offseter_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposites are currently locked") %}
-    anyone.deposite(token_id=3);
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposits are currently locked") %}
+    anyone.deposit(token_id=3);
     %{ stop_warp() %}
 
     return ();
@@ -143,7 +151,7 @@ func test_e2e_withdraw_revert_locked{
 }() {
     // When admin start a 10s period with 5s unlock
     // And anyone approves offseter for token 3 at time 1
-    // And anyone deposites token 3 to offseter at time 5
+    // And anyone deposits token 3 to offseter at time 5
     // And anyone withdraws token 3 from offseter at time 6
     // Then a failed transactions expected
     alloc_locals;
@@ -155,7 +163,7 @@ func test_e2e_withdraw_revert_locked{
     anyone.approve(approved=offseter_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
-    anyone.deposite(token_id=3);
+    anyone.deposit(token_id=3);
     %{ stop_warp() %}
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}

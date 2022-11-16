@@ -173,11 +173,11 @@ namespace carbonable_yielder_instance {
         return (balance=balance,);
     }
 
-    func share{
+    func shares_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
-    }(address: felt, precision: felt) -> (share: Uint256) {
-        let (share) = ICarbonableYielder.share(carbonable_yielder, address, precision);
-        return (share=share,);
+    }(address: felt, precision: felt) -> (shares: Uint256) {
+        let (shares) = ICarbonableYielder.shares_of(carbonable_yielder, address, precision);
+        return (shares=shares,);
     }
 
     func registred_owner_of{
@@ -209,12 +209,12 @@ namespace carbonable_yielder_instance {
         return (success=success,);
     }
 
-    func deposite{
+    func deposit{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(token_id: Uint256, caller: felt, carbonable_project: felt) -> (success: felt) {
         %{ stop_prank_yielder = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
         %{ stop_prank_project = start_prank(caller_address=ids.carbonable_yielder, target_contract_address=ids.carbonable_project) %}
-        let (success) = ICarbonableYielder.deposite(carbonable_yielder, token_id);
+        let (success) = ICarbonableYielder.deposit(carbonable_yielder, token_id);
         %{ stop_prank_yielder() %}
         %{ stop_prank_project() %}
         return (success=success,);
@@ -296,14 +296,16 @@ namespace admin_instance {
         return (balance=balance,);
     }
 
-    func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt, precision: felt
-    ) -> (share: Uint256) {
+    ) -> (shares: Uint256) {
         let (carbonable_yielder) = carbonable_yielder_instance.deployed();
         with carbonable_yielder {
-            let (share) = carbonable_yielder_instance.share(address=address, precision=precision);
+            let (shares) = carbonable_yielder_instance.shares_of(
+                address=address, precision=precision
+            );
         }
-        return (share=share,);
+        return (shares=shares,);
     }
 
     func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -371,7 +373,7 @@ namespace admin_instance {
         return ();
     }
 
-    func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
+    func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
         let (carbonable_yielder) = carbonable_yielder_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
@@ -381,7 +383,7 @@ namespace admin_instance {
             assert owner = caller;
         }
         with carbonable_yielder {
-            let (success) = carbonable_yielder_instance.deposite(
+            let (success) = carbonable_yielder_instance.deposit(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;
@@ -459,14 +461,16 @@ namespace anyone_instance {
         return (balance=balance,);
     }
 
-    func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt, precision: felt
-    ) -> (share: Uint256) {
+    ) -> (shares: Uint256) {
         let (carbonable_yielder) = carbonable_yielder_instance.deployed();
         with carbonable_yielder {
-            let (share) = carbonable_yielder_instance.share(address=address, precision=precision);
+            let (shares) = carbonable_yielder_instance.shares_of(
+                address=address, precision=precision
+            );
         }
-        return (share=share,);
+        return (shares=shares,);
     }
 
     func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -522,7 +526,7 @@ namespace anyone_instance {
         return ();
     }
 
-    func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
+    func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: felt) {
         let (carbonable_yielder) = carbonable_yielder_instance.deployed();
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
@@ -532,7 +536,7 @@ namespace anyone_instance {
             assert owner = caller;
         }
         with carbonable_yielder {
-            let (success) = carbonable_yielder_instance.deposite(
+            let (success) = carbonable_yielder_instance.deposit(
                 token_id=token_id_uint256, caller=caller, carbonable_project=carbonable_project
             );
             assert success = TRUE;

@@ -105,7 +105,7 @@ namespace CarbonableFarmer {
         let is_after_locked = is_le(end, current_time);
         let over = is_not_zero(is_before_locked + is_after_locked);
         let status = 1 - over;
-        
+
         return (status=status,);
     }
 
@@ -122,18 +122,33 @@ namespace CarbonableFarmer {
         return (balance=balance,);
     }
 
-    func share{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt, precision: felt
-    ) -> (share: Uint256) {
+    ) -> (shares: Uint256) {
         alloc_locals;
 
-        let (total_deposite) = count(address);
+        let (total_deposit) = balance_of(address);
         let (total_contract) = total_locked();
 
-        let dividend = precision * total_deposite;
+        let dividend = precision * total_deposit;
         let dividend_uint256 = Uint256(low=dividend, high=0);
-        let (share, _) = uint256_unsigned_div_rem(dividend_uint256, total_contract);
-        return (share=share,);
+
+        // [Check] Uint256 compliance
+        with_attr error_message("CarbonableFarmer: dividend_uint256 is not a valid Uint256") {
+            uint256_check(dividend_uint256);
+        }
+
+        let (shares, _) = uint256_unsigned_div_rem(dividend_uint256, total_contract);
+        return (shares=shares,);
+    }
+
+    func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (balance: felt) {
+        alloc_locals;
+
+        let (balance) = count(address);
+        return (balance=balance,);
     }
 
     func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -191,7 +206,7 @@ namespace CarbonableFarmer {
         return (success=TRUE,);
     }
 
-    func deposite{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: Uint256
     ) -> (success: felt) {
         alloc_locals;
@@ -201,7 +216,7 @@ namespace CarbonableFarmer {
 
         // [Check] Locked status
         let (status) = is_locked();
-        with_attr error_message("CarbonableFarmer: deposites are currently locked") {
+        with_attr error_message("CarbonableFarmer: deposits are currently locked") {
             assert status = FALSE;
         }
 

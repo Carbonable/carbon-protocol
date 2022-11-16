@@ -29,7 +29,7 @@ func test_withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 
     %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
     %{ stop=start_prank(context.signers.anyone) %}
-    let (success) = CarbonableFarmer.deposite(token_id=one);
+    let (success) = CarbonableFarmer.deposit(token_id=one);
     assert success = 1;
     %{ stop() %}
     %{ stop_mock() %}
