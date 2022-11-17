@@ -158,6 +158,17 @@ namespace CarbonableFarmer {
         with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
             uint256_check(token_id);
         }
+        // [Check] Owned token id
+        let (contract_address) = get_contract_address();
+        let (carbonable_project_address) = carbonable_project_address_.read();
+        // [Check] Throws error if unknown token id
+        let (owner) = IERC721.ownerOf(  
+            contract_address=carbonable_project_address, tokenId=token_id
+        );
+        with_attr error_message("CarbonableFarmer: token_id has not been registred") {
+            assert owner = contract_address;
+        }
+
         let (address) = registration_.read(token_id);
         return (address=address,);
     }

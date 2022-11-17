@@ -54,6 +54,8 @@ func test_e2e_deposit_and_withdraw_while_unlock{
     // Then anyone shares is 100%
     // When anyone withdraws token 4 from yielder at time 10
     // Then anyone shares is 0%
+    // When check the owner of token 1
+    // Then a failed transaction is expected
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
@@ -106,8 +108,8 @@ func test_e2e_deposit_and_withdraw_while_unlock{
     let (shares) = anyone.shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=0, high=0);
 
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: token_id has not been registred") %}
     let (owner) = anyone.registred_owner_of(token_id=1);
-    assert owner = 0;
 
     return ();
 }

@@ -56,6 +56,8 @@ func test_e2e_deposit_and_withdraw_while_unlock{
     // And anyone balance is 1
     // When anyone withdraws token 4 from offseter at time 10
     // Then anyone balance is 0
+    // When check the owner of token 1
+    // Then a failed transaction is expected
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
@@ -114,8 +116,8 @@ func test_e2e_deposit_and_withdraw_while_unlock{
     let (balance) = anyone.balance_of(anyone_address);
     assert balance = 0;
 
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: token_id has not been registred") %}
     let (owner) = anyone.registred_owner_of(token_id=1);
-    assert owner = 0;
 
     return ();
 }
