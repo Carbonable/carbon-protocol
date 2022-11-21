@@ -4,6 +4,3 @@
 [submodule "bal7hazar_contracts"]
 	url = https://github.com/Bal7hazar/cairo-contracts.git
 	path = lib/bal7hazar_contracts
-[submodule "cairo_contracts"]
-	path = lib/cairo_contracts
-	url = https://github.com/OpenZeppelin/cairo-contracts
