@@ -8,6 +8,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
+from openzeppelin.access.accesscontrol.library import AccessControl
 from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.token.erc721.library import ERC721
@@ -16,6 +17,7 @@ from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.project.library import CarbonableProject
+from src.utils.access.library import CarbonableAccessControl
 
 //
 // Initializer
@@ -45,6 +47,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
     Ownable.initializer(owner);
+    CarbonableAccessControl.initializer();
     Proxy.initializer(proxy_admin);
     return ();
 }
@@ -325,6 +328,13 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
 //
 
 @external
+func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_minter(minter);
+    return ();
+}
+
+@external
 func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     to: felt, tokenId: Uint256
 ) {
@@ -429,7 +439,7 @@ func mint{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     //   to: to is the zero address
     //   tokenId: tokenId is not a valid Uint256
     //   tokenId: token already minted
-    Ownable.assert_only_owner();
+    CarbonableAccessControl.assert_only_minter();
     ERC721Enumerable._mint(to, tokenId);
     return ();
 }
