@@ -8,17 +8,18 @@ from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.farm.library import CarbonableFarmer
 
 //
-// Constructor
+// Initializer
 //
 
-@constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    carbonable_project_address: felt, owner: felt
+@external
+func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    carbonable_project_address: felt, owner: felt, proxy_admin: felt
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -30,10 +31,52 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     // Explicit args:
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
     //   owner(felt): Owner address
+    //   proxy_admin(felt): Admin address
     // Returns:
     //   None
     CarbonableFarmer.initializer(carbonable_project_address);
     Ownable.initializer(owner);
+    Proxy.initializer(proxy_admin);
+    return ();
+}
+
+@view
+func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    implementation: felt
+) {
+    return Proxy.get_implementation_hash();
+}
+
+@view
+func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
+    return Proxy.get_admin();
+}
+
+@external
+func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    new_implementation: felt
+) {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
+    // Explicit args:
+    //   new_implementation(felt): new contract implementation
+    // Raises:
+    //   caller: caller is not a contract admin
+    Proxy.assert_only_admin();
+    Proxy._set_implementation_hash(new_implementation);
+    return ();
+}
+
+@external
+func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
+    Proxy.assert_only_admin();
+    Proxy._set_admin(new_admin);
     return ();
 }
 

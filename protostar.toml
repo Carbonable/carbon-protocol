@@ -9,15 +9,19 @@ CarbonableProject = ["src/project/project.cairo"]
 CarbonableMinter = ["src/mint/minter.cairo"]
 CarbonableYielder = ["src/farm/yielder.cairo"]
 CarbonableOffseter = ["src/farm/offseter.cairo"]
+CarbonableProxy = ["src/proxy/proxy.cairo"]
 
 [test]
 target = ["tests"]
 
-[profile.devnet.deploy]
+[profile.devnet.project]
 gateway-url = "http://127.0.0.1:5050/"
 
-[profile.testnet.deploy]
+[profile.testnet.project]
 network = "testnet"
+private-key-path = "./.env"
+account-address = "0x063675fa1ecea10063722e61557ed7f49ed2503d6cdd74f4b31e9770b473650c"
+max-fee = "auto"
 
-[profile.mainnet.deploy]
+[profile.mainnet.project]
 network = "mainnet"

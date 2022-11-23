@@ -12,21 +12,23 @@ from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.token.erc721.library import ERC721
 from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
+from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.project.library import CarbonableProject
 
 //
-// Constructor
+// Initializer
 //
 
-@constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    name: felt, symbol: felt, owner: felt
+@external
+func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    name: felt, symbol: felt, owner: felt, proxy_admin: felt
 ) {
     // Desc:
     //   Initialize the contract with the given name, symbol and owner -
-    //   This constructor uses the standard OZ ERC721 initializer,
+    //   This constructor uses the standard OZ Proxy initializer,
+    //   the standard OZ ERC721 initializer,
     //   the standard OZ ERC721Enumerable initializer and
     //   the OZ Ownable initializer
     // Implicit args:
@@ -37,11 +39,53 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   name(felt): Name of the collection
     //   symbol(felt): Symbol of the collection
     //   owner(felt): Owner address
+    //   proxy_admin(felt): Admin address
     // Returns:
     //   None
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
     Ownable.initializer(owner);
+    Proxy.initializer(proxy_admin);
+    return ();
+}
+
+@view
+func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    implementation: felt
+) {
+    return Proxy.get_implementation_hash();
+}
+
+@view
+func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
+    return Proxy.get_admin();
+}
+
+@external
+func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    new_implementation: felt
+) {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
+    // Explicit args:
+    //   new_implementation(felt): new contract implementation
+    // Raises:
+    //   caller: caller is not a contract admin
+    Proxy.assert_only_admin();
+    Proxy._set_implementation_hash(new_implementation);
+    return ();
+}
+
+@external
+func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
+    Proxy.assert_only_admin();
+    Proxy._set_admin(new_admin);
     return ();
 }
 

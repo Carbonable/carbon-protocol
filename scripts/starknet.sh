@@ -15,7 +15,7 @@ get_account_address() {
 get_network() {
     profile=$1
     protostar_toml_file=$2
-    network=$(grep profile.$profile $protostar_toml_file -A3 -m1 | sed -n 's@^.*[network=|gateway_url=]"\(.*\)".*$@\1@p')
+    network=$(grep profile.$profile $protostar_toml_file -A3 -m1 | sed -n 's@^.*[network =|gateway_url =]"\(.*\)".*$@\1@p')
     echo $(get_legacy_network "$network")
 }
 
