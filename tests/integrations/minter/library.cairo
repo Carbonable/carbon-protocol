@@ -93,7 +93,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     %}
 
     // Transfer project ownership from admin to minter
-    admin_instance.transferOwnership(carbonable_minter);
+    admin_instance.set_minter(carbonable_minter);
     // Set merkle tree root to minter contract
     admin_instance.set_whitelist_merkle_root(merkle_root);
 
@@ -134,11 +134,11 @@ namespace carbonable_project_instance {
 
     // Externals
 
-    func transferOwnership{
+    func set_minter{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }(newOwner: felt, caller: felt) {
+    }(minter: felt, caller: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
-        ICarbonableProject.transferOwnership(carbonable_project, newOwner);
+        ICarbonableProject.set_minter(carbonable_project, minter);
         %{ stop_prank() %}
         return ();
     }
@@ -464,15 +464,11 @@ namespace admin_instance {
         return ();
     }
 
-    func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        newOwner: felt
-    ) {
+    func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
         let (carbonable_project) = carbonable_project_instance.deployed();
         let (caller) = get_address();
         with carbonable_project {
-            carbonable_project_instance.transferOwnership(newOwner=newOwner, caller=caller);
-            let (owner) = carbonable_project_instance.owner();
-            assert owner = newOwner;
+            carbonable_project_instance.set_minter(minter=minter, caller=caller);
         }
         return ();
     }

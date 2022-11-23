@@ -85,6 +85,8 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     let (local admin_address) = admin_instance.get_address();
     let (local anyone_address) = anyone_instance.get_address();
 
+    admin_instance.set_minter(admin_address);
+
     admin_instance.mint(to=admin_address, token_id=1);
     admin_instance.mint(to=admin_address, token_id=2);
     admin_instance.mint(to=anyone_address, token_id=3);
@@ -133,6 +135,15 @@ namespace carbonable_project_instance {
     }
 
     // Externals
+
+    func set_minter{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(minter: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        ICarbonableProject.set_minter(carbonable_project, minter);
+        %{ stop_prank() %}
+        return ();
+    }
 
     func approve{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
@@ -336,6 +347,15 @@ namespace admin_instance {
     }
 
     // Externals
+
+    func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+        let (carbonable_project) = carbonable_project_instance.deployed();
+        let (caller) = get_address();
+        with carbonable_project {
+            carbonable_project_instance.set_minter(minter=minter, caller=caller);
+        }
+        return ();
+    }
 
     func approve{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         approved: felt, token_id: felt

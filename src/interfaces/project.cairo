@@ -10,7 +10,7 @@ namespace ICarbonableProject {
     func owner() -> (owner: felt) {
     }
 
-    func transferOwnership(newOwner: felt) {
+    func set_minter(minter: felt) {
     }
 
     func mint(to: felt, token_id: Uint256) {
