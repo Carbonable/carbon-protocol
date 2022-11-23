@@ -261,7 +261,7 @@ namespace CarbonableMinter {
         alloc_locals;
 
         // [Security] Start reetrancy guard
-        ReentrancyGuard._start();
+        ReentrancyGuard.start();
 
         // [Check] Not zero address
         let (caller) = get_caller_address();
@@ -298,7 +298,7 @@ namespace CarbonableMinter {
         mint_iter(carbonable_project_address, to, starting_index, quantity_uint256);
 
         // [Security] End reetrancy guard
-        ReentrancyGuard._end();
+        ReentrancyGuard.end();
 
         return (TRUE,);
     }
@@ -352,7 +352,7 @@ namespace CarbonableMinter {
         alloc_locals;
 
         // [Security] Start reetrancy guard
-        ReentrancyGuard._start();
+        ReentrancyGuard.start();
 
         // [Check] Whitelisted sale is open
         let (is_whitelist_open) = whitelisted_sale_open();
@@ -385,7 +385,7 @@ namespace CarbonableMinter {
         let (success) = buy(quantity);
 
         // [Security] End reetrancy guard
-        ReentrancyGuard._end();
+        ReentrancyGuard.end();
 
         return (success,);
     }
@@ -394,7 +394,7 @@ namespace CarbonableMinter {
         quantity: felt
     ) -> (success: felt) {
         // [Security] Start reetrancy guard
-        ReentrancyGuard._start();
+        ReentrancyGuard.start();
 
         // [Check] if at least whitelisted or public sale is open
         let (public_sale_open) = public_sale_open_.read();
@@ -406,7 +406,7 @@ namespace CarbonableMinter {
         let (success) = buy(quantity);
 
         // [Security] End reetrancy guard
-        ReentrancyGuard._end();
+        ReentrancyGuard.end();
 
         return (success,);
     }

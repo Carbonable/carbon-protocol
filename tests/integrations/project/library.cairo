@@ -28,28 +28,35 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
         # Admin account deployment
         context.admin_account_contract = deploy_contract(
-            context.sources.account,
-            {
+            contract=context.sources.account,
+            constructor_args={
                 "public_key": context.signers.admin,
             },
         ).contract_address
 
         # Anyone account deployment
         context.anyone_account_contract = deploy_contract(
-            context.sources.account,
-            {
+            contract=context.sources.account,
+            constructor_args={
                 "public_key": context.signers.anyone,
             },
         ).contract_address
 
         # Carbonable project deployment
+        context.carbonable_project_class_hash = declare(contract=context.sources.project).class_hash
+        calldata = {
+            "name": context.project.name,
+            "symbol": context.project.symbol,
+            "owner": context.signers.admin,
+            "proxy_admin": context.signers.admin,
+        }
         context.carbonable_project_contract = deploy_contract(
-            context.sources.project,
-            {
-                "name": context.project.name,
-                "symbol": context.project.symbol,
-                "owner": context.admin_account_contract,
-            },
+            contract=context.sources.proxy,
+            constructor_args={
+                "implementation_hash": context.carbonable_project_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": calldata.values(),
+            }
         ).contract_address
     %}
 

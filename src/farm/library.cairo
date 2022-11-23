@@ -162,7 +162,7 @@ namespace CarbonableFarmer {
         let (contract_address) = get_contract_address();
         let (carbonable_project_address) = carbonable_project_address_.read();
         // [Check] Throws error if unknown token id
-        let (owner) = IERC721.ownerOf(  
+        let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
         );
         with_attr error_message("CarbonableFarmer: token_id has not been registred") {
@@ -223,7 +223,7 @@ namespace CarbonableFarmer {
         alloc_locals;
 
         // [Security] Start reetrancy guard
-        ReentrancyGuard._start();
+        ReentrancyGuard.start();
 
         // [Check] Locked status
         let (status) = is_locked();
@@ -259,7 +259,7 @@ namespace CarbonableFarmer {
         registration_.write(token_id, caller);
 
         // [Security] End reetrancy guard
-        ReentrancyGuard._end();
+        ReentrancyGuard.end();
 
         return (success=TRUE,);
     }
@@ -270,7 +270,7 @@ namespace CarbonableFarmer {
         alloc_locals;
 
         // [Security] Start reetrancy guard
-        ReentrancyGuard._start();
+        ReentrancyGuard.start();
 
         // [Check] Locked status
         let (status) = is_locked();
@@ -306,7 +306,7 @@ namespace CarbonableFarmer {
         }
 
         // [Security] End reetrancy guard
-        ReentrancyGuard._end();
+        ReentrancyGuard.end();
 
         return (success=TRUE,);
     }

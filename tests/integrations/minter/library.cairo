@@ -34,19 +34,26 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         load("./tests/integrations/minter/config.yml", context)
 
         # Carbonable project deployment
+        context.carbonable_project_class_hash = declare(contract=context.sources.project).class_hash
+        calldata = {
+            "name": context.project.name,
+            "symbol": context.project.symbol,
+            "owner": context.signers.admin,
+            "proxy_admin": context.signers.admin,
+        }
         context.carbonable_project_contract = deploy_contract(
-            context.sources.project,
-            {
-                "name": context.project.name,
-                "symbol": context.project.symbol,
-                "owner": context.signers.admin,
-            },
+            contract=context.sources.proxy,
+            constructor_args={
+                "implementation_hash": context.carbonable_project_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": calldata.values(),
+            }
         ).contract_address
 
         # Payment token deployment
         context.payment_token_contract = deploy_contract(
-            context.sources.token,
-            {
+            contract=context.sources.token,
+            constructor_args={
                 "name": context.token.name,
                 "symbol": context.token.symbol,
                 "decimals": context.token.decimals,
@@ -56,18 +63,28 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ).contract_address
 
         # Carbonable minter deployment
+        context.carbonable_minter_class_hash = declare(contract=context.sources.minter).class_hash
+        calldata = {
+            "carbonable_project_address": context.carbonable_project_contract,
+            "payment_token_address": context.payment_token_contract,
+            "public_sale_open": context.minter.public_sale_open,
+            "max_buy_per_tx": context.minter.max_buy_per_tx,
+            "unit_price_low": context.minter.unit_price,
+            "unit_price_high": 0,
+            "max_supply_for_mint_low": context.minter.max_supply_for_mint,
+            "max_supply_for_mint_high": 0,
+            "reserved_supply_for_mint_low": context.minter.reserved_supply_for_mint,
+            "reserved_supply_for_mint_high": 0,
+            "owner": context.signers.admin,
+            "proxy_admin": context.signers.admin,
+        }
         context.carbonable_minter_contract = deploy_contract(
-            context.sources.minter,
-            {
-                "owner": context.signers.admin,
-                "carbonable_project_address": context.carbonable_project_contract,
-                "payment_token_address": context.payment_token_contract,
-                "public_sale_open": context.minter.public_sale_open,
-                "max_buy_per_tx": context.minter.max_buy_per_tx,
-                "unit_price": context.minter.unit_price,
-                "max_supply_for_mint": context.minter.max_supply_for_mint,
-                "reserved_supply_for_mint": context.minter.reserved_supply_for_mint,
-            },
+            contract=context.sources.proxy,
+            constructor_args={
+                "implementation_hash": context.carbonable_minter_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": calldata.values(),
+            }
         ).contract_address
 
         # Externalize required variables

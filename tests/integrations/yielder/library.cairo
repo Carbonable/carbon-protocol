@@ -33,37 +33,51 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
         # Admin account deployment
         context.admin_account_contract = deploy_contract(
-            context.sources.account,
-            {
+            contract=context.sources.account,
+            constructor_args={
                 "public_key": context.signers.admin,
             },
         ).contract_address
 
         # Anyone account deployment
         context.anyone_account_contract = deploy_contract(
-            context.sources.account,
-            {
+            contract=context.sources.account,
+            constructor_args={
                 "public_key": context.signers.anyone,
             },
         ).contract_address
 
         # Carbonable project deployment
+        context.carbonable_project_class_hash = declare(contract=context.sources.project).class_hash
+        calldata = {
+            "name": context.project.name,
+            "symbol": context.project.symbol,
+            "owner": context.admin_account_contract,
+            "proxy_admin": context.admin_account_contract,
+        }
         context.carbonable_project_contract = deploy_contract(
-            context.sources.project,
-            {
-                "name": context.project.name,
-                "symbol": context.project.symbol,
-                "owner": context.admin_account_contract,
-            },
+            contract=context.sources.proxy,
+            constructor_args={
+                "implementation_hash": context.carbonable_project_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": calldata.values(),
+            }
         ).contract_address
 
         # Carbonable yielder deployment
+        context.carbonable_yielder_class_hash = declare(contract=context.sources.yielder).class_hash
+        calldata = {
+            "carbonable_project_address": context.carbonable_project_contract,
+            "owner": context.admin_account_contract,
+            "proxy_admin": context.admin_account_contract,
+        }
         context.carbonable_yielder_contract = deploy_contract(
-            context.sources.yielder,
-            {
-                "owner": context.admin_account_contract,
-                "carbonable_project_address": context.carbonable_project_contract,
-            },
+            contract=context.sources.proxy,
+            constructor_args={
+                "implementation_hash": context.carbonable_yielder_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": calldata.values(),
+            }
         ).contract_address
     %}
 

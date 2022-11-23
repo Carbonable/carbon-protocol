@@ -8,17 +8,17 @@ from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.mint.library import CarbonableMinter
 
 //
-// Constructor
+// Initializer
 //
 
-@constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    owner: felt,
+@external
+func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
     payment_token_address: felt,
     public_sale_open: felt,
@@ -26,6 +26,8 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     unit_price: Uint256,
     max_supply_for_mint: Uint256,
     reserved_supply_for_mint: Uint256,
+    owner: felt,
+    proxy_admin: felt,
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -35,7 +37,6 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   owner(felt): Owner address
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
     //   payment_token_address(felt): Address of the ERC20 token that will be used during sales
     //   public_sale_open(felt): 1 to open the public sale right after deployment, 0 otherwise
@@ -43,6 +44,8 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   unit_price(Uint256): Price per token (based on ERC20 token defined as -payment_token_address-)
     //   max_supply_for_mint(Uint256): Max supply available whatever the way to mint
     //   reserved_supply_for_mint(Uint256): Supply reserved to be airdropped
+    //   owner(felt): Owner address
+    //   proxy_admin(felt): Admin address
     // Returns:
     //   None
     // Raises:
@@ -59,6 +62,47 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         reserved_supply_for_mint,
     );
     Ownable.initializer(owner);
+    Proxy.initializer(proxy_admin);
+    return ();
+}
+
+@view
+func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    implementation: felt
+) {
+    return Proxy.get_implementation_hash();
+}
+
+@view
+func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
+    return Proxy.get_admin();
+}
+
+@external
+func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    new_implementation: felt
+) {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
+    // Explicit args:
+    //   new_implementation(felt): new contract implementation
+    // Raises:
+    //   caller: caller is not a contract admin
+    Proxy.assert_only_admin();
+    Proxy._set_implementation_hash(new_implementation);
+    return ();
+}
+
+@external
+func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
+    Proxy.assert_only_admin();
+    Proxy._set_admin(new_admin);
     return ();
 }
 
