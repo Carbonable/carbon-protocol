@@ -73,7 +73,7 @@ permissions:
 env:
   PROJECT_ABI: ./build/CarbonableProject_abi.json
   PROTOSTAR_TOML_FILE: ./protostar.toml
-  PROTOSTAR_VERSION: 0.8.0
+  PROTOSTAR_VERSION: 0.8.1
 
 jobs:
   transfer:

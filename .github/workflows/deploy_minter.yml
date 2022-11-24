@@ -121,7 +121,7 @@ permissions:
 env:
   COMPILED_SOURCE: ./build/CarbonableMinter.json
   PROTOSTAR_TOML_FILE: ./protostar.toml
-  PROTOSTAR_VERSION: 0.8.0
+  PROTOSTAR_VERSION: 0.8.1
 
 jobs:
   deploy:
