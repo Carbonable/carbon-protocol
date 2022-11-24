@@ -26,11 +26,12 @@ from interfaces.yielder import ICarbonableYielder
 
 func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
+    local merkle_root;
     %{
         # Load config
         import sys
         sys.path.append('.')
-        from tests import load
+        from tests import load, MerkleTree
         load("./tests/integrations/minter/config.yml", context)
 
         # Admin account deployment
@@ -74,7 +75,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
                 "symbol": context.token.symbol,
                 "decimals": context.token.decimals,
                 "initial_supply": context.token.initial_supply,
-                "recipient": context.signers.anyone
+                "recipient": context.anyone_account_contract
             },
         ).contract_address
 
@@ -134,13 +135,33 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
                 "calldata": calldata.values(),
             }
         ).contract_address
+
+        # Build merkle tree
+        recipients = [context.anyone_account_contract, context.admin_account_contract]
+        slots = [5, 5]
+        merkle_leaves = MerkleTree.get_leaves(recipients, slots)
+        merkle_root = MerkleTree.generate_merkle_root(merkle_leaves)
+        merkle_proofs = [
+            MerkleTree.generate_merkle_proof(merkle_leaves, index)
+            for index, _ in enumerate(recipients)
+        ]
+
+        # Externalize required variables
+        context.whitelist = dict(
+            merkle_root=merkle_root,
+            merkle_proofs=merkle_proofs,
+            slots=slots,
+            recipients=recipients,
+        )
+        ids.merkle_root = merkle_root
     %}
 
-    // Set minters
+    // Set minter and merkle root
     let (local admin_address) = admin_instance.get_address();
     let (local carbonable_minter) = carbonable_minter_instance.get_address();
     admin_instance.set_minter(admin_address);
     admin_instance.set_minter(carbonable_minter);
+    admin_instance.set_whitelist_merkle_root(merkle_root);
 
     return ();
 }
@@ -1067,23 +1088,34 @@ namespace anyone_instance {
     }
 
     func get_slots() -> (slots: felt) {
+        let (address) = get_address();
         tempvar slots;
-        %{ ids.slots = context.whitelist.slots %}
+        %{
+            index = context.whitelist["recipients"].index(ids.address)
+            ids.slots = context.whitelist["slots"][index]
+        %}
         return (slots,);
     }
 
     func get_proof_len() -> (proof_len: felt) {
+        let (address) = get_address();
         tempvar proof_len;
-        %{ ids.proof_len = context.whitelist.merkle_proof_len %}
+        %{
+            index = context.whitelist["recipients"].index(ids.address)
+            ids.proof_len = len(context.whitelist["merkle_proofs"][index])
+        %}
         return (proof_len,);
     }
 
     func get_proof() -> (proof: felt*) {
         alloc_locals;
+        let (address) = get_address();
         let (local proof: felt*) = alloc();
         %{
-            for index, node in enumerate(context.whitelist.merkle_proof):
-                memory[ids.proof + index] = node
+            index = context.whitelist["recipients"].index(ids.address)
+            merkle_proof = context.whitelist["merkle_proofs"][index]
+            for idx, node in enumerate(merkle_proof):
+                memory[ids.proof + idx] = node
         %}
         return (proof,);
     }
