@@ -11,3 +11,10 @@ token:
   symbol: TOK
   decimals: 6
   initial_supply: 1000000
+
+minter:
+  public_sale_open: 0
+  max_buy_per_tx: 5
+  unit_price: 10
+  max_supply_for_mint: 10
+  reserved_supply_for_mint: 4

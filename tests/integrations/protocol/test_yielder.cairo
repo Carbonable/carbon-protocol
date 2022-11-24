@@ -8,7 +8,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
-from tests.integrations.yielder.library import (
+from tests.integrations.protocol.library import (
     setup,
     admin_instance as admin,
     anyone_instance as anyone,
@@ -17,23 +17,23 @@ from tests.integrations.yielder.library import (
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    // Given a deployed user contracts
+    // Given a get_address user contracts
     // And an admin with address 1000
     // And an anyone with address 1001
-    // Given a deployed project contact
+    // Given a get_address project contact
     // And owned by admin
     // And with token 1 owned by admin
     // And with token 2 owned by admin
     // And with token 3 owned by anyone
     // And with token 4 owned by anyone
     // And with token 5 owned by anyone
-    // Given a deployed farmer contract
+    // Given a get_address farmer contract
     // And owned by admin
     return setup();
 }
 
 @view
-func test_e2e_deposit_and_withdraw_while_unlock{
+func test_deposit_and_withdraw_while_unlock{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin starts a 10s period with 5s unlock
@@ -59,65 +59,70 @@ func test_e2e_deposit_and_withdraw_while_unlock{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (yielder_address) = yielder.get_address();
 
-    admin.start_period(unlocked_duration=5, period_duration=10);
+    // Mint tokens
+    admin.mint(to=admin_address, token_id=1);
+    admin.mint(to=admin_address, token_id=2);
+    admin.mint(to=anyone_address, token_id=3);
+    admin.mint(to=anyone_address, token_id=4);
+    admin.mint(to=anyone_address, token_id=5);
+
+    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
-    anyone.approve(approved=yielder_address, token_id=3);
-    anyone.deposit(token_id=3);
-    anyone.withdraw(token_id=3);
-    anyone.approve(approved=yielder_address, token_id=3);
-    anyone.deposit(token_id=3);
-    anyone.approve(approved=yielder_address, token_id=4);
-    anyone.deposit(token_id=4);
+    anyone.project_approve(approved=yielder_address, token_id=3);
+    anyone.yielder_deposit(token_id=3);
+    anyone.yielder_withdraw(token_id=3);
+    anyone.project_approve(approved=yielder_address, token_id=3);
+    anyone.yielder_deposit(token_id=3);
+    anyone.project_approve(approved=yielder_address, token_id=4);
+    anyone.yielder_deposit(token_id=4);
 
-    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=100, high=0);
 
-    admin.approve(approved=yielder_address, token_id=1);
-    admin.deposit(token_id=1);
+    admin.project_approve(approved=yielder_address, token_id=1);
+    admin.yielder_deposit(token_id=1);
     %{ stop_warp() %}
 
-    let (owner) = anyone.registred_owner_of(token_id=3);
+    let (owner) = anyone.yielder_registred_owner_of(token_id=3);
     assert owner = anyone_address;
 
-    let (owner) = anyone.registred_owner_of(token_id=1);
+    let (owner) = anyone.yielder_registred_owner_of(token_id=1);
     assert owner = admin_address;
 
-    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=66, high=0);
 
-    let (balance) = anyone.total_locked();
+    let (balance) = anyone.yielder_total_locked();
     assert balance = Uint256(low=3, high=0);
 
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.yielder_address) %}
-    anyone.withdraw(token_id=3);
+    anyone.yielder_withdraw(token_id=3);
 
-    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=50, high=0);
 
-    admin.withdraw(token_id=1);
+    admin.yielder_withdraw(token_id=1);
 
-    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=100, high=0);
 
-    anyone.withdraw(token_id=4);
+    anyone.yielder_withdraw(token_id=4);
     %{ stop_warp() %}
 
-    let (shares) = anyone.shares_of(anyone_address, precision=100);
+    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=0, high=0);
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: token_id has not been registred") %}
-    let (owner) = anyone.registred_owner_of(token_id=1);
+    let (owner) = anyone.yielder_registred_owner_of(token_id=1);
 
     return ();
 }
 
 @view
-func test_e2e_deposit_revert_locked{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
+func test_deposit_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
     // And anyone deposits token 3 to yielder at time 6
@@ -125,24 +130,26 @@ func test_e2e_deposit_revert_locked{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (yielder_address) = yielder.get_address();
 
-    admin.start_period(unlocked_duration=5, period_duration=10);
+    // Mint tokens
+    admin.mint(to=anyone_address, token_id=3);
 
-    anyone.approve(approved=yielder_address, token_id=3);
+    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
+
+    anyone.project_approve(approved=yielder_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposits are currently locked") %}
-    anyone.deposit(token_id=3);
+    anyone.yielder_deposit(token_id=3);
     %{ stop_warp() %}
 
     return ();
 }
 
 @view
-func test_e2e_withdraw_revert_locked{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
+func test_withdraw_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
     // When admin starts a 10s period with 5s unlock
     // And anyone approves yielder for token 3 at time 1
     // And anyone deposits token 3 to yielder at time 5
@@ -151,25 +158,28 @@ func test_e2e_withdraw_revert_locked{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (yielder_address) = yielder.get_address();
 
-    admin.start_period(unlocked_duration=5, period_duration=10);
-    anyone.approve(approved=yielder_address, token_id=3);
+    // Mint tokens
+    admin.mint(to=anyone_address, token_id=3);
+
+    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
+    anyone.project_approve(approved=yielder_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
-    anyone.deposit(token_id=3);
+    anyone.yielder_deposit(token_id=3);
     %{ stop_warp() %}
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: withdrawals are currently locked") %}
-    anyone.withdraw(token_id=3);
+    anyone.yielder_withdraw(token_id=3);
     %{ stop_warp() %}
 
     return ();
 }
 
 @view
-func test_e2e_start_and_start_and_stop_period{
+func test_start_and_start_and_stop_period{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin starts a 10s period with 5s unlock
@@ -179,17 +189,17 @@ func test_e2e_start_and_start_and_stop_period{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.deployed();
+    let (yielder_address) = yielder.get_address();
 
-    admin.start_period(unlocked_duration=5, period_duration=10);
-    admin.start_period(unlocked_duration=10, period_duration=20);
-    admin.stop_period();
+    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
+    admin.yielder_start_period(unlocked_duration=10, period_duration=20);
+    admin.yielder_stop_period();
 
     return ();
 }
 
 @view
-func test_e2e_start_period_revert_not_owner{
+func test_start_period_revert_not_owner{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When anyone starts a 10s period with 5s unlock
@@ -197,13 +207,13 @@ func test_e2e_start_period_revert_not_owner{
     alloc_locals;
 
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.start_period(unlocked_duration=5, period_duration=10);
+    anyone.yielder_start_period(unlocked_duration=5, period_duration=10);
 
     return ();
 }
 
 @view
-func test_e2e_stop_period_revert_not_owner{
+func test_stop_period_revert_not_owner{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin starts a 10s period with 5s unlock
@@ -211,9 +221,9 @@ func test_e2e_stop_period_revert_not_owner{
     // Then a failed transaction is expected
     alloc_locals;
 
-    admin.start_period(unlocked_duration=5, period_duration=10);
+    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.stop_period();
+    anyone.yielder_stop_period();
 
     return ();
 }
