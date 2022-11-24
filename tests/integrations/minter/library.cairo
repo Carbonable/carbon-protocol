@@ -17,6 +17,11 @@ from openzeppelin.security.safemath.library import SafeUint256
 // Local dependencies
 from interfaces.minter import ICarbonableMinter
 from interfaces.project import ICarbonableProject
+from tests.integrations.protocol.library import (
+    carbonable_project_instance,
+    payment_token_instance,
+    carbonable_minter_instance,
+)
 
 //
 // Functions
@@ -24,7 +29,6 @@ from interfaces.project import ICarbonableProject
 
 func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
-    local carbonable_minter;
     local merkle_root;
     %{
         # Load config
@@ -88,270 +92,15 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ).contract_address
 
         # Externalize required variables
-        ids.carbonable_minter = context.carbonable_minter_contract
         ids.merkle_root = context.whitelist.merkle_root
     %}
 
-    // Transfer project ownership from admin to minter
+    // Set minter and merkle root
+    let (local carbonable_minter) = carbonable_minter_instance.get_address();
     admin_instance.set_minter(carbonable_minter);
-    // Set merkle tree root to minter contract
     admin_instance.set_whitelist_merkle_root(merkle_root);
 
     return ();
-}
-
-namespace carbonable_project_instance {
-    // Internals
-
-    func deployed() -> (carbonable_project_contract: felt) {
-        tempvar carbonable_project_contract;
-        %{ ids.carbonable_project_contract = context.carbonable_project_contract %}
-        return (carbonable_project_contract,);
-    }
-
-    // Views
-
-    func owner{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }() -> (owner: felt) {
-        let (owner: felt) = ICarbonableProject.owner(carbonable_project);
-        return (owner,);
-    }
-
-    func balanceOf{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }(owner: felt) -> (balance: Uint256) {
-        let (balance) = IERC721.balanceOf(carbonable_project, owner);
-        return (balance,);
-    }
-
-    func totalSupply{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }() -> (totalSupply: Uint256) {
-        let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project);
-        return (total_supply,);
-    }
-
-    // Externals
-
-    func set_minter{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }(minter: felt, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
-        ICarbonableProject.set_minter(carbonable_project, minter);
-        %{ stop_prank() %}
-        return ();
-    }
-}
-
-namespace payment_token_instance {
-    // Internals
-
-    func deployed() -> (payment_token_contract: felt) {
-        tempvar payment_token_contract;
-        %{ ids.payment_token_contract = context.payment_token_contract %}
-        return (payment_token_contract,);
-    }
-
-    // Views
-
-    func balanceOf{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, payment_token: felt
-    }(account: felt) -> (balance: Uint256) {
-        let (balance) = IERC20.balanceOf(payment_token, account);
-        return (balance,);
-    }
-
-    func allowance{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, payment_token: felt
-    }(owner: felt, spender: felt) -> (remaining: Uint256) {
-        let (remaining) = IERC20.allowance(payment_token, owner, spender);
-        return (remaining,);
-    }
-
-    // Externals
-
-    func approve{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, payment_token: felt
-    }(spender: felt, amount: Uint256, caller: felt) -> (success: felt) {
-        %{ stop_prank = start_prank(ids.caller, ids.payment_token) %}
-        let (success) = IERC20.approve(payment_token, spender, amount);
-        %{ stop_prank() %}
-        return (success,);
-    }
-}
-
-namespace carbonable_minter_instance {
-    // Internals
-
-    func deployed() -> (carbonable_minter_contract: felt) {
-        tempvar carbonable_minter_contract;
-        %{ ids.carbonable_minter_contract = context.carbonable_minter_contract %}
-        return (carbonable_minter_contract,);
-    }
-
-    // Views
-
-    func carbonable_project_address{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (carbonable_project_address: felt) {
-        let (carbonable_project_address) = ICarbonableMinter.carbonable_project_address(
-            carbonable_minter
-        );
-        return (carbonable_project_address,);
-    }
-
-    func payment_token_address{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (payment_token_address: felt) {
-        let (payment_token_address) = ICarbonableMinter.payment_token_address(carbonable_minter);
-        return (payment_token_address,);
-    }
-
-    func whitelisted_sale_open{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (whitelisted_sale_open: felt) {
-        let (whitelisted_sale_open) = ICarbonableMinter.whitelisted_sale_open(carbonable_minter);
-        return (whitelisted_sale_open,);
-    }
-
-    func public_sale_open{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (public_sale_open: felt) {
-        let (public_sale_open) = ICarbonableMinter.public_sale_open(carbonable_minter);
-        return (public_sale_open,);
-    }
-
-    func max_buy_per_tx{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (max_buy_per_tx: felt) {
-        let (max_buy_per_tx) = ICarbonableMinter.max_buy_per_tx(carbonable_minter);
-        return (max_buy_per_tx,);
-    }
-
-    func unit_price{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (unit_price: Uint256) {
-        let (unit_price) = ICarbonableMinter.unit_price(carbonable_minter);
-        return (unit_price,);
-    }
-
-    func max_supply_for_mint{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (max_supply_for_mint: Uint256) {
-        let (max_supply_for_mint) = ICarbonableMinter.max_supply_for_mint(carbonable_minter);
-        return (max_supply_for_mint,);
-    }
-
-    func reserved_supply_for_mint{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (reserved_supply_for_mint: Uint256) {
-        let (reserved_supply_for_mint) = ICarbonableMinter.reserved_supply_for_mint(
-            carbonable_minter
-        );
-        return (reserved_supply_for_mint,);
-    }
-
-    func whitelist_merkle_root{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (whitelist_merkle_root: felt) {
-        let (whitelist_merkle_root) = ICarbonableMinter.whitelist_merkle_root(carbonable_minter);
-        return (whitelist_merkle_root,);
-    }
-
-    func whitelisted_slots{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(account: felt, slots: felt, proof_len: felt, proof: felt*) -> (slots: felt) {
-        let (slots) = ICarbonableMinter.whitelisted_slots(
-            carbonable_minter, account, slots, proof_len, proof
-        );
-        return (slots,);
-    }
-
-    // Externals
-
-    func decrease_reserved_supply_for_mint{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(slots: Uint256, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.decrease_reserved_supply_for_mint(carbonable_minter, slots);
-        %{ stop_prank() %}
-        return ();
-    }
-
-    func withdraw{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(caller: felt) -> (success: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        let (success) = ICarbonableMinter.withdraw(carbonable_minter);
-        %{ stop_prank() %}
-        return (success,);
-    }
-
-    func set_whitelist_merkle_root{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(whitelist_merkle_root: felt, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.set_whitelist_merkle_root(carbonable_minter, whitelist_merkle_root);
-        %{ stop_prank() %}
-        return ();
-    }
-
-    func set_public_sale_open{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(public_sale_open: felt, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.set_public_sale_open(carbonable_minter, public_sale_open);
-        %{ stop_prank() %}
-        return ();
-    }
-
-    func set_max_buy_per_tx{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(max_buy_per_tx: felt, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.set_max_buy_per_tx(carbonable_minter, max_buy_per_tx);
-        %{ stop_prank() %}
-        return ();
-    }
-
-    func set_unit_price{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(unit_price: Uint256, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.set_unit_price(carbonable_minter, unit_price);
-        %{ stop_prank() %}
-        return ();
-    }
-
-    func whitelist_buy{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(slots: felt, proof_len: felt, proof: felt*, quantity: felt, caller: felt) -> (success: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        let (success) = ICarbonableMinter.whitelist_buy(
-            carbonable_minter, slots, proof_len, proof, quantity
-        );
-        %{ stop_prank() %}
-        return (success,);
-    }
-
-    func public_buy{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(quantity: felt, caller: felt) -> (success: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        let (success) = ICarbonableMinter.public_buy(carbonable_minter, quantity);
-        %{ stop_prank() %}
-        return (success,);
-    }
-
-    func airdrop{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(to: felt, quantity: felt, caller: felt) -> (success: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        let (success) = ICarbonableMinter.airdrop(carbonable_minter, to, quantity);
-        %{ stop_prank() %}
-        return (success,);
-    }
 }
 
 namespace admin_instance {
@@ -366,8 +115,8 @@ namespace admin_instance {
     // Externals
 
     func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (payment_token) = payment_token_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
+        let (payment_token) = payment_token_instance.get_address();
         let (caller) = get_address();
         with payment_token {
             let (initial_balance) = payment_token_instance.balanceOf(account=caller);
@@ -388,7 +137,7 @@ namespace admin_instance {
     func set_whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         whitelist_merkle_root: felt
     ) {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_whitelist_merkle_root(
@@ -404,7 +153,7 @@ namespace admin_instance {
     func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         public_sale_open: felt
     ) {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_public_sale_open(
@@ -419,7 +168,7 @@ namespace admin_instance {
     func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         max_buy_per_tx: felt
     ) {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_max_buy_per_tx(
@@ -434,7 +183,7 @@ namespace admin_instance {
     func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         unit_price: felt
     ) {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         let unit_price_uint256 = Uint256(unit_price, 0);
         with carbonable_minter {
@@ -449,7 +198,7 @@ namespace admin_instance {
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }(slots: felt) {
         alloc_locals;
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         let slots_uint256 = Uint256(slots, 0);
         with carbonable_minter {
@@ -465,7 +214,7 @@ namespace admin_instance {
     }
 
     func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
-        let (carbonable_project) = carbonable_project_instance.deployed();
+        let (carbonable_project) = carbonable_project_instance.get_address();
         let (caller) = get_address();
         with carbonable_project {
             carbonable_project_instance.set_minter(minter=minter, caller=caller);
@@ -477,8 +226,8 @@ namespace admin_instance {
         to: felt, quantity: felt
     ) {
         alloc_locals;
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (carbonable_project) = carbonable_project_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
+        let (carbonable_project) = carbonable_project_instance.get_address();
         let (caller) = get_address();
         let quantity_uint256 = Uint256(quantity, 0);
 
@@ -555,7 +304,7 @@ namespace anyone_instance {
     func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         public_sale_open: felt
     ) {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_public_sale_open(
@@ -570,7 +319,7 @@ namespace anyone_instance {
     func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         max_buy_per_tx: felt
     ) {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
             carbonable_minter_instance.set_max_buy_per_tx(
@@ -585,7 +334,7 @@ namespace anyone_instance {
     func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         unit_price: felt
     ) {
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         let unit_price_uint256 = Uint256(unit_price, 0);
         with carbonable_minter {
@@ -598,8 +347,8 @@ namespace anyone_instance {
 
     func approve{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) {
         alloc_locals;
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (payment_token) = payment_token_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
+        let (payment_token) = payment_token_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
             let (unit_price) = carbonable_minter_instance.unit_price();
@@ -622,9 +371,9 @@ namespace anyone_instance {
         quantity: felt
     ) {
         alloc_locals;
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (carbonable_project) = carbonable_project_instance.deployed();
-        let (payment_token) = payment_token_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (payment_token) = payment_token_instance.get_address();
         let (caller) = get_address();
         let (slots) = get_slots();
         let (proof_len) = get_proof_len();
@@ -676,9 +425,9 @@ namespace anyone_instance {
         quantity: felt
     ) {
         alloc_locals;
-        let (carbonable_minter) = carbonable_minter_instance.deployed();
-        let (carbonable_project) = carbonable_project_instance.deployed();
-        let (payment_token) = payment_token_instance.deployed();
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (payment_token) = payment_token_instance.get_address();
         let (caller) = get_address();
 
         // get user nft and payment token balances to check after buy

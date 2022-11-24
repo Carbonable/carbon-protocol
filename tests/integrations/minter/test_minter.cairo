@@ -38,7 +38,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
-func test_e2e_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // When anyone approves minter for 5 token equivalent nfts
     // And anyone makes 5 whitelist buy
     // And admin open the public sale
@@ -58,7 +58,7 @@ func test_e2e_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 }
 
 @view
-func test_e2e_not_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_not_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // When admin set up a new whitelist merkle tree excluding anyone
     // And anyone approves minter for 1 token equivalent nft
     // And anyone makes 1 whitelist buy
@@ -73,7 +73,7 @@ func test_e2e_not_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 }
 
 @view
-func test_e2e_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // When anyone approves minter for 5 token equivalent nfts
     // And anyone makes 5 whitelist buy
     // And admin open the public sale
@@ -99,7 +99,7 @@ func test_e2e_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 @view
-func test_e2e_public_buy_not_enough_available_nfts{
+func test_public_buy_not_enough_available_nfts{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When anyone approves minter for 5 token equivalent nfts
@@ -122,7 +122,7 @@ func test_e2e_public_buy_not_enough_available_nfts{
 }
 
 @view
-func test_e2e_airdrop_not_enough_available_reserved_nfts{
+func test_airdrop_not_enough_available_reserved_nfts{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When anyone approves minter for 5 token equivalent nfts
@@ -144,7 +144,7 @@ func test_e2e_airdrop_not_enough_available_reserved_nfts{
 }
 
 @view
-func test_e2e_over_airdropped{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_over_airdropped{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // When admin airdrops 11 nfts to anyone
     // Then 'not enough available NFTs' failed transaction happens
     alloc_locals;
@@ -157,7 +157,7 @@ func test_e2e_over_airdropped{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 }
 
 @view
-func test_e2e_revert_set_public_sale_not_owner{
+func test_revert_set_public_sale_not_owner{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When anyone closes the public sale
@@ -171,7 +171,7 @@ func test_e2e_revert_set_public_sale_not_owner{
 }
 
 @view
-func test_e2e_revert_set_max_buy_per_tx_not_owner{
+func test_revert_set_max_buy_per_tx_not_owner{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When anyone set the max buy per tx
@@ -185,7 +185,7 @@ func test_e2e_revert_set_max_buy_per_tx_not_owner{
 }
 
 @view
-func test_e2e_revert_set_unit_price_not_owner{
+func test_revert_set_unit_price_not_owner{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When anyone set the unit price
