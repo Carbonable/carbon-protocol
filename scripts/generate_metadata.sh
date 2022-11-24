@@ -7,7 +7,7 @@ PARENT_DIR="$(dirname "$SOURCE_FILE")"
 
 ### GENERATION
 echo $TIMES
-for (( i=0; i<$TIMES; i++))
+for (( i=1; i<=$TIMES; i++))
 do
     cp $SOURCE_FILE $PARENT_DIR/$i.json
 done

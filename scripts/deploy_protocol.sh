@@ -42,11 +42,12 @@ deploy_all_contracts() {
     [ ! -z $PROFILE ] && PROFILE_OPT="--profile $PROFILE"
 
     # Deploy ERC-721 token contract
-    if [ -z $ERC721_ADDRESS ]; then
-        erc721_name=$(str_to_hex "$ERC721_NAME")
-        erc721_symbol=$(str_to_hex "$ERC721_SYMBOL")
+    if [ -z $PROJECT_ADDRESS ]; then
+        project_name=$(str_to_hex "$PROJECT_NAME")
+        project_symbol=$(str_to_hex "$PROJECT_SYMBOL")
         log_info "Deploying ERC-721 contract..."
-        ERC721_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProject.json --inputs $erc721_name $erc721_symbol $ADMIN_ADDRESS" "$NETWORK"` || exit_error
+        PROJECT_CLASS_HASH=`send_transaction "protostar $PROFILE_OPT declare ./build/CarbonableProject.json --max-fee auto" "$NETWORK"` || exit_error
+        PROJECT_ADDRESS=`send_transaction "protostar $PROFILE_OPT deploy ./build/CarbonableProxy.json --max-fee auto --inputs $project_name $project_symbol $ADMIN_ADDRESS" "$NETWORK"` || exit_error
     fi
 
     # Deploy Minter contract
