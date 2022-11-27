@@ -15,7 +15,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
@@ -26,7 +26,7 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let unlocked_duration = 30;
     let period_duration = 100;
     let (success) = CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration
+        unlocked_duration=unlocked_duration, period_duration=period_duration, removal=0
     );
     assert success = TRUE;
     %{ stop_warp() %}

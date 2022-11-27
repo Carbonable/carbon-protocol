@@ -22,7 +22,9 @@ namespace ICarbonableOffseter {
     func registred_owner_of(token_id: Uint256) -> (address: felt) {
     }
 
-    func start_period(unlocked_duration: felt, period_duration: felt) -> (success: felt) {
+    func start_period(unlocked_duration: felt, period_duration: felt, removal: felt) -> (
+        success: felt
+    ) {
     }
 
     func stop_period() -> (success: felt) {

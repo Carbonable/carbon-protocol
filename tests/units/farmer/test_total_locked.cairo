@@ -16,7 +16,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance

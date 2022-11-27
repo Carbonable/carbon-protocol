@@ -114,6 +114,36 @@ func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
+func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (total_offsetable: Uint256) {
+    // Desc:
+    //   Return the locked status of deposits and withdrawals
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   status(felt): Locked status (1 if locked else 0)
+    return CarbonableFarmer.total_offsetable(address=address);
+}
+
+@view
+func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (total_offseted: Uint256) {
+    // Desc:
+    //   Return the locked status of deposits and withdrawals
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   status(felt): Locked status (1 if locked else 0)
+    return CarbonableFarmer.total_offseted(address=address);
+}
+
+@view
 func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     balance: Uint256
 ) {
@@ -169,7 +199,7 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 
 @external
 func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    unlocked_duration: felt, period_duration: felt
+    unlocked_duration: felt, period_duration: felt, removal: felt
 ) -> (success: felt) {
     // Desc:
     //   Start a new period (erase the current one)
@@ -180,11 +210,12 @@ func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // Explicit args:
     //   unlocked_duration(felt): Unlocked duration in seconds
     //   period_duration(felt): Period duration in seconds
+    //   removal(felt): Carbon removal in ng of CO2
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
     return CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration
+        unlocked_duration=unlocked_duration, period_duration=period_duration, removal=removal
     );
 }
 
