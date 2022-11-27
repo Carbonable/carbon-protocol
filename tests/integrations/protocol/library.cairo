@@ -511,7 +511,7 @@ namespace carbonable_offseter_instance {
     ) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
         let (success) = ICarbonableOffseter.start_period(
-            carbonable_offseter, unlocked_duration, removal, period_duration
+            carbonable_offseter, unlocked_duration, period_duration, removal
         );
         %{ stop_prank() %}
         return (success=success,);
