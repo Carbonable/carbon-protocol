@@ -64,7 +64,7 @@ func period_duration_() -> (duration: felt) {
 }
 
 @storage_var
-func removal_() -> (removal: Uint256) {
+func absorption_() -> (absorption: Uint256) {
 }
 
 @storage_var
@@ -238,7 +238,7 @@ namespace CarbonableFarmer {
     //
 
     func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        unlocked_duration: felt, period_duration: felt, removal: felt
+        unlocked_duration: felt, period_duration: felt, absorption: felt
     ) -> (success: felt) {
         // [Check] Duration inputs validity
         with_attr error_message("CarbonableFarmer: Invalid period duration") {
@@ -248,8 +248,8 @@ namespace CarbonableFarmer {
             assert_le(unlocked_duration, period_duration);
         }
 
-        // [Effect] Store removal information
-        removal_.write(Uint256(low=removal, high=0));
+        // [Effect] Store absorption information
+        absorption_.write(Uint256(low=absorption, high=0));
 
         // [Effect] Store period information
         let (current_time) = get_block_timestamp();
@@ -517,8 +517,8 @@ namespace CarbonableFarmer {
         // If registred then update the total offsetable
         let one = Uint256(low=1, high=0);
         if (address != 0) {
-            let (removal) = removal_.read();
-            let (quantity, _, _) = uint256_mul_div_mod(removal, one, total_supply);
+            let (absorption) = absorption_.read();
+            let (quantity, _, _) = uint256_mul_div_mod(absorption, one, total_supply);
             let (balance) = total_offsetable_.read(address);
             let (new_balance) = SafeUint256.add(balance, quantity);
             total_offsetable_.write(address, new_balance);

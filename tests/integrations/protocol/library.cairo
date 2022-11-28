@@ -556,12 +556,12 @@ namespace carbonable_offseter_instance {
 
     func start_period{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
-    }(unlocked_duration: felt, period_duration: felt, removal: felt, caller: felt) -> (
+    }(unlocked_duration: felt, period_duration: felt, absorption: felt, caller: felt) -> (
         success: felt
     ) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
         let (success) = ICarbonableOffseter.start_period(
-            carbonable_offseter, unlocked_duration, period_duration, removal
+            carbonable_offseter, unlocked_duration, period_duration, absorption
         );
         %{ stop_prank() %}
         return (success=success,);
@@ -990,7 +990,7 @@ namespace admin_instance {
     }
 
     func offseter_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        unlocked_duration: felt, period_duration: felt, removal: felt
+        unlocked_duration: felt, period_duration: felt, absorption: felt
     ) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         let (caller) = get_address();
@@ -998,7 +998,7 @@ namespace admin_instance {
             let (success) = carbonable_offseter_instance.start_period(
                 unlocked_duration=unlocked_duration,
                 period_duration=period_duration,
-                removal=removal,
+                absorption=absorption,
                 caller=caller,
             );
             assert success = TRUE;
@@ -1513,7 +1513,7 @@ namespace anyone_instance {
     }
 
     func offseter_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        unlocked_duration: felt, period_duration: felt, removal: felt
+        unlocked_duration: felt, period_duration: felt, absorption: felt
     ) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         let (caller) = get_address();
@@ -1521,7 +1521,7 @@ namespace anyone_instance {
             let (success) = carbonable_offseter_instance.start_period(
                 unlocked_duration=unlocked_duration,
                 period_duration=period_duration,
-                removal=removal,
+                absorption=absorption,
                 caller=caller,
             );
             assert success = TRUE;

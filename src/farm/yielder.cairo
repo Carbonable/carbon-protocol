@@ -229,7 +229,7 @@ func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     //   success(felt): Success status
     Ownable.assert_only_owner();
     return CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, removal=0
+        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=0
     );
 }
 

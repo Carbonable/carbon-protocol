@@ -71,7 +71,7 @@ func test_deposit_and_withdraw_while_unlock{
     admin.mint(to=anyone_address, token_id=5);
 
     // 0.5 T/year is 41700000000000 ng/month which is 8340000000000 ng/month per token for a total supply of 5 tokens
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, removal=41700000000000);
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
     anyone.project_approve(approved=offseter_address, token_id=3);
@@ -184,7 +184,7 @@ func test_deposit_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     // Mint tokens
     admin.mint(to=anyone_address, token_id=3);
 
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, removal=41700000000000);
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
 
     anyone.project_approve(approved=offseter_address, token_id=3);
 
@@ -212,7 +212,7 @@ func test_withdraw_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     // Mint tokens
     admin.mint(to=anyone_address, token_id=3);
 
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, removal=41700000000000);
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
     anyone.project_approve(approved=offseter_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
@@ -240,8 +240,10 @@ func test_start_and_start_and_stop_period{
     let (anyone_address) = anyone.get_address();
     let (offseter_address) = offseter.get_address();
 
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, removal=41700000000000);
-    admin.offseter_start_period(unlocked_duration=10, period_duration=20, removal=41700000000000);
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
+    admin.offseter_start_period(
+        unlocked_duration=10, period_duration=20, absorption=41700000000000
+    );
     admin.offseter_stop_period();
 
     return ();
@@ -256,7 +258,9 @@ func test_start_period_revert_not_owner{
     alloc_locals;
 
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.offseter_start_period(unlocked_duration=5, period_duration=10, removal=41700000000000);
+    anyone.offseter_start_period(
+        unlocked_duration=5, period_duration=10, absorption=41700000000000
+    );
 
     return ();
 }
@@ -270,9 +274,61 @@ func test_stop_period_revert_not_owner{
     // Then a failed transaction is expected
     alloc_locals;
 
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, removal=41700000000000);
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
     anyone.offseter_stop_period();
+
+    return ();
+}
+
+@view
+func test_snapshot_revert_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin starts a 10s period with 5s unlock
+    // And anyone snapshots
+    // Then a failed transaction is expected
+    alloc_locals;
+
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.snapshot();
+
+    return ();
+}
+
+@view
+func test_snapshot_revert_not_locked{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin snapshots
+    // Then a failed transaction is expected
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: snapshot must be executed in locked period") %}
+    admin.snapshot();
+
+    return ();
+}
+
+@view
+func test_snapshot_revert_already_snapshoted{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin starts a 10s period with 5s unlock
+    // And anyone stops the current period
+    // Then a failed transaction is expected
+    alloc_locals;
+
+    let (offseter_address) = offseter.get_address();
+
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
+
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
+    admin.snapshot();
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: snapshot already executed for the current period") %}
+    admin.snapshot();
+    %{ stop_warp() %}
 
     return ();
 }

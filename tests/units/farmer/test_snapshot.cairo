@@ -31,7 +31,7 @@ func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     let unlocked_duration = 30;
     let period_duration = 100;
     let (success) = CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, removal=2
+        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=2
     );
     assert success = TRUE;
     %{ stop_warp() %}

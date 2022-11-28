@@ -784,8 +784,8 @@
   functionName:
     name: stop_period
     charIndex:
-      start: 6755
-      end: 6766
+      start: 6758
+      end: 6769
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -835,14 +835,14 @@
           end: 212
     raises: null
     charIndex:
-      start: 6860
-      end: 7072
+      start: 6863
+      end: 7075
 - attributeName: external
   functionName:
     name: deposit
     charIndex:
-      start: 7167
-      end: 7174
+      start: 7170
+      end: 7177
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -900,14 +900,14 @@
           end: 303
     raises: null
     charIndex:
-      start: 7285
-      end: 7588
+      start: 7288
+      end: 7591
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 7663
-      end: 7671
+      start: 7666
+      end: 7674
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -965,5 +965,5 @@
           end: 297
     raises: null
     charIndex:
-      start: 7782
-      end: 8079
+      start: 7785
+      end: 8082
