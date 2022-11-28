@@ -113,25 +113,43 @@ namespace CarbonableFarmer {
         return (carbonable_minter_address=carbonable_minter_address,);
     }
 
+    func get_start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        start_time: felt
+    ) {
+        let (start) = start_.read();
+        return (start_time=start,);
+    }
+
+    func get_lock_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        lock_time: felt
+    ) {
+        let (start) = get_start_time();
+        let (unlocked_duration) = unlocked_duration_.read();
+        return (lock_time=start + unlocked_duration,);
+    }
+
+    func get_end_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        end_time: felt
+    ) {
+        let (start) = get_start_time();
+        let (period_duration) = period_duration_.read();
+        return (end_time=start + period_duration,);
+    }
+
     func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         status: felt
     ) {
         alloc_locals;
 
-        // [Compute] Absolute locked time
+        // [Compute] Absolute times
         let (current_time) = get_block_timestamp();
-        let (start) = start_.read();
-        let (unlocked_duration) = unlocked_duration_.read();
-        let locked_time = start + unlocked_duration;
-
-        // [Compute] Absolute end time
-        let (period_duration) = period_duration_.read();
-        let end = start + period_duration;
+        let (lock_time) = get_lock_time();
+        let (end_time) = get_end_time();
 
         // [Evaluate] Boudaries and current time
-        let is_before_locked = is_le(current_time, locked_time);
-        let is_after_locked = is_le(end, current_time);
-        let over = is_not_zero(is_before_locked + is_after_locked);
+        let is_before_lock = is_le(current_time, lock_time);
+        let is_after_lock = is_le(end_time, current_time);
+        let over = is_not_zero(is_before_lock + is_after_lock);
         let status = 1 - over;
 
         return (status=status,);

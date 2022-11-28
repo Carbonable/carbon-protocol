@@ -99,6 +99,51 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
+func get_start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    start_time: felt
+) {
+    // Desc:
+    //   Return the start time of the current period
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   start_time(felt): absolute unix time
+    return CarbonableFarmer.get_start_time();
+}
+
+@view
+func get_lock_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    lock_time: felt
+) {
+    // Desc:
+    //   Return the lock time of the current period
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   lock_time(felt): absolute unix time
+    return CarbonableFarmer.get_lock_time();
+}
+
+@view
+func get_end_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    end_time: felt
+) {
+    // Desc:
+    //   Return the end time of the current period
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   end_time(felt): absolute unix time
+    return CarbonableFarmer.get_end_time();
+}
+
+@view
 func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     status: felt
 ) {
