@@ -36,7 +36,7 @@ from src.interfaces.project import ICarbonableProject
 //
 
 @event
-func Offset(address: felt, quantity: Uint256) {
+func Offset(address: felt, quantity: Uint256, time: felt) {
 }
 
 @event
@@ -379,7 +379,8 @@ namespace CarbonableFarmer {
         total_offsetable_.write(caller, zero);
         total_offseted_.write(caller, new_total_offseted);
 
-        Offset.emit(address=caller, quantity=total_offsetable);
+        let (current_time) = get_block_timestamp();
+        Offset.emit(address=caller, quantity=total_offsetable, time=current_time);
         return (success=TRUE,);
     }
 
@@ -500,9 +501,9 @@ namespace CarbonableFarmer {
         if (address != 0) {
             let (removal) = removal_.read();
             let (quantity, _, _) = uint256_mul_div_mod(removal, one, total_supply);
-            let (offsetable) = total_offsetable_.read(address);
-            let (new_offsetable) = SafeUint256.add(offsetable, quantity);
-            total_offsetable_.write(address, new_offsetable);
+            let (balance) = total_offsetable_.read(address);
+            let (new_balance) = SafeUint256.add(balance, quantity);
+            total_offsetable_.write(address, new_balance);
 
             tempvar _syscall_ptr = syscall_ptr;
             tempvar _pedersen_ptr = pedersen_ptr;

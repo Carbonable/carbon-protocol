@@ -198,6 +198,35 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 //
 
 @external
+func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {
+    // Desc:
+    //   Snapshot deposits
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   success(felt): Success status
+    return CarbonableFarmer.offset();
+}
+
+@external
+func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    success: felt
+) {
+    // Desc:
+    //   Snapshot deposits
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   success(felt): Success status
+    Ownable.assert_only_owner();
+    return CarbonableFarmer.snapshot();
+}
+
+@external
 func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     unlocked_duration: felt, period_duration: felt, removal: felt
 ) -> (success: felt) {

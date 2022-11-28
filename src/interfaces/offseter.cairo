@@ -13,6 +13,12 @@ namespace ICarbonableOffseter {
     func is_locked() -> (status: felt) {
     }
 
+    func total_offsetable(address: felt) -> (total_offsetable: Uint256) {
+    }
+
+    func total_offseted(address: felt) -> (total_offseted: Uint256) {
+    }
+
     func total_locked() -> (balance: Uint256) {
     }
 
@@ -20,6 +26,12 @@ namespace ICarbonableOffseter {
     }
 
     func registred_owner_of(token_id: Uint256) -> (address: felt) {
+    }
+
+    func offset() -> (success: felt) {
+    }
+
+    func snapshot() -> (success: felt) {
     }
 
     func start_period(unlocked_duration: felt, period_duration: felt, removal: felt) -> (
