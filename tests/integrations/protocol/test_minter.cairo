@@ -49,10 +49,17 @@ func test_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 
     anyone.approve(quantity=5);
     anyone.whitelist_buy(quantity=5);
+
+    let (sold_out) = admin.sold_out();
+    assert sold_out = FALSE;
+
     admin.set_public_sale_open(TRUE);
     anyone.approve(quantity=1);
     anyone.public_buy(quantity=1);
     admin.withdraw();
+
+    let (sold_out) = admin.sold_out();
+    assert sold_out = TRUE;
 
     return ();
 }

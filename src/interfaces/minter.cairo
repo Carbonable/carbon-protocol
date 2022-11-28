@@ -52,6 +52,12 @@ namespace ICarbonableMinter {
     ) {
     }
 
+    func claimed_slots(account: felt) -> (slots: felt) {
+    }
+
+    func sold_out() -> (status: felt) {
+    }
+
     func set_whitelist_merkle_root(whitelist_merkle_root: felt) {
     }
 

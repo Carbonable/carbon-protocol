@@ -10,6 +10,15 @@ namespace ICarbonableYielder {
     func carbonable_project_address() -> (carbonable_project_address: felt) {
     }
 
+    func get_start_time() -> (start_time: felt) {
+    }
+
+    func get_lock_time() -> (lock_time: felt) {
+    }
+
+    func get_end_time() -> (end_time: felt) {
+    }
+
     func is_locked() -> (status: felt) {
     }
 

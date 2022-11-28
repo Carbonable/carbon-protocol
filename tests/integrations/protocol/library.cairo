@@ -368,6 +368,20 @@ namespace carbonable_minter_instance {
         return (slots,);
     }
 
+    func claimed_slots{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
+    }(account: felt) -> (slots: felt) {
+        let (slots) = ICarbonableMinter.claimed_slots(carbonable_minter, account);
+        return (slots=slots,);
+    }
+
+    func sold_out{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
+    }() -> (status: felt) {
+        let (status) = ICarbonableMinter.sold_out(carbonable_minter);
+        return (status=status,);
+    }
+
     // Externals
 
     func decrease_reserved_supply_for_mint{
@@ -715,6 +729,16 @@ namespace admin_instance {
     }
 
     // Minter
+
+    func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        status: felt
+    ) {
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
+        with carbonable_minter {
+            let (status) = carbonable_minter_instance.sold_out();
+        }
+        return (status=status,);
+    }
 
     func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         let (carbonable_minter) = carbonable_minter_instance.get_address();
