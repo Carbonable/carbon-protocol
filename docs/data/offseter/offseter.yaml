@@ -1,9 +1,9 @@
-- attributeName: constructor
+- attributeName: view
   functionName:
-    name: constructor
+    name: getImplementationHash
     charIndex:
-      start: 379
-      end: 390
+      start: 1225
+      end: 1246
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -12,71 +12,52 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs:
-      - name: carbonable_project_address
+    explicitArgs: null
+    returns:
+      - name: implementation
         type: felt
-      - name: owner
-        type: felt
-    returns: null
   functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Initialize the contract with the given parameters -
-        charIndex:
-          start: 23
-          end: 74
-      - name: ''
-        type: ''
-        desc: >-
-          This constructor uses a dedicated initializer that mainly stores the
-          inputs
-        charIndex:
-          start: 84
-          end: 159
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 191
-          end: 209
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 219
-          end: 245
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 255
-          end: 270
-    explicitArgs:
-      - name: carbonable_project_address
-        type: felt
-        desc: Address of the corresponding Carbonable project
-        charIndex:
-          start: 302
-          end: 383
-      - name: owner
-        type: felt
-        desc: Owner address
-        charIndex:
-          start: 393
-          end: 419
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
     returns: null
     raises: null
     charIndex:
-      start: 510
-      end: 959
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: getAdmin
+    charIndex:
+      start: 1406
+      end: 1414
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: admin
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
 - attributeName: view
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 1101
-      end: 1127
+      start: 2310
+      end: 2336
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -128,14 +109,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 1239
-      end: 1520
+      start: 2448
+      end: 2729
 - attributeName: view
   functionName:
     name: is_locked
     charIndex:
-      start: 1593
-      end: 1602
+      start: 2802
+      end: 2811
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -185,14 +166,132 @@
           end: 260
     raises: null
     charIndex:
-      start: 1695
-      end: 1955
+      start: 2904
+      end: 3164
+- attributeName: view
+  functionName:
+    name: total_offsetable
+    charIndex:
+      start: 3220
+      end: 3236
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: total_offsetable
+        type: Uint256
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the locked status of deposits and withdrawals
+        charIndex:
+          start: 23
+          end: 75
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 125
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 135
+          end: 161
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 171
+          end: 186
+    explicitArgs: null
+    returns:
+      - name: status
+        type: felt
+        desc: Locked status (1 if locked else 0)
+        charIndex:
+          start: 212
+          end: 260
+    raises: null
+    charIndex:
+      start: 3355
+      end: 3615
+- attributeName: view
+  functionName:
+    name: total_offseted
+    charIndex:
+      start: 3693
+      end: 3707
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: total_offseted
+        type: Uint256
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the locked status of deposits and withdrawals
+        charIndex:
+          start: 23
+          end: 75
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 125
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 135
+          end: 161
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 171
+          end: 186
+    explicitArgs: null
+    returns:
+      - name: status
+        type: felt
+        desc: Locked status (1 if locked else 0)
+        charIndex:
+          start: 212
+          end: 260
+    raises: null
+    charIndex:
+      start: 3824
+      end: 4084
 - attributeName: view
   functionName:
     name: total_locked
     charIndex:
-      start: 2011
-      end: 2023
+      start: 4160
+      end: 4172
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -242,14 +341,14 @@
           end: 266
     raises: null
     charIndex:
-      start: 2120
-      end: 2386
+      start: 4269
+      end: 4535
 - attributeName: view
   functionName:
     name: balance_of
     charIndex:
-      start: 2445
-      end: 2455
+      start: 4594
+      end: 4604
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -313,14 +412,14 @@
           end: 365
     raises: null
     charIndex:
-      start: 2562
-      end: 2927
+      start: 4711
+      end: 5076
 - attributeName: view
   functionName:
     name: registred_owner_of
     charIndex:
-      start: 2999
-      end: 3017
+      start: 5148
+      end: 5166
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -380,14 +479,299 @@
           end: 340
     raises: null
     charIndex:
-      start: 3128
-      end: 3468
+      start: 5277
+      end: 5617
+- attributeName: external
+  functionName:
+    name: initializer
+    charIndex:
+      start: 424
+      end: 435
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: carbonable_project_address
+        type: felt
+      - name: owner
+        type: felt
+      - name: proxy_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract with the given parameters -
+        charIndex:
+          start: 23
+          end: 74
+      - name: ''
+        type: ''
+        desc: >-
+          This constructor uses a dedicated initializer that mainly stores the
+          inputs
+        charIndex:
+          start: 84
+          end: 159
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 191
+          end: 209
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 219
+          end: 245
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 255
+          end: 270
+    explicitArgs:
+      - name: carbonable_project_address
+        type: felt
+        desc: Address of the corresponding Carbonable project
+        charIndex:
+          start: 302
+          end: 383
+      - name: owner
+        type: felt
+        desc: Owner address
+        charIndex:
+          start: 393
+          end: 419
+      - name: proxy_admin
+        type: felt
+        desc: Admin address
+        charIndex:
+          start: 429
+          end: 461
+    returns: null
+    raises: null
+    charIndex:
+      start: 574
+      end: 1065
+- attributeName: external
+  functionName:
+    name: upgrade
+    charIndex:
+      start: 1549
+      end: 1556
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Renounce ownership
+        charIndex:
+          start: 23
+          end: 41
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 73
+          end: 91
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 127
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 137
+          end: 152
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+        desc: new contract implementation
+        charIndex:
+          start: 214
+          end: 267
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not a contract admin
+        charIndex:
+          start: 292
+          end: 330
+    charIndex:
+      start: 1655
+      end: 1985
+- attributeName: external
+  functionName:
+    name: setAdmin
+    charIndex:
+      start: 2106
+      end: 2114
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: offset
+    charIndex:
+      start: 5723
+      end: 5729
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: success
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Snapshot deposits
+        charIndex:
+          start: 23
+          end: 40
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 72
+          end: 90
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 100
+          end: 126
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 136
+          end: 151
+    explicitArgs: null
+    returns:
+      - name: success
+        type: felt
+        desc: Success status
+        charIndex:
+          start: 177
+          end: 206
+    raises: null
+    charIndex:
+      start: 5817
+      end: 6023
+- attributeName: external
+  functionName:
+    name: snapshot
+    charIndex:
+      start: 6080
+      end: 6088
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: success
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Snapshot deposits
+        charIndex:
+          start: 23
+          end: 40
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 72
+          end: 90
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 100
+          end: 126
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 136
+          end: 151
+    explicitArgs: null
+    returns:
+      - name: success
+        type: felt
+        desc: Success status
+        charIndex:
+          start: 177
+          end: 206
+    raises: null
+    charIndex:
+      start: 6182
+      end: 6388
 - attributeName: external
   functionName:
     name: start_period
     charIndex:
-      start: 3574
-      end: 3586
+      start: 6480
+      end: 6492
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -400,6 +784,8 @@
       - name: unlocked_duration
         type: felt
       - name: period_duration
+        type: felt
+      - name: removal
         type: felt
     returns:
       - name: success
@@ -444,23 +830,29 @@
         charIndex:
           start: 271
           end: 320
+      - name: removal
+        type: felt
+        desc: Carbon removal in ng of CO2
+        charIndex:
+          start: 330
+          end: 372
     returns:
       - name: success
         type: felt
         desc: Success status
         charIndex:
-          start: 346
-          end: 375
+          start: 398
+          end: 427
     raises: null
     charIndex:
-      start: 3726
-      end: 4101
+      start: 6647
+      end: 7074
 - attributeName: external
   functionName:
     name: stop_period
     charIndex:
-      start: 4279
-      end: 4290
+      start: 7269
+      end: 7280
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -510,14 +902,14 @@
           end: 212
     raises: null
     charIndex:
-      start: 4384
-      end: 4596
+      start: 7374
+      end: 7586
 - attributeName: external
   functionName:
     name: deposit
     charIndex:
-      start: 4691
-      end: 4698
+      start: 7681
+      end: 7688
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -575,14 +967,14 @@
           end: 303
     raises: null
     charIndex:
-      start: 4809
-      end: 5112
+      start: 7799
+      end: 8102
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 5187
-      end: 5195
+      start: 8177
+      end: 8185
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -640,5 +1032,5 @@
           end: 297
     raises: null
     charIndex:
-      start: 5306
-      end: 5603
+      start: 8296
+      end: 8593

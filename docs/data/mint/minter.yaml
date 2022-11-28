@@ -1,9 +1,9 @@
-- attributeName: constructor
+- attributeName: view
   functionName:
-    name: constructor
+    name: getImplementationHash
     charIndex:
-      start: 379
-      end: 390
+      start: 2368
+      end: 2389
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -12,141 +12,52 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs:
-      - name: owner
+    explicitArgs: null
+    returns:
+      - name: implementation
         type: felt
-      - name: carbonable_project_address
-        type: felt
-      - name: payment_token_address
-        type: felt
-      - name: public_sale_open
-        type: felt
-      - name: max_buy_per_tx
-        type: felt
-      - name: unit_price
-        type: Uint256
-      - name: max_supply_for_mint
-        type: Uint256
-      - name: reserved_supply_for_mint
-        type: Uint256
-      - name: ''
-        type: ''
-    returns: null
   functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Initialize the contract with the given parameters -
-        charIndex:
-          start: 23
-          end: 74
-      - name: ''
-        type: ''
-        desc: >-
-          This constructor uses a dedicated initializer that mainly stores the
-          inputs
-        charIndex:
-          start: 84
-          end: 159
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: getAdmin
+    charIndex:
+      start: 2549
+      end: 2557
+  functionSignature:
     implicitArgs:
       - name: syscall_ptr
         type: felt*
-        desc: ''
-        charIndex:
-          start: 191
-          end: 209
       - name: pedersen_ptr
         type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 219
-          end: 245
       - name: range_check_ptr
         type: ''
-        desc: ''
-        charIndex:
-          start: 255
-          end: 270
-    explicitArgs:
-      - name: owner
+    explicitArgs: null
+    returns:
+      - name: admin
         type: felt
-        desc: Owner address
-        charIndex:
-          start: 302
-          end: 328
-      - name: carbonable_project_address
-        type: felt
-        desc: Address of the corresponding Carbonable project
-        charIndex:
-          start: 338
-          end: 419
-      - name: payment_token_address
-        type: felt
-        desc: Address of the ERC20 token that will be used during sales
-        charIndex:
-          start: 429
-          end: 515
-      - name: public_sale_open
-        type: felt
-        desc: 1 to open the public sale right after deployment, 0 otherwise
-        charIndex:
-          start: 525
-          end: 610
-      - name: max_buy_per_tx
-        type: felt
-        desc: Max number of NFTs that can be purchased in a single tx
-        charIndex:
-          start: 620
-          end: 697
-      - name: unit_price
-        type: Uint256
-        desc: >-
-          Price per token (based on ERC20 token defined as
-          -payment_token_address-)
-        charIndex:
-          start: 707
-          end: 801
-      - name: max_supply_for_mint
-        type: Uint256
-        desc: Max supply available whatever the way to mint
-        charIndex:
-          start: 811
-          end: 886
-      - name: reserved_supply_for_mint
-        type: Uint256
-        desc: Supply reserved to be airdropped
-        charIndex:
-          start: 896
-          end: 963
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
     returns: null
-    raises:
-      - name: unit_price
-        type: ''
-        desc: unit_price is not a valid Uint256
-        charIndex:
-          start: 1018
-          end: 1063
-      - name: max_supply_for_mint
-        type: ''
-        desc: max_supply_for_mint is not a valid Uint256
-        charIndex:
-          start: 1073
-          end: 1136
-      - name: reserved_supply_for_mint
-        type: ''
-        desc: reserved_supply_for_mint is not a valid Uint256
-        charIndex:
-          start: 1146
-          end: 1219
+    raises: null
     charIndex:
-      start: 700
-      end: 1919
+      start: 0
+      end: 0
 - attributeName: view
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 2240
-      end: 2266
+      start: 3453
+      end: 3479
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -198,14 +109,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 2378
-      end: 2659
+      start: 3591
+      end: 3872
 - attributeName: view
   functionName:
     name: payment_token_address
     charIndex:
-      start: 2732
-      end: 2753
+      start: 3945
+      end: 3966
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -255,14 +166,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 2861
-      end: 3142
+      start: 4074
+      end: 4355
 - attributeName: view
   functionName:
     name: whitelisted_sale_open
     charIndex:
-      start: 3210
-      end: 3231
+      start: 4423
+      end: 4444
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -312,14 +223,14 @@
           end: 256
     raises: null
     charIndex:
-      start: 3339
-      end: 3595
+      start: 4552
+      end: 4808
 - attributeName: view
   functionName:
     name: public_sale_open
     charIndex:
-      start: 3663
-      end: 3679
+      start: 4876
+      end: 4892
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -369,14 +280,14 @@
           end: 250
     raises: null
     charIndex:
-      start: 3782
-      end: 4032
+      start: 4995
+      end: 5245
 - attributeName: view
   functionName:
     name: max_buy_per_tx
     charIndex:
-      start: 4095
-      end: 4109
+      start: 5308
+      end: 5322
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -426,14 +337,14 @@
           end: 257
     raises: null
     charIndex:
-      start: 4210
-      end: 4467
+      start: 5423
+      end: 5680
 - attributeName: view
   functionName:
     name: unit_price
     charIndex:
-      start: 4528
-      end: 4538
+      start: 5741
+      end: 5751
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -483,14 +394,14 @@
           end: 222
     raises: null
     charIndex:
-      start: 4638
-      end: 4860
+      start: 5851
+      end: 6073
 - attributeName: view
   functionName:
     name: reserved_supply_for_mint
     charIndex:
-      start: 4917
-      end: 4941
+      start: 6130
+      end: 6154
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -542,14 +453,14 @@
           end: 259
     raises: null
     charIndex:
-      start: 5054
-      end: 5313
+      start: 6267
+      end: 6526
 - attributeName: view
   functionName:
     name: max_supply_for_mint
     charIndex:
-      start: 5384
-      end: 5403
+      start: 6597
+      end: 6616
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -599,14 +510,14 @@
           end: 231
     raises: null
     charIndex:
-      start: 5512
-      end: 5743
+      start: 6725
+      end: 6956
 - attributeName: view
   functionName:
     name: whitelist_merkle_root
     charIndex:
-      start: 5809
-      end: 5830
+      start: 7022
+      end: 7043
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -656,14 +567,14 @@
           end: 269
     raises: null
     charIndex:
-      start: 5938
-      end: 6207
+      start: 7151
+      end: 7420
 - attributeName: view
   functionName:
     name: whitelisted_slots
     charIndex:
-      start: 6275
-      end: 6292
+      start: 7488
+      end: 7505
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -745,14 +656,14 @@
           end: 542
     raises: null
     charIndex:
-      start: 6441
-      end: 6983
+      start: 7654
+      end: 8196
 - attributeName: view
   functionName:
     name: claimed_slots
     charIndex:
-      start: 7079
-      end: 7092
+      start: 8292
+      end: 8305
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -810,14 +721,255 @@
           end: 325
     raises: null
     charIndex:
-      start: 7197
-      end: 7522
+      start: 8410
+      end: 8735
+- attributeName: external
+  functionName:
+    name: initializer
+    charIndex:
+      start: 424
+      end: 435
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: carbonable_project_address
+        type: felt
+      - name: payment_token_address
+        type: felt
+      - name: public_sale_open
+        type: felt
+      - name: max_buy_per_tx
+        type: felt
+      - name: unit_price
+        type: Uint256
+      - name: max_supply_for_mint
+        type: Uint256
+      - name: reserved_supply_for_mint
+        type: Uint256
+      - name: owner
+        type: felt
+      - name: proxy_admin
+        type: felt
+      - name: ''
+        type: ''
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract with the given parameters -
+        charIndex:
+          start: 23
+          end: 74
+      - name: ''
+        type: ''
+        desc: >-
+          This constructor uses a dedicated initializer that mainly stores the
+          inputs
+        charIndex:
+          start: 84
+          end: 159
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 191
+          end: 209
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 219
+          end: 245
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 255
+          end: 270
+    explicitArgs:
+      - name: carbonable_project_address
+        type: felt
+        desc: Address of the corresponding Carbonable project
+        charIndex:
+          start: 302
+          end: 383
+      - name: payment_token_address
+        type: felt
+        desc: Address of the ERC20 token that will be used during sales
+        charIndex:
+          start: 393
+          end: 479
+      - name: public_sale_open
+        type: felt
+        desc: 1 to open the public sale right after deployment, 0 otherwise
+        charIndex:
+          start: 489
+          end: 574
+      - name: max_buy_per_tx
+        type: felt
+        desc: Max number of NFTs that can be purchased in a single tx
+        charIndex:
+          start: 584
+          end: 661
+      - name: unit_price
+        type: Uint256
+        desc: >-
+          Price per token (based on ERC20 token defined as
+          -payment_token_address-)
+        charIndex:
+          start: 671
+          end: 765
+      - name: max_supply_for_mint
+        type: Uint256
+        desc: Max supply available whatever the way to mint
+        charIndex:
+          start: 775
+          end: 850
+      - name: reserved_supply_for_mint
+        type: Uint256
+        desc: Supply reserved to be airdropped
+        charIndex:
+          start: 860
+          end: 927
+      - name: owner
+        type: felt
+        desc: Owner address
+        charIndex:
+          start: 937
+          end: 963
+      - name: proxy_admin
+        type: felt
+        desc: Admin address
+        charIndex:
+          start: 973
+          end: 1005
+    returns: null
+    raises:
+      - name: unit_price
+        type: ''
+        desc: unit_price is not a valid Uint256
+        charIndex:
+          start: 1060
+          end: 1105
+      - name: max_supply_for_mint
+        type: ''
+        desc: max_supply_for_mint is not a valid Uint256
+        charIndex:
+          start: 1115
+          end: 1178
+      - name: reserved_supply_for_mint
+        type: ''
+        desc: reserved_supply_for_mint is not a valid Uint256
+        charIndex:
+          start: 1188
+          end: 1261
+    charIndex:
+      start: 768
+      end: 2029
+- attributeName: external
+  functionName:
+    name: upgrade
+    charIndex:
+      start: 2692
+      end: 2699
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Renounce ownership
+        charIndex:
+          start: 23
+          end: 41
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 73
+          end: 91
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 127
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 137
+          end: 152
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+        desc: new contract implementation
+        charIndex:
+          start: 214
+          end: 267
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not a contract admin
+        charIndex:
+          start: 292
+          end: 330
+    charIndex:
+      start: 2798
+      end: 3128
+- attributeName: external
+  functionName:
+    name: setAdmin
+    charIndex:
+      start: 3249
+      end: 3257
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
 - attributeName: external
   functionName:
     name: set_whitelist_merkle_root
     charIndex:
-      start: 7613
-      end: 7638
+      start: 8826
+      end: 8851
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -875,14 +1027,14 @@
           start: 345
           end: 385
     charIndex:
-      start: 7740
-      end: 8125
+      start: 8953
+      end: 9338
 - attributeName: external
   functionName:
     name: set_public_sale_open
     charIndex:
-      start: 8255
-      end: 8275
+      start: 9468
+      end: 9488
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -938,14 +1090,14 @@
           start: 316
           end: 356
     charIndex:
-      start: 8372
-      end: 8728
+      start: 9585
+      end: 9941
 - attributeName: external
   functionName:
     name: set_max_buy_per_tx
     charIndex:
-      start: 8848
-      end: 8866
+      start: 10061
+      end: 10079
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1001,14 +1153,14 @@
           start: 303
           end: 343
     charIndex:
-      start: 8961
-      end: 9304
+      start: 10174
+      end: 10517
 - attributeName: external
   functionName:
     name: set_unit_price
     charIndex:
-      start: 9420
-      end: 9434
+      start: 10633
+      end: 10647
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1064,14 +1216,14 @@
           start: 282
           end: 322
     charIndex:
-      start: 9528
-      end: 9850
+      start: 10741
+      end: 11063
 - attributeName: external
   functionName:
     name: decrease_reserved_supply_for_mint
     charIndex:
-      start: 9958
-      end: 9991
+      start: 11171
+      end: 11204
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1129,14 +1281,14 @@
           start: 362
           end: 402
     charIndex:
-      start: 10080
-      end: 10482
+      start: 11293
+      end: 11695
 - attributeName: external
   functionName:
     name: airdrop
     charIndex:
-      start: 10604
-      end: 10611
+      start: 11817
+      end: 11824
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1222,14 +1374,14 @@
           start: 563
           end: 633
     charIndex:
-      start: 10729
-      end: 11362
+      start: 11942
+      end: 12575
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 11465
-      end: 11473
+      start: 12678
+      end: 12686
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1291,14 +1443,14 @@
           start: 337
           end: 361
     charIndex:
-      start: 11567
-      end: 11928
+      start: 12780
+      end: 13141
 - attributeName: external
   functionName:
     name: transfer
     charIndex:
-      start: 12020
-      end: 12028
+      start: 13233
+      end: 13241
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1392,14 +1544,14 @@
           start: 583
           end: 607
     charIndex:
-      start: 12175
-      end: 12782
+      start: 13388
+      end: 13995
 - attributeName: external
   functionName:
     name: whitelist_buy
     charIndex:
-      start: 12906
-      end: 12919
+      start: 14119
+      end: 14132
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1525,14 +1677,14 @@
           start: 877
           end: 902
     charIndex:
-      start: 13071
-      end: 13973
+      start: 14284
+      end: 15186
 - attributeName: external
   functionName:
     name: public_buy
     charIndex:
-      start: 14070
-      end: 14080
+      start: 15283
+      end: 15293
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1620,5 +1772,5 @@
           start: 527
           end: 552
     charIndex:
-      start: 14188
-      end: 14740
+      start: 15401
+      end: 15953

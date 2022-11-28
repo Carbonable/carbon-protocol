@@ -1,9 +1,9 @@
-- attributeName: constructor
+- attributeName: view
   functionName:
-    name: constructor
+    name: getImplementationHash
     charIndex:
-      start: 636
-      end: 647
+      start: 1791
+      end: 1812
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -12,89 +12,52 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs:
-      - name: name
+    explicitArgs: null
+    returns:
+      - name: implementation
         type: felt
-      - name: symbol
-        type: felt
-      - name: owner
-        type: felt
-    returns: null
   functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Initialize the contract with the given name, symbol and owner -
-        charIndex:
-          start: 23
-          end: 86
-      - name: ''
-        type: ''
-        desc: This constructor uses the standard OZ ERC721 initializer,
-        charIndex:
-          start: 96
-          end: 153
-      - name: ''
-        type: ''
-        desc: the standard OZ ERC721Enumerable initializer and
-        charIndex:
-          start: 163
-          end: 211
-      - name: ''
-        type: ''
-        desc: the OZ Ownable initializer
-        charIndex:
-          start: 221
-          end: 247
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 279
-          end: 297
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 307
-          end: 333
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 343
-          end: 358
-    explicitArgs:
-      - name: name
-        type: felt
-        desc: Name of the collection
-        charIndex:
-          start: 390
-          end: 424
-      - name: symbol
-        type: felt
-        desc: Symbol of the collection
-        charIndex:
-          start: 434
-          end: 472
-      - name: owner
-        type: felt
-        desc: Owner address
-        charIndex:
-          start: 482
-          end: 508
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
     returns: null
     raises: null
     charIndex:
-      start: 759
-      end: 1297
+      start: 0
+      end: 0
+- attributeName: view
+  functionName:
+    name: getAdmin
+    charIndex:
+      start: 1972
+      end: 1980
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: admin
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
 - attributeName: view
   functionName:
     name: totalSupply
     charIndex:
-      start: 1451
-      end: 1462
+      start: 2876
+      end: 2887
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -146,14 +109,14 @@
           end: 387
     raises: null
     charIndex:
-      start: 1563
-      end: 1950
+      start: 2988
+      end: 3375
 - attributeName: view
   functionName:
     name: tokenByIndex
     charIndex:
-      start: 2069
-      end: 2081
+      start: 3494
+      end: 3506
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -217,14 +180,14 @@
           start: 409
           end: 441
     charIndex:
-      start: 2192
-      end: 2633
+      start: 3617
+      end: 4058
 - attributeName: view
   functionName:
     name: tokenOfOwnerByIndex
     charIndex:
-      start: 2747
-      end: 2766
+      start: 4172
+      end: 4191
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -292,14 +255,14 @@
           end: 501
     raises: null
     charIndex:
-      start: 2890
-      end: 3522
+      start: 4315
+      end: 4947
 - attributeName: view
   functionName:
     name: supportsInterface
     charIndex:
-      start: 3652
-      end: 3669
+      start: 5077
+      end: 5094
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -357,14 +320,14 @@
           end: 328
     raises: null
     charIndex:
-      start: 3780
-      end: 4108
+      start: 5205
+      end: 5533
 - attributeName: view
   functionName:
     name: name
     charIndex:
-      start: 4174
-      end: 4178
+      start: 5599
+      end: 5603
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -416,14 +379,14 @@
           end: 280
     raises: null
     charIndex:
-      start: 4263
-      end: 4543
+      start: 5688
+      end: 5968
 - attributeName: view
   functionName:
     name: symbol
     charIndex:
-      start: 4584
-      end: 4590
+      start: 6009
+      end: 6015
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -475,14 +438,14 @@
           end: 269
     raises: null
     charIndex:
-      start: 4677
-      end: 4946
+      start: 6102
+      end: 6371
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 4989
-      end: 4998
+      start: 6414
+      end: 6423
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -546,14 +509,14 @@
           start: 383
           end: 411
     charIndex:
-      start: 5106
-      end: 5517
+      start: 6531
+      end: 6942
 - attributeName: view
   functionName:
     name: ownerOf
     charIndex:
-      start: 5569
-      end: 5576
+      start: 6994
+      end: 7001
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -611,14 +574,14 @@
           end: 317
     raises: null
     charIndex:
-      start: 5684
-      end: 6001
+      start: 7109
+      end: 7426
 - attributeName: view
   functionName:
     name: getApproved
     charIndex:
-      start: 6053
-      end: 6064
+      start: 7478
+      end: 7489
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -684,14 +647,14 @@
           start: 413
           end: 448
     charIndex:
-      start: 6175
-      end: 6623
+      start: 7600
+      end: 8048
 - attributeName: view
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 6679
-      end: 6695
+      start: 8104
+      end: 8120
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -759,14 +722,14 @@
           end: 462
     raises: null
     charIndex:
-      start: 6819
-      end: 7281
+      start: 8244
+      end: 8706
 - attributeName: view
   functionName:
     name: tokenURI
     charIndex:
-      start: 7406
-      end: 7414
+      start: 8831
+      end: 8839
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -842,14 +805,14 @@
           start: 458
           end: 497
     charIndex:
-      start: 7566
-      end: 8063
+      start: 8991
+      end: 9488
 - attributeName: view
   functionName:
     name: contractURI
     charIndex:
-      start: 8193
-      end: 8204
+      start: 9618
+      end: 9629
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -915,14 +878,14 @@
           end: 298
     raises: null
     charIndex:
-      start: 8340
-      end: 8638
+      start: 9765
+      end: 10063
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 8764
-      end: 8769
+      start: 10189
+      end: 10194
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -972,14 +935,236 @@
           end: 215
     raises: null
     charIndex:
-      start: 8855
-      end: 9070
+      start: 10280
+      end: 10495
+- attributeName: external
+  functionName:
+    name: initializer
+    charIndex:
+      start: 810
+      end: 821
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: name
+        type: felt
+      - name: symbol
+        type: felt
+      - name: owner
+        type: felt
+      - name: proxy_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract with the given name, symbol and owner -
+        charIndex:
+          start: 23
+          end: 86
+      - name: ''
+        type: ''
+        desc: This constructor uses the standard OZ Proxy initializer,
+        charIndex:
+          start: 96
+          end: 152
+      - name: ''
+        type: ''
+        desc: the standard OZ ERC721 initializer,
+        charIndex:
+          start: 162
+          end: 197
+      - name: ''
+        type: ''
+        desc: the standard OZ ERC721Enumerable initializer and
+        charIndex:
+          start: 207
+          end: 255
+      - name: ''
+        type: ''
+        desc: the OZ Ownable initializer
+        charIndex:
+          start: 265
+          end: 291
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 323
+          end: 341
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 351
+          end: 377
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 387
+          end: 402
+    explicitArgs:
+      - name: name
+        type: felt
+        desc: Name of the collection
+        charIndex:
+          start: 434
+          end: 468
+      - name: symbol
+        type: felt
+        desc: Symbol of the collection
+        charIndex:
+          start: 478
+          end: 516
+      - name: owner
+        type: felt
+        desc: Owner address
+        charIndex:
+          start: 526
+          end: 552
+      - name: proxy_admin
+        type: felt
+        desc: Admin address
+        charIndex:
+          start: 562
+          end: 594
+    returns: null
+    raises: null
+    charIndex:
+      start: 952
+      end: 1576
+- attributeName: external
+  functionName:
+    name: upgrade
+    charIndex:
+      start: 2115
+      end: 2122
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Renounce ownership
+        charIndex:
+          start: 23
+          end: 41
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 73
+          end: 91
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 127
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 137
+          end: 152
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+        desc: new contract implementation
+        charIndex:
+          start: 214
+          end: 267
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not a contract admin
+        charIndex:
+          start: 292
+          end: 330
+    charIndex:
+      start: 2221
+      end: 2551
+- attributeName: external
+  functionName:
+    name: setAdmin
+    charIndex:
+      start: 2672
+      end: 2680
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: external
+  functionName:
+    name: set_minter
+    charIndex:
+      start: 10562
+      end: 10572
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: minter
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
 - attributeName: external
   functionName:
     name: approve
     charIndex:
-      start: 9137
-      end: 9144
+      start: 10768
+      end: 10775
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1037,14 +1222,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 9245
-      end: 9674
+      start: 10876
+      end: 11305
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 9741
-      end: 9758
+      start: 11372
+      end: 11389
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1104,14 +1289,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 9863
-      end: 10270
+      start: 11494
+      end: 11901
 - attributeName: external
   functionName:
     name: transferFrom
     charIndex:
-      start: 10357
-      end: 10369
+      start: 11988
+      end: 12000
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1203,14 +1388,14 @@
           start: 545
           end: 580
     charIndex:
-      start: 10483
-      end: 11063
+      start: 12114
+      end: 12694
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 11153
-      end: 11169
+      start: 12784
+      end: 12800
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1328,14 +1513,14 @@
           start: 762
           end: 840
     charIndex:
-      start: 11312
-      end: 12152
+      start: 12943
+      end: 13783
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 12263
-      end: 12267
+      start: 13894
+      end: 13898
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1417,14 +1602,14 @@
           start: 463
           end: 492
     charIndex:
-      start: 12368
-      end: 12860
+      start: 13999
+      end: 14491
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 12968
-      end: 12972
+      start: 14616
+      end: 14620
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1480,14 +1665,14 @@
           start: 271
           end: 310
     charIndex:
-      start: 13057
-      end: 13367
+      start: 14705
+      end: 15015
 - attributeName: external
   functionName:
     name: setTokenURI
     charIndex:
-      start: 13483
-      end: 13494
+      start: 15131
+      end: 15142
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1567,14 +1752,14 @@
           start: 499
           end: 530
     charIndex:
-      start: 13601
-      end: 14131
+      start: 15249
+      end: 15779
 - attributeName: external
   functionName:
     name: setURI
     charIndex:
-      start: 14247
-      end: 14253
+      start: 15895
+      end: 15901
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1640,14 +1825,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 14383
-      end: 14679
+      start: 16031
+      end: 16327
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 14791
-      end: 14808
+      start: 16439
+      end: 16456
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1709,14 +1894,14 @@
           start: 344
           end: 383
     charIndex:
-      start: 14897
-      end: 15280
+      start: 16545
+      end: 16928
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 15356
-      end: 15373
+      start: 17004
+      end: 17021
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1764,5 +1949,5 @@
           start: 207
           end: 247
     charIndex:
-      start: 15442
-      end: 15689
+      start: 17090
+      end: 17337

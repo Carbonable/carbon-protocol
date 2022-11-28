@@ -51,152 +51,152 @@ digraph CarbonableBadge {
 	611 [label="bal7hazar.token.erc1155.IERC1155Receiver.IERC1155Receiver.onERC1155Received" color="" fillcolor=lightcoral shape=oval style=filled]
 	650 [label="bal7hazar.token.erc1155.IERC1155Receiver.IERC1155Receiver.onERC1155BatchReceived" color="" fillcolor=lightcoral shape=oval style=filled]
 	717 [label="openzeppelin.security.safemath.library.SafeUint256.add" color="" fillcolor=lightcoral shape=oval style=filled]
-	740 [label="openzeppelin.security.safemath.library.SafeUint256.sub_le" color="" fillcolor=lightcoral shape=oval style=filled]
-	772 [label="bal7hazar.token.erc1155.library.TransferSingle.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	802 [label="bal7hazar.token.erc1155.library.TransferBatch.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	858 [label="bal7hazar.token.erc1155.library.ApprovalForAll.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	884 [label="bal7hazar.token.erc1155.library.ERC1155_balances.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	904 [label="bal7hazar.token.erc1155.library.ERC1155_balances.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	926 [label="bal7hazar.token.erc1155.library.ERC1155_balances.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	946 [label="bal7hazar.token.erc1155.library.ERC1155_operator_approvals.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	963 [label="bal7hazar.token.erc1155.library.ERC1155_operator_approvals.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	978 [label="bal7hazar.token.erc1155.library.ERC1155_operator_approvals.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	992 [label="bal7hazar.token.erc1155.library.ERC1155_uri.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	997 [label="bal7hazar.token.erc1155.library.ERC1155_uri.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	1009 [label="bal7hazar.token.erc1155.library.ERC1155.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
-	1024 [label="bal7hazar.token.erc1155.library.ERC1155.balance_of" color="" fillcolor=lightcoral shape=oval style=filled]
-	1041 [label="bal7hazar.token.erc1155.library.ERC1155.balance_of_batch" color="" fillcolor=lightcoral shape=oval style=filled]
-	1059 [label="bal7hazar.token.erc1155.library.ERC1155.is_approved_for_all" color="" fillcolor=lightcoral shape=oval style=filled]
-	1067 [label="bal7hazar.token.erc1155.library.ERC1155.set_approval_for_all" color="" fillcolor=lightcoral shape=oval style=filled]
-	1081 [label="bal7hazar.token.erc1155.library.ERC1155.safe_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
-	1103 [label="bal7hazar.token.erc1155.library.ERC1155.safe_batch_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
-	1125 [label="bal7hazar.token.erc1155.library.ERC1155._safe_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
-	1197 [label="bal7hazar.token.erc1155.library.ERC1155._safe_batch_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
-	1244 [label="bal7hazar.token.erc1155.library.ERC1155._mint" color="" fillcolor=lightcoral shape=oval style=filled]
-	1297 [label="bal7hazar.token.erc1155.library.ERC1155._mint_batch" color="" fillcolor=lightcoral shape=oval style=filled]
-	1345 [label="bal7hazar.token.erc1155.library.ERC1155._burn" color="" fillcolor=lightcoral shape=oval style=filled]
-	1400 [label="bal7hazar.token.erc1155.library.ERC1155._burn_batch" color="" fillcolor=lightcoral shape=oval style=filled]
-	1435 [label="bal7hazar.token.erc1155.library.ERC1155._set_approval_for_all" color="" fillcolor=lightcoral shape=oval style=filled]
-	1466 [label="bal7hazar.token.erc1155.library.ERC1155._set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	1473 [label="bal7hazar.token.erc1155.library.ERC1155.assert_owner_or_approved" color="" fillcolor=lightcoral shape=oval style=filled]
-	1496 [label="bal7hazar.token.erc1155.library._do_safe_transfer_acceptance_check" color="" fillcolor=lightcoral shape=oval style=filled]
-	1530 [label="bal7hazar.token.erc1155.library._do_safe_batch_transfer_acceptance_check" color="" fillcolor=lightcoral shape=oval style=filled]
-	1564 [label="bal7hazar.token.erc1155.library.balance_of_batch_iter" color="" fillcolor=lightcoral shape=oval style=filled]
-	1599 [label="bal7hazar.token.erc1155.library.safe_batch_transfer_from_iter" color="" fillcolor=lightcoral shape=oval style=filled]
-	1656 [label="bal7hazar.token.erc1155.library.mint_batch_iter" color="" fillcolor=lightcoral shape=oval style=filled]
-	1693 [label="bal7hazar.token.erc1155.library.burn_batch_iter" color="" fillcolor=lightcoral shape=oval style=filled]
-	1742 [label="bal7hazar.token.erc1155.library.add_to_receiver" color="" fillcolor=lightcoral shape=oval style=filled]
-	1765 [label="bal7hazar.token.erc1155.library.check_id" color="" fillcolor=lightcoral shape=oval style=filled]
-	1771 [label="cairopen.math.array.concat_arr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1798 [label="cairopen.math.array.concat_felt_arr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1808 [label="cairopen.math.array.invert_arr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1831 [label="cairopen.math.array.invert_felt_arr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1839 [label="cairopen.math.array._loop_invert_arr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1866 [label="cairopen.math.array._sub_loop_invert_arr" color="" fillcolor=lightcoral shape=oval style=filled]
-	1905 [label="cairopen.string.libs.conversion.conversion_felt_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	1930 [label="cairopen.string.libs.conversion._loop_felt_to_inverted_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	1976 [label="cairopen.string.libs.conversion.conversion_ss_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	2007 [label="cairopen.string.libs.conversion._loop_ss_to_inverted_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	2055 [label="cairopen.string.libs.conversion.conversion_ss_arr_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	2071 [label="cairopen.string.libs.conversion._loop_ss_arr_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	2128 [label="cairopen.string.libs.conversion.conversion_extract_last_char_from_ss" color="" fillcolor=lightcoral shape=oval style=filled]
-	2150 [label="cairopen.string.libs.storage.strings_data.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	2167 [label="cairopen.string.libs.storage.strings_data.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2182 [label="cairopen.string.libs.storage.strings_data.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2196 [label="cairopen.string.libs.storage.strings_len.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	2210 [label="cairopen.string.libs.storage.strings_len.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2224 [label="cairopen.string.libs.storage.strings_len.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2237 [label="cairopen.string.libs.storage.storage_read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2281 [label="cairopen.string.libs.storage._loop_get_ss" color="" fillcolor=lightcoral shape=oval style=filled]
-	2312 [label="cairopen.string.libs.storage._loop_get_ss_char" color="" fillcolor=lightcoral shape=oval style=filled]
-	2349 [label="cairopen.string.libs.storage.storage_write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2384 [label="cairopen.string.libs.storage._loop_set_ss" color="" fillcolor=lightcoral shape=oval style=filled]
-	2409 [label="cairopen.string.libs.storage._loop_set_ss_char" color="" fillcolor=lightcoral shape=oval style=filled]
-	2448 [label="cairopen.string.ASCII.StringCodec.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2466 [label="cairopen.string.ASCII.StringCodec.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2480 [label="cairopen.string.ASCII.StringCodec.felt_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	2490 [label="cairopen.string.ASCII.StringCodec.ss_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	2504 [label="cairopen.string.ASCII.StringCodec.ss_arr_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
-	2519 [label="cairopen.string.libs.manipulation.manipulation_concat" color="" fillcolor=lightcoral shape=oval style=filled]
-	2527 [label="cairopen.string.libs.manipulation.manipulation_append_char" color="" fillcolor=lightcoral shape=oval style=filled]
-	2534 [label="cairopen.string.libs.manipulation.manipulation_path_join" color="" fillcolor=lightcoral shape=oval style=filled]
-	2562 [label="cairopen.string.utils.StringUtil.concat" color="" fillcolor=lightcoral shape=oval style=filled]
-	2570 [label="cairopen.string.utils.StringUtil.path_join" color="" fillcolor=lightcoral shape=oval style=filled]
-	2578 [label="src.utils.metadata.library.Metadata.token_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2632 [label="src.utils.metadata.library.Metadata.contract_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2667 [label="src.utils.metadata.library.Metadata.set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2690 [label="src.badge.library.Locked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	2715 [label="src.badge.library.Unlocked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
-	2740 [label="src.badge.library.CarbonableBadge_unlocked.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	2757 [label="src.badge.library.CarbonableBadge_unlocked.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2772 [label="src.badge.library.CarbonableBadge_unlocked.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2786 [label="src.badge.library.CarbonableBadge_name.addr" color="" fillcolor=lightcoral shape=oval style=filled]
-	2791 [label="src.badge.library.CarbonableBadge_name.read" color="" fillcolor=lightcoral shape=oval style=filled]
-	2804 [label="src.badge.library.CarbonableBadge_name.write" color="" fillcolor=lightcoral shape=oval style=filled]
-	2816 [label="src.badge.library.CarbonableBadge.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
-	2839 [label="src.badge.library.CarbonableBadge.uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2848 [label="src.badge.library.CarbonableBadge.contract_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2855 [label="src.badge.library.CarbonableBadge.name" color="" fillcolor=lightcoral shape=oval style=filled]
-	2861 [label="src.badge.library.CarbonableBadge.locked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2880 [label="src.badge.library.CarbonableBadge.set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
-	2889 [label="src.badge.library.CarbonableBadge.set_locked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2913 [label="src.badge.library.CarbonableBadge.set_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2937 [label="src.badge.library.CarbonableBadge.assert_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
-	2955 [label="src.badge.library.CarbonableBadge.assert_unlocked_batch" color="" fillcolor=lightcoral shape=oval style=filled]
-	2963 [label="src.badge.library.CarbonableBadge._assert_unlocked_iter" color="" fillcolor=lightcoral shape=oval style=filled]
-	2983 [label="__main__.constructor\l['constructor']" color="" fillcolor=violet shape=oval style=filled]
-	3013 [label="__wrappers__.constructor\l['constructor']" color="" fillcolor=violet shape=doubleoctagon style=filled]
-	3046 [label="__main__.supportsInterface\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3053 [label="__wrappers__.supportsInterface_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3062 [label="__wrappers__.supportsInterface\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3081 [label="__main__.uri\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3090 [label="__wrappers__.uri_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3109 [label="__wrappers__.uri\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3135 [label="__main__.contractURI\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3142 [label="__wrappers__.contractURI_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3161 [label="__wrappers__.contractURI\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3183 [label="__main__.balanceOf\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3192 [label="__wrappers__.balanceOf_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3202 [label="__wrappers__.balanceOf\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3223 [label="__main__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3233 [label="__wrappers__.balanceOfBatch_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3255 [label="__wrappers__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3299 [label="__main__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3307 [label="__wrappers__.isApprovedForAll_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3316 [label="__wrappers__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3336 [label="__main__.owner\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3342 [label="__wrappers__.owner_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3351 [label="__wrappers__.owner\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3367 [label="__main__.name\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3373 [label="__wrappers__.name_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3382 [label="__wrappers__.name\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3398 [label="__main__.locked\l['view']" color="" fillcolor=orange shape=oval style=filled]
-	3406 [label="__wrappers__.locked_encode_return" color="" fillcolor=white shape=oval style=solid]
-	3415 [label="__wrappers__.locked\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
-	3435 [label="__main__.setURI\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3449 [label="__wrappers__.setURI\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3478 [label="__main__.setLocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3488 [label="__wrappers__.setLocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3508 [label="__main__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3518 [label="__wrappers__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3538 [label="__main__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3546 [label="__wrappers__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3566 [label="__main__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3584 [label="__wrappers__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3618 [label="__main__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3636 [label="__wrappers__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3690 [label="__main__.mint\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3705 [label="__wrappers__.mint\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3738 [label="__main__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3753 [label="__wrappers__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3806 [label="__main__.burn\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3828 [label="__wrappers__.burn\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3851 [label="__main__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3873 [label="__wrappers__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3916 [label="__main__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3923 [label="__wrappers__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
-	3942 [label="__main__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
-	3948 [label="__wrappers__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	738 [label="openzeppelin.security.safemath.library.SafeUint256.sub_le" color="" fillcolor=lightcoral shape=oval style=filled]
+	765 [label="bal7hazar.token.erc1155.library.TransferSingle.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	795 [label="bal7hazar.token.erc1155.library.TransferBatch.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	851 [label="bal7hazar.token.erc1155.library.ApprovalForAll.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	877 [label="bal7hazar.token.erc1155.library.ERC1155_balances.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	897 [label="bal7hazar.token.erc1155.library.ERC1155_balances.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	919 [label="bal7hazar.token.erc1155.library.ERC1155_balances.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	939 [label="bal7hazar.token.erc1155.library.ERC1155_operator_approvals.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	956 [label="bal7hazar.token.erc1155.library.ERC1155_operator_approvals.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	971 [label="bal7hazar.token.erc1155.library.ERC1155_operator_approvals.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	985 [label="bal7hazar.token.erc1155.library.ERC1155_uri.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	990 [label="bal7hazar.token.erc1155.library.ERC1155_uri.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	1002 [label="bal7hazar.token.erc1155.library.ERC1155.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
+	1017 [label="bal7hazar.token.erc1155.library.ERC1155.balance_of" color="" fillcolor=lightcoral shape=oval style=filled]
+	1034 [label="bal7hazar.token.erc1155.library.ERC1155.balance_of_batch" color="" fillcolor=lightcoral shape=oval style=filled]
+	1052 [label="bal7hazar.token.erc1155.library.ERC1155.is_approved_for_all" color="" fillcolor=lightcoral shape=oval style=filled]
+	1060 [label="bal7hazar.token.erc1155.library.ERC1155.set_approval_for_all" color="" fillcolor=lightcoral shape=oval style=filled]
+	1074 [label="bal7hazar.token.erc1155.library.ERC1155.safe_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
+	1096 [label="bal7hazar.token.erc1155.library.ERC1155.safe_batch_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
+	1118 [label="bal7hazar.token.erc1155.library.ERC1155._safe_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
+	1190 [label="bal7hazar.token.erc1155.library.ERC1155._safe_batch_transfer_from" color="" fillcolor=lightcoral shape=oval style=filled]
+	1237 [label="bal7hazar.token.erc1155.library.ERC1155._mint" color="" fillcolor=lightcoral shape=oval style=filled]
+	1290 [label="bal7hazar.token.erc1155.library.ERC1155._mint_batch" color="" fillcolor=lightcoral shape=oval style=filled]
+	1338 [label="bal7hazar.token.erc1155.library.ERC1155._burn" color="" fillcolor=lightcoral shape=oval style=filled]
+	1393 [label="bal7hazar.token.erc1155.library.ERC1155._burn_batch" color="" fillcolor=lightcoral shape=oval style=filled]
+	1428 [label="bal7hazar.token.erc1155.library.ERC1155._set_approval_for_all" color="" fillcolor=lightcoral shape=oval style=filled]
+	1459 [label="bal7hazar.token.erc1155.library.ERC1155._set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	1466 [label="bal7hazar.token.erc1155.library.ERC1155.assert_owner_or_approved" color="" fillcolor=lightcoral shape=oval style=filled]
+	1489 [label="bal7hazar.token.erc1155.library._do_safe_transfer_acceptance_check" color="" fillcolor=lightcoral shape=oval style=filled]
+	1523 [label="bal7hazar.token.erc1155.library._do_safe_batch_transfer_acceptance_check" color="" fillcolor=lightcoral shape=oval style=filled]
+	1557 [label="bal7hazar.token.erc1155.library.balance_of_batch_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	1592 [label="bal7hazar.token.erc1155.library.safe_batch_transfer_from_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	1649 [label="bal7hazar.token.erc1155.library.mint_batch_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	1686 [label="bal7hazar.token.erc1155.library.burn_batch_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	1735 [label="bal7hazar.token.erc1155.library.add_to_receiver" color="" fillcolor=lightcoral shape=oval style=filled]
+	1758 [label="bal7hazar.token.erc1155.library.check_id" color="" fillcolor=lightcoral shape=oval style=filled]
+	1764 [label="cairopen.math.array.concat_arr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1791 [label="cairopen.math.array.concat_felt_arr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1801 [label="cairopen.math.array.invert_arr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1824 [label="cairopen.math.array.invert_felt_arr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1832 [label="cairopen.math.array._loop_invert_arr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1859 [label="cairopen.math.array._sub_loop_invert_arr" color="" fillcolor=lightcoral shape=oval style=filled]
+	1898 [label="cairopen.string.libs.conversion.conversion_felt_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	1923 [label="cairopen.string.libs.conversion._loop_felt_to_inverted_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	1969 [label="cairopen.string.libs.conversion.conversion_ss_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	2000 [label="cairopen.string.libs.conversion._loop_ss_to_inverted_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	2048 [label="cairopen.string.libs.conversion.conversion_ss_arr_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	2064 [label="cairopen.string.libs.conversion._loop_ss_arr_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	2121 [label="cairopen.string.libs.conversion.conversion_extract_last_char_from_ss" color="" fillcolor=lightcoral shape=oval style=filled]
+	2143 [label="cairopen.string.libs.storage.strings_data.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	2160 [label="cairopen.string.libs.storage.strings_data.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2175 [label="cairopen.string.libs.storage.strings_data.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2189 [label="cairopen.string.libs.storage.strings_len.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	2203 [label="cairopen.string.libs.storage.strings_len.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2217 [label="cairopen.string.libs.storage.strings_len.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2230 [label="cairopen.string.libs.storage.storage_read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2274 [label="cairopen.string.libs.storage._loop_get_ss" color="" fillcolor=lightcoral shape=oval style=filled]
+	2305 [label="cairopen.string.libs.storage._loop_get_ss_char" color="" fillcolor=lightcoral shape=oval style=filled]
+	2342 [label="cairopen.string.libs.storage.storage_write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2377 [label="cairopen.string.libs.storage._loop_set_ss" color="" fillcolor=lightcoral shape=oval style=filled]
+	2402 [label="cairopen.string.libs.storage._loop_set_ss_char" color="" fillcolor=lightcoral shape=oval style=filled]
+	2441 [label="cairopen.string.ASCII.StringCodec.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2459 [label="cairopen.string.ASCII.StringCodec.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2473 [label="cairopen.string.ASCII.StringCodec.felt_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	2483 [label="cairopen.string.ASCII.StringCodec.ss_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	2497 [label="cairopen.string.ASCII.StringCodec.ss_arr_to_string" color="" fillcolor=lightcoral shape=oval style=filled]
+	2512 [label="cairopen.string.libs.manipulation.manipulation_concat" color="" fillcolor=lightcoral shape=oval style=filled]
+	2520 [label="cairopen.string.libs.manipulation.manipulation_append_char" color="" fillcolor=lightcoral shape=oval style=filled]
+	2527 [label="cairopen.string.libs.manipulation.manipulation_path_join" color="" fillcolor=lightcoral shape=oval style=filled]
+	2555 [label="cairopen.string.utils.StringUtil.concat" color="" fillcolor=lightcoral shape=oval style=filled]
+	2563 [label="cairopen.string.utils.StringUtil.path_join" color="" fillcolor=lightcoral shape=oval style=filled]
+	2571 [label="src.utils.metadata.library.Metadata.token_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2625 [label="src.utils.metadata.library.Metadata.contract_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2660 [label="src.utils.metadata.library.Metadata.set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2683 [label="src.badge.library.Locked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	2708 [label="src.badge.library.Unlocked.emit" color="" fillcolor=lightcoral shape=oval style=filled]
+	2733 [label="src.badge.library.CarbonableBadge_unlocked.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	2750 [label="src.badge.library.CarbonableBadge_unlocked.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2765 [label="src.badge.library.CarbonableBadge_unlocked.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2779 [label="src.badge.library.CarbonableBadge_name.addr" color="" fillcolor=lightcoral shape=oval style=filled]
+	2784 [label="src.badge.library.CarbonableBadge_name.read" color="" fillcolor=lightcoral shape=oval style=filled]
+	2797 [label="src.badge.library.CarbonableBadge_name.write" color="" fillcolor=lightcoral shape=oval style=filled]
+	2809 [label="src.badge.library.CarbonableBadge.initializer" color="" fillcolor=lightcoral shape=oval style=filled]
+	2832 [label="src.badge.library.CarbonableBadge.uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2841 [label="src.badge.library.CarbonableBadge.contract_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2848 [label="src.badge.library.CarbonableBadge.name" color="" fillcolor=lightcoral shape=oval style=filled]
+	2854 [label="src.badge.library.CarbonableBadge.locked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2873 [label="src.badge.library.CarbonableBadge.set_uri" color="" fillcolor=lightcoral shape=oval style=filled]
+	2882 [label="src.badge.library.CarbonableBadge.set_locked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2906 [label="src.badge.library.CarbonableBadge.set_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2930 [label="src.badge.library.CarbonableBadge.assert_unlocked" color="" fillcolor=lightcoral shape=oval style=filled]
+	2948 [label="src.badge.library.CarbonableBadge.assert_unlocked_batch" color="" fillcolor=lightcoral shape=oval style=filled]
+	2956 [label="src.badge.library.CarbonableBadge._assert_unlocked_iter" color="" fillcolor=lightcoral shape=oval style=filled]
+	2976 [label="__main__.constructor\l['constructor']" color="" fillcolor=violet shape=oval style=filled]
+	3006 [label="__wrappers__.constructor\l['constructor']" color="" fillcolor=violet shape=doubleoctagon style=filled]
+	3039 [label="__main__.supportsInterface\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3046 [label="__wrappers__.supportsInterface_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3055 [label="__wrappers__.supportsInterface\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3074 [label="__main__.uri\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3083 [label="__wrappers__.uri_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3102 [label="__wrappers__.uri\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3128 [label="__main__.contractURI\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3135 [label="__wrappers__.contractURI_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3154 [label="__wrappers__.contractURI\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3176 [label="__main__.balanceOf\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3185 [label="__wrappers__.balanceOf_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3195 [label="__wrappers__.balanceOf\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3216 [label="__main__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3226 [label="__wrappers__.balanceOfBatch_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3248 [label="__wrappers__.balanceOfBatch\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3292 [label="__main__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3300 [label="__wrappers__.isApprovedForAll_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3309 [label="__wrappers__.isApprovedForAll\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3329 [label="__main__.owner\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3335 [label="__wrappers__.owner_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3344 [label="__wrappers__.owner\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3360 [label="__main__.name\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3366 [label="__wrappers__.name_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3375 [label="__wrappers__.name\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3391 [label="__main__.locked\l['view']" color="" fillcolor=orange shape=oval style=filled]
+	3399 [label="__wrappers__.locked_encode_return" color="" fillcolor=white shape=oval style=solid]
+	3408 [label="__wrappers__.locked\l['view']" color="" fillcolor=orange shape=doubleoctagon style=filled]
+	3428 [label="__main__.setURI\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3442 [label="__wrappers__.setURI\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3471 [label="__main__.setLocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3481 [label="__wrappers__.setLocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3501 [label="__main__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3511 [label="__wrappers__.setUnlocked\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3531 [label="__main__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3539 [label="__wrappers__.setApprovalForAll\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3559 [label="__main__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3577 [label="__wrappers__.safeTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3611 [label="__main__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3629 [label="__wrappers__.safeBatchTransferFrom\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3683 [label="__main__.mint\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3698 [label="__wrappers__.mint\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3731 [label="__main__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3746 [label="__wrappers__.mintBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3799 [label="__main__.burn\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3821 [label="__wrappers__.burn\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3844 [label="__main__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3866 [label="__wrappers__.burnBatch\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3909 [label="__main__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3916 [label="__wrappers__.transferOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
+	3935 [label="__main__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=oval style=filled]
+	3941 [label="__wrappers__.renounceOwnership\l['external']" color="" fillcolor=lightgreen shape=doubleoctagon style=filled]
 	25 -> 24
 	45 -> 41
 	108 -> 45
@@ -251,309 +251,309 @@ digraph CarbonableBadge {
 	650 -> 163
 	717 -> 295 [label=2]
 	717 -> 300
-	740 -> 295 [label=2]
-	740 -> 339
-	740 -> 374
-	772 -> 0 [label=2]
-	772 -> 198
-	802 -> 0 [label=2]
-	802 -> 9 [label=2]
-	802 -> 198
-	858 -> 0 [label=2]
-	858 -> 198
-	884 -> 3 [label=3]
-	884 -> 123
-	904 -> 884
-	904 -> 182 [label=2]
-	926 -> 884
-	926 -> 190 [label=2]
-	946 -> 3 [label=2]
-	946 -> 123
-	963 -> 946
-	963 -> 182
-	978 -> 946
-	978 -> 190
-	997 -> 992
-	997 -> 190
-	1009 -> 1466
-	1009 -> 597 [label=2]
-	1024 -> 30
-	1024 -> 1765
-	1024 -> 904
-	1041 -> 0
-	1041 -> 1564
-	1059 -> 963
-	1067 -> 175
-	1067 -> 30
-	1067 -> 1435
-	1081 -> 175
-	1081 -> 30
-	1081 -> 1473
-	1081 -> 1125
-	1103 -> 175
-	1103 -> 30
-	1103 -> 1473
-	1103 -> 1197
-	1125 -> 30
-	1125 -> 1765
-	1125 -> 295
-	1125 -> 904
-	1125 -> 740
-	1125 -> 926
-	1125 -> 1742
-	1125 -> 175
-	1125 -> 772
-	1125 -> 1496
-	1197 -> 30
-	1197 -> 1599
-	1197 -> 175
-	1197 -> 802
-	1197 -> 1530
-	1244 -> 30
-	1244 -> 1765
-	1244 -> 295
-	1244 -> 1742
-	1244 -> 175
-	1244 -> 772
-	1244 -> 1496
-	1297 -> 30
-	1297 -> 1656
-	1297 -> 175
-	1297 -> 802
-	1297 -> 1530
-	1345 -> 30
-	1345 -> 1765
-	1345 -> 295
-	1345 -> 904
-	1345 -> 740
-	1345 -> 926
-	1345 -> 175
-	1345 -> 772
-	1400 -> 30
-	1400 -> 1693
-	1400 -> 175
-	1400 -> 802
-	1435 -> 30
-	1435 -> 35
-	1435 -> 978
-	1435 -> 858
-	1466 -> 997
-	1473 -> 175
-	1473 -> 1059
-	1496 -> 516
-	1496 -> 611
-	1530 -> 516
-	1530 -> 650
-	1564 -> 1765
-	1564 -> 1024
-	1564 -> 1564
-	1599 -> 1765
-	1599 -> 295
-	1599 -> 904
-	1599 -> 740
-	1599 -> 926
-	1599 -> 1742
-	1599 -> 1599
-	1656 -> 1765
-	1656 -> 295
-	1656 -> 1742
-	1656 -> 1656
-	1693 -> 1765
-	1693 -> 295
-	1693 -> 904
-	1693 -> 740
-	1693 -> 926
-	1693 -> 1693
-	1742 -> 904
-	1742 -> 717
-	1742 -> 926
-	1765 -> 295
-	1771 -> 45
-	1771 -> 0
-	1771 -> 9 [label=2]
-	1798 -> 1771
-	1808 -> 45
-	1808 -> 0
-	1808 -> 1839
-	1831 -> 1808
-	1839 -> 1866
-	1839 -> 1839
-	1866 -> 1866
-	1905 -> 0
-	1905 -> 1930
-	1905 -> 1831
-	1930 -> 45
-	1930 -> 108
-	1930 -> 247
-	1930 -> 1930
-	1976 -> 0
-	1976 -> 2007
-	1976 -> 1831
-	2007 -> 2128
-	2007 -> 247
-	2007 -> 2007
-	2055 -> 0
-	2055 -> 2071
-	2071 -> 0
-	2071 -> 2007
-	2071 -> 1831
-	2071 -> 1798
-	2071 -> 2071
-	2128 -> 208 [label=2]
-	2150 -> 3 [label=2]
-	2150 -> 123
-	2167 -> 2150
-	2167 -> 182
-	2182 -> 2150
-	2182 -> 190
-	2196 -> 3
-	2196 -> 123
-	2210 -> 2196
-	2210 -> 182
-	2224 -> 2196
-	2224 -> 190
-	2237 -> 0
-	2237 -> 2210
-	2237 -> 108
-	2237 -> 2281
-	2281 -> 2167
-	2281 -> 2312
-	2281 -> 2281
-	2312 -> 2128
-	2312 -> 2312
-	2349 -> 45
-	2349 -> 2224
-	2349 -> 108
-	2349 -> 2384
-	2384 -> 2409
-	2384 -> 2384
-	2409 -> 2182
-	2409 -> 252
-	2409 -> 2409
-	2448 -> 2237
-	2466 -> 2349
-	2480 -> 1905
-	2490 -> 1976
-	2504 -> 2055
-	2519 -> 1798
-	2534 -> 2519 [label=2]
-	2534 -> 2527
-	2562 -> 2519
-	2570 -> 2534
-	2578 -> 295
-	2578 -> 2448
-	2578 -> 2480
-	2578 -> 2490
-	2578 -> 2562
-	2578 -> 2570
-	2632 -> 2448
-	2632 -> 2490
-	2632 -> 2570
-	2667 -> 2504
-	2667 -> 2466
-	2690 -> 0 [label=2]
-	2690 -> 198
-	2715 -> 0 [label=2]
-	2715 -> 198
-	2740 -> 3 [label=2]
-	2740 -> 123
-	2757 -> 2740
-	2757 -> 182
-	2772 -> 2740
-	2772 -> 190
-	2791 -> 2786
-	2791 -> 182
-	2804 -> 2786
-	2804 -> 190
-	2816 -> 2667
-	2816 -> 597
-	2816 -> 2804
-	2839 -> 2578
-	2848 -> 2632
-	2855 -> 2791
-	2861 -> 295
-	2861 -> 2757
-	2880 -> 2667
-	2889 -> 295
-	2889 -> 2772
-	2889 -> 2690
-	2913 -> 295
-	2913 -> 2772
-	2913 -> 2715
-	2937 -> 295
-	2937 -> 2861
-	2955 -> 2963
-	2963 -> 2937
-	2963 -> 2963
-	2983 -> 1009
-	2983 -> 2816
-	2983 -> 445
-	3013 -> 2983
-	3046 -> 580
-	3062 -> 3046
-	3062 -> 3053
-	3081 -> 2839
-	3090 -> 9
-	3109 -> 3081
-	3109 -> 3090
-	3135 -> 2848
-	3142 -> 9
-	3161 -> 3135
-	3161 -> 3142
-	3183 -> 1024
-	3202 -> 3183
-	3202 -> 3192
-	3223 -> 1041
-	3233 -> 9
-	3255 -> 3223
-	3255 -> 3233
-	3299 -> 1059
-	3316 -> 3299
-	3316 -> 3307
-	3336 -> 467
-	3351 -> 3336
-	3351 -> 3342
-	3367 -> 2855
-	3382 -> 3367
-	3382 -> 3373
-	3398 -> 2861
-	3415 -> 3398
-	3415 -> 3406
-	3435 -> 452
-	3435 -> 2880
-	3449 -> 3435
-	3478 -> 452
-	3478 -> 2889
-	3488 -> 3478
-	3508 -> 452
-	3508 -> 2913
-	3518 -> 3508
-	3538 -> 1067
-	3546 -> 3538
-	3566 -> 2937
-	3566 -> 1081
-	3584 -> 3566
-	3618 -> 2955
-	3618 -> 1103
-	3636 -> 3618
-	3690 -> 452
-	3690 -> 1244
-	3705 -> 3690
-	3738 -> 452
-	3738 -> 1297
-	3753 -> 3738
-	3806 -> 1473
-	3806 -> 175
-	3806 -> 30
-	3806 -> 1345
-	3828 -> 3806
-	3851 -> 1473
-	3851 -> 175
-	3851 -> 30
-	3851 -> 1400
-	3873 -> 3851
-	3916 -> 473
-	3923 -> 3916
-	3942 -> 485
-	3948 -> 3942
+	738 -> 295 [label=2]
+	738 -> 339
+	738 -> 374
+	765 -> 0 [label=2]
+	765 -> 198
+	795 -> 0 [label=2]
+	795 -> 9 [label=2]
+	795 -> 198
+	851 -> 0 [label=2]
+	851 -> 198
+	877 -> 3 [label=3]
+	877 -> 123
+	897 -> 877
+	897 -> 182 [label=2]
+	919 -> 877
+	919 -> 190 [label=2]
+	939 -> 3 [label=2]
+	939 -> 123
+	956 -> 939
+	956 -> 182
+	971 -> 939
+	971 -> 190
+	990 -> 985
+	990 -> 190
+	1002 -> 1459
+	1002 -> 597 [label=2]
+	1017 -> 30
+	1017 -> 1758
+	1017 -> 897
+	1034 -> 0
+	1034 -> 1557
+	1052 -> 956
+	1060 -> 175
+	1060 -> 30
+	1060 -> 1428
+	1074 -> 175
+	1074 -> 30
+	1074 -> 1466
+	1074 -> 1118
+	1096 -> 175
+	1096 -> 30
+	1096 -> 1466
+	1096 -> 1190
+	1118 -> 30
+	1118 -> 1758
+	1118 -> 295
+	1118 -> 897
+	1118 -> 738
+	1118 -> 919
+	1118 -> 1735
+	1118 -> 175
+	1118 -> 765
+	1118 -> 1489
+	1190 -> 30
+	1190 -> 1592
+	1190 -> 175
+	1190 -> 795
+	1190 -> 1523
+	1237 -> 30
+	1237 -> 1758
+	1237 -> 295
+	1237 -> 1735
+	1237 -> 175
+	1237 -> 765
+	1237 -> 1489
+	1290 -> 30
+	1290 -> 1649
+	1290 -> 175
+	1290 -> 795
+	1290 -> 1523
+	1338 -> 30
+	1338 -> 1758
+	1338 -> 295
+	1338 -> 897
+	1338 -> 738
+	1338 -> 919
+	1338 -> 175
+	1338 -> 765
+	1393 -> 30
+	1393 -> 1686
+	1393 -> 175
+	1393 -> 795
+	1428 -> 30
+	1428 -> 35
+	1428 -> 971
+	1428 -> 851
+	1459 -> 990
+	1466 -> 175
+	1466 -> 1052
+	1489 -> 516
+	1489 -> 611
+	1523 -> 516
+	1523 -> 650
+	1557 -> 1758
+	1557 -> 1017
+	1557 -> 1557
+	1592 -> 1758
+	1592 -> 295
+	1592 -> 897
+	1592 -> 738
+	1592 -> 919
+	1592 -> 1735
+	1592 -> 1592
+	1649 -> 1758
+	1649 -> 295
+	1649 -> 1735
+	1649 -> 1649
+	1686 -> 1758
+	1686 -> 295
+	1686 -> 897
+	1686 -> 738
+	1686 -> 919
+	1686 -> 1686
+	1735 -> 897
+	1735 -> 717
+	1735 -> 919
+	1758 -> 295
+	1764 -> 45
+	1764 -> 0
+	1764 -> 9 [label=2]
+	1791 -> 1764
+	1801 -> 45
+	1801 -> 0
+	1801 -> 1832
+	1824 -> 1801
+	1832 -> 1859
+	1832 -> 1832
+	1859 -> 1859
+	1898 -> 0
+	1898 -> 1923
+	1898 -> 1824
+	1923 -> 45
+	1923 -> 108
+	1923 -> 247
+	1923 -> 1923
+	1969 -> 0
+	1969 -> 2000
+	1969 -> 1824
+	2000 -> 2121
+	2000 -> 247
+	2000 -> 2000
+	2048 -> 0
+	2048 -> 2064
+	2064 -> 0
+	2064 -> 2000
+	2064 -> 1824
+	2064 -> 1791
+	2064 -> 2064
+	2121 -> 208 [label=2]
+	2143 -> 3 [label=2]
+	2143 -> 123
+	2160 -> 2143
+	2160 -> 182
+	2175 -> 2143
+	2175 -> 190
+	2189 -> 3
+	2189 -> 123
+	2203 -> 2189
+	2203 -> 182
+	2217 -> 2189
+	2217 -> 190
+	2230 -> 0
+	2230 -> 2203
+	2230 -> 108
+	2230 -> 2274
+	2274 -> 2160
+	2274 -> 2305
+	2274 -> 2274
+	2305 -> 2121
+	2305 -> 2305
+	2342 -> 45
+	2342 -> 2217
+	2342 -> 108
+	2342 -> 2377
+	2377 -> 2402
+	2377 -> 2377
+	2402 -> 2175
+	2402 -> 252
+	2402 -> 2402
+	2441 -> 2230
+	2459 -> 2342
+	2473 -> 1898
+	2483 -> 1969
+	2497 -> 2048
+	2512 -> 1791
+	2527 -> 2512 [label=2]
+	2527 -> 2520
+	2555 -> 2512
+	2563 -> 2527
+	2571 -> 295
+	2571 -> 2441
+	2571 -> 2473
+	2571 -> 2483
+	2571 -> 2555
+	2571 -> 2563
+	2625 -> 2441
+	2625 -> 2483
+	2625 -> 2563
+	2660 -> 2497
+	2660 -> 2459
+	2683 -> 0 [label=2]
+	2683 -> 198
+	2708 -> 0 [label=2]
+	2708 -> 198
+	2733 -> 3 [label=2]
+	2733 -> 123
+	2750 -> 2733
+	2750 -> 182
+	2765 -> 2733
+	2765 -> 190
+	2784 -> 2779
+	2784 -> 182
+	2797 -> 2779
+	2797 -> 190
+	2809 -> 2660
+	2809 -> 597
+	2809 -> 2797
+	2832 -> 2571
+	2841 -> 2625
+	2848 -> 2784
+	2854 -> 295
+	2854 -> 2750
+	2873 -> 2660
+	2882 -> 295
+	2882 -> 2765
+	2882 -> 2683
+	2906 -> 295
+	2906 -> 2765
+	2906 -> 2708
+	2930 -> 295
+	2930 -> 2854
+	2948 -> 2956
+	2956 -> 2930
+	2956 -> 2956
+	2976 -> 1002
+	2976 -> 2809
+	2976 -> 445
+	3006 -> 2976
+	3039 -> 580
+	3055 -> 3039
+	3055 -> 3046
+	3074 -> 2832
+	3083 -> 9
+	3102 -> 3074
+	3102 -> 3083
+	3128 -> 2841
+	3135 -> 9
+	3154 -> 3128
+	3154 -> 3135
+	3176 -> 1017
+	3195 -> 3176
+	3195 -> 3185
+	3216 -> 1034
+	3226 -> 9
+	3248 -> 3216
+	3248 -> 3226
+	3292 -> 1052
+	3309 -> 3292
+	3309 -> 3300
+	3329 -> 467
+	3344 -> 3329
+	3344 -> 3335
+	3360 -> 2848
+	3375 -> 3360
+	3375 -> 3366
+	3391 -> 2854
+	3408 -> 3391
+	3408 -> 3399
+	3428 -> 452
+	3428 -> 2873
+	3442 -> 3428
+	3471 -> 452
+	3471 -> 2882
+	3481 -> 3471
+	3501 -> 452
+	3501 -> 2906
+	3511 -> 3501
+	3531 -> 1060
+	3539 -> 3531
+	3559 -> 2930
+	3559 -> 1074
+	3577 -> 3559
+	3611 -> 2948
+	3611 -> 1096
+	3629 -> 3611
+	3683 -> 452
+	3683 -> 1237
+	3698 -> 3683
+	3731 -> 452
+	3731 -> 1290
+	3746 -> 3731
+	3799 -> 1466
+	3799 -> 175
+	3799 -> 30
+	3799 -> 1338
+	3821 -> 3799
+	3844 -> 1466
+	3844 -> 175
+	3844 -> 30
+	3844 -> 1393
+	3866 -> 3844
+	3909 -> 473
+	3916 -> 3909
+	3935 -> 485
+	3941 -> 3935
 }

@@ -1,16 +1,66 @@
+- attributeName: event
+  functionName:
+    name: Offset
+    charIndex:
+      start: 1064
+      end: 1070
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+      - name: quantity
+        type: Uint256
+      - name: time
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: event
+  functionName:
+    name: Snapshot
+    charIndex:
+      start: 1134
+      end: 1142
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: time
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
 - attributeName: storage_var
   functionName:
     name: carbonable_project_address_
     charIndex:
-      start: 1067
-      end: 1094
+      start: 1206
+      end: 1233
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: res
+      - name: address
         type: felt
   functionComment:
     desc: null
@@ -25,15 +75,15 @@
   functionName:
     name: start_
     charIndex:
-      start: 1154
-      end: 1160
+      start: 1278
+      end: 1284
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: res
+      - name: time
         type: felt
   functionComment:
     desc: null
@@ -48,15 +98,15 @@
   functionName:
     name: unlocked_duration_
     charIndex:
-      start: 1222
-      end: 1240
+      start: 1326
+      end: 1344
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: res
+      - name: duration
         type: felt
   functionComment:
     desc: null
@@ -71,16 +121,39 @@
   functionName:
     name: period_duration_
     charIndex:
-      start: 1300
-      end: 1316
+      start: 1390
+      end: 1406
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: res
+      - name: duration
         type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: removal_
+    charIndex:
+      start: 1452
+      end: 1460
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: removal
+        type: Uint256
   functionComment:
     desc: null
     implicitArgs: null
@@ -94,8 +167,8 @@
   functionName:
     name: registration_
     charIndex:
-      start: 1373
-      end: 1386
+      start: 1508
+      end: 1521
   functionSignature:
     implicitArgs:
       - name: ''
@@ -115,12 +188,85 @@
     charIndex:
       start: 0
       end: 0
+- attributeName: storage_var
+  functionName:
+    name: total_offsetable_
+    charIndex:
+      start: 1583
+      end: 1600
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: balance
+        type: Uint256
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: total_offseted_
+    charIndex:
+      start: 1661
+      end: 1676
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: balance
+        type: Uint256
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: snapshoted_
+    charIndex:
+      start: 1737
+      end: 1748
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: snapshoted
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
 - attributeName: namespace CarbonableFarmer
   functionName:
     name: initializer
     charIndex:
-      start: 1502
-      end: 1513
+      start: 1850
+      end: 1861
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -146,8 +292,8 @@
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 1765
-      end: 1791
+      start: 2113
+      end: 2139
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -173,8 +319,8 @@
   functionName:
     name: carbonable_minter_address
     charIndex:
-      start: 2054
-      end: 2079
+      start: 2402
+      end: 2427
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -202,8 +348,8 @@
   functionName:
     name: is_locked
     charIndex:
-      start: 2457
-      end: 2466
+      start: 2805
+      end: 2814
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -229,8 +375,8 @@
   functionName:
     name: total_locked
     charIndex:
-      start: 3296
-      end: 3308
+      start: 3644
+      end: 3656
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -256,8 +402,8 @@
   functionName:
     name: shares_of
     charIndex:
-      start: 3737
-      end: 3746
+      start: 4085
+      end: 4094
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -287,8 +433,8 @@
   functionName:
     name: balance_of
     charIndex:
-      start: 4440
-      end: 4450
+      start: 4788
+      end: 4798
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -316,8 +462,8 @@
   functionName:
     name: registred_owner_of
     charIndex:
-      start: 4680
-      end: 4698
+      start: 5029
+      end: 5047
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -339,14 +485,72 @@
     returns: null
     raises: null
     charIndex:
-      start: 4817
-      end: 4829
+      start: 5166
+      end: 5178
+- attributeName: namespace CarbonableFarmer
+  functionName:
+    name: total_offsetable
+    charIndex:
+      start: 5933
+      end: 5949
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: total_offsetable
+        type: Uint256
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableFarmer
+  functionName:
+    name: total_offseted
+    charIndex:
+      start: 6212
+      end: 6226
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: total_offseted
+        type: Uint256
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
 - attributeName: namespace CarbonableFarmer
   functionName:
     name: start_period
     charIndex:
-      start: 5127
-      end: 5139
+      start: 6511
+      end: 6523
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -360,6 +564,8 @@
         type: felt
       - name: period_duration
         type: felt
+      - name: removal
+        type: felt
     returns:
       - name: success
         type: felt
@@ -370,14 +576,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 5287
-      end: 5299
+      start: 6686
+      end: 6698
 - attributeName: namespace CarbonableFarmer
   functionName:
     name: stop_period
     charIndex:
-      start: 5894
-      end: 5905
+      start: 7469
+      end: 7480
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -397,14 +603,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 6007
-      end: 6019
+      start: 7582
+      end: 7594
 - attributeName: namespace CarbonableFarmer
   functionName:
     name: deposit
     charIndex:
-      start: 6548
-      end: 6555
+      start: 8123
+      end: 8130
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -432,8 +638,8 @@
   functionName:
     name: withdraw
     charIndex:
-      start: 8105
-      end: 8113
+      start: 9678
+      end: 9686
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -459,10 +665,64 @@
       end: 0
 - attributeName: namespace CarbonableFarmer
   functionName:
-    name: count
+    name: offset
     charIndex:
-      start: 9696
-      end: 9701
+      start: 11235
+      end: 11241
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: success
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableFarmer
+  functionName:
+    name: snapshot
+    charIndex:
+      start: 12263
+      end: 12271
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: success
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 12373
+      end: 12385
+- attributeName: namespace CarbonableFarmer
+  functionName:
+    name: _count
+    charIndex:
+      start: 13184
+      end: 13190
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -488,10 +748,10 @@
       end: 0
 - attributeName: namespace CarbonableFarmer
   functionName:
-    name: count_iter
+    name: _count_iter
     charIndex:
-      start: 10368
-      end: 10378
+      start: 13915
+      end: 13926
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -510,6 +770,62 @@
     returns:
       - name: count
         type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableFarmer
+  functionName:
+    name: _snapshot
+    charIndex:
+      start: 14977
+      end: 14986
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableFarmer
+  functionName:
+    name: _snapshot_iter
+    charIndex:
+      start: 15655
+      end: 15669
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: contract_address
+        type: felt
+      - name: index
+        type: Uint256
+      - name: total_supply
+        type: Uint256
+    returns: null
   functionComment:
     desc: null
     implicitArgs: null
