@@ -280,6 +280,19 @@ func claimed_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     return CarbonableMinter.claimed_slots(account);
 }
 
+@view
+func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
+    // Desc:
+    //   Return the sold out status
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   status(felt): 1 if sold out else 0
+    return CarbonableMinter.sold_out();
+}
+
 //
 // Externals
 //

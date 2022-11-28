@@ -195,6 +195,21 @@ namespace CarbonableMinter {
         return (slots,);
     }
 
+    func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        status: felt
+    ) {
+        alloc_locals;
+        let (max_supply) = max_supply_for_mint();
+        let (reserved_supply) = reserved_supply_for_mint();
+        let (max_supply_to_sold_out) = SafeUint256.sub_le(max_supply, reserved_supply);
+
+        let (project_address) = carbonable_project_address();
+        let (total_supply) = IERC721Enumerable.totalSupply(project_address);
+        let (status) = uint256_eq(total_supply, max_supply_to_sold_out);
+
+        return (status=status,);
+    }
+
     //
     // Externals
     //
