@@ -113,10 +113,181 @@
       end: 2729
 - attributeName: view
   functionName:
-    name: is_locked
+    name: get_start_time
     charIndex:
       start: 2802
-      end: 2811
+      end: 2816
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: start_time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the start time of the current period
+        charIndex:
+          start: 23
+          end: 66
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 98
+          end: 116
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 126
+          end: 152
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 162
+          end: 177
+    explicitArgs: null
+    returns:
+      - name: start_time
+        type: felt
+        desc: absolute unix time
+        charIndex:
+          start: 203
+          end: 239
+    raises: null
+    charIndex:
+      start: 2913
+      end: 3152
+- attributeName: view
+  functionName:
+    name: get_lock_time
+    charIndex:
+      start: 3213
+      end: 3226
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: lock_time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the lock time of the current period
+        charIndex:
+          start: 23
+          end: 65
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 97
+          end: 115
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 125
+          end: 151
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 161
+          end: 176
+    explicitArgs: null
+    returns:
+      - name: lock_time
+        type: felt
+        desc: absolute unix time
+        charIndex:
+          start: 202
+          end: 237
+    raises: null
+    charIndex:
+      start: 3322
+      end: 3559
+- attributeName: view
+  functionName:
+    name: get_end_time
+    charIndex:
+      start: 3619
+      end: 3631
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: end_time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the end time of the current period
+        charIndex:
+          start: 23
+          end: 64
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 96
+          end: 114
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 124
+          end: 150
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 160
+          end: 175
+    explicitArgs: null
+    returns:
+      - name: end_time
+        type: felt
+        desc: absolute unix time
+        charIndex:
+          start: 201
+          end: 235
+    raises: null
+    charIndex:
+      start: 3726
+      end: 3961
+- attributeName: view
+  functionName:
+    name: is_locked
+    charIndex:
+      start: 4020
+      end: 4029
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -166,14 +337,14 @@
           end: 260
     raises: null
     charIndex:
-      start: 2904
-      end: 3164
+      start: 4122
+      end: 4382
 - attributeName: view
   functionName:
     name: total_locked
     charIndex:
-      start: 3220
-      end: 3232
+      start: 4438
+      end: 4450
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -223,14 +394,14 @@
           end: 266
     raises: null
     charIndex:
-      start: 3329
-      end: 3595
+      start: 4547
+      end: 4813
 - attributeName: view
   functionName:
     name: shares_of
     charIndex:
-      start: 3654
-      end: 3663
+      start: 4872
+      end: 4881
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -296,14 +467,14 @@
           end: 365
     raises: null
     charIndex:
-      start: 3789
-      end: 4154
+      start: 5007
+      end: 5372
 - attributeName: view
   functionName:
     name: registred_owner_of
     charIndex:
-      start: 4246
-      end: 4264
+      start: 5464
+      end: 5482
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -363,8 +534,8 @@
           end: 340
     raises: null
     charIndex:
-      start: 4375
-      end: 4715
+      start: 5593
+      end: 5933
 - attributeName: external
   functionName:
     name: initializer
@@ -540,8 +711,8 @@
   functionName:
     name: start_period
     charIndex:
-      start: 4821
-      end: 4833
+      start: 6039
+      end: 6051
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -607,14 +778,14 @@
           end: 375
     raises: null
     charIndex:
-      start: 4973
-      end: 5348
+      start: 6191
+      end: 6566
 - attributeName: external
   functionName:
     name: stop_period
     charIndex:
-      start: 5537
-      end: 5548
+      start: 6755
+      end: 6766
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -664,14 +835,14 @@
           end: 212
     raises: null
     charIndex:
-      start: 5642
-      end: 5854
+      start: 6860
+      end: 7072
 - attributeName: external
   functionName:
     name: deposit
     charIndex:
-      start: 5949
-      end: 5956
+      start: 7167
+      end: 7174
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -729,14 +900,14 @@
           end: 303
     raises: null
     charIndex:
-      start: 6067
-      end: 6370
+      start: 7285
+      end: 7588
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 6445
-      end: 6453
+      start: 7663
+      end: 7671
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -794,5 +965,5 @@
           end: 297
     raises: null
     charIndex:
-      start: 6564
-      end: 6861
+      start: 7782
+      end: 8079
