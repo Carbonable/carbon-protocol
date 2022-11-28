@@ -26,7 +26,7 @@ func test_stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     let unlocked_duration = 30;
     let period_duration = 100;
     let (success) = CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, removal=0
+        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=0
     );
     assert success = TRUE;
     %{ stop_warp() %}

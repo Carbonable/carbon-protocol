@@ -34,7 +34,7 @@ namespace ICarbonableOffseter {
     func snapshot() -> (success: felt) {
     }
 
-    func start_period(unlocked_duration: felt, period_duration: felt, removal: felt) -> (
+    func start_period(unlocked_duration: felt, period_duration: felt, absorption: felt) -> (
         success: felt
     ) {
     }

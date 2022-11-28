@@ -118,13 +118,15 @@ func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     address: felt
 ) -> (total_offsetable: Uint256) {
     // Desc:
-    //   Return the locked status of deposits and withdrawals
+    //   Return the total offsetable balance of the provided address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   address(felt): address
     // Returns:
-    //   status(felt): Locked status (1 if locked else 0)
+    //   total_offsetable(Uint256): Total offsetable balance
     return CarbonableFarmer.total_offsetable(address=address);
 }
 
@@ -133,13 +135,15 @@ func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     address: felt
 ) -> (total_offseted: Uint256) {
     // Desc:
-    //   Return the locked status of deposits and withdrawals
+    //   Return the total offseted balance of the provided address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   address(felt): address
     // Returns:
-    //   status(felt): Locked status (1 if locked else 0)
+    //   total_offseted(Uint256): Total offseted balance
     return CarbonableFarmer.total_offseted(address=address);
 }
 
@@ -200,7 +204,7 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 @external
 func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {
     // Desc:
-    //   Snapshot deposits
+    //   Offset the current total offsetable of the caller address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -228,7 +232,7 @@ func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
 @external
 func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    unlocked_duration: felt, period_duration: felt, removal: felt
+    unlocked_duration: felt, period_duration: felt, absorption: felt
 ) -> (success: felt) {
     // Desc:
     //   Start a new period (erase the current one)
@@ -239,12 +243,12 @@ func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // Explicit args:
     //   unlocked_duration(felt): Unlocked duration in seconds
     //   period_duration(felt): Period duration in seconds
-    //   removal(felt): Carbon removal in ng of CO2
+    //   absorption(felt): Carbon absorption in ng of CO2
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
     return CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, removal=removal
+        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=absorption
     );
 }
 
