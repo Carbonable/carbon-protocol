@@ -70,6 +70,7 @@ func test_deposit_and_withdraw_while_unlock{
     admin.mint(to=anyone_address, token_id=4);
     admin.mint(to=anyone_address, token_id=5);
 
+    // 0.5 T/year is 41700000000000 ng/month which is 8340000000000 ng/month per token for a total supply of 5 tokens
     admin.offseter_start_period(unlocked_duration=5, period_duration=10, removal=41700000000000);
 
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
@@ -102,6 +103,46 @@ func test_deposit_and_withdraw_while_unlock{
 
     let (total_balance) = anyone.offseter_total_locked();
     assert total_balance = Uint256(low=3, high=0);
+
+    %{ stop_warp = warp(blk_timestamp=8, target_contract_address=ids.offseter_address) %}
+
+    let (total_offsetable) = anyone.total_offsetable(admin_address);
+    assert total_offsetable = 0;
+
+    let (total_offsetable) = anyone.total_offsetable(anyone_address);
+    assert total_offsetable = 0;
+
+    %{ expect_events({"name": "Snapshot"}) %}
+    admin.snapshot();
+
+    let (total_offsetable) = anyone.total_offsetable(admin_address);
+    assert total_offsetable = 8340000000000;
+
+    let (total_offseted) = anyone.total_offseted(admin_address);
+    assert total_offseted = 0;
+
+    let (total_offsetable) = anyone.total_offsetable(anyone_address);
+    assert total_offsetable = 16680000000000;
+
+    let (total_offseted) = anyone.total_offseted(anyone_address);
+    assert total_offseted = 0;
+
+    %{ expect_events({"name": "Offset"}) %}
+    anyone.offset();
+
+    let (total_offsetable) = anyone.total_offsetable(admin_address);
+    assert total_offsetable = 8340000000000;
+
+    let (total_offseted) = anyone.total_offseted(admin_address);
+    assert total_offseted = 0;
+
+    let (total_offsetable) = anyone.total_offsetable(anyone_address);
+    assert total_offsetable = 0;
+
+    let (total_offseted) = anyone.total_offseted(anyone_address);
+    assert total_offseted = 16680000000000;
+
+    %{ stop_warp() %}
 
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.offseter_address) %}
     anyone.offseter_withdraw(token_id=3);

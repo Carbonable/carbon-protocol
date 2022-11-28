@@ -481,6 +481,24 @@ namespace carbonable_offseter_instance {
         return (status=status,);
     }
 
+    func total_offsetable{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
+    }(address: felt) -> (total_offsetable: Uint256) {
+        let (total_offsetable) = ICarbonableOffseter.total_offsetable(
+            contract_address=carbonable_offseter, address=address
+        );
+        return (total_offsetable=total_offsetable,);
+    }
+
+    func total_offseted{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
+    }(address: felt) -> (total_offseted: Uint256) {
+        let (total_offseted) = ICarbonableOffseter.total_offseted(
+            contract_address=carbonable_offseter, address=address
+        );
+        return (total_offseted=total_offseted,);
+    }
+
     func total_locked{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (balance: Uint256) {
@@ -503,6 +521,24 @@ namespace carbonable_offseter_instance {
     }
 
     // Externals
+
+    func offset{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
+    }(caller: felt) -> (success: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
+        let (success) = ICarbonableOffseter.offset(contract_address=carbonable_offseter);
+        %{ stop_prank() %}
+        return (success=success,);
+    }
+
+    func snapshot{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
+    }(caller: felt) -> (success: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
+        let (success) = ICarbonableOffseter.snapshot(contract_address=carbonable_offseter);
+        %{ stop_prank() %}
+        return (success=success,);
+    }
 
     func start_period{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
@@ -857,6 +893,26 @@ namespace admin_instance {
         return (status=status,);
     }
 
+    func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (total_offsetable: felt) {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        with carbonable_offseter {
+            let (total_offsetable) = carbonable_offseter_instance.total_offsetable(address=address);
+        }
+        return (total_offsetable=total_offsetable.low,);
+    }
+
+    func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (total_offseted: felt) {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        with carbonable_offseter {
+            let (total_offseted) = carbonable_offseter_instance.total_offseted(address=address);
+        }
+        return (total_offseted=total_offseted.low,);
+    }
+
     func offseter_total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         ) -> (balance: Uint256) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
@@ -887,6 +943,26 @@ namespace admin_instance {
             );
         }
         return (address=address,);
+    }
+
+    func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.offset(caller=caller);
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.snapshot(caller=caller);
+            assert success = TRUE;
+        }
+        return ();
     }
 
     func offseter_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1340,6 +1416,26 @@ namespace anyone_instance {
         return (status=status,);
     }
 
+    func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (total_offsetable: felt) {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        with carbonable_offseter {
+            let (total_offsetable) = carbonable_offseter_instance.total_offsetable(address=address);
+        }
+        return (total_offsetable=total_offsetable.low,);
+    }
+
+    func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (total_offseted: felt) {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        with carbonable_offseter {
+            let (total_offseted) = carbonable_offseter_instance.total_offseted(address=address);
+        }
+        return (total_offseted=total_offseted.low,);
+    }
+
     func offseter_total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         ) -> (balance: Uint256) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
@@ -1370,6 +1466,26 @@ namespace anyone_instance {
             );
         }
         return (address=address,);
+    }
+
+    func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.offset(caller=caller);
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.snapshot(caller=caller);
+            assert success = TRUE;
+        }
+        return ();
     }
 
     func offseter_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
