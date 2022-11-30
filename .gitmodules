@@ -7,6 +7,3 @@
 [submodule "cairo_contracts"]
 	path = lib/cairo_contracts
 	url = https://github.com/OpenZeppelin/cairo-contracts
-[submodule "starkvest"]
-	path = lib/starkvest
-	url = https://github.com/Carbonable/starkvest
