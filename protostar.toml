@@ -1,7 +1,13 @@
 [project]
 protostar-version = "0.8.1"
 lib-path = "lib"
-cairo-path = ["./lib/cairopen_contracts/src", "./lib/cairo_contracts/src", "./lib/bal7hazar_contracts/src", "src"]
+cairo-path = [
+    "./lib/cairopen_contracts/src",
+    "./lib/cairo_contracts/src",
+    "./lib/bal7hazar_contracts/src",
+    "./lib/carbonable_starkvest/src",
+    "src",
+]
 
 [contracts]
 CarbonableBadge = ["src/badge/badge.cairo"]
@@ -24,8 +30,8 @@ account-address = "0x063675fa1ecea10063722e61557ed7f49ed2503d6cdd74f4b31e9770b47
 block-explorer = "starkscan"
 
 [profile.testnet2.project]
-gateway-url="https://alpha4-2.starknet.io"
-chain-id=1536727068981429685321
+gateway-url = "https://alpha4-2.starknet.io"
+chain-id = 1536727068981429685321
 private-key-path = "./.env"
 account-address = "0x063675fa1ecea10063722e61557ed7f49ed2503d6cdd74f4b31e9770b473650c"
 block-explorer = "starkscan"

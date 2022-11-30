@@ -28,6 +28,9 @@ from openzeppelin.token.erc721.IERC721 import IERC721
 from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 
+// Carbonable dependencies
+from interfaces.starkvest import IStarkVest
+
 // Local dependencies
 from src.interfaces.project import ICarbonableProject
 
@@ -43,12 +46,24 @@ func Offset(address: felt, quantity: Uint256, time: felt) {
 func Snapshot(time: felt) {
 }
 
+@event
+func VestingsCreated(total_amount: felt, time: felt) {
+}
+
+@event
+func VestingOfAddrCreated(address: felt, vesting_id: felt, time: felt) {
+}
+
 //
 // Storage variables
 //
 
 @storage_var
 func carbonable_project_address_() -> (address: felt) {
+}
+
+@storage_var
+func starkvest_address_() -> (address: felt) {
 }
 
 @storage_var
@@ -83,6 +98,10 @@ func total_offseted_(address: felt) -> (balance: Uint256) {
 func snapshoted_() -> (snapshoted: felt) {
 }
 
+@storage_var
+func vestings_created_() -> (vesting_created: felt) {
+}
+
 namespace CarbonableFarmer {
     //
     // Constructor
@@ -92,6 +111,14 @@ namespace CarbonableFarmer {
         carbonable_project_address: felt
     ) {
         carbonable_project_address_.write(carbonable_project_address);
+        return ();
+    }
+
+    func yielder_initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        carbonable_project_address: felt, starkvest_address: felt
+    ) {
+        carbonable_project_address_.write(carbonable_project_address);
+        starkvest_address_.write(starkvest_address);
         return ();
     }
 
@@ -257,8 +284,9 @@ namespace CarbonableFarmer {
         period_duration_.write(period_duration);
         unlocked_duration_.write(unlocked_duration);
 
-        // [Effect] Reset snapshoted status
+        // [Effect] Reset snapshoted status and Vestings status
         snapshoted_.write(0);
+        vestings_created_.write(0);
 
         return (success=TRUE,);
     }
@@ -430,6 +458,38 @@ namespace CarbonableFarmer {
         return (success=TRUE,);
     }
 
+    func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        total_amount: felt, precision: felt
+    ) -> (success: felt) {
+        alloc_locals;
+
+        // [Check] Locked period
+        let (status) = is_locked();
+        with_attr error_message(
+                "CarbonableFarmer: create vestings must be executed in locked period") {
+            assert status = TRUE;
+        }
+
+        // [Check] Create Vesting not yet executed for the current period
+        let (vestings_created) = vestings_created_.read();
+        with_attr error_message(
+                "CarbonableFarmer: vestings was already executed for the current period") {
+            assert vestings_created = FALSE;
+        }
+
+        // [Effect] Update snapshot status
+        vestings_created_.write(TRUE);
+
+        // [Interaction] Run create_vestings
+        _create_vestings(total_amount=total_amount, precision=precision);
+
+        // [Event] Emit all vesting are created
+        let (current_time) = get_block_timestamp();
+        VestingsCreated.emit(total_amount=total_amount, time=current_time);
+
+        return (success=TRUE,);
+    }
+
     //
     // Internals
     //
@@ -546,5 +606,143 @@ namespace CarbonableFarmer {
         return _snapshot_iter(
             contract_address=contract_address, index=next, total_supply=total_supply
         );
+    }
+
+    func _create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        total_amount: felt, precision: felt
+    ) {
+        alloc_locals;
+
+        let (starkvest_address) = starkvest_address_.read();
+        let (contract_address) = carbonable_project_address_.read();
+        let (total_supply) = IERC721Enumerable.totalSupply(contract_address=contract_address);
+
+        let zero = Uint256(low=0, high=0);
+        let (is_zero) = uint256_eq(total_supply, zero);
+        if (is_zero == TRUE) {
+            return ();
+        }
+
+        let one = Uint256(low=1, high=0);
+        let (index) = SafeUint256.sub_le(total_supply, one);
+        let (token_total_deposited) = total_locked();
+        return _create_vestings_iter(
+            contract_address=contract_address,
+            starkvest_address=starkvest_address,
+            total_amount=total_amount,
+            precision=precision,
+            token_total_deposited=token_total_deposited,
+            index=index,
+            total_supply=total_supply,
+        );
+    }
+
+    func _create_vestings_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        contract_address: felt,
+        starkvest_address: felt,
+        total_amount: felt,
+        precision: felt,
+        token_total_deposited: Uint256,
+        index: Uint256,
+        total_supply: Uint256,
+    ) {
+        alloc_locals;
+
+        // Get registred address of the current token index
+        let (token_id) = IERC721Enumerable.tokenByIndex(
+            contract_address=contract_address, index=index
+        );
+        let (address) = registration_.read(token_id);
+
+        // If registred then create a vesting for each token_id
+        let one = Uint256(low=1, high=0);
+        if (address != 0) {
+            // The value 1 is the 1 token_id
+            let address_token_amount = 1;
+            let (address_amount) = _amount_to_vesting(
+                precision=precision,
+                token_total_deposited=token_total_deposited,
+                total_amount=total_amount,
+                address_token_amount=address_token_amount,
+            );
+
+            // [Interaction] Starkvest - create vesting for address
+            // Vesting, with no cliff period, no duration and no delay to start
+            let beneficiary = address;
+            let cliff_delta = 0;
+            let start = 1;
+            let duration = 1;
+            let slice_period_seconds = 1;
+            let revocable = TRUE;
+
+            // [Interaction] Starkvest - create vesting for address
+            let (vesting_id) = IStarkVest.create_vesting(
+                starkvest_address,
+                beneficiary,
+                cliff_delta,
+                start,
+                duration,
+                slice_period_seconds,
+                revocable,
+                address_amount,
+            );
+
+            // TODO: verify vesting_id is not 0
+
+            // [Event] Emit addr vesting are created
+            let (current_time) = get_block_timestamp();
+            VestingOfAddrCreated.emit(address=address, vesting_id=vesting_id, time=current_time);
+
+            tempvar _syscall_ptr = syscall_ptr;
+            tempvar _pedersen_ptr = pedersen_ptr;
+            tempvar _range_check_ptr = range_check_ptr;
+        } else {
+            tempvar _syscall_ptr = syscall_ptr;
+            tempvar _pedersen_ptr = pedersen_ptr;
+            tempvar _range_check_ptr = range_check_ptr;
+        }
+        let syscall_ptr = _syscall_ptr;
+        let pedersen_ptr = _pedersen_ptr;
+        let range_check_ptr = _range_check_ptr;
+
+        let zero = Uint256(low=0, high=0);
+        let (is_zero) = uint256_eq(index, zero);
+        // Stop recursion if index is 0
+        if (is_zero == TRUE) {
+            return ();
+        }
+        // Else move on to the next index
+        let (next) = SafeUint256.sub_le(index, one);
+        return _create_vestings_iter(
+            contract_address=contract_address,
+            starkvest_address=starkvest_address,
+            total_amount=total_amount,
+            precision=precision,
+            token_total_deposited=token_total_deposited,
+            index=next,
+            total_supply=total_supply,
+        );
+    }
+
+    // We have to make a cross product, between address_token_amount, total_amount and token_total_deposited
+    // to find the amount to distribut
+    func _amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        precision: felt,
+        token_total_deposited: Uint256,
+        total_amount: felt,
+        address_token_amount: felt,
+    ) -> (amount: Uint256) {
+        // let dividend = precision * address_token_amount;
+        let dividend = total_amount * address_token_amount;
+        let dividend_uint256 = Uint256(low=dividend, high=0);
+
+        // [Check] Uint256 compliance
+        with_attr error_message("CarbonableFarmer: dividend_uint256 is not a valid Uint256") {
+            uint256_check(dividend_uint256);
+        }
+
+        let (amount, _) = uint256_unsigned_div_rem(dividend_uint256, token_total_deposited);
+
+        return (amount=amount,);
     }
 }
