@@ -19,7 +19,7 @@ from src.farm.library import CarbonableFarmer
 
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    carbonable_project_address: felt, owner: felt, proxy_admin: felt
+    carbonable_project_address: felt, starkvest_address: felt, owner: felt, proxy_admin: felt
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -30,11 +30,14 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   range_check_ptr
     // Explicit args:
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   starkvest_address(felt): Address of the vestings contract where are deposited yield result
     //   owner(felt): Owner address
     //   proxy_admin(felt): Admin address
     // Returns:
     //   None
-    CarbonableFarmer.initializer(carbonable_project_address);
+    CarbonableFarmer.yielder_initializer(
+        carbonable_project_address=carbonable_project_address, starkvest_address=starkvest_address
+    );
     Ownable.initializer(owner);
     Proxy.initializer(proxy_admin);
     return ();
@@ -211,6 +214,25 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 //
 // Externals
 //
+
+@external
+func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    total_amount: felt, precision: felt
+) -> (success: felt) {
+    // Desc:
+    //   Create vestings for all asset deposited in yielder, during the current period
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   total_amount(felt): amount, in ERC-20 value, of carbon credit selling for the current period
+    //   precision(felt): Decimal of the returned share
+    // Returns:
+    //   success(felt): Success status
+    Ownable.assert_only_owner();
+    return CarbonableFarmer.create_vestings(total_amount=total_amount, precision=precision);
+}
 
 @external
 func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
