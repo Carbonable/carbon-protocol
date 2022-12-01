@@ -459,7 +459,7 @@ namespace CarbonableFarmer {
     }
 
     func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        total_amount: felt, precision: felt
+        total_amount: felt
     ) -> (success: felt) {
         alloc_locals;
 
@@ -481,7 +481,7 @@ namespace CarbonableFarmer {
         vestings_created_.write(TRUE);
 
         // [Interaction] Run create_vestings
-        _create_vestings(total_amount=total_amount, precision=precision);
+        _create_vestings(total_amount=total_amount);
 
         // [Event] Emit all vesting are created
         let (current_time) = get_block_timestamp();
@@ -609,7 +609,7 @@ namespace CarbonableFarmer {
     }
 
     func _create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        total_amount: felt, precision: felt
+        total_amount: felt
     ) {
         alloc_locals;
 
@@ -630,7 +630,6 @@ namespace CarbonableFarmer {
             contract_address=contract_address,
             starkvest_address=starkvest_address,
             total_amount=total_amount,
-            precision=precision,
             token_total_deposited=token_total_deposited,
             index=index,
             total_supply=total_supply,
@@ -641,7 +640,6 @@ namespace CarbonableFarmer {
         contract_address: felt,
         starkvest_address: felt,
         total_amount: felt,
-        precision: felt,
         token_total_deposited: Uint256,
         index: Uint256,
         total_supply: Uint256,
@@ -660,7 +658,6 @@ namespace CarbonableFarmer {
             // The value 1 is the 1 token_id
             let address_token_amount = 1;
             let (address_amount) = _amount_to_vesting(
-                precision=precision,
                 token_total_deposited=token_total_deposited,
                 total_amount=total_amount,
                 address_token_amount=address_token_amount,
@@ -717,7 +714,6 @@ namespace CarbonableFarmer {
             contract_address=contract_address,
             starkvest_address=starkvest_address,
             total_amount=total_amount,
-            precision=precision,
             token_total_deposited=token_total_deposited,
             index=next,
             total_supply=total_supply,
@@ -727,12 +723,8 @@ namespace CarbonableFarmer {
     // We have to make a cross product, between address_token_amount, total_amount and token_total_deposited
     // to find the amount to distribut
     func _amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        precision: felt,
-        token_total_deposited: Uint256,
-        total_amount: felt,
-        address_token_amount: felt,
+        token_total_deposited: Uint256, total_amount: felt, address_token_amount: felt
     ) -> (amount: Uint256) {
-        // let dividend = precision * address_token_amount;
         let dividend = total_amount * address_token_amount;
         let dividend_uint256 = Uint256(low=dividend, high=0);
 

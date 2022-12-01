@@ -6,7 +6,8 @@
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.uint256 import Uint256, uint256_eq
+from starkware.cairo.common.math import assert_not_zero, assert_not_equal
 
 // Project dependencies
 from openzeppelin.token.erc20.IERC20 import IERC20
@@ -15,10 +16,11 @@ from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumer
 from openzeppelin.security.safemath.library import SafeUint256
 
 // Local dependencies
-from interfaces.minter import ICarbonableMinter
-from interfaces.offseter import ICarbonableOffseter
-from interfaces.project import ICarbonableProject
-from interfaces.yielder import ICarbonableYielder
+from src.interfaces.minter import ICarbonableMinter
+from src.interfaces.offseter import ICarbonableOffseter
+from src.interfaces.project import ICarbonableProject
+from src.interfaces.yielder import ICarbonableYielder
+from src.interfaces.starkvest import IStarkVest
 
 //
 // Functions
@@ -104,10 +106,20 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             }
         ).contract_address
 
+        # Carbonable Starkvest deployment
+        context.carbonable_starkvest_contract = deploy_contract(
+            contract=context.sources.starkvest,
+            constructor_args={
+                "owner": context.admin_account_contract,
+                "erc20_address": context.payment_token_contract,
+            },
+        ).contract_address
+
         # Carbonable yielder deployment
         context.carbonable_yielder_class_hash = declare(contract=context.sources.yielder).class_hash
         calldata = {
             "carbonable_project_address": context.carbonable_project_contract,
+            "starkvest_address": context.carbonable_starkvest_contract,
             "owner": context.admin_account_contract,
             "proxy_admin": context.admin_account_contract,
         }
@@ -162,6 +174,12 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     admin_instance.set_minter(admin_address);
     admin_instance.set_minter(carbonable_minter);
     admin_instance.set_whitelist_merkle_root(merkle_root);
+
+    anyone_instance.transfer(admin_address, 500000);
+
+    let (local carbonable_starkvest) = carbonable_starkvest_instance.get_address();
+    let (local carbonable_yielder) = carbonable_yielder_instance.get_address();
+    admin_instance.starkvest_transfer_ownership(carbonable_yielder);
 
     return ();
 }
@@ -232,6 +250,83 @@ namespace carbonable_project_instance {
         ICarbonableProject.mint(carbonable_project, to, token_id);
         %{ stop_prank() %}
         return ();
+    }
+}
+
+namespace carbonable_starkvest_instance {
+    // Internals
+
+    func get_address() -> (carbonable_starkvest_contract: felt) {
+        tempvar carbonable_starkvest_contract;
+        %{ ids.carbonable_starkvest_contract = context.carbonable_starkvest_contract %}
+        return (carbonable_starkvest_contract,);
+    }
+
+    // Views
+
+    func vesting_count{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_starkvest: felt
+    }(caller: felt) -> (vesting_count: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_starkvest) %}
+        let (vesting_count) = IStarkVest.vesting_count(carbonable_starkvest, caller);
+        %{ stop_prank() %}
+        return (vesting_count,);
+    }
+
+    func get_vesting_id{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_starkvest: felt
+    }(vesting_index: felt, caller: felt) -> (vesting_id: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_starkvest) %}
+        let (vesting_id) = IStarkVest.get_vesting_id(carbonable_starkvest, caller, vesting_index);
+        %{ stop_prank() %}
+        return (vesting_id,);
+    }
+
+    func releasable_amount{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_starkvest: felt
+    }(vesting_id: felt, caller: felt) -> (releasable_amount: Uint256) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_starkvest) %}
+        let (releasable_amount) = IStarkVest.releasable_amount(carbonable_starkvest, vesting_id);
+        %{ stop_prank() %}
+        return (releasable_amount=releasable_amount,);
+    }
+
+    // Externals
+
+    func transfer_ownership{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_starkvest: felt
+    }(newOwner: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_starkvest) %}
+        IStarkVest.transferOwnership(carbonable_starkvest, newOwner);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func create_vesting{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_starkvest: felt
+    }(
+        beneficiary: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
+        amount_total: Uint256,
+        caller: felt,
+    ) -> (vesting_id: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_starkvest) %}
+        let (vesting_id) = IStarkVest.create_vesting(
+            carbonable_starkvest,
+            beneficiary,
+            cliff_delta,
+            start,
+            duration,
+            slice_period_seconds,
+            revocable,
+            amount_total,
+        );
+        %{ stop_prank() %}
+        return (vesting_id,);
     }
 }
 
@@ -690,6 +785,23 @@ namespace carbonable_yielder_instance {
         %{ stop_prank_project() %}
         return (success=success,);
     }
+
+    func create_vestings{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
+    }(caller: felt, total_amount: felt, carbonable_project: felt, carbonable_starkvest: felt) -> (
+        success: felt
+    ) {
+        %{ stop_prank_yielder = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
+        %{ stop_prank_project = start_prank(caller_address=ids.carbonable_yielder, target_contract_address=ids.carbonable_project) %}
+        %{ stop_prank_starkves = start_prank(caller_address=ids.carbonable_yielder, target_contract_address=ids.carbonable_starkvest) %}
+
+        let (success) = ICarbonableYielder.create_vestings(carbonable_yielder, total_amount);
+
+        %{ stop_prank_yielder() %}
+        %{ stop_prank_project() %}
+        %{ stop_prank_starkves() %}
+        return (success=success,);
+    }
 }
 
 namespace admin_instance {
@@ -699,6 +811,46 @@ namespace admin_instance {
         tempvar address;
         %{ ids.address = context.admin_account_contract %}
         return (address,);
+    }
+
+    // Starkvest
+    func starkvest_transfer_ownership{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(newOwner: felt) {
+        let (carbonable_starkvest) = carbonable_starkvest_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_starkvest {
+            carbonable_starkvest_instance.transfer_ownership(newOwner=newOwner, caller=caller);
+        }
+        return ();
+    }
+
+    func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        total_amount: felt
+    ) {
+        let (payment_token) = payment_token_instance.get_address();
+        let (carbonable_yielder) = carbonable_yielder_instance.get_address();
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (carbonable_starkvest) = carbonable_starkvest_instance.get_address();
+        let (caller) = get_address();
+
+        with payment_token {
+            let (success) = payment_token_instance.transfer(
+                carbonable_starkvest, Uint256(total_amount, 0), caller
+            );
+            assert success = TRUE;
+        }
+
+        with carbonable_yielder {
+            let (success) = carbonable_yielder_instance.create_vestings(
+                caller=caller,
+                total_amount=total_amount,
+                carbonable_project=carbonable_project,
+                carbonable_starkvest=carbonable_starkvest,
+            );
+            assert success = TRUE;
+        }
+        return ();
     }
 
     // Project
@@ -1703,5 +1855,67 @@ namespace anyone_instance {
             assert owner = caller;
         }
         return ();
+    }
+
+    func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        total_amount: felt
+    ) {
+        let (payment_token) = payment_token_instance.get_address();
+        let (carbonable_yielder) = carbonable_yielder_instance.get_address();
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (carbonable_starkvest) = carbonable_starkvest_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_yielder {
+            let (success) = carbonable_yielder_instance.create_vestings(
+                caller=caller,
+                total_amount=total_amount,
+                carbonable_project=carbonable_project,
+                carbonable_starkvest=carbonable_starkvest,
+            );
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    func get_vesting_id{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        vesting_id: felt
+    ) {
+        alloc_locals;
+        let zero = Uint256(low=0, high=0);
+        let (carbonable_starkvest) = carbonable_starkvest_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_starkvest {
+            let (vesting_count) = carbonable_starkvest_instance.vesting_count(caller);
+            assert_not_equal(vesting_count, 0);
+
+            let (vesting_id) = carbonable_starkvest_instance.get_vesting_id(
+                vesting_count - 1, caller
+            );
+            assert_not_equal(vesting_id, 0);
+        }
+        return (vesting_id=vesting_id,);
+    }
+
+    func releasable_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        vesting_id: felt
+    ) -> (releasable_amount: Uint256) {
+        alloc_locals;
+        let zero = Uint256(low=0, high=0);
+        let (carbonable_starkvest) = carbonable_starkvest_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_starkvest {
+            let (releasable_amount) = carbonable_starkvest_instance.releasable_amount(
+                vesting_id, caller
+            );
+            let (is_zero) = uint256_eq(releasable_amount, zero);
+            with_attr error_message("Testing: releasable amount cannot be zero") {
+                assert is_zero = FALSE;
+            }
+        }
+
+        return (releasable_amount=releasable_amount,);
     }
 }
