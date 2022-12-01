@@ -11,6 +11,7 @@ sources:
   minter: ./src/mint/minter.cairo
   yielder: ./src/farm/yielder.cairo
   offseter: ./src/farm/offseter.cairo
+  starkvest: ./src/vesting/starkvest.cairo
 
 selector:
   initializer: 1295919550572838631247819983596733806859788957403169325509326258146877103642

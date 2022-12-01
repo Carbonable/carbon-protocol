@@ -5,7 +5,7 @@
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.uint256 import Uint256, uint256_eq
 
 // Local dependencies
 from tests.integrations.protocol.library import (
@@ -13,6 +13,7 @@ from tests.integrations.protocol.library import (
     admin_instance as admin,
     anyone_instance as anyone,
     carbonable_yielder_instance as yielder,
+    carbonable_starkvest_instance as starkvest,
 )
 
 @view
@@ -224,6 +225,148 @@ func test_stop_period_revert_not_owner{
     admin.yielder_start_period(unlocked_duration=5, period_duration=10);
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
     anyone.yielder_stop_period();
+
+    return ();
+}
+
+@view
+func test_create_vestings_revert_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin starts a 10s period with 5s unlock
+    // And anyone create vestings
+    // Then a failed transaction is expected
+    alloc_locals;
+    let total_amount = 10;
+
+    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
+    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    anyone.create_vestings(total_amount=total_amount);
+
+    return ();
+}
+
+@view
+func test_create_vestings_without_any_deposited{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin starts a 10s period with 5s unlock
+    // And anyone create vestings
+    // Then a failed transaction is expected
+    alloc_locals;
+    let (yielder_address) = yielder.get_address();
+    let (starkvest_address) = starkvest.get_address();
+    let total_amount = 10;
+
+    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
+
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    admin.create_vestings(total_amount=total_amount);
+    %{ stop_warp %}
+    return ();
+}
+
+@view
+func test_create_vestings_nominal_case{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // # Setup for prerequis
+    alloc_locals;
+    let zero = Uint256(low=0, high=0);
+    let (admin_address) = admin.get_address();
+    let (anyone_address) = anyone.get_address();
+    let (yielder_address) = yielder.get_address();
+    let (starkvest_address) = starkvest.get_address();
+
+    // Mint tokens
+    admin.mint(to=admin_address, token_id=1);
+    admin.mint(to=admin_address, token_id=2);
+    admin.mint(to=anyone_address, token_id=3);
+    admin.mint(to=anyone_address, token_id=4);
+    admin.mint(to=anyone_address, token_id=5);
+
+    // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
+    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
+    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
+    anyone.project_approve(approved=yielder_address, token_id=3);
+    anyone.yielder_deposit(token_id=3);
+    anyone.project_approve(approved=yielder_address, token_id=4);
+    anyone.yielder_deposit(token_id=4);
+    anyone.project_approve(approved=yielder_address, token_id=5);
+    anyone.yielder_deposit(token_id=5);
+
+    admin.project_approve(approved=yielder_address, token_id=1);
+    admin.yielder_deposit(token_id=1);
+    admin.project_approve(approved=yielder_address, token_id=2);
+    admin.yielder_deposit(token_id=2);
+    %{ stop_warp %}
+
+    // # Start testing create vestings
+    let total_amount = 1000;
+
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    admin.create_vestings(total_amount=total_amount);
+    %{ stop_warp %}
+
+    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.starkvest_address) %}
+    let (vesting_id) = anyone.get_vesting_id();
+    let (releasable_amount) = anyone.releasable_amount(vesting_id);
+
+    let expected_amount = Uint256(low=200, high=0);
+    let (is_zero) = uint256_eq(releasable_amount, expected_amount);
+    with_attr error_message("Testing: releasable amount should be expected amount: 200") {
+        assert is_zero = TRUE;
+    }
+
+    %{ stop_warp %}
+
+    return ();
+}
+
+@view
+func test_create_vestings_only_one_deposited{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // # Setup for prerequis
+    alloc_locals;
+    let zero = Uint256(low=0, high=0);
+    let (admin_address) = admin.get_address();
+    let (anyone_address) = anyone.get_address();
+    let (yielder_address) = yielder.get_address();
+    let (starkvest_address) = starkvest.get_address();
+
+    // Mint tokens
+    admin.mint(to=admin_address, token_id=1);
+    admin.mint(to=admin_address, token_id=2);
+    admin.mint(to=anyone_address, token_id=3);
+    admin.mint(to=anyone_address, token_id=4);
+    admin.mint(to=anyone_address, token_id=5);
+
+    // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
+    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
+    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
+    anyone.project_approve(approved=yielder_address, token_id=3);
+    anyone.yielder_deposit(token_id=3);
+    %{ stop_warp %}
+
+    // # Start testing create vestings
+    let total_amount = 1000;
+
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    admin.create_vestings(total_amount=total_amount);
+    %{ stop_warp %}
+
+    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.starkvest_address) %}
+    let (vesting_id) = anyone.get_vesting_id();
+    let (releasable_amount) = anyone.releasable_amount(vesting_id);
+
+    let expected_amount = Uint256(low=1000, high=0);
+    let (is_zero) = uint256_eq(releasable_amount, expected_amount);
+    with_attr error_message("Testing: releasable amount should be expected amount: 1000") {
+        assert is_zero = TRUE;
+    }
+
+    %{ stop_warp %}
 
     return ();
 }

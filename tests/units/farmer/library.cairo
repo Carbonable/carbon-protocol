@@ -20,6 +20,7 @@ struct Signers {
 
 struct Mocks {
     carbonable_project_address: felt,
+    starkvest_address: felt,
 }
 
 struct TestContext {
@@ -52,20 +53,27 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local admin;
     local anyone;
     local carbonable_project_address;
+    local starkvest_address;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
+        ids.starkvest_address = context.mocks.starkvest_address
     %}
 
     // Instantiate farmer
     CarbonableFarmer.initializer(carbonable_project_address=carbonable_project_address);
+    // Instantiate yield farmer
+    CarbonableFarmer.yielder_initializer(
+        carbonable_project_address=carbonable_project_address, starkvest_address=starkvest_address
+    );
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);
 
     local mocks: Mocks = Mocks(
         carbonable_project_address=carbonable_project_address,
+        starkvest_address=starkvest_address,
         );
 
     local context: TestContext = TestContext(signers=signers, mocks=mocks);
