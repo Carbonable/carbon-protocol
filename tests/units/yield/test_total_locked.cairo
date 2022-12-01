@@ -8,7 +8,7 @@ from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
-from tests.units.farmer.library import setup, prepare, CarbonableFarmer
+from tests.units.yield.library import setup, prepare, CarbonableYielder
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -23,7 +23,7 @@ func test_total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     let (local context) = prepare();
 
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
-    let (balance) = CarbonableFarmer.total_locked();
+    let (balance) = CarbonableYielder.total_locked();
     assert balance = Uint256(low=1, high=0);
 
     return ();

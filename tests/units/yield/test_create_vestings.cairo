@@ -9,7 +9,7 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_contract_address
 
 // Local dependencies
-from tests.units.farmer.library import setup, prepare, CarbonableFarmer
+from tests.units.yield.library import setup, prepare, CarbonableYielder
 
 // unites are in Wei
 const TOTAL_AMOUNT_HIGH = 24663812000000000000000;  // 24663.812 ETH
@@ -35,8 +35,8 @@ func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ stop_warp = warp(100) %}
     let unlocked_duration = 30;
     let period_duration = 100;
-    let (success) = CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=2
+    let (success) = CarbonableYielder.start_period(
+        unlocked_duration=unlocked_duration, period_duration=period_duration
     );
     assert success = TRUE;
     %{ stop_warp() %}
@@ -48,9 +48,9 @@ func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     // %{ mock_call(context.mocks.starkvest_address, "ownerOf", [ids.contract_address]) %}
 
     %{ stop=start_prank(context.signers.anyone) %}
-    let (success) = CarbonableFarmer.deposit(token_id=one);
+    let (success) = CarbonableYielder.deposit(token_id=one);
     assert success = 1;
-    let (success) = CarbonableFarmer.deposit(token_id=two);
+    let (success) = CarbonableYielder.deposit(token_id=two);
     assert success = 1;
     %{ stop() %}
 
@@ -61,7 +61,7 @@ func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ stop_warp = warp(131) %}
     %{ stop=start_prank(context.signers.admin) %}
 
-    let (success) = CarbonableFarmer.create_vestings(total_amount=total_amount);
+    let (success) = CarbonableYielder.create_vestings(total_amount=total_amount);
     assert success = 1;
     %{ stop() %}
     %{ stop_warp() %}

@@ -7,7 +7,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
 
 // Local dependencies
-from tests.units.farmer.library import setup, prepare, CarbonableFarmer
+from tests.units.offset.library import setup, prepare, CarbonableOffseter
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -15,7 +15,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
@@ -25,20 +25,27 @@ func test_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     %{ stop_warp = warp(100) %}
     let unlocked_duration = 30;
     let period_duration = 100;
-    let (success) = CarbonableFarmer.start_period(
+    let (success) = CarbonableOffseter.start_period(
         unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=0
     );
     assert success = TRUE;
     %{ stop_warp() %}
 
-    let (start_time) = CarbonableFarmer.get_start_time();
-    assert start_time = 100;
+    // check if locked at timestamp = 131
+    %{ stop_warp = warp(131) %}
+    let (is_locked) = CarbonableOffseter.is_locked();
+    assert is_locked = TRUE;
+    %{ stop_warp() %}
 
-    let (lock_time) = CarbonableFarmer.get_lock_time();
-    assert lock_time = 130;
+    // stop period
+    let (success) = CarbonableOffseter.stop_period();
+    assert success = TRUE;
 
-    let (end_time) = CarbonableFarmer.get_end_time();
-    assert end_time = 200;
+    // check if locked at timestamp = 131
+    %{ stop_warp = warp(131) %}
+    let (is_locked) = CarbonableOffseter.is_locked();
+    assert is_locked = FALSE;
+    %{ stop_warp() %}
 
     return ();
 }

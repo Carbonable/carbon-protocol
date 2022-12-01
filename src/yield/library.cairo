@@ -39,14 +39,6 @@ from src.interfaces.project import ICarbonableProject
 //
 
 @event
-func Offset(address: felt, quantity: Uint256, time: felt) {
-}
-
-@event
-func Snapshot(time: felt) {
-}
-
-@event
 func VestingsCreated(total_amount: felt, time: felt) {
 }
 
@@ -55,7 +47,7 @@ func VestingOfAddrCreated(address: felt, vesting_id: felt, time: felt) {
 }
 
 //
-// Storage variables
+// Storage variables - Common
 //
 
 @storage_var
@@ -79,42 +71,23 @@ func period_duration_() -> (duration: felt) {
 }
 
 @storage_var
-func absorption_() -> (absorption: Uint256) {
-}
-
-@storage_var
 func registration_(token_id: Uint256) -> (address: felt) {
 }
 
-@storage_var
-func total_offsetable_(address: felt) -> (balance: Uint256) {
-}
-
-@storage_var
-func total_offseted_(address: felt) -> (balance: Uint256) {
-}
-
-@storage_var
-func snapshoted_() -> (snapshoted: felt) {
-}
+//
+// Storage variables - Yield
+//
 
 @storage_var
 func vestings_created_() -> (vesting_created: felt) {
 }
 
-namespace CarbonableFarmer {
+namespace CarbonableYielder {
     //
     // Constructor
     //
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        carbonable_project_address: felt
-    ) {
-        carbonable_project_address_.write(carbonable_project_address);
-        return ();
-    }
-
-    func yielder_initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         carbonable_project_address: felt, starkvest_address: felt
     ) {
         carbonable_project_address_.write(carbonable_project_address);
@@ -207,7 +180,7 @@ namespace CarbonableFarmer {
         let dividend_uint256 = Uint256(low=dividend, high=0);
 
         // [Check] Uint256 compliance
-        with_attr error_message("CarbonableFarmer: dividend_uint256 is not a valid Uint256") {
+        with_attr error_message("CarbonableYielder: dividend_uint256 is not a valid Uint256") {
             uint256_check(dividend_uint256);
         }
 
@@ -228,7 +201,7 @@ namespace CarbonableFarmer {
         token_id: Uint256
     ) -> (address: felt) {
         // [Check] Uint256 compliance
-        with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
+        with_attr error_message("CarbonableYielder: token_id is not a valid Uint256") {
             uint256_check(token_id);
         }
         // [Check] Owned token id
@@ -238,7 +211,7 @@ namespace CarbonableFarmer {
         let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
         );
-        with_attr error_message("CarbonableFarmer: token_id has not been registred") {
+        with_attr error_message("CarbonableYielder: token_id has not been registred") {
             assert owner = contract_address;
         }
 
@@ -246,37 +219,20 @@ namespace CarbonableFarmer {
         return (address=address,);
     }
 
-    func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt
-    ) -> (total_offsetable: Uint256) {
-        let (total_offsetable) = total_offsetable_.read(address);
-        return (total_offsetable=total_offsetable,);
-    }
-
-    func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt
-    ) -> (total_offseted: Uint256) {
-        let (total_offseted) = total_offseted_.read(address);
-        return (total_offseted=total_offseted,);
-    }
-
     //
     // Externals
     //
 
     func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        unlocked_duration: felt, period_duration: felt, absorption: felt
+        unlocked_duration: felt, period_duration: felt
     ) -> (success: felt) {
         // [Check] Duration inputs validity
-        with_attr error_message("CarbonableFarmer: Invalid period duration") {
+        with_attr error_message("CarbonableYielder: Invalid period duration") {
             assert_nn(period_duration);
         }
-        with_attr error_message("CarbonableFarmer: Invalid locked duration") {
+        with_attr error_message("CarbonableYielder: Invalid locked duration") {
             assert_le(unlocked_duration, period_duration);
         }
-
-        // [Effect] Store absorption information
-        absorption_.write(Uint256(low=absorption, high=0));
 
         // [Effect] Store period information
         let (current_time) = get_block_timestamp();
@@ -284,8 +240,7 @@ namespace CarbonableFarmer {
         period_duration_.write(period_duration);
         unlocked_duration_.write(unlocked_duration);
 
-        // [Effect] Reset snapshoted status and Vestings status
-        snapshoted_.write(0);
+        // [Effect] Reset Vestings status
         vestings_created_.write(0);
 
         return (success=TRUE,);
@@ -299,7 +254,7 @@ namespace CarbonableFarmer {
         let (start) = start_.read();
         let (period_duration) = period_duration_.read();
         let end = start + period_duration;
-        with_attr error_message("CarbonableFarmer: No current period") {
+        with_attr error_message("CarbonableYielder: No current period") {
             assert_le(current_time, end);
         }
 
@@ -321,12 +276,12 @@ namespace CarbonableFarmer {
 
         // [Check] Locked status
         let (status) = is_locked();
-        with_attr error_message("CarbonableFarmer: deposits are currently locked") {
+        with_attr error_message("CarbonableYielder: deposits are currently locked") {
             assert status = FALSE;
         }
 
         // [Check] Uint256 compliance
-        with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
+        with_attr error_message("CarbonableYielder: token_id is not a valid Uint256") {
             uint256_check(token_id);
         }
 
@@ -345,7 +300,7 @@ namespace CarbonableFarmer {
         let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
         );
-        with_attr error_message("CarbonableFarmer: transfer failed") {
+        with_attr error_message("CarbonableYielder: transfer failed") {
             assert owner = contract_address;
         }
 
@@ -368,12 +323,12 @@ namespace CarbonableFarmer {
 
         // [Check] Locked status
         let (status) = is_locked();
-        with_attr error_message("CarbonableFarmer: withdrawals are currently locked") {
+        with_attr error_message("CarbonableYielder: withdrawals are currently locked") {
             assert status = FALSE;
         }
 
         // [Check] Uint256 compliance
-        with_attr error_message("CarbonableFarmer: token_id is not a valid Uint256") {
+        with_attr error_message("CarbonableYielder: token_id is not a valid Uint256") {
             uint256_check(token_id);
         }
 
@@ -395,65 +350,12 @@ namespace CarbonableFarmer {
         let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
         );
-        with_attr error_message("CarbonableFarmer: transfer failed") {
+        with_attr error_message("CarbonableYielder: transfer failed") {
             assert owner = caller;
         }
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
-
-        return (success=TRUE,);
-    }
-
-    func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        success: felt
-    ) {
-        alloc_locals;
-
-        // [Check] Total offsetable not null
-        let (caller) = get_caller_address();
-        let (total_offsetable) = total_offsetable_.read(caller);
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(total_offsetable, zero);
-        with_attr error_message("CarbonableFarmer: offsetable balance must be positive") {
-            assert is_zero = FALSE;
-        }
-
-        // [Effect] Transfer value from offsetable to offseted
-        let (total_offseted) = total_offseted_.read(caller);
-        let (new_total_offseted) = SafeUint256.add(total_offseted, total_offsetable);
-        total_offsetable_.write(caller, zero);
-        total_offseted_.write(caller, new_total_offseted);
-
-        let (current_time) = get_block_timestamp();
-        Offset.emit(address=caller, quantity=total_offsetable, time=current_time);
-        return (success=TRUE,);
-    }
-
-    func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        success: felt
-    ) {
-        // [Check] Locked period
-        let (status) = is_locked();
-        with_attr error_message("CarbonableFarmer: snapshot must be executed in locked period") {
-            assert status = TRUE;
-        }
-
-        // [Check] Snapshot not yet executed for the current period
-        let (snapshoted) = snapshoted_.read();
-        with_attr error_message(
-                "CarbonableFarmer: snapshot already executed for the current period") {
-            assert snapshoted = FALSE;
-        }
-
-        // [Effect] Update snapshot status
-        snapshoted_.write(TRUE);
-
-        // [Interaction] Run snapshot
-        _snapshot();
-
-        let (current_time) = get_block_timestamp();
-        Snapshot.emit(time=current_time);
 
         return (success=TRUE,);
     }
@@ -466,14 +368,14 @@ namespace CarbonableFarmer {
         // [Check] Locked period
         let (status) = is_locked();
         with_attr error_message(
-                "CarbonableFarmer: create vestings must be executed in locked period") {
+                "CarbonableYielder: create vestings must be executed in locked period") {
             assert status = TRUE;
         }
 
         // [Check] Create Vesting not yet executed for the current period
         let (vestings_created) = vestings_created_.read();
         with_attr error_message(
-                "CarbonableFarmer: vestings was already executed for the current period") {
+                "CarbonableYielder: vestings was already executed for the current period") {
             assert vestings_created = FALSE;
         }
 
@@ -544,70 +446,6 @@ namespace CarbonableFarmer {
         return (count=count + add,);
     }
 
-    func _snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        alloc_locals;
-
-        let (contract_address) = carbonable_project_address_.read();
-        let (total_supply) = IERC721Enumerable.totalSupply(contract_address=contract_address);
-
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(total_supply, zero);
-        if (is_zero == TRUE) {
-            return ();
-        }
-
-        let one = Uint256(low=1, high=0);
-        let (index) = SafeUint256.sub_le(total_supply, one);
-        return _snapshot_iter(
-            contract_address=contract_address, index=index, total_supply=total_supply
-        );
-    }
-
-    func _snapshot_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        contract_address: felt, index: Uint256, total_supply: Uint256
-    ) {
-        alloc_locals;
-
-        // Get registred address of the current token index
-        let (token_id) = IERC721Enumerable.tokenByIndex(
-            contract_address=contract_address, index=index
-        );
-        let (address) = registration_.read(token_id);
-
-        // If registred then update the total offsetable
-        let one = Uint256(low=1, high=0);
-        if (address != 0) {
-            let (absorption) = absorption_.read();
-            let (quantity, _, _) = uint256_mul_div_mod(absorption, one, total_supply);
-            let (balance) = total_offsetable_.read(address);
-            let (new_balance) = SafeUint256.add(balance, quantity);
-            total_offsetable_.write(address, new_balance);
-
-            tempvar _syscall_ptr = syscall_ptr;
-            tempvar _pedersen_ptr = pedersen_ptr;
-            tempvar _range_check_ptr = range_check_ptr;
-        } else {
-            tempvar _syscall_ptr = syscall_ptr;
-            tempvar _pedersen_ptr = pedersen_ptr;
-            tempvar _range_check_ptr = range_check_ptr;
-        }
-        let syscall_ptr = _syscall_ptr;
-        let pedersen_ptr = _pedersen_ptr;
-        let range_check_ptr = _range_check_ptr;
-
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(index, zero);
-        // Stop recursion if index is 0
-        if (is_zero == TRUE) {
-            return ();
-        }
-        // Else move on to the next index
-        let (next) = SafeUint256.sub_le(index, one);
-        return _snapshot_iter(
-            contract_address=contract_address, index=next, total_supply=total_supply
-        );
-    }
-
     func _create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         total_amount: felt
     ) {
@@ -657,7 +495,7 @@ namespace CarbonableFarmer {
         if (address != 0) {
             // The value 1 is the 1 token_id
             let address_token_amount = 1;
-            let (address_amount) = _amount_to_vesting(
+            let (address_amount) = _amount_to_vest(
                 token_total_deposited=token_total_deposited,
                 total_amount=total_amount,
                 address_token_amount=address_token_amount,
@@ -683,8 +521,6 @@ namespace CarbonableFarmer {
                 revocable,
                 address_amount,
             );
-
-            // TODO: verify vesting_id is not 0
 
             // [Event] Emit addr vesting are created
             let (current_time) = get_block_timestamp();
@@ -722,14 +558,14 @@ namespace CarbonableFarmer {
 
     // We have to make a cross product, between address_token_amount, total_amount and token_total_deposited
     // to find the amount to distribut
-    func _amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func _amount_to_vest{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_total_deposited: Uint256, total_amount: felt, address_token_amount: felt
     ) -> (amount: Uint256) {
         let dividend = total_amount * address_token_amount;
         let dividend_uint256 = Uint256(low=dividend, high=0);
 
         // [Check] Uint256 compliance
-        with_attr error_message("CarbonableFarmer: dividend_uint256 is not a valid Uint256") {
+        with_attr error_message("CarbonableYielder: dividend_uint256 is not a valid Uint256") {
             uint256_check(dividend_uint256);
         }
 

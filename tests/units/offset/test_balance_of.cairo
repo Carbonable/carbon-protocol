@@ -9,7 +9,7 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_contract_address
 
 // Local dependencies
-from tests.units.farmer.library import setup, prepare, CarbonableFarmer
+from tests.units.offset.library import setup, prepare, CarbonableOffseter
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -35,14 +35,14 @@ func test_balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
 
     %{ stop=start_prank(context.signers.anyone) %}
-    let (success) = CarbonableFarmer.deposit(token_id=one);
+    let (success) = CarbonableOffseter.deposit(token_id=one);
     assert success = 1;
     %{ stop() %}
 
-    let (balance) = CarbonableFarmer.balance_of(address=context.signers.anyone);
+    let (balance) = CarbonableOffseter.balance_of(address=context.signers.anyone);
     assert balance = 1;
 
-    let (balance) = CarbonableFarmer.balance_of(address=context.signers.admin);
+    let (balance) = CarbonableOffseter.balance_of(address=context.signers.admin);
     assert balance = 0;
 
     return ();

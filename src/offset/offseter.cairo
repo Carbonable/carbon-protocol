@@ -11,7 +11,7 @@ from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
-from src.farm.library import CarbonableFarmer
+from src.offset.library import CarbonableOffseter
 
 //
 // Initializer
@@ -34,7 +34,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   proxy_admin(felt): Admin address
     // Returns:
     //   None
-    CarbonableFarmer.initializer(carbonable_project_address);
+    CarbonableOffseter.initializer(carbonable_project_address);
     Ownable.initializer(owner);
     Proxy.initializer(proxy_admin);
     return ();
@@ -95,7 +95,7 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     //   range_check_ptr
     // Returns:
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
-    return CarbonableFarmer.carbonable_project_address();
+    return CarbonableOffseter.carbonable_project_address();
 }
 
 @view
@@ -110,7 +110,7 @@ func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   range_check_ptr
     // Returns:
     //   status(felt): Locked status (1 if locked else 0)
-    return CarbonableFarmer.is_locked();
+    return CarbonableOffseter.is_locked();
 }
 
 @view
@@ -127,7 +127,7 @@ func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     //   address(felt): address
     // Returns:
     //   total_offsetable(Uint256): Total offsetable balance
-    return CarbonableFarmer.total_offsetable(address=address);
+    return CarbonableOffseter.total_offsetable(address=address);
 }
 
 @view
@@ -144,7 +144,7 @@ func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   address(felt): address
     // Returns:
     //   total_offseted(Uint256): Total offseted balance
-    return CarbonableFarmer.total_offseted(address=address);
+    return CarbonableOffseter.total_offseted(address=address);
 }
 
 @view
@@ -159,7 +159,7 @@ func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     //   range_check_ptr
     // Returns:
     //   balance(Uint256): Total balance of locked tokens
-    return CarbonableFarmer.total_locked();
+    return CarbonableOffseter.total_locked();
 }
 
 @view
@@ -167,17 +167,16 @@ func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     balance: felt
 ) {
     // Desc:
-    //   Return the current share of a specified address
+    //   Return the current balance of a specified address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
     //   address(felt): Address
-    //   precision(felt): Decimal of the returned share
     // Returns:
-    //   share(Uint256): Shares associated to the address
-    return CarbonableFarmer.balance_of(address=address);
+    //   balance(Uint256): Balance associated to the address
+    return CarbonableOffseter.balance_of(address=address);
 }
 
 @view
@@ -194,7 +193,7 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     //   token_id(Uint256): Token id
     // Returns:
     //   address(felt): Registred owner address
-    return CarbonableFarmer.registred_owner_of(token_id=token_id);
+    return CarbonableOffseter.registred_owner_of(token_id=token_id);
 }
 
 //
@@ -211,7 +210,7 @@ func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -
     //   range_check_ptr
     // Returns:
     //   success(felt): Success status
-    return CarbonableFarmer.offset();
+    return CarbonableOffseter.offset();
 }
 
 @external
@@ -227,7 +226,7 @@ func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
-    return CarbonableFarmer.snapshot();
+    return CarbonableOffseter.snapshot();
 }
 
 @external
@@ -247,7 +246,7 @@ func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
-    return CarbonableFarmer.start_period(
+    return CarbonableOffseter.start_period(
         unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=absorption
     );
 }
@@ -265,7 +264,7 @@ func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
-    return CarbonableFarmer.stop_period();
+    return CarbonableOffseter.stop_period();
 }
 
 @external
@@ -282,7 +281,7 @@ func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   token_id(Uint256): Token id
     // Returns:
     //   success(felt): Success status
-    return CarbonableFarmer.deposit(token_id=token_id);
+    return CarbonableOffseter.deposit(token_id=token_id);
 }
 
 @external
@@ -299,5 +298,5 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   token_id(Uint256): Token id
     // Returns:
     //   success(felt): Success status
-    return CarbonableFarmer.withdraw(token_id=token_id);
+    return CarbonableOffseter.withdraw(token_id=token_id);
 }

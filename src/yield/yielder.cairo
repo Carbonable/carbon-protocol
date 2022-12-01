@@ -11,7 +11,7 @@ from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
-from src.farm.library import CarbonableFarmer
+from src.yield.library import CarbonableYielder
 
 //
 // Initializer
@@ -35,7 +35,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   proxy_admin(felt): Admin address
     // Returns:
     //   None
-    CarbonableFarmer.yielder_initializer(
+    CarbonableYielder.initializer(
         carbonable_project_address=carbonable_project_address, starkvest_address=starkvest_address
     );
     Ownable.initializer(owner);
@@ -98,7 +98,7 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     //   range_check_ptr
     // Returns:
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
-    return CarbonableFarmer.carbonable_project_address();
+    return CarbonableYielder.carbonable_project_address();
 }
 
 @view
@@ -113,7 +113,7 @@ func get_start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   range_check_ptr
     // Returns:
     //   start_time(felt): absolute unix time
-    return CarbonableFarmer.get_start_time();
+    return CarbonableYielder.get_start_time();
 }
 
 @view
@@ -128,7 +128,7 @@ func get_lock_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     //   range_check_ptr
     // Returns:
     //   lock_time(felt): absolute unix time
-    return CarbonableFarmer.get_lock_time();
+    return CarbonableYielder.get_lock_time();
 }
 
 @view
@@ -143,7 +143,7 @@ func get_end_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     //   range_check_ptr
     // Returns:
     //   end_time(felt): absolute unix time
-    return CarbonableFarmer.get_end_time();
+    return CarbonableYielder.get_end_time();
 }
 
 @view
@@ -158,7 +158,7 @@ func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   range_check_ptr
     // Returns:
     //   status(felt): Locked status (1 if locked else 0)
-    return CarbonableFarmer.is_locked();
+    return CarbonableYielder.is_locked();
 }
 
 @view
@@ -173,7 +173,7 @@ func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     //   range_check_ptr
     // Returns:
     //   balance(Uint256): Total balance of locked tokens
-    return CarbonableFarmer.total_locked();
+    return CarbonableYielder.total_locked();
 }
 
 @view
@@ -191,7 +191,7 @@ func shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   precision(felt): Decimal of the returned share
     // Returns:
     //   share(Uint256): Shares associated to the address
-    return CarbonableFarmer.shares_of(address=address, precision=precision);
+    return CarbonableYielder.shares_of(address=address, precision=precision);
 }
 
 @view
@@ -208,7 +208,7 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     //   token_id(Uint256): Token id
     // Returns:
     //   address(felt): Registred owner address
-    return CarbonableFarmer.registred_owner_of(token_id=token_id);
+    return CarbonableYielder.registred_owner_of(token_id=token_id);
 }
 
 //
@@ -220,17 +220,18 @@ func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     total_amount: felt
 ) -> (success: felt) {
     // Desc:
-    //   Create vestings for all asset deposited in yielder, during the current period
+    //   The Yielder goes through all assets that are deposited, during the current period, to create a vesting for each of the assets,
+    //   on the starkvest smart contract, by allocating shares of the total amount collected from selling carbon credit.
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   total_amount(felt): amount, in ERC-20 value, of carbon credit selling for the current period
+    //   total_amount(felt): amount, in ERC-20 value, of carbon credit sold for the current period
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
-    return CarbonableFarmer.create_vestings(total_amount=total_amount);
+    return CarbonableYielder.create_vestings(total_amount=total_amount);
 }
 
 @external
@@ -249,8 +250,8 @@ func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
-    return CarbonableFarmer.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=0
+    return CarbonableYielder.start_period(
+        unlocked_duration=unlocked_duration, period_duration=period_duration
     );
 }
 
@@ -267,7 +268,7 @@ func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
-    return CarbonableFarmer.stop_period();
+    return CarbonableYielder.stop_period();
 }
 
 @external
@@ -284,7 +285,7 @@ func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   token_id(Uint256): Token id
     // Returns:
     //   success(felt): Success status
-    return CarbonableFarmer.deposit(token_id=token_id);
+    return CarbonableYielder.deposit(token_id=token_id);
 }
 
 @external
@@ -301,5 +302,5 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   token_id(Uint256): Token id
     // Returns:
     //   success(felt): Success status
-    return CarbonableFarmer.withdraw(token_id=token_id);
+    return CarbonableYielder.withdraw(token_id=token_id);
 }

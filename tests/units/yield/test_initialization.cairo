@@ -7,7 +7,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
 
 // Local dependencies
-from tests.units.farmer.library import setup, prepare, CarbonableFarmer
+from tests.units.yield.library import setup, prepare, CarbonableYielder
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -21,11 +21,11 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     // prepare farmer instance
     let (local context) = prepare();
 
-    let (carbonable_project_address) = CarbonableFarmer.carbonable_project_address();
+    let (carbonable_project_address) = CarbonableYielder.carbonable_project_address();
     assert carbonable_project_address = context.mocks.carbonable_project_address;
 
     %{ stop_warp = warp(1) %}
-    let (is_locked) = CarbonableFarmer.is_locked();
+    let (is_locked) = CarbonableYielder.is_locked();
     assert is_locked = FALSE;
     %{ stop_warp() %}
 
