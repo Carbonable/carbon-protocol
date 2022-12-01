@@ -9,8 +9,8 @@ sources:
   token: ./tests/mocks/erc20.cairo
   account: ./tests/mocks/account.cairo
   minter: ./src/mint/minter.cairo
-  yielder: ./src/farm/yielder.cairo
-  offseter: ./src/farm/offseter.cairo
+  yielder: ./src/yield/yielder.cairo
+  offseter: ./src/offset/offseter.cairo
   starkvest: ./src/vesting/starkvest.cairo
 
 selector:

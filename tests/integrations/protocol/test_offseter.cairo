@@ -164,7 +164,7 @@ func test_deposit_and_withdraw_while_unlock{
     let (balance) = anyone.offseter_balance_of(anyone_address);
     assert balance = 0;
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: token_id has not been registred") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: token_id has not been registred") %}
     let (owner) = anyone.offseter_registred_owner_of(token_id=1);
 
     return ();
@@ -189,7 +189,7 @@ func test_deposit_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     anyone.project_approve(approved=offseter_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposits are currently locked") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: deposits are currently locked") %}
     anyone.offseter_deposit(token_id=3);
     %{ stop_warp() %}
 
@@ -220,7 +220,7 @@ func test_withdraw_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     %{ stop_warp() %}
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: withdrawals are currently locked") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: withdrawals are currently locked") %}
     anyone.offseter_withdraw(token_id=3);
     %{ stop_warp() %}
 
@@ -305,7 +305,7 @@ func test_snapshot_revert_not_locked{
     // Then a failed transaction is expected
     alloc_locals;
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: snapshot must be executed in locked period") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: snapshot must be executed in locked period") %}
     admin.snapshot();
 
     return ();
@@ -326,7 +326,7 @@ func test_snapshot_revert_already_snapshoted{
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
     admin.snapshot();
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: snapshot already executed for the current period") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: snapshot already executed for the current period") %}
     admin.snapshot();
     %{ stop_warp() %}
 

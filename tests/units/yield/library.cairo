@@ -7,7 +7,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
-from src.farm.library import CarbonableFarmer
+from src.yield.library import CarbonableYielder
 
 //
 // Structs
@@ -38,7 +38,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         import sys
         sys.path.append('.')
         from tests import load
-        load("./tests/units/farmer/config.yml", context)
+        load("./tests/units/yield/config.yml", context)
     %}
 
     return ();
@@ -61,10 +61,8 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         ids.starkvest_address = context.mocks.starkvest_address
     %}
 
-    // Instantiate farmer
-    CarbonableFarmer.initializer(carbonable_project_address=carbonable_project_address);
     // Instantiate yield farmer
-    CarbonableFarmer.yielder_initializer(
+    CarbonableYielder.initializer(
         carbonable_project_address=carbonable_project_address, starkvest_address=starkvest_address
     );
 

@@ -13,8 +13,8 @@ cairo-path = [
 CarbonableBadge = ["src/badge/badge.cairo"]
 CarbonableProject = ["src/project/project.cairo"]
 CarbonableMinter = ["src/mint/minter.cairo"]
-CarbonableYielder = ["src/farm/yielder.cairo"]
-CarbonableOffseter = ["src/farm/offseter.cairo"]
+CarbonableYielder = ["src/yield/yielder.cairo"]
+CarbonableOffseter = ["src/offset/offseter.cairo"]
 CarbonableProxy = ["src/proxy/proxy.cairo"]
 CarbonableStarkvest = ["src/vesting/starkvest.cairo"]
 

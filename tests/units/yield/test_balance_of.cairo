@@ -9,7 +9,7 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_contract_address
 
 // Local dependencies
-from tests.units.farmer.library import setup, prepare, CarbonableFarmer
+from tests.units.yield.library import setup, prepare, CarbonableYielder
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -17,7 +17,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
@@ -35,18 +35,15 @@ func test_shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
 
     %{ stop=start_prank(context.signers.anyone) %}
-    let (success) = CarbonableFarmer.deposit(token_id=one);
+    let (success) = CarbonableYielder.deposit(token_id=one);
     assert success = 1;
     %{ stop() %}
 
-    let (shares) = CarbonableFarmer.shares_of(address=context.signers.anyone, precision=10);
-    assert shares = ten;  // 10 / 10 = 1 = 100%
+    let (balance) = CarbonableYielder.balance_of(address=context.signers.anyone);
+    assert balance = 1;
 
-    let (shares) = CarbonableFarmer.shares_of(address=context.signers.anyone, precision=100);
-    assert shares = hundred;  // 100 / 100 = 1 = 100%
-
-    let (shares) = CarbonableFarmer.shares_of(address=context.signers.admin, precision=100);
-    assert shares = zero;  // 0 / 100 = 0 = 0%
+    let (balance) = CarbonableYielder.balance_of(address=context.signers.admin);
+    assert balance = 0;
 
     return ();
 }

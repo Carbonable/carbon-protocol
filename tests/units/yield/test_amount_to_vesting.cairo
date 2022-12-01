@@ -9,7 +9,7 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_contract_address
 
 // Local dependencies
-from tests.units.farmer.library import setup, prepare, CarbonableFarmer
+from tests.units.yield.library import setup, prepare, CarbonableYielder
 
 // unites are in Wei
 const TOTAL_AMOUNT_LOW = 100000000000000;  // 0.0001 ETH
@@ -23,8 +23,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_high_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) {
+func test_high_amount_to_vest{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
@@ -39,7 +38,7 @@ func test_high_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 
     let address_token_amount = 1;
 
-    let (amount) = CarbonableFarmer._amount_to_vesting(
+    let (amount) = CarbonableYielder._amount_to_vest(
         token_total_deposited=token_total_deposited,
         total_amount=total_amount,
         address_token_amount=address_token_amount,
@@ -50,7 +49,7 @@ func test_high_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     // [Expected] amount = 129599108815423378 Wei => 0.129599108815423378 ETH
     let address_token_amount = 4;
 
-    let (amount) = CarbonableFarmer._amount_to_vesting(
+    let (amount) = CarbonableYielder._amount_to_vest(
         token_total_deposited=token_total_deposited,
         total_amount=total_amount,
         address_token_amount=address_token_amount,
@@ -61,7 +60,7 @@ func test_high_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     // [Expected] amount = 1295991088154233783 Wei => 1.295991088154233783 ETH
     let address_token_amount = 40;
 
-    let (amount) = CarbonableFarmer._amount_to_vesting(
+    let (amount) = CarbonableYielder._amount_to_vest(
         token_total_deposited=token_total_deposited,
         total_amount=total_amount,
         address_token_amount=address_token_amount,
@@ -72,7 +71,7 @@ func test_high_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     // [Expected] amount = 18902872414936799985287 Wei => 18902.872414936799985287 ETH
     let address_token_amount = 583426;
 
-    let (amount) = CarbonableFarmer._amount_to_vesting(
+    let (amount) = CarbonableYielder._amount_to_vest(
         token_total_deposited=token_total_deposited,
         total_amount=total_amount,
         address_token_amount=address_token_amount,
@@ -84,7 +83,7 @@ func test_high_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 }
 
 @external
-func test_low_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_low_amount_to_vest{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
@@ -99,7 +98,7 @@ func test_low_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 
     let address_token_amount = 1;
 
-    let (amount) = CarbonableFarmer._amount_to_vesting(
+    let (amount) = CarbonableYielder._amount_to_vest(
         token_total_deposited=token_total_deposited,
         total_amount=total_amount,
         address_token_amount=address_token_amount,
@@ -110,7 +109,7 @@ func test_low_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     // [Expected] amount = 9523809523809 Wei => 0.000009523809523809 ETH
     let address_token_amount = 4;
 
-    let (amount) = CarbonableFarmer._amount_to_vesting(
+    let (amount) = CarbonableYielder._amount_to_vest(
         token_total_deposited=token_total_deposited,
         total_amount=total_amount,
         address_token_amount=address_token_amount,
@@ -121,7 +120,7 @@ func test_low_amount_to_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     // [Expected] amount = 95238095238095 Wei => 0.000095238095238095 ETH
     let address_token_amount = 40;
 
-    let (amount) = CarbonableFarmer._amount_to_vesting(
+    let (amount) = CarbonableYielder._amount_to_vest(
         token_total_deposited=token_total_deposited,
         total_amount=total_amount,
         address_token_amount=address_token_amount,

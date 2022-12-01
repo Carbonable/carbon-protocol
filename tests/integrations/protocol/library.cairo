@@ -1860,7 +1860,6 @@ namespace anyone_instance {
     func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         total_amount: felt
     ) {
-        let (payment_token) = payment_token_instance.get_address();
         let (carbonable_yielder) = carbonable_yielder_instance.get_address();
         let (carbonable_project) = carbonable_project_instance.get_address();
         let (carbonable_starkvest) = carbonable_starkvest_instance.get_address();

@@ -116,7 +116,7 @@ func test_deposit_and_withdraw_while_unlock{
     let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=0, high=0);
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: token_id has not been registred") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: token_id has not been registred") %}
     let (owner) = anyone.yielder_registred_owner_of(token_id=1);
 
     return ();
@@ -141,7 +141,7 @@ func test_deposit_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     anyone.project_approve(approved=yielder_address, token_id=3);
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: deposits are currently locked") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: deposits are currently locked") %}
     anyone.yielder_deposit(token_id=3);
     %{ stop_warp() %}
 
@@ -172,7 +172,7 @@ func test_withdraw_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     %{ stop_warp() %}
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarmer: withdrawals are currently locked") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: withdrawals are currently locked") %}
     anyone.yielder_withdraw(token_id=3);
     %{ stop_warp() %}
 
@@ -239,7 +239,7 @@ func test_create_vestings_revert_not_owner{
     alloc_locals;
     let total_amount = 10;
 
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
+    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
     anyone.create_vestings(total_amount=total_amount);
 
@@ -250,9 +250,10 @@ func test_create_vestings_revert_not_owner{
 func test_create_vestings_without_any_deposited{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
-    // When admin starts a 10s period with 5s unlock
-    // And anyone create vestings
-    // Then a failed transaction is expected
+    // When admin starts a 100s period with 5s unlock
+    // And admin create vestings during lock period
+    // Then no failed transactions expected
+    // And no vesting will be created
     alloc_locals;
     let (yielder_address) = yielder.get_address();
     let (starkvest_address) = starkvest.get_address();
@@ -270,6 +271,23 @@ func test_create_vestings_without_any_deposited{
 func test_create_vestings_nominal_case{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
+    // When admin starts a 100s period with 5s unlock
+    // And admin mint token_id from 1 to 5
+    // And anyone approves yielder for token 3 at time 5
+    // And anyone deposits token 3 to yielder at time 5
+    // And anyone approves yielder for token 4 at time 5
+    // And anyone deposits token 4 to yielder at time 5
+    // And anyone approves yielder for token 5 at time 5
+    // And anyone deposits token 5 to yielder at time 5
+    // And admin approves yielder for token 1 at time 5
+    // And admin deposits token 1 to yielder at time 5
+    // And admin approves yielder for token 2 at time 5
+    // And admin deposits token 2 to yielder at time 5
+    // When admin deposits 1000 ERC-20 token into at time 6
+    // And admin create vesting for anyone and admin who deposited token during unlock period
+    // Then anyone request the releasable amount of vesting for the last vesting created at time 10
+    // And releasable amount of anyone must be equal to expected amount of vesting
+
     // # Setup for prerequis
     alloc_locals;
     let zero = Uint256(low=0, high=0);
@@ -327,6 +345,15 @@ func test_create_vestings_nominal_case{
 func test_create_vestings_only_one_deposited{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
+    // When admin starts a 100s period with 5s unlock
+    // And admin mint token_id from 1 to 5
+    // And anyone approves yielder for token 3 at time 5
+    // And anyone deposits token 3 to yielder at time 5
+    // When admin deposits 1000 ERC-20 token into at time 6
+    // And admin create vesting for anyone and admin who deposited token during unlock period
+    // Then anyone request the releasable amount of vesting for the last vesting created at time 10
+    // And releasable amount of anyone must be equal to the total of amount deposited by admin
+
     // # Setup for prerequis
     alloc_locals;
     let zero = Uint256(low=0, high=0);
