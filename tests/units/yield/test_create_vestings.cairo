@@ -63,6 +63,7 @@ func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     // create_vestings at timestamp = 131
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [2, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [2, 0]) %}
+    %{ mock_call(context.mocks.starkvest_address, "withdrawable_amount", [24663812000000000000000, 0]) %}
     %{ mock_call(context.mocks.starkvest_address, "create_vesting", [123456]) %}
     %{ stop_warp = warp(131) %}
     %{ stop=start_prank(context.signers.admin) %}
