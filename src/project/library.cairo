@@ -8,10 +8,6 @@ from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256, uint256_check
 
-// Project dependencies
-from cairopen.string.ASCII import StringCodec
-from cairopen.string.utils import StringUtil
-
 // Local dependencies
 from src.utils.metadata.library import Metadata
 

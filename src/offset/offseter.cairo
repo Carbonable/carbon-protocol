@@ -4,6 +4,7 @@
 
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
@@ -18,8 +19,16 @@ from src.offset.library import CarbonableOffseter
 //
 
 @external
-func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    carbonable_project_address: felt, owner: felt, proxy_admin: felt
+func initializer{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(
+    carbonable_project_address: felt,
+    times_len: felt,
+    times: felt*,
+    absoprtions_len: felt,
+    absoprtions: felt*,
+    owner: felt,
+    proxy_admin: felt,
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -34,7 +43,11 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   proxy_admin(felt): Admin address
     // Returns:
     //   None
-    CarbonableOffseter.initializer(carbonable_project_address);
+    alloc_locals;
+
+    CarbonableOffseter.initializer(
+        carbonable_project_address, times_len, times, absoprtions_len, absoprtions
+    );
     Ownable.initializer(owner);
     Proxy.initializer(proxy_admin);
     return ();
@@ -99,26 +112,11 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
-func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    status: felt
-) {
+func claimable_of{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(address: felt) -> (claimable: felt) {
     // Desc:
-    //   Return the locked status of deposits and withdrawals
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   status(felt): Locked status (1 if locked else 0)
-    return CarbonableOffseter.is_locked();
-}
-
-@view
-func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    address: felt
-) -> (total_offsetable: Uint256) {
-    // Desc:
-    //   Return the total offsetable balance of the provided address
+    //   Return the total claimable balance of the provided address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -126,16 +124,16 @@ func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // Explicit args:
     //   address(felt): address
     // Returns:
-    //   total_offsetable(Uint256): Total offsetable balance
-    return CarbonableOffseter.total_offsetable(address=address);
+    //   claimable(felt): Total claimable
+    return CarbonableOffseter.claimable_of(address=address);
 }
 
 @view
-func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    address: felt
-) -> (total_offseted: Uint256) {
+func claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) -> (
+    claimed: felt
+) {
     // Desc:
-    //   Return the total offseted balance of the provided address
+    //   Return the total claimed balance of the provided address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -143,48 +141,16 @@ func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     // Explicit args:
     //   address(felt): address
     // Returns:
-    //   total_offseted(Uint256): Total offseted balance
-    return CarbonableOffseter.total_offseted(address=address);
+    //   claimed(felt): Total claimed
+    return CarbonableOffseter.claimed_of(address=address);
 }
 
 @view
-func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    balance: Uint256
-) {
-    // Desc:
-    //   Return the current number of tokens locked in the contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   balance(Uint256): Total balance of locked tokens
-    return CarbonableOffseter.total_locked();
-}
-
-@view
-func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) -> (
-    balance: felt
-) {
-    // Desc:
-    //   Return the current balance of a specified address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): Address
-    // Returns:
-    //   balance(Uint256): Balance associated to the address
-    return CarbonableOffseter.balance_of(address=address);
-}
-
-@view
-func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func registered_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (address: felt) {
     // Desc:
-    //   Return the registred owner of a token id (0 if token is not locked in the contract)
+    //   Return the registered owner of a token id (0 if token is not owned by the contract)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -193,7 +159,24 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     //   token_id(Uint256): Token id
     // Returns:
     //   address(felt): Registred owner address
-    return CarbonableOffseter.registred_owner_of(token_id=token_id);
+    return CarbonableOffseter.registered_owner_of(token_id=token_id);
+}
+
+@view
+func registered_time_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    token_id: Uint256
+) -> (time: felt) {
+    // Desc:
+    //   Return the registered time of a token id (0 if token is not owned by the contract)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   token_id(Uint256): Token id
+    // Returns:
+    //   address(felt): Registred time
+    return CarbonableOffseter.registered_time_of(token_id=token_id);
 }
 
 //
@@ -201,70 +184,18 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 //
 
 @external
-func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {
+func claim{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}() -> (success: felt) {
     // Desc:
-    //   Offset the current total offsetable of the caller address
+    //   Claim all the claimable balance of the caller address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
     //   success(felt): Success status
-    return CarbonableOffseter.offset();
-}
-
-@external
-func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    success: felt
-) {
-    // Desc:
-    //   Snapshot deposits
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   success(felt): Success status
-    Ownable.assert_only_owner();
-    return CarbonableOffseter.snapshot();
-}
-
-@external
-func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    unlocked_duration: felt, period_duration: felt, absorption: felt
-) -> (success: felt) {
-    // Desc:
-    //   Start a new period (erase the current one)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   unlocked_duration(felt): Unlocked duration in seconds
-    //   period_duration(felt): Period duration in seconds
-    //   absorption(felt): Carbon absorption in ng of CO2
-    // Returns:
-    //   success(felt): Success status
-    Ownable.assert_only_owner();
-    return CarbonableOffseter.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=absorption
-    );
-}
-
-@external
-func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    success: felt
-) {
-    // Desc:
-    //   Stop the current period
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   success(felt): Success status
-    Ownable.assert_only_owner();
-    return CarbonableOffseter.stop_period();
+    return CarbonableOffseter.claim();
 }
 
 @external
