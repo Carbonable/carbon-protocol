@@ -217,7 +217,12 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 
 @external
 func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    total_amount: felt
+    total_amount: felt,
+    cliff_delta: felt,
+    start: felt,
+    duration: felt,
+    slice_period_seconds: felt,
+    revocable: felt,
 ) -> (success: felt) {
     // Desc:
     //   The Yielder goes through all assets that are deposited, during the current period, to create a vesting for each of the assets,
@@ -228,10 +233,22 @@ func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     //   range_check_ptr
     // Explicit args:
     //   total_amount(felt): amount, in ERC-20 value, of carbon credit sold for the current period
+    //   start(felt): start time of the vesting period
+    //   cliff_delta(felt): duration in seconds of the cliff in which tokens will begin to vest
+    //   duration(felt): duration in seconds of the period in which the tokens will vest
+    //   slice_period_seconds(felt): duration of a slice period for the vesting in seconds
+    //   revocable(felt): whether the vesting is revocable or not
     // Returns:
     //   success(felt): Success status
     Ownable.assert_only_owner();
-    return CarbonableYielder.create_vestings(total_amount=total_amount);
+    return CarbonableYielder.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
 }
 
 @external

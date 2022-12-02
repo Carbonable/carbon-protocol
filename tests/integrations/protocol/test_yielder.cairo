@@ -238,10 +238,22 @@ func test_create_vestings_revert_not_owner{
     // Then a failed transaction is expected
     alloc_locals;
     let total_amount = 10;
+    let cliff_delta = 0;
+    let start = 1;
+    let duration = 1;
+    let slice_period_seconds = 1;
+    let revocable = TRUE;
 
     admin.yielder_start_period(unlocked_duration=5, period_duration=10);
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.create_vestings(total_amount=total_amount);
+    anyone.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
 
     return ();
 }
@@ -258,11 +270,23 @@ func test_create_vestings_without_any_deposited{
     let (yielder_address) = yielder.get_address();
     let (starkvest_address) = starkvest.get_address();
     let total_amount = 10;
+    let cliff_delta = 0;
+    let start = 1;
+    let duration = 1;
+    let slice_period_seconds = 1;
+    let revocable = TRUE;
 
     admin.yielder_start_period(unlocked_duration=5, period_duration=100);
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    admin.create_vestings(total_amount=total_amount);
+    admin.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
     %{ stop_warp %}
     return ();
 }
@@ -321,9 +345,21 @@ func test_create_vestings_nominal_case{
 
     // # Start testing create vestings
     let total_amount = 1000;
+    let cliff_delta = 0;
+    let start = 1;
+    let duration = 1;
+    let slice_period_seconds = 1;
+    let revocable = TRUE;
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    admin.create_vestings(total_amount=total_amount);
+    admin.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
     %{ stop_warp %}
 
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.starkvest_address) %}
@@ -378,9 +414,21 @@ func test_create_vestings_only_one_deposited{
 
     // # Start testing create vestings
     let total_amount = 1000;
+    let cliff_delta = 0;
+    let start = 1;
+    let duration = 1;
+    let slice_period_seconds = 1;
+    let revocable = TRUE;
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    admin.create_vestings(total_amount=total_amount);
+    admin.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
     %{ stop_warp %}
 
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.starkvest_address) %}

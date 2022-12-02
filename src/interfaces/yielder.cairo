@@ -31,7 +31,14 @@ namespace ICarbonableYielder {
     func registred_owner_of(token_id: Uint256) -> (address: felt) {
     }
 
-    func create_vestings(total_amount: felt) -> (success: felt) {
+    func create_vestings(
+        total_amount: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
+    ) -> (success: felt) {
     }
 
     func start_period(unlocked_duration: felt, period_duration: felt) -> (success: felt) {

@@ -788,14 +788,30 @@ namespace carbonable_yielder_instance {
 
     func create_vestings{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
-    }(caller: felt, total_amount: felt, carbonable_project: felt, carbonable_starkvest: felt) -> (
-        success: felt
-    ) {
+    }(
+        caller: felt,
+        total_amount: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
+        carbonable_project: felt,
+        carbonable_starkvest: felt,
+    ) -> (success: felt) {
         %{ stop_prank_yielder = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
         %{ stop_prank_project = start_prank(caller_address=ids.carbonable_yielder, target_contract_address=ids.carbonable_project) %}
         %{ stop_prank_starkves = start_prank(caller_address=ids.carbonable_yielder, target_contract_address=ids.carbonable_starkvest) %}
 
-        let (success) = ICarbonableYielder.create_vestings(carbonable_yielder, total_amount);
+        let (success) = ICarbonableYielder.create_vestings(
+            carbonable_yielder,
+            total_amount,
+            cliff_delta,
+            start,
+            duration,
+            slice_period_seconds,
+            revocable,
+        );
 
         %{ stop_prank_yielder() %}
         %{ stop_prank_project() %}
@@ -826,7 +842,12 @@ namespace admin_instance {
     }
 
     func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        total_amount: felt
+        total_amount: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
     ) {
         let (payment_token) = payment_token_instance.get_address();
         let (carbonable_yielder) = carbonable_yielder_instance.get_address();
@@ -845,6 +866,11 @@ namespace admin_instance {
             let (success) = carbonable_yielder_instance.create_vestings(
                 caller=caller,
                 total_amount=total_amount,
+                cliff_delta=cliff_delta,
+                start=start,
+                duration=duration,
+                slice_period_seconds=slice_period_seconds,
+                revocable=revocable,
                 carbonable_project=carbonable_project,
                 carbonable_starkvest=carbonable_starkvest,
             );
@@ -1858,7 +1884,12 @@ namespace anyone_instance {
     }
 
     func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        total_amount: felt
+        total_amount: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
     ) {
         let (carbonable_yielder) = carbonable_yielder_instance.get_address();
         let (carbonable_project) = carbonable_project_instance.get_address();
@@ -1869,6 +1900,11 @@ namespace anyone_instance {
             let (success) = carbonable_yielder_instance.create_vestings(
                 caller=caller,
                 total_amount=total_amount,
+                cliff_delta=cliff_delta,
+                start=start,
+                duration=duration,
+                slice_period_seconds=slice_period_seconds,
+                revocable=revocable,
                 carbonable_project=carbonable_project,
                 carbonable_starkvest=carbonable_starkvest,
             );

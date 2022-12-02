@@ -23,11 +23,17 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
-    // prepare farmer instance
+    // prepare yiler instance
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
     let two = Uint256(low=2, high=0);
     let total_amount = TOTAL_AMOUNT_HIGH;
+
+    let cliff_delta = 0;
+    let start = 1;
+    let duration = 1;
+    let slice_period_seconds = 1;
+    let revocable = TRUE;
 
     let (contract_address) = get_contract_address();
 
@@ -61,7 +67,14 @@ func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ stop_warp = warp(131) %}
     %{ stop=start_prank(context.signers.admin) %}
 
-    let (success) = CarbonableYielder.create_vestings(total_amount=total_amount);
+    let (success) = CarbonableYielder.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
     assert success = 1;
     %{ stop() %}
     %{ stop_warp() %}
