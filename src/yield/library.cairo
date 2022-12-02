@@ -361,7 +361,12 @@ namespace CarbonableYielder {
     }
 
     func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        total_amount: felt
+        total_amount: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
     ) -> (success: felt) {
         alloc_locals;
 
@@ -383,7 +388,14 @@ namespace CarbonableYielder {
         vestings_created_.write(TRUE);
 
         // [Interaction] Run create_vestings
-        _create_vestings(total_amount=total_amount);
+        _create_vestings(
+            total_amount=total_amount,
+            cliff_delta=cliff_delta,
+            start=start,
+            duration=duration,
+            slice_period_seconds=slice_period_seconds,
+            revocable=revocable,
+        );
 
         // [Event] Emit all vesting are created
         let (current_time) = get_block_timestamp();
@@ -447,7 +459,12 @@ namespace CarbonableYielder {
     }
 
     func _create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        total_amount: felt
+        total_amount: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
     ) {
         alloc_locals;
 
@@ -461,6 +478,15 @@ namespace CarbonableYielder {
             return ();
         }
 
+        // [Check] total_supply compliance
+        // with_attr error_message("CarbonableYielder: Project total supply can not be empty") {
+        //     assert is_zero = FALSE;
+        // }
+
+        // [Check] enough allocable amount into starkvest compare to total amount to distribute
+        // TODO: Do we need to check somewhere that total_amount was indeed sent to the starkvest?
+        // IStarkVest.withdrawable_amount() >= total_amount
+
         let one = Uint256(low=1, high=0);
         let (index) = SafeUint256.sub_le(total_supply, one);
         let (token_total_deposited) = total_locked();
@@ -471,6 +497,11 @@ namespace CarbonableYielder {
             token_total_deposited=token_total_deposited,
             index=index,
             total_supply=total_supply,
+            cliff_delta=cliff_delta,
+            start=start,
+            duration=duration,
+            slice_period_seconds=slice_period_seconds,
+            revocable=revocable,
         );
     }
 
@@ -481,6 +512,11 @@ namespace CarbonableYielder {
         token_total_deposited: Uint256,
         index: Uint256,
         total_supply: Uint256,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
     ) {
         alloc_locals;
 
@@ -504,11 +540,6 @@ namespace CarbonableYielder {
             // [Interaction] Starkvest - create vesting for address
             // Vesting, with no cliff period, no duration and no delay to start
             let beneficiary = address;
-            let cliff_delta = 0;
-            let start = 1;
-            let duration = 1;
-            let slice_period_seconds = 1;
-            let revocable = TRUE;
 
             // [Interaction] Starkvest - create vesting for address
             let (vesting_id) = IStarkVest.create_vesting(
@@ -553,6 +584,11 @@ namespace CarbonableYielder {
             token_total_deposited=token_total_deposited,
             index=next,
             total_supply=total_supply,
+            cliff_delta=cliff_delta,
+            start=start,
+            duration=duration,
+            slice_period_seconds=slice_period_seconds,
+            revocable=revocable,
         );
     }
 
