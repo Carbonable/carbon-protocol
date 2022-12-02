@@ -2,6 +2,20 @@
 View
 ====
   
+{% swagger method = "view" path = " " baseUrl = " " summary = "getImplementationHash" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-response status="implementation ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getAdmin" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-response status="admin ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
 {% swagger-description %}  
 Return the associated carbonable project  
@@ -16,6 +30,26 @@ Return the locked status of deposits and withdrawals
 {% swagger-response status="status ( felt )" description="Locked status (1 if locked else 0)" %}  
 {% endswagger-response %}  
 {% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "total_offsetable" %}  
+{% swagger-description %}  
+Return the total offsetable balance of the provided address  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="address" %}  
+address  
+{% endswagger-parameter %}  
+{% swagger-response status="total_offsetable ( Uint256 )" description="Total offsetable balance" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "total_offseted" %}  
+{% swagger-description %}  
+Return the total offseted balance of the provided address  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="address" %}  
+address  
+{% endswagger-parameter %}  
+{% swagger-response status="total_offseted ( Uint256 )" description="Total offseted balance" %}  
+{% endswagger-response %}  
+{% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "total_locked" %}  
 {% swagger-description %}  
 Return the current number of tokens locked in the contract  
@@ -25,12 +59,12 @@ Return the current number of tokens locked in the contract
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "balance_of" %}  
 {% swagger-description %}  
-Return the current share of a specified address  
+Return the current balance of a specified address  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="address" %}  
 Address  
 {% endswagger-parameter %}  
-{% swagger-response status="balance ( felt )" description="" %}  
+{% swagger-response status="balance ( Uint256 )" description="Balance associated to the address" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "registred_owner_of" %}  

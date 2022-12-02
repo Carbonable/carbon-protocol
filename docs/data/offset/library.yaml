@@ -2,8 +2,8 @@
   functionName:
     name: Offset
     charIndex:
-      start: 1064
-      end: 1070
+      start: 1136
+      end: 1142
   functionSignature:
     implicitArgs:
       - name: ''
@@ -29,8 +29,8 @@
   functionName:
     name: Snapshot
     charIndex:
-      start: 1134
-      end: 1142
+      start: 1206
+      end: 1214
   functionSignature:
     implicitArgs:
       - name: ''
@@ -52,8 +52,8 @@
   functionName:
     name: carbonable_project_address_
     charIndex:
-      start: 1206
-      end: 1233
+      start: 1287
+      end: 1314
   functionSignature:
     implicitArgs:
       - name: ''
@@ -75,8 +75,8 @@
   functionName:
     name: start_
     charIndex:
-      start: 1278
-      end: 1284
+      start: 1359
+      end: 1365
   functionSignature:
     implicitArgs:
       - name: ''
@@ -98,8 +98,8 @@
   functionName:
     name: unlocked_duration_
     charIndex:
-      start: 1326
-      end: 1344
+      start: 1407
+      end: 1425
   functionSignature:
     implicitArgs:
       - name: ''
@@ -121,8 +121,8 @@
   functionName:
     name: period_duration_
     charIndex:
-      start: 1390
-      end: 1406
+      start: 1471
+      end: 1487
   functionSignature:
     implicitArgs:
       - name: ''
@@ -142,33 +142,10 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: absorption_
-    charIndex:
-      start: 1452
-      end: 1463
-  functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: absorption
-        type: Uint256
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: storage_var
-  functionName:
     name: registration_
     charIndex:
-      start: 1514
-      end: 1527
+      start: 1533
+      end: 1546
   functionSignature:
     implicitArgs:
       - name: ''
@@ -190,10 +167,33 @@
       end: 0
 - attributeName: storage_var
   functionName:
+    name: absorption_
+    charIndex:
+      start: 1645
+      end: 1656
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorption
+        type: Uint256
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
     name: total_offsetable_
     charIndex:
-      start: 1589
-      end: 1606
+      start: 1707
+      end: 1724
   functionSignature:
     implicitArgs:
       - name: ''
@@ -217,8 +217,8 @@
   functionName:
     name: total_offseted_
     charIndex:
-      start: 1667
-      end: 1682
+      start: 1785
+      end: 1800
   functionSignature:
     implicitArgs:
       - name: ''
@@ -242,8 +242,8 @@
   functionName:
     name: snapshoted_
     charIndex:
-      start: 1743
-      end: 1754
+      start: 1861
+      end: 1872
   functionSignature:
     implicitArgs:
       - name: ''
@@ -261,12 +261,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: initializer
     charIndex:
-      start: 1856
-      end: 1867
+      start: 1976
+      end: 1987
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -288,12 +288,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 2119
-      end: 2145
+      start: 2239
+      end: 2265
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -315,12 +315,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: carbonable_minter_address
     charIndex:
-      start: 2408
-      end: 2433
+      start: 2528
+      end: 2553
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -344,12 +344,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: get_start_time
     charIndex:
-      start: 2811
-      end: 2825
+      start: 2931
+      end: 2945
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -371,12 +371,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: get_lock_time
     charIndex:
-      start: 3020
-      end: 3033
+      start: 3140
+      end: 3153
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -398,12 +398,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: get_end_time
     charIndex:
-      start: 3310
-      end: 3322
+      start: 3430
+      end: 3442
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -425,12 +425,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: is_locked
     charIndex:
-      start: 3591
-      end: 3600
+      start: 3711
+      end: 3720
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -452,12 +452,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: total_locked
     charIndex:
-      start: 4212
-      end: 4224
+      start: 4332
+      end: 4344
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -479,43 +479,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
-  functionName:
-    name: shares_of
-    charIndex:
-      start: 4653
-      end: 4662
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: address
-        type: felt
-      - name: precision
-        type: felt
-    returns:
-      - name: shares
-        type: Uint256
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: balance_of
     charIndex:
-      start: 5356
-      end: 5366
+      start: 4773
+      end: 4783
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -539,12 +508,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: registred_owner_of
     charIndex:
-      start: 5597
-      end: 5615
+      start: 5014
+      end: 5032
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -566,14 +535,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 5734
-      end: 5746
-- attributeName: namespace CarbonableFarmer
+      start: 5151
+      end: 5163
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: total_offsetable
     charIndex:
-      start: 6501
-      end: 6517
+      start: 5922
+      end: 5938
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -597,12 +566,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: total_offseted
     charIndex:
-      start: 6780
-      end: 6794
+      start: 6201
+      end: 6215
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -626,12 +595,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: start_period
     charIndex:
-      start: 7079
-      end: 7091
+      start: 6500
+      end: 6512
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -657,14 +626,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7257
-      end: 7269
-- attributeName: namespace CarbonableFarmer
+      start: 6678
+      end: 6690
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: stop_period
     charIndex:
-      start: 8049
-      end: 8060
+      start: 7474
+      end: 7485
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -684,14 +653,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8162
-      end: 8174
-- attributeName: namespace CarbonableFarmer
+      start: 7587
+      end: 7599
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: deposit
     charIndex:
-      start: 8703
-      end: 8710
+      start: 8130
+      end: 8137
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -715,12 +684,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: withdraw
     charIndex:
-      start: 10258
-      end: 10266
+      start: 9691
+      end: 9699
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -744,12 +713,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: offset
     charIndex:
-      start: 11815
-      end: 11821
+      start: 11254
+      end: 11260
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -771,12 +740,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: snapshot
     charIndex:
-      start: 12843
-      end: 12851
+      start: 12284
+      end: 12292
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -796,14 +765,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 12953
-      end: 12965
-- attributeName: namespace CarbonableFarmer
+      start: 12394
+      end: 12406
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: _count
     charIndex:
-      start: 13764
-      end: 13770
+      start: 13209
+      end: 13215
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -827,12 +796,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: _count_iter
     charIndex:
-      start: 14495
-      end: 14506
+      start: 13940
+      end: 13951
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -860,12 +829,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: _snapshot
     charIndex:
-      start: 15557
-      end: 15566
+      start: 15002
+      end: 15011
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -885,12 +854,12 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableFarmer
+- attributeName: namespace CarbonableOffseter
   functionName:
     name: _snapshot_iter
     charIndex:
-      start: 16235
-      end: 16249
+      start: 15680
+      end: 15694
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

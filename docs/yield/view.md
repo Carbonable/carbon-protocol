@@ -2,11 +2,46 @@
 View
 ====
   
+{% swagger method = "view" path = " " baseUrl = " " summary = "getImplementationHash" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-response status="implementation ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getAdmin" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-response status="admin ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
 {% swagger-description %}  
 Return the associated carbonable project  
 {% endswagger-description %}  
 {% swagger-response status="carbonable_project_address ( felt )" description="Address of the corresponding Carbonable project" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "get_start_time" %}  
+{% swagger-description %}  
+Return the start time of the current period  
+{% endswagger-description %}  
+{% swagger-response status="start_time ( felt )" description="absolute unix time" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "get_lock_time" %}  
+{% swagger-description %}  
+Return the lock time of the current period  
+{% endswagger-description %}  
+{% swagger-response status="lock_time ( felt )" description="absolute unix time" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "get_end_time" %}  
+{% swagger-description %}  
+Return the end time of the current period  
+{% endswagger-description %}  
+{% swagger-response status="end_time ( felt )" description="absolute unix time" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "is_locked" %}  

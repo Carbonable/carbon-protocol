@@ -2,20 +2,6 @@
 View
 ====
   
-{% swagger method = "view" path = " " baseUrl = " " summary = "getImplementationHash" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-response status="implementation ( felt )" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "getAdmin" %}  
-{% swagger-description %}  
-  
-{% endswagger-description %}  
-{% swagger-response status="admin ( felt )" description="" %}  
-{% endswagger-response %}  
-{% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "totalSupply" %}  
 {% swagger-description %}  
 Count NFTs tracked by this contract (EIP 721 - Enumeration extension)  
