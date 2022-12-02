@@ -29,9 +29,7 @@ from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumer
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 
 // Carbonable dependencies
-from interfaces.starkvest import IStarkVest
-
-// Local dependencies
+from src.interfaces.starkvest import IStarkVest
 from src.interfaces.project import ICarbonableProject
 
 //
@@ -468,24 +466,18 @@ namespace CarbonableYielder {
     ) {
         alloc_locals;
 
+        let zero = Uint256(low=0, high=0);
         let (starkvest_address) = starkvest_address_.read();
         let (contract_address) = carbonable_project_address_.read();
         let (total_supply) = IERC721Enumerable.totalSupply(contract_address=contract_address);
 
-        let zero = Uint256(low=0, high=0);
         let (is_zero) = uint256_eq(total_supply, zero);
         if (is_zero == TRUE) {
             return ();
         }
 
-        // [Check] total_supply compliance
-        // with_attr error_message("CarbonableYielder: Project total supply can not be empty") {
-        //     assert is_zero = FALSE;
-        // }
-
-        // [Check] enough allocable amount into starkvest compare to total amount to distribute
-        // TODO: Do we need to check somewhere that total_amount was indeed sent to the starkvest?
-        // IStarkVest.withdrawable_amount() >= total_amount
+        // [Check] Enough unallocated amount into starkvest
+        _check_enough_amount(total_amount=total_amount, total_supply=total_supply);
 
         let one = Uint256(low=1, high=0);
         let (index) = SafeUint256.sub_le(total_supply, one);
@@ -503,6 +495,25 @@ namespace CarbonableYielder {
             slice_period_seconds=slice_period_seconds,
             revocable=revocable,
         );
+    }
+
+    func _check_enough_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        total_amount: felt, total_supply: Uint256
+    ) {
+        alloc_locals;
+
+        let (starkvest_address) = starkvest_address_.read();
+        // [Interaction] Starkvest - withdrawable amount
+        let (releasable_amount) = IStarkVest.withdrawable_amount(starkvest_address);
+
+        // [Check] Enough unallocated amount into starkvest
+        let total_amount_unint256 = Uint256(low=total_amount, high=0);
+        let (enough_unallocated_amount) = uint256_lt(releasable_amount, total_amount_unint256);
+        with_attr error_message("CarbonableYielder: not enough unallocated amount into starkvest") {
+            assert enough_unallocated_amount = FALSE;
+        }
+
+        return ();
     }
 
     func _create_vestings_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

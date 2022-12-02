@@ -264,6 +264,15 @@ namespace carbonable_starkvest_instance {
 
     // Views
 
+    func withdrawable_amount{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_starkvest: felt
+    }(caller: felt) -> (releasable_amount: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_starkvest) %}
+        let (releasable_amount) = IStarkVest.withdrawable_amount(carbonable_starkvest);
+        %{ stop_prank() %}
+        return (releasable_amount,);
+    }
+
     func vesting_count{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_starkvest: felt
     }(caller: felt) -> (vesting_count: felt) {
@@ -829,7 +838,25 @@ namespace admin_instance {
         return (address,);
     }
 
+    // Token
+
+    func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        recipient: felt, amount: felt
+    ) {
+        let (payment_token) = payment_token_instance.get_address();
+        let (caller) = get_address();
+        let amount_uint256 = Uint256(low=amount, high=0);
+        with payment_token {
+            let (success) = payment_token_instance.transfer(
+                recipient=recipient, amount=amount_uint256, caller=caller
+            );
+            assert success = TRUE;
+        }
+        return ();
+    }
+
     // Starkvest
+
     func starkvest_transfer_ownership{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }(newOwner: felt) {
@@ -849,18 +876,10 @@ namespace admin_instance {
         slice_period_seconds: felt,
         revocable: felt,
     ) {
-        let (payment_token) = payment_token_instance.get_address();
         let (carbonable_yielder) = carbonable_yielder_instance.get_address();
         let (carbonable_project) = carbonable_project_instance.get_address();
         let (carbonable_starkvest) = carbonable_starkvest_instance.get_address();
         let (caller) = get_address();
-
-        with payment_token {
-            let (success) = payment_token_instance.transfer(
-                carbonable_starkvest, Uint256(total_amount, 0), caller
-            );
-            assert success = TRUE;
-        }
 
         with carbonable_yielder {
             let (success) = carbonable_yielder_instance.create_vestings(

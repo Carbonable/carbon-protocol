@@ -270,6 +270,7 @@ func test_create_vestings_without_any_deposited{
     let (yielder_address) = yielder.get_address();
     let (starkvest_address) = starkvest.get_address();
     let total_amount = 10;
+    let unallocated_starkvest_amount = 1000;
     let cliff_delta = 0;
     let start = 1;
     let duration = 1;
@@ -279,6 +280,7 @@ func test_create_vestings_without_any_deposited{
     admin.yielder_start_period(unlocked_duration=5, period_duration=100);
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
     admin.create_vestings(
         total_amount=total_amount,
         cliff_delta=cliff_delta,
@@ -345,6 +347,7 @@ func test_create_vestings_nominal_case{
 
     // # Start testing create vestings
     let total_amount = 1000;
+    let unallocated_starkvest_amount = 1000;
     let cliff_delta = 0;
     let start = 1;
     let duration = 1;
@@ -352,6 +355,7 @@ func test_create_vestings_nominal_case{
     let revocable = TRUE;
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
     admin.create_vestings(
         total_amount=total_amount,
         cliff_delta=cliff_delta,
@@ -414,6 +418,7 @@ func test_create_vestings_only_one_deposited{
 
     // # Start testing create vestings
     let total_amount = 1000;
+    let unallocated_starkvest_amount = 1000;
     let cliff_delta = 0;
     let start = 1;
     let duration = 1;
@@ -421,6 +426,8 @@ func test_create_vestings_only_one_deposited{
     let revocable = TRUE;
 
     %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
+
     admin.create_vestings(
         total_amount=total_amount,
         cliff_delta=cliff_delta,
@@ -441,6 +448,67 @@ func test_create_vestings_only_one_deposited{
         assert is_zero = TRUE;
     }
 
+    %{ stop_warp %}
+
+    return ();
+}
+
+@view
+func test_create_vestings_not_enough_fund_starkvest{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    // When admin starts a 100s period with 5s unlock
+    // And admin mint token_id from 1 to 5
+    // And anyone approves yielder for token 3 at time 5
+    // And anyone deposits token 3 to yielder at time 5
+    // When admin deposits 800 ERC-20 token into at time 6
+    // And admin create vesting for anyone and admin who deposited token during unlock period
+    // Then a failed transactions expected
+    // And error_messages of not enough unallocated amount into starkvest expected
+
+    // # Setup for prerequis
+    alloc_locals;
+    let zero = Uint256(low=0, high=0);
+    let (admin_address) = admin.get_address();
+    let (anyone_address) = anyone.get_address();
+    let (yielder_address) = yielder.get_address();
+    let (starkvest_address) = starkvest.get_address();
+
+    // Mint tokens
+    admin.mint(to=admin_address, token_id=1);
+    admin.mint(to=admin_address, token_id=2);
+    admin.mint(to=anyone_address, token_id=3);
+    admin.mint(to=anyone_address, token_id=4);
+    admin.mint(to=anyone_address, token_id=5);
+
+    // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
+    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
+    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
+    anyone.project_approve(approved=yielder_address, token_id=3);
+    anyone.yielder_deposit(token_id=3);
+    %{ stop_warp %}
+
+    // # Start testing create vestings
+    let total_amount = 1000;
+    let unallocated_starkvest_amount = 800;
+    let cliff_delta = 0;
+    let start = 1;
+    let duration = 1;
+    let slice_period_seconds = 1;
+    let revocable = TRUE;
+
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
+    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into starkvest") %}
+    admin.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
     %{ stop_warp %}
 
     return ();
