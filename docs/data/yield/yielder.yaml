@@ -2,8 +2,8 @@
   functionName:
     name: getImplementationHash
     charIndex:
-      start: 1225
-      end: 1246
+      start: 1431
+      end: 1452
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -29,8 +29,8 @@
   functionName:
     name: getAdmin
     charIndex:
-      start: 1406
-      end: 1414
+      start: 1612
+      end: 1620
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -56,8 +56,8 @@
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 2310
-      end: 2336
+      start: 2516
+      end: 2542
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -109,14 +109,185 @@
           end: 281
     raises: null
     charIndex:
-      start: 2448
-      end: 2729
+      start: 2654
+      end: 2935
+- attributeName: view
+  functionName:
+    name: get_start_time
+    charIndex:
+      start: 3009
+      end: 3023
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: start_time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the start time of the current period
+        charIndex:
+          start: 23
+          end: 66
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 98
+          end: 116
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 126
+          end: 152
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 162
+          end: 177
+    explicitArgs: null
+    returns:
+      - name: start_time
+        type: felt
+        desc: absolute unix time
+        charIndex:
+          start: 203
+          end: 239
+    raises: null
+    charIndex:
+      start: 3120
+      end: 3359
+- attributeName: view
+  functionName:
+    name: get_lock_time
+    charIndex:
+      start: 3421
+      end: 3434
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: lock_time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the lock time of the current period
+        charIndex:
+          start: 23
+          end: 65
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 97
+          end: 115
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 125
+          end: 151
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 161
+          end: 176
+    explicitArgs: null
+    returns:
+      - name: lock_time
+        type: felt
+        desc: absolute unix time
+        charIndex:
+          start: 202
+          end: 237
+    raises: null
+    charIndex:
+      start: 3530
+      end: 3767
+- attributeName: view
+  functionName:
+    name: get_end_time
+    charIndex:
+      start: 3828
+      end: 3840
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: end_time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the end time of the current period
+        charIndex:
+          start: 23
+          end: 64
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 96
+          end: 114
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 124
+          end: 150
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 160
+          end: 175
+    explicitArgs: null
+    returns:
+      - name: end_time
+        type: felt
+        desc: absolute unix time
+        charIndex:
+          start: 201
+          end: 235
+    raises: null
+    charIndex:
+      start: 3935
+      end: 4170
 - attributeName: view
   functionName:
     name: is_locked
     charIndex:
-      start: 2802
-      end: 2811
+      start: 4230
+      end: 4239
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -166,144 +337,14 @@
           end: 260
     raises: null
     charIndex:
-      start: 2904
-      end: 3164
-- attributeName: view
-  functionName:
-    name: total_offsetable
-    charIndex:
-      start: 3220
-      end: 3236
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: address
-        type: felt
-    returns:
-      - name: total_offsetable
-        type: Uint256
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Return the total offsetable balance of the provided address
-        charIndex:
-          start: 23
-          end: 82
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 114
-          end: 132
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 142
-          end: 168
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 178
-          end: 193
-    explicitArgs:
-      - name: address
-        type: felt
-        desc: address
-        charIndex:
-          start: 225
-          end: 247
-    returns:
-      - name: total_offsetable
-        type: Uint256
-        desc: Total offsetable balance
-        charIndex:
-          start: 273
-          end: 324
-    raises: null
-    charIndex:
-      start: 3355
-      end: 3679
-- attributeName: view
-  functionName:
-    name: total_offseted
-    charIndex:
-      start: 3757
-      end: 3771
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: address
-        type: felt
-    returns:
-      - name: total_offseted
-        type: Uint256
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Return the total offseted balance of the provided address
-        charIndex:
-          start: 23
-          end: 80
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 112
-          end: 130
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 140
-          end: 166
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 176
-          end: 191
-    explicitArgs:
-      - name: address
-        type: felt
-        desc: address
-        charIndex:
-          start: 223
-          end: 245
-    returns:
-      - name: total_offseted
-        type: Uint256
-        desc: Total offseted balance
-        charIndex:
-          start: 271
-          end: 318
-    raises: null
-    charIndex:
-      start: 3888
-      end: 4206
+      start: 4332
+      end: 4592
 - attributeName: view
   functionName:
     name: total_locked
     charIndex:
-      start: 4282
-      end: 4294
+      start: 4649
+      end: 4661
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -353,14 +394,14 @@
           end: 266
     raises: null
     charIndex:
-      start: 4391
-      end: 4657
+      start: 4758
+      end: 5024
 - attributeName: view
   functionName:
-    name: balance_of
+    name: shares_of
     charIndex:
-      start: 4716
-      end: 4726
+      start: 5084
+      end: 5093
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -372,9 +413,11 @@
     explicitArgs:
       - name: address
         type: felt
-    returns:
-      - name: balance
+      - name: precision
         type: felt
+    returns:
+      - name: shares
+        type: Uint256
   functionComment:
     desc:
       - name: ''
@@ -424,14 +467,14 @@
           end: 365
     raises: null
     charIndex:
-      start: 4833
-      end: 5198
+      start: 5219
+      end: 5584
 - attributeName: view
   functionName:
     name: registred_owner_of
     charIndex:
-      start: 5270
-      end: 5288
+      start: 5677
+      end: 5695
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -491,14 +534,14 @@
           end: 340
     raises: null
     charIndex:
-      start: 5399
-      end: 5739
+      start: 5806
+      end: 6146
 - attributeName: external
   functionName:
     name: initializer
     charIndex:
-      start: 424
-      end: 435
+      start: 426
+      end: 437
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -509,6 +552,8 @@
         type: ''
     explicitArgs:
       - name: carbonable_project_address
+        type: felt
+      - name: starkvest_address
         type: felt
       - name: owner
         type: felt
@@ -557,29 +602,35 @@
         charIndex:
           start: 302
           end: 383
+      - name: starkvest_address
+        type: felt
+        desc: Address of the vestings contract where are deposited yield result
+        charIndex:
+          start: 393
+          end: 483
       - name: owner
         type: felt
         desc: Owner address
         charIndex:
-          start: 393
-          end: 419
+          start: 493
+          end: 519
       - name: proxy_admin
         type: felt
         desc: Admin address
         charIndex:
-          start: 429
-          end: 461
+          start: 529
+          end: 561
     returns: null
     raises: null
     charIndex:
-      start: 574
-      end: 1065
+      start: 601
+      end: 1192
 - attributeName: external
   functionName:
     name: upgrade
     charIndex:
-      start: 1549
-      end: 1556
+      start: 1755
+      end: 1762
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -635,14 +686,14 @@
           start: 292
           end: 330
     charIndex:
-      start: 1655
-      end: 1985
+      start: 1861
+      end: 2191
 - attributeName: external
   functionName:
     name: setAdmin
     charIndex:
-      start: 2106
-      end: 2114
+      start: 2312
+      end: 2320
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -666,10 +717,10 @@
       end: 0
 - attributeName: external
   functionName:
-    name: offset
+    name: create_vestings
     charIndex:
-      start: 5845
-      end: 5851
+      start: 6253
+      end: 6268
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -678,7 +729,21 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: total_amount
+        type: felt
+      - name: cliff_delta
+        type: felt
+      - name: start
+        type: felt
+      - name: duration
+        type: felt
+      - name: slice_period_seconds
+        type: felt
+      - name: revocable
+        type: felt
+      - name: ''
+        type: ''
     returns:
       - name: success
         type: felt
@@ -686,104 +751,33 @@
     desc:
       - name: ''
         type: ''
-        desc: Offset the current total offsetable of the caller address
+        desc: >-
+          The Yielder goes through all assets that are deposited, during the
+          current period, to create a vesting for each of the assets,
         charIndex:
           start: 23
-          end: 80
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 112
-          end: 130
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 140
-          end: 166
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 176
-          end: 191
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-        desc: Success status
-        charIndex:
-          start: 217
-          end: 246
-    raises: null
-    charIndex:
-      start: 5939
-      end: 6185
-- attributeName: external
-  functionName:
-    name: snapshot
-    charIndex:
-      start: 6242
-      end: 6250
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc:
+          end: 149
       - name: ''
         type: ''
-        desc: Snapshot deposits
+        desc: >-
+          on the starkvest smart contract, by allocating shares of the total
+          amount collected from selling carbon
         charIndex:
-          start: 23
-          end: 40
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 72
-          end: 90
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 100
-          end: 126
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 136
-          end: 151
+          start: 159
+          end: 263
+    implicitArgs: null
     explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-        desc: Success status
-        charIndex:
-          start: 177
-          end: 206
+    returns: null
     raises: null
     charIndex:
-      start: 6344
-      end: 6550
+      start: 6494
+      end: 6757
 - attributeName: external
   functionName:
     name: start_period
     charIndex:
-      start: 6642
-      end: 6654
+      start: 7749
+      end: 7761
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -796,8 +790,6 @@
       - name: unlocked_duration
         type: felt
       - name: period_duration
-        type: felt
-      - name: absorption
         type: felt
     returns:
       - name: success
@@ -842,29 +834,23 @@
         charIndex:
           start: 271
           end: 320
-      - name: absorption
-        type: felt
-        desc: Carbon absorption in ng of CO2
-        charIndex:
-          start: 330
-          end: 378
     returns:
       - name: success
         type: felt
         desc: Success status
         charIndex:
-          start: 404
-          end: 433
+          start: 346
+          end: 375
     raises: null
     charIndex:
-      start: 6812
-      end: 7245
+      start: 7901
+      end: 8276
 - attributeName: external
   functionName:
     name: stop_period
     charIndex:
-      start: 7446
-      end: 7457
+      start: 8455
+      end: 8466
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -914,14 +900,14 @@
           end: 212
     raises: null
     charIndex:
-      start: 7551
-      end: 7763
+      start: 8560
+      end: 8772
 - attributeName: external
   functionName:
     name: deposit
     charIndex:
-      start: 7858
-      end: 7865
+      start: 8868
+      end: 8875
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -979,14 +965,14 @@
           end: 303
     raises: null
     charIndex:
-      start: 7976
-      end: 8279
+      start: 8986
+      end: 9289
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 8354
-      end: 8362
+      start: 9365
+      end: 9373
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1044,5 +1030,5 @@
           end: 297
     raises: null
     charIndex:
-      start: 8473
-      end: 8770
+      start: 9484
+      end: 9781

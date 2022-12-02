@@ -2,6 +2,47 @@
 External
 ========
   
+{% swagger method = "external" path = " " baseUrl = " " summary = "initializer" %}  
+{% swagger-description %}  
+Initialize the contract with the given name, symbol and owner - This constructor uses the standard OZ Proxy initializer, the standard OZ ERC721 initializer, the standard OZ ERC721Enumerable initializer and the OZ Ownable initializer  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="name" %}  
+Name of the collection  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="felt" name="symbol" %}  
+Symbol of the collection  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="felt" name="owner" %}  
+Owner address  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="felt" name="proxy_admin" %}  
+Admin address  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  
+{% swagger-description %}  
+Renounce ownership  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="new_implementation" %}  
+new contract implementation  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setAdmin" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="new_admin" %}  
+  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "set_minter" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="minter" %}  
+  
+{% endswagger-parameter %}  
+{% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "approve" %}  
 {% swagger-description %}  
 Change or reaffirm the approved address for an NFT (EIP 721)  

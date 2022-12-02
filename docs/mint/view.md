@@ -2,6 +2,20 @@
 View
 ====
   
+{% swagger method = "view" path = " " baseUrl = " " summary = "getImplementationHash" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-response status="implementation ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getAdmin" %}  
+{% swagger-description %}  
+  
+{% endswagger-description %}  
+{% swagger-response status="admin ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
 {% swagger-description %}  
 Return the associated carbonable project  
@@ -92,5 +106,12 @@ Return the slots already minted by an account using whitelist slots
 Account address  
 {% endswagger-parameter %}  
 {% swagger-response status="slots ( felt )" description="amount of claimed slots" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "sold_out" %}  
+{% swagger-description %}  
+Return the sold out status  
+{% endswagger-description %}  
+{% swagger-response status="status ( felt )" description="1 if sold out else 0" %}  
 {% endswagger-response %}  
 {% endswagger %}
