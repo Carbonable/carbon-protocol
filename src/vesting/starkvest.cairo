@@ -11,7 +11,6 @@ from starkvest.starkvest import (
     erc20_address,
     vestings_total_amount,
     vesting_count,
-    get_vesting_id,
     vestings,
     withdrawable_amount,
     get_contract_balance,
@@ -20,6 +19,18 @@ from starkvest.starkvest import (
     release,
     withdraw,
 )
+
+from starkvest.library import StarkVest
+
+//##
+// @return the number of vestings associated to the account
+//##
+@view
+func get_vesting_id{pedersen_ptr: HashBuiltin*}(account: felt, vesting_index: felt) -> (
+    vesting_id: felt
+) {
+    return StarkVest.compute_vesting_id(account, vesting_index);
+}
 
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
