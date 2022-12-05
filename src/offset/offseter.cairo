@@ -4,7 +4,6 @@
 
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
@@ -19,14 +18,11 @@ from src.offset.library import CarbonableOffseter
 //
 
 @external
-func initializer{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(
+func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
-    times_len: felt,
-    times: felt*,
-    absoprtions_len: felt,
-    absoprtions: felt*,
+    time_step: felt,
+    absorptions_len: felt,
+    absorptions: felt*,
     owner: felt,
     proxy_admin: felt,
 ) {
@@ -46,7 +42,7 @@ func initializer{
     alloc_locals;
 
     CarbonableOffseter.initializer(
-        carbonable_project_address, times_len, times, absoprtions_len, absoprtions
+        carbonable_project_address, time_step, absorptions_len, absorptions
     );
     Ownable.initializer(owner);
     Proxy.initializer(proxy_admin);
@@ -112,9 +108,51 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
-func claimable_of{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(address: felt) -> (claimable: felt) {
+func time_step{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    time_step: felt
+) {
+    return CarbonableOffseter.time_step();
+}
+
+@view
+func absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorptions_len: felt, absorptions: felt*
+) {
+    return CarbonableOffseter.absorptions();
+}
+
+@view
+func total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    balance: Uint256
+) {
+    return CarbonableOffseter.total_deposited();
+}
+
+@view
+func total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_claimed: felt
+) {
+    return CarbonableOffseter.total_claimed();
+}
+
+@view
+func total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_claimable: felt
+) {
+    return CarbonableOffseter.total_claimable();
+}
+
+@view
+func total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorption: felt
+) {
+    return CarbonableOffseter.total_absorption();
+}
+
+@view
+func claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (claimable: felt) {
     // Desc:
     //   Return the total claimable balance of the provided address
     // Implicit args:
@@ -184,9 +222,28 @@ func registered_time_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 //
 
 @external
-func claim{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (success: felt) {
+func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    absorptions_len: felt, absorptions: felt*
+) {
+    // Desc:
+    //   Set new absorption values
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   absorptions_len(felt): Array length
+    //   absorptions(felt*): Absorption values
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   absorptions_len: absorptions_len is null
+    return CarbonableOffseter.set_absorptions(
+        absorptions_len=absorptions_len, absorptions=absorptions
+    );
+}
+
+@external
+func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {
     // Desc:
     //   Claim all the claimable balance of the caller address
     // Implicit args:
@@ -230,4 +287,41 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Returns:
     //   success(felt): Success status
     return CarbonableOffseter.withdraw(token_id=token_id);
+}
+
+@external
+func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    newOwner: felt
+) {
+    // Desc:
+    //   Transfer ownership to a new owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   newOwner(felt): Address of the new owner
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   newOwner: new owner is the zero address
+    Ownable.transfer_ownership(newOwner);
+    return ();
+}
+
+@external
+func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.renounce_ownership();
+    return ();
 }

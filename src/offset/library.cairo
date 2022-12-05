@@ -370,6 +370,22 @@ namespace CarbonableOffseter {
         return (success=TRUE,);
     }
 
+    func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        absorptions_len: felt, absorptions: felt*
+    ) {
+        alloc_locals;
+
+        // [Check] Consistency
+        let not_zero = is_not_zero(absorptions_len);
+        with_attr error_message("CarbonableOffseter: absorptions must be defined") {
+            not_zero = TRUE;
+        }
+
+        // [Effect] Update storage
+        _write_absorptions(absorptions_len=absorptions_len, absorptions=absorptions);
+        return ();
+    }
+
     //
     // Internals
     //

@@ -7,44 +7,66 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableOffseter {
+    func getImplementationHash() -> (implementation: felt) {
+    }
+
+    func getAdmin() -> (admin: felt) {
+    }
+
+    func upgrade(new_implementation: felt) {
+    }
+
+    func setAdmin(new_admin: felt) {
+    }
+
     func carbonable_project_address() -> (carbonable_project_address: felt) {
     }
 
-    func is_locked() -> (status: felt) {
+    func time_step() -> (time_step: felt) {
     }
 
-    func total_offsetable(address: felt) -> (total_offsetable: Uint256) {
+    func absorptions() -> (absorptions_len: felt, absorptions: felt*) {
     }
 
-    func total_offseted(address: felt) -> (total_offseted: Uint256) {
+    func total_deposited() -> (balance: Uint256) {
     }
 
-    func total_locked() -> (balance: Uint256) {
+    func total_claimed() -> (total_claimed: felt) {
     }
 
-    func balance_of(address: felt) -> (balance: felt) {
+    func total_claimable() -> (total_claimable: felt) {
     }
 
-    func registred_owner_of(token_id: Uint256) -> (address: felt) {
+    func total_absorption() -> (absorption: felt) {
     }
 
-    func offset() -> (success: felt) {
+    func claimable_of(address: felt) -> (claimable: felt) {
     }
 
-    func snapshot() -> (success: felt) {
+    func claimed_of(address: felt) -> (claimed: felt) {
     }
 
-    func start_period(unlocked_duration: felt, period_duration: felt, absorption: felt) -> (
-        success: felt
-    ) {
+    func registered_owner_of(token_id: Uint256) -> (address: felt) {
     }
 
-    func stop_period() -> (success: felt) {
+    func registered_time_of(token_id: Uint256) -> (time: felt) {
+    }
+
+    func set_absorptions(absorptions_len: felt, absorptions: felt*) {
+    }
+
+    func claim() -> (success: felt) {
     }
 
     func deposit(token_id: Uint256) -> (success: felt) {
     }
 
     func withdraw(token_id: Uint256) -> (success: felt) {
+    }
+
+    func transferOwnership(newOwner: felt) {
+    }
+
+    func renounceOwnership() {
     }
 }
