@@ -52,6 +52,18 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             },
         ).contract_address
 
+        # Payment token deployment
+        context.payment_token_contract = deploy_contract(
+            contract=context.sources.token,
+            constructor_args={
+                "name": context.token.name,
+                "symbol": context.token.symbol,
+                "decimals": context.token.decimals,
+                "initial_supply": context.token.initial_supply,
+                "recipient": context.anyone_account_contract
+            },
+        ).contract_address
+
         # Carbonable project deployment
         context.carbonable_project_class_hash = declare(contract=context.sources.project).class_hash
         calldata = {
@@ -67,18 +79,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
                 "selector": context.selector.initializer,
                 "calldata": calldata.values(),
             }
-        ).contract_address
-
-        # Payment token deployment
-        context.payment_token_contract = deploy_contract(
-            contract=context.sources.token,
-            constructor_args={
-                "name": context.token.name,
-                "symbol": context.token.symbol,
-                "decimals": context.token.decimals,
-                "initial_supply": context.token.initial_supply,
-                "recipient": context.anyone_account_contract
-            },
         ).contract_address
 
         # Carbonable minter deployment
@@ -107,12 +107,19 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ).contract_address
 
         # Carbonable Starkvest deployment
+        context.carbonable_starkvest_class_hash = declare(contract=context.sources.starkvest).class_hash
+        calldata = {
+            "erc20_address": context.payment_token_contract,
+            "owner": context.admin_account_contract,
+            "proxy_admin": context.admin_account_contract,
+        }
         context.carbonable_starkvest_contract = deploy_contract(
-            contract=context.sources.starkvest,
+            contract=context.sources.proxy,
             constructor_args={
-                "owner": context.admin_account_contract,
-                "erc20_address": context.payment_token_contract,
-            },
+                "implementation_hash": context.carbonable_starkvest_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": calldata.values(),
+            }
         ).contract_address
 
         # Carbonable yielder deployment

@@ -74,15 +74,18 @@ namespace IStarkVest {
     func withdraw(amount: Uint256) {
     }
 
-    func transferOwnership(newOwner: felt) {
-    }
-
-    func renounceOwnership() {
-    }
-
     func vesting_count(account: felt) -> (vesting_count: felt) {
     }
 
     func get_vesting_id(account: felt, vesting_index: felt) -> (vesting_id: felt) {
+    }
+
+    func setAdmin(new_admin: felt) {
+    }
+
+    func transferOwnership(newOwner: felt) {
+    }
+
+    func renounceOwnership() {
     }
 }
