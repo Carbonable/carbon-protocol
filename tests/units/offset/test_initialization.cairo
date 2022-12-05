@@ -24,10 +24,8 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
     assert carbonable_project_address = context.mocks.carbonable_project_address;
 
-    let (times_len, times) = CarbonableOffseter.times();
-    assert times_len = context.absorption.times_len;
-    assert times[0] = context.absorption.times[0];
-    assert times[times_len - 1] = context.absorption.times[times_len - 1];
+    let (time_step) = CarbonableOffseter.time_step();
+    assert time_step = context.absorption.time_step;
 
     let (absorptions_len, absorptions) = CarbonableOffseter.absorptions();
     assert absorptions_len = context.absorption.values_len;

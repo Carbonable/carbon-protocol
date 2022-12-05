@@ -24,8 +24,7 @@ struct Mocks {
 }
 
 struct Absorption {
-    times_len: felt,
-    times: felt*,
+    time_step: felt,
     values_len: felt,
     values: felt*,
 }
@@ -61,17 +60,14 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local admin;
     local anyone;
     local carbonable_project_address;
-    local times_len;
-    let (local times: felt*) = alloc();
+    local time_step;
     local absorptions_len;
     let (local absorptions: felt*) = alloc();
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
-        ids.times_len = len(context.absorption.times)
-        for idx, time in enumerate(context.absorption.times):
-            memory[ids.times + idx] = time
+        ids.time_step = context.absorption.time_step
         ids.absorptions_len = len(context.absorption.values)
         for idx, absorption in enumerate(context.absorption.values):
             memory[ids.absorptions + idx] = absorption
@@ -80,8 +76,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     // Instantiate farmer
     CarbonableOffseter.initializer(
         carbonable_project_address=carbonable_project_address,
-        times_len=times_len,
-        times=times,
+        time_step=time_step,
         absorptions_len=absorptions_len,
         absorptions=absorptions,
     );
@@ -94,8 +89,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         );
 
     local absorption: Absorption = Absorption(
-        times_len=times_len,
-        times=times,
+        time_step=time_step,
         values_len=absorptions_len,
         values=absorptions,
         );

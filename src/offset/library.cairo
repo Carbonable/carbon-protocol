@@ -55,11 +55,7 @@ func registered_time_(tokenId: Uint256) -> (time: felt) {
 }
 
 @storage_var
-func times_len_() -> (length: felt) {
-}
-
-@storage_var
-func times_(index: felt) -> (absorption: felt) {
+func time_step_() -> (step: felt) {
 }
 
 @storage_var
@@ -96,22 +92,18 @@ namespace CarbonableOffseter {
     //
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        carbonable_project_address: felt,
-        times_len: felt,
-        times: felt*,
-        absorptions_len: felt,
-        absorptions: felt*,
+        carbonable_project_address: felt, time_step: felt, absorptions_len: felt, absorptions: felt*
     ) {
         alloc_locals;
         carbonable_project_address_.write(carbonable_project_address);
 
         // [Check] Array consistency
-        with_attr error_message(
-                "CarbonableOffseter: times and absorptions must have the same len") {
-            assert times_len = absorptions_len;
+        let not_zero = is_not_zero(absorptions_len);
+        with_attr error_message("CarbonableOffseter: absorptions must be defined") {
+            assert not_zero = TRUE;
         }
 
-        _write_times(times_len=times_len, times=times);
+        time_step_.write(time_step);
         _write_absorptions(absorptions_len=absorptions_len, absorptions=absorptions);
 
         return ();
@@ -128,11 +120,11 @@ namespace CarbonableOffseter {
         return (carbonable_project_address,);
     }
 
-    func times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        times_len: felt, times: felt*
+    func time_step{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        time_step: felt
     ) {
-        let (times_len, times) = _read_times();
-        return (times_len=times_len, times=times,);
+        let (time_step) = time_step_.read();
+        return (time_step=time_step,);
     }
 
     func absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -382,55 +374,6 @@ namespace CarbonableOffseter {
     // Internals
     //
 
-    func _write_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        times_len: felt, times: felt*
-    ) {
-        alloc_locals;
-
-        let not_zero = is_not_zero(times_len);
-        with_attr error_message("CarbonableOffseter: times_len must be positive") {
-            assert not_zero = TRUE;
-        }
-        times_len_.write(times_len);
-        _write_times_iter(index=times_len - 1, times=times);
-        return ();
-    }
-
-    func _write_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, times: felt*
-    ) {
-        alloc_locals;
-        times_.write(index, times[index]);
-        if (index == 0) {
-            return ();
-        }
-        _write_times_iter(index=index - 1, times=times);
-        return ();
-    }
-
-    func _read_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        times_len: felt, times: felt*
-    ) {
-        alloc_locals;
-        let (times_len) = times_len_.read();
-        let (local times: felt*) = alloc();
-        _read_times_iter(index=times_len - 1, times=times);
-        return (times_len=times_len, times=times);
-    }
-
-    func _read_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, times: felt*
-    ) {
-        alloc_locals;
-        let (time) = times_.read(index);
-        assert times[index] = time;
-        if (index == 0) {
-            return ();
-        }
-        _read_times_iter(index=index - 1, times=times);
-        return ();
-    }
-
     func _write_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         absorptions_len: felt, absorptions: felt*
     ) {
@@ -618,13 +561,14 @@ namespace CarbonableOffseter {
     ) -> (computed_absorption: felt) {
         alloc_locals;
 
-        let (_, absorptions) = _read_absorptions();
-        let (times_len, times) = _read_times();
+        let (time_step) = time_step_.read();
+        let (absorptions_len, absorptions) = _read_absorptions();
+
         let (computed_absorption) = _compute_absorption_iter(
             time=time,
-            index=times_len - 1,
-            times=times,
+            index=absorptions_len - 1,
             absorptions=absorptions,
+            time_step=time_step,
             next_time=0,
             next_absorption=0,
         );
@@ -634,13 +578,13 @@ namespace CarbonableOffseter {
     func _compute_absorption_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         time: felt,
         index: felt,
-        times: felt*,
         absorptions: felt*,
+        time_step: felt,
         next_time: felt,
         next_absorption: felt,
     ) -> (computed_absorption: felt) {
-        let stored_time = times[index];
         let stored_absorption = absorptions[index];
+        let stored_time = index * time_step;
         let is_after = is_le(stored_time, time);
         if (is_after == TRUE) {
             // [Check] first iteration
@@ -679,8 +623,8 @@ namespace CarbonableOffseter {
         let (computed_absorption) = _compute_absorption_iter(
             time=time,
             index=index - 1,
-            times=times,
             absorptions=absorptions,
+            time_step=time_step,
             next_time=stored_time,
             next_absorption=stored_absorption,
         );
