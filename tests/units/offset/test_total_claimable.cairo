@@ -17,40 +17,45 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
-    let two = Uint256(low=2, high=0);
     let (contract_address) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-    %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
 
+    // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
+
+    // At t=0
+    %{ stop_warp=warp(blk_timestamp=0) %}
+
+    // Total claimable is 0
+    let (total_claimable) = CarbonableOffseter.total_claimable();
+    assert total_claimable = context.absorption.values[0];
+    %{ stop_warp() %}
+
+    // At t=357
+    %{ stop_warp=warp(blk_timestamp=357) %}
+
+    // Deposit token #1
     let (success) = CarbonableOffseter.deposit(token_id=one);
     assert success = 1;
+
+    // At t=1000
+    %{ stop_warp=warp(blk_timestamp=1000) %}
+
+    // Total claimable is 11011000 = 1573000000 - 1561989000
+    let (total_claimable) = CarbonableOffseter.total_claimable();
+    assert total_claimable = 11011000;
+    %{ stop_warp() %}
     %{ stop() %}
-
-    %{ stop=start_prank(context.signers.admin) %}
-    let (success) = CarbonableOffseter.deposit(token_id=two);
-    assert success = 1;
-    %{ stop() %}
-
-    %{ stop_mock() %}
-    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [2, 0]) %}
-
-    let (balance) = CarbonableOffseter.total_locked();
-    assert balance = Uint256(low=2, high=0);
-
-    let (owner) = CarbonableOffseter.registred_owner_of(one);
-    assert owner = context.signers.anyone;
-
-    let (owner) = CarbonableOffseter.registred_owner_of(two);
-    assert owner = context.signers.admin;
 
     return ();
 }

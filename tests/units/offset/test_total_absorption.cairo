@@ -16,15 +16,22 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
     let (local context) = prepare();
+    let values_len = context.absorption.values_len;
 
-    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
-    let (balance) = CarbonableOffseter.total_locked();
-    assert balance = Uint256(low=1, high=0);
+    %{ stop_warp=warp(blk_timestamp=0) %}
+    let (absorption) = CarbonableOffseter.total_absorption();
+    assert absorption = context.absorption.values[0];
+    %{ stop_warp() %}
+
+    %{ stop_warp=warp(blk_timestamp=1000) %}
+    let (absorption) = CarbonableOffseter.total_absorption();
+    assert absorption = context.absorption.values[values_len - 1];
+    %{ stop_warp() %}
 
     return ();
 }

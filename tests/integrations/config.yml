@@ -18,3 +18,23 @@ minter:
   unit_price: 10
   max_supply_for_mint: 10
   reserved_supply_for_mint: 4
+
+absorption:
+  times:
+    - 0
+    - 3
+    - 6
+    - 9
+    - 12
+    - 15
+    - 357
+    - 360
+  values:
+    - 0
+    - 1179750
+    - 2359500
+    - 3539250
+    - 4719000
+    - 6685250
+    - 1561989000
+    - 1573000000

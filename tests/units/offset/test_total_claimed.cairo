@@ -17,45 +17,47 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
     let (local context) = prepare();
+    let values_len = context.absorption.values_len;
     let one = Uint256(low=1, high=0);
-    let two = Uint256(low=2, high=0);
     let (contract_address) = get_contract_address();
 
-    // start period at timestamp = 100
-    %{ stop_warp = warp(100) %}
-    let unlocked_duration = 30;
-    let period_duration = 100;
-    let (success) = CarbonableOffseter.start_period(
-        unlocked_duration=unlocked_duration, period_duration=period_duration, absorption=2
-    );
-    assert success = TRUE;
-    %{ stop_warp() %}
-
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-
-    %{ stop=start_prank(context.signers.anyone) %}
-    let (success) = CarbonableOffseter.deposit(token_id=one);
-    assert success = 1;
-    %{ stop() %}
-
-    // snapshot at timestamp = 131
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
-    %{ stop_warp = warp(131) %}
-    %{ stop=start_prank(context.signers.admin) %}
-    let (success) = CarbonableOffseter.snapshot();
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+
+    // Anyone
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    // At t=0
+    %{ stop_warp=warp(blk_timestamp=0) %}
+
+    // Deposit token #1
+    let (success) = CarbonableOffseter.deposit(token_id=one);
     assert success = 1;
-    %{ stop() %}
+
+    // Total claimable is 0
+    let (total_claimed) = CarbonableOffseter.total_claimed();
+    assert total_claimed = context.absorption.values[0];
     %{ stop_warp() %}
 
-    let (total_offsetable) = CarbonableOffseter.total_offsetable(context.signers.anyone);
-    assert total_offsetable = two;
+    // At t=1000
+    %{ stop_warp=warp(blk_timestamp=1000) %}
+
+    // Claim
+    let (success) = CarbonableOffseter.claim();
+    assert success = 1;
+
+    // Total claimed is 1573000000
+    let (total_claimed) = CarbonableOffseter.total_claimed();
+    assert total_claimed = context.absorption.values[values_len - 1];
+    %{ stop_warp() %}
+    %{ stop() %}
 
     return ();
 }
