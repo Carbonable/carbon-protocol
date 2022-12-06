@@ -1146,9 +1146,8 @@ namespace admin_instance {
 
     // Offseter
 
-    func total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        balance: felt
-    ) {
+    func offseter_total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (balance: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         with carbonable_offseter {
             let (balance) = carbonable_offseter_instance.total_deposited();
@@ -1156,9 +1155,8 @@ namespace admin_instance {
         return (balance=balance.low,);
     }
 
-    func total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        total_claimed: felt
-    ) {
+    func offseter_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (total_claimed: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         with carbonable_offseter {
             let (total_claimed) = carbonable_offseter_instance.total_claimed();
@@ -1166,9 +1164,8 @@ namespace admin_instance {
         return (total_claimed=total_claimed,);
     }
 
-    func total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        total_claimable: felt
-    ) {
+    func offseter_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (total_claimable: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         with carbonable_offseter {
             let (total_claimable) = carbonable_offseter_instance.total_claimable();
@@ -1176,9 +1173,8 @@ namespace admin_instance {
         return (total_claimable=total_claimable,);
     }
 
-    func total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        absorption: felt
-    ) {
+    func offseter_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (absorption: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         with carbonable_offseter {
             let (absorption) = carbonable_offseter_instance.total_absorption();
@@ -1186,7 +1182,7 @@ namespace admin_instance {
         return (absorption=absorption,);
     }
 
-    func claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func offseter_claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
     ) -> (claimable: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
@@ -1196,7 +1192,7 @@ namespace admin_instance {
         return (claimable=claimable,);
     }
 
-    func claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func offseter_claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
     ) -> (claimed: felt) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
