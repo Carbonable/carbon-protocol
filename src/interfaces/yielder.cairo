@@ -28,7 +28,7 @@ namespace ICarbonableYielder {
     func shares_of(address: felt, precision: felt) -> (share: Uint256) {
     }
 
-    func registred_owner_of(token_id: Uint256) -> (address: felt) {
+    func registered_owner_of(token_id: Uint256) -> (address: felt) {
     }
 
     func create_vestings(

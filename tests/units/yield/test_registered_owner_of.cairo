@@ -17,7 +17,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_registered_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
@@ -46,10 +46,10 @@ func test_registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     let (balance) = CarbonableYielder.total_locked();
     assert balance = Uint256(low=2, high=0);
 
-    let (owner) = CarbonableYielder.registred_owner_of(one);
+    let (owner) = CarbonableYielder.registered_owner_of(one);
     assert owner = context.signers.anyone;
 
-    let (owner) = CarbonableYielder.registred_owner_of(two);
+    let (owner) = CarbonableYielder.registered_owner_of(two);
     assert owner = context.signers.admin;
 
     return ();

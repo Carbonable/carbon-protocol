@@ -217,6 +217,19 @@ func registered_time_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     return CarbonableOffseter.registered_time_of(token_id=token_id);
 }
 
+@view
+func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+    // Desc:
+    //   Return the contract owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   owner(felt): The owner address
+    return Ownable.owner();
+}
+
 //
 // Externals
 //

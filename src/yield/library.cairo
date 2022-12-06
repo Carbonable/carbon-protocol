@@ -195,7 +195,7 @@ namespace CarbonableYielder {
         return (balance=balance,);
     }
 
-    func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func registered_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: Uint256
     ) -> (address: felt) {
         // [Check] Uint256 compliance
@@ -209,7 +209,7 @@ namespace CarbonableYielder {
         let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
         );
-        with_attr error_message("CarbonableYielder: token_id has not been registred") {
+        with_attr error_message("CarbonableYielder: token_id has not been registered") {
             assert owner = contract_address;
         }
 
@@ -432,7 +432,7 @@ namespace CarbonableYielder {
     ) -> (count: felt) {
         alloc_locals;
 
-        // Get registred owner of the current token index
+        // Get registered owner of the current token index
         let (token_id) = IERC721Enumerable.tokenByIndex(
             contract_address=contract_address, index=index
         );
@@ -531,13 +531,13 @@ namespace CarbonableYielder {
     ) {
         alloc_locals;
 
-        // Get registred address of the current token index
+        // Get registered address of the current token index
         let (token_id) = IERC721Enumerable.tokenByIndex(
             contract_address=contract_address, index=index
         );
         let (address) = registration_.read(token_id);
 
-        // If registred then create a vesting for each token_id
+        // If registered then create a vesting for each token_id
         let one = Uint256(low=1, high=0);
         if (address != 0) {
             // The value 1 is the 1 token_id

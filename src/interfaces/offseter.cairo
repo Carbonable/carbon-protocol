@@ -52,6 +52,9 @@ namespace ICarbonableOffseter {
     func registered_time_of(token_id: Uint256) -> (time: felt) {
     }
 
+    func owner() -> (owner: felt) {
+    }
+
     func set_absorptions(absorptions_len: felt, absorptions: felt*) {
     }
 

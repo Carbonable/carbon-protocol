@@ -195,11 +195,11 @@ func shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
-func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func registered_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (address: felt) {
     // Desc:
-    //   Return the registred owner of a token id (0 if token is not locked in the contract)
+    //   Return the registered owner of a token id (0 if token is not locked in the contract)
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -207,8 +207,8 @@ func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     // Explicit args:
     //   token_id(Uint256): Token id
     // Returns:
-    //   address(felt): Registred owner address
-    return CarbonableYielder.registred_owner_of(token_id=token_id);
+    //   address(felt): registered owner address
+    return CarbonableYielder.registered_owner_of(token_id=token_id);
 }
 
 //

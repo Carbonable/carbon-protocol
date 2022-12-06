@@ -70,265 +70,63 @@ func test_deposit_and_withdraw_while_unlock{
     admin.mint(to=anyone_address, token_id=4);
     admin.mint(to=anyone_address, token_id=5);
 
-    // 0.5 T/year is 41700000000000 ng/month which is 8340000000000 ng/month per token for a total supply of 5 tokens
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
-
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
     anyone.project_approve(approved=offseter_address, token_id=3);
     anyone.offseter_deposit(token_id=3);
+    %{ stop_warp() %}
+
+    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
     anyone.offseter_withdraw(token_id=3);
-    anyone.project_approve(approved=offseter_address, token_id=3);
+    %{ stop_warp() %}
+
+    %{ stop_warp = warp(blk_timestamp=7, target_contract_address=ids.offseter_address) %}
     anyone.offseter_deposit(token_id=3);
+    %{ stop_warp() %}
+
+    %{ stop_warp = warp(blk_timestamp=8, target_contract_address=ids.offseter_address) %}
     anyone.project_approve(approved=offseter_address, token_id=4);
     anyone.offseter_deposit(token_id=4);
+    %{ stop_warp() %}
 
-    let (balance) = anyone.offseter_balance_of(anyone_address);
-    assert balance = 2;
+    let (total_deposited) = admin.offseter_total_deposited();
+    assert total_deposited = 2;
 
+    %{ stop_warp = warp(blk_timestamp=9, target_contract_address=ids.offseter_address) %}
     admin.project_approve(approved=offseter_address, token_id=1);
     admin.offseter_deposit(token_id=1);
     %{ stop_warp() %}
 
-    let (owner) = anyone.offseter_registred_owner_of(token_id=3);
+    let (owner) = anyone.offseter_registered_owner_of(token_id=3);
     assert owner = anyone_address;
 
-    let (owner) = anyone.offseter_registred_owner_of(token_id=1);
+    let (time) = anyone.offseter_registered_time_of(token_id=3);
+    assert time = 7;
+
+    let (owner) = anyone.offseter_registered_owner_of(token_id=1);
     assert owner = admin_address;
 
-    let (balance) = anyone.offseter_balance_of(anyone_address);
-    assert balance = 2;
+    let (time) = anyone.offseter_registered_time_of(token_id=1);
+    assert time = 9;
 
-    let (balance) = anyone.offseter_balance_of(admin_address);
-    assert balance = 1;
-
-    let (total_balance) = anyone.offseter_total_locked();
-    assert total_balance = Uint256(low=3, high=0);
-
-    %{ stop_warp = warp(blk_timestamp=8, target_contract_address=ids.offseter_address) %}
-
-    let (total_offsetable) = anyone.total_offsetable(admin_address);
-    assert total_offsetable = 0;
-
-    let (total_offsetable) = anyone.total_offsetable(anyone_address);
-    assert total_offsetable = 0;
-
-    %{ expect_events({"name": "Snapshot"}) %}
-    admin.snapshot();
-
-    let (total_offsetable) = anyone.total_offsetable(admin_address);
-    assert total_offsetable = 8340000000000;
-
-    let (total_offseted) = anyone.total_offseted(admin_address);
-    assert total_offseted = 0;
-
-    let (total_offsetable) = anyone.total_offsetable(anyone_address);
-    assert total_offsetable = 16680000000000;
-
-    let (total_offseted) = anyone.total_offseted(anyone_address);
-    assert total_offseted = 0;
-
-    %{ expect_events({"name": "Offset"}) %}
-    anyone.offset();
-
-    let (total_offsetable) = anyone.total_offsetable(admin_address);
-    assert total_offsetable = 8340000000000;
-
-    let (total_offseted) = anyone.total_offseted(admin_address);
-    assert total_offseted = 0;
-
-    let (total_offsetable) = anyone.total_offsetable(anyone_address);
-    assert total_offsetable = 0;
-
-    let (total_offseted) = anyone.total_offseted(anyone_address);
-    assert total_offseted = 16680000000000;
-
-    %{ stop_warp() %}
+    let (total_balance) = anyone.offseter_total_deposited();
+    assert total_deposited = 3;
 
     %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.offseter_address) %}
-    anyone.offseter_withdraw(token_id=3);
 
-    let (balance) = anyone.offseter_balance_of(anyone_address);
-    assert balance = 1;
+    let (claimable) = admin.offseter_claimable_of(admin_address);
+    assert claimable = 0;
 
-    admin.offseter_withdraw(token_id=1);
+    let (claimable) = admin.offseter_claimable_of(anyone_address);
+    assert claimable = 0;
 
-    let (balance) = anyone.offseter_balance_of(admin_address);
-    assert balance = 0;
+    let (total_claimable) = admin.offseter_total_claimable();
+    assert total_claimable = 0;
 
-    let (balance) = anyone.offseter_balance_of(anyone_address);
-    assert balance = 1;
+    %{ expect_events({"name": "Claim"}) %}
+    anyone.offseter_claim();
 
-    anyone.offseter_withdraw(token_id=4);
-    %{ stop_warp() %}
-
-    let (balance) = anyone.offseter_balance_of(anyone_address);
-    assert balance = 0;
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: token_id has not been registred") %}
-    let (owner) = anyone.offseter_registred_owner_of(token_id=1);
-
-    return ();
-}
-
-@view
-func test_deposit_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    // When admin start a 10s period with 5s unlock
-    // And anyone approves offseter for token 3 at time 1
-    // And anyone deposits token 3 to offseter at time 6
-    // Then a failed transactions expected
-    alloc_locals;
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (offseter_address) = offseter.get_address();
-
-    // Mint tokens
-    admin.mint(to=anyone_address, token_id=3);
-
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
-
-    anyone.project_approve(approved=offseter_address, token_id=3);
-
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: deposits are currently locked") %}
-    anyone.offseter_deposit(token_id=3);
-    %{ stop_warp() %}
-
-    return ();
-}
-
-@view
-func test_withdraw_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) {
-    // When admin start a 10s period with 5s unlock
-    // And anyone approves offseter for token 3 at time 1
-    // And anyone deposits token 3 to offseter at time 5
-    // And anyone withdraws token 3 from offseter at time 6
-    // Then a failed transactions expected
-    alloc_locals;
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (offseter_address) = offseter.get_address();
-
-    // Mint tokens
-    admin.mint(to=anyone_address, token_id=3);
-
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
-    anyone.project_approve(approved=offseter_address, token_id=3);
-
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
-    anyone.offseter_deposit(token_id=3);
-    %{ stop_warp() %}
-
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: withdrawals are currently locked") %}
-    anyone.offseter_withdraw(token_id=3);
-    %{ stop_warp() %}
-
-    return ();
-}
-
-@view
-func test_start_and_start_and_stop_period{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When admin start a 10s period with 5s unlock
-    // And admin start a 20s period with 10s unlock
-    // And admin stop the current period
-    // Then no failed transactions expected
-    alloc_locals;
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (offseter_address) = offseter.get_address();
-
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
-    admin.offseter_start_period(
-        unlocked_duration=10, period_duration=20, absorption=41700000000000
-    );
-    admin.offseter_stop_period();
-
-    return ();
-}
-
-@view
-func test_start_period_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When anyone starts a 10s period with 5s unlock
-    // Then a failed transaction is expected
-    alloc_locals;
-
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.offseter_start_period(
-        unlocked_duration=5, period_duration=10, absorption=41700000000000
-    );
-
-    return ();
-}
-
-@view
-func test_stop_period_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When admin starts a 10s period with 5s unlock
-    // And anyone stops the current period
-    // Then a failed transaction is expected
-    alloc_locals;
-
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.offseter_stop_period();
-
-    return ();
-}
-
-@view
-func test_snapshot_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When admin starts a 10s period with 5s unlock
-    // And anyone snapshots
-    // Then a failed transaction is expected
-    alloc_locals;
-
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.snapshot();
-
-    return ();
-}
-
-@view
-func test_snapshot_revert_not_locked{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When admin snapshots
-    // Then a failed transaction is expected
-    alloc_locals;
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: snapshot must be executed in locked period") %}
-    admin.snapshot();
-
-    return ();
-}
-
-@view
-func test_snapshot_revert_already_snapshoted{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When admin starts a 10s period with 5s unlock
-    // And anyone stops the current period
-    // Then a failed transaction is expected
-    alloc_locals;
-
-    let (offseter_address) = offseter.get_address();
-
-    admin.offseter_start_period(unlocked_duration=5, period_duration=10, absorption=41700000000000);
-
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
-    admin.snapshot();
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: snapshot already executed for the current period") %}
-    admin.snapshot();
-    %{ stop_warp() %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: token_id has not been registered") %}
+    let (owner) = anyone.offseter_registered_owner_of(token_id=1);
 
     return ();
 }

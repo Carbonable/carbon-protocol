@@ -87,10 +87,10 @@ func test_deposit_and_withdraw_while_unlock{
     admin.yielder_deposit(token_id=1);
     %{ stop_warp() %}
 
-    let (owner) = anyone.yielder_registred_owner_of(token_id=3);
+    let (owner) = anyone.yielder_registered_owner_of(token_id=3);
     assert owner = anyone_address;
 
-    let (owner) = anyone.yielder_registred_owner_of(token_id=1);
+    let (owner) = anyone.yielder_registered_owner_of(token_id=1);
     assert owner = admin_address;
 
     let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
@@ -116,8 +116,8 @@ func test_deposit_and_withdraw_while_unlock{
     let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
     assert shares = Uint256(low=0, high=0);
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: token_id has not been registred") %}
-    let (owner) = anyone.yielder_registred_owner_of(token_id=1);
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: token_id has not been registered") %}
+    let (owner) = anyone.yielder_registered_owner_of(token_id=1);
 
     return ();
 }
