@@ -29,6 +29,10 @@ from src.interfaces.starkvest import IStarkVest
 func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
     local merkle_root;
+    local start_time;
+    local time_step;
+    local absorptions_len;
+    let (local absorptions: felt*) = alloc();
     %{
         # Load config
         import sys
@@ -143,8 +147,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         context.carbonable_offseter_class_hash = declare(contract=context.sources.offseter).class_hash
         calldata = {
             "carbonable_project_address": context.carbonable_project_contract,
-            "time_step": context.absorption.time_step,
-            "absorptions": context.absorption.values,
             "owner": context.admin_account_contract,
             "proxy_admin": context.admin_account_contract,
         }
@@ -168,24 +170,34 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ]
 
         # Externalize required variables
+        ids.merkle_root = merkle_root
         context.whitelist = dict(
             merkle_root=merkle_root,
             merkle_proofs=merkle_proofs,
             slots=slots,
             recipients=recipients,
         )
-        ids.merkle_root = merkle_root
+        ids.start_time = context.absorption.start_time
+        ids.time_step = context.absorption.time_step
+        ids.absorptions_len = len(context.absorption.values)
+        for idx, value in enumerate(context.absorption.values):
+            memory[ids.absorptions + idx] = value
     %}
+    // Set absorptions
+    admin_instance.set_time(start_time=start_time, time_step=time_step);
+    admin_instance.set_absorptions(absorptions_len=absorptions_len, absorptions=absorptions);
 
     // Set minter and merkle root
     let (local admin_address) = admin_instance.get_address();
     let (local carbonable_minter) = carbonable_minter_instance.get_address();
-    admin_instance.set_minter(admin_address);
-    admin_instance.set_minter(carbonable_minter);
+    admin_instance.add_minter(admin_address);
+    admin_instance.add_minter(carbonable_minter);
     admin_instance.set_whitelist_merkle_root(merkle_root);
 
+    // Set initial balances between users
     anyone_instance.transfer(admin_address, 500000);
 
+    // Set vesting ownership
     let (local carbonable_starkvest) = carbonable_starkvest_instance.get_address();
     let (local carbonable_yielder) = carbonable_yielder_instance.get_address();
     admin_instance.starkvest_transfer_ownership(carbonable_yielder);
@@ -232,13 +244,92 @@ namespace carbonable_project_instance {
         return (total_supply,);
     }
 
+    func get_start_time{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }() -> (start_time: felt) {
+        let (start_time) = ICarbonableProject.getStartTime(carbonable_project);
+        return (start_time=start_time);
+    }
+
+    func get_final_time{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }() -> (final_time: felt) {
+        let (final_time) = ICarbonableProject.getFinalTime(carbonable_project);
+        return (final_time=final_time);
+    }
+
+    func get_time_step{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }() -> (time_step: felt) {
+        let (time_step) = ICarbonableProject.getTimeStep(carbonable_project);
+        return (time_step=time_step);
+    }
+
+    func get_absorptions{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }() -> (absorptions_len: felt, absorptions: felt*) {
+        let (absorptions_len, absorptions) = ICarbonableProject.getAbsorptions(carbonable_project);
+        return (absorptions_len=absorptions_len, absorptions=absorptions);
+    }
+
+    func get_absorption{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(time: felt) -> (absorption: felt) {
+        let (absorption) = ICarbonableProject.getAbsorption(
+            contract_address=carbonable_project, time=time
+        );
+        return (absorption=absorption);
+    }
+
+    func get_current_absorption{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }() -> (absorption: felt) {
+        let (absorption) = ICarbonableProject.getCurrentAbsorption(
+            contract_address=carbonable_project
+        );
+        return (absorption=absorption);
+    }
+
+    func get_final_absorption{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }() -> (absorption: felt) {
+        let (absorption) = ICarbonableProject.getFinalAbsorption(
+            contract_address=carbonable_project
+        );
+        return (absorption=absorption);
+    }
+
     // Externals
 
-    func set_minter{
+    func add_minter{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
     }(minter: felt, caller: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
-        ICarbonableProject.set_minter(carbonable_project, minter);
+        ICarbonableProject.addMinter(carbonable_project, minter);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func set_time{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(start_time: felt, time_step: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        ICarbonableProject.setTime(
+            contract_address=carbonable_project, start_time=start_time, time_step=time_step
+        );
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func set_absorptions{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(absorptions_len: felt, absorptions: felt*, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        ICarbonableProject.setAbsorptions(
+            contract_address=carbonable_project,
+            absorptions_len=absorptions_len,
+            absorptions=absorptions,
+        );
         %{ stop_prank() %}
         return ();
     }
@@ -306,7 +397,7 @@ namespace carbonable_starkvest_instance {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_starkvest) %}
         let (releasable_amount) = IStarkVest.releasable_amount(carbonable_starkvest, vesting_id);
         %{ stop_prank() %}
-        return (releasable_amount=releasable_amount,);
+        return (releasable_amount=releasable_amount);
     }
 
     // Externals
@@ -485,14 +576,14 @@ namespace carbonable_minter_instance {
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
     }(account: felt) -> (slots: felt) {
         let (slots) = ICarbonableMinter.claimed_slots(carbonable_minter, account);
-        return (slots=slots,);
+        return (slots=slots);
     }
 
     func sold_out{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
     }() -> (status: felt) {
         let (status) = ICarbonableMinter.sold_out(carbonable_minter);
-        return (status=status,);
+        return (status=status);
     }
 
     // Externals
@@ -587,7 +678,7 @@ namespace carbonable_offseter_instance {
     func get_address() -> (carbonable_offseter_contract: felt) {
         tempvar carbonable_offseter_contract;
         %{ ids.carbonable_offseter_contract = context.carbonable_offseter_contract %}
-        return (carbonable_offseter_contract=carbonable_offseter_contract,);
+        return (carbonable_offseter_contract=carbonable_offseter_contract);
     }
 
     // Views
@@ -598,14 +689,14 @@ namespace carbonable_offseter_instance {
         let (carbonable_project_address) = ICarbonableOffseter.carbonable_project_address(
             carbonable_offseter
         );
-        return (carbonable_project_address=carbonable_project_address,);
+        return (carbonable_project_address=carbonable_project_address);
     }
 
     func time_step{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (time_step: felt) {
         let (time_step) = ICarbonableOffseter.time_step(contract_address=carbonable_offseter);
-        return (time_step=time_step,);
+        return (time_step=time_step);
     }
 
     func absorptions{
@@ -614,14 +705,14 @@ namespace carbonable_offseter_instance {
         let (absorptions_len, absorptions) = ICarbonableOffseter.absorptions(
             contract_address=carbonable_offseter
         );
-        return (absorptions_len=absorptions_len, absorptions=absorptions,);
+        return (absorptions_len=absorptions_len, absorptions=absorptions);
     }
 
     func total_deposited{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (balance: Uint256) {
         let (balance) = ICarbonableOffseter.total_deposited(contract_address=carbonable_offseter);
-        return (balance=balance,);
+        return (balance=balance);
     }
 
     func total_claimed{
@@ -630,7 +721,7 @@ namespace carbonable_offseter_instance {
         let (total_claimed) = ICarbonableOffseter.total_claimed(
             contract_address=carbonable_offseter
         );
-        return (total_claimed=total_claimed,);
+        return (total_claimed=total_claimed);
     }
 
     func total_claimable{
@@ -639,16 +730,7 @@ namespace carbonable_offseter_instance {
         let (total_claimable) = ICarbonableOffseter.total_claimable(
             contract_address=carbonable_offseter
         );
-        return (total_claimable=total_claimable,);
-    }
-
-    func total_absorption{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
-    }() -> (absorption: felt) {
-        let (absorption) = ICarbonableOffseter.total_absorption(
-            contract_address=carbonable_offseter
-        );
-        return (absorption=absorption,);
+        return (total_claimable=total_claimable);
     }
 
     func claimable_of{
@@ -657,7 +739,7 @@ namespace carbonable_offseter_instance {
         let (claimable) = ICarbonableOffseter.claimable_of(
             contract_address=carbonable_offseter, address=address
         );
-        return (claimable=claimable,);
+        return (claimable=claimable);
     }
 
     func claimed_of{
@@ -666,7 +748,7 @@ namespace carbonable_offseter_instance {
         let (claimed) = ICarbonableOffseter.claimed_of(
             contract_address=carbonable_offseter, address=address
         );
-        return (claimed=claimed,);
+        return (claimed=claimed);
     }
 
     func registered_owner_of{
@@ -675,7 +757,7 @@ namespace carbonable_offseter_instance {
         let (address) = ICarbonableOffseter.registered_owner_of(
             contract_address=carbonable_offseter, token_id=token_id
         );
-        return (address=address,);
+        return (address=address);
     }
 
     func registered_time_of{
@@ -684,30 +766,17 @@ namespace carbonable_offseter_instance {
         let (time) = ICarbonableOffseter.registered_time_of(
             contract_address=carbonable_offseter, token_id=token_id
         );
-        return (time=time,);
+        return (time=time);
     }
 
     func owner{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (owner: felt) {
         let (owner) = ICarbonableOffseter.owner(contract_address=carbonable_offseter);
-        return (owner=owner,);
+        return (owner=owner);
     }
 
     // Externals
-
-    func set_absorptions{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
-    }(absorptions_len: felt, absorptions: felt*, caller: felt) {
-        %{ stop_prank_offseter = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
-        ICarbonableOffseter.set_absorptions(
-            contract_address=carbonable_offseter,
-            absorptions_len=absorptions_len,
-            absorptions=absorptions,
-        );
-        %{ stop_prank_offseter() %}
-        return ();
-    }
 
     func claim{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
@@ -715,7 +784,7 @@ namespace carbonable_offseter_instance {
         %{ stop_prank_offseter = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
         let (success) = ICarbonableOffseter.claim(contract_address=carbonable_offseter);
         %{ stop_prank_offseter() %}
-        return (success=success,);
+        return (success=success);
     }
 
     func deposit{
@@ -726,7 +795,7 @@ namespace carbonable_offseter_instance {
         let (success) = ICarbonableOffseter.deposit(carbonable_offseter, token_id);
         %{ stop_prank_offseter() %}
         %{ stop_prank_project() %}
-        return (success=success,);
+        return (success=success);
     }
 
     func withdraw{
@@ -737,7 +806,7 @@ namespace carbonable_offseter_instance {
         let (success) = ICarbonableOffseter.withdraw(carbonable_offseter, token_id);
         %{ stop_prank_offseter() %}
         %{ stop_prank_project() %}
-        return (success=success,);
+        return (success=success);
     }
 
     func transferOwnership{
@@ -767,7 +836,7 @@ namespace carbonable_yielder_instance {
     func get_address() -> (carbonable_yielder_contract: felt) {
         tempvar carbonable_yielder_contract;
         %{ ids.carbonable_yielder_contract = context.carbonable_yielder_contract %}
-        return (carbonable_yielder_contract=carbonable_yielder_contract,);
+        return (carbonable_yielder_contract=carbonable_yielder_contract);
     }
 
     // Views
@@ -778,35 +847,35 @@ namespace carbonable_yielder_instance {
         let (carbonable_project_address) = ICarbonableYielder.carbonable_project_address(
             carbonable_yielder
         );
-        return (carbonable_project_address=carbonable_project_address,);
+        return (carbonable_project_address=carbonable_project_address);
     }
 
     func is_locked{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (status: felt) {
         let (status) = ICarbonableYielder.is_locked(carbonable_yielder);
-        return (status=status,);
+        return (status=status);
     }
 
     func total_locked{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (balance: Uint256) {
         let (balance) = ICarbonableYielder.total_locked(carbonable_yielder);
-        return (balance=balance,);
+        return (balance=balance);
     }
 
     func shares_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(address: felt, precision: felt) -> (shares: Uint256) {
         let (shares) = ICarbonableYielder.shares_of(carbonable_yielder, address, precision);
-        return (shares=shares,);
+        return (shares=shares);
     }
 
     func registered_owner_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(token_id: Uint256) -> (address: felt) {
         let (address) = ICarbonableYielder.registered_owner_of(carbonable_yielder, token_id);
-        return (address=address,);
+        return (address=address);
     }
 
     // Externals
@@ -819,7 +888,7 @@ namespace carbonable_yielder_instance {
             carbonable_yielder, unlocked_duration, period_duration
         );
         %{ stop_prank() %}
-        return (success=success,);
+        return (success=success);
     }
 
     func stop_period{
@@ -828,7 +897,7 @@ namespace carbonable_yielder_instance {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
         let (success) = ICarbonableYielder.stop_period(carbonable_yielder);
         %{ stop_prank() %}
-        return (success=success,);
+        return (success=success);
     }
 
     func deposit{
@@ -839,7 +908,7 @@ namespace carbonable_yielder_instance {
         let (success) = ICarbonableYielder.deposit(carbonable_yielder, token_id);
         %{ stop_prank_yielder() %}
         %{ stop_prank_project() %}
-        return (success=success,);
+        return (success=success);
     }
 
     func withdraw{
@@ -850,7 +919,7 @@ namespace carbonable_yielder_instance {
         let (success) = ICarbonableYielder.withdraw(carbonable_yielder, token_id);
         %{ stop_prank_yielder() %}
         %{ stop_prank_project() %}
-        return (success=success,);
+        return (success=success);
     }
 
     func create_vestings{
@@ -883,7 +952,7 @@ namespace carbonable_yielder_instance {
         %{ stop_prank_yielder() %}
         %{ stop_prank_project() %}
         %{ stop_prank_starkves() %}
-        return (success=success,);
+        return (success=success);
     }
 }
 
@@ -966,7 +1035,7 @@ namespace admin_instance {
         with carbonable_project {
             let (owner) = carbonable_project_instance.ownerOf(tokenId=token_id_uint256);
         }
-        return (owner=owner,);
+        return (owner=owner);
     }
 
     func project_approve{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -983,6 +1052,32 @@ namespace admin_instance {
         return ();
     }
 
+    func set_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        start_time: felt, time_step: felt
+    ) {
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_project {
+            carbonable_project_instance.set_time(
+                start_time=start_time, time_step=time_step, caller=caller
+            );
+        }
+        return ();
+    }
+
+    func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        absorptions_len: felt, absorptions: felt*
+    ) {
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_project {
+            carbonable_project_instance.set_absorptions(
+                absorptions_len=absorptions_len, absorptions=absorptions, caller=caller
+            );
+        }
+        return ();
+    }
+
     // Minter
 
     func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -992,7 +1087,7 @@ namespace admin_instance {
         with carbonable_minter {
             let (status) = carbonable_minter_instance.sold_out();
         }
-        return (status=status,);
+        return (status=status);
     }
 
     func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -1094,11 +1189,11 @@ namespace admin_instance {
         return ();
     }
 
-    func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+    func add_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
         let (carbonable_project) = carbonable_project_instance.get_address();
         let (caller) = get_address();
         with carbonable_project {
-            carbonable_project_instance.set_minter(minter=minter, caller=caller);
+            carbonable_project_instance.add_minter(minter=minter, caller=caller);
         }
         return ();
     }
@@ -1168,7 +1263,7 @@ namespace admin_instance {
         with carbonable_offseter {
             let (balance) = carbonable_offseter_instance.total_deposited();
         }
-        return (balance=balance.low,);
+        return (balance=balance.low);
     }
 
     func offseter_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1177,7 +1272,7 @@ namespace admin_instance {
         with carbonable_offseter {
             let (total_claimed) = carbonable_offseter_instance.total_claimed();
         }
-        return (total_claimed=total_claimed,);
+        return (total_claimed=total_claimed);
     }
 
     func offseter_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1186,16 +1281,7 @@ namespace admin_instance {
         with carbonable_offseter {
             let (total_claimable) = carbonable_offseter_instance.total_claimable();
         }
-        return (total_claimable=total_claimable,);
-    }
-
-    func offseter_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (absorption: felt) {
-        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
-        with carbonable_offseter {
-            let (absorption) = carbonable_offseter_instance.total_absorption();
-        }
-        return (absorption=absorption,);
+        return (total_claimable=total_claimable);
     }
 
     func offseter_claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1205,7 +1291,7 @@ namespace admin_instance {
         with carbonable_offseter {
             let (claimable) = carbonable_offseter_instance.claimable_of(address=address);
         }
-        return (claimable=claimable,);
+        return (claimable=claimable);
     }
 
     func offseter_claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1215,7 +1301,7 @@ namespace admin_instance {
         with carbonable_offseter {
             let (claimed) = carbonable_offseter_instance.claimed_of(address=address);
         }
-        return (claimed=claimed,);
+        return (claimed=claimed);
     }
 
     func offseter_registered_owner_of{
@@ -1228,7 +1314,7 @@ namespace admin_instance {
                 token_id=token_id_uint256
             );
         }
-        return (address=address,);
+        return (address=address);
     }
 
     func offseter_registered_time_of{
@@ -1239,20 +1325,7 @@ namespace admin_instance {
         with carbonable_offseter {
             let (time) = carbonable_offseter_instance.registered_time_of(token_id=token_id_uint256);
         }
-        return (time=time,);
-    }
-
-    func offseter_set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        absorptions_len: felt, absorptions: felt*
-    ) {
-        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
-        let (caller) = get_address();
-        with carbonable_offseter {
-            carbonable_offseter_instance.set_absorptions(
-                absorptions_len=absorptions_len, absorptions=absorptions, caller=caller
-            );
-        }
-        return ();
+        return (time=time);
     }
 
     func offseter_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -1350,7 +1423,7 @@ namespace admin_instance {
         with carbonable_yielder {
             let (status) = carbonable_yielder_instance.is_locked();
         }
-        return (status=status,);
+        return (status=status);
     }
 
     func yielder_total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1359,7 +1432,7 @@ namespace admin_instance {
         with carbonable_yielder {
             let (balance) = carbonable_yielder_instance.total_locked();
         }
-        return (balance=balance,);
+        return (balance=balance);
     }
 
     func yielder_shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1371,7 +1444,7 @@ namespace admin_instance {
                 address=address, precision=precision
             );
         }
-        return (shares=shares,);
+        return (shares=shares);
     }
 
     func yielder_registered_owner_of{
@@ -1384,7 +1457,7 @@ namespace admin_instance {
                 token_id=token_id_uint256
             );
         }
-        return (address=address,);
+        return (address=address);
     }
 
     func yielder_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1713,7 +1786,7 @@ namespace anyone_instance {
         with carbonable_offseter {
             let (balance) = carbonable_offseter_instance.total_deposited();
         }
-        return (balance=balance.low,);
+        return (balance=balance.low);
     }
 
     func offseter_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1722,7 +1795,7 @@ namespace anyone_instance {
         with carbonable_offseter {
             let (total_claimed) = carbonable_offseter_instance.total_claimed();
         }
-        return (total_claimed=total_claimed,);
+        return (total_claimed=total_claimed);
     }
 
     func offseter_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1731,16 +1804,7 @@ namespace anyone_instance {
         with carbonable_offseter {
             let (total_claimable) = carbonable_offseter_instance.total_claimable();
         }
-        return (total_claimable=total_claimable,);
-    }
-
-    func offseter_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (absorption: felt) {
-        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
-        with carbonable_offseter {
-            let (absorption) = carbonable_offseter_instance.total_absorption();
-        }
-        return (absorption=absorption,);
+        return (total_claimable=total_claimable);
     }
 
     func offseter_claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1750,7 +1814,7 @@ namespace anyone_instance {
         with carbonable_offseter {
             let (claimable) = carbonable_offseter_instance.claimable_of(address=address);
         }
-        return (claimable=claimable,);
+        return (claimable=claimable);
     }
 
     func offseter_claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1760,7 +1824,7 @@ namespace anyone_instance {
         with carbonable_offseter {
             let (claimed) = carbonable_offseter_instance.claimed_of(address=address);
         }
-        return (claimed=claimed,);
+        return (claimed=claimed);
     }
 
     func offseter_registered_owner_of{
@@ -1773,7 +1837,7 @@ namespace anyone_instance {
                 token_id=token_id_uint256
             );
         }
-        return (address=address,);
+        return (address=address);
     }
 
     func offseter_registered_time_of{
@@ -1784,20 +1848,7 @@ namespace anyone_instance {
         with carbonable_offseter {
             let (time) = carbonable_offseter_instance.registered_time_of(token_id=token_id_uint256);
         }
-        return (time=time,);
-    }
-
-    func offseter_set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        absorptions_len: felt, absorptions: felt*
-    ) {
-        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
-        let (caller) = get_address();
-        with carbonable_offseter {
-            carbonable_offseter_instance.set_absorptions(
-                absorptions_len=absorptions_len, absorptions=absorptions, caller=caller
-            );
-        }
-        return ();
+        return (time=time);
     }
 
     func offseter_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -1809,7 +1860,7 @@ namespace anyone_instance {
             let (success) = carbonable_offseter_instance.claim(caller=caller);
             assert success = TRUE;
         }
-        return (success=success,);
+        return (success=success);
     }
 
     func offseter_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1895,7 +1946,7 @@ namespace anyone_instance {
         with carbonable_yielder {
             let (status) = carbonable_yielder_instance.is_locked();
         }
-        return (status=status,);
+        return (status=status);
     }
 
     func yielder_total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1904,7 +1955,7 @@ namespace anyone_instance {
         with carbonable_yielder {
             let (balance) = carbonable_yielder_instance.total_locked();
         }
-        return (balance=balance,);
+        return (balance=balance);
     }
 
     func yielder_shares_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -1916,7 +1967,7 @@ namespace anyone_instance {
                 address=address, precision=precision
             );
         }
-        return (shares=shares,);
+        return (shares=shares);
     }
 
     func yielder_registered_owner_of{
@@ -1929,7 +1980,7 @@ namespace anyone_instance {
                 token_id=token_id_uint256
             );
         }
-        return (address=address,);
+        return (address=address);
     }
 
     func yielder_start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -2051,7 +2102,7 @@ namespace anyone_instance {
             );
             assert_not_equal(vesting_id, 0);
         }
-        return (vesting_id=vesting_id,);
+        return (vesting_id=vesting_id);
     }
 
     func releasable_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -2072,6 +2123,6 @@ namespace anyone_instance {
             }
         }
 
-        return (releasable_amount=releasable_amount,);
+        return (releasable_amount=releasable_amount);
     }
 }

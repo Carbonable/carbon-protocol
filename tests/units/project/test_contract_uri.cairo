@@ -29,7 +29,6 @@ func test_contract_uri{
     let (local context) = prepare();
 
     // run scenario
-    %{ stop=start_prank(context.signers.admin) %}
 
     let (str) = StringCodec.ss_to_string('ipfs://carbonable/');
     CarbonableProject.set_uri(uri_len=str.len, uri=str.data);
@@ -43,8 +42,6 @@ func test_contract_uri{
     let (expected_str) = StringUtil.concat(pre_str, ext_str);
 
     assert_string(returned_str, expected_str);
-
-    %{ stop() %}
 
     return ();
 }

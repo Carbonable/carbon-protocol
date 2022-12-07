@@ -30,8 +30,6 @@ func test_token_uri{
     let (local context) = prepare();
 
     // run scenario
-    %{ stop=start_prank(context.signers.admin) %}
-
     let (str) = StringCodec.ss_to_string('ipfs://carbonable/');
     CarbonableProject.set_uri(uri_len=str.len, uri=str.data);
 
@@ -46,8 +44,6 @@ func test_token_uri{
 
     assert_string(returned_str, expected_str);
 
-    %{ stop() %}
-
     return ();
 }
 
@@ -61,16 +57,12 @@ func test_token_uri_revert_invalid_uint256{
     let (local context) = prepare();
 
     // run scenario
-    %{ stop=start_prank(context.signers.admin) %}
-
     let (str) = StringCodec.ss_to_string('ipfs://carbonable/');
     CarbonableProject.set_uri(uri_len=str.len, uri=str.data);
 
     let invalid = Uint256(0, -1);
     %{ expect_revert("TRANSACTION_FAILED", "Metadata: token_id is not a valid Uint256") %}
     let (len, array) = CarbonableProject.token_uri(invalid);
-
-    %{ stop() %}
 
     return ();
 }

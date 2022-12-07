@@ -323,12 +323,130 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
     return Ownable.owner();
 }
 
+@view
+func getStartTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    time: felt
+) {
+    // Desc:
+    //   Return the stored start time
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   time(felt): Start time
+    return CarbonableProject.start_time();
+}
+
+@view
+func getFinalTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    time: felt
+) {
+    // Desc:
+    //   Return the computed final time
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   time(felt): Final time
+    return CarbonableProject.final_time();
+}
+
+@view
+func getTimeStep{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    step: felt
+) {
+    // Desc:
+    //   Return the stored time step
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   step(felt): Time step
+    return CarbonableProject.time_step();
+}
+
+@view
+func getAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorptions_len: felt, absorptions: felt*
+) {
+    // Desc:
+    //   Return the stored absorptions
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   absorptions_len(felt): Array length
+    //   absorptions(felt*): absorption values
+    return CarbonableProject.absorptions();
+}
+
+@view
+func getAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(time: felt) -> (
+    absorption: felt
+) {
+    // Desc:
+    //   Return the computed absorption based on the current timestamp
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   time(felt): Time to compute the absorption
+    // Returns:
+    //   absorption(felt): absorption
+    return CarbonableProject.absorption(time=time);
+}
+
+@view
+func getCurrentAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorption: felt
+) {
+    // Desc:
+    //   Return the computed absorption based on the current timestamp
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   absorption(felt): current absorption
+    return CarbonableProject.current_absorption();
+}
+
+@view
+func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorption: felt
+) {
+    // Desc:
+    //   Return the expected total absorption based on the final timestamp
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   absorptions(felt): Final absorption
+    return CarbonableProject.final_absorption();
+}
+
 //
 // Externals
 //
 
 @external
-func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+    // Desc:
+    //   Add new minter
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   minter(felt): Minter address
+    // Raises:
+    //   caller: caller is not the contract owner
     Ownable.assert_only_owner();
     CarbonableAccessControl.set_minter(minter);
     return ();
@@ -502,6 +620,48 @@ func setURI{
     Ownable.assert_only_owner();
     CarbonableProject.set_uri(uri_len, uri);
     return ();
+}
+
+@external
+func setTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    start_time: felt, time_step: felt
+) {
+    // Desc:
+    //   Set new time step
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   start_time(felt): Absolute start time
+    //   time_step(felt): Time step value
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   time_step: time_step is null
+    Ownable.assert_only_owner();
+    return CarbonableProject.set_time(start_time=start_time, time_step=time_step);
+}
+
+@external
+func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    absorptions_len: felt, absorptions: felt*
+) {
+    // Desc:
+    //   Set new absorption values
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   absorptions_len(felt): Array length
+    //   absorptions(felt*): Absorption values
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   absorptions_len: absorptions_len is null
+    Ownable.assert_only_owner();
+    return CarbonableProject.set_absorptions(
+        absorptions_len=absorptions_len, absorptions=absorptions
+    );
 }
 
 @external

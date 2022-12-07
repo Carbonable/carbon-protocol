@@ -29,6 +29,7 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
@@ -38,7 +39,7 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 
     // Total claimable is 0
     let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = context.absorption.values[0];
+    assert total_claimable = 0;
     %{ stop_warp() %}
 
     // At t=357
@@ -47,13 +48,14 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     // Deposit token #1
     let (success) = CarbonableOffseter.deposit(token_id=one);
     assert success = 1;
+    %{ stop_warp() %}
 
     // At t=1000
     %{ stop_warp=warp(blk_timestamp=1000) %}
 
-    // Total claimable is 11011000 = 1573000000 - 1561989000
+    // Total claimable is 0 because of mock feature
     let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = 11011000;
+    assert total_claimable = 0;
     %{ stop_warp() %}
     %{ stop() %}
 

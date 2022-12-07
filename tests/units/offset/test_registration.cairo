@@ -29,6 +29,7 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [2, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
     %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
 
     %{ stop_mock_ownerOf = mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}

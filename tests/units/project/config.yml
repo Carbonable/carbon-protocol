@@ -1,29 +1,8 @@
-badge:
-  uri: ipfs://carbonable/{id}.json
-  name: badge
-
-project:
-  name: Project
-  symbol: NFT
-
-token:
-  name: Token
-  symbol: TOK
-  decimals: 6
-  initial_supply: 1000000
-
-minter:
-  public_sale_open: 0
-  max_buy_per_tx: 5
-  unit_price: 10
-  max_supply_for_mint: 10
-  reserved_supply_for_mint: 4
-
 absorption:
   start_time: 100
   time_step: 3
   values:
-    - 0
+    - 1
     - 1179750
     - 2359500
     - 3539250

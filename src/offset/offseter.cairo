@@ -19,12 +19,7 @@ from src.offset.library import CarbonableOffseter
 
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    carbonable_project_address: felt,
-    time_step: felt,
-    absorptions_len: felt,
-    absorptions: felt*,
-    owner: felt,
-    proxy_admin: felt,
+    carbonable_project_address: felt, owner: felt, proxy_admin: felt
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -41,9 +36,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   None
     alloc_locals;
 
-    CarbonableOffseter.initializer(
-        carbonable_project_address, time_step, absorptions_len, absorptions
-    );
+    CarbonableOffseter.initializer(carbonable_project_address);
     Ownable.initializer(owner);
     Proxy.initializer(proxy_admin);
     return ();
@@ -108,20 +101,6 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
-func time_step{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    time_step: felt
-) {
-    return CarbonableOffseter.time_step();
-}
-
-@view
-func absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    absorptions_len: felt, absorptions: felt*
-) {
-    return CarbonableOffseter.absorptions();
-}
-
-@view
 func total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     balance: Uint256
 ) {
@@ -140,13 +119,6 @@ func total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     total_claimable: felt
 ) {
     return CarbonableOffseter.total_claimable();
-}
-
-@view
-func total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    absorption: felt
-) {
-    return CarbonableOffseter.total_absorption();
 }
 
 @view
@@ -233,27 +205,6 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
 //
 // Externals
 //
-
-@external
-func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    absorptions_len: felt, absorptions: felt*
-) {
-    // Desc:
-    //   Set new absorption values
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   absorptions_len(felt): Array length
-    //   absorptions(felt*): Absorption values
-    // Raises:
-    //   caller: caller is not the contract owner
-    //   absorptions_len: absorptions_len is null
-    return CarbonableOffseter.set_absorptions(
-        absorptions_len=absorptions_len, absorptions=absorptions
-    );
-}
 
 @external
 func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {

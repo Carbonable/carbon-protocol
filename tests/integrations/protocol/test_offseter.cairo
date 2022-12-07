@@ -70,28 +70,56 @@ func test_deposit_and_withdraw_while_unlock{
     admin.mint(to=anyone_address, token_id=4);
     admin.mint(to=anyone_address, token_id=5);
 
+    // At t = 5
     %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.offseter_address) %}
+
+    // Anyone deposits token #3
     anyone.project_approve(approved=offseter_address, token_id=3);
     anyone.offseter_deposit(token_id=3);
+
+    // Claimable is 0
+    let (claimable) = anyone.offseter_claimable_of(address=anyone_address);
+    assert claimable = 0;
     %{ stop_warp() %}
 
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.offseter_address) %}
+    // At t = 103
+    %{ stop_warp = warp(blk_timestamp=103, target_contract_address=ids.offseter_address) %}
+
+    // Anyone withdraws token #3
     anyone.offseter_withdraw(token_id=3);
+
+    // Claimable is 1179750
+    let (claimable) = anyone.offseter_claimable_of(address=anyone_address);
+    assert claimable = 1179750;
+
+    // Claimed is 0
+    let (claimed) = anyone.offseter_claimed_of(address=anyone_address);
+    assert claimed = 0;
     %{ stop_warp() %}
 
-    %{ stop_warp = warp(blk_timestamp=7, target_contract_address=ids.offseter_address) %}
+    // At t = 104
+    %{ stop_warp = warp(blk_timestamp=104, target_contract_address=ids.offseter_address) %}
+
+    // Anyone deposits token #3
     anyone.offseter_deposit(token_id=3);
     %{ stop_warp() %}
 
-    %{ stop_warp = warp(blk_timestamp=8, target_contract_address=ids.offseter_address) %}
+    // At t = 105
+    %{ stop_warp = warp(blk_timestamp=105, target_contract_address=ids.offseter_address) %}
+
+    // Anyone deposits token #4
     anyone.project_approve(approved=offseter_address, token_id=4);
     anyone.offseter_deposit(token_id=4);
     %{ stop_warp() %}
 
+    // Total deposited is 2
     let (total_deposited) = admin.offseter_total_deposited();
     assert total_deposited = 2;
 
+    // At t = 109
     %{ stop_warp = warp(blk_timestamp=9, target_contract_address=ids.offseter_address) %}
+
+    // Admin deposits token #1
     admin.project_approve(approved=offseter_address, token_id=1);
     admin.offseter_deposit(token_id=1);
     %{ stop_warp() %}
@@ -100,18 +128,18 @@ func test_deposit_and_withdraw_while_unlock{
     assert owner = anyone_address;
 
     let (time) = anyone.offseter_registered_time_of(token_id=3);
-    assert time = 7;
+    assert time = 107;
 
     let (owner) = anyone.offseter_registered_owner_of(token_id=1);
     assert owner = admin_address;
 
     let (time) = anyone.offseter_registered_time_of(token_id=1);
-    assert time = 9;
+    assert time = 109;
 
     let (total_balance) = anyone.offseter_total_deposited();
     assert total_deposited = 3;
 
-    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp = warp(blk_timestamp=110, target_contract_address=ids.offseter_address) %}
 
     let (claimable) = admin.offseter_claimable_of(admin_address);
     assert claimable = 0;
@@ -126,7 +154,7 @@ func test_deposit_and_withdraw_while_unlock{
     anyone.offseter_claim();
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: token_id has not been registered") %}
-    let (owner) = anyone.offseter_registered_owner_of(token_id=1);
+    let (owner) = anyone.offseter_registered_owner_of(token_id=2);
 
     return ();
 }

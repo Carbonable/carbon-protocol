@@ -3,7 +3,6 @@
 %lang starknet
 
 // Starkware dependencies
-from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
@@ -23,16 +22,9 @@ struct Mocks {
     carbonable_project_address: felt,
 }
 
-struct Absorption {
-    time_step: felt,
-    values_len: felt,
-    values: felt*,
-}
-
 struct TestContext {
     signers: Signers,
     mocks: Mocks,
-    absorption: Absorption,
 }
 
 //
@@ -60,40 +52,20 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local admin;
     local anyone;
     local carbonable_project_address;
-    local time_step;
-    local absorptions_len;
-    let (local absorptions: felt*) = alloc();
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
-        ids.time_step = context.absorption.time_step
-        ids.absorptions_len = len(context.absorption.values)
-        for idx, absorption in enumerate(context.absorption.values):
-            memory[ids.absorptions + idx] = absorption
     %}
 
     // Instantiate farmer
-    CarbonableOffseter.initializer(
-        carbonable_project_address=carbonable_project_address,
-        time_step=time_step,
-        absorptions_len=absorptions_len,
-        absorptions=absorptions,
-    );
+    CarbonableOffseter.initializer(carbonable_project_address=carbonable_project_address);
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);
 
-    local mocks: Mocks = Mocks(
-        carbonable_project_address=carbonable_project_address,
-        );
+    local mocks: Mocks = Mocks(carbonable_project_address=carbonable_project_address);
 
-    local absorption: Absorption = Absorption(
-        time_step=time_step,
-        values_len=absorptions_len,
-        values=absorptions,
-        );
-
-    local context: TestContext = TestContext(signers=signers, mocks=mocks, absorption=absorption);
+    local context: TestContext = TestContext(signers=signers, mocks=mocks);
     return (test_context=context);
 }
