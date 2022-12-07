@@ -92,3 +92,20 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
     return ();
 }
+
+@external
+func test_registration_revert_not_registered{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+    let one = Uint256(low=1, high=0);
+
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [0]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: token_id has not been registered") %}
+    let (owner) = CarbonableOffseter.registered_owner_of(one);
+
+    return ();
+}

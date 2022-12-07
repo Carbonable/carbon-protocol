@@ -141,11 +141,22 @@ namespace CarbonableOffseter {
     ) -> (claimable: felt) {
         alloc_locals;
 
-        let (current_time) = get_block_timestamp();
-        let (computed_claimable) = _claimable(address=address, time=current_time);
+        let (computed_claimable) = _claimable(user=address);
         let (stored_claimable) = claimable_.read(address);
         let (stored_claimed) = claimed_.read(address);
-        return (claimable=stored_claimable + computed_claimable - stored_claimed);
+        let claimable = stored_claimable + computed_claimable - stored_claimed;
+
+        // [Check] Overflow
+        let (contract_address) = carbonable_project_address_.read();
+        let (max_absorption) = ICarbonableProject.getCurrentAbsorption(
+            contract_address=contract_address
+        );
+        let not_overflow = is_le(claimable, max_absorption);
+        with_attr error_message("CarbonableOffseter: overflow while computing claimable") {
+            assert not_overflow = TRUE;
+        }
+
+        return (claimable=claimable);
     }
 
     func claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -219,6 +230,7 @@ namespace CarbonableOffseter {
         let claimed = stored_claimed + claimable;
         claimed_.write(caller, claimed);
 
+        // [Effect] Emit event
         let (current_time) = get_block_timestamp();
         Claim.emit(address=caller, quantity=claimable, time=current_time);
         return (success=TRUE);
@@ -289,15 +301,15 @@ namespace CarbonableOffseter {
             uint256_check(token_id);
         }
 
+        // [Effect] Store cumulated claimable
+        let (caller) = get_caller_address();
+        let (computed_claimable) = _claimable(user=caller);
+        let (stored_claimable) = claimable_.read(caller);
+        claimable_.write(caller, stored_claimable + computed_claimable);
+
         // [Effect] Remove the caller from registration for the token id
         registered_owner_.write(token_id, 0);
         registered_time_.write(token_id, 0);
-
-        // [Effect] Store cumulated claimable
-        let (caller) = get_caller_address();
-        let (claimable) = claimable_of(caller);
-        let (stored_claimable) = claimable_.read(caller);
-        claimable_.write(caller, stored_claimable + claimable);
 
         // [Interaction] Transfer token_id from contract to call
         let (carbonable_project_address) = carbonable_project_address_.read();
@@ -388,7 +400,7 @@ namespace CarbonableOffseter {
     }
 
     func _claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt, time: felt
+        user: felt
     ) -> (claimable: felt) {
         alloc_locals;
 
@@ -398,27 +410,37 @@ namespace CarbonableOffseter {
         );
 
         // [Check] totalSupply is lower than 2**128
-        let is_too_high = is_not_zero(total_supply_uint256.high);
+        let not_zero = is_not_zero(total_supply_uint256.high);
         with_attr error_message("CarbonableOffseter: project total supply too high") {
-            assert is_too_high = 0;
+            assert not_zero = FALSE;
+        }
+
+        // [Check] totalSupply is not zero
+        let not_zero = is_not_zero(total_supply_uint256.low);
+        with_attr error_message("CarbonableOffseter: project total supply too low") {
+            assert not_zero = TRUE;
         }
 
         let total_supply = total_supply_uint256.low;
 
-        if (total_supply == 0) {
-            return (claimable=0);
-        }
-
-        let index = total_supply - 1;
-        let (claimable) = _claimable_iter(
-            contract_address=contract_address, address=address, current_time=time, index=index
+        let (current_time) = get_block_timestamp();
+        let (total_claimable) = _claimable_iter(
+            contract_address=contract_address,
+            user=user,
+            current_time=current_time,
+            index=total_supply - 1,
         );
 
+        if (total_claimable == 0) {
+            return (claimable=total_claimable);
+        }
+
+        let (claimable, _) = unsigned_div_rem(total_claimable, total_supply);
         return (claimable=claimable);
     }
 
     func _claimable_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        contract_address: felt, address: felt, current_time: felt, index: felt
+        contract_address: felt, user: felt, current_time: felt, index: felt
     ) -> (claimable: felt) {
         alloc_locals;
 
@@ -431,10 +453,25 @@ namespace CarbonableOffseter {
         let (owner) = registered_owner_.read(token_id);
         let (time) = registered_time_.read(token_id);
 
-        // Increment the counter if owner is the specified address
-        let not_eq = is_not_zero(owner - address);
-        let eq = 1 - not_eq;
+        // Check if user is registered owner
+        let not_eq = is_not_zero(owner - user);
+        if (not_eq == TRUE) {
+            // Stop if index = 0
+            if (index == 0) {
+                return (claimable=0);
+            }
 
+            // Else move on to next index
+            let (add) = _claimable_iter(
+                contract_address=contract_address,
+                user=user,
+                current_time=current_time,
+                index=index - 1,
+            );
+            return (claimable=add);
+        }
+
+        // User is the registered owner, then compute claimable for the current token
         let (initial_absorption) = ICarbonableProject.getAbsorption(
             contract_address=contract_address, time=time
         );
@@ -456,10 +493,7 @@ namespace CarbonableOffseter {
 
         // Else move on to next index
         let (add) = _claimable_iter(
-            contract_address=contract_address,
-            address=address,
-            current_time=current_time,
-            index=index - 1,
+            contract_address=contract_address, user=user, current_time=current_time, index=index - 1
         );
         return (claimable=claimable + add);
     }

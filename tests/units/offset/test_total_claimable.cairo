@@ -30,6 +30,7 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [9999999]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}

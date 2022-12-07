@@ -223,18 +223,35 @@ namespace CarbonableProject {
     ) -> (computed_absorption: felt) {
         alloc_locals;
 
-        let (start_time) = CarbonableProject_start_time_.read();
-        let (time_step) = CarbonableProject_time_step_.read();
+        // Check absorptions are set
         let (absorptions_len, absorptions) = _read_absorptions();
 
+        // Check if time is before the start_time, then absorption is 0
+        let (stored_start_time) = start_time();
+        let is_before = is_le(time, stored_start_time - 1);  // is_lt
+        if (is_before == TRUE) {
+            return (computed_absorption=0);
+        }
+
+        // Check if time is after the final_time, then absorption is the latest stored
+        let (stored_final_time) = final_time();
+        let index = absorptions_len - 1;
+        let final_absorption = absorptions[index];
+        let is_after = is_le(stored_final_time, time  - 1);  // is_lt
+        if (is_after == TRUE) {
+            return (computed_absorption=final_absorption);
+        }
+
+        // Else iter over times to get the value
+        let (stored_time_step) = time_step();
         let (computed_absorption) = _compute_absorption_iter(
             time=time,
-            index=absorptions_len - 1,
+            index=index - 1,
             absorptions=absorptions,
-            start_time=start_time,
-            time_step=time_step,
-            next_time=0,
-            next_absorption=0,
+            start_time=stored_start_time,
+            time_step=stored_time_step,
+            next_time=stored_final_time,
+            next_absorption=final_absorption,
         );
         return (computed_absorption=computed_absorption);
     }
@@ -252,11 +269,6 @@ namespace CarbonableProject {
         let stored_time = index * time_step + start_time;
         let is_after = is_le(stored_time, time);
         if (is_after == TRUE) {
-            // [Check] first iteration
-            if (next_time == 0) {
-                return (computed_absorption=stored_absorption);
-            }
-
             // [Check] exact time
             if (time == stored_time) {
                 return (computed_absorption=stored_absorption);
