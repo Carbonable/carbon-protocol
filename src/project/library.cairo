@@ -26,7 +26,7 @@ namespace CarbonableProject {
         bitwise_ptr: BitwiseBuiltin*,
         range_check_ptr,
     }(token_id: Uint256) -> (uri_len: felt, uri: felt*) {
-        let (uri_len: felt, uri: felt*) = Metadata.token_uri(token_id);
+        let (uri_len: felt, uri: felt*) = Metadata.uri();
         return (uri_len=uri_len, uri=uri);
     }
 

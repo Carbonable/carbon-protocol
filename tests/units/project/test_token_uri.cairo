@@ -39,36 +39,10 @@ func test_token_uri{
     let (len, array) = CarbonableProject.token_uri(Uint256(id, 0));
     let (returned_str) = StringCodec.ss_arr_to_string(len, array);
 
-    let (id_str) = StringCodec.felt_to_string(id);
-    let (ext_str) = StringCodec.ss_to_string('.json');
-    let (pre_str) = StringUtil.concat(str, id_str);
-    let (expected_str) = StringUtil.concat(pre_str, ext_str);
+    let (json_str) = StringCodec.ss_to_string('token.json');
+    let (expected_str) = StringUtil.path_join(str, json_str);
 
     assert_string(returned_str, expected_str);
-
-    %{ stop() %}
-
-    return ();
-}
-
-@external
-func test_token_uri_revert_invalid_uint256{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    // prepare project instance
-    let (local context) = prepare();
-
-    // run scenario
-    %{ stop=start_prank(context.signers.admin) %}
-
-    let (str) = StringCodec.ss_to_string('ipfs://carbonable/');
-    CarbonableProject.set_uri(uri_len=str.len, uri=str.data);
-
-    let invalid = Uint256(0, -1);
-    %{ expect_revert("TRANSACTION_FAILED", "Metadata: token_id is not a valid Uint256") %}
-    let (len, array) = CarbonableProject.token_uri(invalid);
 
     %{ stop() %}
 
