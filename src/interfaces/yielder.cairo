@@ -7,28 +7,61 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableYielder {
-    func carbonable_project_address() -> (carbonable_project_address: felt) {
+    func getImplementationHash() -> (implementation: felt) {
     }
 
-    func get_start_time() -> (start_time: felt) {
+    func getAdmin() -> (admin: felt) {
     }
 
-    func get_lock_time() -> (lock_time: felt) {
+    func upgrade(new_implementation: felt) {
     }
 
-    func get_end_time() -> (end_time: felt) {
+    func setAdmin(new_admin: felt) {
     }
 
-    func is_locked() -> (status: felt) {
+    func owner() -> (owner: felt) {
     }
 
-    func total_locked() -> (balance: Uint256) {
+    func transferOwnership(newOwner: felt) {
     }
 
-    func shares_of(address: felt, precision: felt) -> (share: Uint256) {
+    func renounceOwnership() {
     }
 
-    func registered_owner_of(token_id: Uint256) -> (address: felt) {
+    func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
+    }
+
+    func isOpen() -> (status: felt) {
+    }
+
+    func getTotalDeposited() -> (balance: Uint256) {
+    }
+
+    func getTotalClaimed() -> (total_claimed: felt) {
+    }
+
+    func getTotalClaimable() -> (total_claimable: felt) {
+    }
+
+    func getClaimableOf(address: felt) -> (claimable: felt) {
+    }
+
+    func getClaimedOf(address: felt) -> (claimed: felt) {
+    }
+
+    func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
+    }
+
+    func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
+    }
+
+    func claim() -> (success: felt) {
+    }
+
+    func deposit(token_id: Uint256) -> (success: felt) {
+    }
+
+    func withdraw(token_id: Uint256) -> (success: felt) {
     }
 
     func create_vestings(
@@ -39,17 +72,5 @@ namespace ICarbonableYielder {
         slice_period_seconds: felt,
         revocable: felt,
     ) -> (success: felt) {
-    }
-
-    func start_period(unlocked_duration: felt, period_duration: felt) -> (success: felt) {
-    }
-
-    func stop_period() -> (success: felt) {
-    }
-
-    func deposit(token_id: Uint256) -> (success: felt) {
-    }
-
-    func withdraw(token_id: Uint256) -> (success: felt) {
     }
 }

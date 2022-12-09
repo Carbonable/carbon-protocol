@@ -21,6 +21,9 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     // prepare farmer instance
     let (local context) = prepare();
 
+    let (status) = CarbonableProject.is_setup();
+    assert status = TRUE;
+
     let (start_time) = CarbonableProject.start_time();
     assert start_time = context.absorption.start_time;
 

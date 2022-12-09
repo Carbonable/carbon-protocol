@@ -25,39 +25,28 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     let one = Uint256(low=1, high=0);
     let (contract_address) = get_contract_address();
 
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [9999999]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
 
-    // At t=0
-    %{ stop_warp=warp(blk_timestamp=0) %}
-
     // Total claimable is 0
     let (total_claimable) = CarbonableOffseter.total_claimable();
     assert total_claimable = 0;
-    %{ stop_warp() %}
-
-    // At t=357
-    %{ stop_warp=warp(blk_timestamp=357) %}
 
     // Deposit token #1
     let (success) = CarbonableOffseter.deposit(token_id=one);
     assert success = 1;
-    %{ stop_warp() %}
 
-    // At t=1000
-    %{ stop_warp=warp(blk_timestamp=1000) %}
-
-    // Total claimable is 0 because of mock feature
+    // Total claimable is 3 - 1 = 2
     let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = 0;
-    %{ stop_warp() %}
+    assert total_claimable = 2;
     %{ stop() %}
 
     return ();

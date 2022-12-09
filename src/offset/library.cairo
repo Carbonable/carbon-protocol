@@ -8,16 +8,9 @@
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_nn, assert_le, split_felt, unsigned_div_rem
+from starkware.cairo.common.math import split_felt, unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le, is_not_zero
-from starkware.cairo.common.uint256 import (
-    Uint256,
-    uint256_check,
-    uint256_lt,
-    uint256_eq,
-    uint256_unsigned_div_rem,
-    uint256_mul_div_mod,
-)
+from starkware.cairo.common.uint256 import Uint256, uint256_check
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
     get_caller_address,
@@ -25,7 +18,6 @@ from starkware.starknet.common.syscalls import (
 )
 
 // Project dependencies
-from openzeppelin.security.safemath.library import SafeUint256
 from openzeppelin.token.erc20.IERC20 import IERC20
 from openzeppelin.token.erc721.IERC721 import IERC721
 from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
@@ -33,14 +25,19 @@ from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 
 // Local dependencies
 from src.interfaces.project import ICarbonableProject
+from src.utils.type.library import _uint_to_felt
 
 //
 // Events
 //
 
 @event
-func Claim(address: felt, quantity: felt, time: felt) {
+func Claim(address: felt, absorption: felt, time: felt) {
 }
+
+//
+// Storages
+//
 
 @storage_var
 func carbonable_project_address_() -> (address: felt) {
@@ -95,6 +92,14 @@ namespace CarbonableOffseter {
     }() -> (carbonable_project_address: felt) {
         let (carbonable_project_address) = carbonable_project_address_.read();
         return (carbonable_project_address,);
+    }
+
+    func is_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        status: felt
+    ) {
+        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (status) = ICarbonableProject.isSetup(contract_address=carbonable_project_address);
+        return (status=status);
     }
 
     func total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -210,6 +215,13 @@ namespace CarbonableOffseter {
         return (time=time);
     }
 
+    func registered_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        users_len: felt, users: felt*
+    ) {
+        let (users_len, users) = _read_users();
+        return (users_len=users_len, users=users);
+    }
+
     //
     // Externals
     //
@@ -225,14 +237,14 @@ namespace CarbonableOffseter {
 
         CarbonableOffseter_assert.claimable_not_null(claimable);
 
-        // [Effect] Transfer value from claimable to claimed
+        // [Effect] Add claimed value
         let (stored_claimed) = claimed_.read(caller);
         let claimed = stored_claimed + claimable;
         claimed_.write(caller, claimed);
 
         // [Effect] Emit event
         let (current_time) = get_block_timestamp();
-        Claim.emit(address=caller, quantity=claimable, time=current_time);
+        Claim.emit(address=caller, absorption=claimable, time=current_time);
         return (success=TRUE);
     }
 
@@ -243,6 +255,9 @@ namespace CarbonableOffseter {
 
         // [Security] Start reetrancy guard
         ReentrancyGuard.start();
+
+        // [Check] Deposits are open
+        CarbonableOffseter_assert.is_open();
 
         // [Check] Uint256 compliance
         with_attr error_message("CarbonableOffseter: token_id is not a valid Uint256") {
@@ -408,6 +423,7 @@ namespace CarbonableOffseter {
         let (total_supply_uint256) = IERC721Enumerable.totalSupply(
             contract_address=contract_address
         );
+        let (total_supply) = _uint_to_felt(total_supply_uint256);
 
         // [Check] totalSupply is lower than 2**128
         let not_zero = is_not_zero(total_supply_uint256.high);
@@ -423,12 +439,8 @@ namespace CarbonableOffseter {
 
         let total_supply = total_supply_uint256.low;
 
-        let (current_time) = get_block_timestamp();
         let (total_claimable) = _claimable_iter(
-            contract_address=contract_address,
-            user=user,
-            current_time=current_time,
-            index=total_supply - 1,
+            contract_address=contract_address, user=user, index=total_supply - 1
         );
 
         if (total_claimable == 0) {
@@ -440,7 +452,7 @@ namespace CarbonableOffseter {
     }
 
     func _claimable_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        contract_address: felt, user: felt, current_time: felt, index: felt
+        contract_address: felt, user: felt, index: felt
     ) -> (claimable: felt) {
         alloc_locals;
 
@@ -463,10 +475,7 @@ namespace CarbonableOffseter {
 
             // Else move on to next index
             let (add) = _claimable_iter(
-                contract_address=contract_address,
-                user=user,
-                current_time=current_time,
-                index=index - 1,
+                contract_address=contract_address, user=user, index=index - 1
             );
             return (claimable=add);
         }
@@ -475,8 +484,8 @@ namespace CarbonableOffseter {
         let (initial_absorption) = ICarbonableProject.getAbsorption(
             contract_address=contract_address, time=time
         );
-        let (final_absorption) = ICarbonableProject.getAbsorption(
-            contract_address=contract_address, time=current_time
+        let (final_absorption) = ICarbonableProject.getCurrentAbsorption(
+            contract_address=contract_address
         );
 
         // [Check] felt overflow
@@ -492,9 +501,7 @@ namespace CarbonableOffseter {
         }
 
         // Else move on to next index
-        let (add) = _claimable_iter(
-            contract_address=contract_address, user=user, current_time=current_time, index=index - 1
-        );
+        let (add) = _claimable_iter(contract_address=contract_address, user=user, index=index - 1);
         return (claimable=claimable + add);
     }
 }
@@ -507,6 +514,14 @@ namespace CarbonableOffseter_assert {
         let not_zero = is_not_zero(claimable);
         with_attr error_message("CarbonableOffseter: claimable balance must be positive") {
             assert not_zero = TRUE;
+        }
+        return ();
+    }
+
+    func is_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (status) = CarbonableOffseter.is_open();
+        with_attr error_message("CarbonableOffseter: deposits are closed") {
+            assert status = TRUE;
         }
         return ();
     }

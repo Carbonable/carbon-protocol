@@ -25,34 +25,73 @@ func test_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     let one = Uint256(low=1, high=0);
     let (contract_address) = get_contract_address();
 
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [9999999]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
-
-    // At t=0
-    %{ stop_warp=warp(blk_timestamp=0) %}
 
     // Deposit token #1
     let (success) = CarbonableOffseter.deposit(token_id=one);
     assert success = 1;
 
-    // Total claimable is 0
+    // Total claimable is 0;
     let (total_claimed) = CarbonableOffseter.total_claimed();
     assert total_claimed = 0;
-    %{ stop_warp() %}
 
-    // At t=1000
-    %{ stop_warp=warp(blk_timestamp=1000) %}
+    // Claim
+    let (success) = CarbonableOffseter.claim();
+    assert success = 1;
+
+    // Total claimable is 3 - 1 = 2;
+    let (total_claimed) = CarbonableOffseter.total_claimed();
+    assert total_claimed = 2;
+
+    %{ stop() %}
+
+    return ();
+}
+
+@external
+func test_claimed_revert_balance_null{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+    let one = Uint256(low=1, high=0);
+    let (contract_address) = get_contract_address();
+
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [1]) %}
+
+    // Anyone
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    // Deposit token #1
+    let (success) = CarbonableOffseter.deposit(token_id=one);
+    assert success = 1;
+
+    // Total claimable is 0;
+    let (total_claimed) = CarbonableOffseter.total_claimed();
+    assert total_claimed = 0;
 
     // Claim
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: claimable balance must be positive") %}
     let (success) = CarbonableOffseter.claim();
+    assert success = 1;
+
     %{ stop() %}
 
     return ();

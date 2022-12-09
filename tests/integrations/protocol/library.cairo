@@ -686,39 +686,23 @@ namespace carbonable_offseter_instance {
     func carbonable_project_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (carbonable_project_address: felt) {
-        let (carbonable_project_address) = ICarbonableOffseter.carbonable_project_address(
+        let (carbonable_project_address) = ICarbonableOffseter.getCarbonableProjectAddress(
             carbonable_offseter
         );
         return (carbonable_project_address=carbonable_project_address);
     }
 
-    func time_step{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
-    }() -> (time_step: felt) {
-        let (time_step) = ICarbonableOffseter.time_step(contract_address=carbonable_offseter);
-        return (time_step=time_step);
-    }
-
-    func absorptions{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
-    }() -> (absorptions_len: felt, absorptions: felt*) {
-        let (absorptions_len, absorptions) = ICarbonableOffseter.absorptions(
-            contract_address=carbonable_offseter
-        );
-        return (absorptions_len=absorptions_len, absorptions=absorptions);
-    }
-
     func total_deposited{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (balance: Uint256) {
-        let (balance) = ICarbonableOffseter.total_deposited(contract_address=carbonable_offseter);
+        let (balance) = ICarbonableOffseter.getTotalDeposited(contract_address=carbonable_offseter);
         return (balance=balance);
     }
 
     func total_claimed{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (total_claimed: felt) {
-        let (total_claimed) = ICarbonableOffseter.total_claimed(
+        let (total_claimed) = ICarbonableOffseter.getTotalClaimed(
             contract_address=carbonable_offseter
         );
         return (total_claimed=total_claimed);
@@ -727,7 +711,7 @@ namespace carbonable_offseter_instance {
     func total_claimable{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (total_claimable: felt) {
-        let (total_claimable) = ICarbonableOffseter.total_claimable(
+        let (total_claimable) = ICarbonableOffseter.getTotalClaimable(
             contract_address=carbonable_offseter
         );
         return (total_claimable=total_claimable);
@@ -736,7 +720,7 @@ namespace carbonable_offseter_instance {
     func claimable_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }(address: felt) -> (claimable: felt) {
-        let (claimable) = ICarbonableOffseter.claimable_of(
+        let (claimable) = ICarbonableOffseter.getClaimableOf(
             contract_address=carbonable_offseter, address=address
         );
         return (claimable=claimable);
@@ -745,7 +729,7 @@ namespace carbonable_offseter_instance {
     func claimed_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }(address: felt) -> (claimed: felt) {
-        let (claimed) = ICarbonableOffseter.claimed_of(
+        let (claimed) = ICarbonableOffseter.getClaimedOf(
             contract_address=carbonable_offseter, address=address
         );
         return (claimed=claimed);
@@ -754,7 +738,7 @@ namespace carbonable_offseter_instance {
     func registered_owner_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }(token_id: Uint256) -> (address: felt) {
-        let (address) = ICarbonableOffseter.registered_owner_of(
+        let (address) = ICarbonableOffseter.getRegisteredOwnerOf(
             contract_address=carbonable_offseter, token_id=token_id
         );
         return (address=address);
@@ -763,7 +747,7 @@ namespace carbonable_offseter_instance {
     func registered_time_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }(token_id: Uint256) -> (time: felt) {
-        let (time) = ICarbonableOffseter.registered_time_of(
+        let (time) = ICarbonableOffseter.getRegisteredTimeOf(
             contract_address=carbonable_offseter, token_id=token_id
         );
         return (time=time);

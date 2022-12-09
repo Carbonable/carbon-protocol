@@ -4,7 +4,7 @@
 
 // Starkware dependencies
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.math import unsigned_div_rem
@@ -70,6 +70,9 @@ namespace CarbonableProject {
     func final_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         time: felt
     ) {
+        // [Check] absorptions have been defined
+        CarbonableProject_assert.absorptions_are_defined();
+
         let (start_time) = CarbonableProject_start_time_.read();
         let (time_step) = CarbonableProject_time_step_.read();
         let (absorptions_len) = CarbonableProject_absorptions_len_.read();
@@ -114,6 +117,15 @@ namespace CarbonableProject {
         let (time) = final_time();
         let (final_absorption) = absorption(time=time);
         return (absorption=final_absorption);
+    }
+
+    func is_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        status: felt
+    ) {
+        let (time_step) = CarbonableProject_time_step_.read();
+        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
+        let status = is_not_zero(time_step * absorptions_len);
+        return (status=status);
     }
 
     //
@@ -237,7 +249,7 @@ namespace CarbonableProject {
         let (stored_final_time) = final_time();
         let index = absorptions_len - 1;
         let final_absorption = absorptions[index];
-        let is_after = is_le(stored_final_time, time  - 1);  // is_lt
+        let is_after = is_le(stored_final_time, time - 1);  // is_lt
         if (is_after == TRUE) {
             return (computed_absorption=final_absorption);
         }
@@ -314,11 +326,9 @@ namespace CarbonableProject {
 namespace CarbonableProject_assert {
     func absorptions_are_defined{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         ) {
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
-
-        let not_zero = is_not_zero(absorptions_len);
+        let (status) = CarbonableProject.is_setup();
         with_attr error_message("CarbonableProject: absorptions must be defined") {
-            assert not_zero = TRUE;
+            assert status = TRUE;
         }
         return ();
     }

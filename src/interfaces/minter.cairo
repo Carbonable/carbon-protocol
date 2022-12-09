@@ -7,11 +7,27 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableMinter {
-    //##
-    // Compute and return releasable amount of tokens for a vesting.
-    // @param vesting_id the vesting identifier
-    // @return the amount of releasable tokens
-    //##
+    func getImplementationHash() -> (implementation: felt) {
+    }
+
+    func getAdmin() -> (admin: felt) {
+    }
+
+    func upgrade(new_implementation: felt) {
+    }
+
+    func setAdmin(new_admin: felt) {
+    }
+
+    func owner() -> (owner: felt) {
+    }
+
+    func transferOwnership(newOwner: felt) {
+    }
+
+    func renounceOwnership() {
+    }
+
     func carbonable_project_address() -> (carbonable_project_address: felt) {
     }
 

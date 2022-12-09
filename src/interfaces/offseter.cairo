@@ -19,43 +19,40 @@ namespace ICarbonableOffseter {
     func setAdmin(new_admin: felt) {
     }
 
-    func carbonable_project_address() -> (carbonable_project_address: felt) {
-    }
-
-    func time_step() -> (time_step: felt) {
-    }
-
-    func absorptions() -> (absorptions_len: felt, absorptions: felt*) {
-    }
-
-    func total_deposited() -> (balance: Uint256) {
-    }
-
-    func total_claimed() -> (total_claimed: felt) {
-    }
-
-    func total_claimable() -> (total_claimable: felt) {
-    }
-
-    func total_absorption() -> (absorption: felt) {
-    }
-
-    func claimable_of(address: felt) -> (claimable: felt) {
-    }
-
-    func claimed_of(address: felt) -> (claimed: felt) {
-    }
-
-    func registered_owner_of(token_id: Uint256) -> (address: felt) {
-    }
-
-    func registered_time_of(token_id: Uint256) -> (time: felt) {
-    }
-
     func owner() -> (owner: felt) {
     }
 
-    func set_absorptions(absorptions_len: felt, absorptions: felt*) {
+    func transferOwnership(newOwner: felt) {
+    }
+
+    func renounceOwnership() {
+    }
+
+    func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
+    }
+
+    func isOpen() -> (status: felt) {
+    }
+
+    func getTotalDeposited() -> (balance: Uint256) {
+    }
+
+    func getTotalClaimed() -> (total_claimed: felt) {
+    }
+
+    func getTotalClaimable() -> (total_claimable: felt) {
+    }
+
+    func getClaimableOf(address: felt) -> (claimable: felt) {
+    }
+
+    func getClaimedOf(address: felt) -> (claimed: felt) {
+    }
+
+    func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
+    }
+
+    func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
     }
 
     func claim() -> (success: felt) {
@@ -65,11 +62,5 @@ namespace ICarbonableOffseter {
     }
 
     func withdraw(token_id: Uint256) -> (success: felt) {
-    }
-
-    func transferOwnership(newOwner: felt) {
-    }
-
-    func renounceOwnership() {
     }
 }

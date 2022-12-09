@@ -21,13 +21,14 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     // prepare farmer instance
     let (local context) = prepare();
 
-    let (carbonable_project_address) = CarbonableYielder.carbonable_project_address();
-    assert carbonable_project_address = context.mocks.carbonable_project_address;
+    let (carbonable_vester_address) = CarbonableYielder.carbonable_vester_address();
+    assert carbonable_vester_address = context.mocks.carbonable_vester_address;
 
-    %{ stop_warp = warp(1) %}
-    let (is_locked) = CarbonableYielder.is_locked();
-    assert is_locked = FALSE;
-    %{ stop_warp() %}
+    let (carbonable_offseter_address) = CarbonableYielder.carbonable_offseter_address();
+    assert carbonable_offseter_address = context.mocks.carbonable_offseter_address;
+
+    let (snapshoted_time) = CarbonableYielder.snapshoted_time();
+    assert snapshoted_time = 0;
 
     return ();
 }

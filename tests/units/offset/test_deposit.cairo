@@ -26,6 +26,7 @@ func test_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     let two = Uint256(low=2, high=0);
     let (contract_address) = get_contract_address();
 
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
 
@@ -38,6 +39,25 @@ func test_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     let (success) = CarbonableOffseter.deposit(token_id=two);
     assert success = 1;
     %{ stop() %}
+
+    return ();
+}
+
+@external
+func test_deposit_revert_closed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+    let one = Uint256(low=1, high=0);
+    let (contract_address) = get_contract_address();
+
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: deposits are closed") %}
+    let (success) = CarbonableOffseter.deposit(token_id=one);
 
     return ();
 }
