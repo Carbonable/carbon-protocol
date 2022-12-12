@@ -40,35 +40,35 @@ func Claim(address: felt, absorption: felt, time: felt) {
 //
 
 @storage_var
-func carbonable_project_address_() -> (address: felt) {
+func CarbonableOffseter_carbonable_project_address_() -> (address: felt) {
 }
 
 @storage_var
-func registered_owner_(tokenId: Uint256) -> (address: felt) {
+func CarbonableOffseter_registered_owner_(tokenId: Uint256) -> (address: felt) {
 }
 
 @storage_var
-func registered_time_(tokenId: Uint256) -> (time: felt) {
+func CarbonableOffseter_registered_time_(tokenId: Uint256) -> (time: felt) {
 }
 
 @storage_var
-func claimable_(address: felt) -> (absorption: felt) {
+func CarbonableOffseter_claimable_(address: felt) -> (absorption: felt) {
 }
 
 @storage_var
-func claimed_(address: felt) -> (absorption: felt) {
+func CarbonableOffseter_claimed_(address: felt) -> (absorption: felt) {
 }
 
 @storage_var
-func users_len_() -> (length: felt) {
+func CarbonableOffseter_users_len_() -> (length: felt) {
 }
 
 @storage_var
-func users_(index: felt) -> (address: felt) {
+func CarbonableOffseter_users_(index: felt) -> (address: felt) {
 }
 
 @storage_var
-func known_user_(address: felt) -> (bool: felt) {
+func CarbonableOffseter_known_user_(address: felt) -> (bool: felt) {
 }
 
 namespace CarbonableOffseter {
@@ -79,7 +79,7 @@ namespace CarbonableOffseter {
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         carbonable_project_address: felt
     ) {
-        carbonable_project_address_.write(carbonable_project_address);
+        CarbonableOffseter_carbonable_project_address_.write(carbonable_project_address);
         return ();
     }
 
@@ -90,14 +90,14 @@ namespace CarbonableOffseter {
     func carbonable_project_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }() -> (carbonable_project_address: felt) {
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         return (carbonable_project_address,);
     }
 
     func is_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         status: felt
     ) {
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (status) = ICarbonableProject.isSetup(contract_address=carbonable_project_address);
         return (status=status);
     }
@@ -106,7 +106,7 @@ namespace CarbonableOffseter {
         balance: Uint256
     ) {
         let (contract_address) = get_contract_address();
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
 
         let (balance) = IERC721.balanceOf(
             contract_address=carbonable_project_address, owner=contract_address
@@ -147,12 +147,12 @@ namespace CarbonableOffseter {
         alloc_locals;
 
         let (computed_claimable) = _claimable(user=address);
-        let (stored_claimable) = claimable_.read(address);
-        let (stored_claimed) = claimed_.read(address);
+        let (stored_claimable) = CarbonableOffseter_claimable_.read(address);
+        let (stored_claimed) = CarbonableOffseter_claimed_.read(address);
         let claimable = stored_claimable + computed_claimable - stored_claimed;
 
         // [Check] Overflow
-        let (contract_address) = carbonable_project_address_.read();
+        let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (max_absorption) = ICarbonableProject.getCurrentAbsorption(
             contract_address=contract_address
         );
@@ -167,7 +167,7 @@ namespace CarbonableOffseter {
     func claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
     ) -> (claimed: felt) {
-        let (claimed) = claimed_.read(address);
+        let (claimed) = CarbonableOffseter_claimed_.read(address);
         return (claimed=claimed);
     }
 
@@ -180,7 +180,7 @@ namespace CarbonableOffseter {
         }
         // [Check] Owned token id
         let (contract_address) = get_contract_address();
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         // [Check] Throws error if unknown token id
         let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
@@ -189,7 +189,7 @@ namespace CarbonableOffseter {
             assert owner = contract_address;
         }
 
-        let (address) = registered_owner_.read(token_id);
+        let (address) = CarbonableOffseter_registered_owner_.read(token_id);
         return (address=address);
     }
 
@@ -202,7 +202,7 @@ namespace CarbonableOffseter {
         }
         // [Check] Owned token id
         let (contract_address) = get_contract_address();
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         // [Check] Throws error if unknown token id
         let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
@@ -211,7 +211,7 @@ namespace CarbonableOffseter {
             assert owner = contract_address;
         }
 
-        let (time) = registered_time_.read(token_id);
+        let (time) = CarbonableOffseter_registered_time_.read(token_id);
         return (time=time);
     }
 
@@ -238,9 +238,9 @@ namespace CarbonableOffseter {
         CarbonableOffseter_assert.claimable_not_null(claimable);
 
         // [Effect] Add claimed value
-        let (stored_claimed) = claimed_.read(caller);
+        let (stored_claimed) = CarbonableOffseter_claimed_.read(caller);
         let claimed = stored_claimed + claimable;
-        claimed_.write(caller, claimed);
+        CarbonableOffseter_claimed_.write(caller, claimed);
 
         // [Effect] Emit event
         let (current_time) = get_block_timestamp();
@@ -265,7 +265,7 @@ namespace CarbonableOffseter {
         }
 
         // [Interaction] Transfer token_id from caller to contract
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (caller) = get_caller_address();
         let (contract_address) = get_contract_address();
         IERC721.transferFrom(
@@ -285,19 +285,19 @@ namespace CarbonableOffseter {
 
         // [Effect] Register the caller with the token id and the current timestamp
         let (current_time) = get_block_timestamp();
-        registered_owner_.write(token_id, caller);
-        registered_time_.write(token_id, current_time);
+        CarbonableOffseter_registered_owner_.write(token_id, caller);
+        CarbonableOffseter_registered_time_.write(token_id, current_time);
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
         // [Effect] Register the caller
-        let (is_known) = known_user_.read(caller);
-        let (index) = users_len_.read();
+        let (is_known) = CarbonableOffseter_known_user_.read(caller);
+        let (index) = CarbonableOffseter_users_len_.read();
         if (is_known == FALSE) {
-            users_.write(index, caller);
-            users_len_.write(index + 1);
-            known_user_.write(caller, TRUE);
+            CarbonableOffseter_users_.write(index, caller);
+            CarbonableOffseter_users_len_.write(index + 1);
+            CarbonableOffseter_known_user_.write(caller, TRUE);
             return (success=TRUE);
         }
         return (success=TRUE);
@@ -319,15 +319,15 @@ namespace CarbonableOffseter {
         // [Effect] Store cumulated claimable
         let (caller) = get_caller_address();
         let (computed_claimable) = _claimable(user=caller);
-        let (stored_claimable) = claimable_.read(caller);
-        claimable_.write(caller, stored_claimable + computed_claimable);
+        let (stored_claimable) = CarbonableOffseter_claimable_.read(caller);
+        CarbonableOffseter_claimable_.write(caller, stored_claimable + computed_claimable);
 
         // [Effect] Remove the caller from registration for the token id
-        registered_owner_.write(token_id, 0);
-        registered_time_.write(token_id, 0);
+        CarbonableOffseter_registered_owner_.write(token_id, 0);
+        CarbonableOffseter_registered_time_.write(token_id, 0);
 
         // [Interaction] Transfer token_id from contract to call
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (contract_address) = get_contract_address();
         IERC721.transferFrom(
             contract_address=carbonable_project_address,
@@ -358,7 +358,7 @@ namespace CarbonableOffseter {
         users_len: felt, users: felt*
     ) {
         alloc_locals;
-        let (users_len) = users_len_.read();
+        let (users_len) = CarbonableOffseter_users_len_.read();
         let (local users: felt*) = alloc();
 
         if (users_len == 0) {
@@ -373,7 +373,7 @@ namespace CarbonableOffseter {
         index: felt, users: felt*
     ) {
         alloc_locals;
-        let (user) = users_.read(index);
+        let (user) = CarbonableOffseter_users_.read(index);
         assert users[index] = user;
         if (index == 0) {
             return ();
@@ -388,7 +388,7 @@ namespace CarbonableOffseter {
         alloc_locals;
 
         let user = users[index];
-        let (claimed) = claimed_.read(user);
+        let (claimed) = CarbonableOffseter_claimed_.read(user);
 
         if (index == 0) {
             return (total_claimed=claimed);
@@ -419,7 +419,7 @@ namespace CarbonableOffseter {
     ) -> (claimable: felt) {
         alloc_locals;
 
-        let (contract_address) = carbonable_project_address_.read();
+        let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (total_supply_uint256) = IERC721Enumerable.totalSupply(
             contract_address=contract_address
         );
@@ -462,8 +462,8 @@ namespace CarbonableOffseter {
         let (token_id) = IERC721Enumerable.tokenByIndex(
             contract_address=contract_address, index=index_uint256
         );
-        let (owner) = registered_owner_.read(token_id);
-        let (time) = registered_time_.read(token_id);
+        let (owner) = CarbonableOffseter_registered_owner_.read(token_id);
+        let (time) = CarbonableOffseter_registered_time_.read(token_id);
 
         // Check if user is registered owner
         let not_eq = is_not_zero(owner - user);
