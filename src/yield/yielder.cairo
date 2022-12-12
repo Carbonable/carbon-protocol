@@ -369,42 +369,6 @@ func getSnapshotedTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 //
 
 @external
-func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    total_amount: felt,
-    cliff_delta: felt,
-    start: felt,
-    duration: felt,
-    slice_period_seconds: felt,
-    revocable: felt,
-) -> (success: felt) {
-    // Desc:
-    //   The Yielder goes through all assets that are deposited, during the current period, to create a vesting for each of the assets,
-    //   on the starkvest smart contract, by allocating shares of the total amount collected from selling carbon credit
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   total_amount(felt): amount, in ERC-20 value, of carbon credit sold for the current period
-    //   start(felt): start time of the vesting period
-    //   cliff_delta(felt): duration in seconds of the cliff in which tokens will begin to vest
-    //   duration(felt): duration in seconds of the period in which the tokens will vest
-    //   slice_period_seconds(felt): duration of a slice period for the vesting in seconds
-    //   revocable(felt): whether the vesting is revocable or not
-    // Returns:
-    //   success(felt): Success status
-    Ownable.assert_only_owner();
-    return CarbonableYielder.create_vestings(
-        total_amount=total_amount,
-        cliff_delta=cliff_delta,
-        start=start,
-        duration=duration,
-        slice_period_seconds=slice_period_seconds,
-        revocable=revocable,
-    );
-}
-
-@external
 func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (success: felt) {
@@ -436,4 +400,61 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Returns:
     //   success(felt): Success status
     return CarbonableOffseter.withdraw(token_id=token_id);
+}
+
+@external
+func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    success: felt
+) {
+    // Desc:
+    //   Snapshot the current state of claimable and claimed per user
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   success(felt): Success status
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    return CarbonableYielder.snapshot();
+}
+
+@external
+func createVestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    total_amount: felt,
+    cliff_delta: felt,
+    start: felt,
+    duration: felt,
+    slice_period_seconds: felt,
+    revocable: felt,
+) -> (success: felt) {
+    // Desc:
+    //   The Yielder goes through all assets that are deposited, during the current period, to create a vesting for each of the assets,
+    //   on the starkvest smart contract, by allocating shares of the total amount collected from selling carbon credit
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   total_amount(felt): amount, in ERC-20 value, of carbon credit sold for the current period
+    //   start(felt): start time of the vesting period
+    //   cliff_delta(felt): duration in seconds of the cliff in which tokens will begin to vest
+    //   duration(felt): duration in seconds of the period in which the tokens will vest
+    //   slice_period_seconds(felt): duration of a slice period for the vesting in seconds
+    //   revocable(felt): whether the vesting is revocable or not
+    // Returns:
+    //   success(felt): Success status
+    // Raises:
+    //   snapshot: snapshot must have been executed before
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    return CarbonableYielder.create_vestings(
+        total_amount=total_amount,
+        cliff_delta=cliff_delta,
+        start=start,
+        duration=duration,
+        slice_period_seconds=slice_period_seconds,
+        revocable=revocable,
+    );
 }

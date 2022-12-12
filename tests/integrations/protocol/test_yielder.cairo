@@ -13,7 +13,7 @@ from tests.integrations.protocol.library import (
     admin_instance as admin,
     anyone_instance as anyone,
     carbonable_yielder_instance as yielder,
-    carbonable_starkvest_instance as starkvest,
+    carbonable_vester_instance as vester,
 )
 
 @view
@@ -34,197 +34,16 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
-func test_deposit_and_withdraw_while_unlock{
+func test_snapshot_revert_not_owner{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin starts a 10s period with 5s unlock
-    // And anyone approves yielder for token 3 at time 5
-    // And anyone deposits token 3 to yielder at time 5
-    // And anyone withdraws token 3 from yielder at time 5
-    // And anyone approves yielder for token 3 at time 5
-    // And anyone deposits token 3 to yielder at time 5
-    // And anyone approves yielder for token 4 at time 5
-    // And anyone deposits token 4 to yielder at time 5
-    // Then anyone shares is 100%
-    // When admin approves yielder for token 1 at time 5
-    // And admin deposits token 1 to yielder at time 5
-    // Then anyone shares is 66%
-    // When anyone withdraws token 3 from yielder at time 10
-    // Then anyone shares is 50%
-    // When admin withdraws token 1 from yielder at time 10
-    // Then anyone shares is 100%
-    // When anyone withdraws token 4 from yielder at time 10
-    // Then anyone shares is 0%
-    // When check the owner of token 1
-    // Then a failed transaction is expected
-    alloc_locals;
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.get_address();
-
-    // Mint tokens
-    admin.mint(to=admin_address, token_id=1);
-    admin.mint(to=admin_address, token_id=2);
-    admin.mint(to=anyone_address, token_id=3);
-    admin.mint(to=anyone_address, token_id=4);
-    admin.mint(to=anyone_address, token_id=5);
-
-    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
-
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
-    anyone.project_approve(approved=yielder_address, token_id=3);
-    anyone.yielder_deposit(token_id=3);
-    anyone.yielder_withdraw(token_id=3);
-    anyone.project_approve(approved=yielder_address, token_id=3);
-    anyone.yielder_deposit(token_id=3);
-    anyone.project_approve(approved=yielder_address, token_id=4);
-    anyone.yielder_deposit(token_id=4);
-
-    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
-    assert shares = Uint256(low=100, high=0);
-
-    admin.project_approve(approved=yielder_address, token_id=1);
-    admin.yielder_deposit(token_id=1);
-    %{ stop_warp() %}
-
-    let (owner) = anyone.yielder_registered_owner_of(token_id=3);
-    assert owner = anyone_address;
-
-    let (owner) = anyone.yielder_registered_owner_of(token_id=1);
-    assert owner = admin_address;
-
-    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
-    assert shares = Uint256(low=66, high=0);
-
-    let (balance) = anyone.yielder_total_locked();
-    assert balance = Uint256(low=3, high=0);
-
-    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.yielder_address) %}
-    anyone.yielder_withdraw(token_id=3);
-
-    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
-    assert shares = Uint256(low=50, high=0);
-
-    admin.yielder_withdraw(token_id=1);
-
-    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
-    assert shares = Uint256(low=100, high=0);
-
-    anyone.yielder_withdraw(token_id=4);
-    %{ stop_warp() %}
-
-    let (shares) = anyone.yielder_shares_of(anyone_address, precision=100);
-    assert shares = Uint256(low=0, high=0);
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: token_id has not been registered") %}
-    let (owner) = anyone.yielder_registered_owner_of(token_id=1);
-
-    return ();
-}
-
-@view
-func test_deposit_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    // When admin starts a 10s period with 5s unlock
-    // And anyone approves yielder for token 3 at time 1
-    // And anyone deposits token 3 to yielder at time 6
-    // Then a failed transactions expected
-    alloc_locals;
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.get_address();
-
-    // Mint tokens
-    admin.mint(to=anyone_address, token_id=3);
-
-    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
-
-    anyone.project_approve(approved=yielder_address, token_id=3);
-
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: deposits are currently locked") %}
-    anyone.yielder_deposit(token_id=3);
-    %{ stop_warp() %}
-
-    return ();
-}
-
-@view
-func test_withdraw_revert_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) {
-    // When admin starts a 10s period with 5s unlock
-    // And anyone approves yielder for token 3 at time 1
-    // And anyone deposits token 3 to yielder at time 5
-    // And anyone withdraws token 3 from yielder at time 6
-    // Then a failed transactions expected
-    alloc_locals;
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.get_address();
-
-    // Mint tokens
-    admin.mint(to=anyone_address, token_id=3);
-
-    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
-    anyone.project_approve(approved=yielder_address, token_id=3);
-
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
-    anyone.yielder_deposit(token_id=3);
-    %{ stop_warp() %}
-
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: withdrawals are currently locked") %}
-    anyone.yielder_withdraw(token_id=3);
-    %{ stop_warp() %}
-
-    return ();
-}
-
-@view
-func test_start_and_start_and_stop_period{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When admin starts a 10s period with 5s unlock
-    // And admin starts a 20s period with 10s unlock
-    // And admin stops the current period
-    // Then no failed transactions expected
-    alloc_locals;
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (yielder_address) = yielder.get_address();
-
-    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
-    admin.yielder_start_period(unlocked_duration=10, period_duration=20);
-    admin.yielder_stop_period();
-
-    return ();
-}
-
-@view
-func test_start_period_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When anyone starts a 10s period with 5s unlock
+    // And anyone snapshots
     // Then a failed transaction is expected
     alloc_locals;
 
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.yielder_start_period(unlocked_duration=5, period_duration=10);
-
-    return ();
-}
-
-@view
-func test_stop_period_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    // When admin starts a 10s period with 5s unlock
-    // And anyone stops the current period
-    // Then a failed transaction is expected
-    alloc_locals;
-
-    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.yielder_stop_period();
+    anyone.snapshot();
 
     return ();
 }
@@ -237,22 +56,15 @@ func test_create_vestings_revert_not_owner{
     // And anyone create vestings
     // Then a failed transaction is expected
     alloc_locals;
-    let total_amount = 10;
-    let cliff_delta = 0;
-    let start = 1;
-    let duration = 1;
-    let slice_period_seconds = 1;
-    let revocable = TRUE;
 
-    admin.yielder_start_period(unlocked_duration=5, period_duration=10);
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
     anyone.create_vestings(
-        total_amount=total_amount,
-        cliff_delta=cliff_delta,
-        start=start,
-        duration=duration,
-        slice_period_seconds=slice_period_seconds,
-        revocable=revocable,
+        total_amount=1000,
+        cliff_delta=0,
+        start=120,
+        duration=10,
+        slice_period_seconds=1,
+        revocable=TRUE,
     );
 
     return ();
@@ -267,29 +79,10 @@ func test_create_vestings_without_any_deposited{
     // Then no failed transactions expected
     // And no vesting will be created
     alloc_locals;
-    let (yielder_address) = yielder.get_address();
-    let (starkvest_address) = starkvest.get_address();
-    let total_amount = 10;
-    let unallocated_starkvest_amount = 1000;
-    let cliff_delta = 0;
-    let start = 1;
-    let duration = 1;
-    let slice_period_seconds = 1;
-    let revocable = TRUE;
 
-    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot or create vestings if no user has registered") %}
+    admin.snapshot();
 
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
-    admin.create_vestings(
-        total_amount=total_amount,
-        cliff_delta=cliff_delta,
-        start=start,
-        duration=duration,
-        slice_period_seconds=slice_period_seconds,
-        revocable=revocable,
-    );
-    %{ stop_warp %}
     return ();
 }
 
@@ -314,13 +107,12 @@ func test_create_vestings_nominal_case{
     // Then anyone request the releasable amount of vesting for the last vesting created at time 10
     // And releasable amount of anyone must be equal to expected amount of vesting
 
-    // # Setup for prerequis
+    // Setup for prerequis
     alloc_locals;
-    let zero = Uint256(low=0, high=0);
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
     let (yielder_address) = yielder.get_address();
-    let (starkvest_address) = starkvest.get_address();
+    let (vester_address) = vester.get_address();
 
     // Mint tokens
     admin.mint(to=admin_address, token_id=1);
@@ -330,8 +122,7 @@ func test_create_vestings_nominal_case{
     admin.mint(to=anyone_address, token_id=5);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
     anyone.project_approve(approved=yielder_address, token_id=4);
@@ -345,38 +136,32 @@ func test_create_vestings_nominal_case{
     admin.yielder_deposit(token_id=2);
     %{ stop_warp %}
 
-    // # Start testing create vestings
-    let total_amount = 1000;
-    let unallocated_starkvest_amount = 1000;
-    let cliff_delta = 0;
-    let start = 1;
-    let duration = 1;
-    let slice_period_seconds = 1;
-    let revocable = TRUE;
+    // Admin snapshot
+    %{ stop_warp = warp(blk_timestamp=110, target_contract_address=ids.yielder_address) %}
+    admin.snapshot();
+    %{ stop_warp %}
 
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
+    // Start testing create vestings
+    %{ stop_warp = warp(blk_timestamp=120, target_contract_address=ids.yielder_address) %}
+    admin.transfer(recipient=vester_address, amount=1000);
     admin.create_vestings(
-        total_amount=total_amount,
-        cliff_delta=cliff_delta,
-        start=start,
-        duration=duration,
-        slice_period_seconds=slice_period_seconds,
-        revocable=revocable,
+        total_amount=1000,
+        cliff_delta=0,
+        start=120,
+        duration=10,
+        slice_period_seconds=1,
+        revocable=TRUE,
     );
     %{ stop_warp %}
 
-    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.starkvest_address) %}
+    %{ warp(blk_timestamp=130, target_contract_address=ids.vester_address) %}
     let (vesting_id) = anyone.get_vesting_id();
     let (releasable_amount) = anyone.releasable_amount(vesting_id);
-
     let expected_amount = Uint256(low=200, high=0);
     let (is_zero) = uint256_eq(releasable_amount, expected_amount);
     with_attr error_message("Testing: releasable amount should be expected amount: 200") {
         assert is_zero = TRUE;
     }
-
-    %{ stop_warp %}
 
     return ();
 }
@@ -394,51 +179,42 @@ func test_create_vestings_only_one_deposited{
     // Then anyone request the releasable amount of vesting for the last vesting created at time 10
     // And releasable amount of anyone must be equal to the total of amount deposited by admin
 
-    // # Setup for prerequis
+    // Setup for prerequis
     alloc_locals;
-    let zero = Uint256(low=0, high=0);
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
     let (yielder_address) = yielder.get_address();
-    let (starkvest_address) = starkvest.get_address();
+    let (vester_address) = vester.get_address();
 
     // Mint tokens
-    admin.mint(to=admin_address, token_id=1);
-    admin.mint(to=admin_address, token_id=2);
     admin.mint(to=anyone_address, token_id=3);
-    admin.mint(to=anyone_address, token_id=4);
-    admin.mint(to=anyone_address, token_id=5);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
     %{ stop_warp %}
 
-    // # Start testing create vestings
-    let total_amount = 1000;
-    let unallocated_starkvest_amount = 1000;
-    let cliff_delta = 0;
-    let start = 1;
-    let duration = 1;
-    let slice_period_seconds = 1;
-    let revocable = TRUE;
+    // Admin snapshot
+    %{ stop_warp = warp(blk_timestamp=110, target_contract_address=ids.yielder_address) %}
+    admin.snapshot();
+    %{ stop_warp %}
 
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
+    // Start testing create vestings
+    %{ stop_warp = warp(blk_timestamp=120, target_contract_address=ids.yielder_address) %}
+    admin.transfer(recipient=vester_address, amount=1000);
 
     admin.create_vestings(
-        total_amount=total_amount,
-        cliff_delta=cliff_delta,
-        start=start,
-        duration=duration,
-        slice_period_seconds=slice_period_seconds,
-        revocable=revocable,
+        total_amount=1000,
+        cliff_delta=0,
+        start=120,
+        duration=10,
+        slice_period_seconds=1,
+        revocable=TRUE,
     );
     %{ stop_warp %}
 
-    %{ stop_warp = warp(blk_timestamp=10, target_contract_address=ids.starkvest_address) %}
+    %{ stop_warp = warp(blk_timestamp=130, target_contract_address=ids.vester_address) %}
     let (vesting_id) = anyone.get_vesting_id();
     let (releasable_amount) = anyone.releasable_amount(vesting_id);
 
@@ -454,7 +230,7 @@ func test_create_vestings_only_one_deposited{
 }
 
 @view
-func test_create_vestings_not_enough_fund_starkvest{
+func test_create_vestings_not_enough_fund_vester{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // When admin starts a 100s period with 5s unlock
@@ -464,50 +240,41 @@ func test_create_vestings_not_enough_fund_starkvest{
     // When admin deposits 800 ERC-20 token into at time 6
     // And admin create vesting for anyone and admin who deposited token during unlock period
     // Then a failed transactions expected
-    // And error_messages of not enough unallocated amount into starkvest expected
+    // And error_messages of not enough unallocated amount into vester expected
 
-    // # Setup for prerequis
+    // Setup for prerequis
     alloc_locals;
-    let zero = Uint256(low=0, high=0);
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
     let (yielder_address) = yielder.get_address();
-    let (starkvest_address) = starkvest.get_address();
+    let (vester_address) = vester.get_address();
 
     // Mint tokens
-    admin.mint(to=admin_address, token_id=1);
-    admin.mint(to=admin_address, token_id=2);
     admin.mint(to=anyone_address, token_id=3);
-    admin.mint(to=anyone_address, token_id=4);
-    admin.mint(to=anyone_address, token_id=5);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    admin.yielder_start_period(unlocked_duration=5, period_duration=100);
-    %{ stop_warp = warp(blk_timestamp=5, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
     %{ stop_warp %}
 
-    // # Start testing create vestings
-    let total_amount = 1000;
-    let unallocated_starkvest_amount = 800;
-    let cliff_delta = 0;
-    let start = 1;
-    let duration = 1;
-    let slice_period_seconds = 1;
-    let revocable = TRUE;
+    // Admin snapshot
+    %{ stop_warp = warp(blk_timestamp=110, target_contract_address=ids.yielder_address) %}
+    admin.snapshot();
+    %{ stop_warp %}
 
-    %{ stop_warp = warp(blk_timestamp=6, target_contract_address=ids.yielder_address) %}
-    admin.transfer(recipient=starkvest_address, amount=unallocated_starkvest_amount);
+    // Start testing create vestings
+    %{ stop_warp = warp(blk_timestamp=120, target_contract_address=ids.yielder_address) %}
+    admin.transfer(recipient=vester_address, amount=800);
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into starkvest") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into vester") %}
     admin.create_vestings(
-        total_amount=total_amount,
-        cliff_delta=cliff_delta,
-        start=start,
-        duration=duration,
-        slice_period_seconds=slice_period_seconds,
-        revocable=revocable,
+        total_amount=1000,
+        cliff_delta=0,
+        start=120,
+        duration=10,
+        slice_period_seconds=1,
+        revocable=TRUE,
     );
     %{ stop_warp %}
 

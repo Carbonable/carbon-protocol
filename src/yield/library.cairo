@@ -378,7 +378,7 @@ namespace CarbonableYielder_assert {
         );
         let (total_amount_uint256) = _felt_to_uint(total_amount);
         let (is_not_enough) = uint256_lt(withdrawable_amount, total_amount_uint256);
-        with_attr error_message("CarbonableYielder: not enough unallocated amount into starkvest") {
+        with_attr error_message("CarbonableYielder: not enough unallocated amount into vester") {
             assert is_not_enough = FALSE;
         }
         return (users_len=users_len, users=users);

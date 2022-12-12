@@ -31,6 +31,12 @@ namespace ICarbonableYielder {
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
+    func getCarbonableOffseterAddress() -> (carbonable_offseter_address: felt) {
+    }
+
+    func getCarbonableVesterAddress() -> (carbonable_vester_address: felt) {
+    }
+
     func isOpen() -> (status: felt) {
     }
 
@@ -55,7 +61,7 @@ namespace ICarbonableYielder {
     func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
     }
 
-    func claim() -> (success: felt) {
+    func getSnapshotedTime() -> (time: felt) {
     }
 
     func deposit(token_id: Uint256) -> (success: felt) {
@@ -64,7 +70,10 @@ namespace ICarbonableYielder {
     func withdraw(token_id: Uint256) -> (success: felt) {
     }
 
-    func create_vestings(
+    func snapshot() -> (success: felt) {
+    }
+
+    func createVestings(
         total_amount: felt,
         cliff_delta: felt,
         start: felt,
