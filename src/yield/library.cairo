@@ -57,35 +57,35 @@ func Vesting(address: felt, vesting_id: felt, amount: felt, time: felt) {
 //
 
 @storage_var
-func carbonable_offseter_address_() -> (address: felt) {
+func CarbonableYielder_carbonable_offseter_address_() -> (address: felt) {
 }
 
 @storage_var
-func carbonable_vester_address_() -> (address: felt) {
+func CarbonableYielder_carbonable_vester_address_() -> (address: felt) {
 }
 
 @storage_var
-func snapshoted_offseter_absorption_() -> (absorption: felt) {
+func CarbonableYielder_snapshoted_offseter_absorption_() -> (absorption: felt) {
 }
 
 @storage_var
-func snapshoted_yielder_absorption_() -> (absorption: felt) {
+func CarbonableYielder_snapshoted_yielder_absorption_() -> (absorption: felt) {
 }
 
 @storage_var
-func snapshoted_yielder_contribution_() -> (absorption: felt) {
+func CarbonableYielder_snapshoted_yielder_contribution_() -> (absorption: felt) {
 }
 
 @storage_var
-func snapshoted_user_absorption_(address: felt) -> (absorption: felt) {
+func CarbonableYielder_snapshoted_user_absorption_(address: felt) -> (absorption: felt) {
 }
 
 @storage_var
-func snapshoted_user_contribution_(address: felt) -> (absorption: felt) {
+func CarbonableYielder_snapshoted_user_contribution_(address: felt) -> (absorption: felt) {
 }
 
 @storage_var
-func snapshoted_time_() -> (time: felt) {
+func CarbonableYielder_snapshoted_time_() -> (time: felt) {
 }
 
 namespace CarbonableYielder {
@@ -96,8 +96,8 @@ namespace CarbonableYielder {
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         carbonable_offseter_address: felt, carbonable_vester_address: felt
     ) {
-        carbonable_offseter_address_.write(carbonable_offseter_address);
-        carbonable_vester_address_.write(carbonable_vester_address);
+        CarbonableYielder_carbonable_offseter_address_.write(carbonable_offseter_address);
+        CarbonableYielder_carbonable_vester_address_.write(carbonable_vester_address);
         return ();
     }
 
@@ -108,20 +108,20 @@ namespace CarbonableYielder {
     func carbonable_offseter_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }() -> (carbonable_offseter_address: felt) {
-        let (carbonable_offseter_address) = carbonable_offseter_address_.read();
+        let (carbonable_offseter_address) = CarbonableYielder_carbonable_offseter_address_.read();
         return (carbonable_offseter_address,);
     }
 
     func carbonable_vester_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         ) -> (carbonable_vester_address: felt) {
-        let (carbonable_vester_address) = carbonable_vester_address_.read();
+        let (carbonable_vester_address) = CarbonableYielder_carbonable_vester_address_.read();
         return (carbonable_vester_address,);
     }
 
     func snapshoted_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         time: felt
     ) {
-        let (time) = snapshoted_time_.read();
+        let (time) = CarbonableYielder_snapshoted_time_.read();
         return (time,);
     }
 
@@ -138,15 +138,15 @@ namespace CarbonableYielder {
         let (users_len, users) = CarbonableYielder_assert.is_snapshotable();
 
         let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
-        let (carbonable_offseter_address) = carbonable_offseter_address_.read();
+        let (carbonable_offseter_address) = CarbonableYielder_carbonable_offseter_address_.read();
 
         // [Compute] Previous information
-        let (previous_time) = snapshoted_time_.read();
+        let (previous_time) = CarbonableYielder_snapshoted_time_.read();
         let (previous_project_absorption) = ICarbonableProject.getAbsorption(
             contract_address=carbonable_project_address, time=previous_time
         );
-        let (previous_offseter_absorption) = snapshoted_offseter_absorption_.read();
-        let (previous_yielder_absorption) = snapshoted_yielder_absorption_.read();
+        let (previous_offseter_absorption) = CarbonableYielder_snapshoted_offseter_absorption_.read();
+        let (previous_yielder_absorption) = CarbonableYielder_snapshoted_yielder_absorption_.read();
 
         // [Compute] Current information
         let (current_project_absorption) = ICarbonableProject.getCurrentAbsorption(
@@ -188,10 +188,10 @@ namespace CarbonableYielder {
         );
 
         // [Effect] Store snapshot values
-        snapshoted_time_.write(current_time);
-        snapshoted_offseter_absorption_.write(current_offseter_absorption);
-        snapshoted_yielder_absorption_.write(current_yielder_absorption);
-        snapshoted_yielder_contribution_.write(period_yielder_absorption);
+        CarbonableYielder_snapshoted_time_.write(current_time);
+        CarbonableYielder_snapshoted_offseter_absorption_.write(current_offseter_absorption);
+        CarbonableYielder_snapshoted_yielder_absorption_.write(current_yielder_absorption);
+        CarbonableYielder_snapshoted_yielder_contribution_.write(period_yielder_absorption);
 
         // [Effect] Store period shares per users
         _snapshot_iter(users_index=users_len - 1, users=users);
@@ -214,7 +214,7 @@ namespace CarbonableYielder {
         let (users_len, users) = CarbonableYielder_assert.is_vestable(total_amount);
 
         // [Interaction] Run create_vestings
-        let (carbonable_vester_address) = carbonable_vester_address_.read();
+        let (carbonable_vester_address) = CarbonableYielder_carbonable_vester_address_.read();
         _create_vestings_iter(
             contract_address=carbonable_vester_address,
             total_amount=total_amount,
@@ -247,7 +247,7 @@ namespace CarbonableYielder {
         let (claimable) = CarbonableOffseter.claimable_of(user);
         let (claimed) = CarbonableOffseter.claimed_of(user);
         let current_absorption = claimable + claimed;
-        let (previous_absorption) = snapshoted_user_absorption_.read(user);
+        let (previous_absorption) = CarbonableYielder_snapshoted_user_absorption_.read(user);
 
         // [Check] Overflow
         let is_lower = is_le(current_absorption + 1, previous_absorption);  // is_lt
@@ -257,9 +257,9 @@ namespace CarbonableYielder {
         let period_contribution = current_absorption - previous_absorption;
 
         // [Effect] Store new snapshoted absorption
-        snapshoted_user_absorption_.write(user, current_absorption);
+        CarbonableYielder_snapshoted_user_absorption_.write(user, current_absorption);
         // [Effect] Store new snapshoted contribution (period absorption)
-        snapshoted_user_contribution_.write(user, period_contribution);
+        CarbonableYielder_snapshoted_user_contribution_.write(user, period_contribution);
 
         // [Check] If not last, then continue
         if (users_index != 0) {
@@ -282,7 +282,7 @@ namespace CarbonableYielder {
         alloc_locals;
 
         let beneficiary = users[users_index];
-        let (user_contribution) = snapshoted_user_contribution_.read(beneficiary);
+        let (user_contribution) = CarbonableYielder_snapshoted_user_contribution_.read(beneficiary);
 
         // [Check] If user abosrption is null, then continue
         if (user_contribution == 0) {
@@ -300,7 +300,7 @@ namespace CarbonableYielder {
             return ();
         }
 
-        let (yielder_contribution) = snapshoted_yielder_contribution_.read();
+        let (yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
         let (amount, _) = unsigned_div_rem(user_contribution * total_amount, yielder_contribution);
         let (amount_uint256) = _felt_to_uint(amount);
 
