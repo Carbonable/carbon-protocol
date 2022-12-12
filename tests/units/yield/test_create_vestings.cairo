@@ -120,7 +120,7 @@ func test_create_vestings_revert_not_vestable{
     CarbonableYielder.snapshot();
     %{ stop_warp() %}
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into starkvest") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into vester") %}
     let (success) = CarbonableYielder.create_vestings(
         total_amount=TOTAL_AMOUNT,
         cliff_delta=CLIFF_DELTA,
