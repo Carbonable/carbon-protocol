@@ -40,6 +40,22 @@ namespace Metadata {
         return (str.len, str.data);
     }
 
+    func uri{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        bitwise_ptr: BitwiseBuiltin*,
+        range_check_ptr,
+    }() -> (uri_len: felt, uri: felt*) {
+        alloc_locals;
+
+        // [Effect] Compute and return corresponding token URI
+        let (uri_str) = StringCodec.read('uri');
+        let (json_str) = StringCodec.ss_to_string('token.json');
+        let (str) = StringUtil.path_join(uri_str, json_str);
+
+        return (str.len, str.data);
+    }
+
     func contract_uri{
         syscall_ptr: felt*,
         pedersen_ptr: HashBuiltin*,
