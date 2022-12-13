@@ -21,26 +21,39 @@ Admin address
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  
 {% swagger-description %}  
-Renounce ownership  
+Upgrade the contract to the new implementation  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_implementation" %}  
-new contract implementation  
+New implementation class hash  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setAdmin" %}  
 {% swagger-description %}  
-  
+Transfer admin rights to a new admin  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_admin" %}  
-  
+Address of the new admin  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "set_minter" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  
 {% swagger-description %}  
-  
+Transfer ownership to a new owner  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="newOwner" %}  
+Address of the new owner  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "renounceOwnership" %}  
+{% swagger-description %}  
+Renounce ownership  
+{% endswagger-description %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "addMinter" %}  
+{% swagger-description %}  
+Add new minter  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="minter" %}  
-  
+Minter address  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "approve" %}  
@@ -140,16 +153,25 @@ URI array length
 URI characters  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setTime" %}  
 {% swagger-description %}  
-Transfer ownership to a new owner  
+Set new time step  
 {% endswagger-description %}  
-{% swagger-parameter in="path" type="felt" name="newOwner" %}  
-Address of the new owner  
+{% swagger-parameter in="path" type="felt" name="start_time" %}  
+Absolute start time  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="felt" name="time_step" %}  
+Time step value  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "renounceOwnership" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setAbsorptions" %}  
 {% swagger-description %}  
-Renounce ownership  
+Set new absorption values  
 {% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="absorptions_len" %}  
+Array length  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="felt*" name="absorptions" %}  
+Absorption values  
+{% endswagger-parameter %}  
 {% endswagger %}

@@ -1,9 +1,83 @@
 - attributeName: event
   functionName:
-    name: VestingsCreated
+    name: Claim
     charIndex:
-      start: 1117
-      end: 1132
+      start: 771
+      end: 776
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+      - name: absorption
+        type: felt
+      - name: time
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: event
+  functionName:
+    name: Snapshot
+    charIndex:
+      start: 839
+      end: 847
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: project
+        type: felt
+      - name: previous_time
+        type: felt
+      - name: previous_project_absorption
+        type: felt
+      - name: previous_offseter_absorption
+        type: felt
+      - name: previous_yielder_absorption
+        type: felt
+      - name: current_time
+        type: felt
+      - name: current_project_absorption
+        type: felt
+      - name: current_offseter_absorption
+        type: felt
+      - name: current_yielder_absorption
+        type: felt
+      - name: period_project_absorption
+        type: felt
+      - name: period_offseter_absorption
+        type: felt
+      - name: period_yielder_absorption
+        type: felt
+      - name: ''
+        type: ''
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: event
+  functionName:
+    name: Vestings
+    charIndex:
+      start: 1281
+      end: 1289
   functionSignature:
     implicitArgs:
       - name: ''
@@ -25,10 +99,10 @@
       end: 0
 - attributeName: event
   functionName:
-    name: VestingOfAddrCreated
+    name: Vesting
     charIndex:
-      start: 1182
-      end: 1202
+      start: 1339
+      end: 1346
   functionSignature:
     implicitArgs:
       - name: ''
@@ -38,6 +112,8 @@
         type: felt
       - name: vesting_id
         type: felt
+      - name: amount
+        type: felt
       - name: time
         type: felt
     returns: null
@@ -52,10 +128,10 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: carbonable_project_address_
+    name: CarbonableYielder_carbonable_offseter_address_
     charIndex:
-      start: 1308
-      end: 1335
+      start: 1448
+      end: 1494
   functionSignature:
     implicitArgs:
       - name: ''
@@ -75,10 +151,10 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: starkvest_address_
+    name: CarbonableYielder_carbonable_vester_address_
     charIndex:
-      start: 1380
-      end: 1398
+      start: 1539
+      end: 1583
   functionSignature:
     implicitArgs:
       - name: ''
@@ -98,17 +174,17 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: start_
+    name: CarbonableYielder_snapshoted_offseter_absorption_
     charIndex:
-      start: 1443
-      end: 1449
+      start: 1628
+      end: 1677
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: time
+      - name: absorption
         type: felt
   functionComment:
     desc: null
@@ -121,17 +197,17 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: unlocked_duration_
+    name: CarbonableYielder_snapshoted_yielder_absorption_
     charIndex:
-      start: 1491
-      end: 1509
+      start: 1725
+      end: 1773
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: duration
+      - name: absorption
         type: felt
   functionComment:
     desc: null
@@ -144,17 +220,17 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: period_duration_
+    name: CarbonableYielder_snapshoted_yielder_contribution_
     charIndex:
-      start: 1555
-      end: 1571
+      start: 1821
+      end: 1871
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: duration
+      - name: absorption
         type: felt
   functionComment:
     desc: null
@@ -167,19 +243,19 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: registration_
+    name: CarbonableYielder_snapshoted_user_absorption_
     charIndex:
-      start: 1617
-      end: 1630
+      start: 1919
+      end: 1964
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs:
-      - name: token_id
-        type: Uint256
-    returns:
       - name: address
+        type: felt
+    returns:
+      - name: absorption
         type: felt
   functionComment:
     desc: null
@@ -192,17 +268,42 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: vestings_created_
+    name: CarbonableYielder_snapshoted_user_contribution_
     charIndex:
-      start: 1728
-      end: 1745
+      start: 2025
+      end: 2072
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableYielder_snapshoted_time_
+    charIndex:
+      start: 2133
+      end: 2167
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs: null
     returns:
-      - name: vesting_created
+      - name: time
         type: felt
   functionComment:
     desc: null
@@ -217,8 +318,8 @@
   functionName:
     name: initializer
     charIndex:
-      start: 1853
-      end: 1864
+      start: 2264
+      end: 2275
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -228,9 +329,9 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: carbonable_project_address
+      - name: carbonable_offseter_address
         type: felt
-      - name: starkvest_address
+      - name: carbonable_vester_address
         type: felt
     returns: null
   functionComment:
@@ -244,10 +345,10 @@
       end: 0
 - attributeName: namespace CarbonableYielder
   functionName:
-    name: carbonable_project_address
+    name: carbonable_offseter_address
     charIndex:
-      start: 2194
-      end: 2220
+      start: 2668
+      end: 2695
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -258,7 +359,7 @@
         type: ''
     explicitArgs: null
     returns:
-      - name: carbonable_project_address
+      - name: carbonable_offseter_address
         type: felt
   functionComment:
     desc: null
@@ -271,10 +372,10 @@
       end: 0
 - attributeName: namespace CarbonableYielder
   functionName:
-    name: carbonable_minter_address
+    name: carbonable_vester_address
     charIndex:
-      start: 2483
-      end: 2508
+      start: 2980
+      end: 3005
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -287,7 +388,7 @@
       - name: ''
         type: ''
     returns:
-      - name: carbonable_minter_address
+      - name: carbonable_vester_address
         type: felt
   functionComment:
     desc: null
@@ -300,10 +401,10 @@
       end: 0
 - attributeName: namespace CarbonableYielder
   functionName:
-    name: get_start_time
+    name: snapshoted_time
     charIndex:
-      start: 2886
-      end: 2900
+      start: 3277
+      end: 3292
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -314,7 +415,7 @@
         type: ''
     explicitArgs: null
     returns:
-      - name: start_time
+      - name: time
         type: felt
   functionComment:
     desc: null
@@ -327,10 +428,10 @@
       end: 0
 - attributeName: namespace CarbonableYielder
   functionName:
-    name: get_lock_time
+    name: snapshot
     charIndex:
-      start: 3095
-      end: 3108
+      start: 3528
+      end: 3536
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -340,292 +441,6 @@
       - name: range_check_ptr
         type: ''
     explicitArgs: null
-    returns:
-      - name: lock_time
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: get_end_time
-    charIndex:
-      start: 3385
-      end: 3397
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: end_time
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: is_locked
-    charIndex:
-      start: 3666
-      end: 3675
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: status
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: total_locked
-    charIndex:
-      start: 4287
-      end: 4299
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: balance
-        type: Uint256
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: shares_of
-    charIndex:
-      start: 4728
-      end: 4737
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: address
-        type: felt
-      - name: precision
-        type: felt
-    returns:
-      - name: shares
-        type: Uint256
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: balance_of
-    charIndex:
-      start: 5432
-      end: 5442
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: address
-        type: felt
-    returns:
-      - name: balance
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: registred_owner_of
-    charIndex:
-      start: 5673
-      end: 5691
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: token_id
-        type: Uint256
-    returns:
-      - name: address
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 5810
-      end: 5822
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: start_period
-    charIndex:
-      start: 6611
-      end: 6623
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: unlocked_duration
-        type: felt
-      - name: period_duration
-        type: felt
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 6771
-      end: 6783
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: stop_period
-    charIndex:
-      start: 7459
-      end: 7470
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 7572
-      end: 7584
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: deposit
-    charIndex:
-      start: 8114
-      end: 8121
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: token_id
-        type: Uint256
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: withdraw
-    charIndex:
-      start: 9672
-      end: 9680
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: token_id
-        type: Uint256
     returns:
       - name: success
         type: felt
@@ -642,8 +457,8 @@
   functionName:
     name: create_vestings
     charIndex:
-      start: 11232
-      end: 11247
+      start: 7035
+      end: 7050
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -681,10 +496,10 @@
       end: 0
 - attributeName: namespace CarbonableYielder
   functionName:
-    name: _count
+    name: _snapshot_iter
     charIndex:
-      start: 12720
-      end: 12726
+      start: 8295
+      end: 8309
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -694,111 +509,10 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: address
+      - name: users_index
         type: felt
-    returns:
-      - name: count
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: _count_iter
-    charIndex:
-      start: 13451
-      end: 13462
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
+      - name: users
         type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: contract_address
-        type: felt
-      - name: address
-        type: felt
-      - name: index
-        type: Uint256
-    returns:
-      - name: count
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: _create_vestings
-    charIndex:
-      start: 14513
-      end: 14529
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: total_amount
-        type: felt
-      - name: cliff_delta
-        type: felt
-      - name: start
-        type: felt
-      - name: duration
-        type: felt
-      - name: slice_period_seconds
-        type: felt
-      - name: revocable
-        type: felt
-      - name: ''
-        type: ''
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableYielder
-  functionName:
-    name: _check_enough_amount
-    charIndex:
-      start: 15982
-      end: 16002
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: total_amount
-        type: felt
-      - name: total_supply
-        type: Uint256
     returns: null
   functionComment:
     desc: null
@@ -813,8 +527,8 @@
   functionName:
     name: _create_vestings_iter
     charIndex:
-      start: 16782
-      end: 16803
+      start: 9587
+      end: 9608
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -826,16 +540,8 @@
     explicitArgs:
       - name: contract_address
         type: felt
-      - name: starkvest_address
-        type: felt
       - name: total_amount
         type: felt
-      - name: token_total_deposited
-        type: Uint256
-      - name: index
-        type: Uint256
-      - name: total_supply
-        type: Uint256
       - name: cliff_delta
         type: felt
       - name: start
@@ -846,6 +552,10 @@
         type: felt
       - name: revocable
         type: felt
+      - name: users_index
+        type: felt
+      - name: users
+        type: felt*
       - name: ''
         type: ''
     returns: null
@@ -858,12 +568,66 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: namespace CarbonableYielder
+- attributeName: namespace CarbonableYielder_assert
   functionName:
-    name: _amount_to_vest
+    name: is_snapshoted
     charIndex:
-      start: 20099
-      end: 20114
+      start: 12612
+      end: 12625
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 12694
+      end: 12706
+- attributeName: namespace CarbonableYielder_assert
+  functionName:
+    name: is_snapshotable
+    charIndex:
+      start: 13043
+      end: 13058
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: users_len
+        type: felt
+      - name: users
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 13176
+      end: 13188
+- attributeName: namespace CarbonableYielder_assert
+  functionName:
+    name: is_vestable
+    charIndex:
+      start: 13589
+      end: 13600
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -873,15 +637,13 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: token_total_deposited
-        type: Uint256
       - name: total_amount
         type: felt
-      - name: address_token_amount
-        type: felt
     returns:
-      - name: amount
-        type: Uint256
+      - name: users_len
+        type: felt
+      - name: users
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null

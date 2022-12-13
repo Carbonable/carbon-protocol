@@ -1,0 +1,624 @@
+- attributeName: view
+  functionName:
+    name: getImplementationHash
+    charIndex:
+      start: 1521
+      end: 1542
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: implementation
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the current implementation hash
+        charIndex:
+          start: 23
+          end: 61
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 93
+          end: 111
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 121
+          end: 147
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 157
+          end: 172
+    explicitArgs: null
+    returns:
+      - name: implementation
+        type: felt
+        desc: Implementation class hash
+        charIndex:
+          start: 198
+          end: 245
+    raises: null
+    charIndex:
+      start: 1643
+      end: 1888
+- attributeName: view
+  functionName:
+    name: getAdmin
+    charIndex:
+      start: 1947
+      end: 1955
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: admin
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the admin address
+        charIndex:
+          start: 23
+          end: 47
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 79
+          end: 97
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 133
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 143
+          end: 158
+    explicitArgs: null
+    returns:
+      - name: admin
+        type: felt
+        desc: The admin address
+        charIndex:
+          start: 184
+          end: 214
+    raises: null
+    charIndex:
+      start: 2041
+      end: 2255
+- attributeName: view
+  functionName:
+    name: owner
+    charIndex:
+      start: 3434
+      end: 3439
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the contract owner
+        charIndex:
+          start: 23
+          end: 48
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 80
+          end: 98
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 134
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 144
+          end: 159
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+        desc: The owner address
+        charIndex:
+          start: 185
+          end: 215
+    raises: null
+    charIndex:
+      start: 3525
+      end: 3740
+- attributeName: external
+  functionName:
+    name: initializer
+    charIndex:
+      start: 735
+      end: 746
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: erc20_address
+        type: felt
+      - name: owner
+        type: felt
+      - name: proxy_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Initialize the contract with the given parameters -
+        charIndex:
+          start: 23
+          end: 74
+      - name: ''
+        type: ''
+        desc: >-
+          This constructor uses a dedicated initializer that mainly stores the
+          inputs
+        charIndex:
+          start: 84
+          end: 159
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 191
+          end: 209
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 219
+          end: 245
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 255
+          end: 270
+    explicitArgs:
+      - name: erc20_address
+        type: felt
+        desc: Address of the corresponding Carbonable project
+        charIndex:
+          start: 302
+          end: 370
+      - name: owner
+        type: felt
+        desc: Owner address
+        charIndex:
+          start: 380
+          end: 406
+      - name: proxy_admin
+        type: felt
+        desc: Admin address
+        charIndex:
+          start: 416
+          end: 448
+    returns: null
+    raises: null
+    charIndex:
+      start: 872
+      end: 1350
+- attributeName: external
+  functionName:
+    name: upgrade
+    charIndex:
+      start: 2304
+      end: 2311
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Upgrade the contract to the new implementation
+        charIndex:
+          start: 23
+          end: 69
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 119
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 129
+          end: 155
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 165
+          end: 180
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+        desc: New implementation class hash
+        charIndex:
+          start: 212
+          end: 267
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 322
+          end: 353
+    charIndex:
+      start: 2410
+      end: 2763
+- attributeName: external
+  functionName:
+    name: setAdmin
+    charIndex:
+      start: 2884
+      end: 2892
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer admin rights to a new admin
+        charIndex:
+          start: 23
+          end: 59
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 91
+          end: 109
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 119
+          end: 145
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 155
+          end: 170
+    explicitArgs:
+      - name: new_admin
+        type: felt
+        desc: Address of the new admin
+        charIndex:
+          start: 202
+          end: 243
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 298
+          end: 329
+    charIndex:
+      start: 2976
+      end: 3305
+- attributeName: external
+  functionName:
+    name: transferOwnership
+    charIndex:
+      start: 3787
+      end: 3804
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: newOwner
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer ownership to a new owner
+        charIndex:
+          start: 23
+          end: 56
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 88
+          end: 106
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 142
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 152
+          end: 167
+    explicitArgs:
+      - name: newOwner
+        type: felt
+        desc: Address of the new owner
+        charIndex:
+          start: 199
+          end: 239
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 294
+          end: 334
+      - name: newOwner
+        type: ''
+        desc: new owner is the zero address
+        charIndex:
+          start: 344
+          end: 383
+    charIndex:
+      start: 3893
+      end: 4276
+- attributeName: external
+  functionName:
+    name: renounceOwnership
+    charIndex:
+      start: 4352
+      end: 4369
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Renounce ownership
+        charIndex:
+          start: 23
+          end: 41
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 73
+          end: 91
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 127
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 137
+          end: 152
+    explicitArgs: null
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 207
+          end: 247
+    charIndex:
+      start: 4438
+      end: 4685
+- attributeName: external
+  functionName:
+    name: releasableOf
+    charIndex:
+      start: 4769
+      end: 4781
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: account
+        type: felt
+    returns:
+      - name: amount
+        type: Uint256
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return
+        charIndex:
+          start: 23
+          end: 29
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 61
+          end: 79
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 89
+          end: 115
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 125
+          end: 140
+    explicitArgs:
+      - name: account
+        type: felt
+        desc: Account address
+        charIndex:
+          start: 172
+          end: 202
+    returns:
+      - name: amount
+        type: Uint256
+        desc: Total amount releasable
+        charIndex:
+          start: 228
+          end: 268
+    raises: null
+    charIndex:
+      start: 4890
+      end: 5158
+- attributeName: external
+  functionName:
+    name: releaseAll
+    charIndex:
+      start: 5257
+      end: 5267
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Release all withdrawable amounts of all vestings associated to the
+          caller
+        charIndex:
+          start: 23
+          end: 96
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 128
+          end: 146
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 156
+          end: 182
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 192
+          end: 207
+    explicitArgs: null
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 262
+          end: 302
+    charIndex:
+      start: 5336
+      end: 5638

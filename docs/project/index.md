@@ -19,9 +19,3 @@ Contracts include the following standard features:
 - 🔥 Burnable
 - 📝 Enumerable
 - 🌐 Metadata
-
-## 📈 Callgraph
-
-See also the detailed [callgraph](../callgraphs/CarbonableProject.gv) of the smart-contract.
-
-![Figure - Carbonable Project Callgraph](../callgraphs/CarbonableProject.gv.svg)

@@ -18,53 +18,36 @@ Admin address
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  
 {% swagger-description %}  
-Renounce ownership  
+Upgrade the contract to the new implementation  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_implementation" %}  
-new contract implementation  
+New implementation class hash  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setAdmin" %}  
 {% swagger-description %}  
-  
+Transfer admin rights to a new admin  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_admin" %}  
-  
+Address of the new admin  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "offset" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  
 {% swagger-description %}  
-Offset the current total offsetable of the caller address  
+Transfer ownership to a new owner  
 {% endswagger-description %}  
-{% swagger-response status="success ( felt )" description="Success status" %}  
-{% endswagger-response %}  
+{% swagger-parameter in="path" type="felt" name="newOwner" %}  
+Address of the new owner  
+{% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "snapshot" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "renounceOwnership" %}  
 {% swagger-description %}  
-Snapshot deposits  
+Renounce ownership  
 {% endswagger-description %}  
-{% swagger-response status="success ( felt )" description="Success status" %}  
-{% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "start_period" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "claim" %}  
 {% swagger-description %}  
-Start a new period (erase the current one)  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="felt" name="unlocked_duration" %}  
-Unlocked duration in seconds  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="period_duration" %}  
-Period duration in seconds  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="absorption" %}  
-Carbon absorption in ng of CO2  
-{% endswagger-parameter %}  
-{% swagger-response status="success ( felt )" description="Success status" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "stop_period" %}  
-{% swagger-description %}  
-Stop the current period  
+Claim all the claimable balance of the caller address  
 {% endswagger-description %}  
 {% swagger-response status="success ( felt )" description="Success status" %}  
 {% endswagger-response %}  

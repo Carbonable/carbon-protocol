@@ -2,8 +2,8 @@
   functionName:
     name: getImplementationHash
     charIndex:
-      start: 1231
-      end: 1252
+      start: 1281
+      end: 1302
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -17,20 +17,50 @@
       - name: implementation
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the current implementation hash
+        charIndex:
+          start: 23
+          end: 61
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 93
+          end: 111
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 121
+          end: 147
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 157
+          end: 172
     explicitArgs: null
-    returns: null
+    returns:
+      - name: implementation
+        type: felt
+        desc: Implementation class hash
+        charIndex:
+          start: 198
+          end: 245
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 1403
+      end: 1648
 - attributeName: view
   functionName:
     name: getAdmin
     charIndex:
-      start: 1412
-      end: 1420
+      start: 1707
+      end: 1715
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -44,20 +74,107 @@
       - name: admin
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the admin address
+        charIndex:
+          start: 23
+          end: 47
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 79
+          end: 97
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 133
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 143
+          end: 158
     explicitArgs: null
-    returns: null
+    returns:
+      - name: admin
+        type: felt
+        desc: The admin address
+        charIndex:
+          start: 184
+          end: 214
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 1801
+      end: 2015
 - attributeName: view
   functionName:
-    name: carbonable_project_address
+    name: owner
     charIndex:
-      start: 2316
-      end: 2342
+      start: 3194
+      end: 3199
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the contract owner
+        charIndex:
+          start: 23
+          end: 48
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 80
+          end: 98
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 134
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 144
+          end: 159
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+        desc: The owner address
+        charIndex:
+          start: 185
+          end: 215
+    raises: null
+    charIndex:
+      start: 3285
+      end: 3500
+- attributeName: view
+  functionName:
+    name: getCarbonableProjectAddress
+    charIndex:
+      start: 4527
+      end: 4554
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -109,14 +226,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 2454
-      end: 2735
+      start: 4666
+      end: 4947
 - attributeName: view
   functionName:
-    name: is_locked
+    name: isOpen
     charIndex:
-      start: 2810
-      end: 2819
+      start: 5022
+      end: 5028
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -133,7 +250,178 @@
     desc:
       - name: ''
         type: ''
-        desc: Return the locked status of deposits and withdrawals
+        desc: Return the deposits status according to project setup
+        charIndex:
+          start: 23
+          end: 76
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 126
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 136
+          end: 162
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 172
+          end: 187
+    explicitArgs: null
+    returns:
+      - name: status
+        type: felt
+        desc: Deposits status
+        charIndex:
+          start: 213
+          end: 242
+    raises: null
+    charIndex:
+      start: 5115
+      end: 5357
+- attributeName: view
+  functionName:
+    name: getTotalDeposited
+    charIndex:
+      start: 5413
+      end: 5430
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: balance
+        type: Uint256
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the total deposited balance of the project
+        charIndex:
+          start: 23
+          end: 72
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 104
+          end: 122
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 132
+          end: 158
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 168
+          end: 183
+    explicitArgs: null
+    returns:
+      - name: balance
+        type: Uint256
+        desc: Total deposited
+        charIndex:
+          start: 209
+          end: 242
+    raises: null
+    charIndex:
+      start: 5527
+      end: 5769
+- attributeName: view
+  functionName:
+    name: getTotalClaimed
+    charIndex:
+      start: 5833
+      end: 5848
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: total_claimed
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the total claimed absorption of the project
+        charIndex:
+          start: 23
+          end: 73
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 105
+          end: 123
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 133
+          end: 159
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 169
+          end: 184
+    explicitArgs: null
+    returns:
+      - name: total_claimed
+        type: felt
+        desc: Total claimed
+        charIndex:
+          start: 210
+          end: 244
+    raises: null
+    charIndex:
+      start: 5948
+      end: 6192
+- attributeName: view
+  functionName:
+    name: getTotalClaimable
+    charIndex:
+      start: 6254
+      end: 6271
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: total_claimable
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the total claimable absorption of the project
         charIndex:
           start: 23
           end: 75
@@ -158,22 +446,22 @@
           end: 186
     explicitArgs: null
     returns:
-      - name: status
+      - name: total_claimable
         type: felt
-        desc: Locked status (1 if locked else 0)
+        desc: Total claimable
         charIndex:
           start: 212
-          end: 260
+          end: 250
     raises: null
     charIndex:
-      start: 2912
-      end: 3172
+      start: 6373
+      end: 6623
 - attributeName: view
   functionName:
-    name: total_offsetable
+    name: getClaimableOf
     charIndex:
-      start: 3230
-      end: 3246
+      start: 6687
+      end: 6701
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -186,141 +474,13 @@
       - name: address
         type: felt
     returns:
-      - name: total_offsetable
-        type: Uint256
+      - name: claimable
+        type: felt
   functionComment:
     desc:
       - name: ''
         type: ''
-        desc: Return the total offsetable balance of the provided address
-        charIndex:
-          start: 23
-          end: 82
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 114
-          end: 132
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 142
-          end: 168
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 178
-          end: 193
-    explicitArgs:
-      - name: address
-        type: felt
-        desc: address
-        charIndex:
-          start: 225
-          end: 247
-    returns:
-      - name: total_offsetable
-        type: Uint256
-        desc: Total offsetable balance
-        charIndex:
-          start: 273
-          end: 324
-    raises: null
-    charIndex:
-      start: 3365
-      end: 3689
-- attributeName: view
-  functionName:
-    name: total_offseted
-    charIndex:
-      start: 3769
-      end: 3783
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: address
-        type: felt
-    returns:
-      - name: total_offseted
-        type: Uint256
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Return the total offseted balance of the provided address
-        charIndex:
-          start: 23
-          end: 80
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 112
-          end: 130
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 140
-          end: 166
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 176
-          end: 191
-    explicitArgs:
-      - name: address
-        type: felt
-        desc: address
-        charIndex:
-          start: 223
-          end: 245
-    returns:
-      - name: total_offseted
-        type: Uint256
-        desc: Total offseted balance
-        charIndex:
-          start: 271
-          end: 318
-    raises: null
-    charIndex:
-      start: 3900
-      end: 4218
-- attributeName: view
-  functionName:
-    name: total_locked
-    charIndex:
-      start: 4296
-      end: 4308
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: balance
-        type: Uint256
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Return the current number of tokens locked in the contract
+        desc: Return the total claimable balance of the provided address
         charIndex:
           start: 23
           end: 81
@@ -343,24 +503,30 @@
         charIndex:
           start: 177
           end: 192
-    explicitArgs: null
-    returns:
-      - name: balance
-        type: Uint256
-        desc: Total balance of locked tokens
+    explicitArgs:
+      - name: address
+        type: felt
+        desc: address
         charIndex:
-          start: 218
-          end: 266
+          start: 224
+          end: 246
+    returns:
+      - name: claimable
+        type: felt
+        desc: Total claimable
+        charIndex:
+          start: 272
+          end: 304
     raises: null
     charIndex:
-      start: 4405
-      end: 4671
+      start: 6810
+      end: 7114
 - attributeName: view
   functionName:
-    name: balance_of
+    name: getClaimedOf
     charIndex:
-      start: 4732
-      end: 4742
+      start: 7190
+      end: 7202
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -373,59 +539,59 @@
       - name: address
         type: felt
     returns:
-      - name: balance
+      - name: claimed
         type: felt
   functionComment:
     desc:
       - name: ''
         type: ''
-        desc: Return the current balance of a specified address
+        desc: Return the total claimed balance of the provided address
         charIndex:
           start: 23
-          end: 72
+          end: 79
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 104
-          end: 122
+          start: 111
+          end: 129
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 132
-          end: 158
+          start: 139
+          end: 165
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 168
-          end: 183
+          start: 175
+          end: 190
     explicitArgs:
       - name: address
         type: felt
-        desc: Address
+        desc: address
         charIndex:
-          start: 215
-          end: 237
+          start: 222
+          end: 244
     returns:
-      - name: balance
-        type: Uint256
-        desc: Balance associated to the address
+      - name: claimed
+        type: felt
+        desc: Total claimed
         charIndex:
-          start: 263
-          end: 314
+          start: 270
+          end: 298
     raises: null
     charIndex:
-      start: 4849
-      end: 5163
+      start: 7309
+      end: 7607
 - attributeName: view
   functionName:
-    name: registred_owner_of
+    name: getRegisteredOwnerOf
     charIndex:
-      start: 5237
-      end: 5255
+      start: 7681
+      end: 7701
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -445,7 +611,7 @@
       - name: ''
         type: ''
         desc: >-
-          Return the registred owner of a token id (0 if token is not locked in
+          Return the registered owner of a token id (0 if token is not owned by
           the contract)
         charIndex:
           start: 23
@@ -485,8 +651,75 @@
           end: 340
     raises: null
     charIndex:
-      start: 5366
-      end: 5706
+      start: 7812
+      end: 8152
+- attributeName: view
+  functionName:
+    name: getRegisteredTimeOf
+    charIndex:
+      start: 8237
+      end: 8256
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: token_id
+        type: Uint256
+    returns:
+      - name: time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Return the registered time of a token id (0 if token is not owned by
+          the contract)
+        charIndex:
+          start: 23
+          end: 105
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 137
+          end: 155
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 165
+          end: 191
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 201
+          end: 216
+    explicitArgs:
+      - name: token_id
+        type: Uint256
+        desc: Token id
+        charIndex:
+          start: 248
+          end: 275
+    returns:
+      - name: address
+        type: felt
+        desc: Registred time
+        charIndex:
+          start: 301
+          end: 330
+    raises: null
+    charIndex:
+      start: 8364
+      end: 8694
 - attributeName: external
   functionName:
     name: initializer
@@ -572,8 +805,8 @@
   functionName:
     name: upgrade
     charIndex:
-      start: 1555
-      end: 1562
+      start: 2064
+      end: 2071
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -585,6 +818,199 @@
     explicitArgs:
       - name: new_implementation
         type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Upgrade the contract to the new implementation
+        charIndex:
+          start: 23
+          end: 69
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 119
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 129
+          end: 155
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 165
+          end: 180
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+        desc: New implementation class hash
+        charIndex:
+          start: 212
+          end: 267
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 322
+          end: 353
+    charIndex:
+      start: 2170
+      end: 2523
+- attributeName: external
+  functionName:
+    name: setAdmin
+    charIndex:
+      start: 2644
+      end: 2652
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer admin rights to a new admin
+        charIndex:
+          start: 23
+          end: 59
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 91
+          end: 109
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 119
+          end: 145
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 155
+          end: 170
+    explicitArgs:
+      - name: new_admin
+        type: felt
+        desc: Address of the new admin
+        charIndex:
+          start: 202
+          end: 243
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 298
+          end: 329
+    charIndex:
+      start: 2736
+      end: 3065
+- attributeName: external
+  functionName:
+    name: transferOwnership
+    charIndex:
+      start: 3547
+      end: 3564
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: newOwner
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer ownership to a new owner
+        charIndex:
+          start: 23
+          end: 56
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 88
+          end: 106
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 142
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 152
+          end: 167
+    explicitArgs:
+      - name: newOwner
+        type: felt
+        desc: Address of the new owner
+        charIndex:
+          start: 199
+          end: 239
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 294
+          end: 334
+      - name: newOwner
+        type: ''
+        desc: new owner is the zero address
+        charIndex:
+          start: 344
+          end: 383
+    charIndex:
+      start: 3653
+      end: 4036
+- attributeName: external
+  functionName:
+    name: renounceOwnership
+    charIndex:
+      start: 4112
+      end: 4129
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
     returns: null
   functionComment:
     desc:
@@ -613,57 +1039,24 @@
         charIndex:
           start: 137
           end: 152
-    explicitArgs:
-      - name: new_implementation
-        type: felt
-        desc: new contract implementation
-        charIndex:
-          start: 214
-          end: 267
+    explicitArgs: null
     returns: null
     raises:
       - name: caller
         type: ''
-        desc: caller is not a contract admin
+        desc: caller is not the contract owner
         charIndex:
-          start: 292
-          end: 330
+          start: 207
+          end: 247
     charIndex:
-      start: 1661
-      end: 1991
+      start: 4198
+      end: 4445
 - attributeName: external
   functionName:
-    name: setAdmin
+    name: claim
     charIndex:
-      start: 2112
-      end: 2120
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: new_admin
-        type: felt
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: offset
-    charIndex:
-      start: 5814
-      end: 5820
+      start: 8802
+      end: 8807
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -680,242 +1073,47 @@
     desc:
       - name: ''
         type: ''
-        desc: Offset the current total offsetable of the caller address
+        desc: Claim all the claimable balance of the caller address
         charIndex:
           start: 23
-          end: 80
+          end: 76
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 112
-          end: 130
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 140
-          end: 166
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 176
-          end: 191
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-        desc: Success status
-        charIndex:
-          start: 217
-          end: 246
-    raises: null
-    charIndex:
-      start: 5908
-      end: 6154
-- attributeName: external
-  functionName:
-    name: snapshot
-    charIndex:
-      start: 6213
-      end: 6221
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Snapshot deposits
-        charIndex:
-          start: 23
-          end: 40
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 72
-          end: 90
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 100
+          start: 108
           end: 126
-      - name: range_check_ptr
-        type: ''
+      - name: pedersen_ptr
+        type: HashBuiltin*
         desc: ''
         charIndex:
           start: 136
-          end: 151
+          end: 162
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 172
+          end: 187
     explicitArgs: null
     returns:
       - name: success
         type: felt
         desc: Success status
         charIndex:
-          start: 177
-          end: 206
+          start: 213
+          end: 242
     raises: null
     charIndex:
-      start: 6315
-      end: 6521
-- attributeName: external
-  functionName:
-    name: start_period
-    charIndex:
-      start: 6615
-      end: 6627
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: unlocked_duration
-        type: felt
-      - name: period_duration
-        type: felt
-      - name: absorption
-        type: felt
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Start a new period (erase the current one)
-        charIndex:
-          start: 23
-          end: 65
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 97
-          end: 115
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 125
-          end: 151
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 161
-          end: 176
-    explicitArgs:
-      - name: unlocked_duration
-        type: felt
-        desc: Unlocked duration in seconds
-        charIndex:
-          start: 208
-          end: 261
-      - name: period_duration
-        type: felt
-        desc: Period duration in seconds
-        charIndex:
-          start: 271
-          end: 320
-      - name: absorption
-        type: felt
-        desc: Carbon absorption in ng of CO2
-        charIndex:
-          start: 330
-          end: 378
-    returns:
-      - name: success
-        type: felt
-        desc: Success status
-        charIndex:
-          start: 404
-          end: 433
-    raises: null
-    charIndex:
-      start: 6785
-      end: 7218
-- attributeName: external
-  functionName:
-    name: stop_period
-    charIndex:
-      start: 7421
-      end: 7432
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Stop the current period
-        charIndex:
-          start: 23
-          end: 46
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 78
-          end: 96
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 106
-          end: 132
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 142
-          end: 157
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-        desc: Success status
-        charIndex:
-          start: 183
-          end: 212
-    raises: null
-    charIndex:
-      start: 7526
-      end: 7738
+      start: 8895
+      end: 9137
 - attributeName: external
   functionName:
     name: deposit
     charIndex:
-      start: 7835
-      end: 7842
+      start: 9195
+      end: 9202
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -973,14 +1171,14 @@
           end: 303
     raises: null
     charIndex:
-      start: 7953
-      end: 8256
+      start: 9313
+      end: 9616
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 8333
-      end: 8341
+      start: 9693
+      end: 9701
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1038,5 +1236,5 @@
           end: 297
     raises: null
     charIndex:
-      start: 8452
-      end: 8749
+      start: 9812
+      end: 10109

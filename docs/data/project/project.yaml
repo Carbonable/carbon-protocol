@@ -2,8 +2,8 @@
   functionName:
     name: getImplementationHash
     charIndex:
-      start: 1791
-      end: 1812
+      start: 1822
+      end: 1843
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -17,20 +17,50 @@
       - name: implementation
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the current implementation hash
+        charIndex:
+          start: 23
+          end: 61
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 93
+          end: 111
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 121
+          end: 147
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 157
+          end: 172
     explicitArgs: null
-    returns: null
+    returns:
+      - name: implementation
+        type: felt
+        desc: Implementation class hash
+        charIndex:
+          start: 198
+          end: 245
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 1944
+      end: 2189
 - attributeName: view
   functionName:
     name: getAdmin
     charIndex:
-      start: 1972
-      end: 1980
+      start: 2248
+      end: 2256
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -44,20 +74,107 @@
       - name: admin
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the admin address
+        charIndex:
+          start: 23
+          end: 47
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 79
+          end: 97
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 133
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 143
+          end: 158
     explicitArgs: null
-    returns: null
+    returns:
+      - name: admin
+        type: felt
+        desc: The admin address
+        charIndex:
+          start: 184
+          end: 214
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2342
+      end: 2556
+- attributeName: view
+  functionName:
+    name: owner
+    charIndex:
+      start: 3735
+      end: 3740
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the contract owner
+        charIndex:
+          start: 23
+          end: 48
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 80
+          end: 98
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 134
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 144
+          end: 159
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+        desc: The owner address
+        charIndex:
+          start: 185
+          end: 215
+    raises: null
+    charIndex:
+      start: 3826
+      end: 4041
 - attributeName: view
   functionName:
     name: totalSupply
     charIndex:
-      start: 2876
-      end: 2887
+      start: 5068
+      end: 5079
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -109,14 +226,14 @@
           end: 387
     raises: null
     charIndex:
-      start: 2988
-      end: 3375
+      start: 5180
+      end: 5567
 - attributeName: view
   functionName:
     name: tokenByIndex
     charIndex:
-      start: 3494
-      end: 3506
+      start: 5686
+      end: 5698
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -180,14 +297,14 @@
           start: 409
           end: 441
     charIndex:
-      start: 3617
-      end: 4058
+      start: 5809
+      end: 6250
 - attributeName: view
   functionName:
     name: tokenOfOwnerByIndex
     charIndex:
-      start: 4172
-      end: 4191
+      start: 6364
+      end: 6383
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -255,14 +372,14 @@
           end: 501
     raises: null
     charIndex:
-      start: 4315
-      end: 4947
+      start: 6507
+      end: 7139
 - attributeName: view
   functionName:
     name: supportsInterface
     charIndex:
-      start: 5077
-      end: 5094
+      start: 7269
+      end: 7286
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -320,14 +437,14 @@
           end: 328
     raises: null
     charIndex:
-      start: 5205
-      end: 5533
+      start: 7397
+      end: 7725
 - attributeName: view
   functionName:
     name: name
     charIndex:
-      start: 5599
-      end: 5603
+      start: 7791
+      end: 7795
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -379,14 +496,14 @@
           end: 280
     raises: null
     charIndex:
-      start: 5688
-      end: 5968
+      start: 7880
+      end: 8160
 - attributeName: view
   functionName:
     name: symbol
     charIndex:
-      start: 6009
-      end: 6015
+      start: 8201
+      end: 8207
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -438,14 +555,14 @@
           end: 269
     raises: null
     charIndex:
-      start: 6102
-      end: 6371
+      start: 8294
+      end: 8563
 - attributeName: view
   functionName:
     name: balanceOf
     charIndex:
-      start: 6414
-      end: 6423
+      start: 8606
+      end: 8615
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -509,14 +626,14 @@
           start: 383
           end: 411
     charIndex:
-      start: 6531
-      end: 6942
+      start: 8723
+      end: 9134
 - attributeName: view
   functionName:
     name: ownerOf
     charIndex:
-      start: 6994
-      end: 7001
+      start: 9186
+      end: 9193
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -574,14 +691,14 @@
           end: 317
     raises: null
     charIndex:
-      start: 7109
-      end: 7426
+      start: 9301
+      end: 9618
 - attributeName: view
   functionName:
     name: getApproved
     charIndex:
-      start: 7478
-      end: 7489
+      start: 9670
+      end: 9681
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -647,14 +764,14 @@
           start: 413
           end: 448
     charIndex:
-      start: 7600
-      end: 8048
+      start: 9792
+      end: 10240
 - attributeName: view
   functionName:
     name: isApprovedForAll
     charIndex:
-      start: 8104
-      end: 8120
+      start: 10296
+      end: 10312
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -722,14 +839,14 @@
           end: 462
     raises: null
     charIndex:
-      start: 8244
-      end: 8706
+      start: 10436
+      end: 10898
 - attributeName: view
   functionName:
     name: tokenURI
     charIndex:
-      start: 8831
-      end: 8839
+      start: 11023
+      end: 11031
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -805,14 +922,14 @@
           start: 458
           end: 497
     charIndex:
-      start: 8991
-      end: 9488
+      start: 11183
+      end: 11680
 - attributeName: view
   functionName:
     name: contractURI
     charIndex:
-      start: 9618
-      end: 9629
+      start: 11810
+      end: 11821
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -878,14 +995,14 @@
           end: 298
     raises: null
     charIndex:
-      start: 9765
-      end: 10063
+      start: 11957
+      end: 12255
 - attributeName: view
   functionName:
-    name: owner
+    name: getStartTime
     charIndex:
-      start: 10189
-      end: 10194
+      start: 12381
+      end: 12393
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -896,47 +1013,462 @@
         type: ''
     explicitArgs: null
     returns:
-      - name: owner
+      - name: time
         type: felt
   functionComment:
     desc:
       - name: ''
         type: ''
-        desc: Return the contract owner
+        desc: Return the stored start time
         charIndex:
           start: 23
-          end: 48
+          end: 51
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 80
-          end: 98
+          start: 83
+          end: 101
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 108
-          end: 134
+          start: 111
+          end: 137
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 144
-          end: 159
+          start: 147
+          end: 162
     explicitArgs: null
     returns:
-      - name: owner
+      - name: time
         type: felt
-        desc: The owner address
+        desc: Start time
         charIndex:
-          start: 185
-          end: 215
+          start: 188
+          end: 210
     raises: null
     charIndex:
-      start: 10280
-      end: 10495
+      start: 12484
+      end: 12694
+- attributeName: view
+  functionName:
+    name: getFinalTime
+    charIndex:
+      start: 12752
+      end: 12764
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: time
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the computed final time
+        charIndex:
+          start: 23
+          end: 53
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 85
+          end: 103
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 113
+          end: 139
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 149
+          end: 164
+    explicitArgs: null
+    returns:
+      - name: time
+        type: felt
+        desc: Final time
+        charIndex:
+          start: 190
+          end: 212
+    raises: null
+    charIndex:
+      start: 12855
+      end: 13067
+- attributeName: view
+  functionName:
+    name: getTimeStep
+    charIndex:
+      start: 13125
+      end: 13136
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: step
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the stored time step
+        charIndex:
+          start: 23
+          end: 50
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 82
+          end: 100
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 110
+          end: 136
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 146
+          end: 161
+    explicitArgs: null
+    returns:
+      - name: step
+        type: felt
+        desc: Time step
+        charIndex:
+          start: 187
+          end: 208
+    raises: null
+    charIndex:
+      start: 13227
+      end: 13435
+- attributeName: view
+  functionName:
+    name: getAbsorptions
+    charIndex:
+      start: 13492
+      end: 13506
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorptions_len
+        type: felt
+      - name: absorptions
+        type: felt*
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the stored absorptions
+        charIndex:
+          start: 23
+          end: 52
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 84
+          end: 102
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 112
+          end: 138
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 148
+          end: 163
+    explicitArgs: null
+    returns:
+      - name: absorptions_len
+        type: felt
+        desc: Array length
+        charIndex:
+          start: 189
+          end: 224
+      - name: absorptions
+        type: felt*
+        desc: absorption values
+        charIndex:
+          start: 234
+          end: 271
+    raises: null
+    charIndex:
+      start: 13628
+      end: 13899
+- attributeName: view
+  functionName:
+    name: getAbsorption
+    charIndex:
+      start: 13958
+      end: 13971
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: time
+        type: felt
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the computed absorption based on the current timestamp
+        charIndex:
+          start: 23
+          end: 84
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 134
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 144
+          end: 170
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 180
+          end: 195
+    explicitArgs:
+      - name: time
+        type: felt
+        desc: Time to compute the absorption
+        charIndex:
+          start: 227
+          end: 269
+    returns:
+      - name: absorption
+        type: felt
+        desc: absorption
+        charIndex:
+          start: 295
+          end: 323
+    raises: null
+    charIndex:
+      start: 14078
+      end: 14401
+- attributeName: view
+  functionName:
+    name: getCurrentAbsorption
+    charIndex:
+      start: 14468
+      end: 14488
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the computed absorption based on the current timestamp
+        charIndex:
+          start: 23
+          end: 84
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 134
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 144
+          end: 170
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 180
+          end: 195
+    explicitArgs: null
+    returns:
+      - name: absorption
+        type: felt
+        desc: current absorption
+        charIndex:
+          start: 221
+          end: 257
+    raises: null
+    charIndex:
+      start: 14585
+      end: 14842
+- attributeName: view
+  functionName:
+    name: getFinalAbsorption
+    charIndex:
+      start: 14908
+      end: 14926
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the expected total absorption based on the final timestamp
+        charIndex:
+          start: 23
+          end: 88
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 120
+          end: 138
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 148
+          end: 174
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 184
+          end: 199
+    explicitArgs: null
+    returns:
+      - name: absorptions
+        type: felt
+        desc: Final absorption
+        charIndex:
+          start: 225
+          end: 260
+    raises: null
+    charIndex:
+      start: 15023
+      end: 15283
+- attributeName: view
+  functionName:
+    name: isSetup
+    charIndex:
+      start: 15347
+      end: 15354
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: status
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the setup status of the contract
+        charIndex:
+          start: 23
+          end: 62
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 94
+          end: 112
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 122
+          end: 148
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 158
+          end: 173
+    explicitArgs: null
+    returns:
+      - name: status
+        type: felt
+        desc: 1 if setup else 0
+        charIndex:
+          start: 199
+          end: 230
+    raises: null
+    charIndex:
+      start: 15441
+      end: 15671
 - attributeName: external
   functionName:
     name: initializer
@@ -1046,8 +1578,8 @@
   functionName:
     name: upgrade
     charIndex:
-      start: 2115
-      end: 2122
+      start: 2605
+      end: 2612
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1059,6 +1591,199 @@
     explicitArgs:
       - name: new_implementation
         type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Upgrade the contract to the new implementation
+        charIndex:
+          start: 23
+          end: 69
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 119
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 129
+          end: 155
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 165
+          end: 180
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+        desc: New implementation class hash
+        charIndex:
+          start: 212
+          end: 267
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 322
+          end: 353
+    charIndex:
+      start: 2711
+      end: 3064
+- attributeName: external
+  functionName:
+    name: setAdmin
+    charIndex:
+      start: 3185
+      end: 3193
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer admin rights to a new admin
+        charIndex:
+          start: 23
+          end: 59
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 91
+          end: 109
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 119
+          end: 145
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 155
+          end: 170
+    explicitArgs:
+      - name: new_admin
+        type: felt
+        desc: Address of the new admin
+        charIndex:
+          start: 202
+          end: 243
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 298
+          end: 329
+    charIndex:
+      start: 3277
+      end: 3606
+- attributeName: external
+  functionName:
+    name: transferOwnership
+    charIndex:
+      start: 4088
+      end: 4105
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: newOwner
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer ownership to a new owner
+        charIndex:
+          start: 23
+          end: 56
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 88
+          end: 106
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 142
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 152
+          end: 167
+    explicitArgs:
+      - name: newOwner
+        type: felt
+        desc: Address of the new owner
+        charIndex:
+          start: 199
+          end: 239
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 294
+          end: 334
+      - name: newOwner
+        type: ''
+        desc: new owner is the zero address
+        charIndex:
+          start: 344
+          end: 383
+    charIndex:
+      start: 4194
+      end: 4577
+- attributeName: external
+  functionName:
+    name: renounceOwnership
+    charIndex:
+      start: 4653
+      end: 4670
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
     returns: null
   functionComment:
     desc:
@@ -1087,57 +1812,24 @@
         charIndex:
           start: 137
           end: 152
-    explicitArgs:
-      - name: new_implementation
-        type: felt
-        desc: new contract implementation
-        charIndex:
-          start: 214
-          end: 267
+    explicitArgs: null
     returns: null
     raises:
       - name: caller
         type: ''
-        desc: caller is not a contract admin
+        desc: caller is not the contract owner
         charIndex:
-          start: 292
-          end: 330
+          start: 207
+          end: 247
     charIndex:
-      start: 2221
-      end: 2551
+      start: 4739
+      end: 4986
 - attributeName: external
   functionName:
-    name: setAdmin
+    name: addMinter
     charIndex:
-      start: 2672
-      end: 2680
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: new_admin
-        type: felt
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_minter
-    charIndex:
-      start: 10562
-      end: 10572
+      start: 15751
+      end: 15760
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1151,20 +1843,56 @@
         type: felt
     returns: null
   functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Add new minter
+        charIndex:
+          start: 23
+          end: 37
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 69
+          end: 87
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 97
+          end: 123
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 133
+          end: 148
+    explicitArgs:
+      - name: minter
+        type: felt
+        desc: Minter address
+        charIndex:
+          start: 180
+          end: 208
     returns: null
-    raises: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 233
+          end: 273
     charIndex:
-      start: 0
-      end: 0
+      start: 15841
+      end: 16114
 - attributeName: external
   functionName:
     name: approve
     charIndex:
-      start: 10768
-      end: 10775
+      start: 16229
+      end: 16236
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1222,14 +1950,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 10876
-      end: 11305
+      start: 16337
+      end: 16766
 - attributeName: external
   functionName:
     name: setApprovalForAll
     charIndex:
-      start: 11372
-      end: 11389
+      start: 16833
+      end: 16850
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1289,14 +2017,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 11494
-      end: 11901
+      start: 16955
+      end: 17362
 - attributeName: external
   functionName:
     name: transferFrom
     charIndex:
-      start: 11988
-      end: 12000
+      start: 17449
+      end: 17461
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1388,14 +2116,14 @@
           start: 545
           end: 580
     charIndex:
-      start: 12114
-      end: 12694
+      start: 17575
+      end: 18155
 - attributeName: external
   functionName:
     name: safeTransferFrom
     charIndex:
-      start: 12784
-      end: 12800
+      start: 18245
+      end: 18261
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1513,14 +2241,14 @@
           start: 762
           end: 840
     charIndex:
-      start: 12943
-      end: 13783
+      start: 18404
+      end: 19244
 - attributeName: external
   functionName:
     name: mint
     charIndex:
-      start: 13894
-      end: 13898
+      start: 19355
+      end: 19359
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1602,14 +2330,14 @@
           start: 463
           end: 492
     charIndex:
-      start: 13999
-      end: 14491
+      start: 19460
+      end: 19952
 - attributeName: external
   functionName:
     name: burn
     charIndex:
-      start: 14616
-      end: 14620
+      start: 20077
+      end: 20081
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1665,14 +2393,14 @@
           start: 271
           end: 310
     charIndex:
-      start: 14705
-      end: 15015
+      start: 20166
+      end: 20476
 - attributeName: external
   functionName:
     name: setTokenURI
     charIndex:
-      start: 15131
-      end: 15142
+      start: 20592
+      end: 20603
   functionSignature:
     implicitArgs:
       - name: pedersen_ptr
@@ -1752,14 +2480,14 @@
           start: 499
           end: 530
     charIndex:
-      start: 15249
-      end: 15779
+      start: 20710
+      end: 21240
 - attributeName: external
   functionName:
     name: setURI
     charIndex:
-      start: 15895
-      end: 15901
+      start: 21356
+      end: 21362
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1825,14 +2553,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 16031
-      end: 16327
+      start: 21492
+      end: 21788
 - attributeName: external
   functionName:
-    name: transferOwnership
+    name: setTime
     charIndex:
-      start: 16439
-      end: 16456
+      start: 21900
+      end: 21907
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1842,66 +2570,74 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: newOwner
+      - name: start_time
+        type: felt
+      - name: time_step
         type: felt
     returns: null
   functionComment:
     desc:
       - name: ''
         type: ''
-        desc: Transfer ownership to a new owner
+        desc: Set new time step
         charIndex:
           start: 23
-          end: 56
+          end: 40
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 88
-          end: 106
+          start: 72
+          end: 90
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 116
-          end: 142
+          start: 100
+          end: 126
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 152
-          end: 167
+          start: 136
+          end: 151
     explicitArgs:
-      - name: newOwner
+      - name: start_time
         type: felt
-        desc: Address of the new owner
+        desc: Absolute start time
         charIndex:
-          start: 199
-          end: 239
+          start: 183
+          end: 220
+      - name: time_step
+        type: felt
+        desc: Time step value
+        charIndex:
+          start: 230
+          end: 262
     returns: null
     raises:
       - name: caller
         type: ''
         desc: caller is not the contract owner
         charIndex:
-          start: 294
-          end: 334
-      - name: newOwner
+          start: 287
+          end: 327
+      - name: time_step
         type: ''
-        desc: new owner is the zero address
+        desc: time_step is null
         charIndex:
-          start: 344
-          end: 383
+          start: 337
+          end: 365
     charIndex:
-      start: 16545
-      end: 16928
+      start: 22015
+      end: 22380
 - attributeName: external
   functionName:
-    name: renounceOwnership
+    name: setAbsorptions
     charIndex:
-      start: 17004
-      end: 17021
+      start: 22515
+      end: 22529
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1910,44 +2646,66 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: absorptions_len
+        type: felt
+      - name: absorptions
+        type: felt*
     returns: null
   functionComment:
     desc:
       - name: ''
         type: ''
-        desc: Renounce ownership
+        desc: Set new absorption values
         charIndex:
           start: 23
-          end: 41
+          end: 48
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 73
-          end: 91
+          start: 80
+          end: 98
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 101
-          end: 127
+          start: 108
+          end: 134
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 137
-          end: 152
-    explicitArgs: null
+          start: 144
+          end: 159
+    explicitArgs:
+      - name: absorptions_len
+        type: felt
+        desc: Array length
+        charIndex:
+          start: 191
+          end: 226
+      - name: absorptions
+        type: felt*
+        desc: Absorption values
+        charIndex:
+          start: 236
+          end: 273
     returns: null
     raises:
       - name: caller
         type: ''
         desc: caller is not the contract owner
         charIndex:
-          start: 207
-          end: 247
+          start: 298
+          end: 338
+      - name: absorptions_len
+        type: ''
+        desc: absorptions_len is null
+        charIndex:
+          start: 348
+          end: 388
     charIndex:
-      start: 17090
-      end: 17337
+      start: 22645
+      end: 23033

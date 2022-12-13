@@ -36,19 +36,32 @@ Admin address
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  
 {% swagger-description %}  
-Renounce ownership  
+Upgrade the contract to the new implementation  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_implementation" %}  
-new contract implementation  
+New implementation class hash  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setAdmin" %}  
 {% swagger-description %}  
-  
+Transfer admin rights to a new admin  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_admin" %}  
-  
+Address of the new admin  
 {% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  
+{% swagger-description %}  
+Transfer ownership to a new owner  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="newOwner" %}  
+Address of the new owner  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "renounceOwnership" %}  
+{% swagger-description %}  
+Renounce ownership  
+{% endswagger-description %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "set_whitelist_merkle_root" %}  
 {% swagger-description %}  
