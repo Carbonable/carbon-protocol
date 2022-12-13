@@ -14,6 +14,7 @@ from tests.integrations.protocol.library import (
     anyone_instance as anyone,
     carbonable_yielder_instance as yielder,
     carbonable_vester_instance as vester,
+    carbonable_project_instance as project,
 )
 
 @view
@@ -111,18 +112,22 @@ func test_create_vestings_nominal_case{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
+    let (project_address) = project.get_address();
     let (yielder_address) = yielder.get_address();
     let (vester_address) = vester.get_address();
 
     // Mint tokens
-    admin.mint(to=admin_address, token_id=1);
-    admin.mint(to=admin_address, token_id=2);
+    admin.transfer(recipient=vester_address, amount=1000);
     admin.mint(to=anyone_address, token_id=3);
     admin.mint(to=anyone_address, token_id=4);
     admin.mint(to=anyone_address, token_id=5);
+    admin.mint(to=admin_address, token_id=1);
+    admin.mint(to=admin_address, token_id=2);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    %{ stop_warp = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=100, target_contract_address=ids.project_address) %}
+
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
     anyone.project_approve(approved=yielder_address, token_id=4);
@@ -134,34 +139,65 @@ func test_create_vestings_nominal_case{
     admin.yielder_deposit(token_id=1);
     admin.project_approve(approved=yielder_address, token_id=2);
     admin.yielder_deposit(token_id=2);
-    %{ stop_warp %}
+
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     // Admin snapshot
-    %{ stop_warp = warp(blk_timestamp=110, target_contract_address=ids.yielder_address) %}
+    %{
+        stop_warp_yielder = warp(blk_timestamp=112, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=112, target_contract_address=ids.project_address)
+        expect_events(dict(name="Snapshot", data=dict(
+            project=context.carbonable_project_contract,
+            previous_time=0,
+            previous_project_absorption=0,
+            previous_offseter_absorption=0,
+            previous_yielder_absorption=0,
+            current_time=112,
+            current_project_absorption=4719000,
+            current_offseter_absorption=0,
+            current_yielder_absorption=4719000,
+            period_project_absorption=4719000,
+            period_offseter_absorption=0,
+            period_yielder_absorption=4719000,
+        )))
+    %}
     admin.snapshot();
-    %{ stop_warp %}
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     // Start testing create vestings
-    %{ stop_warp = warp(blk_timestamp=120, target_contract_address=ids.yielder_address) %}
-    admin.transfer(recipient=vester_address, amount=1000);
+    %{ stop_warp_yielder = warp(blk_timestamp=121, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=121, target_contract_address=ids.project_address) %}
+
     admin.create_vestings(
         total_amount=1000,
         cliff_delta=0,
-        start=120,
-        duration=10,
+        start=121,
+        duration=5,
         slice_period_seconds=1,
         revocable=TRUE,
     );
-    %{ stop_warp %}
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
-    %{ warp(blk_timestamp=130, target_contract_address=ids.vester_address) %}
+    %{ stop_warp = warp(blk_timestamp=130, target_contract_address=ids.vester_address) %}
     let (vesting_id) = anyone.get_vesting_id();
     let (releasable_amount) = anyone.releasable_amount(vesting_id);
-    let expected_amount = Uint256(low=200, high=0);
+    let expected_amount = Uint256(low=600, high=0);
     let (is_zero) = uint256_eq(releasable_amount, expected_amount);
-    with_attr error_message("Testing: releasable amount should be expected amount: 200") {
+    with_attr error_message("Testing: releasable amount should be expected amount: 600") {
         assert is_zero = TRUE;
     }
+
+    let (vesting_id) = admin.get_vesting_id();
+    let (releasable_amount) = admin.releasable_amount(vesting_id);
+    let expected_amount = Uint256(low=400, high=0);
+    let (is_zero) = uint256_eq(releasable_amount, expected_amount);
+    with_attr error_message("Testing: releasable amount should be expected amount: 400") {
+        assert is_zero = TRUE;
+    }
+    %{ stop_warp %}
 
     return ();
 }
@@ -183,36 +219,65 @@ func test_create_vestings_only_one_deposited{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
+    let (project_address) = project.get_address();
     let (yielder_address) = yielder.get_address();
     let (vester_address) = vester.get_address();
 
     // Mint tokens
+    admin.transfer(recipient=vester_address, amount=1000);
+    admin.mint(to=anyone_address, token_id=1);
+    admin.mint(to=anyone_address, token_id=2);
     admin.mint(to=anyone_address, token_id=3);
+    admin.mint(to=admin_address, token_id=4);
+    admin.mint(to=admin_address, token_id=5);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    %{ stop_warp = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=100, target_contract_address=ids.project_address) %}
+
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
-    %{ stop_warp %}
+
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     // Admin snapshot
-    %{ stop_warp = warp(blk_timestamp=110, target_contract_address=ids.yielder_address) %}
+    %{
+        stop_warp_yielder = warp(blk_timestamp=112, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=112, target_contract_address=ids.project_address)
+        expect_events(dict(name="Snapshot", data=dict(
+            project=context.carbonable_project_contract,
+            previous_time=0,
+            previous_project_absorption=0,
+            previous_offseter_absorption=0,
+            previous_yielder_absorption=0,
+            current_time=112,
+            current_project_absorption=4719000,
+            current_offseter_absorption=0,
+            current_yielder_absorption=943800,
+            period_project_absorption=4719000,
+            period_offseter_absorption=0,
+            period_yielder_absorption=943800,
+        )))
+    %}
     admin.snapshot();
-    %{ stop_warp %}
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     // Start testing create vestings
-    %{ stop_warp = warp(blk_timestamp=120, target_contract_address=ids.yielder_address) %}
-    admin.transfer(recipient=vester_address, amount=1000);
+    %{ stop_warp_yielder = warp(blk_timestamp=121, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=121, target_contract_address=ids.project_address) %}
 
     admin.create_vestings(
         total_amount=1000,
         cliff_delta=0,
-        start=120,
-        duration=10,
+        start=121,
+        duration=5,
         slice_period_seconds=1,
         revocable=TRUE,
     );
-    %{ stop_warp %}
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     %{ stop_warp = warp(blk_timestamp=130, target_contract_address=ids.vester_address) %}
     let (vesting_id) = anyone.get_vesting_id();
@@ -259,19 +324,19 @@ func test_create_vestings_not_enough_fund_vester{
     %{ stop_warp %}
 
     // Admin snapshot
-    %{ stop_warp = warp(blk_timestamp=110, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=112, target_contract_address=ids.yielder_address) %}
     admin.snapshot();
     %{ stop_warp %}
 
     // Start testing create vestings
-    %{ stop_warp = warp(blk_timestamp=120, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=121, target_contract_address=ids.yielder_address) %}
     admin.transfer(recipient=vester_address, amount=800);
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into vester") %}
     admin.create_vestings(
         total_amount=1000,
         cliff_delta=0,
-        start=120,
+        start=121,
         duration=10,
         slice_period_seconds=1,
         revocable=TRUE,

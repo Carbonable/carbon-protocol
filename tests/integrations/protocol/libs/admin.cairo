@@ -628,4 +628,43 @@ namespace instance {
         }
         return ();
     }
+
+    func get_vesting_id{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        vesting_id: felt
+    ) {
+        alloc_locals;
+        let zero = Uint256(low=0, high=0);
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_vester {
+            let (vesting_count) = carbonable_vester_instance.vesting_count(caller);
+            assert_not_equal(vesting_count, 0);
+
+            let (vesting_id) = carbonable_vester_instance.get_vesting_id(vesting_count - 1, caller);
+            assert_not_equal(vesting_id, 0);
+        }
+        return (vesting_id=vesting_id);
+    }
+
+    func releasable_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        vesting_id: felt
+    ) -> (releasable_amount: Uint256) {
+        alloc_locals;
+        let zero = Uint256(low=0, high=0);
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_vester {
+            let (releasable_amount) = carbonable_vester_instance.releasable_amount(
+                vesting_id, caller
+            );
+            let (is_zero) = uint256_eq(releasable_amount, zero);
+            with_attr error_message("Testing: releasable amount cannot be zero") {
+                assert is_zero = FALSE;
+            }
+        }
+
+        return (releasable_amount=releasable_amount);
+    }
 }

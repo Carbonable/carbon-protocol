@@ -301,6 +301,11 @@ namespace CarbonableYielder {
         }
 
         let (yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
+        let not_zero = is_not_zero(yielder_contribution);
+        with_attr error_message("CarbonableYielder: cannot vest if the total yielder contribution is null") {
+            assert not_zero = TRUE;
+        }
+
         let (amount, _) = unsigned_div_rem(user_contribution * total_amount, yielder_contribution);
         let (amount_uint256) = _felt_to_uint(amount);
 

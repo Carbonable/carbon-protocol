@@ -27,81 +27,103 @@ namespace instance {
     func carbonable_project_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (carbonable_project_address: felt) {
-        return ICarbonableYielder.getCarbonableProjectAddress(contract_address=carbonable_yielder);
+        let (carbonable_project_address) = ICarbonableYielder.getCarbonableProjectAddress(
+            contract_address=carbonable_yielder
+        );
+        return (carbonable_project_address=carbonable_project_address);
     }
 
     func carbonable_offseter_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (carbonable_offseter_address: felt) {
-        return ICarbonableYielder.getCarbonableOffseterAddress(contract_address=carbonable_yielder);
+        let (carbonable_offseter_address) = ICarbonableYielder.getCarbonableOffseterAddress(
+            contract_address=carbonable_yielder
+        );
+        return (carbonable_offseter_address=carbonable_offseter_address);
     }
 
     func carbonable_vester_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (carbonable_vester_address: felt) {
-        return ICarbonableYielder.getCarbonableVesterAddress(contract_address=carbonable_yielder);
+        let (carbonable_vester_address) = ICarbonableYielder.getCarbonableVesterAddress(
+            contract_address=carbonable_yielder
+        );
+        return (carbonable_vester_address=carbonable_vester_address);
     }
 
     func is_open{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (status: felt) {
-        return ICarbonableYielder.isOpen(contract_address=carbonable_yielder);
+        let (status) = ICarbonableYielder.isOpen(contract_address=carbonable_yielder);
+        return (status=status);
     }
 
     func total_deposited{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (balance: Uint256) {
-        return ICarbonableYielder.getTotalDeposited(contract_address=carbonable_yielder);
+        let (balance) = ICarbonableYielder.getTotalDeposited(contract_address=carbonable_yielder);
+        return (balance=balance);
     }
 
     func total_claimed{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (total_claimed: felt) {
-        return ICarbonableYielder.getTotalClaimed(contract_address=carbonable_yielder);
+        let (total_claimed) = ICarbonableYielder.getTotalClaimed(
+            contract_address=carbonable_yielder
+        );
+        return (total_claimed=total_claimed);
     }
 
     func total_claimable{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (total_claimable: felt) {
-        return ICarbonableYielder.getTotalClaimable(contract_address=carbonable_yielder);
+        let (total_claimable) = ICarbonableYielder.getTotalClaimable(
+            contract_address=carbonable_yielder
+        );
+        return (total_claimable=total_claimable);
     }
 
     func claimable_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(address: felt) -> (claimable: felt) {
-        return ICarbonableYielder.getClaimableOf(
+        let (claimable) = ICarbonableYielder.getClaimableOf(
             contract_address=carbonable_yielder, address=address
         );
+        return (claimable=claimable);
     }
 
     func claimed_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(address: felt) -> (claimed: felt) {
-        return ICarbonableYielder.getClaimedOf(
+        let (claimed) = ICarbonableYielder.getClaimedOf(
             contract_address=carbonable_yielder, address=address
         );
+        return (claimed=claimed);
     }
 
     func registered_owner_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(token_id: Uint256) -> (address: felt) {
-        return ICarbonableYielder.getRegisteredOwnerOf(
+        let (address) = ICarbonableYielder.getRegisteredOwnerOf(
             contract_address=carbonable_yielder, token_id=token_id
         );
+        return (address=address);
     }
 
     func registered_time_of{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }(token_id: Uint256) -> (time: felt) {
-        return ICarbonableYielder.getRegisteredTimeOf(
+        let (time) = ICarbonableYielder.getRegisteredTimeOf(
             contract_address=carbonable_yielder, token_id=token_id
         );
+        return (time=time);
     }
 
     func snapshoted_time{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (time: felt) {
-        return ICarbonableYielder.getSnapshotedTime(contract_address=carbonable_yielder);
+        let (time) = ICarbonableYielder.getSnapshotedTime(contract_address=carbonable_yielder);
+        return (time=time);
     }
 
     // Externals
