@@ -131,3 +131,47 @@ func test_create_vestings_revert_not_vestable{
     );
     return ();
 }
+
+@external
+func test_create_vestings_no_absorption{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+    let one = Uint256(low=1, high=0);
+    let (contract_address) = get_contract_address();
+
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [0]) %}
+
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [0]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [0]) %}
+
+    %{ mock_call(context.mocks.carbonable_vester_address, "withdrawable_amount", [ids.TOTAL_AMOUNT, 0]) %}
+    %{ mock_call(context.mocks.carbonable_vester_address, "create_vesting", [1]) %}
+
+    // Deposit token #1
+    CarbonableOffseter.deposit(token_id=one);
+
+    // Snapshot
+    %{ stop_warp = warp(blk_timestamp=100) %}
+    CarbonableYielder.snapshot();
+    %{ stop_warp() %}
+
+    let (success) = CarbonableYielder.create_vestings(
+        total_amount=TOTAL_AMOUNT,
+        cliff_delta=CLIFF_DELTA,
+        start=START,
+        duration=DURATION,
+        slice_period_seconds=SLICE_PERIOD_SECONDS,
+        revocable=REVOCABLE,
+    );
+    return ();
+}

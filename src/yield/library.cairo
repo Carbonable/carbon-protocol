@@ -145,7 +145,8 @@ namespace CarbonableYielder {
         let (previous_project_absorption) = ICarbonableProject.getAbsorption(
             contract_address=carbonable_project_address, time=previous_time
         );
-        let (previous_offseter_absorption) = CarbonableYielder_snapshoted_offseter_absorption_.read();
+        let (previous_offseter_absorption) = CarbonableYielder_snapshoted_offseter_absorption_.read(
+            );
         let (previous_yielder_absorption) = CarbonableYielder_snapshoted_yielder_absorption_.read();
 
         // [Compute] Current information
@@ -286,6 +287,11 @@ namespace CarbonableYielder {
 
         // [Check] If user abosrption is null, then continue
         if (user_contribution == 0) {
+            // [Check] If index is null, then stop
+            if (users_index == 0) {
+                return ();
+            }
+
             _create_vestings_iter(
                 contract_address=contract_address,
                 total_amount=total_amount,
@@ -302,7 +308,8 @@ namespace CarbonableYielder {
 
         let (yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
         let not_zero = is_not_zero(yielder_contribution);
-        with_attr error_message("CarbonableYielder: cannot vest if the total yielder contribution is null") {
+        with_attr error_message(
+                "CarbonableYielder: cannot vest if the total yielder contribution is null") {
             assert not_zero = TRUE;
         }
 
