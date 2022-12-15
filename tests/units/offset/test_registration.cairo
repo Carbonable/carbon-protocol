@@ -111,3 +111,26 @@ func test_registration_revert_not_registered{
 
     return ();
 }
+@external
+func test_registered_tokens_no_deposit{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+    let (contract_address) = get_contract_address();
+    let anyone_address = context.signers.anyone;
+    let admin_address = context.signers.admin;
+
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
+
+    let (tokens_len, tokens) = CarbonableOffseter.registered_tokens_of(address=anyone_address);
+    assert tokens_len = 0;
+
+    let (tokens_len, tokens) = CarbonableOffseter.registered_tokens_of(address=admin_address);
+    assert tokens_len = 0;
+
+    return ();
+}

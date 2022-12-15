@@ -202,19 +202,6 @@ func getMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @view
-func isOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
-    // Desc:
-    //   Return the deposits status according to project setup
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   status(felt): Deposits status
-    return CarbonableOffseter.is_open();
-}
-
-@view
 func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     balance: Uint256
 ) {
@@ -321,9 +308,27 @@ func getRegisteredTimeOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   token_id(Uint256): Token id
+    //   address(felt): address
     // Returns:
     //   address(felt): Registred time
+    return CarbonableOffseter.registered_time_of(token_id=token_id);
+}
+
+@view
+func getRegisteredTokensOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (tokens_len: felt, tokens: Uint256*) {
+    // Desc:
+    //   Return the registered tokens of the provided address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   address(felt): Token id
+    // Returns:
+    //   tokens_len(felt): Tokens array length
+    //   tokens(Uint256*): Tokens deposited by the provided address
     return CarbonableOffseter.registered_time_of(token_id=token_id);
 }
 

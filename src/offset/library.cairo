@@ -219,6 +219,34 @@ namespace CarbonableOffseter {
         return (time=time);
     }
 
+    func registered_tokens_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (tokens_len: felt, tokens: Uint256*) {
+        alloc_locals;
+
+        let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
+        let (total_supply_uint256) = IERC721Enumerable.totalSupply(
+            contract_address=contract_address
+        );
+        let (total_supply) = _uint_to_felt(total_supply_uint256);
+
+        // [Check] totalSupply is not zero
+        let not_zero = is_not_zero(total_supply);
+        with_attr error_message("CarbonableOffseter: project total supply is null") {
+            assert not_zero = TRUE;
+        }
+
+        let (local empty: Uint256*) = alloc();
+        let (tokens_len, tokens) = _registerd_tokens_iter(
+            contract_address=contract_address,
+            user=address,
+            index=total_supply - 1,
+            tokens_len=0,
+            tokens=empty,
+        );
+        return (tokens_len=tokens_len, tokens=tokens);
+    }
+
     func registered_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         users_len: felt, users: felt*
     ) {
@@ -407,6 +435,55 @@ namespace CarbonableOffseter {
         return ();
     }
 
+    func _registerd_tokens_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        contract_address: felt, user: felt, index: felt, tokens_len: felt, tokens: Uint256*
+    ) -> (tokens_len: felt, tokens: Uint256*) {
+        alloc_locals;
+
+        // Get registered owner of the current token index
+        let (high, low) = split_felt(index);
+        let index_uint256 = Uint256(low=low, high=high);
+        let (token_id) = IERC721Enumerable.tokenByIndex(
+            contract_address=contract_address, index=index_uint256
+        );
+        let (owner) = CarbonableOffseter_registered_owner_.read(token_id);
+
+        // Check if user is registered owner
+        let not_eq = is_not_zero(owner - user);
+        if (not_eq == TRUE) {
+            // Stop if index = 0
+            if (index == 0) {
+                return (tokens_len=tokens_len, tokens=tokens);
+            }
+
+            // Else move on to next index
+            let (updated_tokens_len, updated_tokens) = _registerd_tokens_iter(
+                contract_address=contract_address,
+                user=user,
+                index=index - 1,
+                tokens_len=tokens_len,
+                tokens=tokens,
+            );
+            return (tokens_len=updated_tokens_len, tokens=updated_tokens);
+        }
+
+        // User is the registered owner, the add the token id to the tokens array
+        assert tokens[tokens_len] = token_id;
+
+        // Stop if index is null
+        if (index == 0) {
+            return (tokens_len=tokens_len + 1, tokens=tokens);
+        }
+        let (updated_tokens_len, updated_tokens) = _registerd_tokens_iter(
+            contract_address=contract_address,
+            user=user,
+            index=index - 1,
+            tokens_len=tokens_len + 1,
+            tokens=tokens,
+        );
+        return (tokens_len=updated_tokens_len, tokens=updated_tokens);
+    }
+
     func _total_claimed_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         index: felt, users: felt*
     ) -> (total_claimed: felt) {
@@ -450,19 +527,11 @@ namespace CarbonableOffseter {
         );
         let (total_supply) = _uint_to_felt(total_supply_uint256);
 
-        // [Check] totalSupply is lower than 2**128
-        let not_zero = is_not_zero(total_supply_uint256.high);
-        with_attr error_message("CarbonableOffseter: project total supply too high") {
-            assert not_zero = FALSE;
-        }
-
         // [Check] totalSupply is not zero
-        let not_zero = is_not_zero(total_supply_uint256.low);
-        with_attr error_message("CarbonableOffseter: project total supply too low") {
+        let not_zero = is_not_zero(total_supply);
+        with_attr error_message("CarbonableOffseter: project total supply is null") {
             assert not_zero = TRUE;
         }
-
-        let total_supply = total_supply_uint256.low;
 
         let (total_claimable) = _claimable_iter(
             contract_address=contract_address, user=user, index=total_supply - 1
