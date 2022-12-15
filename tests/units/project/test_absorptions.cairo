@@ -42,7 +42,7 @@ func test_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     let (absorptions_len, absorptions) = CarbonableProject.absorptions();
     assert absorptions_len = new_absorptions_len;
     assert absorptions[0] = new_absorptions[0];
-    assert absorptions[new_absorptions_len - 1] = new_absorptions[new_absorptions_len - 1];
+    assert absorptions[absorptions_len - 1] = new_absorptions[new_absorptions_len - 1];
 
     return ();
 }
@@ -55,45 +55,45 @@ func test_current_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     let (local context) = prepare();
 
     // Before start, absorption = 0
-    %{ stop_warp=warp(blk_timestamp=0) %}
+    %{ stop_warp=warp(blk_timestamp=context.absorption.times[0] - 86000) %}
     let (absorption) = CarbonableProject.current_absorption();
     assert absorption = 0;
     %{ stop_warp() %}
 
     // At start, absorption = absorptions[0]
-    %{ stop_warp=warp(blk_timestamp=100) %}
+    %{ stop_warp=warp(blk_timestamp=context.absorption.times[0]) %}
     let (absorption) = CarbonableProject.current_absorption();
     assert absorption = context.absorption.values[0];
     %{ stop_warp() %}
 
     // After start, absorptions[0] < absorption < absorptions[1]
-    %{ stop_warp=warp(blk_timestamp=101) %}
+    %{ stop_warp=warp(blk_timestamp=context.absorption.times[0] + 86000) %}
     let (absorption) = CarbonableProject.current_absorption();
-    let is_higher = is_le(context.absorption.values[0], absorption - 1);
+    let is_higher = is_le(context.absorption.values[0] + 1, absorption);
     assert is_higher = TRUE;
-    let is_lower = is_le(absorption, context.absorption.values[1] - 1);
+    let is_lower = is_le(absorption + 1, context.absorption.values[1]);
     assert is_lower = TRUE;
     %{ stop_warp() %}
 
     // Before end, absorptions[-2] < absorption < absorptions[-1]
     %{
-        blk_timestamp = context.absorption.time_step * (len(context.absorption.values) - 1) + context.absorption.start_time - 1
+        blk_timestamp = context.absorption.times[-1] - 86000
         stop_warp=warp(blk_timestamp=blk_timestamp)
     %}
     let (absorption) = CarbonableProject.current_absorption();
     let is_higher = is_le(
-        context.absorption.values[context.absorption.values_len - 2], absorption - 1
+        context.absorption.values[context.absorption.values_len - 2] + 86000, absorption
     );
     assert is_higher = TRUE;
     let is_lower = is_le(
-        absorption, context.absorption.values[context.absorption.values_len - 1] - 1
+        absorption + 86000, context.absorption.values[context.absorption.values_len - 1]
     );
     assert is_lower = TRUE;
     %{ stop_warp() %}
 
     // At end, absorption = absorptions[-1]
     %{
-        blk_timestamp = context.absorption.time_step * (len(context.absorption.values) - 1) + context.absorption.start_time
+        blk_timestamp = context.absorption.times[-1]
         stop_warp=warp(blk_timestamp=blk_timestamp)
     %}
     let (absorption) = CarbonableProject.current_absorption();
@@ -102,7 +102,7 @@ func test_current_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 
     // After end, absorption = absorptions[-1]
     %{
-        blk_timestamp = context.absorption.time_step * (len(context.absorption.values) - 1) + context.absorption.start_time + 1
+        blk_timestamp = context.absorption.times[-1] + 86000
         stop_warp=warp(blk_timestamp=blk_timestamp)
     %}
     let (absorption) = CarbonableProject.current_absorption();
@@ -147,18 +147,5 @@ func test_set_absorptions_revert_not_defined{
     let (local absorptions: felt*) = alloc();
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: absorptions must be defined") %}
     CarbonableProject.set_absorptions(absorptions_len=0, absorptions=absorptions);
-    return ();
-}
-
-@external
-func test_set_time_revert_not_null{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) {
-    alloc_locals;
-
-    // prepare instance
-    let (local context) = prepare();
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: time_step must be not null") %}
-    CarbonableProject.set_time(start_time=0, time_step=0);
     return ();
 }

@@ -20,11 +20,11 @@ from src.utils.metadata.library import Metadata
 //
 
 @storage_var
-func CarbonableProject_start_time_() -> (time: felt) {
+func CarbonableProject_times_len_() -> (length: felt) {
 }
 
 @storage_var
-func CarbonableProject_time_step_() -> (step: felt) {
+func CarbonableProject_times_(index: felt) -> (time: felt) {
 }
 
 @storage_var
@@ -63,29 +63,30 @@ namespace CarbonableProject {
     func start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         time: felt
     ) {
-        let (time) = CarbonableProject_start_time_.read();
+        // [Check] times have been defined
+        CarbonableProject_assert.times_setup();
+
+        let (time) = CarbonableProject_times_.read(0);
         return (time=time);
     }
 
     func final_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         time: felt
     ) {
-        // [Check] absorptions have been defined
-        CarbonableProject_assert.absorptions_are_defined();
+        // [Check] times have been defined
+        CarbonableProject_assert.times_setup();
 
-        let (start_time) = CarbonableProject_start_time_.read();
-        let (time_step) = CarbonableProject_time_step_.read();
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
-        let final_index = absorptions_len - 1;
-        let time = time_step * final_index + start_time;
+        let (times_len) = CarbonableProject_times_len_.read();
+        let index = times_len - 1;
+        let (time) = CarbonableProject_times_.read(index);
         return (time=time);
     }
 
-    func time_step{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        step: felt
+    func times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        times_len: felt, times: felt*
     ) {
-        let (step) = CarbonableProject_time_step_.read();
-        return (step=step);
+        let (times_len, times) = _read_times();
+        return (times_len=times_len, times=times);
     }
 
     func absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -114,17 +115,36 @@ namespace CarbonableProject {
     func final_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         absorption: felt
     ) {
-        let (time) = final_time();
-        let (final_absorption) = absorption(time=time);
-        return (absorption=final_absorption);
+        // [Check] absorptions have been defined
+        CarbonableProject_assert.absorptions_setup();
+
+        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
+        let index = absorptions_len - 1;
+        let (absorption) = CarbonableProject_absorptions_.read(index);
+        return (absorption=absorption);
+    }
+
+    func is_times_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        status: felt
+    ) {
+        let (times_len) = CarbonableProject_times_len_.read();
+        let status = is_not_zero(times_len);
+        return (status=status);
+    }
+
+    func is_absorptions_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (status: felt) {
+        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
+        let status = is_not_zero(absorptions_len);
+        return (status=status);
     }
 
     func is_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         status: felt
     ) {
-        let (time_step) = CarbonableProject_time_step_.read();
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
-        let status = is_not_zero(time_step * absorptions_len);
+        let (times_status) = is_times_setup();
+        let (absorptions_status) = is_absorptions_setup();
+        let status = is_not_zero(times_status * absorptions_status);
         return (status=status);
     }
 
@@ -142,20 +162,19 @@ namespace CarbonableProject {
         return ();
     }
 
-    func set_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        start_time: felt, time_step: felt
+    func set_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        times_len: felt, times: felt*
     ) {
         alloc_locals;
 
         // [Check] Consistency
-        let not_zero = is_not_zero(time_step);
-        with_attr error_message("CarbonableProject: time_step must be not null") {
+        let not_zero = is_not_zero(times_len);
+        with_attr error_message("CarbonableProject: times must be defined") {
             not_zero = TRUE;
         }
 
         // [Effect] Update storage
-        CarbonableProject_start_time_.write(start_time);
-        CarbonableProject_time_step_.write(time_step);
+        _write_times(times_len=times_len, times=times);
         return ();
     }
 
@@ -179,13 +198,64 @@ namespace CarbonableProject {
     // Internals
     //
 
+    func _read_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        times_len: felt, times: felt*
+    ) {
+        alloc_locals;
+
+        // [Check] times have been defined
+        CarbonableProject_assert.times_setup();
+
+        let (times_len) = CarbonableProject_times_len_.read();
+        let (local times: felt*) = alloc();
+        _read_times_iter(index=times_len - 1, times=times);
+        return (times_len=times_len, times=times);
+    }
+
+    func _read_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        index: felt, times: felt*
+    ) {
+        alloc_locals;
+
+        let (time) = CarbonableProject_times_.read(index);
+        assert times[index] = time;
+        if (index == 0) {
+            return ();
+        }
+        _read_times_iter(index=index - 1, times=times);
+        return ();
+    }
+
+    func _write_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        times_len: felt, times: felt*
+    ) {
+        alloc_locals;
+
+        CarbonableProject_times_len_.write(times_len);
+        _write_times_iter(index=times_len - 1, times=times);
+        return ();
+    }
+
+    func _write_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        index: felt, times: felt*
+    ) {
+        alloc_locals;
+
+        CarbonableProject_times_.write(index, times[index]);
+        if (index == 0) {
+            return ();
+        }
+        _write_times_iter(index=index - 1, times=times);
+        return ();
+    }
+
     func _read_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         absorptions_len: felt, absorptions: felt*
     ) {
         alloc_locals;
 
         // [Check] absorptions have been defined
-        CarbonableProject_assert.absorptions_are_defined();
+        CarbonableProject_assert.absorptions_setup();
 
         let (absorptions_len) = CarbonableProject_absorptions_len_.read();
         let (local absorptions: felt*) = alloc();
@@ -237,31 +307,31 @@ namespace CarbonableProject {
 
         // Check absorptions are set
         let (absorptions_len, absorptions) = _read_absorptions();
+        let (times_len, times) = _read_times();
+        CarbonableProject_assert.consistency(times_len=times_len, absorptions_len=absorptions_len);
 
         // Check if time is before the start_time, then absorption is 0
-        let (stored_start_time) = start_time();
-        let is_before = is_le(time, stored_start_time - 1);  // is_lt
+        let stored_start_time = times[0];
+        let is_before = is_le(time + 1, stored_start_time);  // is_lt
         if (is_before == TRUE) {
             return (computed_absorption=0);
         }
 
         // Check if time is after the final_time, then absorption is the latest stored
-        let (stored_final_time) = final_time();
         let index = absorptions_len - 1;
+        let stored_final_time = times[index];
         let final_absorption = absorptions[index];
-        let is_after = is_le(stored_final_time, time - 1);  // is_lt
+        let is_after = is_le(stored_final_time + 1, time);  // is_lt
         if (is_after == TRUE) {
             return (computed_absorption=final_absorption);
         }
 
         // Else iter over times to get the value
-        let (stored_time_step) = time_step();
         let (computed_absorption) = _compute_absorption_iter(
             time=time,
             index=index - 1,
             absorptions=absorptions,
-            start_time=stored_start_time,
-            time_step=stored_time_step,
+            times=times,
             next_time=stored_final_time,
             next_absorption=final_absorption,
         );
@@ -272,13 +342,12 @@ namespace CarbonableProject {
         time: felt,
         index: felt,
         absorptions: felt*,
-        start_time: felt,
-        time_step: felt,
+        times: felt*,
         next_time: felt,
         next_absorption: felt,
     ) -> (computed_absorption: felt) {
         let stored_absorption = absorptions[index];
-        let stored_time = index * time_step + start_time;
+        let stored_time = times[index];
         let is_after = is_le(stored_time, time);
         if (is_after == TRUE) {
             // [Check] exact time
@@ -313,8 +382,7 @@ namespace CarbonableProject {
             time=time,
             index=index - 1,
             absorptions=absorptions,
-            start_time=start_time,
-            time_step=time_step,
+            times=times,
             next_time=stored_time,
             next_absorption=stored_absorption,
         );
@@ -324,11 +392,28 @@ namespace CarbonableProject {
 
 // Assert helpers
 namespace CarbonableProject_assert {
-    func absorptions_are_defined{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) {
-        let (status) = CarbonableProject.is_setup();
+    func times_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (status) = CarbonableProject.is_times_setup();
+        with_attr error_message("CarbonableProject: times must be defined") {
+            assert status = TRUE;
+        }
+        return ();
+    }
+
+    func absorptions_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (status) = CarbonableProject.is_absorptions_setup();
         with_attr error_message("CarbonableProject: absorptions must be defined") {
             assert status = TRUE;
+        }
+        return ();
+    }
+
+    func consistency{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        times_len: felt, absorptions_len: felt
+    ) {
+        with_attr error_message(
+                "CarbonableProject: times and absorptions must have the same length") {
+            assert times_len = absorptions_len;
         }
         return ();
     }
