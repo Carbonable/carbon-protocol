@@ -44,6 +44,10 @@ func CarbonableOffseter_carbonable_project_address_() -> (address: felt) {
 }
 
 @storage_var
+func CarbonableOffseter_min_claimable_() -> (quantity: felt) {
+}
+
+@storage_var
 func CarbonableOffseter_registered_owner_(tokenId: Uint256) -> (address: felt) {
 }
 
@@ -77,9 +81,10 @@ namespace CarbonableOffseter {
     //
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        carbonable_project_address: felt
+        carbonable_project_address: felt, min_claimable: felt
     ) {
         CarbonableOffseter_carbonable_project_address_.write(carbonable_project_address);
+        CarbonableOffseter_min_claimable_.write(min_claimable);
         return ();
     }
 
@@ -91,15 +96,14 @@ namespace CarbonableOffseter {
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }() -> (carbonable_project_address: felt) {
         let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
-        return (carbonable_project_address,);
+        return (carbonable_project_address=carbonable_project_address);
     }
 
-    func is_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        status: felt
+    func min_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        min_claimable: felt
     ) {
-        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
-        let (status) = ICarbonableProject.isSetup(contract_address=carbonable_project_address);
-        return (status=status);
+        let (min_claimable) = CarbonableOffseter_min_claimable_.read();
+        return (min_claimable=min_claimable);
     }
 
     func total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -226,25 +230,49 @@ namespace CarbonableOffseter {
     // Externals
     //
 
-    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    func set_min_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        min_claimable: felt
+    ) -> () {
+        let not_zero = is_not_zero(min_claimable);
+        with_attr error_message("CarbonableOffseter: min claimable balance must be not null") {
+            assert not_zero = TRUE;
+        }
+        CarbonableOffseter_min_claimable_.write(min_claimable);
+        return ();
+    }
+
+    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
+        success: felt
+    ) {
+        // [Check] Quanity is not null
+        CarbonableOffseter_assert.claimable_not_negligible(quantity);
+
+        // [Check] Quantity is lower or equal to the total claimable
+        let (caller) = get_caller_address();
+        let (claimable) = claimable_of(caller);
+        let is_lower = is_le(quantity, claimable);
+        with_attr error_message(
+                "CarbonableOffseter: quantity to claim must be lower than the total claimable") {
+            assert is_lower = TRUE;
+        }
+
+        // [Effect] Claim
+        _claim(quantity=quantity);
+        return (success=TRUE);
+    }
+
+    func claim_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         success: felt
     ) {
         alloc_locals;
 
-        // [Check] Total offsetable not null
+        // [Check] Total offsetable is not null
         let (caller) = get_caller_address();
         let (claimable) = claimable_of(caller);
+        CarbonableOffseter_assert.claimable_not_negligible(claimable);
 
-        CarbonableOffseter_assert.claimable_not_null(claimable);
-
-        // [Effect] Add claimed value
-        let (stored_claimed) = CarbonableOffseter_claimed_.read(caller);
-        let claimed = stored_claimed + claimable;
-        CarbonableOffseter_claimed_.write(caller, claimed);
-
-        // [Effect] Emit event
-        let (current_time) = get_block_timestamp();
-        Claim.emit(address=caller, absorption=claimable, time=current_time);
+        // [Effect] Claim
+        _claim(quantity=claimable);
         return (success=TRUE);
     }
 
@@ -255,9 +283,6 @@ namespace CarbonableOffseter {
 
         // [Security] Start reetrancy guard
         ReentrancyGuard.start();
-
-        // [Check] Deposits are open
-        CarbonableOffseter_assert.is_open();
 
         // [Check] Uint256 compliance
         with_attr error_message("CarbonableOffseter: token_id is not a valid Uint256") {
@@ -504,24 +529,32 @@ namespace CarbonableOffseter {
         let (add) = _claimable_iter(contract_address=contract_address, user=user, index=index - 1);
         return (claimable=claimable + add);
     }
+
+    func _claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        quantity: felt
+    ) -> () {
+        // [Effect] Add claimed value
+        let (caller) = get_caller_address();
+        let (stored_claimed) = CarbonableOffseter_claimed_.read(caller);
+        let claimed = stored_claimed + quantity;
+        CarbonableOffseter_claimed_.write(caller, claimed);
+
+        // [Effect] Emit event
+        let (current_time) = get_block_timestamp();
+        Claim.emit(address=caller, absorption=quantity, time=current_time);
+        return ();
+    }
 }
 
 // Assert helpers
 namespace CarbonableOffseter_assert {
-    func claimable_not_null{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func claimable_not_negligible{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         claimable: felt
     ) {
-        let not_zero = is_not_zero(claimable);
-        with_attr error_message("CarbonableOffseter: claimable balance must be positive") {
-            assert not_zero = TRUE;
-        }
-        return ();
-    }
-
-    func is_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        let (status) = CarbonableOffseter.is_open();
-        with_attr error_message("CarbonableOffseter: deposits are closed") {
-            assert status = TRUE;
+        let (minimum) = CarbonableOffseter.min_claimable();
+        let is_lower = is_le(minimum, claimable);
+        with_attr error_message("CarbonableOffseter: claimable balance must be not negligible") {
+            assert is_lower = TRUE;
         }
         return ();
     }

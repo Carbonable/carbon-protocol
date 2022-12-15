@@ -30,8 +30,8 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
@@ -46,7 +46,7 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 
     // Total claimable is 3 - 1 = 2
     let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = 2;
+    assert total_claimable = 2000000;
     %{ stop() %}
 
     return ();

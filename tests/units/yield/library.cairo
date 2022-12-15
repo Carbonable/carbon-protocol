@@ -57,15 +57,17 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local carbonable_project_address;
     local carbonable_offseter_address;
     local carbonable_vester_address;
+    local minimum;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
         ids.carbonable_offseter_address = context.mocks.carbonable_offseter_address
         ids.carbonable_vester_address = context.mocks.carbonable_vester_address
+        ids.minimum = context.claim.minimum
     %}
     // Instantiate yield farmer
-    CarbonableOffseter.initializer(carbonable_project_address=carbonable_project_address);
+    CarbonableOffseter.initializer(carbonable_project_address=carbonable_project_address, min_claimable=minimum);
 
     // Instantiate yield farmer
     CarbonableYielder.initializer(

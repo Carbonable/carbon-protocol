@@ -19,7 +19,7 @@ from src.offset.library import CarbonableOffseter
 
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    carbonable_project_address: felt, owner: felt, proxy_admin: felt
+    carbonable_project_address: felt, min_claimable: felt, owner: felt
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -30,15 +30,15 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   range_check_ptr
     // Explicit args:
     //   carbonable_project_address(felt): Address of the corresponding Carbonable project
-    //   owner(felt): Owner address
-    //   proxy_admin(felt): Admin address
+    //   min_claimable(felt): Minimum threshold of claimable to allow a claim
+    //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     alloc_locals;
 
-    CarbonableOffseter.initializer(carbonable_project_address);
+    CarbonableOffseter.initializer(carbonable_project_address, min_claimable);
     Ownable.initializer(owner);
-    Proxy.initializer(proxy_admin);
+    Proxy.initializer(owner);
     return ();
 }
 
@@ -186,6 +186,21 @@ func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     return CarbonableOffseter.carbonable_project_address();
 }
 
+@external
+func getMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    min_claimable: felt
+) {
+    // Desc:
+    //   Return the minimum claimable quantity
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   min_claimable(felt): Minimum claimable
+    return CarbonableOffseter.set_min_claimable(min_claimable=min_claimable);
+}
+
 @view
 func isOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
     // Desc:
@@ -317,16 +332,55 @@ func getRegisteredTimeOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 //
 
 @external
-func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {
+func setMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    min_claimable: felt
+) -> () {
+    // Desc:
+    //   Set the minimum claimable quantity (must be consistent with project absorption unit)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   min_claimable(felt): New minimum claimable
+    // Raises:
+    //   min_claimable: min_claimable is null
+    Ownable.assert_only_owner();
+    return CarbonableOffseter.set_min_claimable(min_claimable=min_claimable);
+}
+
+@external
+func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
+    success: felt
+) {
     // Desc:
     //   Claim all the claimable balance of the caller address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   quantity(felt): Quantity to claim
     // Returns:
     //   success(felt): Success status
+    // Raises:
+    //   quantity: quantity is higher than the caller total claimable
     return CarbonableOffseter.claim();
+}
+
+@external
+func claimAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    success: felt
+) {
+    // Desc:
+    //   Claim all the total claimable of the caller address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   success(felt): Success status
+    return CarbonableOffseter.claim_all();
 }
 
 @external

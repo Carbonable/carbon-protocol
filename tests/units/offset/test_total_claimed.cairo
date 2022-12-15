@@ -30,8 +30,8 @@ func test_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
@@ -45,12 +45,20 @@ func test_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     assert total_claimed = 0;
 
     // Claim
-    let (success) = CarbonableOffseter.claim();
+    let (success) = CarbonableOffseter.claim(quantity=1000000);
     assert success = 1;
 
-    // Total claimable is 3 - 1 = 2;
+    // Total claimable is 1;
     let (total_claimed) = CarbonableOffseter.total_claimed();
-    assert total_claimed = 2;
+    assert total_claimed = 1000000;
+
+    // Claim
+    let (success) = CarbonableOffseter.claim_all();
+    assert success = 1;
+
+    // Total claimable is 1 + (3 - 1) - 1 = 2;
+    let (total_claimed) = CarbonableOffseter.total_claimed();
+    assert total_claimed = 2000000;
 
     %{ stop() %}
 
@@ -73,8 +81,8 @@ func test_claimed_revert_balance_null{
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [1999999]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
@@ -88,8 +96,8 @@ func test_claimed_revert_balance_null{
     assert total_claimed = 0;
 
     // Claim
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: claimable balance must be positive") %}
-    let (success) = CarbonableOffseter.claim();
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: claimable balance must be not negligible") %}
+    let (success) = CarbonableOffseter.claim_all();
     assert success = 1;
 
     %{ stop() %}
