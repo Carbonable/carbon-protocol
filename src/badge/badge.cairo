@@ -3,13 +3,11 @@
 %lang starknet
 
 // Starkware dependencies
-from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin, BitwiseBuiltin
+from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
+from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.math import assert_not_zero
-from starkware.cairo.common.signature import verify_ecdsa_signature
-from starkware.cairo.common.hash import hash2
-from starkware.cairo.common.alloc import alloc
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
@@ -18,14 +16,6 @@ from openzeppelin.introspection.erc165.library import ERC165
 
 // Local dependencies
 from src.badge.library import CarbonableBadge
-
-//
-// Storage
-//
-
-@storage_var
-func signer_public_key() -> (signer_public_key: felt) {
-}
 
 //
 // Constructor
@@ -227,96 +217,6 @@ func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id:
 //
 
 @external
-func mintBadge{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*}(
-    signature : (felt, felt),
-    badge_type : felt,
-) -> () {
-    // Desc:
-    //   Mint a badge to the caller of the specified type if the signature is valid
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    //   ecdsa_ptr(SignatureBuiltin*)
-    // Explicit args:
-    //   signature(felt, felt): server signature made from the pedersen hash of the caller address and the badge type
-    //   badge_type(felt): badge type
-    // Returns:
-    //   None
-    alloc_locals;
-    let (caller_address) = get_caller_address();
-
-    // Check if the NFT hasn't already been minted
-    let (balance) = ERC1155.balance_of(caller_address, Uint256(badge_type, 0));
-    assert balance = Uint256(0, 0);
-
-    // Check if the signature is valid
-    let (public_key) = signer_public_key.read();
-    // Pedersen hash of the caller address and the badge type
-    let (messageHash) = hash2{hash_ptr=pedersen_ptr}(caller_address, badge_type);
-    verify_ecdsa_signature(messageHash, public_key, signature[0], signature[1]);
-
-    // Adding the badge type to the datas of the token
-    let (data) = alloc();
-
-    mint(caller_address, Uint256(badge_type, 0), Uint256(1, 0), 1, data);
-    return ();
-}
-
-@external
-func mintBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    to: felt,
-    ids_len: felt,
-    ids: Uint256*,
-    amounts_len: felt,
-    amounts: Uint256*,
-    data_len: felt,
-    data: felt*,
-) {
-    // Desc:
-    //   Mint amounts of token ids to the -to- address specified
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   to(felt): Target address
-    //   ids_len(felt): Token ids array length
-    //   ids(Uint256*): Token ids of each token type (order and length must match amounts array)
-    //   amounts_len(felt): Amounts array length
-    //   amounts(Uint256*): Mint amounts per token type (order and length must match ids array)
-    //   data_len(felt): Data array len
-    //   data(felt*): Additional data with no specified format
-    // Returns:
-    //   None
-    Ownable.assert_only_owner();
-    ERC1155._mint_batch(to, ids_len, ids, amounts_len, amounts, data_len, data);
-    return ();
-}
-
-@external
-func setSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    new_signer_public_key: felt
-) -> () {
-    // Desc:
-    //   Set the public key of the signer for mintBadge transactions
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_signer_public_key(felt): The new public key
-    // Returns:
-    //   None
-    alloc_locals;
-    let (caller_address) = get_caller_address();
-    let (contract_owner) = owner();
-    assert caller_address = contract_owner;
-    signer_public_key.write(new_signer_public_key);
-    return ();
-}
-
-@external
 func setURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(uri_len: felt, uri: felt*) {
@@ -446,6 +346,60 @@ func safeBatchTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @external
+func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    to: felt, id: Uint256, amount: Uint256, data_len: felt, data: felt*
+) {
+    // Desc:
+    //   Mint amount of token id to the -to- address specified
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   to(felt): Target address
+    //   id(Uint256): Token id
+    //   amount(Uint256): Mint amount
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
+    Ownable.assert_only_owner();
+    ERC1155._mint(to, id, amount, data_len, data);
+    return ();
+}
+
+@external
+func mintBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    to: felt,
+    ids_len: felt,
+    ids: Uint256*,
+    amounts_len: felt,
+    amounts: Uint256*,
+    data_len: felt,
+    data: felt*,
+) {
+    // Desc:
+    //   Mint amounts of token ids to the -to- address specified
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   to(felt): Target address
+    //   ids_len(felt): Token ids array length
+    //   ids(Uint256*): Token ids of each token type (order and length must match amounts array)
+    //   amounts_len(felt): Amounts array length
+    //   amounts(Uint256*): Mint amounts per token type (order and length must match ids array)
+    //   data_len(felt): Data array len
+    //   data(felt*): Additional data with no specified format
+    // Returns:
+    //   None
+    Ownable.assert_only_owner();
+    ERC1155._mint_batch(to, ids_len, ids, amounts_len, amounts, data_len, data);
+    return ();
+}
+
+@external
 func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, id: Uint256, amount: Uint256
 ) {
@@ -530,30 +484,5 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     // Returns:
     //   None
     Ownable.renounce_ownership();
-    return ();
-}
-
-//
-// Internals
-//
-
-func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    to: felt, id: Uint256, amount: Uint256, data_len: felt, data: felt*
-) {
-    // Desc:
-    //   Mint amount of token id to the -to- address specified
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   to(felt): Target address
-    //   id(Uint256): Token id
-    //   amount(Uint256): Mint amount
-    //   data_len(felt): Data array len
-    //   data(felt*): Additional data with no specified format
-    // Returns:
-    //   None
-    ERC1155._mint(to, id, amount, data_len, data);
     return ();
 }

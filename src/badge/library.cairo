@@ -4,9 +4,11 @@
 
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
-from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
+from starkware.cairo.common.cairo_builtins import BitwiseBuiltin, SignatureBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256, uint256_check
+from starkware.cairo.common.signature import verify_ecdsa_signature
+from starkware.cairo.common.hash import hash2
 
 // Project dependencies
 from cairopen.string.ASCII import StringCodec
@@ -202,6 +204,19 @@ namespace CarbonableBadge {
         assert_unlocked([ids]);
         _assert_unlocked_iter(ids_len=ids_len - 1, ids=ids + 1);
 
+        return ();
+    }
+
+    func assert_valid_signature{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*}(
+        message: (felt, felt),
+        public_key: felt,
+        signature: (felt, felt),
+    ) {
+        let (messageHash) = hash2{hash_ptr=pedersen_ptr}(message[0], message[1]);
+        // [Check] Signature is valid
+        with_attr error_message("CarbonableBadge: invalid signature") {
+            verify_ecdsa_signature(messageHash, public_key, signature[0], signature[1]);
+        }
         return ();
     }
 }
