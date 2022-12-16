@@ -23,6 +23,9 @@ func test_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // prepare instance
     let (local context) = prepare();
 
+    let (ton_equivalent) = CarbonableProject.ton_equivalent();
+    assert ton_equivalent = context.absorption.ton_equivalent;
+
     let (absorptions_len, absorptions) = CarbonableProject.absorptions();
     assert absorptions_len = context.absorption.values_len;
     assert absorptions[0] = context.absorption.values[0];
@@ -35,9 +38,15 @@ func test_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     assert [new_absorptions + 3] = 4;
     assert [new_absorptions + 4] = 5;
     let new_absorptions_len = 5;
+    let new_ton_equivalent = 1;
     CarbonableProject.set_absorptions(
-        absorptions_len=new_absorptions_len, absorptions=new_absorptions
+        absorptions_len=new_absorptions_len,
+        absorptions=new_absorptions,
+        ton_equivalent=new_ton_equivalent,
     );
+
+    let (ton_equivalent) = CarbonableProject.ton_equivalent();
+    assert ton_equivalent = new_ton_equivalent;
 
     let (absorptions_len, absorptions) = CarbonableProject.absorptions();
     assert absorptions_len = new_absorptions_len;
@@ -146,6 +155,6 @@ func test_set_absorptions_revert_not_defined{
 
     let (local absorptions: felt*) = alloc();
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: absorptions must be defined") %}
-    CarbonableProject.set_absorptions(absorptions_len=0, absorptions=absorptions);
+    CarbonableProject.set_absorptions(absorptions_len=0, absorptions=absorptions, ton_equivalent=1);
     return ();
 }

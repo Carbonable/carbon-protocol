@@ -431,7 +431,7 @@ func getInstantaneousApr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   precision(felt): precision of the output (must be lower than 100000)
+    //   precision(felt): precision of the output (must be lower than 1000000)
     // Returns:
     //   time(felt): The last snapshot time
     // Raises:
@@ -450,7 +450,7 @@ func getEstimatedCreditCarbonPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   precision(felt): precision of the output (must be lower than 100000)
+    //   precision(felt): precision of the output (must be lower than 1000000)
     // Returns:
     //   price(felt): Estimated price
     // Raises:

@@ -20,7 +20,7 @@ from src.interfaces.vester import ICarbonableVester
 from src.offset.library import CarbonableOffseter
 from src.utils.type.library import _felt_to_uint, _uint_to_felt
 
-const PRECISION = 100000;
+const PRECISION = 1000000;
 
 //
 // Events

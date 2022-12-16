@@ -23,6 +23,7 @@ struct Absorption {
     times: felt*,
     values_len: felt,
     values: felt*,
+    ton_equivalent: felt,
 }
 
 struct TestContext {
@@ -58,6 +59,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     let (local times: felt*) = alloc();
     local absorptions_len;
     let (local absorptions: felt*) = alloc();
+    local ton_equivalent;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
@@ -67,15 +69,22 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
             memory[ids.absorptions + idx] = absorption
         for idx, time in enumerate(context.absorption.times):
             memory[ids.times + idx] = time
+        ids.ton_equivalent = context.absorption.ton_equivalent
     %}
     CarbonableProject.set_times(times_len=times_len, times=times);
-    CarbonableProject.set_absorptions(absorptions_len=absorptions_len, absorptions=absorptions);
+    CarbonableProject.set_absorptions(
+        absorptions_len=absorptions_len, absorptions=absorptions, ton_equivalent=ton_equivalent
+    );
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);
 
     local absorption: Absorption = Absorption(
-        times_len=times_len, times=times, values_len=absorptions_len, values=absorptions
+        times_len=times_len,
+        times=times,
+        values_len=absorptions_len,
+        values=absorptions,
+        ton_equivalent=ton_equivalent,
     );
 
     local context: TestContext = TestContext(signers=signers, absorption=absorption);

@@ -38,5 +38,8 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let final_absorption = absorptions[absorptions_len - 1];
     assert final_absorption = context.absorption.values[absorptions_len - 1];
 
+    let (ton_equivalent) = CarbonableProject.ton_equivalent();
+    assert ton_equivalent = context.absorption.ton_equivalent;
+
     return ();
 }
