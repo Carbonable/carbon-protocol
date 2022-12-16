@@ -388,6 +388,24 @@ func getRegisteredTimeOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 }
 
 @view
+func getRegisteredTokensOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (tokens_len: felt, tokens: Uint256*) {
+    // Desc:
+    //   Return the registered tokens of the provided address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   address(felt): Token id
+    // Returns:
+    //   tokens_len(felt): Tokens array length
+    //   tokens(Uint256*): Tokens deposited by the provided address
+    return CarbonableOffseter.registered_tokens_of(address=address);
+}
+
+@view
 func getSnapshotedTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     time: felt
 ) {

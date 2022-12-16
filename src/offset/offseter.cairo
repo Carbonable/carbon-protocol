@@ -187,7 +187,7 @@ func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     return CarbonableOffseter.carbonable_project_address();
 }
 
-@external
+@view
 func getMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     min_claimable: felt
 ) {

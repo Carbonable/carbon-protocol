@@ -55,13 +55,28 @@ namespace ICarbonableYielder {
     func getClaimedOf(address: felt) -> (claimed: felt) {
     }
 
+    func getSnapshotedOf(address: felt) -> (absorption: felt) {
+    }
+
+    func getSnapshotedOffseterOf(address: felt) -> (absorption: felt) {
+    }
+
     func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
     }
 
     func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
     }
 
+    func getRegisteredTokensOf(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
+    }
+
     func getSnapshotedTime() -> (time: felt) {
+    }
+
+    func getInstantaneousApr(precision: felt) -> (apr: felt) {
+    }
+
+    func getEstimatedCreditCarbonPrice(precision: felt) -> (price: felt) {
     }
 
     func deposit(token_id: Uint256) -> (success: felt) {

@@ -31,6 +31,9 @@ namespace ICarbonableOffseter {
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
+    func getMinClaimable() -> (min_claimable: felt) {
+    }
+
     func getTotalDeposited() -> (balance: Uint256) {
     }
 
@@ -52,7 +55,16 @@ namespace ICarbonableOffseter {
     func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
     }
 
+    func getRegisteredTokensOf(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
+    }
+
+    func setMinClaimable(min_claimable: felt) -> () {
+    }
+
     func claim() -> (success: felt) {
+    }
+
+    func claimAll() -> (success: felt) {
     }
 
     func deposit(token_id: Uint256) -> (success: felt) {
