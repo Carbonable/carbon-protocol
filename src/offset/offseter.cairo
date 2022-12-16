@@ -29,14 +29,15 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
+    //   carbonable_project_address(felt): Address of the Carbonable project
     //   min_claimable(felt): Minimum threshold of claimable to allow a claim
     //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     alloc_locals;
 
-    CarbonableOffseter.initializer(carbonable_project_address, min_claimable);
+    CarbonableOffseter.initializer(carbonable_project_address);
+    CarbonableOffseter.set_min_claimable(min_claimable);
     Ownable.initializer(owner);
     Proxy.initializer(owner);
     return ();
@@ -198,7 +199,7 @@ func getMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     //   range_check_ptr
     // Returns:
     //   min_claimable(felt): Minimum claimable
-    return CarbonableOffseter.set_min_claimable(min_claimable=min_claimable);
+    return CarbonableOffseter.min_claimable();
 }
 
 @view
@@ -329,7 +330,7 @@ func getRegisteredTokensOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
     // Returns:
     //   tokens_len(felt): Tokens array length
     //   tokens(Uint256*): Tokens deposited by the provided address
-    return CarbonableOffseter.registered_time_of(token_id=token_id);
+    return CarbonableOffseter.registered_tokens_of(address=address);
 }
 
 //
@@ -370,7 +371,7 @@ func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quan
     //   success(felt): Success status
     // Raises:
     //   quantity: quantity is higher than the caller total claimable
-    return CarbonableOffseter.claim();
+    return CarbonableOffseter.claim(quantity=quantity);
 }
 
 @external

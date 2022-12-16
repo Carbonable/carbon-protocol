@@ -28,6 +28,10 @@ func CarbonableProject_times_(index: felt) -> (time: felt) {
 }
 
 @storage_var
+func CarbonableProject_absorptions_ton_equivalent_() -> (precision: felt) {
+}
+
+@storage_var
 func CarbonableProject_absorptions_len_() -> (length: felt) {
 }
 
@@ -124,6 +128,13 @@ namespace CarbonableProject {
         return (absorption=absorption);
     }
 
+    func ton_equivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        ton_equivalent: felt
+    ) {
+        let (ton_equivalent) = CarbonableProject_absorptions_ton_equivalent_.read();
+        return (ton_equivalent=ton_equivalent);
+    }
+
     func is_times_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         status: felt
     ) {
@@ -179,7 +190,7 @@ namespace CarbonableProject {
     }
 
     func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        absorptions_len: felt, absorptions: felt*
+        absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
     ) {
         alloc_locals;
 
@@ -189,7 +200,14 @@ namespace CarbonableProject {
             not_zero = TRUE;
         }
 
+        // [Check] Precision is not null
+        let not_zero = is_not_zero(ton_equivalent);
+        with_attr error_message("CarbonableProject: ton equivalent must be defined positive") {
+            not_zero = TRUE;
+        }
+
         // [Effect] Update storage
+        CarbonableProject_absorptions_ton_equivalent_.write(ton_equivalent);
         _write_absorptions(absorptions_len=absorptions_len, absorptions=absorptions);
         return ();
     }

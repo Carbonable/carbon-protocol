@@ -439,7 +439,7 @@ func getTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     // Returns:
     //   times_len(felt): Array length
     //   times(felt*): timestamps
-    return CarbonableProject.time_step();
+    return CarbonableProject.times();
 }
 
 @view
@@ -503,6 +503,21 @@ func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     // Returns:
     //   absorptions(felt): Final absorption
     return CarbonableProject.final_absorption();
+}
+
+@view
+func getTonEquivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    ton_equivalent: felt
+) {
+    // Desc:
+    //   Return the ton equivalent in absorption unit
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   ton_equivalent(felt): Ton equivalent
+    return CarbonableProject.ton_equivalent();
 }
 
 @view
@@ -688,28 +703,28 @@ func setURI{
 }
 
 @external
-func setTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    start_time: felt, time_step: felt
+func setTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    times_len: felt, times: felt*
 ) {
     // Desc:
-    //   Set new time step
+    //   Set new time values
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   start_time(felt): Absolute start time
-    //   time_step(felt): Time step value
+    //   times_len(felt): Array length
+    //   times(felt*): Time values
     // Raises:
     //   caller: caller is not the contract owner
-    //   time_step: time_step is null
+    //   times_len: times_len is null
     Ownable.assert_only_owner();
-    return CarbonableProject.set_time(start_time=start_time, time_step=time_step);
+    return CarbonableProject.set_times(times_len=times_len, times=times);
 }
 
 @external
 func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    absorptions_len: felt, absorptions: felt*
+    absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
 ) {
     // Desc:
     //   Set new absorption values
@@ -720,11 +735,13 @@ func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     // Explicit args:
     //   absorptions_len(felt): Array length
     //   absorptions(felt*): Absorption values
+    //   ton_equivalent(felt): Absorption ton equivalent
     // Raises:
     //   caller: caller is not the contract owner
     //   absorptions_len: absorptions_len is null
+    //   ton_equivalent: ton_equivalent is null
     Ownable.assert_only_owner();
     return CarbonableProject.set_absorptions(
-        absorptions_len=absorptions_len, absorptions=absorptions
+        absorptions_len=absorptions_len, absorptions=absorptions, ton_equivalent=ton_equivalent
     );
 }

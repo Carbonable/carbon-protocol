@@ -40,7 +40,7 @@ namespace ICarbonableProject {
     func getFinalTime() -> (final_time: felt) {
     }
 
-    func getTimeStep() -> (time_step: felt) {
+    func getTimes() -> (times_len: felt, times: felt) {
     }
 
     func getAbsorptions() -> (absorptions_len: felt, absorptions: felt*) {
@@ -55,12 +55,15 @@ namespace ICarbonableProject {
     func getFinalAbsorption() -> (absorption: felt) {
     }
 
+    func getTonEquivalent() -> (ton_equivalent: felt) {
+    }
+
     func isSetup() -> (status: felt) {
     }
 
-    func setTime(start_time: felt, time_step: felt) {
+    func setTimes(times_len: felt, times: felt) {
     }
 
-    func setAbsorptions(absorptions_len: felt, absorptions: felt*) {
+    func setAbsorptions(absorptions_len: felt, absorptions: felt*, ton_equivalent: felt) {
     }
 }

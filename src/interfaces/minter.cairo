@@ -28,65 +28,64 @@ namespace ICarbonableMinter {
     func renounceOwnership() {
     }
 
-    func carbonable_project_address() -> (carbonable_project_address: felt) {
+    func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
-    func payment_token_address() -> (payment_token_address: felt) {
+    func getPaymentTokenAddress() -> (payment_token_address: felt) {
     }
 
-    func whitelisted_sale_open() -> (whitelisted_sale_open: felt) {
+    func isWhitelistedSaleOpen() -> (whitelisted_sale_open: felt) {
     }
 
-    func public_sale_open() -> (public_sale_open: felt) {
+    func isPublicSaleOpen() -> (public_sale_open: felt) {
     }
 
-    func max_buy_per_tx() -> (max_buy_per_tx: felt) {
+    func getMaxBuy_PerTx() -> (max_buy_per_tx: felt) {
     }
 
-    func unit_price() -> (unit_price: Uint256) {
+    func getUnitPrice() -> (unit_price: Uint256) {
     }
 
-    func max_supply_for_mint() -> (max_supply_for_mint: Uint256) {
+    func getReservedSupplyForMint() -> (reserved_supply_for_mint: Uint256) {
     }
 
-    func reserved_supply_for_mint() -> (reserved_supply_for_mint: Uint256) {
+    func getMaxSupplyForMint() -> (max_supply_for_mint: Uint256) {
     }
 
-    func whitelist_merkle_root() -> (whitelist_merkle_root: felt) {
+    func getWhitelistMerkleRoot() -> (whitelist_merkle_root: felt) {
     }
 
-    //##
-    // Get the reserved slots number of the specified address.
-    // @param account the specified account
-    // @param slots the expected slots
-    // @param proof_len the len of proof array
-    // @param proof the proof array
-    // @return the number of reserved slots
-    //##
-    func whitelisted_slots(account: felt, slots: felt, proof_len: felt, proof: felt*) -> (
+    func getWhitelistedSlots(account: felt, slots: felt, proof_len: felt, proof: felt*) -> (
         slots: felt
     ) {
     }
 
-    func claimed_slots(account: felt) -> (slots: felt) {
+    func getClaimedSlots(account: felt) -> (slots: felt) {
     }
 
-    func sold_out() -> (status: felt) {
+    func isSoldOut() -> (status: felt) {
     }
 
-    func set_whitelist_merkle_root(whitelist_merkle_root: felt) {
+    func getTotalValue() -> (total_value: Uint256) {
     }
 
-    func set_public_sale_open(public_sale_open: felt) {
+    //
+    // Externals
+    //
+
+    func setWhitelistMerkleRoot(whitelist_merkle_root: felt) {
     }
 
-    func set_max_buy_per_tx(max_buy_per_tx: felt) {
+    func setPublicSaleOpen(public_sale_open: felt) {
     }
 
-    func set_unit_price(unit_price: Uint256) {
+    func setMaxBuyPerTx(max_buy_per_tx: felt) {
     }
 
-    func decrease_reserved_supply_for_mint(slots: Uint256) {
+    func setUnitPrice(unit_price: Uint256) {
+    }
+
+    func decreaseReservedSupplyForMint(slots: Uint256) {
     }
 
     func airdrop(to: felt, quantity: felt) -> (success: felt) {
@@ -98,11 +97,11 @@ namespace ICarbonableMinter {
     func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
     }
 
-    func whitelist_buy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (
+    func whitelistBuy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (
         success: felt
     ) {
     }
 
-    func public_buy(quantity: felt) -> (success: felt) {
+    func publicBuy(quantity: felt) -> (success: felt) {
     }
 }

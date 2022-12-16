@@ -81,10 +81,9 @@ namespace CarbonableOffseter {
     //
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        carbonable_project_address: felt, min_claimable: felt
+        carbonable_project_address: felt
     ) {
         CarbonableOffseter_carbonable_project_address_.write(carbonable_project_address);
-        CarbonableOffseter_min_claimable_.write(min_claimable);
         return ();
     }
 

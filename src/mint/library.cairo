@@ -201,6 +201,18 @@ namespace CarbonableMinter {
         return (status=status);
     }
 
+    func total_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        total_value: Uint256
+    ) {
+        alloc_locals;
+
+        let (max_supply) = max_supply_for_mint();
+        let (price) = unit_price();
+        let (total_value) = SafeUint256.mul(max_supply, price);
+
+        return (total_value=total_value);
+    }
+
     //
     // Externals
     //

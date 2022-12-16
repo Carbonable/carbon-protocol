@@ -31,9 +31,6 @@ namespace ICarbonableOffseter {
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
-    func isOpen() -> (status: felt) {
-    }
-
     func getTotalDeposited() -> (balance: Uint256) {
     }
 

@@ -197,7 +197,7 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 //
 
 @view
-func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
     // Desc:
     //   Return the associated carbonable project
@@ -211,7 +211,7 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
-func payment_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     payment_token_address: felt
 ) {
     // Desc:
@@ -226,7 +226,7 @@ func payment_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @view
-func whitelisted_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func isWhitelistedSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     whitelisted_sale_open: felt
 ) {
     // Desc:
@@ -241,7 +241,7 @@ func whitelisted_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @view
-func public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     public_sale_open: felt
 ) {
     // Desc:
@@ -256,7 +256,7 @@ func public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 @view
-func max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getMaxBuy_PerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_buy_per_tx: felt
 ) {
     // Desc:
@@ -271,7 +271,7 @@ func max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 @view
-func unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     unit_price: Uint256
 ) {
     // Desc:
@@ -286,7 +286,7 @@ func unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 }
 
 @view
-func reserved_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (reserved_supply_for_mint: Uint256) {
     // Desc:
     //   Return the reserved supply available for airdrops
@@ -300,7 +300,7 @@ func reserved_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 }
 
 @view
-func max_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_supply_for_mint: Uint256
 ) {
     // Desc:
@@ -315,7 +315,7 @@ func max_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 }
 
 @view
-func whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     whitelist_merkle_root: felt
 ) {
     // Desc:
@@ -330,7 +330,7 @@ func whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @view
-func whitelisted_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getWhitelistedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt, slots: felt, proof_len: felt, proof: felt*
 ) -> (slots: felt) {
     // Desc:
@@ -350,7 +350,7 @@ func whitelisted_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 @view
-func claimed_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getClaimedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt
 ) -> (slots: felt) {
     // Desc:
@@ -367,7 +367,9 @@ func claimed_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 @view
-func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
+func isSoldOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    status: felt
+) {
     // Desc:
     //   Return the sold out status
     // Implicit args:
@@ -379,12 +381,27 @@ func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return CarbonableMinter.sold_out();
 }
 
+@view
+func getTotalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_value: Uint256
+) {
+    // Desc:
+    //   Return the total project value
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   total_value(Uint256): Total value expressed in payment token units
+    return CarbonableMinter.total_value();
+}
+
 //
 // Externals
 //
 
 @external
-func set_whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     whitelist_merkle_root: felt
 ) {
     // Desc:
@@ -404,7 +421,7 @@ func set_whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
 }
 
 @external
-func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     public_sale_open: felt
 ) {
     // Desc:
@@ -424,7 +441,7 @@ func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 }
 
 @external
-func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     max_buy_per_tx: felt
 ) {
     // Desc:
@@ -444,7 +461,7 @@ func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 }
 
 @external
-func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     unit_price: Uint256
 ) {
     // Desc:
@@ -464,9 +481,9 @@ func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 @external
-func decrease_reserved_supply_for_mint{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}(slots: Uint256) {
+func decreaseReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slots: Uint256
+) {
     // Desc:
     //   Decrease the reserved supply for airdrops by the providing amount of slots
     // Implicit args:
@@ -550,7 +567,7 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func whitelist_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func whitelistBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     slots: felt, proof_len: felt, proof: felt*, quantity: felt
 ) -> (success: felt) {
     // Desc:
@@ -578,9 +595,9 @@ func whitelist_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 @external
-func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    quantity: felt
-) -> (success: felt) {
+func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
+    success: felt
+) {
     // Desc:
     //   Purchase -quantity- tokens while public sale is open
     // Implicit args:

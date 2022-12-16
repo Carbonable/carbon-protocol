@@ -23,6 +23,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     carbonable_project_address: felt,
     carbonable_offseter_address: felt,
     carbonable_vester_address: felt,
+    carbonable_minter_address: felt,
     owner: felt,
     proxy_admin: felt,
 ) {
@@ -34,9 +35,10 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
-    //   carbonable_offseter_address(felt): Address of the corresponding Carbonable offseter
+    //   carbonable_project_address(felt): Address of the Carbonable project
+    //   carbonable_offseter_address(felt): Address of the Carbonable offseter
     //   carbonable_vester_address(felt): Address of the Carbonable vester
+    //   carbonable_minter_address(felt): Address of the Carbonable minter
     //   owner(felt): Owner address
     //   proxy_admin(felt): Admin address
     // Returns:
@@ -45,6 +47,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     CarbonableYielder.initializer(
         carbonable_offseter_address=carbonable_offseter_address,
         carbonable_vester_address=carbonable_vester_address,
+        carbonable_minter_address=carbonable_minter_address,
     );
     Ownable.initializer(owner);
     Proxy.initializer(proxy_admin);
@@ -224,16 +227,17 @@ func getCarbonableVesterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
-func isOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
+func getCarbonableMinterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) -> (carbonable_minter_address: felt) {
     // Desc:
-    //   Return the deposits status according to project setup
+    //   Return the associated carbonable minter
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   status(felt): Deposits status
-    return CarbonableOffseter.is_open();
+    //   carbonable_minter_address(felt): Address of the corresponding Carbonable minter
+    return CarbonableYielder.carbonable_minter_address();
 }
 
 @view
@@ -292,7 +296,7 @@ func getClaimableOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   address(felt): address
+    //   address(felt): Address
     // Returns:
     //   claimable(felt): Total claimable
     return CarbonableOffseter.claimable_of(address=address);
@@ -309,10 +313,44 @@ func getClaimedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   address(felt): address
+    //   address(felt): Address
     // Returns:
     //   claimed(felt): Total claimed
     return CarbonableOffseter.claimed_of(address=address);
+}
+
+@view
+func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (absorption: felt) {
+    // Desc:
+    //   Return the snapshoted absorption of the provided address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   address(felt): Address
+    // Returns:
+    //   absorption(felt): Snapshoted absorption
+    return CarbonableYielder.snapshoted_of(address=address);
+}
+
+@view
+func getSnapshotedOffseterOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (absorption: felt) {
+    // Desc:
+    //   Return the snapshoted absorption of the provided address for offseter contract
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   address(felt): Address
+    // Returns:
+    //   absorption(felt): Snapshoted absorption
+    return CarbonableYielder.snapshoted_offseter_of(address=address);
 }
 
 @view
@@ -362,6 +400,44 @@ func getSnapshotedTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     // Returns:
     //   time(felt): The last snapshot time
     return CarbonableYielder.snapshoted_time();
+}
+
+@view
+func getInstantaneousApr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    precision: felt
+) -> (apr: felt) {
+    // Desc:
+    //   Return the apr of the previous cycle
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   precision(felt): precision of the output (must be lower than 100000)
+    // Returns:
+    //   time(felt): The last snapshot time
+    // Raises:
+    //   precision: precision is higher than highest precision
+    return CarbonableYielder.instantaneous_apr(precision=precision);
+}
+
+@view
+func getEstimatedCreditCarbonPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    precision: felt
+) -> (price: felt) {
+    // Desc:
+    //   Return the estimated price of a credit carbon based the previous cycle
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   precision(felt): precision of the output (must be lower than 100000)
+    // Returns:
+    //   price(felt): Estimated price
+    // Raises:
+    //   precision: precision is higher than highest precision
+    return CarbonableYielder.estimated_credit_carbon_price(precision=precision);
 }
 
 //

@@ -37,7 +37,7 @@ namespace ICarbonableYielder {
     func getCarbonableVesterAddress() -> (carbonable_vester_address: felt) {
     }
 
-    func isOpen() -> (status: felt) {
+    func getCarbonableMinterAddress() -> (carbonable_minter_address: felt) {
     }
 
     func getTotalDeposited() -> (balance: Uint256) {
