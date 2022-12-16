@@ -22,7 +22,7 @@ func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     // prepare farmer instance
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
-    let (contract_address) = get_contract_address();
+    let (local contract_address: felt) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
@@ -40,6 +40,8 @@ func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     %{
         stop_mock_getTotalClaimable = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1])
         stop_mock_getTotalClaimed = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [1])
+        stop_mock_getClaimableOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1])
+        stop_mock_getClaimedOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [1])
         stop_warp = warp(blk_timestamp=100)
         expect_events(dict(name="Snapshot", data=dict(
             project=context.mocks.carbonable_project_address,
@@ -66,10 +68,15 @@ func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
         stop_mock_getCurrentAbsorption()
         stop_mock_getTotalClaimable()
         stop_mock_getTotalClaimed()
+        stop_mock_getClaimableOf()
+        stop_mock_getClaimedOf()
         stop_mock_getAbsorption = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [3])
         stop_mock_getCurrentAbsorption = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [6])
         stop_mock_getTotalClaimable = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1])
         stop_mock_getTotalClaimed = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [2])
+        stop_mock_getClaimableOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1])
+        stop_mock_getClaimedOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2])
+        store(target_contract_address=ids.contract_address, variable_name="CarbonableYielder_vested_", value=[1], )
         stop_warp = warp(blk_timestamp=200)
         expect_events(dict(name="Snapshot", data=dict(
             project=context.mocks.carbonable_project_address,
@@ -102,7 +109,11 @@ func test_snapshot_revert_not_snapshotable{
     // prepare farmer instance
     let (local context) = prepare();
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot or create vestings if no user has registered") %}
+    %{
+        warp(blk_timestamp=200)
+        mock_call(context.mocks.carbonable_project_address, "isSetup", [1])
+        expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot or create vestings if no user has registered")
+    %}
     CarbonableYielder.snapshot();
     return ();
 }

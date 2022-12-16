@@ -39,9 +39,16 @@ func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getStartTime", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getFinalTime", [3]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getTonEquivalent", [1000000]) %}
+
+    %{ mock_call(context.mocks.carbonable_minter_address, "getTotalValue", [100, 0]) %}
 
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [2]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2]) %}
 
     %{ mock_call(context.mocks.carbonable_vester_address, "withdrawable_amount", [ids.TOTAL_AMOUNT, 0]) %}
     %{ mock_call(context.mocks.carbonable_vester_address, "create_vesting", [1]) %}
@@ -107,8 +114,12 @@ func test_create_vestings_revert_not_vestable{
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
 
+    %{ mock_call(context.mocks.carbonable_minter_address, "getTotalValue", [100, 0]) %}
+
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [2]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2]) %}
 
     %{ mock_call(context.mocks.carbonable_vester_address, "withdrawable_amount", [ids.TOTAL_AMOUNT - 1, 0]) %}
 
@@ -153,6 +164,8 @@ func test_create_vestings_no_absorption{
 
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [0]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [0]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2]) %}
 
     %{ mock_call(context.mocks.carbonable_vester_address, "withdrawable_amount", [ids.TOTAL_AMOUNT, 0]) %}
     %{ mock_call(context.mocks.carbonable_vester_address, "create_vesting", [1]) %}
@@ -165,6 +178,7 @@ func test_create_vestings_no_absorption{
     CarbonableYielder.snapshot();
     %{ stop_warp() %}
 
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot vest if the total yielder contribution is null") %}
     let (success) = CarbonableYielder.create_vestings(
         total_amount=TOTAL_AMOUNT,
         cliff_delta=CLIFF_DELTA,

@@ -560,8 +560,6 @@ namespace CarbonableYielder_assert {
     func is_vestable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         total_amount: felt
     ) -> (users_len: felt, users: felt*) {
-        let (users_len, users) = is_snapshotable();
-
         // [Check] Vesting has not been already executed
         let (status) = CarbonableYielder_vested_.read();
         with_attr error_message("CarbonableYielder: cannot vest if vesting has already been set") {
@@ -577,6 +575,14 @@ namespace CarbonableYielder_assert {
         let (is_not_enough) = uint256_lt(withdrawable_amount, total_amount_uint256);
         with_attr error_message("CarbonableYielder: not enough unallocated amount into vester") {
             assert is_not_enough = FALSE;
+        }
+
+        // [Check] At least 1 user registered
+        let (users_len, users) = CarbonableOffseter.registered_users();
+        let not_zero = is_not_zero(users_len);
+        with_attr error_message(
+                "CarbonableYielder: cannot snapshot or create vestings if no user has registered") {
+            assert not_zero = TRUE;
         }
         return (users_len=users_len, users=users);
     }

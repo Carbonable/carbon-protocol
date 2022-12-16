@@ -57,6 +57,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local admin;
     local anyone;
     local carbonable_project_address;
+    local carbonable_minter_address;
     local minimum;
     %{
         ids.admin = context.signers.admin
@@ -66,9 +67,8 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     %}
 
     // Instantiate farmer
-    CarbonableOffseter.initializer(
-        carbonable_project_address=carbonable_project_address, min_claimable=minimum
-    );
+    CarbonableOffseter.initializer(carbonable_project_address=carbonable_project_address);
+    CarbonableOffseter.set_min_claimable(minimum);
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);

@@ -27,6 +27,9 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (carbonable_offseter_address) = CarbonableYielder.carbonable_offseter_address();
     assert carbonable_offseter_address = context.mocks.carbonable_offseter_address;
 
+    let (carbonable_minter_address) = CarbonableYielder.carbonable_minter_address();
+    assert carbonable_minter_address = context.mocks.carbonable_minter_address;
+
     let (snapshoted_time) = CarbonableYielder.snapshoted_time();
     assert snapshoted_time = 0;
 
