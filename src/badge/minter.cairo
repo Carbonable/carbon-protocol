@@ -17,7 +17,7 @@ from bal7hazar.token.erc1155.library import ERC1155
 
 // Local dependencies
 from src.badge.library import CarbonableBadge
-from src.badge.Ibadge import IBadgeContract
+from src.interfaces.badge import ICarbonableBadge
 
 //
 // Storage
@@ -32,15 +32,17 @@ func badge_contract_address() -> (badge_contract_address: felt) {
 }
 
 //
-// Constructor
+// Initializer
 //
 
-@constructor
-func constructor{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(owner: felt) {
+@external
+func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    owner: felt,
+    signer_key: felt,
+    badge_contract: felt
+) {
     // Desc:
-    //   Initialize the contract with the owner address
+    //   Initialize the contract with the owner address, the public key of the signer and the address of the badge contract
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -48,12 +50,21 @@ func constructor{
     //   range_check_ptr
     // Explicit args:
     //   owner(felt): Owner address
+    //   signer_public_key(felt): Public key of the signer
+    //   badge_contract(felt): Address of the badge contract
     // Returns:
     //   None
-    alloc_locals;
 
+    // Can only be called if there is no admin
+    let (current_owner) = Ownable.owner();
+    assert current_owner = 0;
+
+    // Then if there is no admin, the proxy can initialize the contract
     ERC1155.initializer(0);
+    Proxy._set_admin(owner);
     Ownable.initializer(owner);
+    signer_public_key.write(signer_key);
+    badge_contract_address.write(badge_contract);
     return ();
 }
 
@@ -73,6 +84,34 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
     //   owner(felt): The owner address
     let (owner: felt) = Ownable.owner();
     return (owner,);
+}
+
+@view
+func getSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (signer_public_key: felt) {
+    // Desc:
+    //   Return the public key of the signer
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   signer_public_key(felt): The public key
+    let (key: felt) = signer_public_key.read();
+    return (key,);
+}
+
+@view
+func getBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (badge_contract_address: felt) {
+    // Desc:
+    //   Return the address of the badge contract
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   badge_contract_address(felt): The address
+    let (address: felt) = badge_contract_address.read();
+    return (address,);
 }
 
 //
@@ -111,7 +150,7 @@ func claim{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ec
 
     let (contract_address) = badge_contract_address.read();
     
-    IBadgeContract.mint(contract_address, caller_address, Uint256(badge_type, 0), Uint256(1, 0), 1, data);
+    ICarbonableBadge.mint(contract_address, caller_address, Uint256(badge_type, 0), Uint256(1, 0), 0, data);
     return ();
 }
 
@@ -203,7 +242,7 @@ func transferBadgeContractOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuilti
     //   None
     Ownable.assert_only_owner();
     let (contract_address) = badge_contract_address.read();
-    IBadgeContract.transferOwnership(contract_address, newOwner);
+    ICarbonableBadge.transferOwnership(contract_address, newOwner);
     return ();
 }
 
@@ -225,7 +264,39 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     //   new_implementation(felt): Address of the new implementation
     // Returns:
     //   None
-    Ownable.assert_only_owner();
+    Proxy.assert_only_admin();
     Proxy._set_implementation_hash(new_implementation);
     return ();
+}
+
+@external
+func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    newAdmin: felt
+) {
+    // Desc:
+    //   Set the proxy admin
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   newAdmin(felt): Address of the new admin
+    // Returns:
+    //   None
+    Proxy.assert_only_admin();
+    Proxy._set_admin(newAdmin);
+    return ();
+}
+
+@view
+func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (implementation: felt) {
+    // Desc:
+    //   Get the implementation hash
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   Implementation hash(felt)
+    return Proxy.get_implementation_hash();
 }

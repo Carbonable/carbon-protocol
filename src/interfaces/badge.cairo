@@ -44,4 +44,6 @@ namespace ICarbonableBadge {
         data: felt*,
     ) {
     }
+    func transferOwnership(new_owner: felt) {
+    }
 }
