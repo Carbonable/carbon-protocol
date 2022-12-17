@@ -1,9 +1,14 @@
+// SPDX-License-Identifier: MIT
+
 %lang starknet
+
+// Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
 
+// Local dependencies
 from src.interfaces.badgeMinter import ICarbonableBadgeMinter
 
 @external

@@ -1,8 +1,14 @@
+// SPDX-License-Identifier: MIT
+
 %lang starknet
-from src.badge.minter import owner, initializer, getSignerPublicKey, getBadgeContractAddress
+
+// Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math import assert_not_zero
+
+// Local dependencies
+from src.badge.minter import owner, initializer, getSignerPublicKey, getBadgeContractAddress
 
 @external
 func test_initialization{
@@ -18,7 +24,7 @@ func test_initialization{
 
     let (signer_public_key) = getSignerPublicKey();
     assert signer_public_key = 0x41;
-    
+
     let (badge_contract_address) = getBadgeContractAddress();
     assert badge_contract_address = 0x4;
 
