@@ -7,9 +7,11 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
+from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
 from src.interfaces.badgeMinter import ICarbonableBadgeMinter
+from src.interfaces.badge import ICarbonableBadge
 
 @external
 func test_claim{
@@ -17,20 +19,20 @@ func test_claim{
 }() {
     alloc_locals;
 
-    local minter_contract_address: felt;
     local logic_class: felt;
     let public_key = 0x07c42ac1a6415ba91ce25cca6ea3ffcf8201151a722e6a07fe2f73e931f221c6;
     let contract_owner = 0x4;
 
     // Deploy the minter contract
+    local minter_contract_address: felt;
     %{
         from starkware.starknet.compiler.compile import get_selector_from_name
         ids.logic_class = declare("src/badge/minter.cairo").class_hash
         ids.minter_contract_address = deploy_contract("openzeppelin/upgrades/presets/Proxy.cairo", [ids.logic_class, get_selector_from_name("initializer"), 3, ids.contract_owner, ids.public_key, 0]).contract_address
     %}
 
-    local badge_contract_address: felt;
     // Deploy the badge contract
+    local badge_contract_address: felt;
     %{
         ids.badge_contract_address = deploy_contract("src/badge/badge.cairo", [1, 1, 1, ids.minter_contract_address]).contract_address
     %}
@@ -46,6 +48,10 @@ func test_claim{
 
     // Claim the badge
     ICarbonableBadgeMinter.claim(minter_contract_address, sig, badge_type);
+
+    // Check that the badge was minted on tbhe badge contract
+    let (balance) = ICarbonableBadge.balanceOf(badge_contract_address, contract_owner, Uint256(badge_type, 0));
+    assert balance = Uint256(1, 0);
     
     %{ stop_prank_callable() %}
 

@@ -138,8 +138,10 @@ func claim{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ec
     alloc_locals;
     let (caller_address) = get_caller_address();
 
+    let (contract_address) = badge_contract_address.read();
+
     // Check if the NFT hasn't already been minted
-    let (balance) = ERC1155.balance_of(caller_address, Uint256(badge_type, 0));
+    let (balance) = ICarbonableBadge.balanceOf(contract_address, caller_address, Uint256(badge_type, 0));
     assert balance = Uint256(0, 0);
 
     // Check if the signature is valid
@@ -147,8 +149,6 @@ func claim{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ec
     CarbonableBadge.assert_valid_signature((caller_address, badge_type), public_key, signature);
 
     let (data) = alloc();
-
-    let (contract_address) = badge_contract_address.read();
     
     ICarbonableBadge.mint(contract_address, caller_address, Uint256(badge_type, 0), Uint256(1, 0), 0, data);
     return ();
