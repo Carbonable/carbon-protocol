@@ -8,7 +8,13 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math import assert_not_zero
 
 // Local dependencies
-from src.badge.minter import owner, initializer, getSignerPublicKey, getBadgeContractAddress
+from src.badge.minter import owner, initializer, getSignerPublicKey, getBadgeContractAddress, getAdmin
+from tests.units.badge.minter.library import setup, prepare
+
+@view
+func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    return setup();
+}
 
 @external
 func test_initialization{
@@ -16,18 +22,33 @@ func test_initialization{
 }() {
     alloc_locals;
 
+    // Extract context variables
+    local minter_owner: felt;
+    local proxy_admin: felt;
+    local carbonable_badge_contract_address: felt;
+    local public_key: felt;
+    %{ 
+        ids.minter_owner = context.mocks.owner
+        ids.proxy_admin = context.mocks.proxy_admin
+        ids.carbonable_badge_contract_address = context.mocks.carbonable_badge_contract_address
+        ids.public_key = context.whitelist.public_key
+    %}
 
-    initializer(0x123, 0x41, 0x4);
+    // Prepare minter instance
+    prepare(minter_owner, public_key, carbonable_badge_contract_address, proxy_admin);
 
+    // Check initialization
     let (contract_owner) = owner();
-    assert contract_owner = 0x123;
+    assert contract_owner = minter_owner;
 
     let (signer_public_key) = getSignerPublicKey();
-    assert signer_public_key = 0x41;
+    assert signer_public_key = public_key;
 
     let (badge_contract_address) = getBadgeContractAddress();
-    assert badge_contract_address = 0x4;
+    assert badge_contract_address = carbonable_badge_contract_address;
 
+    let (contract_admin) = getAdmin();
+    assert contract_admin = proxy_admin;
 
     return ();
 }

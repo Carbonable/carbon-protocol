@@ -6,12 +6,16 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math import assert_not_zero
-from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
-from src.interfaces.badgeMinter import ICarbonableBadgeMinter
-from src.interfaces.badge import ICarbonableBadge
+from tests.units.badge.minter.library import setup, prepare
+from src.badge.minter import claim
+
+@view
+func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    return setup();
+}
 
 @external
 func test_claim{
@@ -19,40 +23,108 @@ func test_claim{
 }() {
     alloc_locals;
 
-    local logic_class: felt;
-    let public_key = 0x07c42ac1a6415ba91ce25cca6ea3ffcf8201151a722e6a07fe2f73e931f221c6;
-    let contract_owner = 0x4;
-
-    // Deploy the minter contract
-    local minter_contract_address: felt;
-    %{
-        from starkware.starknet.compiler.compile import get_selector_from_name
-        ids.logic_class = declare("src/badge/minter.cairo").class_hash
-        ids.minter_contract_address = deploy_contract("openzeppelin/upgrades/presets/Proxy.cairo", [ids.logic_class, get_selector_from_name("initializer"), 3, ids.contract_owner, ids.public_key, 0]).contract_address
+    // Extract context variables
+    local minter_owner: felt;
+    local proxy_admin: felt;
+    local carbonable_badge_contract_address: felt;
+    local public_key: felt;
+    local sig0: felt;
+    local sig1: felt;
+    local badge_type: felt;
+    %{ 
+        ids.minter_owner = context.mocks.owner
+        ids.proxy_admin = context.mocks.proxy_admin
+        ids.carbonable_badge_contract_address = context.mocks.carbonable_badge_contract_address
+        ids.public_key = context.whitelist.public_key
+        ids.sig0 = context.whitelist.sig0
+        ids.sig1 = context.whitelist.sig1
+        ids.badge_type = context.whitelist.badge_type
     %}
 
-    // Deploy the badge contract
-    local badge_contract_address: felt;
-    %{
-        ids.badge_contract_address = deploy_contract("src/badge/badge.cairo", [1, 1, 1, ids.minter_contract_address]).contract_address
+    // Prepare minter instance
+    prepare(minter_owner, public_key, carbonable_badge_contract_address, proxy_admin);
+
+    // Claim badge
+    %{ stop_prank_callable = start_prank(context.whitelist.whitelisted_user_address) %}
+    %{ expect_revert("UNINITIALIZED_CONTRACT") %}
+    claim((sig0, sig1), badge_type);
+    %{ stop_prank_callable() %}
+
+    return ();
+}
+
+@external
+func test_claim_invalid_user{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+}() {
+    alloc_locals;
+
+    // Extract context variables
+    local minter_owner: felt;
+    local proxy_admin: felt;
+    local carbonable_badge_contract_address: felt;
+    local public_key: felt;
+    local sig0: felt;
+    local sig1: felt;
+    local badge_type: felt;
+    %{ 
+        ids.minter_owner = context.mocks.owner
+        ids.proxy_admin = context.mocks.proxy_admin
+        ids.carbonable_badge_contract_address = context.mocks.carbonable_badge_contract_address
+        ids.public_key = context.whitelist.public_key
+        ids.sig0 = context.whitelist.sig0
+        ids.sig1 = context.whitelist.sig1
+        ids.badge_type = context.whitelist.badge_type
     %}
 
-    %{ stop_prank_callable = start_prank(ids.contract_owner, target_contract_address=ids.minter_contract_address) %}
+    // Prepare minter instance
+    prepare(minter_owner, public_key, carbonable_badge_contract_address, proxy_admin);
 
-    // Set the badge contract address in the minter contract
-    ICarbonableBadgeMinter.setBadgeContractAddress(minter_contract_address, badge_contract_address);
+    // Claim badge
+    %{ stop_prank_callable = start_prank(context.mocks.anyone) %}
+    // The transaction should fail because the signature is invalid with respect to the public key, the badge type and the user address.
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: invalid signature") %}
+    claim((sig0, sig1), badge_type);
+    %{ stop_prank_callable() %}
 
-    let badge_type = 0;
-    // Generated signature for the pedersen hash of the user address badge type, with the private key associated to the public key set in the initializer
-    let sig = (1446613889061454488684584816134311028150072838391055356173753342137386273038,550323174704161837982944959231864662796077128280001789888940955956125828334);
+    return ();
+}
 
-    // Claim the badge
-    ICarbonableBadgeMinter.claim(minter_contract_address, sig, badge_type);
+@external
+func test_claim_whitelisted_user_but_invalid_badge_type{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+}() {
+    alloc_locals;
 
-    // Check that the badge was minted on tbhe badge contract
-    let (balance) = ICarbonableBadge.balanceOf(badge_contract_address, contract_owner, Uint256(badge_type, 0));
-    assert balance = Uint256(1, 0);
-    
+    // Extract context variables
+    local minter_owner: felt;
+    local proxy_admin: felt;
+    local carbonable_badge_contract_address: felt;
+    local public_key: felt;
+    local sig0: felt;
+    local sig1: felt;
+    local badge_type: felt;
+    %{ 
+        ids.minter_owner = context.mocks.owner
+        ids.proxy_admin = context.mocks.proxy_admin
+        ids.carbonable_badge_contract_address = context.mocks.carbonable_badge_contract_address
+        ids.public_key = context.whitelist.public_key
+        ids.sig0 = context.whitelist.sig0
+        ids.sig1 = context.whitelist.sig1
+        ids.badge_type = context.whitelist.badge_type
+    %}
+
+    // Set badge type to an invalid value
+    let badge_type = badge_type + 1;
+
+    // Prepare minter instance
+    prepare(minter_owner, public_key, carbonable_badge_contract_address, proxy_admin);
+
+    // Claim badge
+    %{ stop_prank_callable = start_prank(context.whitelist.whitelisted_user_address) %}
+    // The transaction should fail because the signature is invalid with respect to the public key, the badge type and the user address.
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableBadge: invalid signature") %}
+    claim((sig0, sig1), badge_type);
     %{ stop_prank_callable() %}
 
     return ();
