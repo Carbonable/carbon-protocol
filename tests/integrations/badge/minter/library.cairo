@@ -73,7 +73,12 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             constructor_args={
                 "implementation_hash": context.badge_minter.class_hash,
                 "selector": context.selector.initializer,
-                "calldata": [context.admin_account_contract, context.badge_minter.public_key, context.badge.contract_address, 0]
+                "calldata": {
+                    "owner": context.admin_account_contract,
+                    "signer_key": context.badge_minter.public_key,
+                    "carbonable_badge_contract_address": context.badge.contract_address,
+                    "proxy_admin": 0
+                }.values()
             },
         ).contract_address
     %}

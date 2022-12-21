@@ -46,7 +46,8 @@ func test_claim_nominal_case{
 
     // Claim badge
     %{ stop_prank_callable = start_prank(context.whitelist.whitelisted_user_address) %}
-    %{ mock_call(context.mocks.carbonable_badge_contract_address, "mint", [0]) %}
+    %{ mock_call(context.mocks.carbonable_badge_contract_address, "mint", []) %}
+    // The balance of the user should be 0, else the badge can't be minted.
     %{ mock_call(context.mocks.carbonable_badge_contract_address, "balanceOf", [0, 0]) %}
     claim((sig0, sig1), badge_type);
     %{ stop_prank_callable() %}
