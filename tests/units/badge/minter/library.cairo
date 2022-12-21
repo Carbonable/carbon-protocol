@@ -7,7 +7,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
-from src.badge.minter import initializer
+from src.badge.library import CarbonableBadgeMinter
 
 //
 // Functions
@@ -35,7 +35,8 @@ func prepare{
 ) -> () {
     alloc_locals;
 
-    initializer(contract_owner, public_key, badge_contract_address, proxy_admin);
-
+    // Instantiate minter
+    CarbonableBadgeMinter.initializer(public_key, badge_contract_address);
+    
     return ();
 }

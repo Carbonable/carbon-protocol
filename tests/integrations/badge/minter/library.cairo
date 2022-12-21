@@ -55,12 +55,27 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ).contract_address
 
         # Deploy the badge contract
-        context.badge.contract_address = deploy_contract("src/badge/badge.cairo", [1, 1, 1, context.admin_account_contract]).contract_address
+        context.badge.contract_address = deploy_contract(
+            contract=context.sources.badge,
+            constructor_args={
+                "uri": [1],
+                "name": 1,
+                "owner": context.admin_account_contract
+            },
+        ).contract_address
 
         # Deploy the minter contract
-        from starkware.starknet.compiler.compile import get_selector_from_name
-        context.badge_minter.class_hash = declare("src/badge/minter.cairo").class_hash
-        context.badge_minter.contract_address = deploy_contract("openzeppelin/upgrades/presets/Proxy.cairo", [context.badge_minter.class_hash, get_selector_from_name("initializer"), 4, context.admin_account_contract, context.badge_minter.public_key, context.badge.contract_address, 0]).contract_address
+        context.badge_minter.class_hash = declare(
+            contract=context.sources.badge_minter
+        ).class_hash
+        context.badge_minter.contract_address = deploy_contract(
+            contract=context.sources.proxy,
+            constructor_args={
+                "implementation_hash": context.badge_minter.class_hash,
+                "selector": context.selector.initializer,
+                "calldata": [context.admin_account_contract, context.badge_minter.public_key, context.badge.contract_address, 0]
+            },
+        ).contract_address
     %}
 
     // Transfer ownership of the badge contract to the minter contract

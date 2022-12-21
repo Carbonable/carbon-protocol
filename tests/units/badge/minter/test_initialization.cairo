@@ -38,17 +38,11 @@ func test_initialization{
     prepare(minter_owner, public_key, carbonable_badge_contract_address, proxy_admin);
 
     // Check initialization
-    let (contract_owner) = owner();
-    assert contract_owner = minter_owner;
-
     let (signer_public_key) = getSignerPublicKey();
     assert signer_public_key = public_key;
 
     let (badge_contract_address) = getBadgeContractAddress();
     assert badge_contract_address = carbonable_badge_contract_address;
-
-    let (contract_admin) = getAdmin();
-    assert contract_admin = proxy_admin;
 
     return ();
 }
