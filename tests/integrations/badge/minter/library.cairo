@@ -29,8 +29,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     local badge_contract_address: felt;
     local badge_minter_contract_address: felt;
 
-    let badge_contract_owner_temp = 4554;
-
     %{
         # Load the config
         import sys
