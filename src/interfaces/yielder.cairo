@@ -7,6 +7,10 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableYielder {
+    //
+    // Proxy administration
+    //
+
     func getImplementationHash() -> (implementation: felt) {
     }
 
@@ -19,6 +23,10 @@ namespace ICarbonableYielder {
     func setAdmin(new_admin: felt) {
     }
 
+    //
+    // Ownership administration
+    //
+
     func owner() -> (owner: felt) {
     }
 
@@ -27,6 +35,10 @@ namespace ICarbonableYielder {
 
     func renounceOwnership() {
     }
+
+    //
+    // Views
+    //
 
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
@@ -78,6 +90,10 @@ namespace ICarbonableYielder {
 
     func getEstimatedCreditCarbonPrice(precision: felt) -> (price: felt) {
     }
+
+    //
+    // Externals
+    //
 
     func deposit(token_id: Uint256) -> (success: felt) {
     }

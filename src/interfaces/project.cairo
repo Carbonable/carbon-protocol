@@ -7,6 +7,10 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableProject {
+    //
+    // Proxy administration
+    //
+
     func getImplementationHash() -> (implementation: felt) {
     }
 
@@ -18,6 +22,10 @@ namespace ICarbonableProject {
 
     func setAdmin(new_admin: felt) {
     }
+
+    //
+    // Ownership administration
+    //
 
     func owner() -> (owner: felt) {
     }
@@ -33,6 +41,10 @@ namespace ICarbonableProject {
 
     func mint(to: felt, token_id: Uint256) {
     }
+
+    //
+    // Views
+    //
 
     func getStartTime() -> (start_time: felt) {
     }
@@ -60,6 +72,10 @@ namespace ICarbonableProject {
 
     func isSetup() -> (status: felt) {
     }
+
+    //
+    // Externals
+    //
 
     func setTimes(times_len: felt, times: felt) {
     }

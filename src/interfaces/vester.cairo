@@ -7,6 +7,10 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableVester {
+    //
+    // Proxy administration
+    //
+
     func getImplementationHash() -> (implementation: felt) {
     }
 
@@ -19,6 +23,10 @@ namespace ICarbonableVester {
     func setAdmin(new_admin: felt) {
     }
 
+    //
+    // Ownership administration
+    //
+
     func owner() -> (owner: felt) {
     }
 
@@ -27,6 +35,10 @@ namespace ICarbonableVester {
 
     func renounceOwnership() {
     }
+
+    //
+    // Views
+    //
 
     func vestings_total_amount() -> (vestings_total_amount: Uint256) {
     }
@@ -45,6 +57,10 @@ namespace ICarbonableVester {
 
     func releasableOf(account: felt) -> (amount: Uint256) {
     }
+
+    //
+    // Externals
+    //
 
     func create_vesting(
         beneficiary: felt,

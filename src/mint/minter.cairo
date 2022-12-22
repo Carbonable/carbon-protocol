@@ -256,7 +256,7 @@ func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 @view
-func getMaxBuy_PerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_buy_per_tx: felt
 ) {
     // Desc:
