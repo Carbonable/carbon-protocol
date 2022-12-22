@@ -253,8 +253,22 @@ namespace CarbonableYielder {
         let period_offseter_absorption = current_offseter_absorption - previous_offseter_absorption;
         let period_yielder_absorption = current_yielder_absorption - previous_yielder_absorption;
 
-        // [Effect] Emit event
+        // [Effect] Store snapshot values
         let (current_time) = get_block_timestamp();
+        let period_duration = current_time - previous_time;
+        CarbonableYielder_snapshoted_period_duration_.write(period_duration);
+        CarbonableYielder_snapshoted_time_.write(current_time);
+        CarbonableYielder_snapshoted_offseter_absorption_.write(current_offseter_absorption);
+        CarbonableYielder_snapshoted_yielder_absorption_.write(current_yielder_absorption);
+        CarbonableYielder_snapshoted_yielder_contribution_.write(period_yielder_absorption);
+
+        // [Effect] Store period shares per users
+        _snapshot_iter(users_index=users_len - 1, users=users);
+
+        // [Effect] Update vested status
+        CarbonableYielder_vested_.write(FALSE);
+
+        // [Effect] Emit event
         Snapshot.emit(
             project=carbonable_project_address,
             previous_time=previous_time,
@@ -269,21 +283,6 @@ namespace CarbonableYielder {
             period_offseter_absorption=period_offseter_absorption,
             period_yielder_absorption=period_yielder_absorption,
         );
-
-        // [Effect] Store snapshot values
-        let period_duration = current_time - previous_time;
-        CarbonableYielder_snapshoted_period_duration_.write(period_duration);
-        CarbonableYielder_snapshoted_time_.write(current_time);
-        CarbonableYielder_snapshoted_offseter_absorption_.write(current_offseter_absorption);
-        CarbonableYielder_snapshoted_yielder_absorption_.write(current_yielder_absorption);
-        CarbonableYielder_snapshoted_yielder_contribution_.write(period_yielder_absorption);
-
-        // [Effect] Store period shares per users
-        _snapshot_iter(users_index=users_len - 1, users=users);
-
-        // [Effect] Update vested status
-        CarbonableYielder_vested_.write(FALSE);
-
         return (success=TRUE);
     }
 
