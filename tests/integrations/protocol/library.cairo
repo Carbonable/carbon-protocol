@@ -140,7 +140,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             "carbonable_project_address": context.carbonable_project_contract,
             "carbonable_offseter_address": context.carbonable_offseter_contract,
             "carbonable_vester_address": context.carbonable_vester_contract,
-            "carbonable_minter_address": context.carbonable_minter_contract,
             "owner": context.admin_account_contract,
         }
         context.carbonable_yielder_contract = deploy_contract(

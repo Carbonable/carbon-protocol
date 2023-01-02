@@ -23,7 +23,6 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     carbonable_project_address: felt,
     carbonable_offseter_address: felt,
     carbonable_vester_address: felt,
-    carbonable_minter_address: felt,
     owner: felt,
 ) {
     // Desc:
@@ -37,7 +36,6 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   carbonable_project_address(felt): Address of the Carbonable project
     //   carbonable_offseter_address(felt): Address of the Carbonable offseter
     //   carbonable_vester_address(felt): Address of the Carbonable vester
-    //   carbonable_minter_address(felt): Address of the Carbonable minter
     //   owner(felt): Owner and Admin address
     // Returns:
     //   None
@@ -45,7 +43,6 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     CarbonableYielder.initializer(
         carbonable_offseter_address=carbonable_offseter_address,
         carbonable_vester_address=carbonable_vester_address,
-        carbonable_minter_address=carbonable_minter_address,
     );
     Ownable.initializer(owner);
     Proxy.initializer(owner);
@@ -222,20 +219,6 @@ func getCarbonableVesterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     // Returns:
     //   carbonable_vester_address(felt): Address of the corresponding Carbonable vester
     return CarbonableYielder.carbonable_vester_address();
-}
-
-@view
-func getCarbonableMinterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) -> (carbonable_minter_address: felt) {
-    // Desc:
-    //   Return the associated carbonable minter
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   carbonable_minter_address(felt): Address of the corresponding Carbonable minter
-    return CarbonableYielder.carbonable_minter_address();
 }
 
 @view

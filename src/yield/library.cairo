@@ -68,10 +68,6 @@ func CarbonableYielder_carbonable_vester_address_() -> (address: felt) {
 }
 
 @storage_var
-func CarbonableYielder_carbonable_minter_address_() -> (address: felt) {
-}
-
-@storage_var
 func CarbonableYielder_snapshoted_offseter_absorption_() -> (absorption: felt) {
 }
 
@@ -117,13 +113,10 @@ namespace CarbonableYielder {
     //
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        carbonable_offseter_address: felt,
-        carbonable_vester_address: felt,
-        carbonable_minter_address: felt,
+        carbonable_offseter_address: felt, carbonable_vester_address: felt
     ) {
         CarbonableYielder_carbonable_offseter_address_.write(carbonable_offseter_address);
         CarbonableYielder_carbonable_vester_address_.write(carbonable_vester_address);
-        CarbonableYielder_carbonable_minter_address_.write(carbonable_minter_address);
         CarbonableYielder_vested_.write(TRUE);  // To enable first snapshot
         return ();
     }
@@ -143,12 +136,6 @@ namespace CarbonableYielder {
         ) -> (carbonable_vester_address: felt) {
         let (carbonable_vester_address) = CarbonableYielder_carbonable_vester_address_.read();
         return (carbonable_vester_address=carbonable_vester_address);
-    }
-
-    func carbonable_minter_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (carbonable_minter_address: felt) {
-        let (carbonable_minter_address) = CarbonableYielder_carbonable_minter_address_.read();
-        return (carbonable_minter_address=carbonable_minter_address);
     }
 
     func snapshoted_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -276,18 +263,6 @@ namespace CarbonableYielder {
         let not_zero = is_not_zero(period_duration);
         with_attr error_message(
                 "CarbonableYielder: cannot estimate tCO2 price if the period duration is null") {
-            assert not_zero = TRUE;
-        }
-
-        // [Check] Project total initial value not null
-        let (carbonable_minter_address) = CarbonableYielder.carbonable_minter_address();
-        let (total_value_uint256) = ICarbonableMinter.getTotalValue(
-            contract_address=carbonable_minter_address
-        );
-        let (total_value) = _uint_to_felt(total_value_uint256);
-        let not_zero = is_not_zero(total_value);
-        with_attr error_message(
-                "CarbonableYielder: cannot estimate APR if the project value is null") {
             assert not_zero = TRUE;
         }
 

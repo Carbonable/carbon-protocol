@@ -51,15 +51,6 @@ namespace instance {
         return (carbonable_vester_address=carbonable_vester_address);
     }
 
-    func carbonable_minter_address{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
-    }() -> (carbonable_minter_address: felt) {
-        let (carbonable_minter_address) = ICarbonableYielder.getCarbonableMinterAddress(
-            contract_address=carbonable_yielder
-        );
-        return (carbonable_minter_address=carbonable_minter_address);
-    }
-
     func total_deposited{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (balance: Uint256) {

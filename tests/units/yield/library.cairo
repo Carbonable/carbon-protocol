@@ -23,7 +23,6 @@ struct Mocks {
     carbonable_project_address: felt,
     carbonable_offseter_address: felt,
     carbonable_vester_address: felt,
-    carbonable_minter_address: felt,
 }
 
 struct TestContext {
@@ -58,7 +57,6 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local carbonable_project_address;
     local carbonable_offseter_address;
     local carbonable_vester_address;
-    local carbonable_minter_address;
     local minimum;
     %{
         ids.admin = context.signers.admin
@@ -66,7 +64,6 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         ids.carbonable_project_address = context.mocks.carbonable_project_address
         ids.carbonable_offseter_address = context.mocks.carbonable_offseter_address
         ids.carbonable_vester_address = context.mocks.carbonable_vester_address
-        ids.carbonable_minter_address = context.mocks.carbonable_minter_address
         ids.minimum = context.claim.minimum
     %}
     // Instantiate offset farmer
@@ -77,7 +74,6 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     CarbonableYielder.initializer(
         carbonable_offseter_address=carbonable_offseter_address,
         carbonable_vester_address=carbonable_vester_address,
-        carbonable_minter_address=carbonable_minter_address,
     );
 
     // Instantiate context, useful to avoid many hints in tests
@@ -87,7 +83,6 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         carbonable_project_address=carbonable_project_address,
         carbonable_offseter_address=carbonable_offseter_address,
         carbonable_vester_address=carbonable_vester_address,
-        carbonable_minter_address=carbonable_minter_address,
     );
 
     local context: TestContext = TestContext(signers=signers, mocks=mocks);
