@@ -4,9 +4,12 @@
 
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
-from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
-from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.cairo_builtins import BitwiseBuiltin, SignatureBuiltin, HashBuiltin
 from starkware.cairo.common.uint256 import Uint256, uint256_check
+from starkware.cairo.common.signature import verify_ecdsa_signature
+from starkware.cairo.common.hash import hash2
+from starkware.starknet.common.syscalls import get_caller_address
+from starkware.cairo.common.alloc import alloc
 
 // Project dependencies
 from cairopen.string.ASCII import StringCodec
@@ -15,6 +18,7 @@ from openzeppelin.introspection.erc165.library import ERC165
 
 // Local dependencies
 from src.utils.metadata.library import Metadata
+from src.interfaces.badge import ICarbonableBadge
 
 const IERC5192_ID = 0xb45a3c0e;
 
@@ -48,6 +52,14 @@ func CarbonableBadge_unlocked(id: Uint256) -> (unlocked: felt) {
 
 @storage_var
 func CarbonableBadge_name() -> (name: felt) {
+}
+
+@storage_var
+func CarbonablebadgeMinter_signer_public_key() -> (signer_public_key: felt) {
+}
+
+@storage_var
+func CarbonablebadgeMinter_badge_contract_address() -> (badge_contract_address: felt) {
 }
 
 namespace CarbonableBadge {
@@ -202,6 +214,166 @@ namespace CarbonableBadge {
         assert_unlocked([ids]);
         _assert_unlocked_iter(ids_len=ids_len - 1, ids=ids + 1);
 
+        return ();
+    }
+}
+
+namespace CarbonableBadgeMinter {
+    //
+    // Initializer
+    //
+
+    func initializer{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        range_check_ptr,
+    }(signer_public_key: felt, badge_contract_address: felt) {
+        // Desc:
+        //   Initialize the contract with the given signer public key and badge contract address.
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   range_check_ptr
+        // Explicit args:
+        //   signer_public_key(felt)
+        //   badge_contract_address(felt)
+        // Returns:
+        //   None
+        CarbonablebadgeMinter_signer_public_key.write(signer_public_key);
+        CarbonablebadgeMinter_badge_contract_address.write(badge_contract_address);
+        return ();
+    }
+
+    //
+    // Getters
+    //
+
+    func getSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (signer_public_key: felt) {
+        // Desc:
+        //   Return the public key of the signer
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   range_check_ptr
+        // Returns:
+        //   signer_public_key(felt): The public key
+        let (signer_public_key: felt) = CarbonablebadgeMinter_signer_public_key.read();
+        return (signer_public_key,);
+    }
+
+    func getBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (badge_contract_address: felt) {
+        // Desc:
+        //   Return the address of the badge contract
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   range_check_ptr
+        // Returns:
+        //   badge_contract_address(felt): The address of the badge contract
+        let (badge_contract_address: felt) = CarbonablebadgeMinter_badge_contract_address.read();
+        return (badge_contract_address,);
+    }
+
+    //
+    // Externals
+    //
+
+    func claim{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*}(
+        badge_type : felt,
+    ) -> () {
+        // Desc:
+        //   Claim a badge of the given type.
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   range_check_ptr
+        //   ecdsa_ptr(SignatureBuiltin*)
+        // Explicit args:
+        //   badge_type(felt)
+        // Returns:
+        //   None
+        alloc_locals;
+
+        let (caller_address) = get_caller_address();
+        let (badge_contract_address) = CarbonablebadgeMinter_badge_contract_address.read();
+
+        // Check if the NFT hasn't already been minted
+        let (balance) = ICarbonableBadge.balanceOf(badge_contract_address, caller_address, Uint256(badge_type, 0));
+        assert balance = Uint256(0, 0);
+
+        let (data) = alloc();
+        
+        ICarbonableBadge.mint(badge_contract_address, caller_address, Uint256(badge_type, 0), Uint256(1, 0), 0, data);
+        return ();
+    }
+
+    func setSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        new_signer_public_key: felt
+    ) -> () {
+        // Desc:
+        //   Set the public key of the signer for mintBadge transactions
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   range_check_ptr
+        // Explicit args:
+        //   new_signer_public_key(felt): The new public key
+        // Returns:
+        //   None
+        CarbonablebadgeMinter_signer_public_key.write(new_signer_public_key);
+        return ();
+    }
+
+    func setBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        new_badge_contract_address: felt
+    ) -> () {
+        // Desc:
+        //   Set the address of the badge contract
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   range_check_ptr
+        // Explicit args:
+        //   new_badge_contract_address(felt): The new badge contract address
+        // Returns:
+        //   None
+        CarbonablebadgeMinter_badge_contract_address.write(new_badge_contract_address);
+        return ();
+    }
+
+
+    func transferBadgeContractOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        newOwner: felt
+    ) {
+        // Desc:
+        //   Transfer ownership of the badge contract to a new owner
+        // Implicit args:
+        //   syscall_ptr(felt*)
+        //   pedersen_ptr(HashBuiltin*)
+        //   range_check_ptr
+        // Explicit args:
+        //   newOwner(felt): Address of the new owner
+        // Returns:
+        //   None
+        let (badge_contract_address) = CarbonablebadgeMinter_badge_contract_address.read();
+        ICarbonableBadge.transferOwnership(badge_contract_address, newOwner);
+        return ();
+    }
+
+    //
+    // Internals
+    //
+
+    func assert_valid_signature{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*}(
+        message: (felt, felt),
+        signature: (felt, felt),
+    ) {
+        let (signer_public_key) = CarbonablebadgeMinter_signer_public_key.read();
+        let (messageHash) = hash2{hash_ptr=pedersen_ptr}(message[0], message[1]);
+        // [Check] Signature is valid
+        with_attr error_message("CarbonableBadge: invalid signature") {
+            verify_ecdsa_signature(messageHash, signer_public_key, signature[0], signature[1]);
+        }
         return ();
     }
 }

@@ -22,6 +22,9 @@ namespace ICarbonableBadge {
     func owner() -> (owner: felt) {
     }
 
+    func balanceOf(account: felt, id: Uint256) -> (balance: Uint256) {
+    }
+
     func setURI(uri_len: felt, uri: felt*) {
     }
 
@@ -43,5 +46,8 @@ namespace ICarbonableBadge {
         data_len: felt,
         data: felt*,
     ) {
+    }
+    
+    func transferOwnership(new_owner: felt) {
     }
 }
