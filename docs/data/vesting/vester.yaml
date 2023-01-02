@@ -2,8 +2,8 @@
   functionName:
     name: getImplementationHash
     charIndex:
-      start: 1521
-      end: 1542
+      start: 1464
+      end: 1485
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -53,14 +53,14 @@
           end: 245
     raises: null
     charIndex:
-      start: 1643
-      end: 1888
+      start: 1586
+      end: 1831
 - attributeName: view
   functionName:
     name: getAdmin
     charIndex:
-      start: 1947
-      end: 1955
+      start: 1890
+      end: 1898
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -110,14 +110,14 @@
           end: 214
     raises: null
     charIndex:
-      start: 2041
-      end: 2255
+      start: 1984
+      end: 2198
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 3434
-      end: 3439
+      start: 3377
+      end: 3382
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -167,8 +167,73 @@
           end: 215
     raises: null
     charIndex:
-      start: 3525
-      end: 3740
+      start: 3468
+      end: 3683
+- attributeName: view
+  functionName:
+    name: releasableOf
+    charIndex:
+      start: 4708
+      end: 4720
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: account
+        type: felt
+    returns:
+      - name: amount
+        type: Uint256
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return
+        charIndex:
+          start: 23
+          end: 29
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 61
+          end: 79
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 89
+          end: 115
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 125
+          end: 140
+    explicitArgs:
+      - name: account
+        type: felt
+        desc: Account address
+        charIndex:
+          start: 172
+          end: 202
+    returns:
+      - name: amount
+        type: Uint256
+        desc: Total amount releasable
+        charIndex:
+          start: 228
+          end: 268
+    raises: null
+    charIndex:
+      start: 4829
+      end: 5097
 - attributeName: external
   functionName:
     name: initializer
@@ -187,8 +252,6 @@
       - name: erc20_address
         type: felt
       - name: owner
-        type: felt
-      - name: proxy_admin
         type: felt
     returns: null
   functionComment:
@@ -235,27 +298,21 @@
           end: 370
       - name: owner
         type: felt
-        desc: Owner address
+        desc: Owner and Admin address
         charIndex:
           start: 380
-          end: 406
-      - name: proxy_admin
-        type: felt
-        desc: Admin address
-        charIndex:
-          start: 416
-          end: 448
+          end: 416
     returns: null
     raises: null
     charIndex:
-      start: 872
-      end: 1350
+      start: 853
+      end: 1299
 - attributeName: external
   functionName:
     name: upgrade
     charIndex:
-      start: 2304
-      end: 2311
+      start: 2247
+      end: 2254
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -311,14 +368,14 @@
           start: 322
           end: 353
     charIndex:
-      start: 2410
-      end: 2763
+      start: 2353
+      end: 2706
 - attributeName: external
   functionName:
     name: setAdmin
     charIndex:
-      start: 2884
-      end: 2892
+      start: 2827
+      end: 2835
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -374,14 +431,14 @@
           start: 298
           end: 329
     charIndex:
-      start: 2976
-      end: 3305
+      start: 2919
+      end: 3248
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 3787
-      end: 3804
+      start: 3730
+      end: 3747
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -443,14 +500,14 @@
           start: 344
           end: 383
     charIndex:
-      start: 3893
-      end: 4276
+      start: 3836
+      end: 4219
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 4352
-      end: 4369
+      start: 4295
+      end: 4312
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -498,79 +555,14 @@
           start: 207
           end: 247
     charIndex:
-      start: 4438
-      end: 4685
-- attributeName: external
-  functionName:
-    name: releasableOf
-    charIndex:
-      start: 4769
-      end: 4781
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: account
-        type: felt
-    returns:
-      - name: amount
-        type: Uint256
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Return
-        charIndex:
-          start: 23
-          end: 29
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 61
-          end: 79
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 89
-          end: 115
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 125
-          end: 140
-    explicitArgs:
-      - name: account
-        type: felt
-        desc: Account address
-        charIndex:
-          start: 172
-          end: 202
-    returns:
-      - name: amount
-        type: Uint256
-        desc: Total amount releasable
-        charIndex:
-          start: 228
-          end: 268
-    raises: null
-    charIndex:
-      start: 4890
-      end: 5158
+      start: 4381
+      end: 4628
 - attributeName: external
   functionName:
     name: releaseAll
     charIndex:
-      start: 5257
-      end: 5267
+      start: 5196
+      end: 5206
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -620,5 +612,5 @@
           start: 262
           end: 302
     charIndex:
-      start: 5336
-      end: 5638
+      start: 5275
+      end: 5577

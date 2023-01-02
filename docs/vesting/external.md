@@ -10,10 +10,7 @@ Initialize the contract with the given parameters - This constructor uses a dedi
 Address of the corresponding Carbonable project  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="owner" %}  
-Owner address  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="proxy_admin" %}  
-Admin address  
+Owner and Admin address  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  
@@ -44,16 +41,6 @@ Address of the new owner
 {% swagger-description %}  
 Renounce ownership  
 {% endswagger-description %}  
-{% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "releasableOf" %}  
-{% swagger-description %}  
-Return  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="felt" name="account" %}  
-Account address  
-{% endswagger-parameter %}  
-{% swagger-response status="amount ( Uint256 )" description="Total amount releasable" %}  
-{% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "releaseAll" %}  
 {% swagger-description %}  

@@ -155,11 +155,13 @@ Return the computed final time
 {% swagger-response status="time ( felt )" description="Final time" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "getTimeStep" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getTimes" %}  
 {% swagger-description %}  
-Return the stored time step  
+Return the stored times  
 {% endswagger-description %}  
-{% swagger-response status="step ( felt )" description="Time step" %}  
+{% swagger-response status="times_len ( felt )" description="Array length" %}  
+{% endswagger-response %}  
+{% swagger-response status="times ( felt* )" description="timestamps" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getAbsorptions" %}  
@@ -193,6 +195,13 @@ Return the computed absorption based on the current timestamp
 Return the expected total absorption based on the final timestamp  
 {% endswagger-description %}  
 {% swagger-response status="absorption ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getTonEquivalent" %}  
+{% swagger-description %}  
+Return the ton equivalent in absorption unit  
+{% endswagger-description %}  
+{% swagger-response status="ton_equivalent ( felt )" description="Ton equivalent" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "isSetup" %}  

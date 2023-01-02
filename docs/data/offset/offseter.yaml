@@ -2,8 +2,8 @@
   functionName:
     name: getImplementationHash
     charIndex:
-      start: 1281
-      end: 1302
+      start: 1366
+      end: 1387
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -53,14 +53,14 @@
           end: 245
     raises: null
     charIndex:
-      start: 1403
-      end: 1648
+      start: 1488
+      end: 1733
 - attributeName: view
   functionName:
     name: getAdmin
     charIndex:
-      start: 1707
-      end: 1715
+      start: 1792
+      end: 1800
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -110,14 +110,14 @@
           end: 214
     raises: null
     charIndex:
-      start: 1801
-      end: 2015
+      start: 1886
+      end: 2100
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 3194
-      end: 3199
+      start: 3279
+      end: 3284
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -167,14 +167,14 @@
           end: 215
     raises: null
     charIndex:
-      start: 3285
-      end: 3500
+      start: 3370
+      end: 3585
 - attributeName: view
   functionName:
     name: getCarbonableProjectAddress
     charIndex:
-      start: 4527
-      end: 4554
+      start: 4612
+      end: 4639
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -226,14 +226,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 4666
-      end: 4947
+      start: 4751
+      end: 5032
 - attributeName: view
   functionName:
-    name: isOpen
+    name: getMinClaimable
     charIndex:
-      start: 5022
-      end: 5028
+      start: 5107
+      end: 5122
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -244,53 +244,53 @@
         type: ''
     explicitArgs: null
     returns:
-      - name: status
+      - name: min_claimable
         type: felt
   functionComment:
     desc:
       - name: ''
         type: ''
-        desc: Return the deposits status according to project setup
+        desc: Return the minimum claimable quantity
         charIndex:
           start: 23
-          end: 76
+          end: 60
     implicitArgs:
       - name: syscall_ptr
         type: felt*
         desc: ''
         charIndex:
-          start: 108
-          end: 126
+          start: 92
+          end: 110
       - name: pedersen_ptr
         type: HashBuiltin*
         desc: ''
         charIndex:
-          start: 136
-          end: 162
+          start: 120
+          end: 146
       - name: range_check_ptr
         type: ''
         desc: ''
         charIndex:
-          start: 172
-          end: 187
+          start: 156
+          end: 171
     explicitArgs: null
     returns:
-      - name: status
+      - name: min_claimable
         type: felt
-        desc: Deposits status
+        desc: Minimum claimable
         charIndex:
-          start: 213
-          end: 242
+          start: 197
+          end: 235
     raises: null
     charIndex:
-      start: 5115
-      end: 5357
+      start: 5222
+      end: 5457
 - attributeName: view
   functionName:
     name: getTotalDeposited
     charIndex:
-      start: 5413
-      end: 5430
+      start: 5519
+      end: 5536
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -340,14 +340,14 @@
           end: 242
     raises: null
     charIndex:
-      start: 5527
-      end: 5769
+      start: 5633
+      end: 5875
 - attributeName: view
   functionName:
     name: getTotalClaimed
     charIndex:
-      start: 5833
-      end: 5848
+      start: 5939
+      end: 5954
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -397,14 +397,14 @@
           end: 244
     raises: null
     charIndex:
-      start: 5948
-      end: 6192
+      start: 6054
+      end: 6298
 - attributeName: view
   functionName:
     name: getTotalClaimable
     charIndex:
-      start: 6254
-      end: 6271
+      start: 6360
+      end: 6377
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -454,14 +454,14 @@
           end: 250
     raises: null
     charIndex:
-      start: 6373
-      end: 6623
+      start: 6479
+      end: 6729
 - attributeName: view
   functionName:
     name: getClaimableOf
     charIndex:
-      start: 6687
-      end: 6701
+      start: 6793
+      end: 6807
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -519,14 +519,14 @@
           end: 304
     raises: null
     charIndex:
-      start: 6810
-      end: 7114
+      start: 6916
+      end: 7220
 - attributeName: view
   functionName:
     name: getClaimedOf
     charIndex:
-      start: 7190
-      end: 7202
+      start: 7296
+      end: 7308
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -584,14 +584,14 @@
           end: 298
     raises: null
     charIndex:
-      start: 7309
-      end: 7607
+      start: 7415
+      end: 7713
 - attributeName: view
   functionName:
     name: getRegisteredOwnerOf
     charIndex:
-      start: 7681
-      end: 7701
+      start: 7787
+      end: 7807
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -651,14 +651,14 @@
           end: 340
     raises: null
     charIndex:
-      start: 7812
-      end: 8152
+      start: 7918
+      end: 8258
 - attributeName: view
   functionName:
     name: getRegisteredTimeOf
     charIndex:
-      start: 8237
-      end: 8256
+      start: 8343
+      end: 8362
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -703,23 +703,96 @@
           start: 201
           end: 216
     explicitArgs:
-      - name: token_id
-        type: Uint256
-        desc: Token id
+      - name: address
+        type: felt
+        desc: address
         charIndex:
           start: 248
-          end: 275
+          end: 270
     returns:
       - name: address
         type: felt
         desc: Registred time
         charIndex:
-          start: 301
-          end: 330
+          start: 296
+          end: 325
     raises: null
     charIndex:
-      start: 8364
-      end: 8694
+      start: 8470
+      end: 8795
+- attributeName: view
+  functionName:
+    name: getRegisteredTokensOf
+    charIndex:
+      start: 8879
+      end: 8900
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: tokens_len
+        type: felt
+      - name: tokens
+        type: Uint256*
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the registered tokens of the provided address
+        charIndex:
+          start: 23
+          end: 75
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 125
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 135
+          end: 161
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 171
+          end: 186
+    explicitArgs:
+      - name: address
+        type: felt
+        desc: Token id
+        charIndex:
+          start: 218
+          end: 241
+    returns:
+      - name: tokens_len
+        type: felt
+        desc: Tokens array length
+        charIndex:
+          start: 267
+          end: 304
+      - name: tokens
+        type: Uint256*
+        desc: Tokens deposited by the provided address
+        charIndex:
+          start: 314
+          end: 372
+    raises: null
+    charIndex:
+      start: 9028
+      end: 9400
 - attributeName: external
   functionName:
     name: initializer
@@ -737,9 +810,9 @@
     explicitArgs:
       - name: carbonable_project_address
         type: felt
-      - name: owner
+      - name: min_claimable
         type: felt
-      - name: proxy_admin
+      - name: owner
         type: felt
     returns: null
   functionComment:
@@ -780,33 +853,33 @@
     explicitArgs:
       - name: carbonable_project_address
         type: felt
-        desc: Address of the corresponding Carbonable project
+        desc: Address of the Carbonable project
         charIndex:
           start: 302
-          end: 383
+          end: 369
+      - name: min_claimable
+        type: felt
+        desc: Minimum threshold of claimable to allow a claim
+        charIndex:
+          start: 379
+          end: 447
       - name: owner
         type: felt
-        desc: Owner address
+        desc: Owner and Admin address
         charIndex:
-          start: 393
-          end: 419
-      - name: proxy_admin
-        type: felt
-        desc: Admin address
-        charIndex:
-          start: 429
-          end: 461
+          start: 457
+          end: 493
     returns: null
     raises: null
     charIndex:
-      start: 578
-      end: 1069
+      start: 580
+      end: 1103
 - attributeName: external
   functionName:
     name: upgrade
     charIndex:
-      start: 2064
-      end: 2071
+      start: 2149
+      end: 2156
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -862,14 +935,14 @@
           start: 322
           end: 353
     charIndex:
-      start: 2170
-      end: 2523
+      start: 2255
+      end: 2608
 - attributeName: external
   functionName:
     name: setAdmin
     charIndex:
-      start: 2644
-      end: 2652
+      start: 2729
+      end: 2737
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -925,14 +998,14 @@
           start: 298
           end: 329
     charIndex:
-      start: 2736
-      end: 3065
+      start: 2821
+      end: 3150
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 3547
-      end: 3564
+      start: 3632
+      end: 3649
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -994,14 +1067,14 @@
           start: 344
           end: 383
     charIndex:
-      start: 3653
-      end: 4036
+      start: 3738
+      end: 4121
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 4112
-      end: 4129
+      start: 4197
+      end: 4214
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1049,14 +1122,14 @@
           start: 207
           end: 247
     charIndex:
-      start: 4198
-      end: 4445
+      start: 4283
+      end: 4530
 - attributeName: external
   functionName:
-    name: claim
+    name: setMinClaimable
     charIndex:
-      start: 8802
-      end: 8807
+      start: 9508
+      end: 9523
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1065,7 +1138,74 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
+    explicitArgs:
+      - name: min_claimable
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Set the minimum claimable quantity (must be consistent with project
+          absorption unit)
+        charIndex:
+          start: 23
+          end: 107
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 139
+          end: 157
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 167
+          end: 193
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 203
+          end: 218
+    explicitArgs:
+      - name: min_claimable
+        type: felt
+        desc: New minimum claimable
+        charIndex:
+          start: 250
+          end: 292
+    returns: null
+    raises:
+      - name: min_claimable
+        type: ''
+        desc: min_claimable is null
+        charIndex:
+          start: 317
+          end: 353
+    charIndex:
+      start: 9623
+      end: 9976
+- attributeName: external
+  functionName:
+    name: claim
+    charIndex:
+      start: 10106
+      end: 10111
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: quantity
+        type: felt
     returns:
       - name: success
         type: felt
@@ -1096,24 +1236,93 @@
         charIndex:
           start: 172
           end: 187
+    explicitArgs:
+      - name: quantity
+        type: felt
+        desc: Quantity to claim
+        charIndex:
+          start: 219
+          end: 252
+    returns:
+      - name: success
+        type: felt
+        desc: Success status
+        charIndex:
+          start: 278
+          end: 307
+    raises:
+      - name: quantity
+        type: ''
+        desc: quantity is higher than the caller total claimable
+        charIndex:
+          start: 332
+          end: 392
+    charIndex:
+      start: 10219
+      end: 10611
+- attributeName: external
+  functionName:
+    name: claimAll
+    charIndex:
+      start: 10686
+      end: 10694
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: success
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Claim all the total claimable of the caller address
+        charIndex:
+          start: 23
+          end: 74
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 106
+          end: 124
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 134
+          end: 160
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 170
+          end: 185
     explicitArgs: null
     returns:
       - name: success
         type: felt
         desc: Success status
         charIndex:
-          start: 213
-          end: 242
+          start: 211
+          end: 240
     raises: null
     charIndex:
-      start: 8895
-      end: 9137
+      start: 10788
+      end: 11028
 - attributeName: external
   functionName:
     name: deposit
     charIndex:
-      start: 9195
-      end: 9202
+      start: 11090
+      end: 11097
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1171,14 +1380,14 @@
           end: 303
     raises: null
     charIndex:
-      start: 9313
-      end: 9616
+      start: 11208
+      end: 11511
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 9693
-      end: 9701
+      start: 11588
+      end: 11596
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1236,5 +1445,5 @@
           end: 297
     raises: null
     charIndex:
-      start: 9812
-      end: 10109
+      start: 11707
+      end: 12004

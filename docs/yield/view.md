@@ -44,13 +44,6 @@ Return the associated carbonable vester
 {% swagger-response status="carbonable_vester_address ( felt )" description="Address of the corresponding Carbonable vester" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "isOpen" %}  
-{% swagger-description %}  
-Return the deposits status according to project setup  
-{% endswagger-description %}  
-{% swagger-response status="status ( felt )" description="Deposits status" %}  
-{% endswagger-response %}  
-{% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getTotalDeposited" %}  
 {% swagger-description %}  
 Return the total deposited balance of the project  
@@ -77,7 +70,7 @@ Return the total claimable absorption of the project
 Return the total claimable balance of the provided address  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="address" %}  
-address  
+Address  
 {% endswagger-parameter %}  
 {% swagger-response status="claimable ( felt )" description="Total claimable" %}  
 {% endswagger-response %}  
@@ -87,9 +80,29 @@ address
 Return the total claimed balance of the provided address  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="address" %}  
-address  
+Address  
 {% endswagger-parameter %}  
 {% swagger-response status="claimed ( felt )" description="Total claimed" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getSnapshotedOf" %}  
+{% swagger-description %}  
+Return the snapshoted absorption of the provided address  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="address" %}  
+Address  
+{% endswagger-parameter %}  
+{% swagger-response status="absorption ( felt )" description="Snapshoted absorption" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getSnapshotedOffseterOf" %}  
+{% swagger-description %}  
+Return the snapshoted absorption of the provided address for offseter contract  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="address" %}  
+Address  
+{% endswagger-parameter %}  
+{% swagger-response status="absorption ( felt )" description="Snapshoted absorption" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getRegisteredOwnerOf" %}  
@@ -110,6 +123,18 @@ Return the registered time of a token id (0 if token is not owned by the contrac
 Token id  
 {% endswagger-parameter %}  
 {% swagger-response status="time ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getRegisteredTokensOf" %}  
+{% swagger-description %}  
+Return the registered tokens of the provided address  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="address" %}  
+Token id  
+{% endswagger-parameter %}  
+{% swagger-response status="tokens_len ( felt )" description="Tokens array length" %}  
+{% endswagger-response %}  
+{% swagger-response status="tokens ( Uint256* )" description="Tokens deposited by the provided address" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getSnapshotedTime" %}  

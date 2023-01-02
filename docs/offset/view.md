@@ -30,11 +30,11 @@ Return the associated carbonable project
 {% swagger-response status="carbonable_project_address ( felt )" description="Address of the corresponding Carbonable project" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "isOpen" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getMinClaimable" %}  
 {% swagger-description %}  
-Return the deposits status according to project setup  
+Return the minimum claimable quantity  
 {% endswagger-description %}  
-{% swagger-response status="status ( felt )" description="Deposits status" %}  
+{% swagger-response status="min_claimable ( felt )" description="Minimum claimable" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getTotalDeposited" %}  
@@ -93,8 +93,20 @@ Token id
 Return the registered time of a token id (0 if token is not owned by the contract)  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="Uint256" name="token_id" %}  
-Token id  
+  
 {% endswagger-parameter %}  
 {% swagger-response status="time ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getRegisteredTokensOf" %}  
+{% swagger-description %}  
+Return the registered tokens of the provided address  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="address" %}  
+Token id  
+{% endswagger-parameter %}  
+{% swagger-response status="tokens_len ( felt )" description="Tokens array length" %}  
+{% endswagger-response %}  
+{% swagger-response status="tokens ( Uint256* )" description="Tokens deposited by the provided address" %}  
 {% endswagger-response %}  
 {% endswagger %}

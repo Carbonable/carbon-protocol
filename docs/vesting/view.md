@@ -22,4 +22,14 @@ Return the contract owner
 {% endswagger-description %}  
 {% swagger-response status="owner ( felt )" description="The owner address" %}  
 {% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "releasableOf" %}  
+{% swagger-description %}  
+Return  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="account" %}  
+Account address  
+{% endswagger-parameter %}  
+{% swagger-response status="amount ( Uint256 )" description="Total amount releasable" %}  
+{% endswagger-response %}  
 {% endswagger %}

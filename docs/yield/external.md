@@ -7,19 +7,16 @@ External
 Initialize the contract with the given parameters - This constructor uses a dedicated initializer that mainly stores the inputs  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="carbonable_project_address" %}  
-Address of the corresponding Carbonable project  
+Address of the Carbonable project  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="carbonable_offseter_address" %}  
-Address of the corresponding Carbonable offseter  
+Address of the Carbonable offseter  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="carbonable_vester_address" %}  
 Address of the Carbonable vester  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="owner" %}  
-Owner address  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="proxy_admin" %}  
-Admin address  
+Owner and Admin address  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  

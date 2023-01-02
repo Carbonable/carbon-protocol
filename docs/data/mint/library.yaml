@@ -592,10 +592,37 @@
       end: 0
 - attributeName: namespace CarbonableMinter
   functionName:
+    name: total_value
+    charIndex:
+      start: 7243
+      end: 7254
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: total_value
+        type: Uint256
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableMinter
+  functionName:
     name: set_whitelist_merkle_root
     charIndex:
-      start: 7275
-      end: 7300
+      start: 7628
+      end: 7653
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -621,8 +648,8 @@
   functionName:
     name: set_public_sale_open
     charIndex:
-      start: 7524
-      end: 7544
+      start: 7877
+      end: 7897
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -648,8 +675,8 @@
   functionName:
     name: set_max_buy_per_tx
     charIndex:
-      start: 7753
-      end: 7771
+      start: 8106
+      end: 8124
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -675,8 +702,8 @@
   functionName:
     name: set_unit_price
     charIndex:
-      start: 7974
-      end: 7988
+      start: 8327
+      end: 8341
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -696,14 +723,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 8090
-      end: 8102
+      start: 8443
+      end: 8455
 - attributeName: namespace CarbonableMinter
   functionName:
     name: decrease_reserved_supply_for_mint
     charIndex:
-      start: 8359
-      end: 8392
+      start: 8712
+      end: 8745
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -729,8 +756,8 @@
   functionName:
     name: airdrop
     charIndex:
-      start: 9289
-      end: 9296
+      start: 9642
+      end: 9649
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -760,8 +787,8 @@
   functionName:
     name: withdraw
     charIndex:
-      start: 11336
-      end: 11344
+      start: 11689
+      end: 11697
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -781,14 +808,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 11446
-      end: 11458
+      start: 11799
+      end: 11811
 - attributeName: namespace CarbonableMinter
   functionName:
     name: transfer
     charIndex:
-      start: 12159
-      end: 12167
+      start: 12512
+      end: 12520
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -814,14 +841,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 12322
-      end: 12334
+      start: 12675
+      end: 12687
 - attributeName: namespace CarbonableMinter
   functionName:
     name: whitelist_buy
     charIndex:
-      start: 12878
-      end: 12891
+      start: 13231
+      end: 13244
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -855,8 +882,8 @@
   functionName:
     name: public_buy
     charIndex:
-      start: 14498
-      end: 14508
+      start: 14851
+      end: 14861
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -878,14 +905,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 14624
-      end: 14636
+      start: 14977
+      end: 14989
 - attributeName: namespace CarbonableMinter
   functionName:
     name: buy
     charIndex:
-      start: 15200
-      end: 15203
+      start: 15553
+      end: 15556
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -913,8 +940,8 @@
   functionName:
     name: mint_iter
     charIndex:
-      start: 17861
-      end: 17870
+      start: 18214
+      end: 18223
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

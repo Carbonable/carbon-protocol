@@ -2,8 +2,8 @@
   functionName:
     name: getImplementationHash
     charIndex:
-      start: 1731
-      end: 1752
+      start: 1642
+      end: 1663
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -53,14 +53,14 @@
           end: 245
     raises: null
     charIndex:
-      start: 1853
-      end: 2098
+      start: 1764
+      end: 2009
 - attributeName: view
   functionName:
     name: getAdmin
     charIndex:
-      start: 2157
-      end: 2165
+      start: 2068
+      end: 2076
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -110,14 +110,14 @@
           end: 214
     raises: null
     charIndex:
-      start: 2251
-      end: 2465
+      start: 2162
+      end: 2376
 - attributeName: view
   functionName:
     name: owner
     charIndex:
-      start: 3644
-      end: 3649
+      start: 3555
+      end: 3560
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -167,14 +167,14 @@
           end: 215
     raises: null
     charIndex:
-      start: 3735
-      end: 3950
+      start: 3646
+      end: 3861
 - attributeName: view
   functionName:
     name: getCarbonableProjectAddress
     charIndex:
-      start: 4977
-      end: 5004
+      start: 4888
+      end: 4915
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -226,14 +226,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 5116
-      end: 5397
+      start: 5027
+      end: 5308
 - attributeName: view
   functionName:
     name: getCarbonableOffseterAddress
     charIndex:
-      start: 5472
-      end: 5500
+      start: 5383
+      end: 5411
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -285,14 +285,14 @@
           end: 284
     raises: null
     charIndex:
-      start: 5613
-      end: 5897
+      start: 5524
+      end: 5808
 - attributeName: view
   functionName:
     name: getCarbonableVesterAddress
     charIndex:
-      start: 5972
-      end: 5998
+      start: 5883
+      end: 5909
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -344,71 +344,14 @@
           end: 278
     raises: null
     charIndex:
-      start: 6109
-      end: 6387
-- attributeName: view
-  functionName:
-    name: isOpen
-    charIndex:
-      start: 6460
-      end: 6466
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: status
-        type: felt
-  functionComment:
-    desc:
-      - name: ''
-        type: ''
-        desc: Return the deposits status according to project setup
-        charIndex:
-          start: 23
-          end: 76
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-        desc: ''
-        charIndex:
-          start: 108
-          end: 126
-      - name: pedersen_ptr
-        type: HashBuiltin*
-        desc: ''
-        charIndex:
-          start: 136
-          end: 162
-      - name: range_check_ptr
-        type: ''
-        desc: ''
-        charIndex:
-          start: 172
-          end: 187
-    explicitArgs: null
-    returns:
-      - name: status
-        type: felt
-        desc: Deposits status
-        charIndex:
-          start: 213
-          end: 242
-    raises: null
-    charIndex:
-      start: 6553
-      end: 6795
+      start: 6020
+      end: 6298
 - attributeName: view
   functionName:
     name: getTotalDeposited
     charIndex:
-      start: 6851
-      end: 6868
+      start: 6371
+      end: 6388
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -458,14 +401,14 @@
           end: 242
     raises: null
     charIndex:
-      start: 6965
-      end: 7207
+      start: 6485
+      end: 6727
 - attributeName: view
   functionName:
     name: getTotalClaimed
     charIndex:
-      start: 7271
-      end: 7286
+      start: 6791
+      end: 6806
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -515,14 +458,14 @@
           end: 244
     raises: null
     charIndex:
-      start: 7386
-      end: 7630
+      start: 6906
+      end: 7150
 - attributeName: view
   functionName:
     name: getTotalClaimable
     charIndex:
-      start: 7692
-      end: 7709
+      start: 7212
+      end: 7229
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -572,14 +515,14 @@
           end: 250
     raises: null
     charIndex:
-      start: 7811
-      end: 8061
+      start: 7331
+      end: 7581
 - attributeName: view
   functionName:
     name: getClaimableOf
     charIndex:
-      start: 8125
-      end: 8139
+      start: 7645
+      end: 7659
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -624,7 +567,7 @@
     explicitArgs:
       - name: address
         type: felt
-        desc: address
+        desc: Address
         charIndex:
           start: 224
           end: 246
@@ -637,14 +580,14 @@
           end: 304
     raises: null
     charIndex:
-      start: 8248
-      end: 8552
+      start: 7768
+      end: 8072
 - attributeName: view
   functionName:
     name: getClaimedOf
     charIndex:
-      start: 8628
-      end: 8640
+      start: 8148
+      end: 8160
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -689,7 +632,7 @@
     explicitArgs:
       - name: address
         type: felt
-        desc: address
+        desc: Address
         charIndex:
           start: 222
           end: 244
@@ -702,14 +645,146 @@
           end: 298
     raises: null
     charIndex:
-      start: 8747
-      end: 9045
+      start: 8267
+      end: 8565
+- attributeName: view
+  functionName:
+    name: getSnapshotedOf
+    charIndex:
+      start: 8639
+      end: 8654
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the snapshoted absorption of the provided address
+        charIndex:
+          start: 23
+          end: 79
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 111
+          end: 129
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 139
+          end: 165
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 175
+          end: 190
+    explicitArgs:
+      - name: address
+        type: felt
+        desc: Address
+        charIndex:
+          start: 222
+          end: 244
+    returns:
+      - name: absorption
+        type: felt
+        desc: Snapshoted absorption
+        charIndex:
+          start: 270
+          end: 309
+    raises: null
+    charIndex:
+      start: 8764
+      end: 9073
+- attributeName: view
+  functionName:
+    name: getSnapshotedOffseterOf
+    charIndex:
+      start: 9149
+      end: 9172
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: >-
+          Return the snapshoted absorption of the provided address for offseter
+          contract
+        charIndex:
+          start: 23
+          end: 101
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 133
+          end: 151
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 161
+          end: 187
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 197
+          end: 212
+    explicitArgs:
+      - name: address
+        type: felt
+        desc: Address
+        charIndex:
+          start: 244
+          end: 266
+    returns:
+      - name: absorption
+        type: felt
+        desc: Snapshoted absorption
+        charIndex:
+          start: 292
+          end: 331
+    raises: null
+    charIndex:
+      start: 9282
+      end: 9613
 - attributeName: view
   functionName:
     name: getRegisteredOwnerOf
     charIndex:
-      start: 9119
-      end: 9139
+      start: 9698
+      end: 9718
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -769,14 +844,14 @@
           end: 340
     raises: null
     charIndex:
-      start: 9250
-      end: 9590
+      start: 9829
+      end: 10169
 - attributeName: view
   functionName:
     name: getRegisteredTimeOf
     charIndex:
-      start: 9675
-      end: 9694
+      start: 10254
+      end: 10273
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -836,14 +911,87 @@
           end: 330
     raises: null
     charIndex:
-      start: 9802
-      end: 10132
+      start: 10381
+      end: 10711
+- attributeName: view
+  functionName:
+    name: getRegisteredTokensOf
+    charIndex:
+      start: 10795
+      end: 10816
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: tokens_len
+        type: felt
+      - name: tokens
+        type: Uint256*
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the registered tokens of the provided address
+        charIndex:
+          start: 23
+          end: 75
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 125
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 135
+          end: 161
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 171
+          end: 186
+    explicitArgs:
+      - name: address
+        type: felt
+        desc: Token id
+        charIndex:
+          start: 218
+          end: 241
+    returns:
+      - name: tokens_len
+        type: felt
+        desc: Tokens array length
+        charIndex:
+          start: 267
+          end: 304
+      - name: tokens
+        type: Uint256*
+        desc: Tokens deposited by the provided address
+        charIndex:
+          start: 314
+          end: 372
+    raises: null
+    charIndex:
+      start: 10944
+      end: 11316
 - attributeName: view
   functionName:
     name: getSnapshotedTime
     charIndex:
-      start: 10216
-      end: 10233
+      start: 11400
+      end: 11417
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -893,8 +1041,8 @@
           end: 233
     raises: null
     charIndex:
-      start: 10324
-      end: 10557
+      start: 11508
+      end: 11741
 - attributeName: external
   functionName:
     name: initializer
@@ -917,8 +1065,6 @@
       - name: carbonable_vester_address
         type: felt
       - name: owner
-        type: felt
-      - name: proxy_admin
         type: felt
       - name: ''
         type: ''
@@ -961,45 +1107,39 @@
     explicitArgs:
       - name: carbonable_project_address
         type: felt
-        desc: Address of the corresponding Carbonable project
+        desc: Address of the Carbonable project
         charIndex:
           start: 302
-          end: 383
+          end: 369
       - name: carbonable_offseter_address
         type: felt
-        desc: Address of the corresponding Carbonable offseter
+        desc: Address of the Carbonable offseter
         charIndex:
-          start: 393
-          end: 476
+          start: 379
+          end: 448
       - name: carbonable_vester_address
         type: felt
         desc: Address of the Carbonable vester
         charIndex:
-          start: 486
-          end: 551
+          start: 458
+          end: 523
       - name: owner
         type: felt
-        desc: Owner address
+        desc: Owner and Admin address
         charIndex:
-          start: 561
-          end: 587
-      - name: proxy_admin
-        type: felt
-        desc: Admin address
-        charIndex:
-          start: 597
-          end: 629
+          start: 533
+          end: 569
     returns: null
     raises: null
     charIndex:
-      start: 711
-      end: 1370
+      start: 688
+      end: 1287
 - attributeName: external
   functionName:
     name: upgrade
     charIndex:
-      start: 2514
-      end: 2521
+      start: 2425
+      end: 2432
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1055,14 +1195,14 @@
           start: 322
           end: 353
     charIndex:
-      start: 2620
-      end: 2973
+      start: 2531
+      end: 2884
 - attributeName: external
   functionName:
     name: setAdmin
     charIndex:
-      start: 3094
-      end: 3102
+      start: 3005
+      end: 3013
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1118,14 +1258,14 @@
           start: 298
           end: 329
     charIndex:
-      start: 3186
-      end: 3515
+      start: 3097
+      end: 3426
 - attributeName: external
   functionName:
     name: transferOwnership
     charIndex:
-      start: 3997
-      end: 4014
+      start: 3908
+      end: 3925
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1187,14 +1327,14 @@
           start: 344
           end: 383
     charIndex:
-      start: 4103
-      end: 4486
+      start: 4014
+      end: 4397
 - attributeName: external
   functionName:
     name: renounceOwnership
     charIndex:
-      start: 4562
-      end: 4579
+      start: 4473
+      end: 4490
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1242,14 +1382,14 @@
           start: 207
           end: 247
     charIndex:
-      start: 4648
-      end: 4895
+      start: 4559
+      end: 4806
 - attributeName: external
   functionName:
     name: deposit
     charIndex:
-      start: 10644
-      end: 10651
+      start: 11828
+      end: 11835
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1307,14 +1447,14 @@
           end: 303
     raises: null
     charIndex:
-      start: 10762
-      end: 11065
+      start: 11946
+      end: 12249
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 11142
-      end: 11150
+      start: 12326
+      end: 12334
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1372,14 +1512,14 @@
           end: 297
     raises: null
     charIndex:
-      start: 11261
-      end: 11558
+      start: 12445
+      end: 12742
 - attributeName: external
   functionName:
     name: snapshot
     charIndex:
-      start: 11636
-      end: 11644
+      start: 12820
+      end: 12828
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1435,14 +1575,14 @@
           start: 274
           end: 314
     charIndex:
-      start: 11738
-      end: 12052
+      start: 12922
+      end: 13236
 - attributeName: external
   functionName:
     name: createVestings
     charIndex:
-      start: 12145
-      end: 12159
+      start: 13329
+      end: 13343
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1564,5 +1704,5 @@
           start: 1037
           end: 1077
     charIndex:
-      start: 12385
-      end: 13462
+      start: 13569
+      end: 14646
