@@ -27,7 +27,6 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     max_supply_for_mint: Uint256,
     reserved_supply_for_mint: Uint256,
     owner: felt,
-    proxy_admin: felt,
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -44,8 +43,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   unit_price(Uint256): Price per token (based on ERC20 token defined as -payment_token_address-)
     //   max_supply_for_mint(Uint256): Max supply available whatever the way to mint
     //   reserved_supply_for_mint(Uint256): Supply reserved to be airdropped
-    //   owner(felt): Owner address
-    //   proxy_admin(felt): Admin address
+    //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     // Raises:
@@ -62,7 +60,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         reserved_supply_for_mint,
     );
     Ownable.initializer(owner);
-    Proxy.initializer(proxy_admin);
+    Proxy.initializer(owner);
     return ();
 }
 

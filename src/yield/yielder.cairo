@@ -25,7 +25,6 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     carbonable_vester_address: felt,
     carbonable_minter_address: felt,
     owner: felt,
-    proxy_admin: felt,
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -39,8 +38,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   carbonable_offseter_address(felt): Address of the Carbonable offseter
     //   carbonable_vester_address(felt): Address of the Carbonable vester
     //   carbonable_minter_address(felt): Address of the Carbonable minter
-    //   owner(felt): Owner address
-    //   proxy_admin(felt): Admin address
+    //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     CarbonableOffseter.initializer(carbonable_project_address);
@@ -50,7 +48,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         carbonable_minter_address=carbonable_minter_address,
     );
     Ownable.initializer(owner);
-    Proxy.initializer(proxy_admin);
+    Proxy.initializer(owner);
     return ();
 }
 
@@ -418,44 +416,6 @@ func getSnapshotedTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     // Returns:
     //   time(felt): The last snapshot time
     return CarbonableYielder.snapshoted_time();
-}
-
-@view
-func getInstantaneousApr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    precision: felt
-) -> (apr: felt) {
-    // Desc:
-    //   Return the apr of the previous cycle
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   precision(felt): precision of the output (must be lower than 1000000)
-    // Returns:
-    //   time(felt): The last snapshot time
-    // Raises:
-    //   precision: precision is higher than highest precision
-    return CarbonableYielder.instantaneous_apr(precision=precision);
-}
-
-@view
-func getEstimatedCreditCarbonPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    precision: felt
-) -> (price: felt) {
-    // Desc:
-    //   Return the estimated price of a credit carbon based the previous cycle
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   precision(felt): precision of the output (must be lower than 1000000)
-    // Returns:
-    //   price(felt): Estimated price
-    // Raises:
-    //   precision: precision is higher than highest precision
-    return CarbonableYielder.estimated_credit_carbon_price(precision=precision);
 }
 
 //

@@ -67,12 +67,6 @@ namespace ICarbonableYielder {
     func getClaimedOf(address: felt) -> (claimed: felt) {
     }
 
-    func getSnapshotedOf(address: felt) -> (absorption: felt) {
-    }
-
-    func getSnapshotedOffseterOf(address: felt) -> (absorption: felt) {
-    }
-
     func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
     }
 
@@ -85,10 +79,10 @@ namespace ICarbonableYielder {
     func getSnapshotedTime() -> (time: felt) {
     }
 
-    func getInstantaneousApr(precision: felt) -> (apr: felt) {
+    func getSnapshotedOf(address: felt) -> (absorption: felt) {
     }
 
-    func getEstimatedCreditCarbonPrice(precision: felt) -> (price: felt) {
+    func getSnapshotedOffseterOf(address: felt) -> (absorption: felt) {
     }
 
     //

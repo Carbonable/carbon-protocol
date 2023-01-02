@@ -71,11 +71,11 @@ namespace instance {
         return (final_time=final_time);
     }
 
-    func get_time_step{
+    func get_times{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }() -> (time_step: felt) {
-        let (time_step) = ICarbonableProject.getTimeStep(carbonable_project);
-        return (time_step=time_step);
+    }() -> (times_len: felt, times: felt*) {
+        let (times_len, times) = ICarbonableProject.getTimes(carbonable_project);
+        return (times_len=times_len, times=times);
     }
 
     func get_absorptions{
@@ -112,6 +112,15 @@ namespace instance {
         return (absorption=absorption);
     }
 
+    func get_ton_equivalent{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }() -> (ton_equivalent: felt) {
+        let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
+            contract_address=carbonable_project
+        );
+        return (ton_equivalent=ton_equivalent);
+    }
+
     // Externals
 
     func add_minter{
@@ -123,12 +132,12 @@ namespace instance {
         return ();
     }
 
-    func set_time{
+    func set_times{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }(start_time: felt, time_step: felt, caller: felt) {
+    }(times_len: felt, times: felt*, caller: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
-        ICarbonableProject.setTime(
-            contract_address=carbonable_project, start_time=start_time, time_step=time_step
+        ICarbonableProject.setTimes(
+            contract_address=carbonable_project, times_len=times_len, times=times
         );
         %{ stop_prank() %}
         return ();
@@ -136,12 +145,13 @@ namespace instance {
 
     func set_absorptions{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }(absorptions_len: felt, absorptions: felt*, caller: felt) {
+    }(absorptions_len: felt, absorptions: felt*, ton_equivalent: felt, caller: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
         ICarbonableProject.setAbsorptions(
             contract_address=carbonable_project,
             absorptions_len=absorptions_len,
             absorptions=absorptions,
+            ton_equivalent=ton_equivalent,
         );
         %{ stop_prank() %}
         return ();

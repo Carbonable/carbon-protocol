@@ -111,14 +111,6 @@ func CarbonableYielder_snapshoted_period_duration_() -> (time: felt) {
 func CarbonableYielder_vested_() -> (status: felt) {
 }
 
-@storage_var
-func CarbonableYielder_instantaneous_apr_() -> (apr: felt) {
-}
-
-@storage_var
-func CarbonableYielder_estimated_credit_carbon_price_() -> (ratio: felt) {
-}
-
 namespace CarbonableYielder {
     //
     // Constructor
@@ -178,34 +170,6 @@ namespace CarbonableYielder {
     ) -> (absorption: felt) {
         let (absorption) = CarbonableYielder_snapshoted_user_offseter_contribution_.read(address);
         return (absorption=absorption);
-    }
-
-    func instantaneous_apr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        precision: felt
-    ) -> (apr: felt) {
-        // [Check] Precision under the default precision
-        let is_lower = is_le(precision, PRECISION);
-        with_attr error_message("CarbonableYielder: cannot be more precise than 100000") {
-            assert is_lower = TRUE;
-        }
-
-        let (apr) = CarbonableYielder_instantaneous_apr_.read();
-        let (precised_apr, _) = unsigned_div_rem(apr * precision, PRECISION);
-        return (apr=precised_apr);
-    }
-
-    func estimated_credit_carbon_price{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-    }(precision: felt) -> (price: felt) {
-        // [Check] Precision under the default precision
-        let is_lower = is_le(precision, PRECISION);
-        with_attr error_message("CarbonableYielder: cannot be more precise than 100000") {
-            assert is_lower = TRUE;
-        }
-
-        let (price) = CarbonableYielder_estimated_credit_carbon_price_.read();
-        let (precised_price, _) = unsigned_div_rem(price * precision, PRECISION);
-        return (price=precised_price);
     }
 
     //
@@ -342,29 +306,6 @@ namespace CarbonableYielder {
             users_index=users_len - 1,
             users=users,
         );
-
-        // [Effect] Update APR
-        let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
-        let (start_time) = ICarbonableProject.getStartTime(
-            contract_address=carbonable_project_address
-        );
-        let (final_time) = ICarbonableProject.getFinalTime(
-            contract_address=carbonable_project_address
-        );
-        let total_duration = final_time - start_time;
-        let (apr, _) = unsigned_div_rem(
-            total_amount * total_duration * PRECISION, total_value * period_duration
-        );
-        CarbonableYielder_instantaneous_apr_.write(apr);
-
-        // [Effect] Update estimated price
-        let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
-            contract_address=carbonable_project_address
-        );
-        let (price, _) = unsigned_div_rem(
-            total_amount * ton_equivalent * PRECISION, yielder_contribution
-        );
-        CarbonableYielder_estimated_credit_carbon_price_.write(price);
 
         // [Effect] Update vested status
         CarbonableYielder_vested_.write(TRUE);

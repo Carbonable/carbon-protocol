@@ -34,7 +34,7 @@ from src.vesting.library import CarbonableVester
 
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    erc20_address: felt, owner: felt, proxy_admin: felt
+    erc20_address: felt, owner: felt
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -45,13 +45,12 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   range_check_ptr
     // Explicit args:
     //   erc20_address(felt): Address of the corresponding Carbonable project
-    //   owner(felt): Owner address
-    //   proxy_admin(felt): Admin address
+    //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     Ownable.initializer(owner);
     StarkVest.initializer(erc20_address);
-    Proxy.initializer(proxy_admin);
+    Proxy.initializer(owner);
     return ();
 }
 

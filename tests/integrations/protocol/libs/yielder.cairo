@@ -51,11 +51,13 @@ namespace instance {
         return (carbonable_vester_address=carbonable_vester_address);
     }
 
-    func is_open{
+    func carbonable_minter_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
-    }() -> (status: felt) {
-        let (status) = ICarbonableYielder.isOpen(contract_address=carbonable_yielder);
-        return (status=status);
+    }() -> (carbonable_minter_address: felt) {
+        let (carbonable_minter_address) = ICarbonableYielder.getCarbonableMinterAddress(
+            contract_address=carbonable_yielder
+        );
+        return (carbonable_minter_address=carbonable_minter_address);
     }
 
     func total_deposited{
@@ -119,11 +121,34 @@ namespace instance {
         return (time=time);
     }
 
+    func registered_tokens_of{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
+    }(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
+        let (tokens_len, tokens) = ICarbonableYielder.getRegisteredTokensOf(
+            contract_address=carbonable_offseter, address=address
+        );
+        return (tokens_len=tokens_len, tokens=tokens);
+    }
+
     func snapshoted_time{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
     }() -> (time: felt) {
         let (time) = ICarbonableYielder.getSnapshotedTime(contract_address=carbonable_yielder);
         return (time=time);
+    }
+
+    func snapshoted_of{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
+    }(address: felt) -> (absorption: felt) {
+        let (absorption) = ICarbonableYielder.getSnapshotedOf(address);
+        return (absorption=absorption);
+    }
+
+    func snapshoted_offseter_of{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
+    }(address: felt) -> (absorption: felt) {
+        let (absorption) = ICarbonableYielder.getSnapshotedOffseterOf(address);
+        return (absorption=absorption);
     }
 
     // Externals

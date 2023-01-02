@@ -99,27 +99,28 @@ namespace instance {
         return ();
     }
 
-    func set_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        start_time: felt, time_step: felt
+    func set_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        times_len: felt, times: felt*
     ) {
         let (carbonable_project) = carbonable_project_instance.get_address();
         let (caller) = get_address();
         with carbonable_project {
-            carbonable_project_instance.set_time(
-                start_time=start_time, time_step=time_step, caller=caller
-            );
+            carbonable_project_instance.set_times(times_len=times_len, times=times, caller=caller);
         }
         return ();
     }
 
     func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        absorptions_len: felt, absorptions: felt*
+        absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
     ) {
         let (carbonable_project) = carbonable_project_instance.get_address();
         let (caller) = get_address();
         with carbonable_project {
             carbonable_project_instance.set_absorptions(
-                absorptions_len=absorptions_len, absorptions=absorptions, caller=caller
+                absorptions_len=absorptions_len,
+                absorptions=absorptions,
+                ton_equivalent=ton_equivalent,
+                caller=caller,
             );
         }
         return ();
@@ -375,13 +376,23 @@ namespace instance {
         return (time=time);
     }
 
-    func offseter_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        success: felt
+    func offseter_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        quantity: felt
     ) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         let (caller) = get_address();
         with carbonable_offseter {
-            let (success) = carbonable_offseter_instance.claim(caller=caller);
+            let (success) = carbonable_offseter_instance.claim(quantity=quantity, caller=caller);
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    func offseter_claim_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.claim_all(caller=caller);
             assert success = TRUE;
         }
         return ();

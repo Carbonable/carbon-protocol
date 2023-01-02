@@ -117,3 +117,35 @@ func test_snapshot_revert_not_snapshotable{
     CarbonableYielder.snapshot();
     return ();
 }
+
+@external
+func test_snapshot_revert_not_possible{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+    let one = Uint256(low=1, high=0);
+    let (local contract_address: felt) = get_contract_address();
+
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+
+    %{ stop_mock_getAbsorption = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
+    %{ stop_mock_getCurrentAbsorption = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
+
+    // Deposit token #1
+    let (success) = CarbonableOffseter.deposit(token_id=one);
+    assert success = 1;
+
+    %{
+        stop_warp = warp(blk_timestamp=0)
+        expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot at a sooner time that previous snapshot")
+    %}
+    CarbonableYielder.snapshot();
+    return ();
+}

@@ -342,16 +342,26 @@ namespace instance {
         return (time=time);
     }
 
-    func offseter_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        success: felt
+    func offseter_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        quantity: felt
     ) {
         let (carbonable_offseter) = carbonable_offseter_instance.get_address();
         let (caller) = get_address();
         with carbonable_offseter {
-            let (success) = carbonable_offseter_instance.claim(caller=caller);
+            let (success) = carbonable_offseter_instance.claim(quantity=quantity, caller=caller);
             assert success = TRUE;
         }
-        return (success=success);
+        return ();
+    }
+
+    func offseter_claim_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_offseter) = carbonable_offseter_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_offseter {
+            let (success) = carbonable_offseter_instance.claim_all(caller=caller);
+            assert success = TRUE;
+        }
+        return ();
     }
 
     func offseter_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

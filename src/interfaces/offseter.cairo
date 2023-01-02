@@ -77,7 +77,7 @@ namespace ICarbonableOffseter {
     // Externals
     //
 
-    func claim() -> (success: felt) {
+    func claim(quantity: felt) -> (success: felt) {
     }
 
     func claimAll() -> (success: felt) {

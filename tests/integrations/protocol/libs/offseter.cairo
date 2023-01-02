@@ -94,6 +94,15 @@ namespace instance {
         return (time=time);
     }
 
+    func registered_tokens_of{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
+    }(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
+        let (tokens_len, tokens) = ICarbonableOffseter.getRegisteredTokensOf(
+            contract_address=carbonable_offseter, address=address
+        );
+        return (tokens_len=tokens_len, tokens=tokens);
+    }
+
     func owner{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }() -> (owner: felt) {
@@ -105,9 +114,20 @@ namespace instance {
 
     func claim{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
+    }(quantity: felt, caller: felt) -> (success: felt) {
+        %{ stop_prank_offseter = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
+        let (success) = ICarbonableOffseter.claim(
+            contract_address=carbonable_offseter, quantity=quantity
+        );
+        %{ stop_prank_offseter() %}
+        return (success=success);
+    }
+
+    func claim_all{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_offseter: felt
     }(caller: felt) -> (success: felt) {
         %{ stop_prank_offseter = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_offseter) %}
-        let (success) = ICarbonableOffseter.claim(contract_address=carbonable_offseter);
+        let (success) = ICarbonableOffseter.claimAll(contract_address=carbonable_offseter);
         %{ stop_prank_offseter() %}
         return (success=success);
     }

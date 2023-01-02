@@ -64,9 +64,9 @@ func test_nominal_single_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     %{ stop_warp_offseter() %}
     %{ stop_warp_project() %}
 
-    // At t = 103
-    %{ stop_warp_offseter = warp(blk_timestamp=103, target_contract_address=ids.offseter_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=103, target_contract_address=ids.project_address) %}
+    // At t = 1659312000
+    %{ stop_warp_offseter = warp(blk_timestamp=1659312000, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1659312000, target_contract_address=ids.project_address) %}
 
     // Claimable is 1179750
     let (claimable) = anyone.offseter_claimable_of(address=anyone_address);
@@ -79,20 +79,20 @@ func test_nominal_single_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     %{ stop_warp_offseter() %}
     %{ stop_warp_project() %}
 
-    // At t = 106
-    %{ stop_warp_offseter = warp(blk_timestamp=106, target_contract_address=ids.offseter_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=106, target_contract_address=ids.project_address) %}
+    // At t = 1667260800
+    %{ stop_warp_offseter = warp(blk_timestamp=1667260800, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1667260800, target_contract_address=ids.project_address) %}
 
     // Anyone claims
     %{ expect_events({"name": "Claim"}) %}
-    anyone.offseter_claim();
+    anyone.offseter_claim_all();
 
     %{ stop_warp_offseter() %}
     %{ stop_warp_project() %}
 
-    // At t = 109
-    %{ stop_warp_offseter = warp(blk_timestamp=109, target_contract_address=ids.offseter_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=109, target_contract_address=ids.project_address) %}
+    // At t = 1675209600
+    %{ stop_warp_offseter = warp(blk_timestamp=1675209600, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1675209600, target_contract_address=ids.project_address) %}
 
     // Claimable is 1179750
     let (claimable) = anyone.offseter_claimable_of(address=anyone_address);
@@ -105,9 +105,9 @@ func test_nominal_single_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     %{ stop_warp_offseter() %}
     %{ stop_warp_project() %}
 
-    // At t = 112
-    %{ stop_warp_offseter = warp(blk_timestamp=112, target_contract_address=ids.offseter_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=112, target_contract_address=ids.project_address) %}
+    // At t = 1682899200
+    %{ stop_warp_offseter = warp(blk_timestamp=1682899200, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address) %}
 
     // Anyone wtihdraws token #1
     anyone.offseter_withdraw(token_id=1);
@@ -127,9 +127,9 @@ func test_nominal_single_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     %{ stop_warp_offseter() %}
     %{ stop_warp_project() %}
 
-    // At t = 115
-    %{ stop_warp_offseter = warp(blk_timestamp=115, target_contract_address=ids.offseter_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=115, target_contract_address=ids.project_address) %}
+    // At t = 1690848000
+    %{ stop_warp_offseter = warp(blk_timestamp=1690848000, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1690848000, target_contract_address=ids.project_address) %}
 
     // Claimable is 2359500
     let (claimable) = anyone.offseter_claimable_of(address=anyone_address);
@@ -190,9 +190,9 @@ func test_nominal_multi_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     %{ stop_warp_offseter() %}
     %{ stop_warp_project() %}
 
-    // At t = 103
-    %{ stop_warp_offseter = warp(blk_timestamp=103, target_contract_address=ids.offseter_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=103, target_contract_address=ids.project_address) %}
+    // At t = 1659312000
+    %{ stop_warp_offseter = warp(blk_timestamp=1659312000, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1659312000, target_contract_address=ids.project_address) %}
 
     // Total claimable is 471900 + 707850 = 1179750
     let (total_claimable) = anyone.offseter_total_claimable();

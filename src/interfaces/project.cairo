@@ -52,7 +52,7 @@ namespace ICarbonableProject {
     func getFinalTime() -> (final_time: felt) {
     }
 
-    func getTimes() -> (times_len: felt, times: felt) {
+    func getTimes() -> (times_len: felt, times: felt*) {
     }
 
     func getAbsorptions() -> (absorptions_len: felt, absorptions: felt*) {
@@ -77,7 +77,7 @@ namespace ICarbonableProject {
     // Externals
     //
 
-    func setTimes(times_len: felt, times: felt) {
+    func setTimes(times_len: felt, times: felt*) {
     }
 
     func setAbsorptions(absorptions_len: felt, absorptions: felt*, ton_equivalent: felt) {

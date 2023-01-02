@@ -81,7 +81,7 @@ func test_create_vestings_without_any_deposited{
     // And no vesting will be created
     alloc_locals;
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot or create vestings if no user has registered") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot at a sooner time that previous snapshot") %}
     admin.snapshot();
 
     return ();
@@ -125,8 +125,8 @@ func test_create_vestings_nominal_case{
     admin.mint(to=admin_address, token_id=2);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    %{ stop_warp_yielder = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=100, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
 
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
@@ -145,15 +145,15 @@ func test_create_vestings_nominal_case{
 
     // Admin snapshot
     %{
-        stop_warp_yielder = warp(blk_timestamp=112, target_contract_address=ids.yielder_address)
-        stop_warp_project = warp(blk_timestamp=112, target_contract_address=ids.project_address)
+        stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address)
         expect_events(dict(name="Snapshot", data=dict(
             project=context.carbonable_project_contract,
             previous_time=0,
             previous_project_absorption=0,
             previous_offseter_absorption=0,
             previous_yielder_absorption=0,
-            current_time=112,
+            current_time=1682899200,
             current_project_absorption=4719000,
             current_offseter_absorption=0,
             current_yielder_absorption=4719000,
@@ -167,13 +167,13 @@ func test_create_vestings_nominal_case{
     %{ stop_warp_project() %}
 
     // Start testing create vestings
-    %{ stop_warp_yielder = warp(blk_timestamp=121, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=121, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1706745600, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1706745600, target_contract_address=ids.project_address) %}
 
     admin.create_vestings(
         total_amount=1000,
         cliff_delta=0,
-        start=121,
+        start=1706745600,
         duration=5,
         slice_period_seconds=1,
         revocable=TRUE,
@@ -181,7 +181,7 @@ func test_create_vestings_nominal_case{
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
-    %{ stop_warp = warp(blk_timestamp=130, target_contract_address=ids.vester_address) %}
+    %{ stop_warp = warp(blk_timestamp=1730419200, target_contract_address=ids.vester_address) %}
     let (vesting_id) = anyone.get_vesting_id();
     let (releasable_amount) = anyone.releasable_amount(vesting_id);
     let expected_amount = Uint256(low=600, high=0);
@@ -232,8 +232,8 @@ func test_create_vestings_only_one_deposited{
     admin.mint(to=admin_address, token_id=5);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    %{ stop_warp_yielder = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=100, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
 
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
@@ -243,15 +243,15 @@ func test_create_vestings_only_one_deposited{
 
     // Admin snapshot
     %{
-        stop_warp_yielder = warp(blk_timestamp=112, target_contract_address=ids.yielder_address)
-        stop_warp_project = warp(blk_timestamp=112, target_contract_address=ids.project_address)
+        stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address)
         expect_events(dict(name="Snapshot", data=dict(
             project=context.carbonable_project_contract,
             previous_time=0,
             previous_project_absorption=0,
             previous_offseter_absorption=0,
             previous_yielder_absorption=0,
-            current_time=112,
+            current_time=1682899200,
             current_project_absorption=4719000,
             current_offseter_absorption=0,
             current_yielder_absorption=943800,
@@ -265,13 +265,13 @@ func test_create_vestings_only_one_deposited{
     %{ stop_warp_project() %}
 
     // Start testing create vestings
-    %{ stop_warp_yielder = warp(blk_timestamp=121, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=121, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1706745600, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1706745600, target_contract_address=ids.project_address) %}
 
     admin.create_vestings(
         total_amount=1000,
         cliff_delta=0,
-        start=121,
+        start=1706745600,
         duration=5,
         slice_period_seconds=1,
         revocable=TRUE,
@@ -279,7 +279,7 @@ func test_create_vestings_only_one_deposited{
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
-    %{ stop_warp = warp(blk_timestamp=130, target_contract_address=ids.vester_address) %}
+    %{ stop_warp = warp(blk_timestamp=1730419200, target_contract_address=ids.vester_address) %}
     let (vesting_id) = anyone.get_vesting_id();
     let (releasable_amount) = anyone.releasable_amount(vesting_id);
 
@@ -311,6 +311,7 @@ func test_create_vestings_not_enough_fund_vester{
     alloc_locals;
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
+    let (project_address) = project.get_address();
     let (yielder_address) = yielder.get_address();
     let (vester_address) = vester.get_address();
 
@@ -318,25 +319,29 @@ func test_create_vestings_not_enough_fund_vester{
     admin.mint(to=anyone_address, token_id=3);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    %{ stop_warp = warp(blk_timestamp=100, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
     anyone.project_approve(approved=yielder_address, token_id=3);
     anyone.yielder_deposit(token_id=3);
-    %{ stop_warp %}
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     // Admin snapshot
-    %{ stop_warp = warp(blk_timestamp=112, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address) %}
     admin.snapshot();
-    %{ stop_warp %}
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     // Start testing create vestings
-    %{ stop_warp = warp(blk_timestamp=121, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp = warp(blk_timestamp=1706745600, target_contract_address=ids.yielder_address) %}
     admin.transfer(recipient=vester_address, amount=800);
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into vester") %}
     admin.create_vestings(
         total_amount=1000,
         cliff_delta=0,
-        start=121,
+        start=1706745600,
         duration=10,
         slice_period_seconds=1,
         revocable=TRUE,
