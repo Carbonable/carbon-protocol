@@ -184,7 +184,7 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 // Views
 //
 
-@external
+@view
 func releasableOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt
 ) -> (amount: Uint256) {
