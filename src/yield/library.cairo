@@ -27,10 +27,6 @@ const PRECISION = 1000000;
 //
 
 @event
-func Claim(address: felt, absorption: felt, time: felt) {
-}
-
-@event
 func Snapshot(
     project: felt,
     previous_time: felt,
