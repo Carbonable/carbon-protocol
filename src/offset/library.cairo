@@ -32,6 +32,14 @@ from src.utils.type.library import _uint_to_felt
 //
 
 @event
+func Deposit(address: felt, token_id: Uint256, time: felt) {
+}
+
+@event
+func Withdraw(address: felt, token_id: Uint256, time: felt) {
+}
+
+@event
 func Claim(address: felt, absorption: felt, time: felt) {
 }
 
@@ -340,8 +348,8 @@ namespace CarbonableOffseter {
         CarbonableOffseter_registered_owner_.write(token_id, caller);
         CarbonableOffseter_registered_time_.write(token_id, current_time);
 
-        // [Security] End reetrancy guard
-        ReentrancyGuard.end();
+        // [Effect] Emit event
+        Deposit.emit(address=caller, token_id=token_id, time=current_time);
 
         // [Effect] Register the caller
         let (is_known) = CarbonableOffseter_known_user_.read(caller);
@@ -350,8 +358,14 @@ namespace CarbonableOffseter {
             CarbonableOffseter_users_.write(index, caller);
             CarbonableOffseter_users_len_.write(index + 1);
             CarbonableOffseter_known_user_.write(caller, TRUE);
+
+            // [Security] End reetrancy guard
+            ReentrancyGuard.end();
             return (success=TRUE);
         }
+
+        // [Security] End reetrancy guard
+        ReentrancyGuard.end();
         return (success=TRUE);
     }
 
@@ -395,6 +409,10 @@ namespace CarbonableOffseter {
         with_attr error_message("CarbonableOffseter: transfer failed") {
             assert owner = caller;
         }
+
+        // [Effect] Emit event
+        let (current_time) = get_block_timestamp();
+        Withdraw.emit(address=caller, token_id=token_id, time=current_time);
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();

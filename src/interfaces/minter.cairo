@@ -46,7 +46,7 @@ namespace ICarbonableMinter {
     func getPaymentTokenAddress() -> (payment_token_address: felt) {
     }
 
-    func isWhitelistedSaleOpen() -> (whitelisted_sale_open: felt) {
+    func isPreSaleOpen() -> (pre_sale_open: felt) {
     }
 
     func isPublicSaleOpen() -> (public_sale_open: felt) {
@@ -109,7 +109,7 @@ namespace ICarbonableMinter {
     func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
     }
 
-    func whitelistBuy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (
+    func preBuy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (
         success: felt
     ) {
     }

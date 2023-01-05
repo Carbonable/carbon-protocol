@@ -449,42 +449,23 @@ namespace instance {
         return (balance=balance.low);
     }
 
-    func yielder_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (total_claimed: felt) {
+    func yielder_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (total_absorption: felt) {
         let (carbonable_yielder) = carbonable_yielder_instance.get_address();
         with carbonable_yielder {
-            let (total_claimed) = carbonable_yielder_instance.total_claimed();
+            let (total_absorption) = carbonable_yielder_instance.total_absorption();
         }
-        return (total_claimed=total_claimed);
+        return (total_absorption=total_absorption);
     }
 
-    func yielder_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (total_claimable: felt) {
-        let (carbonable_yielder) = carbonable_yielder_instance.get_address();
-        with carbonable_yielder {
-            let (total_claimable) = carbonable_yielder_instance.total_claimable();
-        }
-        return (total_claimable=total_claimable);
-    }
-
-    func yielder_claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func yielder_absorption_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
-    ) -> (claimable: felt) {
+    ) -> (absorption: felt) {
         let (carbonable_yielder) = carbonable_yielder_instance.get_address();
         with carbonable_yielder {
-            let (claimable) = carbonable_yielder_instance.claimable_of(address=address);
+            let (absorption) = carbonable_yielder_instance.absorption_of(address=address);
         }
-        return (claimable=claimable);
-    }
-
-    func yielder_claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt
-    ) -> (claimed: felt) {
-        let (carbonable_yielder) = carbonable_yielder_instance.get_address();
-        with carbonable_yielder {
-            let (claimed) = carbonable_yielder_instance.claimed_of(address=address);
-        }
-        return (claimed=claimed);
+        return (absorption=absorption);
     }
 
     func yielder_registered_owner_of{

@@ -237,23 +237,8 @@ func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 @view
-func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    total_claimed: felt
-) {
-    // Desc:
-    //   Return the total claimed absorption of the project
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   total_claimed(felt): Total claimed
-    return CarbonableOffseter.total_claimed();
-}
-
-@view
-func getTotalClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    total_claimable: felt
+func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_absorption: felt
 ) {
     // Desc:
     //   Return the total claimable absorption of the project
@@ -262,50 +247,17 @@ func getTotalClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   total_claimable(felt): Total claimable
-    return CarbonableOffseter.total_claimable();
+    //   total_absorption(felt): Total absorption
+    let (total_claimable) = CarbonableOffseter.total_claimable();
+    return (total_absorption=total_claimable);
 }
 
 @view
-func getClaimableOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    address: felt
-) -> (claimable: felt) {
-    // Desc:
-    //   Return the total claimable balance of the provided address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): Address
-    // Returns:
-    //   claimable(felt): Total claimable
-    return CarbonableOffseter.claimable_of(address=address);
-}
-
-@view
-func getClaimedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    address: felt
-) -> (claimed: felt) {
-    // Desc:
-    //   Return the total claimed balance of the provided address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): Address
-    // Returns:
-    //   claimed(felt): Total claimed
-    return CarbonableOffseter.claimed_of(address=address);
-}
-
-@view
-func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (absorption: felt) {
     // Desc:
-    //   Return the snapshoted absorption of the provided address
+    //   Return the total absorption balance of the provided address
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -313,25 +265,9 @@ func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     // Explicit args:
     //   address(felt): Address
     // Returns:
-    //   absorption(felt): Snapshoted absorption
-    return CarbonableYielder.snapshoted_of(address=address);
-}
-
-@view
-func getSnapshotedOffseterOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    address: felt
-) -> (absorption: felt) {
-    // Desc:
-    //   Return the snapshoted absorption of the provided address for offseter contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): Address
-    // Returns:
-    //   absorption(felt): Snapshoted absorption
-    return CarbonableYielder.snapshoted_offseter_of(address=address);
+    //   absorption(felt): Absorption
+    let (claimable) = CarbonableOffseter.claimable_of(address=address);
+    return (absorption=claimable);
 }
 
 @view
@@ -399,6 +335,23 @@ func getSnapshotedTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     // Returns:
     //   time(felt): The last snapshot time
     return CarbonableYielder.snapshoted_time();
+}
+
+@view
+func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (absorption: felt) {
+    // Desc:
+    //   Return the snapshoted absorption of the provided address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   address(felt): Address
+    // Returns:
+    //   absorption(felt): Snapshoted absorption
+    return CarbonableYielder.snapshoted_of(address=address);
 }
 
 //

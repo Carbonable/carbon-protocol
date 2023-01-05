@@ -13,14 +13,11 @@ from starkware.cairo.common.uint256 import uint256_lt
 from starkware.starknet.common.syscalls import get_block_timestamp
 
 // Local dependencies
-from src.interfaces.minter import ICarbonableMinter
 from src.interfaces.offseter import ICarbonableOffseter
 from src.interfaces.project import ICarbonableProject
 from src.interfaces.vester import ICarbonableVester
 from src.offset.library import CarbonableOffseter
-from src.utils.type.library import _felt_to_uint, _uint_to_felt
-
-const PRECISION = 1000000;
+from src.utils.type.library import _felt_to_uint
 
 //
 // Events
@@ -44,11 +41,23 @@ func Snapshot(
 }
 
 @event
-func Vestings(total_amount: felt, time: felt) {
+func UserSnapshot(
+    address: felt,
+    project: felt,
+    previous_time: felt,
+    previous_user_yielder_absorption: felt,
+    current_time: felt,
+    current_user_yielder_absorption: felt,
+    period_user_yielder_absorption: felt,
+) {
 }
 
 @event
-func Vesting(address: felt, vesting_id: felt, amount: felt, time: felt) {
+func Vesting(project: felt, amount: felt, time: felt) {
+}
+
+@event
+func UserVesting(address: felt, project: felt, amount: felt, time: felt, vesting_id: felt) {
 }
 
 //
@@ -80,23 +89,11 @@ func CarbonableYielder_snapshoted_user_yielder_absorption_(address: felt) -> (ab
 }
 
 @storage_var
-func CarbonableYielder_snapshoted_user_offseter_absorption_(address: felt) -> (absorption: felt) {
-}
-
-@storage_var
 func CarbonableYielder_snapshoted_user_yielder_contribution_(address: felt) -> (absorption: felt) {
 }
 
 @storage_var
-func CarbonableYielder_snapshoted_user_offseter_contribution_(address: felt) -> (absorption: felt) {
-}
-
-@storage_var
 func CarbonableYielder_snapshoted_time_() -> (time: felt) {
-}
-
-@storage_var
-func CarbonableYielder_snapshoted_period_duration_() -> (time: felt) {
 }
 
 @storage_var
@@ -148,13 +145,6 @@ namespace CarbonableYielder {
         return (absorption=absorption);
     }
 
-    func snapshoted_offseter_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt
-    ) -> (absorption: felt) {
-        let (absorption) = CarbonableYielder_snapshoted_user_offseter_contribution_.read(address);
-        return (absorption=absorption);
-    }
-
     //
     // Externals
     //
@@ -200,17 +190,29 @@ namespace CarbonableYielder {
         let period_offseter_absorption = current_offseter_absorption - previous_offseter_absorption;
         let period_yielder_absorption = current_yielder_absorption - previous_yielder_absorption;
 
-        // [Effect] Store snapshot values
+        // [Check] Period duration not null
         let (current_time) = get_block_timestamp();
         let period_duration = current_time - previous_time;
-        CarbonableYielder_snapshoted_period_duration_.write(period_duration);
+        let not_zero = is_not_zero(period_duration);
+        with_attr error_message(
+                "CarbonableYielder: cannot estimate tCO2 price if the period duration is null") {
+            assert not_zero = TRUE;
+        }
+
+        // [Effect] Store snapshot values
         CarbonableYielder_snapshoted_time_.write(current_time);
         CarbonableYielder_snapshoted_offseter_absorption_.write(current_offseter_absorption);
         CarbonableYielder_snapshoted_yielder_absorption_.write(current_yielder_absorption);
         CarbonableYielder_snapshoted_yielder_contribution_.write(period_yielder_absorption);
 
         // [Effect] Store period shares per users
-        _snapshot_iter(users_index=users_len - 1, users=users);
+        _snapshot_iter(
+            users_index=users_len - 1,
+            users=users,
+            carbonable_project_address=carbonable_project_address,
+            previous_time=previous_time,
+            current_time=current_time,
+        );
 
         // [Effect] Update vested status
         CarbonableYielder_vested_.write(FALSE);
@@ -254,17 +256,11 @@ namespace CarbonableYielder {
             assert not_zero = TRUE;
         }
 
-        // [Check] Period duration not null
-        let (period_duration) = CarbonableYielder_snapshoted_period_duration_.read();
-        let not_zero = is_not_zero(period_duration);
-        with_attr error_message(
-                "CarbonableYielder: cannot estimate tCO2 price if the period duration is null") {
-            assert not_zero = TRUE;
-        }
-
         // [Interaction] Run create_vestings
         let (users_len, users) = CarbonableYielder_assert.is_vestable(total_amount);
+        let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
         let (carbonable_vester_address) = CarbonableYielder_carbonable_vester_address_.read();
+        let (current_time) = get_block_timestamp();
         _create_vestings_iter(
             contract_address=carbonable_vester_address,
             yielder_contribution=yielder_contribution,
@@ -276,14 +272,15 @@ namespace CarbonableYielder {
             revocable=revocable,
             users_index=users_len - 1,
             users=users,
+            carbonable_project_address=carbonable_project_address,
+            current_time=current_time,
         );
 
         // [Effect] Update vested status
         CarbonableYielder_vested_.write(TRUE);
 
         // [Event] Emit all vesting are created
-        let (current_time) = get_block_timestamp();
-        Vestings.emit(total_amount=total_amount, time=current_time);
+        Vesting.emit(project=carbonable_project_address, amount=total_amount, time=current_time);
 
         return (success=TRUE);
     }
@@ -293,7 +290,11 @@ namespace CarbonableYielder {
     //
 
     func _snapshot_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        users_index: felt, users: felt*
+        users_index: felt,
+        users: felt*,
+        carbonable_project_address: felt,
+        previous_time: felt,
+        current_time: felt,
     ) {
         alloc_locals;
 
@@ -326,14 +327,29 @@ namespace CarbonableYielder {
         CarbonableYielder_snapshoted_user_yielder_absorption_.write(
             user, current_yielder_absorption
         );
-        CarbonableYielder_snapshoted_user_offseter_absorption_.write(
-            user, current_offseter_absorption
-        );
         CarbonableYielder_snapshoted_user_yielder_contribution_.write(user, period_contribution);
+
+        // [Effect] Emit user snapshot event
+        UserSnapshot.emit(
+            address=user,
+            project=carbonable_project_address,
+            previous_time=previous_time,
+            previous_user_yielder_absorption=previous_yielder_absorption,
+            current_time=current_time,
+            current_user_yielder_absorption=current_yielder_absorption,
+            period_user_yielder_absorption=period_contribution,
+        );
 
         // [Check] If not last, then continue
         if (users_index != 0) {
-            _snapshot_iter(users_index=users_index - 1, users=users);
+            _snapshot_iter(
+                users_index=users_index - 1,
+                users=users,
+                carbonable_project_address=carbonable_project_address,
+                previous_time=previous_time,
+                current_time=current_time,
+            );
+            return ();
         }
         return ();
     }
@@ -349,6 +365,8 @@ namespace CarbonableYielder {
         revocable: felt,
         users_index: felt,
         users: felt*,
+        carbonable_project_address,
+        current_time,
     ) {
         alloc_locals;
 
@@ -375,6 +393,8 @@ namespace CarbonableYielder {
                 revocable=revocable,
                 users_index=users_index - 1,
                 users=users,
+                carbonable_project_address=carbonable_project_address,
+                current_time=current_time,
             );
             return ();
         }
@@ -396,8 +416,13 @@ namespace CarbonableYielder {
         );
 
         // [Event] Emit addr vesting are created
-        let (current_time) = get_block_timestamp();
-        Vesting.emit(address=beneficiary, vesting_id=vesting_id, amount=amount, time=current_time);
+        UserVesting.emit(
+            address=beneficiary,
+            project=carbonable_project_address,
+            amount=amount,
+            time=current_time,
+            vesting_id=vesting_id,
+        );
 
         // [Check] if index is not null, then continue
         if (users_index != 0) {
@@ -412,6 +437,8 @@ namespace CarbonableYielder {
                 revocable=revocable,
                 users_index=users_index - 1,
                 users=users,
+                carbonable_project_address=carbonable_project_address,
+                current_time=current_time,
             );
             return ();
         }

@@ -49,22 +49,13 @@ namespace ICarbonableYielder {
     func getCarbonableVesterAddress() -> (carbonable_vester_address: felt) {
     }
 
-    func getCarbonableMinterAddress() -> (carbonable_minter_address: felt) {
-    }
-
     func getTotalDeposited() -> (balance: Uint256) {
     }
 
-    func getTotalClaimed() -> (total_claimed: felt) {
+    func getTotalAbsorption() -> (total_absorption: felt) {
     }
 
-    func getTotalClaimable() -> (total_claimable: felt) {
-    }
-
-    func getClaimableOf(address: felt) -> (claimable: felt) {
-    }
-
-    func getClaimedOf(address: felt) -> (claimed: felt) {
+    func getAbsorptionOf(address: felt) -> (absorption: felt) {
     }
 
     func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
@@ -80,9 +71,6 @@ namespace ICarbonableYielder {
     }
 
     func getSnapshotedOf(address: felt) -> (absorption: felt) {
-    }
-
-    func getSnapshotedOffseterOf(address: felt) -> (absorption: felt) {
     }
 
     //

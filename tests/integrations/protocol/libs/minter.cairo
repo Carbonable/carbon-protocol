@@ -43,7 +43,7 @@ namespace instance {
     func whitelisted_sale_open{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
     }() -> (whitelisted_sale_open: felt) {
-        let (whitelisted_sale_open) = ICarbonableMinter.isWhitelistedSaleOpen(carbonable_minter);
+        let (whitelisted_sale_open) = ICarbonableMinter.isPreSaleOpen(carbonable_minter);
         return (whitelisted_sale_open,);
     }
 
@@ -181,7 +181,7 @@ namespace instance {
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
     }(slots: felt, proof_len: felt, proof: felt*, quantity: felt, caller: felt) -> (success: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        let (success) = ICarbonableMinter.whitelistBuy(
+        let (success) = ICarbonableMinter.preBuy(
             carbonable_minter, slots, proof_len, proof, quantity
         );
         %{ stop_prank() %}

@@ -224,18 +224,18 @@ func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 }
 
 @view
-func isWhitelistedSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    whitelisted_sale_open: felt
+func isPreSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    pre_sale_open: felt
 ) {
     // Desc:
-    //   Return the whitelisted sale status
+    //   Return the pre sale status
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   whitelisted_sale_open(felt): 1 if presale is open, 0 otherwise
-    return CarbonableMinter.whitelisted_sale_open();
+    //   pre_sale_open(felt): 1 if presale is open, 0 otherwise
+    return CarbonableMinter.pre_sale_open();
 }
 
 @view
@@ -403,7 +403,7 @@ func setWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
     whitelist_merkle_root: felt
 ) {
     // Desc:
-    //   Set a new merkle root, providing a not null merkle root opens the whitelist sale
+    //   Set a new merkle root, providing a not null merkle root opens the pre sale
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -565,11 +565,11 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func whitelistBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     slots: felt, proof_len: felt, proof: felt*, quantity: felt
 ) -> (success: felt) {
     // Desc:
-    //   Purchase -quantity- tokens while proving the caller is part of the merkle tree while whitelist sale is open
+    //   Purchase -quantity- tokens while proving the caller is part of the merkle tree while pre sale is open
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -582,14 +582,14 @@ func whitelistBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // Returns:
     //   success(felt): 1 if it succeeded, 0 otherwise
     // Raises:
-    //   contract: whitelist sale is not open
+    //   contract: pre sale is not open
     //   caller: caller address is not whitelisted
     //   caller: caller is the zero address
     //   quantity: not enough whitelisted slots available
     //   quantity: quantity not allowed
     //   quantity: not enough available NFTs
     //   transfer: transfer failed
-    return CarbonableMinter.whitelist_buy(slots, proof_len, proof, quantity);
+    return CarbonableMinter.pre_buy(slots, proof_len, proof, quantity);
 }
 
 @external
