@@ -45,6 +45,10 @@ func test_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     let new_ton_equivalent = 1;
 
     // [Effect] Apply new configuration
+    %{
+        warp(blk_timestamp=200)
+        expect_events(dict(name="AbsorptionUpdate", data=dict(time=200)))
+    %}
     CarbonableProject.set_absorptions(
         times_len=new_times_len,
         times=new_times,
