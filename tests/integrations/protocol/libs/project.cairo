@@ -132,23 +132,21 @@ namespace instance {
         return ();
     }
 
-    func set_times{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }(times_len: felt, times: felt*, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
-        ICarbonableProject.setTimes(
-            contract_address=carbonable_project, times_len=times_len, times=times
-        );
-        %{ stop_prank() %}
-        return ();
-    }
-
     func set_absorptions{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
-    }(absorptions_len: felt, absorptions: felt*, ton_equivalent: felt, caller: felt) {
+    }(
+        times_len: felt,
+        times: felt*,
+        absorptions_len: felt,
+        absorptions: felt*,
+        ton_equivalent: felt,
+        caller: felt,
+    ) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
         ICarbonableProject.setAbsorptions(
             contract_address=carbonable_project,
+            times_len=times_len,
+            times=times,
             absorptions_len=absorptions_len,
             absorptions=absorptions,
             ton_equivalent=ton_equivalent,

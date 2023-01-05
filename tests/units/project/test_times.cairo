@@ -17,35 +17,6 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    alloc_locals;
-
-    // prepare instance
-    let (local context) = prepare();
-
-    let (times_len, times) = CarbonableProject.times();
-    assert times_len = context.absorption.times_len;
-    assert times[0] = context.absorption.times[0];
-    assert times[times_len - 1] = context.absorption.times[times_len - 1];
-
-    let (local new_times: felt*) = alloc();
-    assert [new_times + 0] = 1;
-    assert [new_times + 1] = 2;
-    assert [new_times + 2] = 3;
-    assert [new_times + 3] = 4;
-    assert [new_times + 4] = 5;
-    let new_times_len = 5;
-    CarbonableProject.set_times(times_len=new_times_len, times=new_times);
-
-    let (times_len, times) = CarbonableProject.times();
-    assert times_len = new_times_len;
-    assert times[0] = new_times[0];
-    assert times[times_len - 1] = new_times[new_times_len - 1];
-
-    return ();
-}
-
-@external
 func test_start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
@@ -88,20 +59,5 @@ func test_final_time_revert_not_defined{
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: times must be defined") %}
     let (time) = CarbonableProject.final_time();
-    return ();
-}
-
-@external
-func test_set_times_revert_not_defined{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    // prepare instance
-    let (local context) = prepare();
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: times must be defined") %}
-    let (local times: felt*) = alloc();
-    CarbonableProject.set_times(times_len=0, times=times);
     return ();
 }

@@ -178,9 +178,12 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             memory[ids.absorptions + idx] = value
     %}
     // Set absorptions
-    admin_instance.set_times(times_len=times_len, times=times);
     admin_instance.set_absorptions(
-        absorptions_len=absorptions_len, absorptions=absorptions, ton_equivalent=ton_equivalent
+        times_len=times_len,
+        times=times,
+        absorptions_len=absorptions_len,
+        absorptions=absorptions,
+        ton_equivalent=ton_equivalent,
     );
 
     // Set minter and merkle root

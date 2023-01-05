@@ -23,14 +23,16 @@ func test_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // prepare instance
     let (local context) = prepare();
 
-    let (ton_equivalent) = CarbonableProject.ton_equivalent();
-    assert ton_equivalent = context.absorption.ton_equivalent;
+    // [Effect] Define new times
+    let (local new_times: felt*) = alloc();
+    assert [new_times + 0] = 1;
+    assert [new_times + 1] = 2;
+    assert [new_times + 2] = 3;
+    assert [new_times + 3] = 4;
+    assert [new_times + 4] = 5;
+    let new_times_len = 5;
 
-    let (absorptions_len, absorptions) = CarbonableProject.absorptions();
-    assert absorptions_len = context.absorption.values_len;
-    assert absorptions[0] = context.absorption.values[0];
-    assert absorptions[absorptions_len - 1] = context.absorption.values[absorptions_len - 1];
-
+    // [Effect] Define new absorptions
     let (local new_absorptions: felt*) = alloc();
     assert [new_absorptions + 0] = 1;
     assert [new_absorptions + 1] = 2;
@@ -38,20 +40,32 @@ func test_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     assert [new_absorptions + 3] = 4;
     assert [new_absorptions + 4] = 5;
     let new_absorptions_len = 5;
+
+    // [Effect] Define new ton equivalent
     let new_ton_equivalent = 1;
+
+    // [Effect] Apply new configuration
     CarbonableProject.set_absorptions(
+        times_len=new_times_len,
+        times=new_times,
         absorptions_len=new_absorptions_len,
         absorptions=new_absorptions,
         ton_equivalent=new_ton_equivalent,
     );
 
-    let (ton_equivalent) = CarbonableProject.ton_equivalent();
-    assert ton_equivalent = new_ton_equivalent;
+    // [Check] New values applied
+    let (times_len, times) = CarbonableProject.times();
+    assert times_len = new_times_len;
+    assert times[0] = new_times[0];
+    assert times[times_len - 1] = new_times[new_times_len - 1];
 
     let (absorptions_len, absorptions) = CarbonableProject.absorptions();
     assert absorptions_len = new_absorptions_len;
     assert absorptions[0] = new_absorptions[0];
     assert absorptions[absorptions_len - 1] = new_absorptions[new_absorptions_len - 1];
+
+    let (ton_equivalent) = CarbonableProject.ton_equivalent();
+    assert ton_equivalent = new_ton_equivalent;
 
     return ();
 }
@@ -153,8 +167,11 @@ func test_set_absorptions_revert_not_defined{
     // prepare instance
     let (local context) = prepare();
 
+    let (local times: felt*) = alloc();
     let (local absorptions: felt*) = alloc();
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: absorptions must be defined") %}
-    CarbonableProject.set_absorptions(absorptions_len=0, absorptions=absorptions, ton_equivalent=1);
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: times and absorptions must be defined and equal") %}
+    CarbonableProject.set_absorptions(
+        times_len=0, times=times, absorptions_len=0, absorptions=absorptions, ton_equivalent=1
+    );
     return ();
 }

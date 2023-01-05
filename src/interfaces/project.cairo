@@ -77,9 +77,12 @@ namespace ICarbonableProject {
     // Externals
     //
 
-    func setTimes(times_len: felt, times: felt*) {
-    }
-
-    func setAbsorptions(absorptions_len: felt, absorptions: felt*, ton_equivalent: felt) {
+    func setAbsorptions(
+        times_len: felt,
+        times: felt*,
+        absorptions_len: felt,
+        absorptions: felt*,
+        ton_equivalent: felt,
+    ) {
     }
 }

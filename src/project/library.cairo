@@ -16,6 +16,14 @@ from starkware.starknet.common.syscalls import get_block_timestamp
 from src.utils.metadata.library import Metadata
 
 //
+// Events
+//
+
+@event
+func AbsorptionUpdate(time: felt) {
+}
+
+//
 // Storage
 //
 
@@ -173,42 +181,40 @@ namespace CarbonableProject {
         return ();
     }
 
-    func set_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        times_len: felt, times: felt*
-    ) {
-        alloc_locals;
-
-        // [Check] Consistency
-        let not_zero = is_not_zero(times_len);
-        with_attr error_message("CarbonableProject: times must be defined") {
-            not_zero = TRUE;
-        }
-
-        // [Effect] Update storage
-        _write_times(times_len=times_len, times=times);
-        return ();
-    }
-
     func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
+        times_len: felt,
+        times: felt*,
+        absorptions_len: felt,
+        absorptions: felt*,
+        ton_equivalent: felt,
     ) {
         alloc_locals;
 
         // [Check] Consistency
-        let not_zero = is_not_zero(absorptions_len);
-        with_attr error_message("CarbonableProject: absorptions must be defined") {
-            not_zero = TRUE;
+        let is_times_defined = is_not_zero(times_len);
+        let is_absorptions_defined = is_not_zero(absorptions_len);
+        with_attr error_message(
+                "CarbonableProject: times and absorptions must be defined and equal") {
+            assert is_times_defined = TRUE;
+            assert is_absorptions_defined = TRUE;
+            assert times_len = absorptions_len;
         }
 
         // [Check] Precision is not null
         let not_zero = is_not_zero(ton_equivalent);
         with_attr error_message("CarbonableProject: ton equivalent must be defined positive") {
-            not_zero = TRUE;
+            assert not_zero = TRUE;
         }
 
         // [Effect] Update storage
-        CarbonableProject_absorptions_ton_equivalent_.write(ton_equivalent);
+        _write_times(times_len=times_len, times=times);
         _write_absorptions(absorptions_len=absorptions_len, absorptions=absorptions);
+        CarbonableProject_absorptions_ton_equivalent_.write(ton_equivalent);
+
+        // [Effect] Emit event
+        let (current_time) = get_block_timestamp();
+        AbsorptionUpdate.emit(time=current_time);
+
         return ();
     }
 
@@ -326,7 +332,6 @@ namespace CarbonableProject {
         // Check absorptions are set
         let (absorptions_len, absorptions) = _read_absorptions();
         let (times_len, times) = _read_times();
-        CarbonableProject_assert.consistency(times_len=times_len, absorptions_len=absorptions_len);
 
         // Check if time is before the start_time, then absorption is 0
         let stored_start_time = times[0];
@@ -422,16 +427,6 @@ namespace CarbonableProject_assert {
         let (status) = CarbonableProject.is_absorptions_setup();
         with_attr error_message("CarbonableProject: absorptions must be defined") {
             assert status = TRUE;
-        }
-        return ();
-    }
-
-    func consistency{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        times_len: felt, absorptions_len: felt
-    ) {
-        with_attr error_message(
-                "CarbonableProject: times and absorptions must have the same length") {
-            assert times_len = absorptions_len;
         }
         return ();
     }

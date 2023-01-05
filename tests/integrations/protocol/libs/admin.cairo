@@ -99,24 +99,19 @@ namespace instance {
         return ();
     }
 
-    func set_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        times_len: felt, times: felt*
-    ) {
-        let (carbonable_project) = carbonable_project_instance.get_address();
-        let (caller) = get_address();
-        with carbonable_project {
-            carbonable_project_instance.set_times(times_len=times_len, times=times, caller=caller);
-        }
-        return ();
-    }
-
     func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
+        times_len: felt,
+        times: felt*,
+        absorptions_len: felt,
+        absorptions: felt*,
+        ton_equivalent: felt,
     ) {
         let (carbonable_project) = carbonable_project_instance.get_address();
         let (caller) = get_address();
         with carbonable_project {
             carbonable_project_instance.set_absorptions(
+                times_len=times_len,
+                times=times,
                 absorptions_len=absorptions_len,
                 absorptions=absorptions,
                 ton_equivalent=ton_equivalent,

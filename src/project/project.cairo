@@ -395,10 +395,6 @@ func contractURI{
     return (uri_len=uri_len, uri=uri);
 }
 
-//
-// Externals
-//
-
 @external
 func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     to: felt, tokenId: Uint256
@@ -706,28 +702,8 @@ func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func setTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    times_len: felt, times: felt*
-) {
-    // Desc:
-    //   Set new time values
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   times_len(felt): Array length
-    //   times(felt*): Time values
-    // Raises:
-    //   caller: caller is not the contract owner
-    //   times_len: times_len is null
-    Ownable.assert_only_owner();
-    return CarbonableProject.set_times(times_len=times_len, times=times);
-}
-
-@external
 func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
+    times_len: felt, times: felt*, absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
 ) {
     // Desc:
     //   Set new absorption values
@@ -736,15 +712,23 @@ func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
+    //   times_len(felt): Array length
+    //   times(felt*): Time values
     //   absorptions_len(felt): Array length
     //   absorptions(felt*): Absorption values
     //   ton_equivalent(felt): Absorption ton equivalent
     // Raises:
     //   caller: caller is not the contract owner
+    //   times_len: times_len is null
     //   absorptions_len: absorptions_len is null
     //   ton_equivalent: ton_equivalent is null
+    //   consistency: times_len and absorptions_len are not equal
     Ownable.assert_only_owner();
     return CarbonableProject.set_absorptions(
-        absorptions_len=absorptions_len, absorptions=absorptions, ton_equivalent=ton_equivalent
+        times_len=times_len,
+        times=times,
+        absorptions_len=absorptions_len,
+        absorptions=absorptions,
+        ton_equivalent=ton_equivalent,
     );
 }

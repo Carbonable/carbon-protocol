@@ -71,9 +71,12 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
             memory[ids.times + idx] = time
         ids.ton_equivalent = context.absorption.ton_equivalent
     %}
-    CarbonableProject.set_times(times_len=times_len, times=times);
     CarbonableProject.set_absorptions(
-        absorptions_len=absorptions_len, absorptions=absorptions, ton_equivalent=ton_equivalent
+        times_len=times_len,
+        times=times,
+        absorptions_len=absorptions_len,
+        absorptions=absorptions,
+        ton_equivalent=ton_equivalent,
     );
 
     // Instantiate context, useful to avoid many hints in tests
