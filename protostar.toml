@@ -11,6 +11,7 @@ cairo-path = [
 
 [contracts]
 CarbonableBadge = ["src/badge/badge.cairo"]
+CarbonableBadgeMinter = ["src/badge/minter.cairo"]
 CarbonableProxy = ["src/proxy/proxy.cairo"]
 CarbonableProject = ["src/project/project.cairo"]
 CarbonableMinter = ["src/mint/minter.cairo"]
