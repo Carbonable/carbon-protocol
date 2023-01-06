@@ -53,12 +53,20 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ).contract_address
 
         # Deploy the badge contract
+        context.badge.class_hash = declare(
+            contract=context.sources.badge
+        ).class_hash
         context.badge.contract_address = deploy_contract(
-            contract=context.sources.badge,
+            contract=context.sources.proxy,
             constructor_args={
-                "uri": [1],
-                "name": 1,
-                "owner": context.admin_account_contract
+                "implementation_hash": context.badge.class_hash,
+                "selector": context.selector.initializer,
+                "calldata": {
+                    "uri_len": 1,
+                    "uri": 1,
+                    "name": 1,
+                    "owner": context.admin_account_contract
+                }.values()
             },
         ).contract_address
 
@@ -72,17 +80,16 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
                 "implementation_hash": context.badge_minter.class_hash,
                 "selector": context.selector.initializer,
                 "calldata": {
-                    "owner": context.admin_account_contract,
                     "signer_key": context.badge_minter.public_key,
                     "carbonable_badge_contract_address": context.badge.contract_address,
-                    "proxy_admin": 0
+                    "owner": context.admin_account_contract,
                 }.values()
             },
         ).contract_address
     %}
 
     // Transfer ownership of the badge contract to the minter contract
-    %{ 
+    %{
         stop_prank_callable = start_prank(context.admin_account_contract, target_contract_address=context.badge.contract_address)
         ids.badge_contract_address = context.badge.contract_address
         ids.badge_minter_contract_address = context.badge_minter.contract_address

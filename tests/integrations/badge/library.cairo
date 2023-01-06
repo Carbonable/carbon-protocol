@@ -48,13 +48,20 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ).contract_address
 
         # Carbonable badge deployment
-
+        context.carbonable_badge_class_hash = declare(
+            contract=context.sources.badge
+        ).class_hash
         context.carbonable_badge_contract = deploy_contract(
-            contract=context.sources.badge,
+            contract=context.sources.proxy,
             constructor_args={
-                "uri": [char for char in context.badge.uri],
-                "name": context.badge.name,
-                "owner": context.admin_account_contract,
+                "implementation_hash": context.carbonable_badge_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": {
+                    "uri_len": 1,
+                    "uri": 1,
+                    "name": 1,
+                    "owner": context.admin_account_contract
+                }.values()
             },
         ).contract_address
     %}
