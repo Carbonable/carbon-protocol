@@ -11,18 +11,19 @@ from starkware.cairo.common.math import assert_not_zero
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
-from bal7hazar.token.erc1155.library import ERC1155
 from openzeppelin.introspection.erc165.library import ERC165
+from bal7hazar.token.erc1155.library import ERC1155
+from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.badge.library import CarbonableBadge
 
 //
-// Constructor
+// Initializer
 //
 
-@constructor
-func constructor{
+@external
+func initializer{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(uri_len: felt, uri: felt*, name: felt, owner: felt) {
     // Desc:
@@ -39,19 +40,145 @@ func constructor{
     //   uri_len(felt): URI array length
     //   uri(felt*): URI characters
     //   name(felt): Name of the badge collection
-    //   owner(felt): Owner address
+    //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     alloc_locals;
-
     ERC1155.initializer(0);
     CarbonableBadge.initializer(uri_len, uri, name);
     Ownable.initializer(owner);
+    Proxy.initializer(owner);
     return ();
 }
 
 //
-// Getters
+// Proxy administration
+//
+
+@view
+func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    implementation: felt
+) {
+    // Desc:
+    //   Return the current implementation hash
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   implementation(felt): Implementation class hash
+    return Proxy.get_implementation_hash();
+}
+
+@view
+func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
+    // Desc:
+    //   Return the admin address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   admin(felt): The admin address
+    return Proxy.get_admin();
+}
+
+@external
+func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    new_implementation: felt
+) {
+    // Desc:
+    //   Upgrade the contract to the new implementation
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   new_implementation(felt): New implementation class hash
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the admin
+    Proxy.assert_only_admin();
+    Proxy._set_implementation_hash(new_implementation);
+    return ();
+}
+
+@external
+func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
+    // Desc:
+    //   Transfer admin rights to a new admin
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   new_admin(felt): Address of the new admin
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the admin
+    Proxy.assert_only_admin();
+    Proxy._set_admin(new_admin);
+    return ();
+}
+
+//
+// Ownership administration
+//
+
+@view
+func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+    // Desc:
+    //   Return the contract owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   owner(felt): The owner address
+    return Ownable.owner();
+}
+
+@external
+func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    newOwner: felt
+) {
+    // Desc:
+    //   Transfer ownership to a new owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   newOwner(felt): Address of the new owner
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   newOwner: new owner is the zero address
+    Ownable.transfer_ownership(newOwner);
+    return ();
+}
+
+@external
+func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.renounce_ownership();
+    return ();
+}
+
+//
+// ERC-1155
 //
 
 @view
@@ -168,54 +295,6 @@ func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return (is_approved,);
 }
 
-@view
-func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
-    // Desc:
-    //   Return the contract owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   owner(felt): The owner address
-    let (owner: felt) = Ownable.owner();
-    return (owner,);
-}
-
-@view
-func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (name: felt) {
-    // Desc:
-    //   A descriptive name for a collection of NFTs in this contract (OpenSea)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   name(felt): The contract name
-    return CarbonableBadge.name();
-}
-
-@view
-func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) -> (
-    is_locked: felt
-) {
-    // Desc:
-    //   Return the locked status of a token id
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   id(Uint256): Token id
-    // Returns:
-    //   is_locked(felt): 1 if locked else 0
-    return CarbonableBadge.locked(id);
-}
-
-//
-// Externals
-//
-
 @external
 func setURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
@@ -232,40 +311,6 @@ func setURI{
     //   uri(felt*): URI characters
     Ownable.assert_only_owner();
     CarbonableBadge.set_uri(uri_len, uri);
-    return ();
-}
-
-@external
-func setLocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
-    // Desc:
-    //   Lock the corresponding token id
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   id(Uint256): Token id to lock
-    // Returns:
-    //   None
-    Ownable.assert_only_owner();
-    CarbonableBadge.set_locked(id);
-    return ();
-}
-
-@external
-func setUnlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
-    // Desc:
-    //   Unock the corresponding token id
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   id(Uint256): Token id to unlock
-    // Returns:
-    //   None
-    Ownable.assert_only_owner();
-    CarbonableBadge.set_unlocked(id);
     return ();
 }
 
@@ -455,34 +500,70 @@ func burnBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
-@external
-func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    newOwner: felt
+//
+// Carbonable Badge
+//
+
+@view
+func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (name: felt) {
+    // Desc:
+    //   A descriptive name for a collection of NFTs in this contract (OpenSea)
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   name(felt): The contract name
+    return CarbonableBadge.name();
+}
+
+@view
+func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) -> (
+    is_locked: felt
 ) {
     // Desc:
-    //   Transfer ownership to a new owner
+    //   Return the locked status of a token id
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   newOwner(felt): Address of the new owner
+    //   id(Uint256): Token id
     // Returns:
-    //   None
-    Ownable.transfer_ownership(newOwner);
-    return ();
+    //   is_locked(felt): 1 if locked else 0
+    return CarbonableBadge.locked(id);
 }
 
 @external
-func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func setLocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
     // Desc:
-    //   Renounce ownership
+    //   Lock the corresponding token id
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   id(Uint256): Token id to lock
     // Returns:
     //   None
-    Ownable.renounce_ownership();
+    Ownable.assert_only_owner();
+    CarbonableBadge.set_locked(id);
+    return ();
+}
+
+@external
+func setUnlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
+    // Desc:
+    //   Unock the corresponding token id
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   id(Uint256): Token id to unlock
+    // Returns:
+    //   None
+    Ownable.assert_only_owner();
+    CarbonableBadge.set_unlocked(id);
     return ();
 }
