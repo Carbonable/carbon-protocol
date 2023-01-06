@@ -7,64 +7,65 @@ External
 Initialize the contract with the given parameters - This constructor uses a dedicated initializer that mainly stores the inputs  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="carbonable_project_address" %}  
-Address of the corresponding Carbonable project  
+Address of the Carbonable project  
+{% endswagger-parameter %}  
+{% swagger-parameter in="path" type="felt" name="min_claimable" %}  
+Minimum threshold of claimable to allow a claim  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="owner" %}  
-Owner address  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="proxy_admin" %}  
-Admin address  
+Owner and Admin address  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  
 {% swagger-description %}  
-Renounce ownership  
+Upgrade the contract to the new implementation  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_implementation" %}  
-new contract implementation  
+New implementation class hash  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setAdmin" %}  
 {% swagger-description %}  
-  
+Transfer admin rights to a new admin  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_admin" %}  
-  
+Address of the new admin  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "offset" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  
 {% swagger-description %}  
-Offset the current total offsetable of the caller address  
+Transfer ownership to a new owner  
 {% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="newOwner" %}  
+Address of the new owner  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "renounceOwnership" %}  
+{% swagger-description %}  
+Renounce ownership  
+{% endswagger-description %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setMinClaimable" %}  
+{% swagger-description %}  
+Set the minimum claimable quantity (must be consistent with project absorption unit)  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="min_claimable" %}  
+New minimum claimable  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "claim" %}  
+{% swagger-description %}  
+Claim all the claimable balance of the caller address  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="quantity" %}  
+Quantity to claim  
+{% endswagger-parameter %}  
 {% swagger-response status="success ( felt )" description="Success status" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "snapshot" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "claimAll" %}  
 {% swagger-description %}  
-Snapshot deposits  
-{% endswagger-description %}  
-{% swagger-response status="success ( felt )" description="Success status" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "start_period" %}  
-{% swagger-description %}  
-Start a new period (erase the current one)  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="felt" name="unlocked_duration" %}  
-Unlocked duration in seconds  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="period_duration" %}  
-Period duration in seconds  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="absorption" %}  
-Carbon absorption in ng of CO2  
-{% endswagger-parameter %}  
-{% swagger-response status="success ( felt )" description="Success status" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "stop_period" %}  
-{% swagger-description %}  
-Stop the current period  
+Claim all the total claimable of the caller address  
 {% endswagger-description %}  
 {% swagger-response status="success ( felt )" description="Success status" %}  
 {% endswagger-response %}  

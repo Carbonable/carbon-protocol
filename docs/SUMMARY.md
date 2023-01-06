@@ -36,3 +36,9 @@
   - [Views](offset/view.md)
   - [Externals](offset/external.md)
   - [Events](offset/event.md)
+
+- [Carbonable Vester](vesting/index.md)
+  - [Constructor](vesting/constructor.md)
+  - [Views](vesting/view.md)
+  - [Externals](vesting/external.md)
+  - [Events](vesting/event.md)

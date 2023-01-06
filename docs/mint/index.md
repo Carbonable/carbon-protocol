@@ -31,9 +31,3 @@ The presale starts when the the merkle root is set to a not null value and conti
 The public sale starts when the corresponding storage boolean becomes true.
 
 The total amount of token that can be purchased during this step is the max supply minus the reserved supply minus the supply already minted.
-
-## 📈 Callgraph
-
-See also the detailed [callgraph](../callgraphs/CarbonableMinter.gv) of the smart-contract.
-
-![Figure - Carbonable Minter Callgraph](../callgraphs/CarbonableMinter.gv.svg)

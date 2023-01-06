@@ -25,9 +25,14 @@ func test_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     let one = Uint256(low=1, high=0);
     let two = Uint256(low=2, high=0);
     let (contract_address) = get_contract_address();
+    let anyone_address = context.signers.anyone;
+    let admin_address = context.signers.admin;
 
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
 
     %{ stop=start_prank(context.signers.anyone) %}
     let (success) = CarbonableOffseter.deposit(token_id=one);
@@ -38,6 +43,19 @@ func test_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     let (success) = CarbonableOffseter.deposit(token_id=two);
     assert success = 1;
     %{ stop() %}
+
+    let (tokens_len, tokens) = CarbonableOffseter.registered_tokens_of(address=anyone_address);
+    assert tokens_len = 1;
+    let token_id = tokens[tokens_len - 1];
+    assert token_id = one;
+    %{ stop_mock() %}
+
+    %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [2, 0]) %}
+    let (tokens_len, tokens) = CarbonableOffseter.registered_tokens_of(address=admin_address);
+    assert tokens_len = 1;
+    let token_id = tokens[tokens_len - 1];
+    assert token_id = two;
+    %{ stop_mock() %}
 
     return ();
 }

@@ -27,7 +27,6 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     max_supply_for_mint: Uint256,
     reserved_supply_for_mint: Uint256,
     owner: felt,
-    proxy_admin: felt,
 ) {
     // Desc:
     //   Initialize the contract with the given parameters -
@@ -44,8 +43,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     //   unit_price(Uint256): Price per token (based on ERC20 token defined as -payment_token_address-)
     //   max_supply_for_mint(Uint256): Max supply available whatever the way to mint
     //   reserved_supply_for_mint(Uint256): Supply reserved to be airdropped
-    //   owner(felt): Owner address
-    //   proxy_admin(felt): Admin address
+    //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     // Raises:
@@ -62,19 +60,39 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         reserved_supply_for_mint,
     );
     Ownable.initializer(owner);
-    Proxy.initializer(proxy_admin);
+    Proxy.initializer(owner);
     return ();
 }
+
+//
+// Proxy administration
+//
 
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
 ) {
+    // Desc:
+    //   Return the current implementation hash
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   implementation(felt): Implementation class hash
     return Proxy.get_implementation_hash();
 }
 
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
+    // Desc:
+    //   Return the admin address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   admin(felt): The admin address
     return Proxy.get_admin();
 }
 
@@ -83,17 +101,17 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
 ) {
     // Desc:
-    //   Renounce ownership
+    //   Upgrade the contract to the new implementation
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   new_implementation(felt): New implementation class hash
     // Returns:
     //   None
-    // Explicit args:
-    //   new_implementation(felt): new contract implementation
     // Raises:
-    //   caller: caller is not a contract admin
+    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_implementation_hash(new_implementation);
     return ();
@@ -101,8 +119,74 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
+    // Desc:
+    //   Transfer admin rights to a new admin
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   new_admin(felt): Address of the new admin
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_admin(new_admin);
+    return ();
+}
+
+//
+// Ownership administration
+//
+
+@view
+func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+    // Desc:
+    //   Return the contract owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   owner(felt): The owner address
+    return Ownable.owner();
+}
+
+@external
+func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    newOwner: felt
+) {
+    // Desc:
+    //   Transfer ownership to a new owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   newOwner(felt): Address of the new owner
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   newOwner: new owner is the zero address
+    Ownable.transfer_ownership(newOwner);
+    return ();
+}
+
+@external
+func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.renounce_ownership();
     return ();
 }
 
@@ -111,7 +195,7 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 //
 
 @view
-func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
     // Desc:
     //   Return the associated carbonable project
@@ -125,7 +209,7 @@ func carbonable_project_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 @view
-func payment_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     payment_token_address: felt
 ) {
     // Desc:
@@ -140,22 +224,22 @@ func payment_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @view
-func whitelisted_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    whitelisted_sale_open: felt
+func isPreSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    pre_sale_open: felt
 ) {
     // Desc:
-    //   Return the whitelisted sale status
+    //   Return the pre sale status
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   whitelisted_sale_open(felt): 1 if presale is open, 0 otherwise
-    return CarbonableMinter.whitelisted_sale_open();
+    //   pre_sale_open(felt): 1 if presale is open, 0 otherwise
+    return CarbonableMinter.pre_sale_open();
 }
 
 @view
-func public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     public_sale_open: felt
 ) {
     // Desc:
@@ -170,7 +254,7 @@ func public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 @view
-func max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_buy_per_tx: felt
 ) {
     // Desc:
@@ -185,7 +269,7 @@ func max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 @view
-func unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     unit_price: Uint256
 ) {
     // Desc:
@@ -200,7 +284,7 @@ func unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 }
 
 @view
-func reserved_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (reserved_supply_for_mint: Uint256) {
     // Desc:
     //   Return the reserved supply available for airdrops
@@ -214,7 +298,7 @@ func reserved_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 }
 
 @view
-func max_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_supply_for_mint: Uint256
 ) {
     // Desc:
@@ -229,7 +313,7 @@ func max_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 }
 
 @view
-func whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     whitelist_merkle_root: felt
 ) {
     // Desc:
@@ -244,7 +328,7 @@ func whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @view
-func whitelisted_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getWhitelistedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt, slots: felt, proof_len: felt, proof: felt*
 ) -> (slots: felt) {
     // Desc:
@@ -264,7 +348,7 @@ func whitelisted_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 @view
-func claimed_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getClaimedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt
 ) -> (slots: felt) {
     // Desc:
@@ -281,7 +365,9 @@ func claimed_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 @view
-func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
+func isSoldOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    status: felt
+) {
     // Desc:
     //   Return the sold out status
     // Implicit args:
@@ -293,16 +379,31 @@ func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return CarbonableMinter.sold_out();
 }
 
+@view
+func getTotalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_value: Uint256
+) {
+    // Desc:
+    //   Return the total project value
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   total_value(Uint256): Total value expressed in payment token units
+    return CarbonableMinter.total_value();
+}
+
 //
 // Externals
 //
 
 @external
-func set_whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     whitelist_merkle_root: felt
 ) {
     // Desc:
-    //   Set a new merkle root, providing a not null merkle root opens the whitelist sale
+    //   Set a new merkle root, providing a not null merkle root opens the pre sale
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -318,7 +419,7 @@ func set_whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
 }
 
 @external
-func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     public_sale_open: felt
 ) {
     // Desc:
@@ -338,7 +439,7 @@ func set_public_sale_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 }
 
 @external
-func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     max_buy_per_tx: felt
 ) {
     // Desc:
@@ -358,7 +459,7 @@ func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 }
 
 @external
-func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     unit_price: Uint256
 ) {
     // Desc:
@@ -378,9 +479,9 @@ func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 @external
-func decrease_reserved_supply_for_mint{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}(slots: Uint256) {
+func decreaseReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slots: Uint256
+) {
     // Desc:
     //   Decrease the reserved supply for airdrops by the providing amount of slots
     // Implicit args:
@@ -464,11 +565,11 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func whitelist_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     slots: felt, proof_len: felt, proof: felt*, quantity: felt
 ) -> (success: felt) {
     // Desc:
-    //   Purchase -quantity- tokens while proving the caller is part of the merkle tree while whitelist sale is open
+    //   Purchase -quantity- tokens while proving the caller is part of the merkle tree while pre sale is open
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
@@ -481,20 +582,20 @@ func whitelist_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     // Returns:
     //   success(felt): 1 if it succeeded, 0 otherwise
     // Raises:
-    //   contract: whitelist sale is not open
+    //   contract: pre sale is not open
     //   caller: caller address is not whitelisted
     //   caller: caller is the zero address
     //   quantity: not enough whitelisted slots available
     //   quantity: quantity not allowed
     //   quantity: not enough available NFTs
     //   transfer: transfer failed
-    return CarbonableMinter.whitelist_buy(slots, proof_len, proof, quantity);
+    return CarbonableMinter.pre_buy(slots, proof_len, proof, quantity);
 }
 
 @external
-func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    quantity: felt
-) -> (success: felt) {
+func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
+    success: felt
+) {
     // Desc:
     //   Purchase -quantity- tokens while public sale is open
     // Implicit args:

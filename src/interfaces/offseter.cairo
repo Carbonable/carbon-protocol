@@ -7,39 +7,80 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableOffseter {
-    func carbonable_project_address() -> (carbonable_project_address: felt) {
+    //
+    // Proxy administration
+    //
+
+    func getImplementationHash() -> (implementation: felt) {
     }
 
-    func is_locked() -> (status: felt) {
+    func getAdmin() -> (admin: felt) {
     }
 
-    func total_offsetable(address: felt) -> (total_offsetable: Uint256) {
+    func upgrade(new_implementation: felt) {
     }
 
-    func total_offseted(address: felt) -> (total_offseted: Uint256) {
+    func setAdmin(new_admin: felt) {
     }
 
-    func total_locked() -> (balance: Uint256) {
+    //
+    // Ownership administration
+    //
+
+    func owner() -> (owner: felt) {
     }
 
-    func balance_of(address: felt) -> (balance: felt) {
+    func transferOwnership(newOwner: felt) {
     }
 
-    func registred_owner_of(token_id: Uint256) -> (address: felt) {
+    func renounceOwnership() {
     }
 
-    func offset() -> (success: felt) {
+    //
+    // Views
+    //
+
+    func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
-    func snapshot() -> (success: felt) {
+    func getMinClaimable() -> (min_claimable: felt) {
     }
 
-    func start_period(unlocked_duration: felt, period_duration: felt, absorption: felt) -> (
-        success: felt
-    ) {
+    func getTotalDeposited() -> (balance: Uint256) {
     }
 
-    func stop_period() -> (success: felt) {
+    func getTotalClaimed() -> (total_claimed: felt) {
+    }
+
+    func getTotalClaimable() -> (total_claimable: felt) {
+    }
+
+    func getClaimableOf(address: felt) -> (claimable: felt) {
+    }
+
+    func getClaimedOf(address: felt) -> (claimed: felt) {
+    }
+
+    func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
+    }
+
+    func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
+    }
+
+    func getRegisteredTokensOf(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
+    }
+
+    func setMinClaimable(min_claimable: felt) -> () {
+    }
+
+    //
+    // Externals
+    //
+
+    func claim(quantity: felt) -> (success: felt) {
+    }
+
+    func claimAll() -> (success: felt) {
     }
 
     func deposit(token_id: Uint256) -> (success: felt) {

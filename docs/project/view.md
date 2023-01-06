@@ -4,16 +4,23 @@ View
   
 {% swagger method = "view" path = " " baseUrl = " " summary = "getImplementationHash" %}  
 {% swagger-description %}  
-  
+Return the current implementation hash  
 {% endswagger-description %}  
-{% swagger-response status="implementation ( felt )" description="" %}  
+{% swagger-response status="implementation ( felt )" description="Implementation class hash" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getAdmin" %}  
 {% swagger-description %}  
-  
+Return the admin address  
 {% endswagger-description %}  
-{% swagger-response status="admin ( felt )" description="" %}  
+{% swagger-response status="admin ( felt )" description="The admin address" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
+{% swagger-description %}  
+Return the contract owner  
+{% endswagger-description %}  
+{% swagger-response status="owner ( felt )" description="The owner address" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "totalSupply" %}  
@@ -134,10 +141,73 @@ Return the contract uri (OpenSea)
 {% swagger-response status="uri ( felt* )" description="URI characters" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getStartTime" %}  
 {% swagger-description %}  
-Return the contract owner  
+Return the stored start time  
 {% endswagger-description %}  
-{% swagger-response status="owner ( felt )" description="The owner address" %}  
+{% swagger-response status="time ( felt )" description="Start time" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getFinalTime" %}  
+{% swagger-description %}  
+Return the computed final time  
+{% endswagger-description %}  
+{% swagger-response status="time ( felt )" description="Final time" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getTimes" %}  
+{% swagger-description %}  
+Return the stored times  
+{% endswagger-description %}  
+{% swagger-response status="times_len ( felt )" description="Array length" %}  
+{% endswagger-response %}  
+{% swagger-response status="times ( felt* )" description="timestamps" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getAbsorptions" %}  
+{% swagger-description %}  
+Return the stored absorptions  
+{% endswagger-description %}  
+{% swagger-response status="absorptions_len ( felt )" description="Array length" %}  
+{% endswagger-response %}  
+{% swagger-response status="absorptions ( felt* )" description="absorption values" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getAbsorption" %}  
+{% swagger-description %}  
+Return the computed absorption based on the current timestamp  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="time" %}  
+Time to compute the absorption  
+{% endswagger-parameter %}  
+{% swagger-response status="absorption ( felt )" description="absorption" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getCurrentAbsorption" %}  
+{% swagger-description %}  
+Return the computed absorption based on the current timestamp  
+{% endswagger-description %}  
+{% swagger-response status="absorption ( felt )" description="current absorption" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getFinalAbsorption" %}  
+{% swagger-description %}  
+Return the expected total absorption based on the final timestamp  
+{% endswagger-description %}  
+{% swagger-response status="absorption ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getTonEquivalent" %}  
+{% swagger-description %}  
+Return the ton equivalent in absorption unit  
+{% endswagger-description %}  
+{% swagger-response status="ton_equivalent ( felt )" description="Ton equivalent" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "isSetup" %}  
+{% swagger-description %}  
+Return the setup status of the contract  
+{% endswagger-description %}  
+{% swagger-response status="status ( felt )" description="1 if setup else 0" %}  
 {% endswagger-response %}  
 {% endswagger %}

@@ -11,7 +11,7 @@ sources:
   minter: ./src/mint/minter.cairo
   yielder: ./src/yield/yielder.cairo
   offseter: ./src/offset/offseter.cairo
-  starkvest: ./src/vesting/starkvest.cairo
+  vester: ./src/vesting/vester.cairo
   badge_minter: ./src/badge/minter.cairo
 
 selector:

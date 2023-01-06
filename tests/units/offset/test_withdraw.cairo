@@ -25,7 +25,12 @@ func test_withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     let one = Uint256(low=1, high=0);
     let (contract_address) = get_contract_address();
 
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [1]) %}
 
     %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
     %{ stop=start_prank(context.signers.anyone) %}

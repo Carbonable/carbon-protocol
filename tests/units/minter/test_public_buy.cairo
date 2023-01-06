@@ -44,6 +44,8 @@ func test_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{ warp(blk_timestamp=200) %}
+    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, amount=dict(low=20, high=0), quantity=2, time=200))) %}
     let (success) = CarbonableMinter.public_buy(2);
     assert success = TRUE;
     %{ stop() %}

@@ -7,70 +7,97 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableMinter {
-    //##
-    // Compute and return releasable amount of tokens for a vesting.
-    // @param vesting_id the vesting identifier
-    // @return the amount of releasable tokens
-    //##
-    func carbonable_project_address() -> (carbonable_project_address: felt) {
+    //
+    // Proxy administration
+    //
+
+    func getImplementationHash() -> (implementation: felt) {
     }
 
-    func payment_token_address() -> (payment_token_address: felt) {
+    func getAdmin() -> (admin: felt) {
     }
 
-    func whitelisted_sale_open() -> (whitelisted_sale_open: felt) {
+    func upgrade(new_implementation: felt) {
     }
 
-    func public_sale_open() -> (public_sale_open: felt) {
+    func setAdmin(new_admin: felt) {
     }
 
-    func max_buy_per_tx() -> (max_buy_per_tx: felt) {
+    //
+    // Ownership administration
+    //
+
+    func owner() -> (owner: felt) {
     }
 
-    func unit_price() -> (unit_price: Uint256) {
+    func transferOwnership(newOwner: felt) {
     }
 
-    func max_supply_for_mint() -> (max_supply_for_mint: Uint256) {
+    func renounceOwnership() {
     }
 
-    func reserved_supply_for_mint() -> (reserved_supply_for_mint: Uint256) {
+    //
+    // Views
+    //
+
+    func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
-    func whitelist_merkle_root() -> (whitelist_merkle_root: felt) {
+    func getPaymentTokenAddress() -> (payment_token_address: felt) {
     }
 
-    //##
-    // Get the reserved slots number of the specified address.
-    // @param account the specified account
-    // @param slots the expected slots
-    // @param proof_len the len of proof array
-    // @param proof the proof array
-    // @return the number of reserved slots
-    //##
-    func whitelisted_slots(account: felt, slots: felt, proof_len: felt, proof: felt*) -> (
+    func isPreSaleOpen() -> (pre_sale_open: felt) {
+    }
+
+    func isPublicSaleOpen() -> (public_sale_open: felt) {
+    }
+
+    func getMaxBuyPerTx() -> (max_buy_per_tx: felt) {
+    }
+
+    func getUnitPrice() -> (unit_price: Uint256) {
+    }
+
+    func getReservedSupplyForMint() -> (reserved_supply_for_mint: Uint256) {
+    }
+
+    func getMaxSupplyForMint() -> (max_supply_for_mint: Uint256) {
+    }
+
+    func getWhitelistMerkleRoot() -> (whitelist_merkle_root: felt) {
+    }
+
+    func getWhitelistedSlots(account: felt, slots: felt, proof_len: felt, proof: felt*) -> (
         slots: felt
     ) {
     }
 
-    func claimed_slots(account: felt) -> (slots: felt) {
+    func getClaimedSlots(account: felt) -> (slots: felt) {
     }
 
-    func sold_out() -> (status: felt) {
+    func isSoldOut() -> (status: felt) {
     }
 
-    func set_whitelist_merkle_root(whitelist_merkle_root: felt) {
+    func getTotalValue() -> (total_value: Uint256) {
     }
 
-    func set_public_sale_open(public_sale_open: felt) {
+    //
+    // Externals
+    //
+
+    func setWhitelistMerkleRoot(whitelist_merkle_root: felt) {
     }
 
-    func set_max_buy_per_tx(max_buy_per_tx: felt) {
+    func setPublicSaleOpen(public_sale_open: felt) {
     }
 
-    func set_unit_price(unit_price: Uint256) {
+    func setMaxBuyPerTx(max_buy_per_tx: felt) {
     }
 
-    func decrease_reserved_supply_for_mint(slots: Uint256) {
+    func setUnitPrice(unit_price: Uint256) {
+    }
+
+    func decreaseReservedSupplyForMint(slots: Uint256) {
     }
 
     func airdrop(to: felt, quantity: felt) -> (success: felt) {
@@ -82,11 +109,11 @@ namespace ICarbonableMinter {
     func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
     }
 
-    func whitelist_buy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (
+    func preBuy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (
         success: felt
     ) {
     }
 
-    func public_buy(quantity: felt) -> (success: felt) {
+    func publicBuy(quantity: felt) -> (success: felt) {
     }
 }

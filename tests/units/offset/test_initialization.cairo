@@ -24,10 +24,27 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
     assert carbonable_project_address = context.mocks.carbonable_project_address;
 
-    %{ stop_warp = warp(1) %}
-    let (is_locked) = CarbonableOffseter.is_locked();
-    assert is_locked = FALSE;
-    %{ stop_warp() %}
+    let (min_claimable) = CarbonableOffseter.min_claimable();
+    assert min_claimable = context.claim.minimum;
+
+    return ();
+}
+
+@external
+func test_set_min_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+
+    let (min_claimable) = CarbonableOffseter.min_claimable();
+    assert min_claimable = context.claim.minimum;
+
+    let new_minimum = 2000000;
+    CarbonableOffseter.set_min_claimable(min_claimable=new_minimum);
+
+    let (min_claimable) = CarbonableOffseter.min_claimable();
+    assert min_claimable = new_minimum;
 
     return ();
 }

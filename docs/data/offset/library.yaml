@@ -1,9 +1,9 @@
 - attributeName: event
   functionName:
-    name: Offset
+    name: Claim
     charIndex:
-      start: 1136
-      end: 1142
+      start: 1032
+      end: 1037
   functionSignature:
     implicitArgs:
       - name: ''
@@ -11,11 +11,57 @@
     explicitArgs:
       - name: address
         type: felt
+      - name: absorption
+        type: felt
+      - name: time
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableOffseter_carbonable_project_address_
+    charIndex:
+      start: 1125
+      end: 1171
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: address
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableOffseter_min_claimable_
+    charIndex:
+      start: 1216
+      end: 1249
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
       - name: quantity
-        type: Uint256
-      - name: time
         type: felt
-    returns: null
   functionComment:
     desc: null
     implicitArgs: null
@@ -25,133 +71,18 @@
     charIndex:
       start: 0
       end: 0
-- attributeName: event
+- attributeName: storage_var
   functionName:
-    name: Snapshot
+    name: CarbonableOffseter_registered_owner_
     charIndex:
-      start: 1206
-      end: 1214
+      start: 1295
+      end: 1331
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
     explicitArgs:
-      - name: time
-        type: felt
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: storage_var
-  functionName:
-    name: carbonable_project_address_
-    charIndex:
-      start: 1287
-      end: 1314
-  functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: address
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: storage_var
-  functionName:
-    name: start_
-    charIndex:
-      start: 1359
-      end: 1365
-  functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: time
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: storage_var
-  functionName:
-    name: unlocked_duration_
-    charIndex:
-      start: 1407
-      end: 1425
-  functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: duration
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: storage_var
-  functionName:
-    name: period_duration_
-    charIndex:
-      start: 1471
-      end: 1487
-  functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: duration
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: storage_var
-  functionName:
-    name: registration_
-    charIndex:
-      start: 1533
-      end: 1546
-  functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
-    explicitArgs:
-      - name: token_id
+      - name: tokenId
         type: Uint256
     returns:
       - name: address
@@ -167,18 +98,45 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: absorption_
+    name: CarbonableOffseter_registered_time_
     charIndex:
-      start: 1645
-      end: 1656
+      start: 1392
+      end: 1427
   functionSignature:
     implicitArgs:
       - name: ''
         type: ''
+    explicitArgs:
+      - name: tokenId
+        type: Uint256
+    returns:
+      - name: time
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
     explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableOffseter_claimable_
+    charIndex:
+      start: 1485
+      end: 1514
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
     returns:
       - name: absorption
-        type: Uint256
+        type: felt
   functionComment:
     desc: null
     implicitArgs: null
@@ -190,10 +148,10 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: total_offsetable_
+    name: CarbonableOffseter_claimed_
     charIndex:
-      start: 1707
-      end: 1724
+      start: 1575
+      end: 1602
   functionSignature:
     implicitArgs:
       - name: ''
@@ -202,8 +160,8 @@
       - name: address
         type: felt
     returns:
-      - name: balance
-        type: Uint256
+      - name: absorption
+        type: felt
   functionComment:
     desc: null
     implicitArgs: null
@@ -215,10 +173,58 @@
       end: 0
 - attributeName: storage_var
   functionName:
-    name: total_offseted_
+    name: CarbonableOffseter_users_len_
     charIndex:
-      start: 1785
-      end: 1800
+      start: 1663
+      end: 1692
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: length
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableOffseter_users_
+    charIndex:
+      start: 1736
+      end: 1761
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+    returns:
+      - name: address
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableOffseter_known_user_
+    charIndex:
+      start: 1817
+      end: 1847
   functionSignature:
     implicitArgs:
       - name: ''
@@ -227,30 +233,7 @@
       - name: address
         type: felt
     returns:
-      - name: balance
-        type: Uint256
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: storage_var
-  functionName:
-    name: snapshoted_
-    charIndex:
-      start: 1861
-      end: 1872
-  functionSignature:
-    implicitArgs:
-      - name: ''
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: snapshoted
+      - name: bool
         type: felt
   functionComment:
     desc: null
@@ -265,8 +248,8 @@
   functionName:
     name: initializer
     charIndex:
-      start: 1976
-      end: 1987
+      start: 1958
+      end: 1969
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -292,8 +275,8 @@
   functionName:
     name: carbonable_project_address
     charIndex:
-      start: 2239
-      end: 2265
+      start: 2240
+      end: 2266
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -317,10 +300,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: carbonable_minter_address
+    name: min_claimable
     charIndex:
-      start: 2528
-      end: 2553
+      start: 2574
+      end: 2587
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -329,11 +312,9 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs:
-      - name: ''
-        type: ''
+    explicitArgs: null
     returns:
-      - name: carbonable_minter_address
+      - name: min_claimable
         type: felt
   functionComment:
     desc: null
@@ -346,118 +327,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: get_start_time
+    name: total_deposited
     charIndex:
-      start: 2931
-      end: 2945
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: start_time
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableOffseter
-  functionName:
-    name: get_lock_time
-    charIndex:
-      start: 3140
-      end: 3153
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: lock_time
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableOffseter
-  functionName:
-    name: get_end_time
-    charIndex:
-      start: 3430
-      end: 3442
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: end_time
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableOffseter
-  functionName:
-    name: is_locked
-    charIndex:
-      start: 3711
-      end: 3720
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: status
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: namespace CarbonableOffseter
-  functionName:
-    name: total_locked
-    charIndex:
-      start: 4332
-      end: 4344
+      start: 2830
+      end: 2845
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -481,10 +354,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: balance_of
+    name: total_claimed
     charIndex:
-      start: 4773
-      end: 4783
+      start: 3292
+      end: 3305
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -493,11 +366,9 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs:
-      - name: address
-        type: felt
+    explicitArgs: null
     returns:
-      - name: balance
+      - name: total_claimed
         type: felt
   functionComment:
     desc: null
@@ -510,10 +381,95 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: registred_owner_of
+    name: total_claimable
     charIndex:
-      start: 5014
-      end: 5032
+      start: 3689
+      end: 3704
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: total_claimable
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: claimable_of
+    charIndex:
+      start: 4100
+      end: 4112
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: claimable
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: claimed_of
+    charIndex:
+      start: 5050
+      end: 5060
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: address
+        type: felt
+    returns:
+      - name: claimed
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: registered_owner_of
+    charIndex:
+      start: 5293
+      end: 5312
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -535,14 +491,43 @@
     returns: null
     raises: null
     charIndex:
-      start: 5151
-      end: 5163
+      start: 5431
+      end: 5443
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: total_offsetable
+    name: registered_time_of
     charIndex:
-      start: 5922
-      end: 5938
+      start: 6244
+      end: 6262
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: token_id
+        type: Uint256
+    returns:
+      - name: time
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 6378
+      end: 6390
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: registered_tokens_of
+    charIndex:
+      start: 7181
+      end: 7201
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -555,8 +540,10 @@
       - name: address
         type: felt
     returns:
-      - name: total_offsetable
-        type: Uint256
+      - name: tokens_len
+        type: felt
+      - name: tokens
+        type: Uint256*
   functionComment:
     desc: null
     implicitArgs: null
@@ -568,10 +555,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: total_offseted
+    name: registered_users
     charIndex:
-      start: 6201
-      end: 6215
+      start: 8216
+      end: 8232
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -580,12 +567,12 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs:
-      - name: address
-        type: felt
+    explicitArgs: null
     returns:
-      - name: total_offseted
-        type: Uint256
+      - name: users_len
+        type: felt
+      - name: users
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -597,10 +584,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: start_period
+    name: set_min_claimable
     charIndex:
-      start: 6500
-      end: 6512
+      start: 8498
+      end: 8515
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -610,11 +597,34 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: unlocked_duration
+      - name: min_claimable
         type: felt
-      - name: period_duration
-        type: felt
-      - name: absorption
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: claim
+    charIndex:
+      start: 8916
+      end: 8921
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: quantity
         type: felt
     returns:
       - name: success
@@ -626,14 +636,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 6678
-      end: 6690
+      start: 9037
+      end: 9049
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: stop_period
+    name: claim_all
     charIndex:
-      start: 7474
-      end: 7485
+      start: 9647
+      end: 9656
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -653,14 +663,14 @@
     returns: null
     raises: null
     charIndex:
-      start: 7587
-      end: 7599
+      start: 0
+      end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
     name: deposit
     charIndex:
-      start: 8130
-      end: 8137
+      start: 10104
+      end: 10111
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -688,8 +698,8 @@
   functionName:
     name: withdraw
     charIndex:
-      start: 9691
-      end: 9699
+      start: 12089
+      end: 12097
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -715,10 +725,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: offset
+    name: _read_users
     charIndex:
-      start: 11254
-      end: 11260
+      start: 13860
+      end: 13871
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -729,8 +739,10 @@
         type: ''
     explicitArgs: null
     returns:
-      - name: success
+      - name: users_len
         type: felt
+      - name: users
+        type: felt*
   functionComment:
     desc: null
     implicitArgs: null
@@ -742,37 +754,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: snapshot
+    name: _read_users_iter
     charIndex:
-      start: 12284
-      end: 12292
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs: null
-    returns:
-      - name: success
-        type: felt
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 12394
-      end: 12406
-- attributeName: namespace CarbonableOffseter
-  functionName:
-    name: _count
-    charIndex:
-      start: 13209
-      end: 13215
+      start: 14344
+      end: 14360
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -782,11 +767,11 @@
       - name: range_check_ptr
         type: ''
     explicitArgs:
-      - name: address
+      - name: index
         type: felt
-    returns:
-      - name: count
-        type: felt
+      - name: users
+        type: felt*
+    returns: null
   functionComment:
     desc: null
     implicitArgs: null
@@ -798,10 +783,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: _count_iter
+    name: _registerd_tokens_iter
     charIndex:
-      start: 13940
-      end: 13951
+      start: 14737
+      end: 14759
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -813,13 +798,19 @@
     explicitArgs:
       - name: contract_address
         type: felt
-      - name: address
+      - name: user
         type: felt
       - name: index
-        type: Uint256
-    returns:
-      - name: count
         type: felt
+      - name: tokens_len
+        type: felt
+      - name: tokens
+        type: Uint256*
+    returns:
+      - name: tokens_len
+        type: felt
+      - name: tokens
+        type: Uint256*
   functionComment:
     desc: null
     implicitArgs: null
@@ -831,10 +822,10 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: _snapshot
+    name: _total_claimed_iter
     charIndex:
-      start: 15002
-      end: 15011
+      start: 16627
+      end: 16646
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -843,8 +834,14 @@
         type: HashBuiltin*
       - name: range_check_ptr
         type: ''
-    explicitArgs: null
-    returns: null
+    explicitArgs:
+      - name: index
+        type: felt
+      - name: users
+        type: felt*
+    returns:
+      - name: total_claimed
+        type: felt
   functionComment:
     desc: null
     implicitArgs: null
@@ -856,10 +853,70 @@
       end: 0
 - attributeName: namespace CarbonableOffseter
   functionName:
-    name: _snapshot_iter
+    name: _total_claimable_iter
     charIndex:
-      start: 15680
-      end: 15694
+      start: 17115
+      end: 17136
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+      - name: users
+        type: felt*
+    returns:
+      - name: total_claimable
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: _claimable
+    charIndex:
+      start: 17599
+      end: 17609
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: user
+        type: felt
+    returns:
+      - name: claimable
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: _claimable_iter
+    charIndex:
+      start: 18622
+      end: 18637
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -871,10 +928,66 @@
     explicitArgs:
       - name: contract_address
         type: felt
+      - name: user
+        type: felt
       - name: index
-        type: Uint256
-      - name: total_supply
-        type: Uint256
+        type: felt
+    returns:
+      - name: claimable
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableOffseter
+  functionName:
+    name: _claim
+    charIndex:
+      start: 20690
+      end: 20696
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: quantity
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 20799
+      end: 20811
+- attributeName: namespace CarbonableOffseter_assert
+  functionName:
+    name: claimable_not_negligible
+    charIndex:
+      start: 21318
+      end: 21342
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: claimable
+        type: felt
     returns: null
   functionComment:
     desc: null

@@ -2,8 +2,8 @@
   functionName:
     name: getImplementationHash
     charIndex:
-      start: 2368
-      end: 2389
+      start: 2338
+      end: 2359
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -17,20 +17,50 @@
       - name: implementation
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the current implementation hash
+        charIndex:
+          start: 23
+          end: 61
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 93
+          end: 111
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 121
+          end: 147
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 157
+          end: 172
     explicitArgs: null
-    returns: null
+    returns:
+      - name: implementation
+        type: felt
+        desc: Implementation class hash
+        charIndex:
+          start: 198
+          end: 245
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2460
+      end: 2705
 - attributeName: view
   functionName:
     name: getAdmin
     charIndex:
-      start: 2549
-      end: 2557
+      start: 2764
+      end: 2772
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -44,20 +74,107 @@
       - name: admin
         type: felt
   functionComment:
-    desc: null
-    implicitArgs: null
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the admin address
+        charIndex:
+          start: 23
+          end: 47
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 79
+          end: 97
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 107
+          end: 133
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 143
+          end: 158
     explicitArgs: null
-    returns: null
+    returns:
+      - name: admin
+        type: felt
+        desc: The admin address
+        charIndex:
+          start: 184
+          end: 214
     raises: null
     charIndex:
-      start: 0
-      end: 0
+      start: 2858
+      end: 3072
 - attributeName: view
   functionName:
-    name: carbonable_project_address
+    name: owner
     charIndex:
-      start: 3453
-      end: 3479
+      start: 4251
+      end: 4256
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the contract owner
+        charIndex:
+          start: 23
+          end: 48
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 80
+          end: 98
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 108
+          end: 134
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 144
+          end: 159
+    explicitArgs: null
+    returns:
+      - name: owner
+        type: felt
+        desc: The owner address
+        charIndex:
+          start: 185
+          end: 215
+    raises: null
+    charIndex:
+      start: 4342
+      end: 4557
+- attributeName: view
+  functionName:
+    name: getCarbonableProjectAddress
+    charIndex:
+      start: 5584
+      end: 5611
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -109,14 +226,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 3591
-      end: 3872
+      start: 5723
+      end: 6004
 - attributeName: view
   functionName:
-    name: payment_token_address
+    name: getPaymentTokenAddress
     charIndex:
-      start: 3945
-      end: 3966
+      start: 6077
+      end: 6099
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -166,14 +283,14 @@
           end: 281
     raises: null
     charIndex:
-      start: 4074
-      end: 4355
+      start: 6207
+      end: 6488
 - attributeName: view
   functionName:
-    name: whitelisted_sale_open
+    name: isWhitelistedSaleOpen
     charIndex:
-      start: 4423
-      end: 4444
+      start: 6556
+      end: 6577
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -223,14 +340,14 @@
           end: 256
     raises: null
     charIndex:
-      start: 4552
-      end: 4808
+      start: 6685
+      end: 6941
 - attributeName: view
   functionName:
-    name: public_sale_open
+    name: isPublicSaleOpen
     charIndex:
-      start: 4876
-      end: 4892
+      start: 7009
+      end: 7025
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -280,14 +397,14 @@
           end: 250
     raises: null
     charIndex:
-      start: 4995
-      end: 5245
+      start: 7128
+      end: 7378
 - attributeName: view
   functionName:
-    name: max_buy_per_tx
+    name: getMaxBuyPerTx
     charIndex:
-      start: 5308
-      end: 5322
+      start: 7441
+      end: 7455
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -337,14 +454,14 @@
           end: 257
     raises: null
     charIndex:
-      start: 5423
-      end: 5680
+      start: 7556
+      end: 7813
 - attributeName: view
   functionName:
-    name: unit_price
+    name: getUnitPrice
     charIndex:
-      start: 5741
-      end: 5751
+      start: 7874
+      end: 7886
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -394,14 +511,14 @@
           end: 222
     raises: null
     charIndex:
-      start: 5851
-      end: 6073
+      start: 7986
+      end: 8208
 - attributeName: view
   functionName:
-    name: reserved_supply_for_mint
+    name: getReservedSupplyForMint
     charIndex:
-      start: 6130
-      end: 6154
+      start: 8265
+      end: 8289
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -453,14 +570,14 @@
           end: 259
     raises: null
     charIndex:
-      start: 6267
-      end: 6526
+      start: 8402
+      end: 8661
 - attributeName: view
   functionName:
-    name: max_supply_for_mint
+    name: getMaxSupplyForMint
     charIndex:
-      start: 6597
-      end: 6616
+      start: 8732
+      end: 8751
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -510,14 +627,14 @@
           end: 231
     raises: null
     charIndex:
-      start: 6725
-      end: 6956
+      start: 8860
+      end: 9091
 - attributeName: view
   functionName:
-    name: whitelist_merkle_root
+    name: getWhitelistMerkleRoot
     charIndex:
-      start: 7022
-      end: 7043
+      start: 9157
+      end: 9179
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -567,14 +684,14 @@
           end: 269
     raises: null
     charIndex:
-      start: 7151
-      end: 7420
+      start: 9287
+      end: 9556
 - attributeName: view
   functionName:
-    name: whitelisted_slots
+    name: getWhitelistedSlots
     charIndex:
-      start: 7488
-      end: 7505
+      start: 9624
+      end: 9643
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -656,14 +773,14 @@
           end: 542
     raises: null
     charIndex:
-      start: 7654
-      end: 8196
+      start: 9792
+      end: 10334
 - attributeName: view
   functionName:
-    name: claimed_slots
+    name: getClaimedSlots
     charIndex:
-      start: 8292
-      end: 8305
+      start: 10430
+      end: 10445
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -721,14 +838,14 @@
           end: 325
     raises: null
     charIndex:
-      start: 8410
-      end: 8735
+      start: 10550
+      end: 10875
 - attributeName: view
   functionName:
-    name: sold_out
+    name: isSoldOut
     charIndex:
-      start: 8802
-      end: 8810
+      start: 10942
+      end: 10951
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -778,8 +895,65 @@
           end: 220
     raises: null
     charIndex:
-      start: 8897
-      end: 9117
+      start: 11044
+      end: 11264
+- attributeName: view
+  functionName:
+    name: getTotalValue
+    charIndex:
+      start: 11319
+      end: 11332
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: total_value
+        type: Uint256
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Return the total project value
+        charIndex:
+          start: 23
+          end: 53
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 85
+          end: 103
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 113
+          end: 139
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 149
+          end: 164
+    explicitArgs: null
+    returns:
+      - name: total_value
+        type: Uint256
+        desc: Total value expressed in payment token units
+        charIndex:
+          start: 190
+          end: 256
+    raises: null
+    charIndex:
+      start: 11433
+      end: 11689
 - attributeName: external
   functionName:
     name: initializer
@@ -810,8 +984,6 @@
       - name: reserved_supply_for_mint
         type: Uint256
       - name: owner
-        type: felt
-      - name: proxy_admin
         type: felt
       - name: ''
         type: ''
@@ -898,45 +1070,39 @@
           end: 927
       - name: owner
         type: felt
-        desc: Owner address
+        desc: Owner and Admin address
         charIndex:
           start: 937
-          end: 963
-      - name: proxy_admin
-        type: felt
-        desc: Admin address
-        charIndex:
-          start: 973
-          end: 1005
+          end: 973
     returns: null
     raises:
       - name: unit_price
         type: ''
         desc: unit_price is not a valid Uint256
         charIndex:
-          start: 1060
-          end: 1105
+          start: 1028
+          end: 1073
       - name: max_supply_for_mint
         type: ''
         desc: max_supply_for_mint is not a valid Uint256
         charIndex:
-          start: 1115
-          end: 1178
+          start: 1083
+          end: 1146
       - name: reserved_supply_for_mint
         type: ''
         desc: reserved_supply_for_mint is not a valid Uint256
         charIndex:
-          start: 1188
-          end: 1261
+          start: 1156
+          end: 1229
     charIndex:
-      start: 768
-      end: 2029
+      start: 745
+      end: 1974
 - attributeName: external
   functionName:
     name: upgrade
     charIndex:
-      start: 2692
-      end: 2699
+      start: 3121
+      end: 3128
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -948,6 +1114,199 @@
     explicitArgs:
       - name: new_implementation
         type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Upgrade the contract to the new implementation
+        charIndex:
+          start: 23
+          end: 69
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 101
+          end: 119
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 129
+          end: 155
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 165
+          end: 180
+    explicitArgs:
+      - name: new_implementation
+        type: felt
+        desc: New implementation class hash
+        charIndex:
+          start: 212
+          end: 267
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 322
+          end: 353
+    charIndex:
+      start: 3227
+      end: 3580
+- attributeName: external
+  functionName:
+    name: setAdmin
+    charIndex:
+      start: 3701
+      end: 3709
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: new_admin
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer admin rights to a new admin
+        charIndex:
+          start: 23
+          end: 59
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 91
+          end: 109
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 119
+          end: 145
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 155
+          end: 170
+    explicitArgs:
+      - name: new_admin
+        type: felt
+        desc: Address of the new admin
+        charIndex:
+          start: 202
+          end: 243
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the admin
+        charIndex:
+          start: 298
+          end: 329
+    charIndex:
+      start: 3793
+      end: 4122
+- attributeName: external
+  functionName:
+    name: transferOwnership
+    charIndex:
+      start: 4604
+      end: 4621
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: newOwner
+        type: felt
+    returns: null
+  functionComment:
+    desc:
+      - name: ''
+        type: ''
+        desc: Transfer ownership to a new owner
+        charIndex:
+          start: 23
+          end: 56
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+        desc: ''
+        charIndex:
+          start: 88
+          end: 106
+      - name: pedersen_ptr
+        type: HashBuiltin*
+        desc: ''
+        charIndex:
+          start: 116
+          end: 142
+      - name: range_check_ptr
+        type: ''
+        desc: ''
+        charIndex:
+          start: 152
+          end: 167
+    explicitArgs:
+      - name: newOwner
+        type: felt
+        desc: Address of the new owner
+        charIndex:
+          start: 199
+          end: 239
+    returns: null
+    raises:
+      - name: caller
+        type: ''
+        desc: caller is not the contract owner
+        charIndex:
+          start: 294
+          end: 334
+      - name: newOwner
+        type: ''
+        desc: new owner is the zero address
+        charIndex:
+          start: 344
+          end: 383
+    charIndex:
+      start: 4710
+      end: 5093
+- attributeName: external
+  functionName:
+    name: renounceOwnership
+    charIndex:
+      start: 5169
+      end: 5186
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
     returns: null
   functionComment:
     desc:
@@ -976,57 +1335,24 @@
         charIndex:
           start: 137
           end: 152
-    explicitArgs:
-      - name: new_implementation
-        type: felt
-        desc: new contract implementation
-        charIndex:
-          start: 214
-          end: 267
+    explicitArgs: null
     returns: null
     raises:
       - name: caller
         type: ''
-        desc: caller is not a contract admin
+        desc: caller is not the contract owner
         charIndex:
-          start: 292
-          end: 330
+          start: 207
+          end: 247
     charIndex:
-      start: 2798
-      end: 3128
+      start: 5255
+      end: 5502
 - attributeName: external
   functionName:
-    name: setAdmin
+    name: setWhitelistMerkleRoot
     charIndex:
-      start: 3249
-      end: 3257
-  functionSignature:
-    implicitArgs:
-      - name: syscall_ptr
-        type: felt*
-      - name: pedersen_ptr
-        type: HashBuiltin*
-      - name: range_check_ptr
-        type: ''
-    explicitArgs:
-      - name: new_admin
-        type: felt
-    returns: null
-  functionComment:
-    desc: null
-    implicitArgs: null
-    explicitArgs: null
-    returns: null
-    raises: null
-    charIndex:
-      start: 0
-      end: 0
-- attributeName: external
-  functionName:
-    name: set_whitelist_merkle_root
-    charIndex:
-      start: 9196
-      end: 9221
+      start: 11771
+      end: 11793
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1084,14 +1410,14 @@
           start: 345
           end: 385
     charIndex:
-      start: 9323
-      end: 9708
+      start: 11895
+      end: 12280
 - attributeName: external
   functionName:
-    name: set_public_sale_open
+    name: setPublicSaleOpen
     charIndex:
-      start: 9838
-      end: 9858
+      start: 12410
+      end: 12427
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1147,14 +1473,14 @@
           start: 316
           end: 356
     charIndex:
-      start: 9955
-      end: 10311
+      start: 12524
+      end: 12880
 - attributeName: external
   functionName:
-    name: set_max_buy_per_tx
+    name: setMaxBuyPerTx
     charIndex:
-      start: 10431
-      end: 10449
+      start: 13000
+      end: 13014
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1210,14 +1536,14 @@
           start: 303
           end: 343
     charIndex:
-      start: 10544
-      end: 10887
+      start: 13109
+      end: 13452
 - attributeName: external
   functionName:
-    name: set_unit_price
+    name: setUnitPrice
     charIndex:
-      start: 11003
-      end: 11017
+      start: 13568
+      end: 13580
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1273,14 +1599,14 @@
           start: 282
           end: 322
     charIndex:
-      start: 11111
-      end: 11433
+      start: 13674
+      end: 13996
 - attributeName: external
   functionName:
-    name: decrease_reserved_supply_for_mint
+    name: decreaseReservedSupplyForMint
     charIndex:
-      start: 11541
-      end: 11574
+      start: 14104
+      end: 14133
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1338,14 +1664,14 @@
           start: 362
           end: 402
     charIndex:
-      start: 11663
-      end: 12065
+      start: 14222
+      end: 14624
 - attributeName: external
   functionName:
     name: airdrop
     charIndex:
-      start: 12187
-      end: 12194
+      start: 14746
+      end: 14753
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1431,14 +1757,14 @@
           start: 563
           end: 633
     charIndex:
-      start: 12312
-      end: 12945
+      start: 14871
+      end: 15504
 - attributeName: external
   functionName:
     name: withdraw
     charIndex:
-      start: 13048
-      end: 13056
+      start: 15607
+      end: 15615
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1500,14 +1826,14 @@
           start: 337
           end: 361
     charIndex:
-      start: 13150
-      end: 13511
+      start: 15709
+      end: 16070
 - attributeName: external
   functionName:
     name: transfer
     charIndex:
-      start: 13603
-      end: 13611
+      start: 16162
+      end: 16170
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1601,14 +1927,14 @@
           start: 583
           end: 607
     charIndex:
-      start: 13758
-      end: 14365
+      start: 16317
+      end: 16924
 - attributeName: external
   functionName:
-    name: whitelist_buy
+    name: whitelistBuy
     charIndex:
-      start: 14489
-      end: 14502
+      start: 17048
+      end: 17060
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1734,14 +2060,14 @@
           start: 877
           end: 902
     charIndex:
-      start: 14654
-      end: 15556
+      start: 17212
+      end: 18114
 - attributeName: external
   functionName:
-    name: public_buy
+    name: publicBuy
     charIndex:
-      start: 15653
-      end: 15663
+      start: 18211
+      end: 18220
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -1829,5 +2155,5 @@
           start: 527
           end: 552
     charIndex:
-      start: 15771
-      end: 16323
+      start: 18328
+      end: 18880

@@ -9,6 +9,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 // Local dependencies
 from tests.integrations.protocol.library import (
     setup,
+    carbonable_minter_instance as minter,
     admin_instance as admin,
     anyone_instance as anyone,
 )
@@ -91,14 +92,21 @@ func test_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // And admin withdraw minter contract balance
     // Then no failed transactions expected
     alloc_locals;
+    let (minter_address) = minter.get_address();
     let (anyone_address) = anyone.get_address();
 
+    %{ warp(blk_timestamp=200, target_contract_address=ids.minter_address) %}
     anyone.approve(quantity=5);
+    %{ expect_events(dict(name="Buy", data=dict(address=context.anyone_account_contract, amount=dict(low=50, high=0), quantity=5, time=200))) %}
     anyone.whitelist_buy(quantity=5);
     admin.set_public_sale_open(TRUE);
+    %{ expect_events(dict(name="Airdrop", data=dict(address=context.anyone_account_contract, quantity=3, time=200))) %}
     admin.airdrop(to=anyone_address, quantity=3);
     admin.decrease_reserved_supply_for_mint(slots=1);
-    anyone.approve(quantity=1);
+    anyone.approve(quantity=2);
+    %{ expect_events(dict(name="Buy", data=dict(address=context.anyone_account_contract, amount=dict(low=10, high=0), quantity=1, time=200))) %}
+    anyone.public_buy(quantity=1);
+    %{ expect_events(dict(name="SoldOut", data=dict(time=200))) %}
     anyone.public_buy(quantity=1);
     admin.withdraw();
 

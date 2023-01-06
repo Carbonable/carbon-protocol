@@ -41,9 +41,9 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (payment_token_address) = CarbonableMinter.payment_token_address();
     assert payment_token_address = context.mocks.payment_token_address;
 
-    let (whitelisted_sale_open) = CarbonableMinter.whitelisted_sale_open();
+    let (pre_sale_open) = CarbonableMinter.pre_sale_open();
     let (whitelist_merkle_root) = CarbonableMinter.whitelist_merkle_root();
-    assert whitelisted_sale_open = whitelist_merkle_root;
+    assert pre_sale_open = whitelist_merkle_root;
 
     let (returned_public_sale_open) = CarbonableMinter.public_sale_open();
     assert returned_public_sale_open = public_sale_open;

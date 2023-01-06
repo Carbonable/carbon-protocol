@@ -7,31 +7,86 @@ from starkware.cairo.common.uint256 import Uint256
 
 @contract_interface
 namespace ICarbonableYielder {
-    func carbonable_project_address() -> (carbonable_project_address: felt) {
+    //
+    // Proxy administration
+    //
+
+    func getImplementationHash() -> (implementation: felt) {
     }
 
-    func get_start_time() -> (start_time: felt) {
+    func getAdmin() -> (admin: felt) {
     }
 
-    func get_lock_time() -> (lock_time: felt) {
+    func upgrade(new_implementation: felt) {
     }
 
-    func get_end_time() -> (end_time: felt) {
+    func setAdmin(new_admin: felt) {
     }
 
-    func is_locked() -> (status: felt) {
+    //
+    // Ownership administration
+    //
+
+    func owner() -> (owner: felt) {
     }
 
-    func total_locked() -> (balance: Uint256) {
+    func transferOwnership(newOwner: felt) {
     }
 
-    func shares_of(address: felt, precision: felt) -> (share: Uint256) {
+    func renounceOwnership() {
     }
 
-    func registred_owner_of(token_id: Uint256) -> (address: felt) {
+    //
+    // Views
+    //
+
+    func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
-    func create_vestings(
+    func getCarbonableOffseterAddress() -> (carbonable_offseter_address: felt) {
+    }
+
+    func getCarbonableVesterAddress() -> (carbonable_vester_address: felt) {
+    }
+
+    func getTotalDeposited() -> (balance: Uint256) {
+    }
+
+    func getTotalAbsorption() -> (total_absorption: felt) {
+    }
+
+    func getAbsorptionOf(address: felt) -> (absorption: felt) {
+    }
+
+    func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
+    }
+
+    func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
+    }
+
+    func getRegisteredTokensOf(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
+    }
+
+    func getSnapshotedTime() -> (time: felt) {
+    }
+
+    func getSnapshotedOf(address: felt) -> (absorption: felt) {
+    }
+
+    //
+    // Externals
+    //
+
+    func deposit(token_id: Uint256) -> (success: felt) {
+    }
+
+    func withdraw(token_id: Uint256) -> (success: felt) {
+    }
+
+    func snapshot() -> (success: felt) {
+    }
+
+    func createVestings(
         total_amount: felt,
         cliff_delta: felt,
         start: felt,
@@ -39,17 +94,5 @@ namespace ICarbonableYielder {
         slice_period_seconds: felt,
         revocable: felt,
     ) -> (success: felt) {
-    }
-
-    func start_period(unlocked_duration: felt, period_duration: felt) -> (success: felt) {
-    }
-
-    func stop_period() -> (success: felt) {
-    }
-
-    func deposit(token_id: Uint256) -> (success: felt) {
-    }
-
-    func withdraw(token_id: Uint256) -> (success: felt) {
     }
 }

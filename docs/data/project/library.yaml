@@ -1,9 +1,128 @@
+- attributeName: storage_var
+  functionName:
+    name: CarbonableProject_times_len_
+    charIndex:
+      start: 640
+      end: 668
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: length
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableProject_times_
+    charIndex:
+      start: 712
+      end: 736
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+    returns:
+      - name: time
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableProject_absorptions_ton_equivalent_
+    charIndex:
+      start: 789
+      end: 834
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: precision
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableProject_absorptions_len_
+    charIndex:
+      start: 881
+      end: 915
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: length
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: storage_var
+  functionName:
+    name: CarbonableProject_absorptions_
+    charIndex:
+      start: 959
+      end: 989
+  functionSignature:
+    implicitArgs:
+      - name: ''
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 1059
+      end: 1109
 - attributeName: namespace CarbonableProject
   functionName:
     name: token_uri
     charIndex:
-      start: 570
-      end: 579
+      start: 1099
+      end: 1108
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -37,8 +156,8 @@
   functionName:
     name: contract_uri
     charIndex:
-      start: 897
-      end: 909
+      start: 1412
+      end: 1424
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -68,10 +187,315 @@
       end: 0
 - attributeName: namespace CarbonableProject
   functionName:
+    name: start_time
+    charIndex:
+      start: 1720
+      end: 1730
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: time
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 1829
+      end: 1841
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: final_time
+    charIndex:
+      start: 2021
+      end: 2031
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: time
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 2130
+      end: 2142
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: times
+    charIndex:
+      start: 2424
+      end: 2429
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: times_len
+        type: felt
+      - name: times
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: absorptions
+    charIndex:
+      start: 2663
+      end: 2674
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorptions_len
+        type: felt
+      - name: absorptions
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: absorption
+    charIndex:
+      start: 2962
+      end: 2972
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: time
+        type: felt
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: current_absorption
+    charIndex:
+      start: 3203
+      end: 3221
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: final_absorption
+    charIndex:
+      start: 3531
+      end: 3547
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorption
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 3652
+      end: 3664
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: ton_equivalent
+    charIndex:
+      start: 4000
+      end: 4014
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: ton_equivalent
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: is_times_setup
+    charIndex:
+      start: 4273
+      end: 4287
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: status
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: is_absorptions_setup
+    charIndex:
+      start: 4545
+      end: 4565
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: ''
+        type: ''
+    returns:
+      - name: status
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: is_setup
+    charIndex:
+      start: 4836
+      end: 4844
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: status
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
     name: set_uri
     charIndex:
-      start: 1237
-      end: 1244
+      start: 5201
+      end: 5208
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -89,6 +513,447 @@
         type: felt
       - name: uri
         type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: set_times
+    charIndex:
+      start: 5447
+      end: 5456
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: times_len
+        type: felt
+      - name: times
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: set_absorptions
+    charIndex:
+      start: 5914
+      end: 5929
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: absorptions_len
+        type: felt
+      - name: absorptions
+        type: felt*
+      - name: ton_equivalent
+        type: felt
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _read_times
+    charIndex:
+      start: 6801
+      end: 6812
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: times_len
+        type: felt
+      - name: times
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _read_times_iter
+    charIndex:
+      start: 7280
+      end: 7296
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+      - name: times
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _write_times
+    charIndex:
+      start: 7673
+      end: 7685
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: times_len
+        type: felt
+      - name: times
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _write_times_iter
+    charIndex:
+      start: 7972
+      end: 7989
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+      - name: times
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _read_absorptions
+    charIndex:
+      start: 8333
+      end: 8350
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: absorptions_len
+        type: felt
+      - name: absorptions
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _read_absorptions_iter
+    charIndex:
+      start: 8908
+      end: 8930
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+      - name: absorptions
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _write_absorptions
+    charIndex:
+      start: 9355
+      end: 9373
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: absorptions_len
+        type: felt
+      - name: absorptions
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _write_absorptions_iter
+    charIndex:
+      start: 9708
+      end: 9731
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: index
+        type: felt
+      - name: absorptions
+        type: felt*
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _compute_absorption
+    charIndex:
+      start: 10111
+      end: 10130
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: time
+        type: felt
+    returns:
+      - name: computed_absorption
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject
+  functionName:
+    name: _compute_absorption_iter
+    charIndex:
+      start: 11595
+      end: 11619
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: time
+        type: felt
+      - name: index
+        type: felt
+      - name: absorptions
+        type: felt*
+      - name: times
+        type: felt*
+      - name: next_time
+        type: felt
+      - name: next_absorption
+        type: felt
+      - name: ''
+        type: ''
+    returns:
+      - name: computed_absorption
+        type: felt
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject_assert
+  functionName:
+    name: times_setup
+    charIndex:
+      start: 13545
+      end: 13556
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject_assert
+  functionName:
+    name: absorptions_setup
+    charIndex:
+      start: 13842
+      end: 13859
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs: null
+    returns: null
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace CarbonableProject_assert
+  functionName:
+    name: consistency
+    charIndex:
+      start: 14157
+      end: 14168
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: range_check_ptr
+        type: ''
+    explicitArgs:
+      - name: times_len
+        type: felt
+      - name: absorptions_len
+        type: felt
     returns: null
   functionComment:
     desc: null

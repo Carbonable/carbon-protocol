@@ -28,29 +28,39 @@ Max supply available whatever the way to mint
 Supply reserved to be airdropped  
 {% endswagger-parameter %}  
 {% swagger-parameter in="path" type="felt" name="owner" %}  
-Owner address  
-{% endswagger-parameter %}  
-{% swagger-parameter in="path" type="felt" name="proxy_admin" %}  
-Admin address  
+Owner and Admin address  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "upgrade" %}  
 {% swagger-description %}  
-Renounce ownership  
+Upgrade the contract to the new implementation  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_implementation" %}  
-new contract implementation  
+New implementation class hash  
 {% endswagger-parameter %}  
 {% endswagger %}  
 {% swagger method = "external" path = " " baseUrl = " " summary = "setAdmin" %}  
 {% swagger-description %}  
-  
+Transfer admin rights to a new admin  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="new_admin" %}  
-  
+Address of the new admin  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "set_whitelist_merkle_root" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "transferOwnership" %}  
+{% swagger-description %}  
+Transfer ownership to a new owner  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="newOwner" %}  
+Address of the new owner  
+{% endswagger-parameter %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "renounceOwnership" %}  
+{% swagger-description %}  
+Renounce ownership  
+{% endswagger-description %}  
+{% endswagger %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setWhitelistMerkleRoot" %}  
 {% swagger-description %}  
 Set a new merkle root, providing a not null merkle root opens the whitelist sale  
 {% endswagger-description %}  
@@ -58,7 +68,7 @@ Set a new merkle root, providing a not null merkle root opens the whitelist sale
 New merkle root  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "set_public_sale_open" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setPublicSaleOpen" %}  
 {% swagger-description %}  
 Set a new public sale status (1 to open, 0 otherwise)  
 {% endswagger-description %}  
@@ -66,7 +76,7 @@ Set a new public sale status (1 to open, 0 otherwise)
 Public sale status  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "set_max_buy_per_tx" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setMaxBuyPerTx" %}  
 {% swagger-description %}  
 Set a new max amount per tx during purchase  
 {% endswagger-description %}  
@@ -74,7 +84,7 @@ Set a new max amount per tx during purchase
 Max amount per tx  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "set_unit_price" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "setUnitPrice" %}  
 {% swagger-description %}  
 Set a new unit price per token  
 {% endswagger-description %}  
@@ -82,7 +92,7 @@ Set a new unit price per token
 Unit price  
 {% endswagger-parameter %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "decrease_reserved_supply_for_mint" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "decreaseReservedSupplyForMint" %}  
 {% swagger-description %}  
 Decrease the reserved supply for airdrops by the providing amount of slots  
 {% endswagger-description %}  
@@ -126,7 +136,7 @@ Amount of token to transfer
 {% swagger-response status="success ( felt )" description="1 if it succeeded, 0 otherwise" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "whitelist_buy" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "whitelistBuy" %}  
 {% swagger-description %}  
 Purchase -quantity- tokens while proving the caller is part of the merkle tree while whitelist sale is open  
 {% endswagger-description %}  
@@ -145,7 +155,7 @@ Quantity of tokens to buy
 {% swagger-response status="success ( felt )" description="1 if it succeeded, 0 otherwise" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "external" path = " " baseUrl = " " summary = "public_buy" %}  
+{% swagger method = "external" path = " " baseUrl = " " summary = "publicBuy" %}  
 {% swagger-description %}  
 Purchase -quantity- tokens while public sale is open  
 {% endswagger-description %}  

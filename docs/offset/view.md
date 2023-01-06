@@ -4,76 +4,109 @@ View
   
 {% swagger method = "view" path = " " baseUrl = " " summary = "getImplementationHash" %}  
 {% swagger-description %}  
-  
+Return the current implementation hash  
 {% endswagger-description %}  
-{% swagger-response status="implementation ( felt )" description="" %}  
+{% swagger-response status="implementation ( felt )" description="Implementation class hash" %}  
 {% endswagger-response %}  
 {% endswagger %}  
 {% swagger method = "view" path = " " baseUrl = " " summary = "getAdmin" %}  
 {% swagger-description %}  
-  
+Return the admin address  
 {% endswagger-description %}  
-{% swagger-response status="admin ( felt )" description="" %}  
+{% swagger-response status="admin ( felt )" description="The admin address" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "carbonable_project_address" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "owner" %}  
+{% swagger-description %}  
+Return the contract owner  
+{% endswagger-description %}  
+{% swagger-response status="owner ( felt )" description="The owner address" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getCarbonableProjectAddress" %}  
 {% swagger-description %}  
 Return the associated carbonable project  
 {% endswagger-description %}  
 {% swagger-response status="carbonable_project_address ( felt )" description="Address of the corresponding Carbonable project" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "is_locked" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getMinClaimable" %}  
 {% swagger-description %}  
-Return the locked status of deposits and withdrawals  
+Return the minimum claimable quantity  
 {% endswagger-description %}  
-{% swagger-response status="status ( felt )" description="Locked status (1 if locked else 0)" %}  
+{% swagger-response status="min_claimable ( felt )" description="Minimum claimable" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "total_offsetable" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getTotalDeposited" %}  
 {% swagger-description %}  
-Return the total offsetable balance of the provided address  
+Return the total deposited balance of the project  
+{% endswagger-description %}  
+{% swagger-response status="balance ( Uint256 )" description="Total deposited" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getTotalClaimed" %}  
+{% swagger-description %}  
+Return the total claimed absorption of the project  
+{% endswagger-description %}  
+{% swagger-response status="total_claimed ( felt )" description="Total claimed" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getTotalClaimable" %}  
+{% swagger-description %}  
+Return the total claimable absorption of the project  
+{% endswagger-description %}  
+{% swagger-response status="total_claimable ( felt )" description="Total claimable" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getClaimableOf" %}  
+{% swagger-description %}  
+Return the total claimable balance of the provided address  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="address" %}  
 address  
 {% endswagger-parameter %}  
-{% swagger-response status="total_offsetable ( Uint256 )" description="Total offsetable balance" %}  
+{% swagger-response status="claimable ( felt )" description="Total claimable" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "total_offseted" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getClaimedOf" %}  
 {% swagger-description %}  
-Return the total offseted balance of the provided address  
+Return the total claimed balance of the provided address  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="address" %}  
 address  
 {% endswagger-parameter %}  
-{% swagger-response status="total_offseted ( Uint256 )" description="Total offseted balance" %}  
+{% swagger-response status="claimed ( felt )" description="Total claimed" %}  
 {% endswagger-response %}  
 {% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "total_locked" %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getRegisteredOwnerOf" %}  
 {% swagger-description %}  
-Return the current number of tokens locked in the contract  
-{% endswagger-description %}  
-{% swagger-response status="balance ( Uint256 )" description="Total balance of locked tokens" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "balance_of" %}  
-{% swagger-description %}  
-Return the current balance of a specified address  
-{% endswagger-description %}  
-{% swagger-parameter in="path" type="felt" name="address" %}  
-Address  
-{% endswagger-parameter %}  
-{% swagger-response status="balance ( Uint256 )" description="Balance associated to the address" %}  
-{% endswagger-response %}  
-{% endswagger %}  
-{% swagger method = "view" path = " " baseUrl = " " summary = "registred_owner_of" %}  
-{% swagger-description %}  
-Return the registred owner of a token id (0 if token is not locked in the contract)  
+Return the registered owner of a token id (0 if token is not owned by the contract)  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="Uint256" name="token_id" %}  
 Token id  
 {% endswagger-parameter %}  
 {% swagger-response status="address ( felt )" description="Registred owner address" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getRegisteredTimeOf" %}  
+{% swagger-description %}  
+Return the registered time of a token id (0 if token is not owned by the contract)  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="Uint256" name="token_id" %}  
+  
+{% endswagger-parameter %}  
+{% swagger-response status="time ( felt )" description="" %}  
+{% endswagger-response %}  
+{% endswagger %}  
+{% swagger method = "view" path = " " baseUrl = " " summary = "getRegisteredTokensOf" %}  
+{% swagger-description %}  
+Return the registered tokens of the provided address  
+{% endswagger-description %}  
+{% swagger-parameter in="path" type="felt" name="address" %}  
+Token id  
+{% endswagger-parameter %}  
+{% swagger-response status="tokens_len ( felt )" description="Tokens array length" %}  
+{% endswagger-response %}  
+{% swagger-response status="tokens ( Uint256* )" description="Tokens deposited by the provided address" %}  
 {% endswagger-response %}  
 {% endswagger %}

@@ -35,10 +35,43 @@
       end: 0
 - attributeName: namespace Metadata
   functionName:
-    name: contract_uri
+    name: uri
     charIndex:
       start: 1297
-      end: 1309
+      end: 1300
+  functionSignature:
+    implicitArgs:
+      - name: syscall_ptr
+        type: felt*
+      - name: pedersen_ptr
+        type: HashBuiltin*
+      - name: bitwise_ptr
+        type: BitwiseBuiltin*
+      - name: range_check_ptr
+        type: ''
+      - name: ''
+        type: ''
+    explicitArgs: null
+    returns:
+      - name: uri_len
+        type: felt
+      - name: uri
+        type: felt*
+  functionComment:
+    desc: null
+    implicitArgs: null
+    explicitArgs: null
+    returns: null
+    raises: null
+    charIndex:
+      start: 0
+      end: 0
+- attributeName: namespace Metadata
+  functionName:
+    name: contract_uri
+    charIndex:
+      start: 1784
+      end: 1796
   functionSignature:
     implicitArgs:
       - name: syscall_ptr
@@ -70,8 +103,8 @@
   functionName:
     name: set_uri
     charIndex:
-      start: 1817
-      end: 1824
+      start: 2304
+      end: 2311
   functionSignature:
     implicitArgs:
       - name: syscall_ptr

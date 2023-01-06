@@ -22,9 +22,14 @@ struct Mocks {
     carbonable_project_address: felt,
 }
 
+struct Claim {
+    minimum: felt,
+}
+
 struct TestContext {
     signers: Signers,
     mocks: Mocks,
+    claim: Claim,
 }
 
 //
@@ -52,22 +57,25 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local admin;
     local anyone;
     local carbonable_project_address;
+    local carbonable_minter_address;
+    local minimum;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
+        ids.minimum = context.claim.minimum
     %}
 
     // Instantiate farmer
     CarbonableOffseter.initializer(carbonable_project_address=carbonable_project_address);
+    CarbonableOffseter.set_min_claimable(minimum);
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);
 
-    local mocks: Mocks = Mocks(
-        carbonable_project_address=carbonable_project_address,
-        );
+    local mocks: Mocks = Mocks(carbonable_project_address=carbonable_project_address);
+    local claim: Claim = Claim(minimum=minimum);
 
-    local context: TestContext = TestContext(signers=signers, mocks=mocks);
+    local context: TestContext = TestContext(signers=signers, mocks=mocks, claim=claim);
     return (test_context=context);
 }

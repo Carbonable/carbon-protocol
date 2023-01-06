@@ -25,7 +25,7 @@ from src.utils.access.library import CarbonableAccessControl
 
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    name: felt, symbol: felt, owner: felt, proxy_admin: felt
+    name: felt, symbol: felt, owner: felt
 ) {
     // Desc:
     //   Initialize the contract with the given name, symbol and owner -
@@ -40,27 +40,46 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     // Explicit args:
     //   name(felt): Name of the collection
     //   symbol(felt): Symbol of the collection
-    //   owner(felt): Owner address
-    //   proxy_admin(felt): Admin address
+    //   owner(felt): Owner and Admin address
     // Returns:
     //   None
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
     Ownable.initializer(owner);
     CarbonableAccessControl.initializer();
-    Proxy.initializer(proxy_admin);
+    Proxy.initializer(owner);
     return ();
 }
+
+//
+// Proxy administration
+//
 
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
 ) {
+    // Desc:
+    //   Return the current implementation hash
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   implementation(felt): Implementation class hash
     return Proxy.get_implementation_hash();
 }
 
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
+    // Desc:
+    //   Return the admin address
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   admin(felt): The admin address
     return Proxy.get_admin();
 }
 
@@ -69,17 +88,17 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
 ) {
     // Desc:
-    //   Renounce ownership
+    //   Upgrade the contract to the new implementation
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
+    // Explicit args:
+    //   new_implementation(felt): New implementation class hash
     // Returns:
     //   None
-    // Explicit args:
-    //   new_implementation(felt): new contract implementation
     // Raises:
-    //   caller: caller is not a contract admin
+    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_implementation_hash(new_implementation);
     return ();
@@ -87,13 +106,79 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
+    // Desc:
+    //   Transfer admin rights to a new admin
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   new_admin(felt): Address of the new admin
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_admin(new_admin);
     return ();
 }
 
 //
-// Getters
+// Ownership administration
+//
+
+@view
+func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+    // Desc:
+    //   Return the contract owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   owner(felt): The owner address
+    return Ownable.owner();
+}
+
+@external
+func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    newOwner: felt
+) {
+    // Desc:
+    //   Transfer ownership to a new owner
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   newOwner(felt): Address of the new owner
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   newOwner: new owner is the zero address
+    Ownable.transfer_ownership(newOwner);
+    return ();
+}
+
+@external
+func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    // Desc:
+    //   Renounce ownership
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   None
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.renounce_ownership();
+    return ();
+}
+
+//
+// ERC721
 //
 
 @view
@@ -310,30 +395,6 @@ func contractURI{
     return (uri_len=uri_len, uri=uri);
 }
 
-@view
-func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
-    // Desc:
-    //   Return the contract owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   owner(felt): The owner address
-    return Ownable.owner();
-}
-
-//
-// Externals
-//
-
-@external
-func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
-    Ownable.assert_only_owner();
-    CarbonableAccessControl.set_minter(minter);
-    return ();
-}
-
 @external
 func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     to: felt, tokenId: Uint256
@@ -464,28 +525,6 @@ func burn{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(token
 }
 
 @external
-func setTokenURI{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
-    tokenId: Uint256, tokenURI: felt
-) {
-    // Desc:
-    //   Set the token URI of the specified token id (EIP 721 - Metadata extension) -
-    //   This function is deprecated since the token uri is generated by the contract according
-    //   to the token id by default (see the setURI function instead)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   tokenId(Uint256): Token id
-    //   tokenURI(felt): The URI to set
-    // Raises:
-    //   tokenId: tokenId does not exist
-    Ownable.assert_only_owner();
-    // ERC721._set_token_uri(tokenId, tokenURI);
-    return ();
-}
-
-@external
 func setURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(uri_len: felt, uri: felt*) {
@@ -504,39 +543,192 @@ func setURI{
     return ();
 }
 
-@external
-func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    newOwner: felt
+//
+// Carbonable
+//
+
+@view
+func getStartTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    time: felt
 ) {
     // Desc:
-    //   Transfer ownership to a new owner
+    //   Return the stored start time
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   time(felt): Start time
+    return CarbonableProject.start_time();
+}
+
+@view
+func getFinalTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    time: felt
+) {
+    // Desc:
+    //   Return the computed final time
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   time(felt): Final time
+    return CarbonableProject.final_time();
+}
+
+@view
+func getTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    times_len: felt, times: felt*
+) {
+    // Desc:
+    //   Return the stored times
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   times_len(felt): Array length
+    //   times(felt*): timestamps
+    return CarbonableProject.times();
+}
+
+@view
+func getAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorptions_len: felt, absorptions: felt*
+) {
+    // Desc:
+    //   Return the stored absorptions
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   absorptions_len(felt): Array length
+    //   absorptions(felt*): absorption values
+    return CarbonableProject.absorptions();
+}
+
+@view
+func getAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(time: felt) -> (
+    absorption: felt
+) {
+    // Desc:
+    //   Return the computed absorption based on the current timestamp
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Explicit args:
-    //   newOwner(felt): Address of the new owner
+    //   time(felt): Time to compute the absorption
     // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the contract owner
-    //   newOwner: new owner is the zero address
-    Ownable.transfer_ownership(newOwner);
-    return ();
+    //   absorption(felt): absorption
+    return CarbonableProject.absorption(time=time);
 }
 
-@external
-func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+@view
+func getCurrentAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorption: felt
+) {
     // Desc:
-    //   Renounce ownership
+    //   Return the computed absorption based on the current timestamp
     // Implicit args:
     //   syscall_ptr(felt*)
     //   pedersen_ptr(HashBuiltin*)
     //   range_check_ptr
     // Returns:
-    //   None
+    //   absorption(felt): current absorption
+    return CarbonableProject.current_absorption();
+}
+
+@view
+func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    absorption: felt
+) {
+    // Desc:
+    //   Return the expected total absorption based on the final timestamp
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   absorptions(felt): Final absorption
+    return CarbonableProject.final_absorption();
+}
+
+@view
+func getTonEquivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    ton_equivalent: felt
+) {
+    // Desc:
+    //   Return the ton equivalent in absorption unit
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   ton_equivalent(felt): Ton equivalent
+    return CarbonableProject.ton_equivalent();
+}
+
+@view
+func isSetup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
+    // Desc:
+    //   Return the setup status of the contract
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   status(felt): 1 if setup else 0
+    return CarbonableProject.is_setup();
+}
+
+@external
+func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+    // Desc:
+    //   Add new minter
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   minter(felt): Minter address
     // Raises:
     //   caller: caller is not the contract owner
-    Ownable.renounce_ownership();
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_minter(minter);
     return ();
+}
+
+@external
+func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    times_len: felt, times: felt*, absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
+) {
+    // Desc:
+    //   Set new absorption values
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   times_len(felt): Array length
+    //   times(felt*): Time values
+    //   absorptions_len(felt): Array length
+    //   absorptions(felt*): Absorption values
+    //   ton_equivalent(felt): Absorption ton equivalent
+    // Raises:
+    //   caller: caller is not the contract owner
+    //   times_len: times_len is null
+    //   absorptions_len: absorptions_len is null
+    //   ton_equivalent: ton_equivalent is null
+    //   consistency: times_len and absorptions_len are not equal
+    Ownable.assert_only_owner();
+    return CarbonableProject.set_absorptions(
+        times_len=times_len,
+        times=times,
+        absorptions_len=absorptions_len,
+        absorptions=absorptions,
+        ton_equivalent=ton_equivalent,
+    );
 }

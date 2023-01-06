@@ -3,18 +3,14 @@
 %lang starknet
 
 // Starkware dependencies
+
+// Starkware dependencies
+from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_nn, assert_le
+from starkware.cairo.common.math import split_felt, unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le, is_not_zero
-from starkware.cairo.common.uint256 import (
-    Uint256,
-    uint256_check,
-    uint256_lt,
-    uint256_eq,
-    uint256_unsigned_div_rem,
-    uint256_mul_div_mod,
-)
+from starkware.cairo.common.uint256 import Uint256, uint256_check
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
     get_caller_address,
@@ -22,72 +18,69 @@ from starkware.starknet.common.syscalls import (
 )
 
 // Project dependencies
-from openzeppelin.security.safemath.library import SafeUint256
 from openzeppelin.token.erc20.IERC20 import IERC20
 from openzeppelin.token.erc721.IERC721 import IERC721
 from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 
-// Carbonable dependencies
-from interfaces.starkvest import IStarkVest
-
 // Local dependencies
 from src.interfaces.project import ICarbonableProject
+from src.utils.type.library import _uint_to_felt
 
 //
 // Events
 //
 
 @event
-func Offset(address: felt, quantity: Uint256, time: felt) {
+func Deposit(address: felt, token_id: Uint256, time: felt) {
 }
 
 @event
-func Snapshot(time: felt) {
+func Withdraw(address: felt, token_id: Uint256, time: felt) {
+}
+
+@event
+func Claim(address: felt, absorption: felt, time: felt) {
 }
 
 //
-// Storage variables - Common
+// Storages
 //
 
 @storage_var
-func carbonable_project_address_() -> (address: felt) {
+func CarbonableOffseter_carbonable_project_address_() -> (address: felt) {
 }
 
 @storage_var
-func start_() -> (time: felt) {
+func CarbonableOffseter_min_claimable_() -> (quantity: felt) {
 }
 
 @storage_var
-func unlocked_duration_() -> (duration: felt) {
+func CarbonableOffseter_registered_owner_(tokenId: Uint256) -> (address: felt) {
 }
 
 @storage_var
-func period_duration_() -> (duration: felt) {
+func CarbonableOffseter_registered_time_(tokenId: Uint256) -> (time: felt) {
 }
 
 @storage_var
-func registration_(token_id: Uint256) -> (address: felt) {
-}
-
-//
-// Storage variables - Offset
-//
-
-@storage_var
-func absorption_() -> (absorption: Uint256) {
+func CarbonableOffseter_claimable_(address: felt) -> (absorption: felt) {
 }
 
 @storage_var
-func total_offsetable_(address: felt) -> (balance: Uint256) {
+func CarbonableOffseter_claimed_(address: felt) -> (absorption: felt) {
 }
 
 @storage_var
-func total_offseted_(address: felt) -> (balance: Uint256) {
+func CarbonableOffseter_users_len_() -> (length: felt) {
 }
 
 @storage_var
-func snapshoted_() -> (snapshoted: felt) {
+func CarbonableOffseter_users_(index: felt) -> (address: felt) {
+}
+
+@storage_var
+func CarbonableOffseter_known_user_(address: felt) -> (bool: felt) {
 }
 
 namespace CarbonableOffseter {
@@ -98,7 +91,7 @@ namespace CarbonableOffseter {
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         carbonable_project_address: felt
     ) {
-        carbonable_project_address_.write(carbonable_project_address);
+        CarbonableOffseter_carbonable_project_address_.write(carbonable_project_address);
         return ();
     }
 
@@ -109,82 +102,87 @@ namespace CarbonableOffseter {
     func carbonable_project_address{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     }() -> (carbonable_project_address: felt) {
-        let (carbonable_project_address) = carbonable_project_address_.read();
-        return (carbonable_project_address,);
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
+        return (carbonable_project_address=carbonable_project_address);
     }
 
-    func carbonable_minter_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (carbonable_minter_address: felt) {
-        let (carbonable_project_address) = carbonable_project_address_.read();
-        let (carbonable_minter_address) = ICarbonableProject.owner(carbonable_project_address);
-        return (carbonable_minter_address=carbonable_minter_address,);
-    }
-
-    func get_start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        start_time: felt
+    func min_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        min_claimable: felt
     ) {
-        let (start) = start_.read();
-        return (start_time=start,);
+        let (min_claimable) = CarbonableOffseter_min_claimable_.read();
+        return (min_claimable=min_claimable);
     }
 
-    func get_lock_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        lock_time: felt
-    ) {
-        let (start) = get_start_time();
-        let (unlocked_duration) = unlocked_duration_.read();
-        return (lock_time=start + unlocked_duration,);
-    }
-
-    func get_end_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        end_time: felt
-    ) {
-        let (start) = get_start_time();
-        let (period_duration) = period_duration_.read();
-        return (end_time=start + period_duration,);
-    }
-
-    func is_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        status: felt
-    ) {
-        alloc_locals;
-
-        // [Compute] Absolute times
-        let (current_time) = get_block_timestamp();
-        let (lock_time) = get_lock_time();
-        let (end_time) = get_end_time();
-
-        // [Evaluate] Boudaries and current time
-        let is_before_lock = is_le(current_time, lock_time);
-        let is_after_lock = is_le(end_time, current_time);
-        let over = is_not_zero(is_before_lock + is_after_lock);
-        let status = 1 - over;
-
-        return (status=status,);
-    }
-
-    func total_locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    func total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         balance: Uint256
     ) {
         let (contract_address) = get_contract_address();
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
 
         let (balance) = IERC721.balanceOf(
             contract_address=carbonable_project_address, owner=contract_address
         );
 
-        return (balance=balance,);
+        return (balance=balance);
     }
 
-    func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        total_claimed: felt
+    ) {
+        let (users_len, users) = _read_users();
+
+        if (users_len == 0) {
+            return (total_claimed=0);
+        }
+
+        let (total_claimed) = _total_claimed_iter(index=users_len - 1, users=users);
+        return (total_claimed=total_claimed);
+    }
+
+    func total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        total_claimable: felt
+    ) {
+        let (users_len, users) = _read_users();
+
+        if (users_len == 0) {
+            return (total_claimable=0);
+        }
+
+        let (total_claimable) = _total_claimable_iter(index=users_len - 1, users=users);
+        return (total_claimable=total_claimable);
+    }
+
+    func claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
-    ) -> (balance: felt) {
+    ) -> (claimable: felt) {
         alloc_locals;
 
-        let (balance) = _count(address);
-        return (balance=balance,);
+        let (computed_claimable) = _claimable(user=address);
+        let (stored_claimable) = CarbonableOffseter_claimable_.read(address);
+        let (stored_claimed) = CarbonableOffseter_claimed_.read(address);
+        let claimable = stored_claimable + computed_claimable - stored_claimed;
+
+        // [Check] Overflow
+        let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
+        let (max_absorption) = ICarbonableProject.getCurrentAbsorption(
+            contract_address=contract_address
+        );
+        let not_overflow = is_le(claimable, max_absorption);
+        with_attr error_message("CarbonableOffseter: overflow while computing claimable") {
+            assert not_overflow = TRUE;
+        }
+
+        return (claimable=claimable);
     }
 
-    func registred_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (claimed: felt) {
+        let (claimed) = CarbonableOffseter_claimed_.read(address);
+        return (claimed=claimed);
+    }
+
+    func registered_owner_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: Uint256
     ) -> (address: felt) {
         // [Check] Uint256 compliance
@@ -193,81 +191,124 @@ namespace CarbonableOffseter {
         }
         // [Check] Owned token id
         let (contract_address) = get_contract_address();
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         // [Check] Throws error if unknown token id
         let (owner) = IERC721.ownerOf(
             contract_address=carbonable_project_address, tokenId=token_id
         );
-        with_attr error_message("CarbonableOffseter: token_id has not been registred") {
+        with_attr error_message("CarbonableOffseter: token_id has not been registered") {
             assert owner = contract_address;
         }
 
-        let (address) = registration_.read(token_id);
-        return (address=address,);
+        let (address) = CarbonableOffseter_registered_owner_.read(token_id);
+        return (address=address);
     }
 
-    func total_offsetable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        address: felt
-    ) -> (total_offsetable: Uint256) {
-        let (total_offsetable) = total_offsetable_.read(address);
-        return (total_offsetable=total_offsetable,);
+    func registered_time_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: Uint256
+    ) -> (time: felt) {
+        // [Check] Uint256 compliance
+        with_attr error_message("CarbonableOffseter: token_id is not a valid Uint256") {
+            uint256_check(token_id);
+        }
+        // [Check] Owned token id
+        let (contract_address) = get_contract_address();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
+        // [Check] Throws error if unknown token id
+        let (owner) = IERC721.ownerOf(
+            contract_address=carbonable_project_address, tokenId=token_id
+        );
+        with_attr error_message("CarbonableOffseter: token_id has not been registered") {
+            assert owner = contract_address;
+        }
+
+        let (time) = CarbonableOffseter_registered_time_.read(token_id);
+        return (time=time);
     }
 
-    func total_offseted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func registered_tokens_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
-    ) -> (total_offseted: Uint256) {
-        let (total_offseted) = total_offseted_.read(address);
-        return (total_offseted=total_offseted,);
+    ) -> (tokens_len: felt, tokens: Uint256*) {
+        alloc_locals;
+
+        let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
+        let (total_supply_uint256) = IERC721Enumerable.totalSupply(
+            contract_address=contract_address
+        );
+        let (total_supply) = _uint_to_felt(total_supply_uint256);
+
+        // [Check] totalSupply is not zero
+        let not_zero = is_not_zero(total_supply);
+        with_attr error_message("CarbonableOffseter: project total supply is null") {
+            assert not_zero = TRUE;
+        }
+
+        let (local empty: Uint256*) = alloc();
+        let (tokens_len, tokens) = _registerd_tokens_iter(
+            contract_address=contract_address,
+            user=address,
+            index=total_supply - 1,
+            tokens_len=0,
+            tokens=empty,
+        );
+        return (tokens_len=tokens_len, tokens=tokens);
+    }
+
+    func registered_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        users_len: felt, users: felt*
+    ) {
+        let (users_len, users) = _read_users();
+        return (users_len=users_len, users=users);
     }
 
     //
     // Externals
     //
 
-    func start_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        unlocked_duration: felt, period_duration: felt, absorption: felt
-    ) -> (success: felt) {
-        // [Check] Duration inputs validity
-        with_attr error_message("CarbonableOffseter: Invalid period duration") {
-            assert_nn(period_duration);
+    func set_min_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        min_claimable: felt
+    ) -> () {
+        let not_zero = is_not_zero(min_claimable);
+        with_attr error_message("CarbonableOffseter: min claimable balance must be not null") {
+            assert not_zero = TRUE;
         }
-        with_attr error_message("CarbonableOffseter: Invalid locked duration") {
-            assert_le(unlocked_duration, period_duration);
-        }
-
-        // [Effect] Store absorption information
-        absorption_.write(Uint256(low=absorption, high=0));
-
-        // [Effect] Store period information
-        let (current_time) = get_block_timestamp();
-        start_.write(current_time);
-        period_duration_.write(period_duration);
-        unlocked_duration_.write(unlocked_duration);
-
-        // [Effect] Reset snapshoted status
-        snapshoted_.write(0);
-
-        return (success=TRUE,);
+        CarbonableOffseter_min_claimable_.write(min_claimable);
+        return ();
     }
 
-    func stop_period{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
         success: felt
     ) {
-        // [Check] Current period
-        let (current_time) = get_block_timestamp();
-        let (start) = start_.read();
-        let (period_duration) = period_duration_.read();
-        let end = start + period_duration;
-        with_attr error_message("CarbonableOffseter: No current period") {
-            assert_le(current_time, end);
+        // [Check] Quanity is not null
+        CarbonableOffseter_assert.claimable_not_negligible(quantity);
+
+        // [Check] Quantity is lower or equal to the total claimable
+        let (caller) = get_caller_address();
+        let (claimable) = claimable_of(caller);
+        let is_lower = is_le(quantity, claimable);
+        with_attr error_message(
+                "CarbonableOffseter: quantity to claim must be lower than the total claimable") {
+            assert is_lower = TRUE;
         }
 
-        // [Effect] Reset period information
-        start_.write(0);
-        period_duration_.write(0);
-        unlocked_duration_.write(0);
+        // [Effect] Claim
+        _claim(quantity=quantity);
+        return (success=TRUE);
+    }
 
-        return (success=TRUE,);
+    func claim_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        success: felt
+    ) {
+        alloc_locals;
+
+        // [Check] Total offsetable is not null
+        let (caller) = get_caller_address();
+        let (claimable) = claimable_of(caller);
+        CarbonableOffseter_assert.claimable_not_negligible(claimable);
+
+        // [Effect] Claim
+        _claim(quantity=claimable);
+        return (success=TRUE);
     }
 
     func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -278,19 +319,13 @@ namespace CarbonableOffseter {
         // [Security] Start reetrancy guard
         ReentrancyGuard.start();
 
-        // [Check] Locked status
-        let (status) = is_locked();
-        with_attr error_message("CarbonableOffseter: deposits are currently locked") {
-            assert status = FALSE;
-        }
-
         // [Check] Uint256 compliance
         with_attr error_message("CarbonableOffseter: token_id is not a valid Uint256") {
             uint256_check(token_id);
         }
 
         // [Interaction] Transfer token_id from caller to contract
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (caller) = get_caller_address();
         let (contract_address) = get_contract_address();
         IERC721.transferFrom(
@@ -308,13 +343,30 @@ namespace CarbonableOffseter {
             assert owner = contract_address;
         }
 
-        // [Effect] Register the caller with the token id
-        registration_.write(token_id, caller);
+        // [Effect] Register the caller with the token id and the current timestamp
+        let (current_time) = get_block_timestamp();
+        CarbonableOffseter_registered_owner_.write(token_id, caller);
+        CarbonableOffseter_registered_time_.write(token_id, current_time);
+
+        // [Effect] Emit event
+        Deposit.emit(address=caller, token_id=token_id, time=current_time);
+
+        // [Effect] Register the caller
+        let (is_known) = CarbonableOffseter_known_user_.read(caller);
+        let (index) = CarbonableOffseter_users_len_.read();
+        if (is_known == FALSE) {
+            CarbonableOffseter_users_.write(index, caller);
+            CarbonableOffseter_users_len_.write(index + 1);
+            CarbonableOffseter_known_user_.write(caller, TRUE);
+
+            // [Security] End reetrancy guard
+            ReentrancyGuard.end();
+            return (success=TRUE);
+        }
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
-
-        return (success=TRUE,);
+        return (success=TRUE);
     }
 
     func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -325,24 +377,24 @@ namespace CarbonableOffseter {
         // [Security] Start reetrancy guard
         ReentrancyGuard.start();
 
-        // [Check] Locked status
-        let (status) = is_locked();
-        with_attr error_message("CarbonableOffseter: withdrawals are currently locked") {
-            assert status = FALSE;
-        }
-
         // [Check] Uint256 compliance
         with_attr error_message("CarbonableOffseter: token_id is not a valid Uint256") {
             uint256_check(token_id);
         }
 
+        // [Effect] Store cumulated claimable
+        let (caller) = get_caller_address();
+        let (computed_claimable) = _claimable(user=caller);
+        let (stored_claimable) = CarbonableOffseter_claimable_.read(caller);
+        CarbonableOffseter_claimable_.write(caller, stored_claimable + computed_claimable);
+
         // [Effect] Remove the caller from registration for the token id
-        registration_.write(token_id, 0);
+        CarbonableOffseter_registered_owner_.write(token_id, 0);
+        CarbonableOffseter_registered_time_.write(token_id, 0);
 
         // [Interaction] Transfer token_id from contract to call
-        let (carbonable_project_address) = carbonable_project_address_.read();
+        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (contract_address) = get_contract_address();
-        let (caller) = get_caller_address();
         IERC721.transferFrom(
             contract_address=carbonable_project_address,
             from_=contract_address,
@@ -358,180 +410,238 @@ namespace CarbonableOffseter {
             assert owner = caller;
         }
 
+        // [Effect] Emit event
+        let (current_time) = get_block_timestamp();
+        Withdraw.emit(address=caller, token_id=token_id, time=current_time);
+
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
-        return (success=TRUE,);
-    }
-
-    func offset{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        success: felt
-    ) {
-        alloc_locals;
-
-        // [Check] Total offsetable not null
-        let (caller) = get_caller_address();
-        let (total_offsetable) = total_offsetable_.read(caller);
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(total_offsetable, zero);
-        with_attr error_message("CarbonableOffseter: offsetable balance must be positive") {
-            assert is_zero = FALSE;
-        }
-
-        // [Effect] Transfer value from offsetable to offseted
-        let (total_offseted) = total_offseted_.read(caller);
-        let (new_total_offseted) = SafeUint256.add(total_offseted, total_offsetable);
-        total_offsetable_.write(caller, zero);
-        total_offseted_.write(caller, new_total_offseted);
-
-        let (current_time) = get_block_timestamp();
-        Offset.emit(address=caller, quantity=total_offsetable, time=current_time);
-        return (success=TRUE,);
-    }
-
-    func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        success: felt
-    ) {
-        // [Check] Locked period
-        let (status) = is_locked();
-        with_attr error_message("CarbonableOffseter: snapshot must be executed in locked period") {
-            assert status = TRUE;
-        }
-
-        // [Check] Snapshot not yet executed for the current period
-        let (snapshoted) = snapshoted_.read();
-        with_attr error_message(
-                "CarbonableOffseter: snapshot already executed for the current period") {
-            assert snapshoted = FALSE;
-        }
-
-        // [Effect] Update snapshot status
-        snapshoted_.write(TRUE);
-
-        // [Interaction] Run snapshot
-        _snapshot();
-
-        let (current_time) = get_block_timestamp();
-        Snapshot.emit(time=current_time);
-
-        return (success=TRUE,);
+        return (success=TRUE);
     }
 
     //
     // Internals
     //
 
-    func _count{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) -> (
-        count: felt
+    func _read_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        users_len: felt, users: felt*
     ) {
         alloc_locals;
+        let (users_len) = CarbonableOffseter_users_len_.read();
+        let (local users: felt*) = alloc();
 
-        let (contract_address) = carbonable_project_address_.read();
-        let (total_supply) = IERC721Enumerable.totalSupply(contract_address=contract_address);
-
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(total_supply, zero);
-        if (is_zero == TRUE) {
-            return (count=0,);
+        if (users_len == 0) {
+            return (users_len=users_len, users=users);
         }
 
-        let one = Uint256(low=1, high=0);
-        let (index) = SafeUint256.sub_le(total_supply, one);
-        let (count) = _count_iter(contract_address=contract_address, address=address, index=index);
-
-        return (count=count,);
+        _read_users_iter(index=users_len - 1, users=users);
+        return (users_len=users_len, users=users);
     }
 
-    func _count_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        contract_address: felt, address: felt, index: Uint256
-    ) -> (count: felt) {
+    func _read_users_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        index: felt, users: felt*
+    ) {
+        alloc_locals;
+        let (user) = CarbonableOffseter_users_.read(index);
+        assert users[index] = user;
+        if (index == 0) {
+            return ();
+        }
+        _read_users_iter(index=index - 1, users=users);
+        return ();
+    }
+
+    func _registerd_tokens_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        contract_address: felt, user: felt, index: felt, tokens_len: felt, tokens: Uint256*
+    ) -> (tokens_len: felt, tokens: Uint256*) {
         alloc_locals;
 
-        // Get registred owner of the current token index
+        // Get registered owner of the current token index
+        let (high, low) = split_felt(index);
+        let index_uint256 = Uint256(low=low, high=high);
         let (token_id) = IERC721Enumerable.tokenByIndex(
-            contract_address=contract_address, index=index
+            contract_address=contract_address, index=index_uint256
         );
-        let (owner) = registration_.read(token_id);
+        let (owner) = CarbonableOffseter_registered_owner_.read(token_id);
 
-        // Increment the counter if owner is the specified address
-        let not_eq = is_not_zero(owner - address);
-        let count = 1 - not_eq;
+        // Check if user is registered owner
+        let not_eq = is_not_zero(owner - user);
+        if (not_eq == TRUE) {
+            // Stop if index = 0
+            if (index == 0) {
+                return (tokens_len=tokens_len, tokens=tokens);
+            }
+
+            // Else move on to next index
+            let (updated_tokens_len, updated_tokens) = _registerd_tokens_iter(
+                contract_address=contract_address,
+                user=user,
+                index=index - 1,
+                tokens_len=tokens_len,
+                tokens=tokens,
+            );
+            return (tokens_len=updated_tokens_len, tokens=updated_tokens);
+        }
+
+        // User is the registered owner, the add the token id to the tokens array
+        assert tokens[tokens_len] = token_id;
 
         // Stop if index is null
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(index, zero);
-        if (is_zero == TRUE) {
-            return (count=count,);
+        if (index == 0) {
+            return (tokens_len=tokens_len + 1, tokens=tokens);
+        }
+        let (updated_tokens_len, updated_tokens) = _registerd_tokens_iter(
+            contract_address=contract_address,
+            user=user,
+            index=index - 1,
+            tokens_len=tokens_len + 1,
+            tokens=tokens,
+        );
+        return (tokens_len=updated_tokens_len, tokens=updated_tokens);
+    }
+
+    func _total_claimed_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        index: felt, users: felt*
+    ) -> (total_claimed: felt) {
+        alloc_locals;
+
+        let user = users[index];
+        let (claimed) = CarbonableOffseter_claimed_.read(user);
+
+        if (index == 0) {
+            return (total_claimed=claimed);
+        }
+
+        let (add) = _total_claimed_iter(index=index - 1, users=users);
+        return (total_claimed=claimed + add);
+    }
+
+    func _total_claimable_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        index: felt, users: felt*
+    ) -> (total_claimable: felt) {
+        alloc_locals;
+
+        let user = users[index];
+        let (claimable) = claimable_of(user);
+
+        if (index == 0) {
+            return (total_claimable=claimable);
+        }
+
+        let (add) = _total_claimable_iter(index=index - 1, users=users);
+        return (total_claimable=claimable + add);
+    }
+
+    func _claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        user: felt
+    ) -> (claimable: felt) {
+        alloc_locals;
+
+        let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
+        let (total_supply_uint256) = IERC721Enumerable.totalSupply(
+            contract_address=contract_address
+        );
+        let (total_supply) = _uint_to_felt(total_supply_uint256);
+
+        // [Check] totalSupply is not zero
+        let not_zero = is_not_zero(total_supply);
+        with_attr error_message("CarbonableOffseter: project total supply is null") {
+            assert not_zero = TRUE;
+        }
+
+        let (total_claimable) = _claimable_iter(
+            contract_address=contract_address, user=user, index=total_supply - 1
+        );
+
+        if (total_claimable == 0) {
+            return (claimable=total_claimable);
+        }
+
+        let (claimable, _) = unsigned_div_rem(total_claimable, total_supply);
+        return (claimable=claimable);
+    }
+
+    func _claimable_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        contract_address: felt, user: felt, index: felt
+    ) -> (claimable: felt) {
+        alloc_locals;
+
+        // Get registered owner of the current token index
+        let (high, low) = split_felt(index);
+        let index_uint256 = Uint256(low=low, high=high);
+        let (token_id) = IERC721Enumerable.tokenByIndex(
+            contract_address=contract_address, index=index_uint256
+        );
+        let (owner) = CarbonableOffseter_registered_owner_.read(token_id);
+        let (time) = CarbonableOffseter_registered_time_.read(token_id);
+
+        // Check if user is registered owner
+        let not_eq = is_not_zero(owner - user);
+        if (not_eq == TRUE) {
+            // Stop if index = 0
+            if (index == 0) {
+                return (claimable=0);
+            }
+
+            // Else move on to next index
+            let (add) = _claimable_iter(
+                contract_address=contract_address, user=user, index=index - 1
+            );
+            return (claimable=add);
+        }
+
+        // User is the registered owner, then compute claimable for the current token
+        let (initial_absorption) = ICarbonableProject.getAbsorption(
+            contract_address=contract_address, time=time
+        );
+        let (final_absorption) = ICarbonableProject.getCurrentAbsorption(
+            contract_address=contract_address
+        );
+
+        // [Check] felt overflow
+        let right_order = is_le(initial_absorption, final_absorption);
+        with_attr error_message("CarbonableOffseter: Error while computing claimable") {
+            assert right_order = TRUE;
+        }
+        let claimable = final_absorption - initial_absorption;
+
+        // Stop if index is null
+        if (index == 0) {
+            return (claimable=claimable);
         }
 
         // Else move on to next index
-        let one = Uint256(low=1, high=0);
-        let (next) = SafeUint256.sub_le(index, one);
-        let (add) = _count_iter(contract_address=contract_address, address=address, index=next);
-        return (count=count + add,);
+        let (add) = _claimable_iter(contract_address=contract_address, user=user, index=index - 1);
+        return (claimable=claimable + add);
     }
 
-    func _snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        alloc_locals;
+    func _claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        quantity: felt
+    ) -> () {
+        // [Effect] Add claimed value
+        let (caller) = get_caller_address();
+        let (stored_claimed) = CarbonableOffseter_claimed_.read(caller);
+        let claimed = stored_claimed + quantity;
+        CarbonableOffseter_claimed_.write(caller, claimed);
 
-        let (contract_address) = carbonable_project_address_.read();
-        let (total_supply) = IERC721Enumerable.totalSupply(contract_address=contract_address);
-
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(total_supply, zero);
-        if (is_zero == TRUE) {
-            return ();
-        }
-
-        let one = Uint256(low=1, high=0);
-        let (index) = SafeUint256.sub_le(total_supply, one);
-        return _snapshot_iter(
-            contract_address=contract_address, index=index, total_supply=total_supply
-        );
+        // [Effect] Emit event
+        let (current_time) = get_block_timestamp();
+        Claim.emit(address=caller, absorption=quantity, time=current_time);
+        return ();
     }
+}
 
-    func _snapshot_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        contract_address: felt, index: Uint256, total_supply: Uint256
+// Assert helpers
+namespace CarbonableOffseter_assert {
+    func claimable_not_negligible{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        claimable: felt
     ) {
-        alloc_locals;
-
-        // Get registred address of the current token index
-        let (token_id) = IERC721Enumerable.tokenByIndex(
-            contract_address=contract_address, index=index
-        );
-        let (address) = registration_.read(token_id);
-
-        // If registred then update the total offsetable
-        let one = Uint256(low=1, high=0);
-        if (address != 0) {
-            let (absorption) = absorption_.read();
-            let (quantity, _, _) = uint256_mul_div_mod(absorption, one, total_supply);
-            let (balance) = total_offsetable_.read(address);
-            let (new_balance) = SafeUint256.add(balance, quantity);
-            total_offsetable_.write(address, new_balance);
-
-            tempvar _syscall_ptr = syscall_ptr;
-            tempvar _pedersen_ptr = pedersen_ptr;
-            tempvar _range_check_ptr = range_check_ptr;
-        } else {
-            tempvar _syscall_ptr = syscall_ptr;
-            tempvar _pedersen_ptr = pedersen_ptr;
-            tempvar _range_check_ptr = range_check_ptr;
+        let (minimum) = CarbonableOffseter.min_claimable();
+        let is_lower = is_le(minimum, claimable);
+        with_attr error_message("CarbonableOffseter: claimable balance must be not negligible") {
+            assert is_lower = TRUE;
         }
-        let syscall_ptr = _syscall_ptr;
-        let pedersen_ptr = _pedersen_ptr;
-        let range_check_ptr = _range_check_ptr;
-
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(index, zero);
-        // Stop recursion if index is 0
-        if (is_zero == TRUE) {
-            return ();
-        }
-        // Else move on to the next index
-        let (next) = SafeUint256.sub_le(index, one);
-        return _snapshot_iter(
-            contract_address=contract_address, index=next, total_supply=total_supply
-        );
+        return ();
     }
 }
