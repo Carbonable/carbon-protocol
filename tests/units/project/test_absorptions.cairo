@@ -152,13 +152,25 @@ func test_final_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @external
-func test_final_absorption_revert_not_defined{
+func test_final_absorption_zero_not_set{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     alloc_locals;
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: absorptions must be defined") %}
     let (absorption) = CarbonableProject.final_absorption();
+    assert absorption = 0;
+
+    return ();
+}
+
+@external
+func test_absorption_zero_not_set{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
+    alloc_locals;
+
+    let (absorption) = CarbonableProject.current_absorption();
+    assert absorption = 0;
+
     return ();
 }
 
