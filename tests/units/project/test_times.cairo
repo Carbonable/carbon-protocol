@@ -29,13 +29,13 @@ func test_start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @external
-func test_start_time_revert_not_defined{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
+func test_start_time_zero_not_set{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
     alloc_locals;
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: times must be defined") %}
     let (time) = CarbonableProject.start_time();
+    assert time = 0;
+
     return ();
 }
 
@@ -52,12 +52,12 @@ func test_final_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @external
-func test_final_time_revert_not_defined{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
+func test_final_time_zero_not_set{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
     alloc_locals;
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: times must be defined") %}
     let (time) = CarbonableProject.final_time();
+    assert time = 0;
+
     return ();
 }

@@ -545,9 +545,8 @@ namespace CarbonableOffseter {
         let (total_supply) = _uint_to_felt(total_supply_uint256);
 
         // [Check] totalSupply is not zero
-        let not_zero = is_not_zero(total_supply);
-        with_attr error_message("CarbonableOffseter: project total supply is null") {
-            assert not_zero = TRUE;
+        if (total_supply == 0) {
+            return (claimable=0);
         }
 
         let (total_claimable) = _claimable_iter(
