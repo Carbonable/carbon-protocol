@@ -41,23 +41,7 @@ func Snapshot(
 }
 
 @event
-func UserSnapshot(
-    address: felt,
-    project: felt,
-    previous_time: felt,
-    previous_user_yielder_absorption: felt,
-    current_time: felt,
-    current_user_yielder_absorption: felt,
-    period_user_yielder_absorption: felt,
-) {
-}
-
-@event
 func Vesting(project: felt, amount: felt, time: felt) {
-}
-
-@event
-func UserVesting(address: felt, project: felt, amount: felt, time: felt, vesting_id: felt) {
 }
 
 //
@@ -206,13 +190,7 @@ namespace CarbonableYielder {
         CarbonableYielder_snapshoted_yielder_contribution_.write(period_yielder_absorption);
 
         // [Effect] Store period shares per users
-        _snapshot_iter(
-            users_index=users_len - 1,
-            users=users,
-            carbonable_project_address=carbonable_project_address,
-            previous_time=previous_time,
-            current_time=current_time,
-        );
+        _snapshot_iter(users_index=users_len - 1, users=users);
 
         // [Effect] Update vested status
         CarbonableYielder_vested_.write(FALSE);
@@ -290,11 +268,7 @@ namespace CarbonableYielder {
     //
 
     func _snapshot_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        users_index: felt,
-        users: felt*,
-        carbonable_project_address: felt,
-        previous_time: felt,
-        current_time: felt,
+        users_index: felt, users: felt*
     ) {
         alloc_locals;
 
@@ -329,26 +303,9 @@ namespace CarbonableYielder {
         );
         CarbonableYielder_snapshoted_user_yielder_contribution_.write(user, period_contribution);
 
-        // [Effect] Emit user snapshot event
-        UserSnapshot.emit(
-            address=user,
-            project=carbonable_project_address,
-            previous_time=previous_time,
-            previous_user_yielder_absorption=previous_yielder_absorption,
-            current_time=current_time,
-            current_user_yielder_absorption=current_yielder_absorption,
-            period_user_yielder_absorption=period_contribution,
-        );
-
         // [Check] If not last, then continue
         if (users_index != 0) {
-            _snapshot_iter(
-                users_index=users_index - 1,
-                users=users,
-                carbonable_project_address=carbonable_project_address,
-                previous_time=previous_time,
-                current_time=current_time,
-            );
+            _snapshot_iter(users_index=users_index - 1, users=users);
             return ();
         }
         return ();
@@ -413,15 +370,6 @@ namespace CarbonableYielder {
             slice_period_seconds=slice_period_seconds,
             revocable=revocable,
             amount_total=amount_uint256,
-        );
-
-        // [Event] Emit addr vesting are created
-        UserVesting.emit(
-            address=beneficiary,
-            project=carbonable_project_address,
-            amount=amount,
-            time=current_time,
-            vesting_id=vesting_id,
         );
 
         // [Check] if index is not null, then continue
