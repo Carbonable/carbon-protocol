@@ -12,6 +12,7 @@ from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.offset.library import CarbonableOffseter
+from src.utils.access.library import CarbonableAccessControl
 from src.yield.library import CarbonableYielder
 
 //
@@ -173,6 +174,40 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     //   caller: caller is not the contract owner
     Ownable.renounce_ownership();
     return ();
+}
+
+@external
+func setSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    snapshoter: felt
+) {
+    // Desc:
+    //   Set the snapshoter
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   snapshoter(felt): snapshoter address
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_snapshoter(snapshoter);
+    return ();
+}
+
+@view
+func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    snapshoter: felt
+) {
+    // Desc:
+    //   Get the snapshoter
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   snapshoter(felt): snapshoter address
+    return CarbonableAccessControl.get_snapshoter();
 }
 
 //
@@ -405,8 +440,8 @@ func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     // Returns:
     //   success(felt): Success status
     // Raises:
-    //   caller: caller is not the contract owner
-    Ownable.assert_only_owner();
+    //   caller: caller does not have the SNAPSHOTER_ROLE role
+    CarbonableAccessControl.assert_only_snapshoter();
     return CarbonableYielder.snapshot();
 }
 

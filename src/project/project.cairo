@@ -496,7 +496,7 @@ func mint{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     // Returns:
     //   None
     // Raises:
-    //   caller: caller is not the contract owner
+    //   caller: caller does not have the MINTER_ROLE role
     //   to: to is the zero address
     //   tokenId: tokenId is not a valid Uint256
     //   tokenId: token already minted
@@ -701,6 +701,74 @@ func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ();
 }
 
+@view
+func getMinters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    minters_len: felt, minters: felt*
+) {
+    // Desc:
+    //   Get the list of minters
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   minters_len(felt): minters array length
+    //   minters(felt*): minter addresses
+    return CarbonableAccessControl.get_minters();
+}
+
+@external
+func revokeMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+    // Desc:
+    //   Revoke minter role
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   minter(felt): Minter address
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.revoke_minter(minter);
+    return ();
+}
+
+@external
+func setCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    certifier: felt
+) {
+    // Desc:
+    //   Add new Certifier
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   certifier(felt): Certifier address
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_certifier(certifier);
+    return ();
+}
+
+@view
+func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    certifier: felt
+) {
+    // Desc:
+    //   Get the certifier
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns
+    //   certifier(felt): Certifier address
+    let (certifier) = CarbonableAccessControl.get_certifier();
+    return (certifier=certifier);
+}
+
 @external
 func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     times_len: felt, times: felt*, absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
@@ -718,12 +786,12 @@ func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     //   absorptions(felt*): Absorption values
     //   ton_equivalent(felt): Absorption ton equivalent
     // Raises:
-    //   caller: caller is not the contract owner
+    //   caller: caller does not have the CERTIFIER_ROLE role
     //   times_len: times_len is null
     //   absorptions_len: absorptions_len is null
     //   ton_equivalent: ton_equivalent is null
     //   consistency: times_len and absorptions_len are not equal
-    Ownable.assert_only_owner();
+    CarbonableAccessControl.assert_only_certifier();
     return CarbonableProject.set_absorptions(
         times_len=times_len,
         times=times,
