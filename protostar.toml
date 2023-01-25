@@ -5,7 +5,7 @@ cairo-path = [
     "./lib/cairopen_contracts/src",
     "./lib/cairo_contracts/src",
     "./lib/bal7hazar_contracts/src",
-    "./lib/carbonable_starkvest/src",
+    "./lib/starkvest/src",
     "src",
 ]
 

@@ -1,9 +1,6 @@
 [submodule "cairopen_contracts"]
 	url = https://github.com/CairOpen/cairopen-contracts.git
 	path = lib/cairopen_contracts
-[submodule "carbonable_starkvest"]
-	path = lib/carbonable_starkvest
-	url = https://github.com/Carbonable/starkvest
 [submodule "cairo_contracts"]
 	path = lib/cairo_contracts
 	url = https://github.com/OpenZeppelin/cairo-contracts
