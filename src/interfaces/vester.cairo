@@ -36,6 +36,15 @@ namespace ICarbonableVester {
     func renounceOwnership() {
     }
 
+    func addVester(vester: felt) {
+    }
+
+    func getVesters() -> (vester_len: felt, vester: felt*) {
+    }
+
+    func revokeVester(vester: felt) {
+    }
+
     //
     // Views
     //

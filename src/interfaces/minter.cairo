@@ -36,6 +36,12 @@ namespace ICarbonableMinter {
     func renounceOwnership() {
     }
 
+    func setWithdrawer(withdrawer: felt) {
+    }
+
+    func getWithdrawer() -> (withdrawer: felt) {
+    }
+
     //
     // Views
     //
@@ -109,9 +115,7 @@ namespace ICarbonableMinter {
     func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
     }
 
-    func preBuy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (
-        success: felt
-    ) {
+    func preBuy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (success: felt) {
     }
 
     func publicBuy(quantity: felt) -> (success: felt) {

@@ -39,7 +39,16 @@ namespace ICarbonableProject {
     func addMinter(minter: felt) {
     }
 
-    func mint(to: felt, token_id: Uint256) {
+    func revokeMinter(minter: felt) {
+    }
+
+    func getMinters() -> (minters_len: felt, minters: felt*) {
+    }
+
+    func setCertifier(certifier: felt) {
+    }
+
+    func getCertifier() -> (certifiers_len: felt, certifiers: felt*) {
     }
 
     //
@@ -76,6 +85,9 @@ namespace ICarbonableProject {
     //
     // Externals
     //
+
+    func mint(to: felt, token_id: Uint256) {
+    }
 
     func setAbsorptions(
         times_len: felt,
