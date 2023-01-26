@@ -157,24 +157,24 @@ namespace CarbonableAccessControl {
 
     func _get_role_members{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         role: felt
-    ) -> (minters_len: felt, minters: felt*) {
+    ) -> (members_len: felt, members: felt*) {
         alloc_locals;
-        let (local minters: felt*) = alloc();
+        let (local members: felt*) = alloc();
         let (n) = CarbonableAccessControl_role_members_len.read(role);
-        _get_role_members_iter(role, n, minters);
-        return (minters_len=n - 1, minters=minters);
+        _get_role_members_iter(role, n, members);
+        return (members_len=n, members=members);
     }
 
     func _get_role_members_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        role: felt, n: felt, minters: felt*
+        role: felt, n: felt, members: felt*
     ) {
         if (n == 0) {
             return ();
         }
 
-        let (minter) = CarbonableAccessControl_role_members_index.read(role, n - 1);
-        assert [minters] = minter;
-        return _get_role_members_iter(role, n - 1, minters + 1);
+        let (member) = CarbonableAccessControl_role_members_index.read(role, n - 1);
+        assert [members] = member;
+        return _get_role_members_iter(role, n - 1, members + 1);
     }
 
     func _set_role{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -203,8 +203,8 @@ namespace CarbonableAccessControl {
 
         AccessControl._revoke_role(role, user);
         let (old_size) = CarbonableAccessControl_role_members_len.read(role);
-        let (user_index) = CarbonableAccessControl_role_members_index.read(role, user);
-        let (last_user) = CarbonableAccessControl_role_members.read(role, old_size - 1);
+        let (user_index) = CarbonableAccessControl_role_members.read(role, user);
+        let (last_user) = CarbonableAccessControl_role_members_index.read(role, old_size - 1);
         CarbonableAccessControl_role_members_len.write(role, old_size - 1);
         CarbonableAccessControl_role_members_index.write(role, user_index, last_user);
         CarbonableAccessControl_role_members.write(role, last_user, user_index);

@@ -48,7 +48,7 @@ namespace ICarbonableProject {
     func setCertifier(certifier: felt) {
     }
 
-    func getCertifier() -> (certifiers_len: felt, certifiers: felt*) {
+    func getCertifier() -> (certifier: felt) {
     }
 
     //
