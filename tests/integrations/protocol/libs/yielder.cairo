@@ -117,7 +117,25 @@ namespace instance {
         return (absorption=absorption);
     }
 
+    func get_snapshoter{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
+    }(caller: felt) -> (snapshoter: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
+        let (snapshoter) = ICarbonableYielder.getSnapshoter(carbonable_yielder);
+        %{ stop_prank() %}
+        return (snapshoter);
+    }
+
     // Externals
+
+    func set_snapshoter{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt
+    }(snapshoter: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_yielder) %}
+        ICarbonableYielder.setSnapshoter(carbonable_yielder, snapshoter);
+        %{ stop_prank() %}
+        return ();
+    }
 
     func deposit{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_yielder: felt

@@ -64,7 +64,34 @@ namespace instance {
         return (releasable_amount=releasable_amount);
     }
 
+    func get_vesters{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
+    }(caller: felt) -> (vesters_len: felt, vesters: felt*) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
+        let (vesters_len, vesters) = ICarbonableVester.getVesters(carbonable_vester);
+        %{ stop_prank() %}
+        return (vesters_len, vesters);
+    }
+
     // Externals
+
+    func add_vester{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
+    }(vester: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
+        ICarbonableVester.addVester(carbonable_vester, vester);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func revoke_vester{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
+    }(vester: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
+        ICarbonableVester.revokeVester(carbonable_vester, vester);
+        %{ stop_prank() %}
+        return ();
+    }
 
     func transfer_ownership{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt

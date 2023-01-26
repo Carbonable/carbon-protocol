@@ -1,6 +1,9 @@
 signers:
   admin: 1000
   anyone: 1001
+  certifier: 1002
+  withdrawer: 1003
+  snapshoter: 1004
 
 sources:
   proxy: ./src/proxy/proxy.cairo

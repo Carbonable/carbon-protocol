@@ -11,6 +11,7 @@ from tests.integrations.protocol.library import (
     setup,
     carbonable_minter_instance as minter,
     admin_instance as admin,
+    withdrawer_instance as withdrawer,
     anyone_instance as anyone,
 )
 
@@ -45,7 +46,7 @@ func test_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     // And admin open the public sale
     // And anyone approves minter for 1 token equivalent nft
     // And anyone makes 1 public buy
-    // And admin withdraw minter contract balance
+    // And Withdrawer withdraws minter contract balance
     // Then no failed transactions expected
 
     anyone.approve(quantity=5);
@@ -57,7 +58,7 @@ func test_whitelisted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     admin.set_public_sale_open(TRUE);
     anyone.approve(quantity=1);
     anyone.public_buy(quantity=1);
-    admin.withdraw();
+    withdrawer.withdraw();
 
     let (sold_out) = admin.sold_out();
     assert sold_out = TRUE;
@@ -89,7 +90,7 @@ func test_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // And admin airdrops 3 nfts to anyone
     // And admin decreases reserved supply by 1
     // And anyone makes 1 public buy
-    // And admin withdraw minter contract balance
+    // And Withdrawer withdraws minter contract balance
     // Then no failed transactions expected
     alloc_locals;
     let (minter_address) = minter.get_address();
@@ -108,7 +109,7 @@ func test_airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     anyone.public_buy(quantity=1);
     %{ expect_events(dict(name="SoldOut", data=dict(time=200))) %}
     anyone.public_buy(quantity=1);
-    admin.withdraw();
+    withdrawer.withdraw();
 
     return ();
 }

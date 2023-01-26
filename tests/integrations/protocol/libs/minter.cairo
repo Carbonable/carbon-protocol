@@ -121,7 +121,25 @@ namespace instance {
         return (total_value=total_value);
     }
 
+    func get_withdrawer{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
+    }(caller: felt) -> (withdrawer: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        let (withdrawer) = ICarbonableMinter.getWithdrawer(carbonable_minter);
+        %{ stop_prank() %}
+        return (withdrawer);
+    }
+
     // Externals
+
+    func set_withdrawer{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
+    }(withdrawer: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
+        ICarbonableMinter.setWithdrawer(carbonable_minter, withdrawer);
+        %{ stop_prank() %}
+        return ();
+    }
 
     func withdraw{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt

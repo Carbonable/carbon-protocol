@@ -34,16 +34,63 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
+func test_access_control{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    let (minters_len, minters) = admin.get_minters();
+    assert 1 = minters_len;
+
+    admin.add_minter(123);
+    admin.add_minter(456);
+    admin.add_minter(789);
+    let (minters_len, minters) = admin.get_minters();
+    assert 4 = minters_len;
+    assert 789 = [minters + 0];
+    assert 456 = [minters + 1];
+    assert 123 = [minters + 2];
+
+    admin.revoke_minter(456);
+    let (minters_len, minters) = admin.get_minters();
+    assert 3 = minters_len;
+    assert 789 = [minters + 0];
+    assert 123 = [minters + 1];
+
+    admin.revoke_minter(123);
+    let (minters_len, minters) = admin.get_minters();
+    assert 2 = minters_len;
+    assert 789 = [minters + 0];
+
+    admin.revoke_minter(789);
+    let (minters_len, minters) = admin.get_minters();
+    assert 1 = minters_len;
+
+    admin.set_certifier(1234);
+    let (certifier) = admin.get_certifier();
+    assert 1234 = certifier;
+
+    admin.set_certifier(5678);
+    let (certifier) = admin.get_certifier();
+    assert 5678 = certifier;
+
+    admin.set_certifier(0);
+    let (certifier) = admin.get_certifier();
+    assert 0 = certifier;
+
+    return ();
+}
+
+@view
 func test_nominal_single_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) {
     alloc_locals;
 
+    let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
     let (offseter_address) = offseter.get_address();
     let (project_address) = project.get_address();
 
-    // Mint tokens
+    // Mint tokens with temporary MINTER_ROLE
+    admin.add_minter(admin_address);
     admin.mint(to=anyone_address, token_id=1);
+    admin.revoke_minter(admin_address);
 
     // At t = 0
     %{ stop_warp_offseter = warp(blk_timestamp=0, target_contract_address=ids.offseter_address) %}
@@ -155,12 +202,14 @@ func test_nominal_multi_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     let (offseter_address) = offseter.get_address();
     let (project_address) = project.get_address();
 
-    // Mint tokens
+    // Mint tokens with temporary MINTER_ROLE
+    admin.add_minter(admin_address);
     admin.mint(to=admin_address, token_id=1);
     admin.mint(to=admin_address, token_id=2);
     admin.mint(to=anyone_address, token_id=3);
     admin.mint(to=anyone_address, token_id=4);
     admin.mint(to=anyone_address, token_id=5);
+    admin.revoke_minter(admin_address);
 
     // At t = 0
     %{ stop_warp_offseter = warp(blk_timestamp=0, target_contract_address=ids.offseter_address) %}

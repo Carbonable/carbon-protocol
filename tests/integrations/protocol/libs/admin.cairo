@@ -63,6 +63,37 @@ namespace instance {
         return ();
     }
 
+    func add_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(vester: felt) {
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_vester {
+            carbonable_vester_instance.add_vester(vester=vester, caller=caller);
+        }
+        return ();
+    }
+
+    func get_vesters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        vesters_len: felt, vesters: felt*
+    ) {
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_vester {
+            let (vesters_len, vesters) = carbonable_vester_instance.get_vesters(caller=caller);
+        }
+        return (vesters_len=vesters_len, vesters=vesters);
+    }
+
+    func revoke_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        vester: felt
+    ) {
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_vester {
+            carbonable_vester_instance.revoke_vester(vester=vester, caller=caller);
+        }
+        return ();
+    }
+
     // Project
 
     func get_current_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -119,6 +150,59 @@ namespace instance {
             );
         }
         return ();
+    }
+
+    func add_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_project {
+            carbonable_project_instance.add_minter(minter=minter, caller=caller);
+        }
+        return ();
+    }
+
+    func get_minters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        minters_len: felt, minters: felt*
+    ) {
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_project {
+            let (minters_len, minters) = carbonable_project_instance.get_minters(caller=caller);
+        }
+        return (minters_len=minters_len, minters=minters);
+    }
+
+    func revoke_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        minter: felt
+    ) {
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_project {
+            carbonable_project_instance.revoke_minter(minter=minter, caller=caller);
+        }
+        return ();
+    }
+
+    func set_certifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        certifier: felt
+    ) {
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_project {
+            carbonable_project_instance.set_certifier(certifier=certifier, caller=caller);
+        }
+        return ();
+    }
+
+    func get_certifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        certifier: felt
+    ) {
+        let (carbonable_project) = carbonable_project_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_project {
+            let (certifier) = carbonable_project_instance.get_certifier(caller=caller);
+        }
+        return (certifier=certifier);
     }
 
     // Minter
@@ -232,13 +316,26 @@ namespace instance {
         return ();
     }
 
-    func add_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
-        let (carbonable_project) = carbonable_project_instance.get_address();
+    func set_withdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        withdrawer: felt
+    ) {
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
-        with carbonable_project {
-            carbonable_project_instance.add_minter(minter=minter, caller=caller);
+        with carbonable_minter {
+            carbonable_minter_instance.set_withdrawer(withdrawer=withdrawer, caller=caller);
         }
         return ();
+    }
+
+    func get_withdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        withdrawer: felt
+    ) {
+        let (carbonable_minter) = carbonable_minter_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_minter {
+            let (withdrawer) = carbonable_minter_instance.set_withdrawer(caller=caller);
+        }
+        return (withdrawer=withdrawer);
     }
 
     func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -653,5 +750,27 @@ namespace instance {
         }
 
         return (releasable_amount=releasable_amount);
+    }
+
+    func set_snapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        snapshoter: felt
+    ) {
+        let (carbonable_yielder) = carbonable_yielder_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_yielder {
+            carbonable_yielder_instance.set_snapshoter(snapshoter=snapshoter, caller=caller);
+        }
+        return ();
+    }
+
+    func get_snapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        snapshoter: felt
+    ) {
+        let (carbonable_yielder) = carbonable_yielder_instance.get_address();
+        let (caller) = get_address();
+        with carbonable_yielder {
+            let (snapshoter) = carbonable_yielder_instance.set_snapshoter(caller=caller);
+        }
+        return (snapshoter=snapshoter);
     }
 }

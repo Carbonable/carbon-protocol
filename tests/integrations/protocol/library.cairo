@@ -15,6 +15,9 @@ from tests.integrations.protocol.libs.offseter import instance as carbonable_off
 from tests.integrations.protocol.libs.yielder import instance as carbonable_yielder_instance
 from tests.integrations.protocol.libs.admin import instance as admin_instance
 from tests.integrations.protocol.libs.anyone import instance as anyone_instance
+from tests.integrations.protocol.libs.certifier import instance as certifier_instance
+from tests.integrations.protocol.libs.snapshoter import instance as snapshoter_instance
+from tests.integrations.protocol.libs.withdrawer import instance as withdrawer_instance
 
 //
 // Functions
@@ -48,6 +51,30 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             contract=context.sources.account,
             constructor_args={
                 "public_key": context.signers.anyone,
+            },
+        ).contract_address
+
+        # Certifier account deployment
+        context.certifier_account_contract = deploy_contract(
+            contract=context.sources.account,
+            constructor_args={
+                "public_key": context.signers.certifier,
+            },
+        ).contract_address
+
+        # Snapshoter account deployment
+        context.snapshoter_account_contract = deploy_contract(
+            contract=context.sources.account,
+            constructor_args={
+                "public_key": context.signers.snapshoter,
+            },
+        ).contract_address
+
+        # Withdrawer account deployment
+        context.withdrawer_account_contract = deploy_contract(
+            contract=context.sources.account,
+            constructor_args={
+                "public_key": context.signers.withdrawer,
             },
         ).contract_address
 
@@ -177,8 +204,24 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         for idx, value in enumerate(context.absorption.values):
             memory[ids.absorptions + idx] = value
     %}
+    // Get protocol addresses
+    let (local admin_address) = admin_instance.get_address();
+    let (local certifier_address) = certifier_instance.get_address();
+    let (local snapshoter_address) = snapshoter_instance.get_address();
+    let (local withdrawer_address) = withdrawer_instance.get_address();
+    let (local carbonable_minter) = carbonable_minter_instance.get_address();
+    let (local carbonable_vester) = carbonable_vester_instance.get_address();
+    let (local carbonable_yielder) = carbonable_yielder_instance.get_address();
+
+    // Setup Access control
+    admin_instance.add_minter(carbonable_minter);
+    admin_instance.add_vester(carbonable_yielder);
+    admin_instance.set_certifier(certifier_address);
+    admin_instance.set_snapshoter(snapshoter_address);
+    admin_instance.set_withdrawer(withdrawer_address);
+
     // Set absorptions
-    admin_instance.set_absorptions(
+    certifier_instance.set_absorptions(
         times_len=times_len,
         times=times,
         absorptions_len=absorptions_len,
@@ -186,19 +229,13 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ton_equivalent=ton_equivalent,
     );
 
-    // Set minter and merkle root
-    let (local admin_address) = admin_instance.get_address();
-    let (local carbonable_minter) = carbonable_minter_instance.get_address();
-    admin_instance.add_minter(admin_address);
-    admin_instance.add_minter(carbonable_minter);
+    // Set merkle root
     admin_instance.set_whitelist_merkle_root(merkle_root);
 
     // Set initial balances between users
     anyone_instance.transfer(admin_address, 500000);
 
     // Set vesting ownership
-    let (local carbonable_vester) = carbonable_vester_instance.get_address();
-    let (local carbonable_yielder) = carbonable_yielder_instance.get_address();
     admin_instance.vester_transfer_ownership(carbonable_yielder);
 
     return ();
