@@ -121,6 +121,24 @@ namespace instance {
         return (ton_equivalent=ton_equivalent);
     }
 
+    func get_minters{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(caller: felt) -> (minters_len: felt, minters: felt*) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        let (minters_len, minters) = ICarbonableProject.getMinters(carbonable_project);
+        %{ stop_prank() %}
+        return (minters_len, minters);
+    }
+
+    func get_certifier{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(caller: felt) -> (certifier: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        let (certifier) = ICarbonableProject.getCertifier(carbonable_project);
+        %{ stop_prank() %}
+        return (certifier=certifier);
+    }
+
     // Externals
 
     func add_minter{
@@ -128,6 +146,24 @@ namespace instance {
     }(minter: felt, caller: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
         ICarbonableProject.addMinter(carbonable_project, minter);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func revoke_minter{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(minter: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        ICarbonableProject.revokeMinter(carbonable_project, minter);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func set_certifier{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_project: felt
+    }(certifier: felt, caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_project) %}
+        ICarbonableProject.setCertifier(carbonable_project, certifier);
         %{ stop_prank() %}
         return ();
     }

@@ -12,6 +12,7 @@ from tests.integrations.protocol.library import (
     setup,
     admin_instance as admin,
     anyone_instance as anyone,
+    snapshoter_instance as snapshoter,
     carbonable_yielder_instance as yielder,
     carbonable_vester_instance as vester,
     carbonable_project_instance as project,
@@ -43,7 +44,7 @@ func test_snapshot_revert_not_owner{
     // Then a failed transaction is expected
     alloc_locals;
 
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
+    %{ expect_revert("TRANSACTION_FAILED", "AccessControl: caller is missing role") %}
     anyone.snapshot();
 
     return ();
@@ -82,7 +83,7 @@ func test_create_vestings_without_any_deposited{
     alloc_locals;
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot at a sooner time that previous snapshot") %}
-    admin.snapshot();
+    snapshoter.snapshot();
 
     return ();
 }
@@ -116,13 +117,15 @@ func test_create_vestings_nominal_case{
     let (yielder_address) = yielder.get_address();
     let (vester_address) = vester.get_address();
 
-    // Mint tokens
+    // Mint tokens with temporary role
+    admin.add_minter(admin_address);
     admin.transfer(recipient=vester_address, amount=1000);
     admin.mint(to=anyone_address, token_id=3);
     admin.mint(to=anyone_address, token_id=4);
     admin.mint(to=anyone_address, token_id=5);
     admin.mint(to=admin_address, token_id=1);
     admin.mint(to=admin_address, token_id=2);
+    admin.revoke_minter(admin_address);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
     %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
@@ -143,7 +146,7 @@ func test_create_vestings_nominal_case{
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
-    // Admin snapshot
+    // Snapshoter snapshot
     %{
         stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address)
         stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address)
@@ -162,7 +165,7 @@ func test_create_vestings_nominal_case{
             period_yielder_absorption=4719000,
         )))
     %}
-    admin.snapshot();
+    snapshoter.snapshot();
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
@@ -223,13 +226,15 @@ func test_create_vestings_only_one_deposited{
     let (yielder_address) = yielder.get_address();
     let (vester_address) = vester.get_address();
 
-    // Mint tokens
+    // Mint tokens with temporary role
+    admin.add_minter(admin_address);
     admin.transfer(recipient=vester_address, amount=1000);
     admin.mint(to=anyone_address, token_id=1);
     admin.mint(to=anyone_address, token_id=2);
     admin.mint(to=anyone_address, token_id=3);
     admin.mint(to=admin_address, token_id=4);
     admin.mint(to=admin_address, token_id=5);
+    admin.revoke_minter(admin_address);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
     %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
@@ -241,7 +246,7 @@ func test_create_vestings_only_one_deposited{
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
-    // Admin snapshot
+    // Snapshoter snapshot
     %{
         stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address)
         stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address)
@@ -260,7 +265,7 @@ func test_create_vestings_only_one_deposited{
             period_yielder_absorption=943800,
         )))
     %}
-    admin.snapshot();
+    snapshoter.snapshot();
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
@@ -315,8 +320,10 @@ func test_create_vestings_not_enough_fund_vester{
     let (yielder_address) = yielder.get_address();
     let (vester_address) = vester.get_address();
 
-    // Mint tokens
+    // Mint tokens with temporary role
+    admin.add_minter(admin_address);
     admin.mint(to=anyone_address, token_id=3);
+    admin.revoke_minter(admin_address);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
     %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
@@ -326,10 +333,10 @@ func test_create_vestings_not_enough_fund_vester{
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
-    // Admin snapshot
+    // Snapshoter snapshot
     %{ stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address) %}
     %{ stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address) %}
-    admin.snapshot();
+    snapshoter.snapshot();
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 

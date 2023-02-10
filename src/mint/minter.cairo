@@ -12,6 +12,7 @@ from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.mint.library import CarbonableMinter
+from src.utils.access.library import CarbonableAccessControl
 
 //
 // Initializer
@@ -188,6 +189,40 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     //   caller: caller is not the contract owner
     Ownable.renounce_ownership();
     return ();
+}
+
+@external
+func setWithdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    withdrawer: felt
+) {
+    // Desc:
+    //   Set the Withdrawer
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   withdrawer(felt): Withdrawer address
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_withdrawer(withdrawer);
+    return ();
+}
+
+@view
+func getWithdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    withdrawer: felt
+) {
+    // Desc:
+    //   Get the Withdrawer
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   withdrawer(felt): Withdrawer address
+    return CarbonableAccessControl.get_withdrawer();
 }
 
 //
@@ -534,9 +569,9 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     // Returns:
     //   success(felt): 1 if it succeeded, 0 otherwise
     // Raises:
-    //   caller: caller is not the contract owner
+    //   caller: caller does not have the WITHDRAWER_ROLE role
     //   transfer: transfer fails
-    Ownable.assert_only_owner();
+    CarbonableAccessControl.assert_only_withdrawer();
     return CarbonableMinter.withdraw();
 }
 

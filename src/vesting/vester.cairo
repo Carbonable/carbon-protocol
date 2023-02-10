@@ -11,7 +11,6 @@ from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.upgrades.library import Proxy
 from starkvest.library import StarkVest
 from starkvest.starkvest import (
-    create_vesting,
     erc20_address,
     vestings_total_amount,
     vesting_count,
@@ -26,6 +25,7 @@ from starkvest.starkvest import (
 )
 
 // Local dependencies
+from src.utils.access.library import CarbonableAccessControl
 from src.vesting.library import CarbonableVester
 
 //
@@ -180,6 +180,56 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
+@external
+func addVester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(vester: felt) {
+    // Desc:
+    //   Add new vester
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   minter(felt): Vester address
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_vester(vester);
+    return ();
+}
+
+@view
+func getVester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    vesters_len: felt, vesters: felt*
+) {
+    // Desc:
+    //   Get the list of vester
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Returns:
+    //   vesters_len(felt): vester array length
+    //   vester(felt*): vester address array
+    return CarbonableAccessControl.get_vesters();
+}
+
+@external
+func revokeVester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(vester: felt) {
+    // Desc:
+    //   Revoke vester role
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   vester(felt): vester address
+    // Raises:
+    //   caller: caller is not the contract owner
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.revoke_vester(vester);
+    return ();
+}
+
 //
 // Views
 //
@@ -219,4 +269,38 @@ func releaseAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     //   caller: caller is not the contract owner
     CarbonableVester.release_all();
     return ();
+}
+
+@external
+func create_vesting{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    beneficiary: felt,
+    cliff_delta: felt,
+    start: felt,
+    duration: felt,
+    slice_period_seconds: felt,
+    revocable: felt,
+    amount_total: Uint256,
+) -> (vesting_id: felt) {
+    // Desc:
+    //   Creates a new vesting for a beneficiary
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   beneficiary(felt): address of the beneficiary
+    //   start(felt): start time of the vesting period
+    //   cliff_delta(felt): duration in seconds of the cliff in which tokens will begin to vest
+    //   duration(felt): duration in seconds of the period in which the tokens will vest
+    //   slice_period_seconds(felt): duration of a slice period for the vesting in seconds
+    //   revocable(felt): whether the vesting is revocable or not
+    //   amount_total(Uint256): total amount of tokens to be released at the end of the vesting
+    // Returns:
+    //   vesting_id(felt): the created vesting id
+    // Raises:
+    //   caller: caller does not have the VESTER_ROLE role
+    CarbonableAccessControl.assert_only_vester();
+    return StarkVest.create_vesting(
+        beneficiary, cliff_delta, start, duration, slice_period_seconds, revocable, amount_total
+    );
 }
