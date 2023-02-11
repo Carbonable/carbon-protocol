@@ -4,7 +4,7 @@ Constructor
   
 {% swagger method = "c0nstruct0r" path = " " baseUrl = " " summary = "constructor" %}  
 {% swagger-description %}  
-Initialize the contract with the given uri, name and owner - This constructor ignores the standard OZ ERC1155 initializer (which require the uri only as single felt) in favor of a dedicated initialize handling the uri (as a felt*) and a name to be compliant with most markplaces, finally the OZ Ownable initializer is used  
+Initialize the contract with the given uri, name and owner - This constructor ignores the standard OZ ERC1155 initializer (which requires the uri only as single felt) in favor of a dedicated initialize handling the uri (as a felt*) and a name to be compliant with most marketplaces, finally the OZ Ownable initializer is used  
 {% endswagger-description %}  
 {% swagger-parameter in="path" type="felt" name="uri_len" %}  
 URI array length  
