@@ -1,5 +1,5 @@
 <div align="center">
-  <h1 align="center">Carbonable Starknet Protocol</h1>
+  <h1 align="center">Carbon Protocol on Starknet</h1>
   <p align="center">
     <a href="https://discord.gg/zUy9UvB7cd">
         <img src="https://img.shields.io/badge/Discord-6666FF?style=for-the-badge&logo=discord&logoColor=white">
