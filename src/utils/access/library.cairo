@@ -5,6 +5,7 @@
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import FALSE, TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.math_cmp import is_le, is_le_felt, is_not_zero
 
 from openzeppelin.access.accesscontrol.library import AccessControl
 
@@ -19,7 +20,7 @@ func CarbonableAccessControl_role_members_index(role: felt, index: felt) -> (mem
 }
 
 @storage_var
-func CarbonableAccessControl_role_members(role: felt, index: felt) -> (member: felt) {
+func CarbonableAccessControl_role_members(role: felt, member: felt) -> (index: felt) {
 }
 
 @storage_var
@@ -204,6 +205,14 @@ namespace CarbonableAccessControl {
         AccessControl._revoke_role(role, user);
         let (old_size) = CarbonableAccessControl_role_members_len.read(role);
         let (user_index) = CarbonableAccessControl_role_members.read(role, user);
+
+        // Case where user has been registered by an older mechanism
+        // Access control storage must be left unchanged
+        let (stored_user) = CarbonableAccessControl_role_members_index.read(role, user_index);
+        if (user != stored_user) {
+            return ();
+        }
+
         let (last_user) = CarbonableAccessControl_role_members_index.read(role, old_size - 1);
         CarbonableAccessControl_role_members_len.write(role, old_size - 1);
         CarbonableAccessControl_role_members_index.write(role, user_index, last_user);
