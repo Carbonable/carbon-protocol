@@ -1,0 +1,28 @@
+[package]
+name = "carbon-protocol"
+version = "1.0.0"
+edition = "2021"
+authors = [
+  "Bal7hazar <bal7hazar@carbonable.io>",
+]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cairo-lang-runner = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-compiler = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-casm = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-diagnostics = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-debug = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-defs = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-sierra = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-sierra-ap-change = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-sierra-gas = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-sierra-generator = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-semantic = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-sierra-to-casm = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-utils = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-filesystem = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-starknet = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-syntax = { git = "https://github.com/starkware-libs/cairo", branch = "main" }
+cairo-lang-plugins = { git = "https://github.com/starkware-libs/cairo", branch = "main" }

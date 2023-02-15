@@ -19,3 +19,8 @@ build
 *logs.json
 
 .DS_Store
+
+# Added by cargo
+
+/target
+/crates
