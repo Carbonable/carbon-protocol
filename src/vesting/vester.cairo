@@ -133,7 +133,7 @@ func addVester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // @return vesters_len Vester array length.
 // @return vesters Vester address array.
 @view
-func getVester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getVesters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     vesters_len: felt, vesters: felt*
 ) {
     return CarbonableAccessControl.get_vesters();
