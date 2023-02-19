@@ -23,26 +23,18 @@ from src.utils.access.library import CarbonableAccessControl
 // Initializer
 //
 
+// @notice Initialize the contract with the given name, symbol and owner.
+//   This constructor uses the standard OZ Proxy initializer,
+//   the standard OZ ERC721 initializer,
+//   the standard OZ ERC721Enumerable initializer and
+//   the OZ Ownable initializer.
+// @param name Name of the collection.
+// @param symbol Symbol of the collection.
+// @param owner Owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     name: felt, symbol: felt, owner: felt
 ) {
-    // Desc:
-    //   Initialize the contract with the given name, symbol and owner -
-    //   This constructor uses the standard OZ Proxy initializer,
-    //   the standard OZ ERC721 initializer,
-    //   the standard OZ ERC721Enumerable initializer and
-    //   the OZ Ownable initializer
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   name(felt): Name of the collection
-    //   symbol(felt): Symbol of the collection
-    //   owner(felt): Owner and Admin address
-    // Returns:
-    //   None
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
     Ownable.initializer(owner);
@@ -55,69 +47,39 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 // Proxy administration
 //
 
+// @notice Return the current implementation hash.
+// @return implementation Implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
 ) {
-    // Desc:
-    //   Return the current implementation hash
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   implementation(felt): Implementation class hash
     return Proxy.get_implementation_hash();
 }
 
+// @notice Return the current admin address.
+// @return admin Admin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
-    // Desc:
-    //   Return the admin address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   admin(felt): The admin address
     return Proxy.get_admin();
 }
 
+// @notice Upgrade the contract to the new implementation.
+// @dev This function is only callable by the admin.
+// @param new_implementation New implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
 ) {
-    // Desc:
-    //   Upgrade the contract to the new implementation
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_implementation(felt): New implementation class hash
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_implementation_hash(new_implementation);
     return ();
 }
 
+// @notice Transfer admin rights to a new admin.
+// @dev This function is only callable by the admin.
+// @param new_admin New admin address.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
-    // Desc:
-    //   Transfer admin rights to a new admin
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_admin(felt): Address of the new admin
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_admin(new_admin);
     return ();
@@ -127,41 +89,27 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 // Ownership administration
 //
 
+// @notice Return the current owner address.
+// @return owner Owner address.
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
-    // Desc:
-    //   Return the contract owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   owner(felt): The owner address
     return Ownable.owner();
 }
 
+// @notice Transfer ownership to a new owner.
+// @dev This function is only callable by the owner.
+//   The new owner address cannot be the zero address.
+// @param newOwner New owner address.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
 ) {
-    // Desc:
-    //   Transfer ownership to a new owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   newOwner(felt): Address of the new owner
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the contract owner
-    //   newOwner: new owner is the zero address
     Ownable.transfer_ownership(newOwner);
     return ();
 }
 
-@external
+// @notice Renounce ownership.
+// @dev This function is only callable by the owner.
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // Desc:
     //   Renounce ownership
@@ -181,363 +129,221 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 // ERC721
 //
 
+// @notice Count NFTs tracked by this contract (EIP 721 - Enumeration extension).
+// @return totalSupply A count of valid NFTs tracked by this contract, where each one of them has an assigned and queryable owner not equal to the zero address.
 @view
 func totalSupply{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}() -> (
     totalSupply: Uint256
 ) {
-    // Desc:
-    //   Count NFTs tracked by this contract (EIP 721 - Enumeration extension)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   totalSupply(Uint256): A count of valid NFTs tracked by this contract, where each one of them has an assigned and queryable owner not equal to the zero address
     let (totalSupply: Uint256) = ERC721Enumerable.total_supply();
     return (totalSupply=totalSupply);
 }
 
+// @notice Enumerate valid NFTs (EIP 721 - Enumeration extension).
+// @dev Throws if -index- >= -totalSupply()-.
+// @param index A counter less than -totalSupply()-.
+// @return tokenId The token identifier for the -index-th NFT (sort order not specified).
 @view
 func tokenByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     index: Uint256
 ) -> (tokenId: Uint256) {
-    // Desc:
-    //   Enumerate valid NFTs (EIP 721 - Enumeration extension)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   index(Uint256): A counter less than -totalSupply()-
-    // Returns:
-    //   tokenId(Uint256): The token identifier for the -index-th NFT (sort order not specified)
-    // Raises:
-    //   index: index ge than totalSupply
     let (tokenId: Uint256) = ERC721Enumerable.token_by_index(index);
     return (tokenId=tokenId);
 }
 
+// @notice Enumerate NFTs assigned to an owner (EIP 721 - Enumeration extension).
+// @dev Throws if -index- >= -balanceOf(owner)-.
+//   Throws if -owner- is the zero address, representing invalid NFTs.
+// @param owner An address where we are interested in NFTs owned by them.
+// @param index A counter less than -balanceOf(owner)-.
+// @return tokenId The token identifier for the -index-th NFT assigned to -owner- (sort order not specified).
 @view
 func tokenOfOwnerByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     owner: felt, index: Uint256
 ) -> (tokenId: Uint256) {
-    // Desc:
-    //   Enumerate NFTs assigned to an owner (EIP 721 - Enumeration extension)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   owner(felt): An address where we are interested in NFTs owned by them
-    //   index(Uint256): A counter less than -balanceOf(owner)-
-    // Returns:
-    //   tokenId(Uint256): The token identifier for the -index-th NFT assigned to -owner- (sort order not specified)
-    // Raises:
-    //   index: index ge than balanceOf(owner)
-    //   owner: owner is the zero address, representing invalid NFTs
     let (tokenId: Uint256) = ERC721Enumerable.token_of_owner_by_index(owner, index);
     return (tokenId=tokenId);
 }
 
+// @notice Return the ability status to support the provided interface (EIP 165).
+// @param interfaceId Interface id.
+// @return success 1 if supported else 0.
 @view
 func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     interfaceId: felt
 ) -> (success: felt) {
-    // Desc:
-    //   Return the ability status to support the provided interface (EIP 165)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   interfaceId(felt): Interface id
-    // Returns:
-    //   success(felt): 1 if supported else 0
     return ERC165.supports_interface(interfaceId);
 }
 
+// @notice A descriptive name for a collection of NFTs in this contract (EIP 721 - Metadata extension).
+// @return name The name of the collection.
 @view
 func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (name: felt) {
-    // Desc:
-    //   A descriptive name for a collection of NFTs in this contract (EIP 721 - Metadata extension)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   name(felt): The contract name
     return ERC721.name();
 }
 
+// @notice An abbreviated name for NFTs in this contract (EIP 721 - Metadata extension).
+// @return symbol The symbol of the collection.
 @view
 func symbol{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (symbol: felt) {
-    // Desc:
-    //   An abbreviated name for NFTs in this contract (EIP 721 - Metadata extension)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   symbol(felt): The contract symbol
     return ERC721.symbol();
 }
 
+// @notice Count all NFTs assigned to an owner (EIP 721).
+// @dev Throws if -owner- is null.
 @view
 func balanceOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(owner: felt) -> (
     balance: Uint256
 ) {
-    // Desc:
-    //   Count all NFTs assigned to an owner (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   owner(felt): An address for whom to query the balance
-    // Returns:
-    //   balance(Uint256): The number of NFTs owned by -owner-, possibly zero
-    // Raises:
-    //   owner: owner is null address
     return ERC721.balance_of(owner);
 }
 
+// @notice Find the owner of an NFT (EIP 721).
+// @param tokenId The identifier for an NFT.
+// @return owner The address of the owner of the NFT.
 @view
 func ownerOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) -> (
     owner: felt
 ) {
-    // Desc:
-    //   Find the owner of an NFT (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   tokenId(Uint256): The identifier for an NFT
-    // Returns:
-    //   owner(felt): The address of the owner of the NFT
     return ERC721.owner_of(tokenId);
 }
 
+// @notice Get the approved address for a single NFT (EIP 721).
+// @dev The tokenId must be a valid NFT.
+// @param tokenId The NFT to find the approved address for.
+// @return approved The approved address for this NFT, or the zero address if there is none.
 @view
 func getApproved{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     tokenId: Uint256
 ) -> (approved: felt) {
-    // Desc:
-    //   Get the approved address for a single NFT (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   tokenId(Uint256): The NFT to find the approved address for
-    // Returns:
-    //   approved(felt): The approved address for this NFT, or the zero address if there is none
-    // Raises:
-    //   tokenId: tokenId is not a valid NFT
     return ERC721.get_approved(tokenId);
 }
 
+// @notice Query if an address is an authorized operator for another address (EIP 721).
+// @param owner The address that owns the NFTs.
+// @param operator The address that acts on behalf of the owner.
+// @return isApproved True if -operator- is an approved operator for -owner-, false otherwise.
 @view
 func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     owner: felt, operator: felt
 ) -> (isApproved: felt) {
-    // Desc:
-    //   Query if an address is an authorized operator for another address (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   owner(felt): The address that owns the NFTs
-    //   operator(felt): The address that acts on behalf of the owner
-    // Returns:
-    //   isApproved(felt): 1 if -operator- is an approved operator for -owner-, 0 otherwise
     let (isApproved: felt) = ERC721.is_approved_for_all(owner, operator);
     return (isApproved=isApproved);
 }
 
+// @notice A distinct Uniform Resource Identifier (URI) for a given asset (EIP 721 - Metadata extension).
+// @dev The tokenID must be a valid Uint256.
+// @param tokenId The token ID to query.
+// @return uri The URI for the token ID.
 @view
 func tokenURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
-    // Desc:
-    //   A distinct Uniform Resource Identifier (URI) for a given asset (EIP 721 - Metadata extension)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   tokenId(Uint256): The NFT to find the URI for
-    // Returns:
-    //   uri_len(felt): URI array length
-    //   uri(felt*): The URI characters associated to the specified NFT
-    // Raises:
-    //   tokenId: tokenId is not a valid Uint256
-    let (uri_len: felt, uri: felt*) = CarbonableProject.token_uri(tokenId);
+}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {t.token_uri(tokenId);
     return (uri_len=uri_len, uri=uri);
 }
 
+// @notice Return the contract uri (OpenSea).
+// @return uri_len URI array length
+// @return uri URI characters
 @view
 func contractURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }() -> (uri_len: felt, uri: felt*) {
-    // Desc:
-    //   Return the contract uri (OpenSea)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   bitwise_ptr(BitwiseBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   uri_len(felt): URI array length
-    //   uri(felt*): URI characters
     let (uri_len: felt, uri: felt*) = CarbonableProject.contract_uri();
     return (uri_len=uri_len, uri=uri);
 }
 
+// @notice Change or reaffirm the approved address for an NFT (EIP 721).
+// @dev The caller must be the owner of the NFT or an authorized operator of the owner.
 @external
 func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     to: felt, tokenId: Uint256
 ) {
-    // Desc:
-    //   Change or reaffirm the approved address for an NFT (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   to(felt): The new approved NFT controller
-    //   tokenId(Uint256): The NFT to approve
-    // Raises:
-    //   caller: caller is not the current NFT owner, or an authorized operator of the current owner
     ERC721.approve(to, tokenId);
     return ();
 }
 
+// @notice Enable or disable approval for a third party ("operator") to manage all of the caller's assets (EIP 721).
+// @dev Emits the ApprovalForAll event.
+// @param operator Address to add to the set of authorized operators.
+// @param approved True if the operator is approved, false to revoke approval.
 @external
 func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     operator: felt, approved: felt
 ) {
-    // Desc:
-    //   Enable or disable approval for a third party -operator- to manage all of -caller-s assets (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   operator(felt): Address to add to the set of authorized operators
-    //   approved(felt): 1 if the operator is approved, 0 to revoke approval
     ERC721.set_approval_for_all(operator, approved);
     return ();
 }
 
+// @notice Transfer ownership of an NFT (EIP 721).
+// @dev Throws unless -from_- is the current owner, an authorized operator, or the approved address for this NFT.
+//   -from_- must be the current owner.
+//   -to- cannot be the zero address.
+//   -tokenId- must be a valid NFT.
+//  @param from_ The current owner of the NFT.
+//  @param to The new owner.
+//  @param tokenId The NFT to transfer.
 @external
 func transferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     from_: felt, to: felt, tokenId: Uint256
 ) {
-    // Desc:
-    //   Transfer ownership of an NFT (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   from_(felt): The current owner of the NFT
-    //   to(felt): The new owner
-    //   tokenId(Uint256): The NFT to transfer
-    // Raises:
-    //   caller: caller is not the current owner or an authorized operator or the approved address for this NFT
-    //   from_: from_ is not the current owner
-    //   to: to is the zero address
-    //   tokenId: tokenId is not a valid NFT
     ERC721Enumerable.transfer_from(from_, to, tokenId);
     return ();
 }
 
+// @notice Transfers the ownership of an NFT from one address to another address (EIP 721).
+// @dev Throws unless -from_- is the current owner, an authorized operator, or the approved address for this NFT.
+//   -from_- must be the current owner.
+//   -to- cannot be the zero address.
+//   -tokenId- must be a valid NFT.
+//   -to- must be a contract account that implements the -onERC721Received- interface.
+//  @param from_ The current owner of the NFT.
+//  @param to The new owner.
+//  @param tokenId The NFT to transfer.
+//  @param data Additional data with no specified format, sent in call to -to-.
 @external
 func safeTransferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     from_: felt, to: felt, tokenId: Uint256, data_len: felt, data: felt*
 ) {
-    // Desc:
-    //   Transfers the ownership of an NFT from one address to another address (EIP 721)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   from_(felt): The current owner of the NFT
-    //   to(felt): The new owner
-    //   tokenId(Uint256): The NFT to transfer
-    //   data_len(felt): The data array length
-    //   data(felt*): Additional data with no specified format sent in call to -to-
-    // Raises:
-    //   caller: caller is not the current owner or an authorized operator or the approved address for this NFT
-    //   from_: from_ is not the current owner
-    //   to: to is the zero address
-    //   tokenId: tokenId is not a valid NFT
-    //   to: to is not a contract account neither implements onERC721Received correctly
     ERC721Enumerable.safe_transfer_from(from_, to, tokenId, data_len, data);
     return ();
 }
 
+// @notice Mint the token id to the specified -to- address.
+// @dev Throws if the caller does not have the MINTER_ROLE role.
+//   Throws if -to- is the zero address.
+//   Throws if -tokenId- is not a valid Uint256.
+//   Throws if token already minted.
+//  @param to Target address.
+//  @param tokenId Token id.
 @external
 func mint{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     to: felt, tokenId: Uint256
 ) {
-    // Desc:
-    //   Mint the token id to the specified -to- address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   to(felt): Target address
-    //   tokenId(Uint256): Token id
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller does not have the MINTER_ROLE role
-    //   to: to is the zero address
-    //   tokenId: tokenId is not a valid Uint256
-    //   tokenId: token already minted
     CarbonableAccessControl.assert_only_minter();
     ERC721Enumerable._mint(to, tokenId);
     return ();
 }
 
+// @notice Burn the specified token.
+// @dev Throws if the caller is not the owner of the token.
+//   Throws if -tokenId- is not a valid Uint256.
+//  @param tokenId Token id.
 @external
 func burn{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(tokenId: Uint256) {
-    // Desc:
-    //   Burn the specified token
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   tokenId(Uint256): Token id
-    // Returns:
-    //   None
-    // Raises:
-    //   tokenId: tokenId is not a valid Uint256
     ERC721.assert_only_token_owner(tokenId);
     ERC721Enumerable._burn(tokenId);
     return ();
 }
 
+// @notice Set the contract base URI.
+// @dev Throws if the caller is not the owner.
+//  @param uri_len URI array length.
+//  @param uri URI characters.
 @external
 func setURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
 }(uri_len: felt, uri: felt*) {
-    // Desc:
-    //   Set the contract base URI
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   bitwise_ptr(BitwiseBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   uri_len(felt): URI array length
-    //   uri(felt*): URI characters
     Ownable.assert_only_owner();
     CarbonableProject.set_uri(uri_len, uri);
     return ();
@@ -547,250 +353,154 @@ func setURI{
 // Carbonable
 //
 
+// @notice Set the start time.
+// @return time Start time.
 @view
 func getStartTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     time: felt
 ) {
-    // Desc:
-    //   Return the stored start time
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   time(felt): Start time
     return CarbonableProject.start_time();
 }
 
+// @notice Return the computed final time.
+// @return time Final time.
 @view
 func getFinalTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     time: felt
 ) {
-    // Desc:
-    //   Return the computed final time
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   time(felt): Final time
     return CarbonableProject.final_time();
 }
 
+// @notice Return the stored times.
+// @return times_len Array length.
+// @return times Timestamps.
 @view
 func getTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     times_len: felt, times: felt*
 ) {
-    // Desc:
-    //   Return the stored times
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   times_len(felt): Array length
-    //   times(felt*): timestamps
     return CarbonableProject.times();
 }
 
+// @notice Return the stored absorptions.
+// @return absorptions_len Array length.
+// @return absorptions Absorption values.
 @view
 func getAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     absorptions_len: felt, absorptions: felt*
 ) {
-    // Desc:
-    //   Return the stored absorptions
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   absorptions_len(felt): Array length
-    //   absorptions(felt*): absorption values
     return CarbonableProject.absorptions();
 }
 
+// @notice Return the computed absorption based on the current timestamp.
+// @return absorption Absorption.
 @view
 func getAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(time: felt) -> (
     absorption: felt
 ) {
-    // Desc:
-    //   Return the computed absorption based on the current timestamp
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   time(felt): Time to compute the absorption
-    // Returns:
-    //   absorption(felt): absorption
     return CarbonableProject.absorption(time=time);
 }
 
+// @notice Return the computed absorption based on the current timestamp.
+// @return absorption Absorption.
 @view
 func getCurrentAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     absorption: felt
 ) {
-    // Desc:
-    //   Return the computed absorption based on the current timestamp
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   absorption(felt): current absorption
     return CarbonableProject.current_absorption();
 }
 
+// @notice Return the computed final absorption based on the final timestamp.
+// @return absorption Final absorption.
 @view
 func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     absorption: felt
 ) {
-    // Desc:
-    //   Return the expected total absorption based on the final timestamp
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   absorptions(felt): Final absorption
     return CarbonableProject.final_absorption();
 }
 
+// @notice Return the ton equivalent in absorption unit.
+// @return ton_equivalent Ton equivalent.
 @view
 func getTonEquivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     ton_equivalent: felt
 ) {
-    // Desc:
-    //   Return the ton equivalent in absorption unit
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   ton_equivalent(felt): Ton equivalent
     return CarbonableProject.ton_equivalent();
 }
 
+// @notice Return the setup status of the contract.
+// @return status 1 if setup else 0.
 @view
 func isSetup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
-    // Desc:
-    //   Return the setup status of the contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   status(felt): 1 if setup else 0
     return CarbonableProject.is_setup();
 }
 
+// @notice Add new minter.
+// @dev Throws if the caller is not the owner.
+// @param minter Minter address.
 @external
 func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
-    // Desc:
-    //   Add new minter
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   minter(felt): Minter address
-    // Raises:
-    //   caller: caller is not the contract owner
     Ownable.assert_only_owner();
     CarbonableAccessControl.set_minter(minter);
     return ();
 }
 
+// @notice Get the list of minters.
+// @return minters_len Array length.
+// @return minters Minter addresses.
 @view
 func getMinters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     minters_len: felt, minters: felt*
 ) {
-    // Desc:
-    //   Get the list of minters
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   minters_len(felt): minters array length
-    //   minters(felt*): minter addresses
     return CarbonableAccessControl.get_minters();
 }
 
+// @notice Revoke minter role.
+// @dev Throws if the caller is not the owner.
+// @param minter Minter address.
 @external
 func revokeMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
-    // Desc:
-    //   Revoke minter role
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   minter(felt): Minter address
-    // Raises:
-    //   caller: caller is not the contract owner
     Ownable.assert_only_owner();
     CarbonableAccessControl.revoke_minter(minter);
     return ();
 }
 
+// @notice Add new certifier.
+// @dev Throws if the caller is not the owner.
+// @param certifier Certifier address.
 @external
 func setCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     certifier: felt
 ) {
-    // Desc:
-    //   Add new Certifier
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   certifier(felt): Certifier address
-    // Raises:
-    //   caller: caller is not the contract owner
     Ownable.assert_only_owner();
     CarbonableAccessControl.set_certifier(certifier);
     return ();
 }
 
+// @notice Get the certifier.
+// @return certifier Certifier address.
 @view
 func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     certifier: felt
 ) {
-    // Desc:
-    //   Get the certifier
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns
-    //   certifier(felt): Certifier address
     let (certifier) = CarbonableAccessControl.get_certifier();
     return (certifier=certifier);
 }
 
+// @notice Set new absorption values.
+// @dev The caller must have the CERTIFIER_ROLE role.
+//   Throws if -times_len- is null.
+//   Throws if -absorptions_len- is null.
+//   Throws if -ton_equivalent- is null.
+//   Throws if times_len is not equal to absorptions_len.
+// @param times_len Array length.
+// @param times Time values.
+// @param absorptions_len Array length.
+// @param absorptions Absorption values.
+// @param ton_equivalent Absorption ton equivalent.
 @external
 func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     times_len: felt, times: felt*, absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
 ) {
-    // Desc:
-    //   Set new absorption values
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   times_len(felt): Array length
-    //   times(felt*): Time values
-    //   absorptions_len(felt): Array length
-    //   absorptions(felt*): Absorption values
-    //   ton_equivalent(felt): Absorption ton equivalent
-    // Raises:
-    //   caller: caller does not have the CERTIFIER_ROLE role
-    //   times_len: times_len is null
-    //   absorptions_len: absorptions_len is null
-    //   ton_equivalent: ton_equivalent is null
-    //   consistency: times_len and absorptions_len are not equal
     CarbonableAccessControl.assert_only_certifier();
     return CarbonableProject.set_absorptions(
         times_len=times_len,

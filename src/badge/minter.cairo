@@ -21,23 +21,15 @@ from src.interfaces.badge import ICarbonableBadge
 // Initializer
 //
 
+// @notice Initialize the contract with the owner address, the public key of the signer and the address of the badge contract.
+// @dev Can only be called if there is no admin.
+// @param signer_public_key Public key of the signer.
+// @param carbonable_badge_contract_address Address of the badge contract.
+// @param owner Owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     signer_key: felt, carbonable_badge_contract_address: felt, owner: felt
 ) {
-    // Desc:
-    //   Initialize the contract with the owner address, the public key of the signer and the address of the badge contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   signer_public_key(felt): Public key of the signer
-    //   carbonable_badge_contract_address(felt): Address of the badge contract
-    //   owner(felt): Owner and Admin address
-    // Returns:
-    //   None
-
     // Can only be called if there is no admin
     let (current_owner) = Ownable.owner();
     assert current_owner = 0;
@@ -53,69 +45,39 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 // Proxy administration
 //
 
+// @notice Return the current implementation hash.
+// @return implementation Implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
 ) {
-    // Desc:
-    //   Return the current implementation hash
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   implementation(felt): Implementation class hash
     return Proxy.get_implementation_hash();
 }
 
+// @notice Return the admin address.
+// @return admin Admin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
-    // Desc:
-    //   Return the admin address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   admin(felt): The admin address
     return Proxy.get_admin();
 }
 
+// @notice Upgrade the contract to the new implementation.
+// @dev Caller must be the admin.
+// @param new_implementation New implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
 ) {
-    // Desc:
-    //   Upgrade the contract to the new implementation
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_implementation(felt): New implementation class hash
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_implementation_hash(new_implementation);
     return ();
 }
 
+// @notice Transfer admin rights to a new admin.
+// @dev Caller must be the admin.
+// @param new_admin Address of the new admin.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
-    // Desc:
-    //   Transfer admin rights to a new admin
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_admin(felt): Address of the new admin
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_admin(new_admin);
     return ();
@@ -125,52 +87,28 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 // Ownership administration
 //
 
-@view
+// @notice Return the contract owner.
+// @return owner Owner address.
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
-    // Desc:
-    //   Return the contract owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   owner(felt): The owner address
     return Ownable.owner();
 }
 
+// @notice Transfer ownership to a new owner.
+// @dev Caller must be the owner.
+//   New owner cannot be the zero address.
+// @param new_owner Address of the new owner.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
 ) {
-    // Desc:
-    //   Transfer ownership to a new owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   newOwner(felt): Address of the new owner
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the contract owner
-    //   newOwner: new owner is the zero address
     Ownable.transfer_ownership(newOwner);
     return ();
 }
 
+// @notice Renounce ownership.
+// @dev Caller must be the owner.
 @external
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    // Desc:
-    //   Renounce ownership
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the contract owner
     Ownable.renounce_ownership();
     return ();
 }
@@ -179,110 +117,68 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 // Carbonable Badge Minter
 //
 
+// @notice Return the public key of the signer.
+// @return signer_public_key Public key of the signer.
 @view
 func getSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     signer_public_key: felt
 ) {
-    // Desc:
-    //   Return the public key of the signer
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   signer_public_key(felt): The public key
     return CarbonableBadgeMinter.getSignerPublicKey();
 }
 
+// @notice Return the address of the badge contract.
+// @return badge_contract_address Address of the badge contract.
 @view
 func getBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     badge_contract_address: felt
 ) {
-    // Desc:
-    //   Return the address of the badge contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   badge_contract_address(felt): The address of the badge contract
     return CarbonableBadgeMinter.getBadgeContractAddress();
 }
 
+// @notice Mint a badge to the caller of the specified type if the signature is valid, on the badge contract.
+// @param signature Server signature made from the pedersen hash of the caller address and the badge type.
+// @param badge_type Badge type.
 @external
 func claim{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }(signature: (felt, felt), badge_type: felt) -> () {
-    // Desc:
-    //   Mint a badge to the caller of the specified type if the signature is valid, on the badge contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    //   ecdsa_ptr(SignatureBuiltin*)
-    // Explicit args:
-    //   signature(felt, felt): server signature made from the pedersen hash of the caller address and the badge type
-    //   badge_type(felt): badge type
-    // Returns:
-    //   None
     let (caller_address) = get_caller_address();
     CarbonableBadgeMinter.assert_valid_signature((caller_address, badge_type), signature);
     CarbonableBadgeMinter.claim(badge_type);
     return ();
 }
 
+// @notice Set the public key of the signer for mintBadge transactions.
+// @dev Caller must be the owner.
+// @param new_signer_public_key The new public key.
 @external
 func setSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_signer_public_key: felt
 ) -> () {
-    // Desc:
-    //   Set the public key of the signer for mintBadge transactions
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_signer_public_key(felt): The new public key
-    // Returns:
-    //   None
     Ownable.assert_only_owner();
     CarbonableBadgeMinter.setSignerPublicKey(new_signer_public_key);
     return ();
 }
 
+// @notice Set the address of the badge contract.
+// @dev Caller must be the owner.
+// @param new_badge_contract_address The new badge contract address.
 @external
 func setBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_badge_contract_address: felt
 ) -> () {
-    // Desc:
-    //   Set the address of the badge contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_badge_contract_address(felt): The new badge contract address
-    // Returns:
-    //   None
     Ownable.assert_only_owner();
     CarbonableBadgeMinter.setBadgeContractAddress(new_badge_contract_address);
     return ();
 }
 
+// @notice Transfer ownership of the badge contract to a new owner.
+// @dev Caller must be the owner.
+// @param newOwner Address of the new owner.
 @external
 func transferBadgeContractOwnership{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }(newOwner: felt) {
-    // Desc:
-    //   Transfer ownership of the badge contract to a new owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   newOwner(felt): Address of the new owner
-    // Returns:
-    //   None
     Ownable.assert_only_owner();
     CarbonableBadgeMinter.transferBadgeContractOwnership(newOwner);
     return ();
