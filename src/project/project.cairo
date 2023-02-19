@@ -238,7 +238,8 @@ func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 @view
 func tokenURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {t.token_uri(tokenId);
+}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
+    let (uri_len: felt, uri: felt*) = CarbonableProject.token_uri(tokenId);
     return (uri_len=uri_len, uri=uri);
 }
 
