@@ -17,23 +17,15 @@ from src.offset.library import CarbonableOffseter
 // Initializer
 //
 
+// @notice Initialize the contract with the given parameters.
+//   This constructor uses a dedicated initializer that mainly stores the inputs.
+// @param carbonable_project_address Address of the Carbonable project.
+// @param min_claimable Minimum threshold of claimable to allow a claim.
+// @param owner Owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt, min_claimable: felt, owner: felt
 ) {
-    // Desc:
-    //   Initialize the contract with the given parameters -
-    //   This constructor uses a dedicated initializer that mainly stores the inputs
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   carbonable_project_address(felt): Address of the Carbonable project
-    //   min_claimable(felt): Minimum threshold of claimable to allow a claim
-    //   owner(felt): Owner and Admin address
-    // Returns:
-    //   None
     alloc_locals;
 
     CarbonableOffseter.initializer(carbonable_project_address);
@@ -47,69 +39,39 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 // Proxy administration
 //
 
+// @notice Return the current implementation hash.
+// @return implementation Implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
 ) {
-    // Desc:
-    //   Return the current implementation hash
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   implementation(felt): Implementation class hash
     return Proxy.get_implementation_hash();
 }
 
+// @notice Return the admin address.
+// @return admin Admin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
-    // Desc:
-    //   Return the admin address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   admin(felt): The admin address
     return Proxy.get_admin();
 }
 
+// @notice Upgrade the contract to the new implementation.
+// @dev This function is only callable by the admin.
+// @param new_implementation New implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
 ) {
-    // Desc:
-    //   Upgrade the contract to the new implementation
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_implementation(felt): New implementation class hash
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_implementation_hash(new_implementation);
     return ();
 }
 
+// @notice Transfer admin rights to a new admin.
+// @dev This function is only callable by the admin.
+// @param new_admin New admin address.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
-    // Desc:
-    //   Transfer admin rights to a new admin
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   new_admin(felt): Address of the new admin
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the admin
     Proxy.assert_only_admin();
     Proxy._set_admin(new_admin);
     return ();
@@ -119,52 +81,29 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 // Ownership administration
 //
 
+// @notice Return the contract owner.
+// @return owner Owner address.
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
-    // Desc:
-    //   Return the contract owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   owner(felt): The owner address
     return Ownable.owner();
 }
 
+// @notice Transfer ownership to a new owner.
+// @dev This function is only callable by the owner.
+//   The new owner cannot be the zero address.
+// @param newOwner New owner address.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
 ) {
-    // Desc:
-    //   Transfer ownership to a new owner
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   newOwner(felt): Address of the new owner
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the contract owner
-    //   newOwner: new owner is the zero address
     Ownable.transfer_ownership(newOwner);
     return ();
 }
 
+// @notice Renounce ownership.
+// @dev This function is only callable by the owner.
 @external
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    // Desc:
-    //   Renounce ownership
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the contract owner
     Ownable.renounce_ownership();
     return ();
 }
@@ -173,163 +112,98 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 // Getters
 //
 
+// @notice Return the associated carbonable project.
+// @return carbonable_project_address Address of the corresponding Carbonable project.
 @view
 func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
-    // Desc:
-    //   Return the associated carbonable project
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   carbonable_project_address(felt): Address of the corresponding Carbonable project
     return CarbonableOffseter.carbonable_project_address();
 }
 
+// @notice Return the minimum claimable quantity.
+// @return min_claimable Minimum claimable.
 @view
 func getMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     min_claimable: felt
 ) {
-    // Desc:
-    //   Return the minimum claimable quantity
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   min_claimable(felt): Minimum claimable
     return CarbonableOffseter.min_claimable();
 }
 
+// @notice Return the total deposited balance of the project.
+// @return balance Total deposited.
 @view
 func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     balance: Uint256
 ) {
-    // Desc:
-    //   Return the total deposited balance of the project
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   balance(Uint256): Total deposited
     return CarbonableOffseter.total_deposited();
 }
 
+// @notice Return the total claimed balance of the project.
+// @return balance Total claimed.
 @view
 func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_claimed: felt
 ) {
-    // Desc:
-    //   Return the total claimed absorption of the project
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   total_claimed(felt): Total claimed
     return CarbonableOffseter.total_claimed();
 }
 
+// @notice Return the total claimable absorption of the project.
+// @return total_claimable Total claimable.
 @view
 func getTotalClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_claimable: felt
 ) {
-    // Desc:
-    //   Return the total claimable absorption of the project
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   total_claimable(felt): Total claimable
     return CarbonableOffseter.total_claimable();
 }
 
+// @notice Return the total claimable balance of the provided address.
+// @param address Address to query.
+// @return claimable Total claimable.
 @view
 func getClaimableOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (claimable: felt) {
-    // Desc:
-    //   Return the total claimable balance of the provided address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): address
-    // Returns:
-    //   claimable(felt): Total claimable
     return CarbonableOffseter.claimable_of(address=address);
 }
 
+// @notice Return the total claimed balance of the provided address.
+// @param address Address to query.
+// @return claimed Total claimed.
 @view
 func getClaimedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (claimed: felt) {
-    // Desc:
-    //   Return the total claimed balance of the provided address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): address
-    // Returns:
-    //   claimed(felt): Total claimed
     return CarbonableOffseter.claimed_of(address=address);
 }
 
+// @notice Return the registered owner of a token id (0 if token is not owned by the contract).
+// @param token_id Token id.
+// @return address Registred owner address.
 @view
 func getRegisteredOwnerOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (address: felt) {
-    // Desc:
-    //   Return the registered owner of a token id (0 if token is not owned by the contract)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   token_id(Uint256): Token id
-    // Returns:
-    //   address(felt): Registred owner address
     return CarbonableOffseter.registered_owner_of(token_id=token_id);
 }
 
+// @notice Return the registered time of a token id (0 if token is not owned by the contract).
+// @param token_id Token id.
+// @return time Registred time.
 @view
 func getRegisteredTimeOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (time: felt) {
-    // Desc:
-    //   Return the registered time of a token id (0 if token is not owned by the contract)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): address
-    // Returns:
-    //   address(felt): Registred time
     return CarbonableOffseter.registered_time_of(token_id=token_id);
 }
 
+// @notice Return the registered tokens of the provided address.
+// @param address Address to query.
+// @return tokens_len Tokens array length.
+// @return tokens Tokens deposited by the provided address.
 @view
 func getRegisteredTokensOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (tokens_len: felt, tokens: Uint256*) {
-    // Desc:
-    //   Return the registered tokens of the provided address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   address(felt): Token id
-    // Returns:
-    //   tokens_len(felt): Tokens array length
-    //   tokens(Uint256*): Tokens deposited by the provided address
     return CarbonableOffseter.registered_tokens_of(address=address);
 }
 
@@ -337,88 +211,56 @@ func getRegisteredTokensOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 // Externals
 //
 
+// @notice Set the minimum claimable quantity (must be consistent with project absorption unit)
+// @dev min_claimable cannot be null.
+// @param min_claimable New minimum claimable.
+// @return success Success flag.
 @external
 func setMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     min_claimable: felt
 ) -> () {
-    // Desc:
-    //   Set the minimum claimable quantity (must be consistent with project absorption unit)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   min_claimable(felt): New minimum claimable
-    // Raises:
-    //   min_claimable: min_claimable is null
     Ownable.assert_only_owner();
     return CarbonableOffseter.set_min_claimable(min_claimable=min_claimable);
 }
 
+// @notice Deposit tokens to the project.
+// @dev Quantity cannot be higher than the caller total claimable.
+// @param token_id Token id.
+// @return success Success status.
 @external
 func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
     success: felt
 ) {
-    // Desc:
-    //   Claim all the claimable balance of the caller address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   quantity(felt): Quantity to claim
-    // Returns:
-    //   success(felt): Success status
-    // Raises:
-    //   quantity: quantity is higher than the caller total claimable
     return CarbonableOffseter.claim(quantity=quantity);
 }
 
+// @notice Claim all the total claimable of the caller address.
+// @return success Success status.
 @external
 func claimAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     success: felt
 ) {
-    // Desc:
-    //   Claim all the total claimable of the caller address
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   success(felt): Success status
     return CarbonableOffseter.claim_all();
 }
 
+// @notice Deposit tokens to the project.
+// @dev Token id must be owned by the caller.
+// @param token_id Token id.
+// @return success Success status.
 @external
 func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (success: felt) {
-    // Desc:
-    //   Deposit the specified token id into the contract (lock)
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   token_id(Uint256): Token id
-    // Returns:
-    //   success(felt): Success status
     return CarbonableOffseter.deposit(token_id=token_id);
 }
 
+// @notice Withdraw the specified token id into the contract.
+// @dev Token id must be owned by the contract.
+// @param token_id Token id.
+// @return success Success status.
 @external
 func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
 ) -> (success: felt) {
-    // Desc:
-    //   Withdraw the specified token id into the contract
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Explicit args:
-    //   token_id(Uint256): Token id
-    // Returns:
-    //   success(felt): Success status
     return CarbonableOffseter.withdraw(token_id=token_id);
 }
