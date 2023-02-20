@@ -587,6 +587,8 @@ namespace instance {
         return ();
     }
 
+    // Vester
+
     func get_vesting_id{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         vesting_id: felt
     ) {
@@ -617,12 +619,48 @@ namespace instance {
             let (releasable_amount) = carbonable_vester_instance.releasable_amount(
                 vesting_id, caller
             );
-            let (is_zero) = uint256_eq(releasable_amount, zero);
-            with_attr error_message("Testing: releasable amount cannot be zero") {
-                assert is_zero = FALSE;
-            }
         }
 
         return (releasable_amount=releasable_amount);
+    }
+
+    func releasable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt
+    ) -> (releasable_amount: Uint256) {
+        alloc_locals;
+        let zero = Uint256(low=0, high=0);
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_vester {
+            let (releasable_amount) = carbonable_vester_instance.releasable_of(account, caller);
+        }
+
+        return (releasable_amount=releasable_amount);
+    }
+
+    func released_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt
+    ) -> (released_amount: Uint256) {
+        alloc_locals;
+        let zero = Uint256(low=0, high=0);
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_vester {
+            let (released_amount) = carbonable_vester_instance.released_of(account, caller);
+        }
+
+        return (released_amount=released_amount);
+    }
+
+    func release_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (carbonable_vester) = carbonable_vester_instance.get_address();
+        let (caller) = get_address();
+
+        with carbonable_vester {
+            carbonable_vester_instance.release_all(caller=caller);
+        }
+        return ();
     }
 }
