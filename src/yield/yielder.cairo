@@ -21,10 +21,10 @@ from src.yield.library import CarbonableYielder
 
 // @notice Initialize the contract with the given parameters.
 //   This constructor uses a dedicated initializer that mainly stores the inputs.
-// @param carbonable_project_address Address of the Carbonable project.
-// @param carbonable_offseter_address Address of the Carbonable offseter.
-// @param carbonable_vester_address Address of the Carbonable vester.
-// @param owner Owner and Admin address.
+// @param carbonable_project_address The address of the Carbonable project.
+// @param carbonable_offseter_address The address of the Carbonable offseter.
+// @param carbonable_vester_address The address of the Carbonable vester.
+// @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
@@ -47,7 +47,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 //
 
 // @notice Return the current implementation hash.
-// @return implementation Implementation class hash.
+// @return implementation The implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
@@ -56,7 +56,7 @@ func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 // @notice Return the admin address.
-// @return admin Admin address.
+// @return admin The admin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
     return Proxy.get_admin();
@@ -64,7 +64,7 @@ func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
 // @notice Upgrade the contract to the new implementation.
 // @dev This function is only callable by the admin.
-// @param new_implementation New implementation class hash.
+// @param new_implementation The new implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
@@ -76,7 +76,7 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 // @notice Transfer admin rights to a new admin.
 // @dev This function is only callable by the admin.
-// @param new_admin Address of the new admin.
+// @param new_admin The address of the new admin.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
     Proxy.assert_only_admin();
@@ -89,7 +89,7 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 //
 
 // @notice Return the owner address.
-// @return owner Owner address.
+// @return owner The owner address.
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
@@ -98,7 +98,7 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
 // @notice Transfer ownership to a new owner.
 // @dev This function is only callable by the owner.
 //   The new owner can be the zero address.
-// @param new_owner Address of the new owner.
+// @param new_owner The address of the new owner.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
@@ -117,7 +117,7 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
 // @notice Set the snapshoter.
 // @dev This function is only callable by the owner.
-// @param snapshoter Address of the snapshoter.
+// @param snapshoter The address of the snapshoter.
 @external
 func setSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     snapshoter: felt
@@ -128,7 +128,7 @@ func setSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 // @notice Get the snapshoter.
-// @return snapshoter Address of the snapshoter.
+// @return snapshoter The address of the snapshoter.
 @view
 func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     snapshoter: felt
@@ -141,7 +141,7 @@ func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 //
 
 // @notice Return the associated carbonable project.
-// @return carbonable_project_address Address of the corresponding Carbonable project.
+// @return carbonable_project_address The address of the corresponding Carbonable project.
 @view
 func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
@@ -149,7 +149,7 @@ func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 }
 
 // @notice Return the associated carbonable offseter.
-// @return carbonable_offseter_address Address of the corresponding Carbonable offseter.
+// @return carbonable_offseter_address The address of the corresponding Carbonable offseter.
 @view
 func getCarbonableOffseterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_offseter_address: felt) {
@@ -157,7 +157,7 @@ func getCarbonableOffseterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 }
 
 // @notice Return the associated carbonable vester.
-// @return carbonable_vester_address Address of the corresponding Carbonable vester.
+// @return carbonable_vester_address The address of the corresponding Carbonable vester.
 @view
 func getCarbonableVesterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_vester_address: felt) {
@@ -165,7 +165,7 @@ func getCarbonableVesterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
 }
 
 // @notice Return the total deposited balance of the project.
-// @return balance Total deposited.
+// @return balance The total deposited.
 @view
 func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     balance: Uint256
@@ -174,7 +174,7 @@ func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 // @notice Return the total claimable absorption of the project.
-// @return total_absorption Total absorption.
+// @return total_absorption The total absorption.
 @view
 func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_absorption: felt
@@ -184,8 +184,8 @@ func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 }
 
 // @notice Return the total absorption balance of the provided address.
-// @param address Address of the user.
-// @return absorption Absorption.
+// @param address The address of the user.
+// @return absorption The absorption.
 @view
 func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
@@ -195,8 +195,8 @@ func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 // @notice Return the registered owner of a token id (0 if token is not owned by the contract).
-// @param token_id Token id.
-// @return address Registred owner address.
+// @param token_id The token id.
+// @return address The registred owner address.
 @view
 func getRegisteredOwnerOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
@@ -205,8 +205,8 @@ func getRegisteredOwnerOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 }
 
 // @notice Return the registered time of a token id (0 if token is not owned by the contract).
-// @param token_id Token id.
-// @return time Registred time.
+// @param token_id The token id.
+// @return time The registred time.
 @view
 func getRegisteredTimeOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
@@ -215,9 +215,9 @@ func getRegisteredTimeOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 }
 
 // @notice Return the registered tokens of the provided address.
-// @param address Address of the user.
-// @return tokens_len Tokens array length.
-// @return tokens Tokens deposited by the provided address.
+// @param address The address of the user.
+// @return tokens_len The tokens array length.
+// @return tokens The tokens deposited by the provided address.
 @view
 func getRegisteredTokensOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
@@ -235,8 +235,8 @@ func getSnapshotedTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 // @notice Return the snapshoted absorption of the provided address.
-// @param address Address of the user.
-// @return absorption Snapshoted absorption.
+// @param address The address of the user.
+// @return absorption The snapshoted absorption.
 @view
 func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
@@ -249,8 +249,8 @@ func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 //
 
 // @notice Deposit the specified token id into the contract (lock).
-// @param token_id Token id.
-// @return success Success status.
+// @param token_id The token id.
+// @return success The success status.
 @external
 func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
@@ -259,8 +259,8 @@ func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Withdraw the specified token id into the contract.
-// @param token_id Token id.
-// @return success Success status.
+// @param token_id The token id.
+// @return success The success status.
 @external
 func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256
@@ -270,7 +270,7 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 // @notice Snapshot the current state of claimable and claimed per user.
 // @dev The caller must have the SNAPSHOTER_ROLE role.
-// @return success Success status.
+// @return success The success status.
 @external
 func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     success: felt
@@ -283,13 +283,13 @@ func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 //   on the starkvest smart contract, by allocating shares of the total amount collected from selling carbon credit.
 // @dev Snapshot must have been executed before.
 //   The caller must be the contract owner.
-// @param total_amount Amount, in ERC-20 value, of carbon credit sold for the current period.
-// @param cliff_delta Time, in seconds, before the first vesting.
-// @param start Start time of the vesting period.
-// @param duration Duration of the vesting period.
-// @param slice_period_seconds Time, in seconds, between each vesting.
-// @param revocable Vesting revocability.
-// @return success Success status.
+// @param total_amount The amount, in ERC-20 value, of carbon credit sold for the current period.
+// @param cliff_delta The time, in seconds, before the first vesting.
+// @param start The start time of the vesting period.
+// @param duration The duration of the vesting period.
+// @param slice_period_seconds The time, in seconds, between each vesting.
+// @param revocable The vesting revocability.
+// @return success The success status.
 @external
 func createVestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     total_amount: felt,

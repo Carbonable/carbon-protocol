@@ -21,14 +21,14 @@ from src.utils.access.library import CarbonableAccessControl
 // @notice Initialize the contract with the given parameters.
 //   This constructor uses a dedicated initializer that mainly stores the inputs.
 // @dev unit_price, max_supply_for_mint and reserved_supply_for_mint must be valid Uint256.
-// @param carbonable_project_address Address of the corresponding Carbonable project.
-// @param payment_token_address Address of the ERC20 token that will be used during sales.
-// @param public_sale_open 1 to open the public sale right after deployment, 0 otherwise.
-// @param max_buy_per_tx Max number of NFTs that can be purchased in a single tx.
-// @param unit_price Price per token (based on ERC20 token defined as -payment_token_address-).
-// @param max_supply_for_mint Max supply available whatever the way to mint.
-// @param reserved_supply_for_mint Supply reserved to be airdropped.
-// @param owner Owner and Admin address.
+// @param carbonable_project_address The adress of the corresponding Carbonable project.
+// @param payment_token_address The address of the ERC20 token that will be used during sales.
+// @param public_sale_open TRUE to open the public sale right after deployment, FALSE otherwise.
+// @param max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @param unit_price The price per token (based on ERC20 token defined as -payment_token_address-).
+// @param max_supply_for_mint The max supply available whatever the way to mint.
+// @param reserved_supply_for_mint The supply reserved to be airdropped.
+// @param owner The owner and admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
@@ -59,7 +59,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 //
 
 // @notice Return the current implementation hash.
-// @return implementation Implementation class hash.
+// @return implementation The implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
@@ -68,7 +68,7 @@ func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 // @notice Return the admin address.
-// @return admin Admin address.
+// @return admin The admin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
     return Proxy.get_admin();
@@ -76,7 +76,7 @@ func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
 // @notice Upgrade the contract to the new implementation.
 // @dev Only callable by the admin.
-// @param new_implementation New implementation class hash.
+// @param new_implementation The new implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
@@ -88,7 +88,7 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 // @notice Transfer admin rights to a new admin.
 // @dev Only callable by the admin.
-// @param new_admin Address of the new admin.
+// @param new_admin The address of the new admin.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
     Proxy.assert_only_admin();
@@ -101,7 +101,7 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 //
 
 // @notice Return the owner address.
-// @return owner Owner address.
+// @return owner The owner address.
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
@@ -110,7 +110,7 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
 // @notice Transfer ownership to a new owner.
 // @dev Only callable by the owner.
 //   The new owner must not be the zero address.
-// @param newOwner Address of the new owner.
+// @param newOwner The address of the new owner.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
@@ -129,7 +129,7 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
 // @notice Set the Withdrawer.
 // @dev Only callable by the owner.
-// @param withdrawer Withdrawer address.
+// @param withdrawer The withdrawer address.
 @external
 func setWithdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     withdrawer: felt
@@ -140,7 +140,7 @@ func setWithdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 // @notice Get the Withdrawer.
-// @return withdrawer Withdrawer address.
+// @return withdrawer The withdrawer address.
 @view
 func getWithdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     withdrawer: felt
@@ -153,7 +153,7 @@ func getWithdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 //
 
 // @notice Return the associated carbonable project.
-// @return carbonable_project_address Address of the corresponding Carbonable project.
+// @return carbonable_project_address The address of the corresponding Carbonable project.
 @view
 func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
@@ -161,7 +161,7 @@ func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 }
 
 // @notice Return the associated payment token.
-// @return payment_token_address Address of the ERC20 token that will be used during sales.
+// @return payment_token_address The address of the ERC20 token that will be used during sales.
 @view
 func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     payment_token_address: felt
@@ -170,7 +170,7 @@ func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 }
 
 // @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx Max number of NFTs that can be purchased in a single tx.
+// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
 @view
 func isPreSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     pre_sale_open: felt
@@ -179,7 +179,7 @@ func isPreSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 // @notice Return the public sale status.
-// @return public_sale_open 1 if public sale is open, 0 otherwise.
+// @return public_sale_open TRUE if public sale is open, FALSE otherwise.
 @view
 func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     public_sale_open: felt
@@ -188,7 +188,7 @@ func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 // @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx Max number of NFTs that can be purchased in a single tx.
+// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
 @view
 func getMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_buy_per_tx: felt
@@ -197,7 +197,7 @@ func getMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 // @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx Max number of NFTs that can be purchased in a single tx.
+// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
 @view
 func getUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     unit_price: Uint256
@@ -206,7 +206,7 @@ func getUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 }
 
 // @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx Max number of NFTs that can be purchased in a single tx.
+// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
 @view
 func getReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (reserved_supply_for_mint: Uint256) {
@@ -214,7 +214,7 @@ func getReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 }
 
 // @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx Max number of NFTs that can be purchased in a single tx.
+// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
 @view
 func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_supply_for_mint: Uint256
@@ -223,7 +223,7 @@ func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 }
 
 // @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx Max number of NFTs that can be purchased in a single tx.
+// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
 @view
 func getWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     whitelist_merkle_root: felt
@@ -232,10 +232,10 @@ func getWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 }
 
 // @notice Return the whitelist merkle root, 0 means it has not been set yet.
-// @param account Address of the account to check.
-// @param slots Number of slots to check.
-// @param proof_len Length of the proof array.
-// @param proof Merkle proof associated to the account and slots.
+// @param account The address of the account to check.
+// @param slots The number of slots to check.
+// @param proof_len The length of the proof array.
+// @param proof The merkle proof associated to the account and slots.
 // @return slots 0 if not whitelisted, amount of slots otherwise.
 @view
 func getWhitelistedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -245,8 +245,8 @@ func getWhitelistedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 }
 
 // @notice Return the slots already minted by an account using whitelist slots.
-// @param account Address of the account to check.
-// @return slots Amount of claimed slots.
+// @param account The address of the account to check.
+// @return slots The amount of claimed slots.
 @view
 func getClaimedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt
@@ -255,7 +255,7 @@ func getClaimedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 // @notice Return the sold out status.
-// @return status 1 if sold out else 0.
+// @return status TRUE if sold out else FALSE.
 @view
 func isSoldOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     status: felt
@@ -264,7 +264,7 @@ func isSoldOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Return the total value of the project.
-// @return total_value Total value expressed in payment token units.
+// @return total_value The total value expressed in payment token units.
 @view
 func getTotalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_value: Uint256
@@ -278,7 +278,7 @@ func getTotalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 
 // @notice Set the payment token address.
 // @dev Only callable by the contract owner.
-// @param payment_token_address Address of the payment token.
+// @param payment_token_address The address of the payment token.
 @external
 func setWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     whitelist_merkle_root: felt
@@ -289,7 +289,7 @@ func setWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 
 // @notice Set a new public sale status (1 to open, 0 otherwise).
 // @dev Only callable by the contract owner.
-// @param public_sale_open Public sale status.
+// @param public_sale_open The public sale status.
 @external
 func setPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     public_sale_open: felt
@@ -300,7 +300,7 @@ func setPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
 // @notice Set a new max amount per tx during purchase.
 // @dev Only callable by the contract owner.
-// @param max_buy_per_tx Max amount per tx.
+// @param max_buy_per_tx The max amount per tx.
 @external
 func setMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     max_buy_per_tx: felt
@@ -311,7 +311,7 @@ func setMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 
 // @notice Set a new unit price per token.
 // @dev Only callable by the contract owner.
-// @param unit_price Unit price.
+// @param unit_price The unit price.
 @external
 func setUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     unit_price: Uint256
@@ -322,7 +322,7 @@ func setUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
 // @notice Decrease the reserved supply for airdrops by the providing amount of slots.
 // @dev Only callable by the contract owner.
-// @param slots Amount of slots to substract to the reserved supply.
+// @param slots The amount of slots to substract to the reserved supply.
 @external
 func decreaseReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     slots: Uint256
@@ -336,8 +336,8 @@ func decreaseReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
 //   The caller can't be the zero address.
 //   Their must be enough available NFTs regarding max supply.
 //   Their must be enough available reserved NFTs regarding reserved supply.
-// @param slots Amount of slots to add to the reserved supply.
-// @return success 1 if it succeeded, 0 otherwise.
+// @param slots The amount of slots to add to the reserved supply.
+// @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     to: felt, quantity: felt
@@ -349,7 +349,7 @@ func airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // @notice Transfer the smart contract balance to the contract owner.
 // @dev The caller must have the WITHDRAWER_ROLE role.
 //   The transfer must succeed.
-// @return success 1 if it succeeded, 0 otherwise.
+// @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     success: felt
@@ -362,10 +362,10 @@ func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 // @dev The caller must be the contract owner.
 //   The amount must be a valid Uint256.
 //   The transfer must succeed.
-// @param token_address Token address to transfer.
-// @param recipient Address to receive tokens.
-// @param amount Amount of token to transfer.
-// @return success 1 if it succeeded, 0 otherwise.
+// @param token_address The token address to transfer.
+// @param recipient The address to receive tokens.
+// @param amount The amount of token to transfer.
+// @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_address: felt, recipient: felt, amount: Uint256
@@ -382,11 +382,11 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //   The quantity must be less than or equal to the available supply.
 //   The quantity must be less than or equal to the available reserved supply.
 //   The transfer must succeed.
-// @param slots Associated slots recorded in the merkle root.
-// @param proof_len Proof array length.
-// @param proof Merkle proof associated to the account and slots.
-// @param quantity Quantity of tokens to buy.
-// @return success 1 if it succeeded, 0 otherwise.
+// @param slots The associated slots recorded in the merkle root.
+// @param proof_len The proof array length.
+// @param proof The merkle proof associated to the account and slots.
+// @param quantity The quantity of tokens to buy.
+// @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     slots: felt, proof_len: felt, proof: felt*, quantity: felt
@@ -402,8 +402,8 @@ func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //   The quantity must be less than or equal to the available supply.
 //   The quantity must be less than or equal to the available reserved supply.
 //   The transfer must succeed.
-// @param quantity Quantity of tokens to buy.
-// @return success 1 if it succeeded, 0 otherwise.
+// @param quantity The quantity of tokens to buy.
+// @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
     success: felt

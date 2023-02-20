@@ -210,9 +210,9 @@ namespace CarbonableBadgeMinter {
     // Initializer
     //
 
-    // @notice Initializes the contract with the given signer public key and badge contract address.
-    // @param signer_public_key signer public key.
-    // @param badge_contract_address badge contract address.
+    // @notice Initialize the contract with the given signer public key and badge contract address.
+    // @param signer_public_key The signer public key.
+    // @param badge_contract_address The badge contract address.
     func initializer{
         syscall_ptr: felt*,
         pedersen_ptr: HashBuiltin*,
@@ -227,15 +227,15 @@ namespace CarbonableBadgeMinter {
     // Getters
     //
 
-    // @notice Returns the public key of the signer.
-    // @return signer_public_key signer public key.
+    // @notice Return the public key of the signer.
+    // @return signer_public_key The signer public key.
     func getSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (signer_public_key: felt) {
         let (signer_public_key: felt) = CarbonablebadgeMinter_signer_public_key.read();
         return (signer_public_key,);
     }
 
-    // @notice Returns the address of the badge contract.
-    // @return badge_contract_address badge contract address.
+    // @notice Return the address of the badge contract.
+    // @return badge_contract_address The badge contract address.
     func getBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (badge_contract_address: felt) {
         let (badge_contract_address: felt) = CarbonablebadgeMinter_badge_contract_address.read();
         return (badge_contract_address,);
@@ -246,7 +246,7 @@ namespace CarbonableBadgeMinter {
     //
 
     // @notice Claim a badge of the given type.
-    // @param badge_type badge type.
+    // @param badge_type The badge type.
     func claim{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*}(
         badge_type : felt,
     ) -> () {
@@ -266,7 +266,7 @@ namespace CarbonableBadgeMinter {
     }
 
     // @notice Set the public key of the signer for mintBadge transactions.
-    // @param new_signer_public_key new signer public key.
+    // @param new_signer_public_key The new signer public key.
     func setSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         new_signer_public_key: felt
     ) -> () {
@@ -275,7 +275,7 @@ namespace CarbonableBadgeMinter {
     }
 
     // @notice Set the address of the badge contract.
-    // @param new_badge_contract_address new badge contract address.
+    // @param new_badge_contract_address The new badge contract address.
     func setBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         new_badge_contract_address: felt
     ) -> () {
@@ -284,7 +284,7 @@ namespace CarbonableBadgeMinter {
     }
 
     // @notice Transfer ownership of the badge contract to a new owner.
-    // @param newOwner address of the new owner.
+    // @param newOwner The address of the new owner.
     func transferBadgeContractOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         newOwner: felt
     ) {

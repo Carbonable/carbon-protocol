@@ -23,9 +23,9 @@ from src.interfaces.badge import ICarbonableBadge
 
 // @notice Initialize the contract with the owner address, the public key of the signer and the address of the badge contract.
 // @dev Can only be called if there is no admin.
-// @param signer_public_key Public key of the signer.
-// @param carbonable_badge_contract_address Address of the badge contract.
-// @param owner Owner and Admin address.
+// @param signer_public_key The public key of the signer.
+// @param carbonable_badge_contract_address The address of the badge contract.
+// @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     signer_key: felt, carbonable_badge_contract_address: felt, owner: felt
@@ -46,7 +46,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 //
 
 // @notice Return the current implementation hash.
-// @return implementation Implementation class hash.
+// @return implementation The implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
@@ -55,15 +55,15 @@ func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 // @notice Return the admin address.
-// @return admin Admin address.
+// @return admin The dmin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
     return Proxy.get_admin();
 }
 
 // @notice Upgrade the contract to the new implementation.
-// @dev Caller must be the admin.
-// @param new_implementation New implementation class hash.
+// @dev The caller must be the admin.
+// @param new_implementation The new implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
@@ -74,8 +74,8 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Transfer admin rights to a new admin.
-// @dev Caller must be the admin.
-// @param new_admin Address of the new admin.
+// @dev The caller must be the admin.
+// @param new_admin The address of the new admin.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
     Proxy.assert_only_admin();
@@ -88,15 +88,15 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 //
 
 // @notice Return the contract owner.
-// @return owner Owner address.
+// @return owner The owner address.
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
 }
 
 // @notice Transfer ownership to a new owner.
-// @dev Caller must be the owner.
-//   New owner cannot be the zero address.
-// @param new_owner Address of the new owner.
+// @dev The caller must be the owner.
+//   The new owner cannot be the zero address.
+// @param new_owner The address of the new owner.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
@@ -106,7 +106,7 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 // @notice Renounce ownership.
-// @dev Caller must be the owner.
+// @dev The caller must be the owner.
 @external
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     Ownable.renounce_ownership();
@@ -118,7 +118,7 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 //
 
 // @notice Return the public key of the signer.
-// @return signer_public_key Public key of the signer.
+// @return signer_public_key The public key of the signer.
 @view
 func getSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     signer_public_key: felt
@@ -127,7 +127,7 @@ func getSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 }
 
 // @notice Return the address of the badge contract.
-// @return badge_contract_address Address of the badge contract.
+// @return badge_contract_address The address of the badge contract.
 @view
 func getBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     badge_contract_address: felt
@@ -136,8 +136,8 @@ func getBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 }
 
 // @notice Mint a badge to the caller of the specified type if the signature is valid, on the badge contract.
-// @param signature Server signature made from the pedersen hash of the caller address and the badge type.
-// @param badge_type Badge type.
+// @param signature The server signature made from the pedersen hash of the caller address and the badge type.
+// @param badge_type The badge type.
 @external
 func claim{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
@@ -149,7 +149,7 @@ func claim{
 }
 
 // @notice Set the public key of the signer for mintBadge transactions.
-// @dev Caller must be the owner.
+// @dev The caller must be the owner.
 // @param new_signer_public_key The new public key.
 @external
 func setSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -161,7 +161,7 @@ func setSignerPublicKey{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 }
 
 // @notice Set the address of the badge contract.
-// @dev Caller must be the owner.
+// @dev The caller must be the owner.
 // @param new_badge_contract_address The new badge contract address.
 @external
 func setBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -173,8 +173,8 @@ func setBadgeContractAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 }
 
 // @notice Transfer ownership of the badge contract to a new owner.
-// @dev Caller must be the owner.
-// @param newOwner Address of the new owner.
+// @dev The caller must be the owner.
+// @param newOwner The address of the new owner.
 @external
 func transferBadgeContractOwnership{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
