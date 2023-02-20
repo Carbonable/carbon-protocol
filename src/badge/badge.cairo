@@ -26,10 +26,10 @@ from src.badge.library import CarbonableBadge
 // @dev This constructor ignores the standard OZ ERC1155 initializer (which require the uri only as single felt) in favor of
 //   a dedicated initialize handling the uri (as a felt*) and a name to be compliant with most markplaces, finally the OZ
 //   Ownable initializer is used.
-// @param uri_len URI array length.
-// @param uri URI characters.
-// @param name Name of the badge collection.
-// @param owner Owner and Admin address.
+// @param uri_len The URI array length.
+// @param uri The URI characters.
+// @param name The name of the badge collection.
+// @param owner The owner and Admin address.
 @external
 func initializer{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
@@ -47,7 +47,7 @@ func initializer{
 //
 
 // @notice Return the current implementation hash.
-// @return implementation Implementation class hash.
+// @return implementation The implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
@@ -56,15 +56,15 @@ func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 // @notice Return the current admin address.
-// @return admin Admin address.
+// @return admin The admin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
     return Proxy.get_admin();
 }
 
 // @notice Upgrade the contract to the new implementation.
-// @dev caller must be the admin.
-// @param new_implementation New implementation class hash.
+// @dev The caller must be the admin.
+// @param new_implementation The new implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
@@ -75,8 +75,8 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Transfer admin rights to a new admin.
-// @dev caller must be the admin.
-// @param new_admin New admin address.
+// @dev The caller must be the admin.
+// @param new_admin The new admin address.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
     Proxy.assert_only_admin();
@@ -89,16 +89,16 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 //
 
 // @notice Return the current owner address.
-// @return owner Owner address.
+// @return owner The owner address.
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
 }
 
 // @notice Transfer ownership to a new owner.
-// @dev caller must be the owner.
-//   new owner must not be the zero address.
-// @param newOwner New owner address.
+// @dev The aller must be the owner.
+//   The new owner must not be the zero address.
+// @param newOwner The new owner address.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
@@ -108,7 +108,7 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 // @notice Renounce ownership.
-// @dev caller must be the owner.
+// @dev The caller must be the owner.
 @external
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     Ownable.renounce_ownership();
@@ -120,8 +120,8 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 //
 
 // @notice Return ability status to support the provided interface (EIP 165).
-// @param interfaceId Interface id.
-// @return success 1 if supported else 0.
+// @param interfaceId The nterface id.
+// @return success TRUE if supported else FALSE.
 @view
 func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     interfaceId: felt
@@ -130,10 +130,10 @@ func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 // @notice Return the URI corresponding to the specified token id (OpenSea).
-// @dev id must be a valid Uint256.
-// @param id Token id.
-// @return uri_len URI array length.
-// @return uri The URI characters.
+// @dev The id must be a valid Uint256.
+// @param id The token id.
+// @return uri_len The URI array length.
+// @return uri The The URI characters.
 @view
 func uri{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
@@ -142,8 +142,8 @@ func uri{
 }
 
 // @notice Return the contract uri (OpenSea).
-// @return uri_len URI array length.
-// @return uri The URI characters.
+// @return uri_len The URI array length.
+// @return uri The The URI characters.
 @view
 func contractURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
@@ -153,7 +153,7 @@ func contractURI{
 
 // @notice Get the balance of multiple account/token pairs (EIP 1155).
 // @param account The addresses of the token holder.
-// @param id Token id.
+// @param id The token id.
 // @return balance The account-s balance of the token types requested (i-e balance for each (owner, id) pair).
 @view
 func balanceOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -165,8 +165,8 @@ func balanceOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // @notice Get the balance of multiple account/token pairs (EIP 1155).
 // @param accounts_len Accounts array length.
 // @param accounts The addresses of the token holders.
-// @param ids_len Token ids array length.
-// @param ids Token ids.
+// @param ids_len The token ids array length.
+// @param ids The token ids.
 // @return balances_len The balances array length.
 // @return balances The accounts balance of the token types requested (i-e balance for each (owner, id) pair).
 @view
@@ -180,7 +180,7 @@ func balanceOfBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 // @notice Query if an address is an authorized operator for another address (EIP 1155).
 // @param account The address that owns the tokens.
 // @param operator The address that acts on behalf of the owner.
-// @return isApproved 1 if the operator is approved, 0 if not.
+// @return isApproved TRUE if the operator is approved, FALSE if not.
 @view
 func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt, operator: felt
@@ -190,8 +190,8 @@ func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 // @notice Set the contract base URI.
-// @param uri_len URI array length.
-// @param uri URI characters.
+// @param uri_len The URI array length.
+// @param uri The URI characters.
 @external
 func setURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
@@ -202,8 +202,8 @@ func setURI{
 }
 
 // @notice Enable or disable approval for a third party (operator) to manage all of the caller-s tokens (EIP 1155).
-// @param operator Address to add to the set of authorized operators.
-// @param approved 1 if the operator is approved, 0 to revoke approval.
+// @param operator The address to add to the set of authorized operators.
+// @param approved TRUE if the operator is approved, FALSE to revoke approval.
 @external
 func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     operator: felt, approved: felt
@@ -213,11 +213,11 @@ func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 // @notice Transfer an amount of token id from address to a target (EIP 1155).
-// @param from_ Source address.
-// @param to Target address.
-// @param id Token id.
-// @param amount Transfer amount.
-// @param data_len Data array len.
+// @param from_ The source address.
+// @param to The target address.
+// @param id The token id.
+// @param amount The transfer amount.
+// @param data_len The data array len.
 // @param data Additional data with no specified format.
 @external
 func safeTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -229,13 +229,13 @@ func safeTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 // @notice Transfer amounts of token ids from the from address to the to address specified (with safety call) (EIP 1155).
-// @param from_ Source address.
-// @param to Target address.
-// @param ids_len Token ids array length.
+// @param from_ The source address.
+// @param to The arget address.
+// @param ids_len The token ids array length.
 // @param ids Token ids of each token type (order and length must match amounts array).
-// @param amounts_len Amounts array length.
-// @param amounts Transfer amounts per token id.
-// @param data_len Data array len.
+// @param amounts_len The amounts array length.
+// @param amounts The transfer amounts per token id.
+// @param data_len The data array len.
 // @param data Additional data with no specified format.
 @external
 func safeBatchTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -254,10 +254,10 @@ func safeBatchTransferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 // @notice Mint amount of token id to the -to- address specified.
-// @param to Target address.
-// @param id Token id.
-// @param amount Mint amount.
-// @param data_len Data array len.
+// @param to The target address.
+// @param id The token id.
+// @param amount The mint amount.
+// @param data_len The data array len.
 // @param data Additional data with no specified format.
 @external
 func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -269,12 +269,12 @@ func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Mint amounts of token ids to the -to- address specified.
-// @param to Target address.
-// @param ids_len Token ids array length.
-// @param ids Token ids of each token type (order and length must match amounts array).
-// @param amounts_len Amounts array length.
-// @param amounts Mint amounts per token type (order and length must match ids array).
-// @param data_len Data array len.
+// @param to The target address.
+// @param ids_len The token ids array length.
+// @param ids The token ids of each token type (order and length must match amounts array).
+// @param amounts_len The amounts array length.
+// @param amounts The mint amounts per token type (order and length must match ids array).
+// @param data_len The Data array len.
 // @param data Additional data with no specified format.
 @external
 func mintBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -292,9 +292,9 @@ func mintBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Burn amount of token id from the -from_- address specified.
-// @param from_ Address of the token holder.
-// @param id Token id.
-// @param amount Burn amount.
+// @param from_ The address of the token holder.
+// @param id The token id.
+// @param amount The burn amount.
 @external
 func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, id: Uint256, amount: Uint256
@@ -309,11 +309,11 @@ func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Burn amounts of token ids from the -from_- address specified.
-// @param from_ Address of the token holder.
-// @param ids_len Token ids array length.
-// @param ids Token ids of each token type (order and length must match amounts array).
-// @param amounts_len Amounts array length.
-// @param amounts Burn amounts per token type (order and length must match ids array).
+// @param from_ The address of the token holder.
+// @param ids_len The token ids array length.
+// @param ids The token ids of each token type (order and length must match amounts array).
+// @param amounts_len The amounts array length.
+// @param amounts The burn amounts per token type (order and length must match ids array).
 @external
 func burnBatch{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     from_: felt, ids_len: felt, ids: Uint256*, amounts_len: felt, amounts: Uint256*
@@ -339,7 +339,7 @@ func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> 
 }
 
 // @notice Return the locked status of a token id.
-// @param is_locked 1 if locked else 0.
+// @param is_locked TRUE if locked else FALSE.
 // @return is_locked The locked status of a token id.
 @view
 func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) -> (
@@ -349,7 +349,7 @@ func locked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id:
 }
 
 // @notice Lock the corresponding token id.
-// @param id Token id to lock.
+// @param id The token id to lock.
 @external
 func setLocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
     Ownable.assert_only_owner();
@@ -358,7 +358,7 @@ func setLocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Unlock the corresponding token id.
-// @param id Token id to unlock.
+// @param id The token id to unlock.
 @external
 func setUnlocked{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: Uint256) {
     Ownable.assert_only_owner();

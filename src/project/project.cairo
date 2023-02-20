@@ -28,9 +28,9 @@ from src.utils.access.library import CarbonableAccessControl
 //   the standard OZ ERC721 initializer,
 //   the standard OZ ERC721Enumerable initializer and
 //   the OZ Ownable initializer.
-// @param name Name of the collection.
-// @param symbol Symbol of the collection.
-// @param owner Owner and Admin address.
+// @param name The name of the collection.
+// @param symbol The symbol of the collection.
+// @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     name: felt, symbol: felt, owner: felt
@@ -48,7 +48,7 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 //
 
 // @notice Return the current implementation hash.
-// @return implementation Implementation class hash.
+// @return implementation The implementation class hash.
 @view
 func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     implementation: felt
@@ -57,7 +57,7 @@ func getImplementationHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 // @notice Return the current admin address.
-// @return admin Admin address.
+// @return admin The admin address.
 @view
 func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (admin: felt) {
     return Proxy.get_admin();
@@ -65,7 +65,7 @@ func getAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 
 // @notice Upgrade the contract to the new implementation.
 // @dev This function is only callable by the admin.
-// @param new_implementation New implementation class hash.
+// @param new_implementation The new implementation class hash.
 @external
 func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     new_implementation: felt
@@ -77,7 +77,7 @@ func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 // @notice Transfer admin rights to a new admin.
 // @dev This function is only callable by the admin.
-// @param new_admin New admin address.
+// @param new_admin The new admin address.
 @external
 func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(new_admin: felt) {
     Proxy.assert_only_admin();
@@ -90,7 +90,7 @@ func setAdmin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n
 //
 
 // @notice Return the current owner address.
-// @return owner Owner address.
+// @return owner The owner address.
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
@@ -99,7 +99,7 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
 // @notice Transfer ownership to a new owner.
 // @dev This function is only callable by the owner.
 //   The new owner address cannot be the zero address.
-// @param newOwner New owner address.
+// @param newOwner The new owner address.
 @external
 func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     newOwner: felt
@@ -111,16 +111,6 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 // @notice Renounce ownership.
 // @dev This function is only callable by the owner.
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    // Desc:
-    //   Renounce ownership
-    // Implicit args:
-    //   syscall_ptr(felt*)
-    //   pedersen_ptr(HashBuiltin*)
-    //   range_check_ptr
-    // Returns:
-    //   None
-    // Raises:
-    //   caller: caller is not the contract owner
     Ownable.renounce_ownership();
     return ();
 }
@@ -167,7 +157,7 @@ func tokenOfOwnerByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_c
 
 // @notice Return the ability status to support the provided interface (EIP 165).
 // @param interfaceId Interface id.
-// @return success 1 if supported else 0.
+// @return success TRUE if supported else FALSE.
 @view
 func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     interfaceId: felt
@@ -244,8 +234,8 @@ func tokenURI{
 }
 
 // @notice Return the contract uri (OpenSea).
-// @return uri_len URI array length
-// @return uri URI characters
+// @return uri_len The URI array length
+// @return uri The URI characters
 @view
 func contractURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
@@ -266,8 +256,8 @@ func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
 
 // @notice Enable or disable approval for a third party ("operator") to manage all of the caller's assets (EIP 721).
 // @dev Emits the ApprovalForAll event.
-// @param operator Address to add to the set of authorized operators.
-// @param approved True if the operator is approved, false to revoke approval.
+// @param operator The address to add to the set of authorized operators.
+// @param approved TRUE if the operator is approved, FALSE to revoke approval.
 @external
 func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     operator: felt, approved: felt
@@ -329,7 +319,7 @@ func mint{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
 // @notice Burn the specified token.
 // @dev Throws if the caller is not the owner of the token.
 //   Throws if -tokenId- is not a valid Uint256.
-//  @param tokenId Token id.
+//  @param tokenId The token id.
 @external
 func burn{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(tokenId: Uint256) {
     ERC721.assert_only_token_owner(tokenId);
@@ -339,8 +329,8 @@ func burn{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(token
 
 // @notice Set the contract base URI.
 // @dev Throws if the caller is not the owner.
-//  @param uri_len URI array length.
-//  @param uri URI characters.
+//  @param uri_len The URI array length.
+//  @param uri The URI characters.
 @external
 func setURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
@@ -355,7 +345,7 @@ func setURI{
 //
 
 // @notice Set the start time.
-// @return time Start time.
+// @return time The start time.
 @view
 func getStartTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     time: felt
@@ -364,7 +354,7 @@ func getStartTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 }
 
 // @notice Return the computed final time.
-// @return time Final time.
+// @return time The final time.
 @view
 func getFinalTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     time: felt
@@ -373,8 +363,8 @@ func getFinalTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 }
 
 // @notice Return the stored times.
-// @return times_len Array length.
-// @return times Timestamps.
+// @return times_len The Array length.
+// @return times The timestamps.
 @view
 func getTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     times_len: felt, times: felt*
@@ -383,8 +373,8 @@ func getTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 }
 
 // @notice Return the stored absorptions.
-// @return absorptions_len Array length.
-// @return absorptions Absorption values.
+// @return absorptions_len The array length.
+// @return absorptions The absorption values.
 @view
 func getAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     absorptions_len: felt, absorptions: felt*
@@ -393,7 +383,7 @@ func getAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 }
 
 // @notice Return the computed absorption based on the current timestamp.
-// @return absorption Absorption.
+// @return absorption The absorption.
 @view
 func getAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(time: felt) -> (
     absorption: felt
@@ -402,7 +392,7 @@ func getAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 }
 
 // @notice Return the computed absorption based on the current timestamp.
-// @return absorption Absorption.
+// @return absorption The absorption.
 @view
 func getCurrentAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     absorption: felt
@@ -411,7 +401,7 @@ func getCurrentAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 }
 
 // @notice Return the computed final absorption based on the final timestamp.
-// @return absorption Final absorption.
+// @return absorption The final absorption.
 @view
 func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     absorption: felt
@@ -420,7 +410,7 @@ func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 }
 
 // @notice Return the ton equivalent in absorption unit.
-// @return ton_equivalent Ton equivalent.
+// @return ton_equivalent The ton equivalent.
 @view
 func getTonEquivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     ton_equivalent: felt
@@ -429,7 +419,7 @@ func getTonEquivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
 }
 
 // @notice Return the setup status of the contract.
-// @return status 1 if setup else 0.
+// @return status TRUE if setup else FALSE.
 @view
 func isSetup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
     return CarbonableProject.is_setup();
@@ -437,7 +427,7 @@ func isSetup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
 
 // @notice Add new minter.
 // @dev Throws if the caller is not the owner.
-// @param minter Minter address.
+// @param minter The minter address.
 @external
 func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
     Ownable.assert_only_owner();
@@ -446,8 +436,8 @@ func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 // @notice Get the list of minters.
-// @return minters_len Array length.
-// @return minters Minter addresses.
+// @return minters_len The array length.
+// @return minters The minter addresses.
 @view
 func getMinters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     minters_len: felt, minters: felt*
@@ -457,7 +447,7 @@ func getMinters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 
 // @notice Revoke minter role.
 // @dev Throws if the caller is not the owner.
-// @param minter Minter address.
+// @param minter The minter address.
 @external
 func revokeMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
     Ownable.assert_only_owner();
@@ -467,7 +457,7 @@ func revokeMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
 // @notice Add new certifier.
 // @dev Throws if the caller is not the owner.
-// @param certifier Certifier address.
+// @param certifier The certifier address.
 @external
 func setCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     certifier: felt
@@ -478,7 +468,7 @@ func setCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 }
 
 // @notice Get the certifier.
-// @return certifier Certifier address.
+// @return certifier The certifier address.
 @view
 func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     certifier: felt
@@ -493,11 +483,11 @@ func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 //   Throws if -absorptions_len- is null.
 //   Throws if -ton_equivalent- is null.
 //   Throws if times_len is not equal to absorptions_len.
-// @param times_len Array length.
-// @param times Time values.
-// @param absorptions_len Array length.
-// @param absorptions Absorption values.
-// @param ton_equivalent Absorption ton equivalent.
+// @param times_len The array length.
+// @param times The time values.
+// @param absorptions_len The array length.
+// @param absorptions The absorption values.
+// @param ton_equivalent The absorption ton equivalent.
 @external
 func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     times_len: felt, times: felt*, absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
