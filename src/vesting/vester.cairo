@@ -162,6 +162,23 @@ func releasableOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     return CarbonableVester.releasable_of(account=account);
 }
 
+@view
+func releasedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(account: felt) -> (
+    amount: Uint256
+) {
+    // Desc:
+    //   Return
+    // Implicit args:
+    //   syscall_ptr(felt*)
+    //   pedersen_ptr(HashBuiltin*)
+    //   range_check_ptr
+    // Explicit args:
+    //   account(felt): Account address
+    // Returns:
+    //   amount(Uint256): Total amount released
+    return CarbonableVester.released_of(account=account);
+}
+
 //
 // Externals
 //
