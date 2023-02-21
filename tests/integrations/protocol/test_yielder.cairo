@@ -285,12 +285,19 @@ func test_create_vestings_only_one_deposited{
     %{ stop_warp_project() %}
 
     %{ stop_warp = warp(blk_timestamp=1730419200, target_contract_address=ids.vester_address) %}
-    let (vesting_id) = anyone.get_vesting_id();
-    let (releasable_amount) = anyone.releasable_amount(vesting_id);
+    let (releasable_amount) = anyone.releasable_of(anyone_address);
 
     let expected_amount = Uint256(low=1000, high=0);
     let (is_zero) = uint256_eq(releasable_amount, expected_amount);
     with_attr error_message("Testing: releasable amount should be expected amount: 1000") {
+        assert is_zero = TRUE;
+    }
+
+    anyone.release_all();
+
+    let (released_amount) = anyone.released_of(anyone_address);
+    let (is_zero) = uint256_eq(released_amount, expected_amount);
+    with_attr error_message("Testing: released amount should be expected amount: 1000") {
         assert is_zero = TRUE;
     }
 

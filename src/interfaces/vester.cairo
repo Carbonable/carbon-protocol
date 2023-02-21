@@ -67,6 +67,9 @@ namespace ICarbonableVester {
     func releasableOf(account: felt) -> (amount: Uint256) {
     }
 
+    func releasedOf(account: felt) -> (amount: Uint256) {
+    }
+
     //
     // Externals
     //
