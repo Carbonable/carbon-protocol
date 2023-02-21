@@ -15,7 +15,7 @@
 
 > ## ⚠️ WARNING! ⚠️
 >
-> This is repo contains highly experimental code.
+> This repo contains highly experimental code.
 > Expect rapid iteration.
 > **Use at your own risk.**
 
@@ -109,13 +109,13 @@ So far, you have to do the following actions manually:
 
 - Change the NFT contract owner from **admin** to **Minter contract**
   * How: _Voyager > Write contract > `transferOwnership`_
-  * Verifiy: _Voyager > Read contract > `owner`_
+  * Verify: _Voyager > Read contract > `owner`_
 - Approve the **Minter contract** to spend the **admin payment tokens**
   * How: Voyager > _Write contract > `approve`_
-  * Verifiy: Voyager > _Read contract > `allowance`_
+  * Verify: Voyager > _Read contract > `allowance`_
 - Buy NFT through the **Minter contract**
   * How: _Voyager > Write contract > `buy`_
-  * Verifiy: _Voyager > Read contract > `balanceOf` (of the NFT contract)_
+  * Verify: _Voyager > Read contract > `balanceOf` (of the NFT contract)_
 
 ## 📄 License
 

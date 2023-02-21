@@ -23,8 +23,8 @@ from src.badge.library import CarbonableBadge
 //
 
 // @notice Initialize the contract with the given uri, name and owner.
-// @dev This constructor ignores the standard OZ ERC1155 initializer (which require the uri only as single felt) in favor of
-//   a dedicated initialize handling the uri (as a felt*) and a name to be compliant with most markplaces, finally the OZ
+// @dev This constructor ignores the standard OZ ERC1155 initializer (which requires the uri only as single felt) in favor of
+//   a dedicated initialize handling the uri (as a felt*) and a name to be compliant with most marketplaces, finally the OZ
 //   Ownable initializer is used.
 // @param uri_len The URI array length.
 // @param uri The URI characters.
