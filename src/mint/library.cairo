@@ -507,6 +507,11 @@ namespace CarbonableMinter {
     ) {
         alloc_locals;
 
+        // [Check] Quantity is not zero
+        with_attr error_message("CarbonableMinter: quantity must be not null") {
+            assert_not_zero(quantity);
+        }
+
         // [Check] Not zero address
         let (caller) = get_caller_address();
         with_attr error_message("CarbonableMinter: caller is the zero address") {
