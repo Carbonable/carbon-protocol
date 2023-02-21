@@ -63,10 +63,10 @@ namespace CarbonableBadge {
     // Initializer
     //
 
-    // @notice Initializes the contract with the given uri and name.
-    // @param uri_len uri array length.
-    // @param uri uri characters as a felt array.
-    // @param name name of the badge collection.
+    // @notice Initialize the contract with the given uri and name.
+    // @param uri_len The URI array length.
+    // @param uri The URI characters as a felt array.
+    // @param name The name of the badge collection.
     func initializer{
         syscall_ptr: felt*,
         pedersen_ptr: HashBuiltin*,
