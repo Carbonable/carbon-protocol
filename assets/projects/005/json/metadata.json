@@ -4,5 +4,72 @@
   "image": "ipfs://QmetbtDEEvQP8bBvEJUtcYbvqa3zt4w4tAr65D29eShUBV/collection.png",
   "external_url": "https://app.carbonable.io/launchpad/forest-regeneration-manjarisoa-madagascar-large",
   "banner_image_url": "ipfs://Qmdjj76nkc1HQn8Tr3ertWs9eWkFMBxXQkGwjHEp6mWbig/banner.png",
-  "youtube_url": "https://youtu.be/5dZrROBmfKU"
+  "youtube_url": "https://youtu.be/5dZrROBmfKU",
+  "attributes": [
+    {
+      "display_type": null,
+      "trait_type": "Project developer",
+      "value": "Forest Calling Action"
+    },
+    {
+      "display_type": null,
+      "trait_type": "Certifier",
+      "value": "Wildsense"
+    },
+    {
+      "display_type": "number",
+      "trait_type": "Project area (ha)",
+      "value": 20.7
+    },
+    {
+      "display_type": "number",
+      "trait_type": "Asset area (ha)",
+      "value": 0.1397
+    },
+    {
+      "display_type": null,
+      "trait_type": "Country",
+      "value": "Madagascar"
+    },
+    {
+      "display_type": "number",
+      "trait_type": "End date",
+      "value": 2043
+    },
+    {
+      "display_type": "number",
+      "trait_type": "Total project carbon units (t)",
+      "value": 8000
+    },
+    {
+      "display_type": "number",
+      "trait_type": "Asset's annual avg. capacity (t/y)",
+      "value": 2.7003
+    },
+    {
+      "display_type": null,
+      "trait_type": "Project color",
+      "value": "Green"
+    },
+    {
+      "display_type": null,
+      "trait_type": "Project type",
+      "value": "Forest"
+    },
+    {
+      "display_type": null,
+      "trait_type": "Project category",
+      "value": "Regeneration"
+    },
+    {
+      "display_type": null,
+      "trait_type": "Status",
+      "value": "Live"
+    },
+    {
+      "display_type": null,
+      "trait_type": "Source",
+      "value": "Carbonable"
+    }
+  ]
 }
