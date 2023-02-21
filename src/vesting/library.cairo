@@ -6,6 +6,7 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_caller_address
+from starkware.cairo.common.math import assert_not_zero
 
 // Project dependencies
 from openzeppelin.security.safemath.library import SafeUint256
@@ -31,6 +32,22 @@ namespace CarbonableVester {
         // [Compute] Sum releasable amount per vesting
         let vesting_index = vesting_count - 1;
         let (amount) = _releasable_iter(account=account, vesting_index=vesting_index);
+        return (amount=amount);
+    }
+
+    func released_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt
+    ) -> (amount: Uint256) {
+        // [Check] If no vesting associated to the caller, then return 0
+        let (vesting_count) = StarkVest.vesting_count(account=account);
+        if (vesting_count == 0) {
+            let zero = Uint256(low=0, high=0);
+            return (amount=zero);
+        }
+
+        // [Compute] Sum releasable amount per vesting
+        let vesting_index = vesting_count - 1;
+        let (amount) = _released_iter(account=account, vesting_index=vesting_index);
         return (amount=amount);
     }
 
@@ -72,6 +89,30 @@ namespace CarbonableVester {
 
         let (add) = _releasable_iter(account=account, vesting_index=vesting_index - 1);
         let (amount) = SafeUint256.add(releasable_amount, add);
+        return (amount=amount);
+    }
+
+    func _released_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt, vesting_index: felt
+    ) -> (amount: Uint256) {
+        alloc_locals;
+
+        let (vesting_id) = StarkVest.compute_vesting_id(
+            account=account, vesting_count=vesting_index
+        );
+
+        let (vesting) = StarkVest.vestings(vesting_id=vesting_id);
+        with_attr error_message("CarbonableVester: invalid beneficiary") {
+            assert_not_zero(vesting.beneficiary);
+        }
+
+        // [Check] If latest vesting, then return the amount
+        if (vesting_index == 0) {
+            return (amount=vesting.released);
+        }
+
+        let (add) = _releasable_iter(account=account, vesting_index=vesting_index - 1);
+        let (amount) = SafeUint256.add(vesting.released, add);
         return (amount=amount);
     }
 

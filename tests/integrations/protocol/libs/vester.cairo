@@ -64,6 +64,24 @@ namespace instance {
         return (releasable_amount=releasable_amount);
     }
 
+    func releasable_of{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
+    }(account: felt, caller: felt) -> (releasable_amount: Uint256) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
+        let (releasable_amount) = ICarbonableVester.releasableOf(carbonable_vester, account);
+        %{ stop_prank() %}
+        return (releasable_amount=releasable_amount);
+    }
+
+    func released_of{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
+    }(account: felt, caller: felt) -> (released_amount: Uint256) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
+        let (released_amount) = ICarbonableVester.releasedOf(carbonable_vester, account);
+        %{ stop_prank() %}
+        return (released_amount=released_amount);
+    }
+
     func get_vesters{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
     }(caller: felt) -> (vesters_len: felt, vesters: felt*) {
@@ -127,5 +145,14 @@ namespace instance {
         );
         %{ stop_prank() %}
         return (vesting_id,);
+    }
+
+    func release_all{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
+    }(caller: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
+        ICarbonableVester.releaseAll(carbonable_vester);
+        %{ stop_prank() %}
+        return ();
     }
 }

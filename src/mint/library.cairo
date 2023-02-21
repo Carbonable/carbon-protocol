@@ -576,10 +576,10 @@ namespace CarbonableMinter {
     }
 
     // @notice Mint a number of NFTs to a recipient.
-    // @param nft_contract_address the address of the NFT contract
-    // @param to the address of the recipient
-    // @param starting_index the starting index
-    // @param quantity the quantity to mint
+    // @param nft_contract_address The address of the NFT contract
+    // @param to The address of the recipient
+    // @param starting_index The starting index
+    // @param quantity The quantity to mint
     func mint_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         nft_contract_address: felt, to: felt, starting_index: Uint256, quantity: Uint256
     ) {
