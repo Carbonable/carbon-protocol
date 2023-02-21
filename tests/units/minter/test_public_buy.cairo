@@ -182,3 +182,35 @@ func test_buy_revert_mint_not_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     %{ stop() %}
     return ();
 }
+
+@external
+func test_buy_revert_null_quantity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
+    // User: anyone
+    // Wants to buy 0 NFTs
+    // Whitelisted sale: CLOSED
+    // Public sale: OPEN
+    // current NFT totalSupply: 5
+    // current NFT reserved supply: 0
+    // has enough funds: YES
+    alloc_locals;
+
+    // prepare minter instance
+    let (local context) = prepare(
+        public_sale_open=TRUE,
+        max_buy_per_tx=5,
+        unit_price=Uint256(10, 0),
+        max_supply_for_mint=Uint256(10, 0),
+        reserved_supply_for_mint=Uint256(0, 0),
+    );
+
+    // run scenario
+    %{ stop=start_prank(context.signers.anyone) %}
+    let quantity = 0;
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: quantity must be not null") %}
+    CarbonableMinter.public_buy(quantity);
+    %{ stop() %}
+    return ();
+}

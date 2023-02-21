@@ -334,8 +334,8 @@ func decreaseReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
 // @notice Increase the reserved supply for airdrops by the providing amount of slots.
 // @dev Only callable by the contract owner.
 //   The caller can't be the zero address.
-//   There must be enough available NFTs regarding max supply.
-//   There must be enough available reserved NFTs regarding reserved supply.
+//   The quantity must be less than or equal to the available reserved supply.
+//   The quantity must be less than or equal to the available supply.
 // @param slots The amount of slots to add to the reserved supply.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
@@ -377,10 +377,10 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // @notice Purchase -quantity- tokens while proving the caller is part of the merkle tree while pre sale is open.
 // @dev The pre sale must be open.
 //   The caller must be part of the merkle tree.
-//   The quantity must be a valid Uint256.
+//   The quantity must be not null.
 //   The quantity must be less than or equal to the max buy per tx.
+//   The quantity must be less than or equal to the remaining whitelisted supply.
 //   The quantity must be less than or equal to the available supply.
-//   The quantity must be less than or equal to the available reserved supply.
 //   The transfer must succeed.
 // @param slots The associated slots recorded in the merkle root.
 // @param proof_len The proof array length.
@@ -397,10 +397,9 @@ func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // @notice Purchase -quantity- tokens while public sale is open.
 // @dev The public sale must be open.
 //   The caller can't be the zero address.
-//   The quantity must be a valid Uint256.
+//   The quantity must be not null.
 //   The quantity must be less than or equal to the max buy per tx.
 //   The quantity must be less than or equal to the available supply.
-//   The quantity must be less than or equal to the available reserved supply.
 //   The transfer must succeed.
 // @param quantity The quantity of tokens to buy.
 // @return success TRUE if it succeeded, FALSE otherwise.
