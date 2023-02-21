@@ -222,8 +222,8 @@ func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     return CarbonableMinter.max_supply_for_mint();
 }
 
-// @notice Return the max supply available.
-// @return max_supply_for_mint The max supply.
+// @notice Return the whitelist merkle root, 0 means it has not been set yet.
+// @return whitelist_merkle_root The merkle root.
 @view
 func getWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     whitelist_merkle_root: felt
