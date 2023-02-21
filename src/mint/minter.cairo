@@ -196,8 +196,8 @@ func getMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     return CarbonableMinter.max_buy_per_tx();
 }
 
-// @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @notice Return the unit price per token.
+// @return unit_price The unit price per token.
 @view
 func getUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     unit_price: Uint256
@@ -205,16 +205,16 @@ func getUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     return CarbonableMinter.unit_price();
 }
 
-// @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @notice Return the reserved supply available for airdrops.
+// @return reserved_supply_for_mint The reserved supply available for airdrops.
 @view
 func getReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (reserved_supply_for_mint: Uint256) {
     return CarbonableMinter.reserved_supply_for_mint();
 }
 
-// @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @notice Return the max supply available.
+// @return max_supply_for_mint The max supply.
 @view
 func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_supply_for_mint: Uint256
@@ -222,8 +222,8 @@ func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     return CarbonableMinter.max_supply_for_mint();
 }
 
-// @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @notice Return the max supply available.
+// @return max_supply_for_mint The max supply.
 @view
 func getWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     whitelist_merkle_root: felt
@@ -334,8 +334,8 @@ func decreaseReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
 // @notice Increase the reserved supply for airdrops by the providing amount of slots.
 // @dev Only callable by the contract owner.
 //   The caller can't be the zero address.
-//   Their must be enough available NFTs regarding max supply.
-//   Their must be enough available reserved NFTs regarding reserved supply.
+//   There must be enough available NFTs regarding max supply.
+//   There must be enough available reserved NFTs regarding reserved supply.
 // @param slots The amount of slots to add to the reserved supply.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
