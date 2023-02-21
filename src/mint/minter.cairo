@@ -169,8 +169,8 @@ func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
     return CarbonableMinter.payment_token_address();
 }
 
-// @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @notice Return the pre sale status.
+// @return pre_sale_open TRUE if presale is open, FALSE otherwise.
 @view
 func isPreSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     pre_sale_open: felt
@@ -187,8 +187,8 @@ func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return CarbonableMinter.public_sale_open();
 }
 
-// @notice Return the max number of NFTs that can be purchased in a single tx.
-// @return max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @notice Return the max amount that can be purchased in a single tx.
+// @return max_buy_per_tx The max amount that can be purchased in a single tx.
 @view
 func getMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_buy_per_tx: felt
