@@ -1,4 +1,5 @@
 absorption:
+  slot: 1
   ton_equivalent: 1000000
   times:
     - 1651363200
