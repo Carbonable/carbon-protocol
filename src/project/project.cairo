@@ -6,6 +6,7 @@
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
+from starkware.starknet.common.syscalls import get_contract_address
 
 // Project dependencies
 from openzeppelin.access.accesscontrol.library import AccessControl
@@ -14,6 +15,13 @@ from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.token.erc721.library import ERC721
 from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
 from openzeppelin.upgrades.library import Proxy
+from erc3525.extensions.slotapprovable.library import ERC3525SlotApprovable
+from erc3525.extensions.slotenumerable.library import (
+    ERC3525SlotEnumerable,
+    _add_token_to_slot_enumeration,
+)
+from erc3525.library import ERC3525
+from erc3525.periphery.library import ERC3525MetadataDescriptor
 
 // Local dependencies
 from src.project.library import CarbonableProject
@@ -24,19 +32,27 @@ from src.utils.access.library import CarbonableAccessControl
 //
 
 // @notice Initialize the contract with the given name, symbol and owner.
-//   This constructor uses the standard OZ Proxy initializer,
+// @dev This constructor uses the following standards:
+//   the standard OZ Proxy initializer,
 //   the standard OZ ERC721 initializer,
-//   the standard OZ ERC721Enumerable initializer and
+//   the standard OZ ERC721Enumerable initializer,
+//   the standard Carbonable ERC3525 initializer,
+//   the standard Carbonable ERC3525SlotApprovable initializer,
+//   the standard Carbonable ERC3525SlotEnumerable initializer,
 //   the OZ Ownable initializer.
 // @param name The name of the collection.
 // @param symbol The symbol of the collection.
+// @param decimals The value decimals of the collection.
 // @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    name: felt, symbol: felt, owner: felt
+    name: felt, symbol: felt, decimals: felt, owner: felt
 ) {
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
+    ERC3525.initializer(decimals);
+    ERC3525SlotApprovable.initializer();
+    ERC3525SlotEnumerable.initializer();
     Ownable.initializer(owner);
     CarbonableAccessControl.initializer();
     Proxy.initializer(owner);
@@ -116,44 +132,8 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 //
-// ERC721
+// ERC165
 //
-
-// @notice Count NFTs tracked by this contract (EIP 721 - Enumeration extension).
-// @return totalSupply A count of valid NFTs tracked by this contract, where each one of them has an assigned and queryable owner not equal to the zero address.
-@view
-func totalSupply{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}() -> (
-    totalSupply: Uint256
-) {
-    let (totalSupply: Uint256) = ERC721Enumerable.total_supply();
-    return (totalSupply=totalSupply);
-}
-
-// @notice Enumerate valid NFTs (EIP 721 - Enumeration extension).
-// @dev Throws if -index- >= -totalSupply()-.
-// @param index A counter less than -totalSupply()-.
-// @return tokenId The token identifier for the -index-th NFT (sort order not specified).
-@view
-func tokenByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
-    index: Uint256
-) -> (tokenId: Uint256) {
-    let (tokenId: Uint256) = ERC721Enumerable.token_by_index(index);
-    return (tokenId=tokenId);
-}
-
-// @notice Enumerate NFTs assigned to an owner (EIP 721 - Enumeration extension).
-// @dev Throws if -index- >= -balanceOf(owner)-.
-//   Throws if -owner- is the zero address, representing invalid NFTs.
-// @param owner An address where we are interested in NFTs owned by them.
-// @param index A counter less than -balanceOf(owner)-.
-// @return tokenId The token identifier for the -index-th NFT assigned to -owner- (sort order not specified).
-@view
-func tokenOfOwnerByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
-    owner: felt, index: Uint256
-) -> (tokenId: Uint256) {
-    let (tokenId: Uint256) = ERC721Enumerable.token_of_owner_by_index(owner, index);
-    return (tokenId=tokenId);
-}
 
 // @notice Return the ability status to support the provided interface (EIP 165).
 // @param interfaceId Interface id.
@@ -164,6 +144,10 @@ func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 ) -> (success: felt) {
     return ERC165.supports_interface(interfaceId);
 }
+
+//
+// ERC721
+//
 
 // @notice A descriptive name for a collection of NFTs in this contract (EIP 721 - Metadata extension).
 // @return name The name of the collection.
@@ -221,27 +205,40 @@ func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return (isApproved=isApproved);
 }
 
-// @notice A distinct Uniform Resource Identifier (URI) for a given asset (EIP 721 - Metadata extension).
-// @dev The tokenID must be a valid Uint256.
-// @param tokenId The token ID to query.
-// @return uri The URI for the token ID.
+// @notice Count NFTs tracked by this contract (EIP 721 - Enumeration extension).
+// @return totalSupply A count of valid NFTs tracked by this contract, where each one of them has an assigned and queryable owner not equal to the zero address.
 @view
-func tokenURI{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
-    let (uri_len: felt, uri: felt*) = CarbonableProject.token_uri(tokenId);
-    return (uri_len=uri_len, uri=uri);
+func totalSupply{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}() -> (
+    totalSupply: Uint256
+) {
+    let (totalSupply: Uint256) = ERC721Enumerable.total_supply();
+    return (totalSupply=totalSupply);
 }
 
-// @notice Return the contract uri (OpenSea).
-// @return uri_len The URI array length
-// @return uri The URI characters
+// @notice Enumerate valid NFTs (EIP 721 - Enumeration extension).
+// @dev Throws if -index- >= -totalSupply()-.
+// @param index A counter less than -totalSupply()-.
+// @return tokenId The token identifier for the -index-th NFT (sort order not specified).
 @view
-func contractURI{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (uri_len: felt, uri: felt*) {
-    let (uri_len: felt, uri: felt*) = CarbonableProject.contract_uri();
-    return (uri_len=uri_len, uri=uri);
+func tokenByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
+    index: Uint256
+) -> (tokenId: Uint256) {
+    let (tokenId: Uint256) = ERC721Enumerable.token_by_index(index);
+    return (tokenId=tokenId);
+}
+
+// @notice Enumerate NFTs assigned to an owner (EIP 721 - Enumeration extension).
+// @dev Throws if -index- >= -balanceOf(owner)-.
+//   Throws if -owner- is the zero address, representing invalid NFTs.
+// @param owner An address where we are interested in NFTs owned by them.
+// @param index A counter less than -balanceOf(owner)-.
+// @return tokenId The token identifier for the -index-th NFT assigned to -owner- (sort order not specified).
+@view
+func tokenOfOwnerByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
+    owner: felt, index: Uint256
+) -> (tokenId: Uint256) {
+    let (tokenId: Uint256) = ERC721Enumerable.token_of_owner_by_index(owner, index);
+    return (tokenId=tokenId);
 }
 
 // @notice Change or reaffirm the approved address for an NFT (EIP 721).
@@ -300,33 +297,6 @@ func safeTransferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_chec
     return ();
 }
 
-// @notice Mint the token id to the specified -to- address.
-// @dev Throws if the caller does not have the MINTER_ROLE role.
-//   Throws if -to- is the zero address.
-//   Throws if -tokenId- is not a valid Uint256.
-//   Throws if token already minted.
-//  @param to Target address.
-//  @param tokenId Token id.
-@external
-func mint{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
-    to: felt, tokenId: Uint256
-) {
-    CarbonableAccessControl.assert_only_minter();
-    ERC721Enumerable._mint(to, tokenId);
-    return ();
-}
-
-// @notice Burn the specified token.
-// @dev Throws if the caller is not the owner of the token.
-//   Throws if -tokenId- is not a valid Uint256.
-//  @param tokenId The token id.
-@external
-func burn{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(tokenId: Uint256) {
-    ERC721.assert_only_token_owner(tokenId);
-    ERC721Enumerable._burn(tokenId);
-    return ();
-}
-
 // @notice Set the contract base URI.
 // @dev Throws if the caller is not the owner.
 //  @param uri_len The URI array length.
@@ -337,6 +307,259 @@ func setURI{
 }(uri_len: felt, uri: felt*) {
     Ownable.assert_only_owner();
     CarbonableProject.set_uri(uri_len, uri);
+    return ();
+}
+
+//
+// ERC3525
+//
+
+@view
+func valueDecimals{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    decimals: felt
+) {
+    return ERC3525.value_decimals();
+}
+
+@view
+func valueOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) -> (
+    balance: Uint256
+) {
+    return ERC3525.balance_of(tokenId);
+}
+
+@view
+func slotOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) -> (
+    slot: Uint256
+) {
+    return ERC3525.slot_of(tokenId);
+}
+
+@view
+func allowance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: Uint256, operator: felt
+) -> (amount: Uint256) {
+    return ERC3525.allowance(tokenId, operator);
+}
+
+@view
+func totalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
+    total: Uint256
+) {
+    return ERC3525.total_value(slot);
+}
+
+@external
+func approveValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: Uint256, operator: felt, value: Uint256
+) {
+    ERC3525SlotApprovable.approve_value(tokenId, operator, value);
+    return ();
+}
+
+@external
+func transferValueFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    fromTokenId: Uint256, toTokenId: Uint256, to: felt, value: Uint256
+) -> (newTokenId: Uint256) {
+    alloc_locals;
+    let (local new_token_id: Uint256) = ERC3525SlotApprovable.transfer_from(
+        fromTokenId, toTokenId, to, value
+    );
+
+    if (to != 0) {
+        // Keep enumerability
+        let (slot) = ERC3525.slot_of(fromTokenId);
+        _add_token_to_slot_enumeration(slot, new_token_id);
+        return (newTokenId=new_token_id);
+    }
+    return (newTokenId=new_token_id);
+}
+
+//
+// ERC3525 - SlotApprovable
+//
+
+@view
+func slotCount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    count: Uint256
+) {
+    return ERC3525SlotEnumerable.slot_count();
+}
+
+@view
+func slotByIndex{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    index: Uint256
+) -> (slot: Uint256) {
+    return ERC3525SlotEnumerable.slot_by_index(index);
+}
+
+@view
+func tokenSupplyInSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (totalAmount: Uint256) {
+    let (totalAmount) = ERC3525SlotEnumerable.token_supply_in_slot(slot);
+    return (totalAmount=totalAmount);
+}
+
+@view
+func tokenInSlotByIndex{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256, index: Uint256
+) -> (tokenId: Uint256) {
+    let (tokenId) = ERC3525SlotEnumerable.token_in_slot_by_index(slot, index);
+    return (tokenId=tokenId);
+}
+
+// @notice Query if operator is authorized to manage all of owner's tokens with the specified slot.
+// @param owner The address that owns the EIP-3525 tokens.
+// @param slot The slot of tokens being queried approval of.
+// @param operator The address for whom to query approval.
+// @return is_approved TRUE if operator is authorized to manage all of owner`'s tokens with slot, FALSE otherwise.
+@view
+func isApprovedForSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    owner: felt, slot: Uint256, operator: felt
+) -> (is_approved: felt) {
+    let (is_approved) = ERC3525SlotApprovable.is_approved_for_slot(owner, slot, operator);
+    return (is_approved=is_approved);
+}
+
+// @notice Approve or disapprove an operator to manage all of `_owner`'s tokens with the specified slot.
+// @dev Caller SHOULD be `_owner` or an operator who has been authorized through setApprovalForAll.
+//    MUST emit ApprovalSlot event.
+// @param owner The address that owns the EIP-3525 tokens.
+// @param slot The slot of tokens being queried approval of.
+// @param operator The address for whom to query approval.
+// @param approved Identify if operator would be approved or disapproved.
+@external
+func setApprovalForSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    owner: felt, slot: Uint256, operator: felt, approved: felt
+) {
+    ERC3525SlotApprovable.set_approval_for_slot(owner, slot, operator, approved);
+    return ();
+}
+
+//
+// ERC3525 - Metadata Descriptor
+//
+
+// @notice Return the contract URI (OpenSea).
+// @return uri_len The URI array length
+// @return uri The URI characters
+@view
+func contractURI{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}() -> (uri_len: felt, uri: felt*) {
+    let (instance) = get_contract_address();
+    let (uri_len, uri) = ERC3525MetadataDescriptor.constructContractURI{instance=instance}();
+    return (uri_len=uri_len, uri=uri);
+}
+
+// @notice Return the slot URI.
+// @dev The slot must be a valid Uint256.
+// @param slot The slot to query.
+// @return uri_len The URI array length
+// @return uri The URI characters
+@view
+func slotURI{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(slot: Uint256) -> (uri_len: felt, uri: felt*) {
+    let (instance) = get_contract_address();
+    let (uri_len, uri) = ERC3525MetadataDescriptor.constructSlotURI{instance=instance}(slot);
+    return (uri_len=uri_len, uri=uri);
+}
+
+// @notice Return the token URI.
+// @dev The tokenID must be a valid Uint256.
+// @param tokenId The token ID to query.
+// @return uri_len The URI array length
+// @return uri The URI characters
+@view
+func tokenURI{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
+    let (instance) = get_contract_address();
+    let (uri_len, uri) = ERC3525MetadataDescriptor.constructTokenURI{instance=instance}(tokenId);
+    return (uri_len=uri_len, uri=uri);
+}
+
+//
+// Mint and Burn
+//
+
+// @notice Mint the token id to the specified -to- address.
+// @dev Throws if the caller does not have the MINTER_ROLE role.
+//   Throws if -to- is the zero address.
+//   Throws if -token_id- is not a valid Uint256.
+//   Throws if -slot- is not a valid Uint256.
+//   Throws if -value- is not a valid Uint256.
+//   Throws if token_id already minted.
+//  @param to Recipient address.
+//  @param token_id The token id.
+//  @param slot Slot number the new token will belong to.
+//  @param value Token value to mint.
+@external
+func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    to: felt, token_id: Uint256, slot: Uint256, value: Uint256
+) {
+    CarbonableAccessControl.assert_only_minter();
+    return ERC3525SlotEnumerable._mint(to, token_id, slot, value);
+}
+
+// @notice Mint a new token to the specified -to- address.
+// @dev Throws if the caller does not have the MINTER_ROLE role.
+//   Throws if -to- is the zero address.
+//   Throws if -slot- is not a valid Uint256.
+//   Throws if -value- is not a valid Uint256.
+//  @param to Recipient address.
+//  @param slot Slot number the new token will belong to.
+//  @param value Token value to mint.
+@external
+func mintNew{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    to: felt, slot: Uint256, value: Uint256
+) -> (token_id: Uint256) {
+    CarbonableAccessControl.assert_only_minter();
+    let (token_id) = ERC3525SlotEnumerable._mint_new(to, slot, value);
+    return (token_id=token_id);
+}
+
+// @notice Mint value of the specified token.
+// @dev Throws if the caller does not have the MINTER_ROLE role.
+//   Throws if -to- is the zero address.
+//   Throws if -slot- is not a valid Uint256.
+//   Throws if -value- is not a valid Uint256.
+//  @param token_id The token id.
+//  @param value Token value to mint.
+@external
+func mintValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    token_id: Uint256, value: Uint256
+) {
+    CarbonableAccessControl.assert_only_minter();
+    ERC3525._mint_value(token_id, value);
+    return ();
+}
+
+// @notice Burn the specified token.
+// @dev Throws if the caller is not the token owner nor approved.
+//   Throws if -token_id- is not a valid Uint256.
+// @param token_id The token id.
+@external
+func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: Uint256) {
+    ERC721.assert_only_token_owner(token_id);
+    ERC3525SlotEnumerable._burn(token_id);
+    return ();
+}
+
+// @notice Burn value of the specified token.
+// @dev Throws if the caller is not the token owner nor approved.
+//   Throws if -token_id- is not a valid Uint256.
+//   Throws if -value- is not a valid Uint256.
+// @param token_id The token id.
+// @param value The token value to burn.
+@external
+func burnValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    token_id: Uint256, value: Uint256
+) {
+    ERC721.assert_only_token_owner(token_id);
+    ERC3525._burn_value(token_id, value);
     return ();
 }
 
