@@ -3,8 +3,9 @@
 %lang starknet
 
 // Starkware dependencies
-from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
 from tests.units.project.library import setup, prepare, CarbonableProject
@@ -21,24 +22,24 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     // prepare farmer instance
     let (local context) = prepare();
 
-    let (status) = CarbonableProject.is_setup();
+    let (status) = CarbonableProject.is_setup(slot=context.absorption.slot);
     assert status = TRUE;
 
-    let (times_len, times) = CarbonableProject.times();
+    let (times_len, times) = CarbonableProject.times(context.absorption.slot);
     assert times_len = context.absorption.times_len;
     let first_time = times[0];
     assert first_time = context.absorption.times[0];
     let final_time = times[times_len - 1];
     assert final_time = context.absorption.times[times_len - 1];
 
-    let (absorptions_len, absorptions) = CarbonableProject.absorptions();
+    let (absorptions_len, absorptions) = CarbonableProject.absorptions(slot=context.absorption.slot);
     assert absorptions_len = context.absorption.values_len;
     let first_absorption = absorptions[0];
     assert first_absorption = context.absorption.values[0];
     let final_absorption = absorptions[absorptions_len - 1];
     assert final_absorption = context.absorption.values[absorptions_len - 1];
 
-    let (ton_equivalent) = CarbonableProject.ton_equivalent();
+    let (ton_equivalent) = CarbonableProject.ton_equivalent(slot=context.absorption.slot);
     assert ton_equivalent = context.absorption.ton_equivalent;
 
     return ();

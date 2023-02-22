@@ -603,84 +603,104 @@ func burnValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //
 
 // @notice Set the start time.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return time The start time.
 @view
-func getStartTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    time: felt
-) {
-    return CarbonableProject.start_time();
+func getStartTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (time: felt) {
+    return CarbonableProject.start_time(slot=slot);
 }
 
 // @notice Return the computed final time.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return time The final time.
 @view
-func getFinalTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    time: felt
-) {
-    return CarbonableProject.final_time();
+func getFinalTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (time: felt) {
+    return CarbonableProject.final_time(slot=slot);
 }
 
 // @notice Return the stored times.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return times_len The Array length.
 // @return times The timestamps.
 @view
-func getTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+func getTimes{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
     times_len: felt, times: felt*
 ) {
-    return CarbonableProject.times();
+    return CarbonableProject.times(slot=slot);
 }
 
 // @notice Return the stored absorptions.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return absorptions_len The array length.
 // @return absorptions The absorption values.
 @view
-func getAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    absorptions_len: felt, absorptions: felt*
-) {
-    return CarbonableProject.absorptions();
+func getAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (absorptions_len: felt, absorptions: felt*) {
+    return CarbonableProject.absorptions(slot=slot);
+}
+
+// @notice Return the computed absorption based on the specified timestamp.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
+// @return absorption The absorption.
+@view
+func getAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256, time: felt
+) -> (absorption: felt) {
+    return CarbonableProject.absorption(slot=slot, time=time);
 }
 
 // @notice Return the computed absorption based on the current timestamp.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return absorption The absorption.
 @view
-func getAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(time: felt) -> (
-    absorption: felt
-) {
-    return CarbonableProject.absorption(time=time);
-}
-
-// @notice Return the computed absorption based on the current timestamp.
-// @return absorption The absorption.
-@view
-func getCurrentAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    absorption: felt
-) {
-    return CarbonableProject.current_absorption();
+func getCurrentAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (absorption: felt) {
+    return CarbonableProject.current_absorption(slot=slot);
 }
 
 // @notice Return the computed final absorption based on the final timestamp.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return absorption The final absorption.
 @view
-func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    absorption: felt
-) {
-    return CarbonableProject.final_absorption();
+func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (absorption: felt) {
+    return CarbonableProject.final_absorption(slot=slot);
 }
 
 // @notice Return the ton equivalent in absorption unit.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return ton_equivalent The ton equivalent.
 @view
-func getTonEquivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    ton_equivalent: felt
-) {
-    return CarbonableProject.ton_equivalent();
+func getTonEquivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (ton_equivalent: felt) {
+    return CarbonableProject.ton_equivalent(slot=slot);
 }
 
 // @notice Return the setup status of the contract.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
 // @return status TRUE if setup else FALSE.
 @view
-func isSetup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (status: felt) {
-    return CarbonableProject.is_setup();
+func isSetup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
+    status: felt
+) {
+    return CarbonableProject.is_setup(slot=slot);
 }
 
 // @notice Add new minter.
@@ -737,10 +757,12 @@ func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
 // @notice Set new absorption values.
 // @dev The caller must have the CERTIFIER_ROLE role.
+//   Throws if -slot- is not Uint256 compliant.
 //   Throws if -times_len- is null.
 //   Throws if -absorptions_len- is null.
 //   Throws if -ton_equivalent- is null.
 //   Throws if times_len is not equal to absorptions_len.
+// @param slot The collection slot.
 // @param times_len The array length.
 // @param times The time values.
 // @param absorptions_len The array length.
@@ -748,10 +770,16 @@ func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 // @param ton_equivalent The absorption ton equivalent.
 @external
 func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    times_len: felt, times: felt*, absorptions_len: felt, absorptions: felt*, ton_equivalent: felt
+    slot: Uint256,
+    times_len: felt,
+    times: felt*,
+    absorptions_len: felt,
+    absorptions: felt*,
+    ton_equivalent: felt,
 ) {
     CarbonableAccessControl.assert_only_certifier();
     return CarbonableProject.set_absorptions(
+        slot=slot,
         times_len=times_len,
         times=times,
         absorptions_len=absorptions_len,

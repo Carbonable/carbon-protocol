@@ -55,31 +55,31 @@ namespace ICarbonableProject {
     // Views
     //
 
-    func getStartTime() -> (start_time: felt) {
+    func getStartTime(slot: Uint256) -> (start_time: felt) {
     }
 
-    func getFinalTime() -> (final_time: felt) {
+    func getFinalTime(slot: Uint256) -> (final_time: felt) {
     }
 
-    func getTimes() -> (times_len: felt, times: felt*) {
+    func getTimes(slot: Uint256) -> (times_len: felt, times: felt*) {
     }
 
-    func getAbsorptions() -> (absorptions_len: felt, absorptions: felt*) {
+    func getAbsorptions(slot: Uint256) -> (absorptions_len: felt, absorptions: felt*) {
     }
 
-    func getAbsorption(time: felt) -> (absorption: felt) {
+    func getAbsorption(slot: Uint256, time: felt) -> (absorption: felt) {
     }
 
-    func getCurrentAbsorption() -> (absorption: felt) {
+    func getCurrentAbsorption(slot: Uint256) -> (absorption: felt) {
     }
 
-    func getFinalAbsorption() -> (absorption: felt) {
+    func getFinalAbsorption(slot: Uint256) -> (absorption: felt) {
     }
 
-    func getTonEquivalent() -> (ton_equivalent: felt) {
+    func getTonEquivalent(slot: Uint256) -> (ton_equivalent: felt) {
     }
 
-    func isSetup() -> (status: felt) {
+    func isSetup(slot: Uint256) -> (status: felt) {
     }
 
     //
@@ -90,6 +90,7 @@ namespace ICarbonableProject {
     }
 
     func setAbsorptions(
+        slot: Uint256,
         times_len: felt,
         times: felt*,
         absorptions_len: felt,

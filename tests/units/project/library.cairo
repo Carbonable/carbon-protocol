@@ -5,6 +5,7 @@
 // Starkware dependencies
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
 from src.project.library import CarbonableProject
@@ -19,6 +20,7 @@ struct Signers {
 }
 
 struct Absorption {
+    slot: Uint256,
     times_len: felt,
     times: felt*,
     values_len: felt,
@@ -55,6 +57,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     // Extract context variables
     local admin;
     local anyone;
+    local slot;
     local times_len;
     let (local times: felt*) = alloc();
     local absorptions_len;
@@ -63,6 +66,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
+        ids.slot = context.absorption.slot
         ids.times_len = len(context.absorption.times)
         ids.absorptions_len = len(context.absorption.values)
         for idx, absorption in enumerate(context.absorption.values):
@@ -72,6 +76,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         ids.ton_equivalent = context.absorption.ton_equivalent
     %}
     CarbonableProject.set_absorptions(
+        slot=Uint256(low=slot, high=0),
         times_len=times_len,
         times=times,
         absorptions_len=absorptions_len,
@@ -83,6 +88,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local signers: Signers = Signers(admin=admin, anyone=anyone);
 
     local absorption: Absorption = Absorption(
+        slot=Uint256(low=slot, high=0),
         times_len=times_len,
         times=times,
         values_len=absorptions_len,
