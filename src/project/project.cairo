@@ -297,23 +297,13 @@ func safeTransferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_chec
     return ();
 }
 
-// @notice Set the contract base URI.
-// @dev Throws if the caller is not the owner.
-//  @param uri_len The URI array length.
-//  @param uri The URI characters.
-@external
-func setURI{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(uri_len: felt, uri: felt*) {
-    Ownable.assert_only_owner();
-    CarbonableProject.set_uri(uri_len, uri);
-    return ();
-}
-
 //
 // ERC3525
 //
 
+// @notice Get the number of decimals the token uses for value - e.g. 6, means the user
+//   representation of the value of a token can be calculated by dividing it by 1,000,000.
+// @return The number of decimals for value.
 @view
 func valueDecimals{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     decimals: felt
@@ -321,6 +311,9 @@ func valueDecimals{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     return ERC3525.value_decimals();
 }
 
+// @notice Get the value of the specified tokenId.
+// @param tokenId The token for which to query the value.
+// @return balance The value of token.
 @view
 func valueOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) -> (
     balance: Uint256
@@ -328,6 +321,9 @@ func valueOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(to
     return ERC3525.balance_of(tokenId);
 }
 
+// @notice Get the slot of a token.
+// @param tokenId The identifier for a token.
+// @return slot The slot of the token.
 @view
 func slotOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) -> (
     slot: Uint256
@@ -335,6 +331,10 @@ func slotOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tok
     return ERC3525.slot_of(tokenId);
 }
 
+// @notice Get the maximum value of a token that an operator is allowed to manage.
+// @param tokenId The token for which to query the allowance.
+// @param operator The address of an operator.
+// @return amount The current approval value of tokenId that operator is allowed to manage.
 @view
 func allowance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     tokenId: Uint256, operator: felt
@@ -342,6 +342,9 @@ func allowance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ERC3525.allowance(tokenId, operator);
 }
 
+// @notice Get the total value of the specified slot.
+// @param slot The slot to query total value for.
+// @return total The total value.
 @view
 func totalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
     total: Uint256
@@ -349,6 +352,13 @@ func totalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     return ERC3525.total_value(slot);
 }
 
+// @notice Allow an operator to manage the value of a token, up to the value.
+// @dev Revert unless caller is the current owner, an authorized operator, or the approved
+//   address for tokenId.
+//   Emit the ApprovalValue event.
+// @param tokenId The token to approve.
+// @param operator The operator to be approved.
+// @param value The maximum value of tokenId that operator is allowed to manage.
 @external
 func approveValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     tokenId: Uint256, operator: felt, value: Uint256
@@ -357,6 +367,19 @@ func approveValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     return ();
 }
 
+// @notice Transfer value from a specified token to another specified token with the same slot
+//   or to an address.
+// @dev -toTokenId- and -to- parameters are mutually exclusive, one of them must be null
+//   depending to the receive mode.
+//   Revert if fromTokenId is zero token id or does not exist.
+//   Revert if to is zero address and toTokenId is null.
+//   Revert if value exceeds the balance of fromTokenId or its allowance to the operator.
+//   Emit TransferValue event.
+// @param fromTokenId The token to transfer value from.
+// @param toTokenId The token to transfer value to.
+// @param to The address to transfer value to.
+// @param value The transferred value.
+// @return newTokenId The id of the token which receives the transferred value.
 @external
 func transferValueFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     fromTokenId: Uint256, toTokenId: Uint256, to: felt, value: Uint256
@@ -379,6 +402,8 @@ func transferValueFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 // ERC3525 - SlotApprovable
 //
 
+// @notice Get the total amount of slots stored by the contract.
+// @return count The total amount of slots.
 @view
 func slotCount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     count: Uint256
@@ -386,6 +411,9 @@ func slotCount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return ERC3525SlotEnumerable.slot_count();
 }
 
+// @notice Get the slot at the specified index of all slots stored by the contract.
+// @param index The index in the slot list.
+// @return slot The slot at index of all slots.
 @view
 func slotByIndex{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     index: Uint256
@@ -393,6 +421,9 @@ func slotByIndex{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     return ERC3525SlotEnumerable.slot_by_index(index);
 }
 
+// @notice Get the total amount of tokens with the same slot.
+// @param slot The slot to query token supply for.
+// @return totalAmount The total amount of tokens with the specified slot.
 @view
 func tokenSupplyInSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     slot: Uint256
@@ -401,6 +432,10 @@ func tokenSupplyInSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return (totalAmount=totalAmount);
 }
 
+// @notice Get the token at the specified index of all tokens with the same slot.
+// @param slot The slot to query tokens with.
+// @param index The index in the token list of the slot.
+// @return tokenId The token ID at index of all tokens with slot.
 @view
 func tokenInSlotByIndex{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     slot: Uint256, index: Uint256
