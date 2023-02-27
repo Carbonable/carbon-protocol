@@ -3,9 +3,10 @@
 %lang starknet
 
 // Starkware dependencies
+from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.uint256 import Uint256, uint256_eq
 from starkware.starknet.common.syscalls import get_contract_address
 
 // Project dependencies
@@ -14,6 +15,7 @@ from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.token.erc721.library import ERC721
 from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
+from openzeppelin.security.safemath.library import SafeUint256
 from openzeppelin.upgrades.library import Proxy
 from erc3525.extensions.slotapprovable.library import ERC3525SlotApprovable
 from erc3525.extensions.slotenumerable.library import (
@@ -22,9 +24,12 @@ from erc3525.extensions.slotenumerable.library import (
 )
 from erc3525.library import ERC3525
 from erc3525.periphery.library import ERC3525MetadataDescriptor
+from erc2981.library import ERC2981
+from erc4906.library import ERC4906
 
 // Local dependencies
 from src.project.library import CarbonableProject
+from src.metadata.library import CarbonableMetadata
 from src.utils.access.library import CarbonableAccessControl
 
 //
@@ -43,16 +48,27 @@ from src.utils.access.library import CarbonableAccessControl
 // @param name The name of the collection.
 // @param symbol The symbol of the collection.
 // @param decimals The value decimals of the collection.
+// @param name The name of the collection.
+// @param name The name of the collection.
+// @param name The name of the collection.
 // @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    name: felt, symbol: felt, decimals: felt, owner: felt
+    name: felt,
+    symbol: felt,
+    decimals: felt,
+    receiver: felt,
+    fee_numerator: felt,
+    fee_denominator: felt,
+    owner: felt,
 ) {
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
     ERC3525.initializer(decimals);
     ERC3525SlotApprovable.initializer();
     ERC3525SlotEnumerable.initializer();
+    ERC2981.initializer(receiver, fee_numerator, fee_denominator);
+    ERC4906.initializer();
     Ownable.initializer(owner);
     CarbonableAccessControl.initializer();
     Proxy.initializer(owner);
@@ -126,6 +142,7 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
 // @notice Renounce ownership.
 // @dev This function is only callable by the owner.
+@external
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     Ownable.renounce_ownership();
     return ();
@@ -268,9 +285,9 @@ func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 //   -from_- must be the current owner.
 //   -to- cannot be the zero address.
 //   -tokenId- must be a valid NFT.
-//  @param from_ The current owner of the NFT.
-//  @param to The new owner.
-//  @param tokenId The NFT to transfer.
+// @param from_ The current owner of the NFT.
+// @param to The new owner.
+// @param tokenId The NFT to transfer.
 @external
 func transferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     from_: felt, to: felt, tokenId: Uint256
@@ -285,10 +302,10 @@ func transferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_pt
 //   -to- cannot be the zero address.
 //   -tokenId- must be a valid NFT.
 //   -to- must be a contract account that implements the -onERC721Received- interface.
-//  @param from_ The current owner of the NFT.
-//  @param to The new owner.
-//  @param tokenId The NFT to transfer.
-//  @param data Additional data with no specified format, sent in call to -to-.
+// @param from_ The current owner of the NFT.
+// @param to The new owner.
+// @param tokenId The NFT to transfer.
+// @param data Additional data with no specified format, sent in call to -to-.
 @external
 func safeTransferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     from_: felt, to: felt, tokenId: Uint256, data_len: felt, data: felt*
@@ -374,7 +391,7 @@ func approveValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 //   Revert if fromTokenId is zero token id or does not exist.
 //   Revert if to is zero address and toTokenId is null.
 //   Revert if value exceeds the balance of fromTokenId or its allowance to the operator.
-//   Emit TransferValue event.
+//   Emit MetadataUpdate and TransferValue events.
 // @param fromTokenId The token to transfer value from.
 // @param toTokenId The token to transfer value to.
 // @param to The address to transfer value to.
@@ -385,16 +402,23 @@ func transferValueFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     fromTokenId: Uint256, toTokenId: Uint256, to: felt, value: Uint256
 ) -> (newTokenId: Uint256) {
     alloc_locals;
+
+    // Transfer
     let (local new_token_id: Uint256) = ERC3525SlotApprovable.transfer_from(
         fromTokenId, toTokenId, to, value
     );
 
-    if (to != 0) {
-        // Keep enumerability
-        let (slot) = ERC3525.slot_of(fromTokenId);
-        _add_token_to_slot_enumeration(slot, new_token_id);
+    // Emit metadata update events
+    ERC4906.metadata_update(token_id=fromTokenId);
+
+    if (to == 0) {
+        ERC4906.metadata_update(token_id=toTokenId);
         return (newTokenId=new_token_id);
     }
+
+    // Keep enumerability
+    let (slot) = ERC3525.slot_of(fromTokenId);
+    _add_token_to_slot_enumeration(slot, new_token_id);
     return (newTokenId=new_token_id);
 }
 
@@ -473,19 +497,19 @@ func setApprovalForSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 }
 
 //
-// ERC3525 - Metadata Descriptor
+// ERC3525 - Metadata
 //
 
 // @notice Return the contract URI (OpenSea).
 // @return uri_len The URI array length
 // @return uri The URI characters
 @view
+@raw_output
 func contractURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (uri_len: felt, uri: felt*) {
-    let (instance) = get_contract_address();
-    let (uri_len, uri) = ERC3525MetadataDescriptor.constructContractURI{instance=instance}();
-    return (uri_len=uri_len, uri=uri);
+}() -> (retdata_size: felt, retdata: felt*) {
+    let (uri_len, uri) = CarbonableProject.contract_uri();
+    return (retdata_size=uri_len, retdata=uri);
 }
 
 // @notice Return the slot URI.
@@ -494,12 +518,12 @@ func contractURI{
 // @return uri_len The URI array length
 // @return uri The URI characters
 @view
+@raw_output
 func slotURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(slot: Uint256) -> (uri_len: felt, uri: felt*) {
-    let (instance) = get_contract_address();
-    let (uri_len, uri) = ERC3525MetadataDescriptor.constructSlotURI{instance=instance}(slot);
-    return (uri_len=uri_len, uri=uri);
+}(slot: Uint256) -> (retdata_size: felt, retdata: felt*) {
+    let (uri_len, uri) = CarbonableProject.slot_uri(slot=slot);
+    return (retdata_size=uri_len, retdata=uri);
 }
 
 // @notice Return the token URI.
@@ -508,12 +532,46 @@ func slotURI{
 // @return uri_len The URI array length
 // @return uri The URI characters
 @view
+@raw_output
 func tokenURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
-    let (instance) = get_contract_address();
-    let (uri_len, uri) = ERC3525MetadataDescriptor.constructTokenURI{instance=instance}(tokenId);
-    return (uri_len=uri_len, uri=uri);
+}(tokenId: Uint256) -> (retdata_size: felt, retdata: felt*) {
+    let (uri_len, uri) = CarbonableProject.token_uri(token_id=tokenId);
+    return (retdata_size=uri_len, retdata=uri);
+}
+
+// @notice Set the contract base URI.
+// @dev Throws if the caller is not the owner.
+// @param uri_len The URI array length.
+// @param uri The URI characters.
+@external
+func setMetadataImplementation{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}(implementation: felt) {
+    alloc_locals;
+
+    Ownable.assert_only_owner();
+
+    // Update metadata implementation
+    CarbonableMetadata.set_implementation(implementation=implementation);
+
+    // Emit BatchMetadataUpdate event for the whole supply if total supply > 0
+    let (total) = ERC721Enumerable.total_supply();
+    let zero = Uint256(low=0, high=0);
+    let (equal) = uint256_eq(total, zero);
+
+    if (equal == TRUE) {
+        return ();
+    }
+
+    let (from_token_id) = ERC721Enumerable.token_by_index(index=zero);
+
+    let one = Uint256(low=1, high=0);
+    let (index) = SafeUint256.sub_le(total, one);
+    let (to_token_id) = ERC721Enumerable.token_by_index(index=index);
+
+    ERC4906.batch_metadata_update(from_token_id=from_token_id, to_token_id=to_token_id);
+    return ();
 }
 
 //
@@ -527,10 +585,10 @@ func tokenURI{
 //   Throws if -slot- is not a valid Uint256.
 //   Throws if -value- is not a valid Uint256.
 //   Throws if token_id already minted.
-//  @param to Recipient address.
-//  @param token_id The token id.
-//  @param slot Slot number the new token will belong to.
-//  @param value Token value to mint.
+// @param to Recipient address.
+// @param token_id The token id.
+// @param slot Slot number the new token will belong to.
+// @param value Token value to mint.
 @external
 func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     to: felt, token_id: Uint256, slot: Uint256, value: Uint256
@@ -544,9 +602,9 @@ func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //   Throws if -to- is the zero address.
 //   Throws if -slot- is not a valid Uint256.
 //   Throws if -value- is not a valid Uint256.
-//  @param to Recipient address.
-//  @param slot Slot number the new token will belong to.
-//  @param value Token value to mint.
+// @param to Recipient address.
+// @param slot Slot number the new token will belong to.
+// @param value Token value to mint.
 @external
 func mintNew{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     to: felt, slot: Uint256, value: Uint256
@@ -561,8 +619,8 @@ func mintNew{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //   Throws if -to- is the zero address.
 //   Throws if -slot- is not a valid Uint256.
 //   Throws if -value- is not a valid Uint256.
-//  @param token_id The token id.
-//  @param value Token value to mint.
+// @param token_id The token id.
+// @param value Token value to mint.
 @external
 func mintValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256, value: Uint256
@@ -595,6 +653,72 @@ func burnValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 ) {
     ERC721.assert_only_token_owner(token_id);
     ERC3525._burn_value(token_id, value);
+    return ();
+}
+
+//
+// ERC2981
+//
+
+@view
+func defaultRoyalty{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    receiver: felt, feeNumerator: felt, feeDenominator: felt
+) {
+    let (receiver, fee_numerator, fee_dumerator) = ERC2981.default_royalty();
+    return (receiver=receiver, feeNumerator=fee_numerator, feeDenominator=fee_dumerator);
+}
+
+@view
+func tokenRoyalty{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: Uint256
+) -> (receiver: felt, feeNumerator: felt, feeDenominator: felt) {
+    let (receiver, fee_numerator, fee_dumerator) = ERC2981.token_royalty(token_id=tokenId);
+    return (receiver=receiver, feeNumerator=fee_numerator, feeDenominator=fee_dumerator);
+}
+
+@view
+func royaltyInfo{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: Uint256, salePrice: Uint256
+) -> (receiver: felt, royaltyAmount: Uint256) {
+    let (receiver, royaltyAmount) = ERC2981.royalty_info(token_id=tokenId, sale_price=salePrice);
+    return (receiver=receiver, royaltyAmount=royaltyAmount);
+}
+
+@external
+func setDefaultRoyalty{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    receiver: felt, feeNumerator: felt, feeDenominator: felt
+) {
+    Ownable.assert_only_owner();
+    ERC2981.set_default_royalty(
+        receiver=receiver, fee_numerator=feeNumerator, fee_denominator=feeDenominator
+    );
+    return ();
+}
+
+@external
+func setTokenRoyalty{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: Uint256, receiver: felt, feeNumerator: felt, feeDenominator: felt
+) {
+    Ownable.assert_only_owner();
+    ERC2981.set_token_royalty(
+        token_id=tokenId,
+        receiver=receiver,
+        fee_numerator=feeNumerator,
+        fee_denominator=feeDenominator,
+    );
+    return ();
+}
+
+//
+// ERC4906
+//
+
+@external
+func emitBatchMetadataUpdate{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
+    fromTokenId: Uint256, toTokenId: Uint256
+) {
+    Ownable.assert_only_owner();
+    ERC4906.batch_metadata_update(fromTokenId, toTokenId);
     return ();
 }
 
