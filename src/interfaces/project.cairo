@@ -86,9 +86,6 @@ namespace ICarbonableProject {
     // Externals
     //
 
-    func mint(to: felt, token_id: Uint256) {
-    }
-
     func setAbsorptions(
         slot: Uint256,
         times_len: felt,
