@@ -12,11 +12,6 @@ from cairopen.string.ASCII import StringCodec
 from cairopen.string.string import String
 from cairopen.string.utils import StringUtil
 
-// Selectors
-const CONTRACT_URI = 0x1530b1e3e1fe59556d7ac7104ced650bd036802735b613ada407ce4a05d653c;
-const SLOT_URI = 0x2fc6debea4e43797c01f3eac698b2a987f7031506928ecbb773b8c2ba8fbfb9;
-const TOKEN_URI = 0x12a7823b0c6bee58f8c694888f32f862c6584caa8afa0242de046d298ba684d;
-
 @storage_var
 func CarbonableMetadata_implementation() -> (implementation: felt) {
 }
