@@ -4,7 +4,6 @@
 
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE
-from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256, uint256_eq
 from starkware.starknet.common.syscalls import get_contract_address
@@ -504,12 +503,11 @@ func setApprovalForSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 // @return uri_len The URI array length
 // @return uri The URI characters
 @view
-@raw_output
-func contractURI{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}() -> (retdata_size: felt, retdata: felt*) {
+func contractURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    uri_len: felt, uri: felt*
+) {
     let (uri_len, uri) = CarbonableProject.contract_uri();
-    return (retdata_size=uri_len, retdata=uri);
+    return (uri_len=uri_len, uri=uri);
 }
 
 // @notice Return the slot URI.
@@ -518,12 +516,11 @@ func contractURI{
 // @return uri_len The URI array length
 // @return uri The URI characters
 @view
-@raw_output
-func slotURI{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(slot: Uint256) -> (retdata_size: felt, retdata: felt*) {
+func slotURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
+    uri_len: felt, uri: felt*
+) {
     let (uri_len, uri) = CarbonableProject.slot_uri(slot=slot);
-    return (retdata_size=uri_len, retdata=uri);
+    return (uri_len=uri_len, uri=uri);
 }
 
 // @notice Return the token URI.
@@ -532,45 +529,31 @@ func slotURI{
 // @return uri_len The URI array length
 // @return uri The URI characters
 @view
-@raw_output
-func tokenURI{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(tokenId: Uint256) -> (retdata_size: felt, retdata: felt*) {
+func tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: Uint256
+) -> (uri_len: felt, uri: felt*) {
     let (uri_len, uri) = CarbonableProject.token_uri(token_id=tokenId);
-    return (retdata_size=uri_len, retdata=uri);
+    return (uri_len=uri_len, uri=uri);
 }
 
-// @notice Set the contract base URI.
+// @notice Get the metadata implementation.
+// @return implementation The metadata implementation class hash.
+@view
+func getMetadataImplementation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) -> (implementation: felt) {
+    let (implementation) = CarbonableMetadata.get_implementation();
+    return (implementation=implementation);
+}
+
+// @notice Set the metadata implementation.
 // @dev Throws if the caller is not the owner.
-// @param uri_len The URI array length.
-// @param uri The URI characters.
+// @param implementation The metadata implementation class hash.
 @external
-func setMetadataImplementation{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(implementation: felt) {
-    alloc_locals;
-
+func setMetadataImplementation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    implementation: felt
+) {
     Ownable.assert_only_owner();
-
-    // Update metadata implementation
     CarbonableMetadata.set_implementation(implementation=implementation);
-
-    // Emit BatchMetadataUpdate event for the whole supply if total supply > 0
-    let (total) = ERC721Enumerable.total_supply();
-    let zero = Uint256(low=0, high=0);
-    let (equal) = uint256_eq(total, zero);
-
-    if (equal == TRUE) {
-        return ();
-    }
-
-    let (from_token_id) = ERC721Enumerable.token_by_index(index=zero);
-
-    let one = Uint256(low=1, high=0);
-    let (index) = SafeUint256.sub_le(total, one);
-    let (to_token_id) = ERC721Enumerable.token_by_index(index=index);
-
-    ERC4906.batch_metadata_update(from_token_id=from_token_id, to_token_id=to_token_id);
     return ();
 }
 

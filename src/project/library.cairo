@@ -6,7 +6,6 @@
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le, is_not_zero
 from starkware.cairo.common.uint256 import Uint256, uint256_check
@@ -16,7 +15,8 @@ from starkware.starknet.common.syscalls import get_block_timestamp, library_call
 from erc3525.library import ERC3525
 
 // Local dependencies
-from src.metadata.library import CarbonableMetadata, CONTRACT_URI, SLOT_URI, TOKEN_URI
+from src.interfaces.metadata import ICarbonableMetadata
+from src.metadata.library import CarbonableMetadata
 from src.utils.type.library import _uint_to_felt, _felt_to_uint
 
 //
@@ -60,50 +60,29 @@ namespace CarbonableProject {
     // Getters
     //
 
-    func token_uri{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        bitwise_ptr: BitwiseBuiltin*,
-        range_check_ptr,
-    }(token_id: Uint256) -> (uri_len: felt, uri: felt*) {
+    func contract_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        uri_len: felt, uri: felt*
+    ) {
         alloc_locals;
 
-        // [Check] Uint256 compliances
-        with_attr error_message("Metadata: token_id is not a valid Uint256") {
-            uint256_check(token_id);
-        }
-
         let (class_hash) = CarbonableMetadata.get_implementation();
-        let (local calldata: felt*) = alloc();
+        let (local array: felt*) = alloc();
 
         // [Check] Metadata implementation set
         if (class_hash == 0) {
-            return (uri_len=0, uri=calldata);
+            return (uri_len=0, uri=array);
         }
 
-        let (slot) = ERC3525.slot_of(token_id);
-        let (slot_felt) = _uint_to_felt(slot);
-        let (value) = ERC3525.balance_of(token_id);
-        let (value_felt) = _uint_to_felt(value);
-        let (decimals) = ERC3525.value_decimals();
-
-        assert [calldata + 0] = slot_felt;
-        assert [calldata + 1] = value_felt;
-        assert [calldata + 2] = decimals;
-
-        let (uri_len: felt, uri: felt*) = library_call(
-            class_hash=class_hash, function_selector=TOKEN_URI, calldata_size=3, calldata=calldata
+        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_contractURI(
+            class_hash=class_hash
         );
 
         return (uri_len=uri_len, uri=uri);
     }
 
-    func slot_uri{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        bitwise_ptr: BitwiseBuiltin*,
-        range_check_ptr,
-    }(slot: Uint256) -> (uri_len: felt, uri: felt*) {
+    func slot_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (uri_len: felt, uri: felt*) {
         alloc_locals;
 
         // [Check] Uint256 compliances
@@ -112,44 +91,46 @@ namespace CarbonableProject {
         }
 
         let (class_hash) = CarbonableMetadata.get_implementation();
-        let (local calldata: felt*) = alloc();
+        let (local array: felt*) = alloc();
 
         // [Check] Metadata implementation set
         if (class_hash == 0) {
-            return (uri_len=0, uri=calldata);
+            return (uri_len=0, uri=array);
         }
 
         let (slot_felt) = _uint_to_felt(slot);
-        assert [calldata] = slot_felt;
-
-        let (uri_len: felt, uri: felt*) = library_call(
-            class_hash=class_hash, function_selector=SLOT_URI, calldata_size=1, calldata=calldata
+        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_slotURI(
+            class_hash=class_hash, slot=slot_felt
         );
 
         return (uri_len=uri_len, uri=uri);
     }
 
-    func contract_uri{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        bitwise_ptr: BitwiseBuiltin*,
-        range_check_ptr,
-    }() -> (uri_len: felt, uri: felt*) {
+    func token_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: Uint256
+    ) -> (uri_len: felt, uri: felt*) {
         alloc_locals;
 
+        // [Check] Uint256 compliances
+        with_attr error_message("Metadata: token_id is not a valid Uint256") {
+            uint256_check(token_id);
+        }
+
         let (class_hash) = CarbonableMetadata.get_implementation();
-        let (local calldata: felt*) = alloc();
+        let (local array: felt*) = alloc();
 
         // [Check] Metadata implementation set
         if (class_hash == 0) {
-            return (uri_len=0, uri=calldata);
+            return (uri_len=0, uri=array);
         }
 
-        let (uri_len: felt, uri: felt*) = library_call(
-            class_hash=class_hash,
-            function_selector=CONTRACT_URI,
-            calldata_size=0,
-            calldata=calldata,
+        let (slot) = ERC3525.slot_of(token_id);
+        let (slot_felt) = _uint_to_felt(slot);
+        let (value) = ERC3525.balance_of(token_id);
+        let (value_felt) = _uint_to_felt(value);
+        let (decimals) = ERC3525.value_decimals();
+        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_tokenURI(
+            class_hash=class_hash, slot=slot_felt, value=value_felt, decimals=decimals
         );
 
         return (uri_len=uri_len, uri=uri);
