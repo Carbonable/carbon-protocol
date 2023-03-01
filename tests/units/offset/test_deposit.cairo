@@ -28,34 +28,80 @@ func test_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     let anyone_address = context.signers.anyone;
     let admin_address = context.signers.admin;
 
-    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
-    %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+
+    // Simple deposit
 
     %{ stop=start_prank(context.signers.anyone) %}
-    let (success) = CarbonableOffseter.deposit(token_id=one);
+    let (success) = CarbonableOffseter.deposit(token_id=one, value=two);
     assert success = 1;
     %{ stop() %}
+
+    let (deposited) = CarbonableOffseter.deposited_of(address=anyone_address);
+    assert deposited = two;
+
+    // Double deposit
 
     %{ stop=start_prank(context.signers.admin) %}
-    let (success) = CarbonableOffseter.deposit(token_id=two);
+    let (success) = CarbonableOffseter.deposit(token_id=two, value=one);
     assert success = 1;
+
+    let (deposited) = CarbonableOffseter.deposited_of(address=admin_address);
+    assert deposited = one;
+
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+
+    let (success) = CarbonableOffseter.deposit(token_id=two, value=one);
+    assert success = 1;
+
+    let (deposited) = CarbonableOffseter.deposited_of(address=admin_address);
+    assert deposited = two;
     %{ stop() %}
 
-    let (tokens_len, tokens) = CarbonableOffseter.registered_tokens_of(address=anyone_address);
-    assert tokens_len = 1;
-    let token_id = tokens[tokens_len - 1];
-    assert token_id = one;
-    %{ stop_mock() %}
+    return ();
+}
 
-    %{ stop_mock = mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [2, 0]) %}
-    let (tokens_len, tokens) = CarbonableOffseter.registered_tokens_of(address=admin_address);
-    assert tokens_len = 1;
-    let token_id = tokens[tokens_len - 1];
-    assert token_id = two;
-    %{ stop_mock() %}
+@external
+func test_deposit_revert_token_not_u256{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: token_id is not a valid Uint256") %}
+    let two = Uint256(low=2, high=0);
+    let invalid = Uint256(low=-1, high=-1);
+    let (success) = CarbonableOffseter.deposit(token_id=invalid, value=two);
+
+    return ();
+}
+
+@external
+func test_deposit_revert_value_not_u256{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: value is not a valid Uint256") %}
+    let two = Uint256(low=2, high=0);
+    let invalid = Uint256(low=-1, high=-1);
+    let (success) = CarbonableOffseter.deposit(token_id=two, value=invalid);
+
+    return ();
+}
+
+@external
+func test_deposit_revert_value_is_zero{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: value is null") %}
+    let zero = Uint256(low=0, high=0);
+    let (success) = CarbonableOffseter.deposit(token_id=zero, value=zero);
 
     return ();
 }

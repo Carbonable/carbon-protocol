@@ -23,8 +23,11 @@ func test_total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     let (local context) = prepare();
 
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
-    let (balance) = CarbonableOffseter.total_deposited();
-    assert balance = Uint256(low=1, high=0);
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "valueOf", [10, 0]) %}
+
+    let (total_deposited) = CarbonableOffseter.total_deposited();
+    assert total_deposited = Uint256(low=10, high=0);
 
     return ();
 }

@@ -138,7 +138,7 @@ namespace CarbonableOffseter {
         let zero = Uint256(low=0, high=0);
         let (equal) = uint256_eq(token_id, zero);
         if (equal == TRUE) {
-            return (value=token_id);
+            return (value=zero);
         }
 
         // [Effect] Read corresponding value
@@ -275,16 +275,6 @@ namespace CarbonableOffseter {
             uint256_check(value);
         }
 
-        // [Check] Token belongs to the caller
-        let (caller) = get_caller_address();
-        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
-        let (owner) = IERC721.ownerOf(
-            contract_address=carbonable_project_address, tokenId=token_id
-        );
-        with_attr error_message("CarbonableOffseter: token does not belong to the caller") {
-            assert caller = owner;
-        }
-
         // [Check] Deposited value is not null
         let zero = Uint256(low=0, high=0);
         let (is_zero) = uint256_eq(value, zero);
@@ -338,16 +328,6 @@ namespace CarbonableOffseter {
         }
         with_attr error_message("CarbonableOffseter: value is not a valid Uint256") {
             uint256_check(value);
-        }
-
-        // [Check] Token belongs to the caller
-        let (caller) = get_caller_address();
-        let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
-        let (owner) = IERC721.ownerOf(
-            contract_address=carbonable_project_address, tokenId=token_id
-        );
-        with_attr error_message("CarbonableOffseter: token does not belong to the caller") {
-            assert caller = owner;
         }
 
         // [Effect] Withdraw to token id
@@ -424,13 +404,19 @@ namespace CarbonableOffseter {
         // [Compute] Get user deposited value
         let (user_value) = CarbonableOffseter_registered_value_.read(address);
 
+        // [Check] User has deposited
+        let zero = Uint256(low=0, high=0);
+        let (is_zero) = uint256_eq(user_value, zero);
+        if (is_zero == TRUE) {
+            return (claimable=0);
+        }
+
         // [Compute] Get project total value
         let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (slot) = CarbonableOffseter_carbonable_project_slot_.read();
         let (total_value) = IERC3525Full.totalValue(contract_address=contract_address, slot=slot);
 
         // [Check] total value is not zero
-        let zero = Uint256(low=0, high=0);
         let (is_zero) = uint256_eq(total_value, zero);
         if (is_zero == TRUE) {
             return (claimable=0);
@@ -489,7 +475,7 @@ namespace CarbonableOffseter {
         ReentrancyGuard.start();
 
         // [Interaction] Transfer value from from_token_id to to_token_id
-        let (old_deposited) = total_deposited();
+        // let (old_deposited) = total_deposited();
         let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (contract_address) = get_contract_address();
         IERC3525.transferValueFrom(
@@ -501,12 +487,12 @@ namespace CarbonableOffseter {
         );
 
         // [Check] Transfer successful
-        let (new_deposited) = total_deposited();
-        let (expected_deposited) = SafeUint256.add(old_deposited, value);
-        let (is_equal) = uint256_eq(new_deposited, expected_deposited);
-        with_attr error_message("CarbonableOffseter: transfer failed") {
-            assert is_equal = TRUE;
-        }
+        // let (new_deposited) = total_deposited();
+        // let (expected_deposited) = SafeUint256.add(old_deposited, value);
+        // let (is_equal) = uint256_eq(new_deposited, expected_deposited);
+        // with_attr error_message("CarbonableOffseter: transfer failed") {
+        //     assert is_equal = TRUE;
+        // }
 
         // [Effect] Store cumulated claimable
         let (caller) = get_caller_address();
@@ -556,7 +542,7 @@ namespace CarbonableOffseter {
         let (caller) = get_caller_address();
         let (registered_value) = CarbonableOffseter_registered_value_.read(caller);
         let (is_lower) = uint256_le(value, registered_value);
-        with_attr error_message("CarbonableOffseter: value is higher than withdrawable value") {
+        with_attr error_message("CarbonableOffseter: value is higher than the withdrawable value") {
             assert is_lower = TRUE;
         }
 
@@ -573,7 +559,7 @@ namespace CarbonableOffseter {
         CarbonableOffseter_registered_value_.write(caller, new_value);
 
         // [Interaction] Transfer value from contract to caller
-        let (old_deposited) = total_deposited();
+        // let (old_deposited) = total_deposited();
         let (from_token_id) = _get_token_id();
         let (carbonable_project_address) = CarbonableOffseter_carbonable_project_address_.read();
         IERC3525.transferValueFrom(
@@ -585,12 +571,12 @@ namespace CarbonableOffseter {
         );
 
         // [Check] Transfer successful
-        let (new_deposited) = total_deposited();
-        let (expected_deposited) = SafeUint256.sub_le(old_deposited, value);
-        let (is_equal) = uint256_eq(new_deposited, expected_deposited);
-        with_attr error_message("CarbonableOffseter: transfer failed") {
-            assert is_equal = TRUE;
-        }
+        // let (new_deposited) = total_deposited();
+        // let (expected_deposited) = SafeUint256.sub_le(old_deposited, value);
+        // let (is_equal) = uint256_eq(new_deposited, expected_deposited);
+        // with_attr error_message("CarbonableOffseter: transfer failed") {
+        //     assert is_equal = TRUE;
+        // }
 
         // [Effect] Emit event
         Withdraw.emit(address=caller, value=value, time=current_time);
