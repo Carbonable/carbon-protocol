@@ -24,12 +24,12 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
     let (contract_address) = get_contract_address();
+    let anyone_address = context.signers.anyone;
 
-    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
@@ -41,12 +41,15 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     assert total_claimable = 0;
 
     // Deposit token #1
-    let (success) = CarbonableOffseter.deposit(token_id=one);
+    let (success) = CarbonableOffseter.deposit(token_id=one, value=one);
     assert success = 1;
 
-    // Total claimable is 3 - 1 = 2
+    // Total claimable is 3 - 1 = 2 / 100
     let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = 2000000;
+    assert total_claimable = 20000;
+
+    let (claimable) = CarbonableOffseter.claimable_of(anyone_address);
+    assert claimable = total_claimable;
     %{ stop() %}
 
     return ();
