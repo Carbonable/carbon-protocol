@@ -150,8 +150,17 @@ func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return CarbonableOffseter.total_deposited();
 }
 
+// @notice Return the total absorption of the project.
+// @return total_absorption The total absorption.
+@view
+func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_absorption: felt
+) {
+    return CarbonableOffseter.total_absorption();
+}
+
 // @notice Return the total claimed balance of the project.
-// @return balance The total claimed.
+// @return total_claimed The total claimed.
 @view
 func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_claimed: felt
@@ -176,6 +185,16 @@ func getDepositedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     address: felt
 ) -> (value: Uint256) {
     return CarbonableOffseter.deposited_of(address=address);
+}
+
+// @notice Return the total absorption of the provided address.
+// @param address The address to query.
+// @return absorption The total absorption.
+@view
+func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (absorption: felt) {
+    return CarbonableOffseter.absorption_of(address=address);
 }
 
 // @notice Return the total claimable balance of the provided address.

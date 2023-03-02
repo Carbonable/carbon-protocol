@@ -162,6 +162,19 @@ namespace CarbonableOffseter {
         return (value=value);
     }
 
+    func total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        total_absorption: felt
+    ) {
+        let (users_len) = CarbonableOffseter_users_len_.read();
+
+        if (users_len == 0) {
+            return (total_absorption=0);
+        }
+
+        let (total_absorption) = _total_absorption_iter(index=users_len - 1);
+        return (total_absorption=total_absorption);
+    }
+
     func total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         total_claimed: felt
     ) {
@@ -195,15 +208,25 @@ namespace CarbonableOffseter {
         return (value=value);
     }
 
+    func absorption_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (absorption: felt) {
+        alloc_locals;
+
+        let (computed_claimable) = _claimable(address=address);
+        let (stored_claimable) = CarbonableOffseter_claimable_.read(address);
+
+        return (absorption=computed_claimable + stored_claimable);
+    }
+
     func claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
     ) -> (claimable: felt) {
         alloc_locals;
 
-        let (computed_claimable) = _claimable(address=address);
-        let (stored_claimable) = CarbonableOffseter_claimable_.read(address);
+        let (absorption) = absorption_of(address);
         let (stored_claimed) = CarbonableOffseter_claimed_.read(address);
-        let claimable = stored_claimable + computed_claimable - stored_claimed;
+        let claimable = absorption - stored_claimed;
 
         // [Check] Overflow
         let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
@@ -376,6 +399,24 @@ namespace CarbonableOffseter {
         );
 
         return (token_id=token_id);
+    }
+
+    func _total_absorption_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        index: felt
+    ) -> (total_absorption: felt) {
+        alloc_locals;
+
+        let (address) = CarbonableOffseter_users_.read(index);
+        let (computed_claimable) = _claimable(address=address);
+        let (stored_claimable) = CarbonableOffseter_claimable_.read(address);
+        let total_absorption = computed_claimable + stored_claimable;
+
+        if (index == 0) {
+            return (total_absorption=total_absorption);
+        }
+
+        let (add) = _total_absorption_iter(index=index - 1);
+        return (total_absorption=total_absorption + add);
     }
 
     func _total_claimed_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
