@@ -128,6 +128,20 @@ namespace CarbonableOffseter {
         return (min_claimable=min_claimable);
     }
 
+    func total_user_count{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        count: felt
+    ) {
+        let (count) = CarbonableOffseter_users_len_.read();
+        return (count=count);
+    }
+
+    func user_by_index{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        index: felt
+    ) -> (user: felt) {
+        let (user) = CarbonableOffseter_users_.read(index);
+        return (user=user);
+    }
+
     func total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         value: Uint256
     ) {
