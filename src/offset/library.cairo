@@ -5,7 +5,8 @@
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math_cmp import is_le_felt, is_not_zero
+from starkware.cairo.common.math import assert_in_range
+from starkware.cairo.common.math_cmp import is_not_zero
 from starkware.cairo.common.uint256 import (
     Uint256,
     uint256_check,
@@ -234,9 +235,8 @@ namespace CarbonableOffseter {
         let (max_absorption) = ICarbonableProject.getCurrentAbsorption(
             contract_address=contract_address, slot=slot
         );
-        let not_overflow = is_le_felt(claimable, max_absorption);
         with_attr error_message("CarbonableOffseter: overflow while computing claimable") {
-            assert not_overflow = TRUE;
+            assert_in_range(claimable, 0, max_absorption + 1);
         }
 
         return (claimable=claimable);
@@ -273,10 +273,9 @@ namespace CarbonableOffseter {
         // [Check] Quantity is lower or equal to the total claimable
         let (caller) = get_caller_address();
         let (claimable) = claimable_of(caller);
-        let is_lower = is_le_felt(quantity, claimable);
         with_attr error_message(
                 "CarbonableOffseter: quantity to claim must be lower than the total claimable") {
-            assert is_lower = TRUE;
+            assert_in_range(value=quantity, lower=0, upper=claimable + 1);
         }
 
         // [Effect] Claim
@@ -415,7 +414,7 @@ namespace CarbonableOffseter {
             return (total_absorption=absorption + sum);
         }
 
-        return _total_absorption_iter(index=index - 1, sum=absorption);
+        return _total_absorption_iter(index=index - 1, sum=absorption + sum);
     }
 
     func _total_claimed_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -430,7 +429,7 @@ namespace CarbonableOffseter {
             return (total_claimed=claimed + sum);
         }
 
-        return _total_claimed_iter(index=index - 1, sum=claimed);
+        return _total_claimed_iter(index=index - 1, sum=claimed + sum);
     }
 
     func _total_claimable_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -445,7 +444,7 @@ namespace CarbonableOffseter {
             return (total_claimable=claimable + sum);
         }
 
-        return _total_claimable_iter(index=index - 1, sum=claimable);
+        return _total_claimable_iter(index=index - 1, sum=claimable + sum);
     }
 
     func _claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -484,9 +483,8 @@ namespace CarbonableOffseter {
         );
 
         // [Check] Absorption overflow
-        let right_order = is_le_felt(initial_absorption, final_absorption);
         with_attr error_message("CarbonableOffseter: Error while computing claimable") {
-            assert right_order = TRUE;
+            assert_in_range(value=initial_absorption, lower=0, upper=final_absorption + 1);
         }
 
         // [Compute] Total absorption, if then return 0
@@ -668,9 +666,8 @@ namespace CarbonableOffseter_assert {
         claimable: felt
     ) {
         let (minimum) = CarbonableOffseter.min_claimable();
-        let is_lower = is_le_felt(minimum, claimable);
         with_attr error_message("CarbonableOffseter: claimable balance must be not negligible") {
-            assert is_lower = TRUE;
+            assert_in_range(value=minimum, lower=0, upper=claimable + 1);
         }
         return ();
     }

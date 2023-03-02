@@ -16,6 +16,7 @@ from src.offset.library import CarbonableOffseter
 struct Signers {
     admin: felt,
     anyone: felt,
+    someone: felt,
 }
 
 struct Mocks {
@@ -57,6 +58,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     // Extract context variables
     local admin;
     local anyone;
+    local someone;
     local carbonable_project_address;
     local carbonable_minter_address;
     local minimum;
@@ -64,6 +66,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
+        ids.someone = context.signers.someone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
         ids.minimum = context.offseter.minimum
         ids.slot = context.offseter.slot
@@ -77,7 +80,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     CarbonableOffseter.set_min_claimable(minimum);
 
     // Instantiate context, useful to avoid many hints in tests
-    local signers: Signers = Signers(admin=admin, anyone=anyone);
+    local signers: Signers = Signers(admin=admin, anyone=anyone, someone=someone);
 
     local mocks: Mocks = Mocks(carbonable_project_address=carbonable_project_address);
     local offset: Offset = Offset(slot=slot, minimum=minimum);
