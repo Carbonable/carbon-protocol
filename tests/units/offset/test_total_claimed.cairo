@@ -59,7 +59,7 @@ func test_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     let (success) = CarbonableOffseter.claim_all();
     assert success = 1;
 
-    // Total claimable is 1 + (3 - 1) - 1 = 2 / 1;
+    // Total claimed is 1 + (3 - 1) - 1 = 2 / 1;
     let (total_claimed) = CarbonableOffseter.total_claimed();
     assert total_claimed = 2000000;
 
@@ -88,7 +88,7 @@ func test_total_claimed_multi_users{syscall_ptr: felt*, pedersen_ptr: HashBuilti
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [1, 0]) %}
     %{ stop_mock_1 = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
-    %{ stop_mock_2 = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [30000000]) %}
+    %{ stop_mock_2 = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     // Anyone
     %{ stop=start_prank(context.signers.anyone) %}
@@ -111,12 +111,7 @@ func test_total_claimed_multi_users{syscall_ptr: felt*, pedersen_ptr: HashBuilti
     CarbonableOffseter.claim(quantity=1000000);
     %{ stop() %}
 
-    %{ stop_mock_1() %}
-    %{ stop_mock_2() %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [9000000]) %}
-
-    // Total claimable is 3000000;
+    // Total claimed is 3000000;
     let (total_claimed) = CarbonableOffseter.total_claimed();
     assert total_claimed = 3000000;
 
