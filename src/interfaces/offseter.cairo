@@ -41,7 +41,6 @@ namespace ICarbonableOffseter {
     //
 
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
-        return CarbonableOffseter.carbonable_project_address();
     }
 
     func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
@@ -53,6 +52,9 @@ namespace ICarbonableOffseter {
     func getTotalDeposited() -> (value: Uint256) {
     }
 
+    func getTotalAbsorption() -> (total_absorption: felt) {
+    }
+
     func getTotalClaimed() -> (total_claimed: felt) {
     }
 
@@ -60,6 +62,9 @@ namespace ICarbonableOffseter {
     }
 
     func getDepositedOf(address: felt) -> (value: Uint256) {
+    }
+
+    func getAbsorptionOf(address: felt) -> (absorption: felt) {
     }
 
     func getClaimableOf(address: felt) -> (claimable: felt) {
