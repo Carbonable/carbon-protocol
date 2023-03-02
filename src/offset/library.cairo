@@ -171,7 +171,7 @@ namespace CarbonableOffseter {
             return (total_absorption=0);
         }
 
-        let (total_absorption) = _total_absorption_iter(index=users_len - 1);
+        let (total_absorption) = _total_absorption_iter(index=users_len - 1, sum=0);
         return (total_absorption=total_absorption);
     }
 
@@ -184,7 +184,7 @@ namespace CarbonableOffseter {
             return (total_claimed=0);
         }
 
-        let (total_claimed) = _total_claimed_iter(index=users_len - 1);
+        let (total_claimed) = _total_claimed_iter(index=users_len - 1, sum=0);
         return (total_claimed=total_claimed);
     }
 
@@ -197,7 +197,7 @@ namespace CarbonableOffseter {
             return (total_claimable=0);
         }
 
-        let (total_claimable) = _total_claimable_iter(index=users_len - 1);
+        let (total_claimable) = _total_claimable_iter(index=users_len - 1, sum=0);
         return (total_claimable=total_claimable);
     }
 
@@ -402,25 +402,24 @@ namespace CarbonableOffseter {
     }
 
     func _total_absorption_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt
+        index: felt, sum: felt
     ) -> (total_absorption: felt) {
         alloc_locals;
 
         let (address) = CarbonableOffseter_users_.read(index);
         let (computed_claimable) = _claimable(address=address);
         let (stored_claimable) = CarbonableOffseter_claimable_.read(address);
-        let total_absorption = computed_claimable + stored_claimable;
+        let absorption = computed_claimable + stored_claimable;
 
         if (index == 0) {
-            return (total_absorption=total_absorption);
+            return (total_absorption=absorption + sum);
         }
 
-        let (add) = _total_absorption_iter(index=index - 1);
-        return (total_absorption=total_absorption + add);
+        return _total_absorption_iter(index=index - 1, sum=absorption);
     }
 
     func _total_claimed_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt
+        index: felt, sum: felt
     ) -> (total_claimed: felt) {
         alloc_locals;
 
@@ -428,15 +427,14 @@ namespace CarbonableOffseter {
         let (claimed) = CarbonableOffseter_claimed_.read(address);
 
         if (index == 0) {
-            return (total_claimed=claimed);
+            return (total_claimed=claimed + sum);
         }
 
-        let (add) = _total_claimed_iter(index=index - 1);
-        return (total_claimed=claimed + add);
+        return _total_claimed_iter(index=index - 1, sum=claimed);
     }
 
     func _total_claimable_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt
+        index: felt, sum: felt
     ) -> (total_claimable: felt) {
         alloc_locals;
 
@@ -444,11 +442,10 @@ namespace CarbonableOffseter {
         let (claimable) = claimable_of(address);
 
         if (index == 0) {
-            return (total_claimable=claimable);
+            return (total_claimable=claimable + sum);
         }
 
-        let (add) = _total_claimable_iter(index=index - 1);
-        return (total_claimable=claimable + add);
+        return _total_claimable_iter(index=index - 1, sum=claimable);
     }
 
     func _claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
