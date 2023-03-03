@@ -7,4 +7,4 @@ install:
 	protostar install
 
 test:
-	protostar test tests/units/project tests/units/offset
+	protostar test tests/units/project tests/units/offset tests/units/yield

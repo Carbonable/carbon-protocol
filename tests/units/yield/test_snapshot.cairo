@@ -25,37 +25,35 @@ func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     let (local contract_address: felt) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [1, 0]) %}
 
-    %{ stop_mock_getAbsorption = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ stop_mock_getCurrentAbsorption = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
+    %{ stop_mock_getAbsorption = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ stop_mock_getCurrentAbsorption = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
-    // Deposit token #1
-    let (success) = CarbonableOffseter.deposit(token_id=one);
+    // Deposit value 1 from token #1
+    let (success) = CarbonableOffseter.deposit(token_id=one, value=one);
     assert success = 1;
 
     %{
-        stop_mock_getTotalClaimable = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1])
-        stop_mock_getTotalClaimed = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [1])
-        stop_mock_getClaimableOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1])
-        stop_mock_getClaimedOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [1])
+        stop_mock_getTotalAbsorption = mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000])
+        stop_mock_getAbsorptionOf = mock_call(context.mocks.carbonable_offseter_address, "getAbsorptionOf", [1000000])
         stop_warp = warp(blk_timestamp=100)
         expect_events(dict(name="Snapshot", data=dict(
             project=context.mocks.carbonable_project_address,
             previous_time=0,
-            previous_project_absorption=1,
+            previous_project_absorption=1000000,
             previous_offseter_absorption=0,
             previous_yielder_absorption=0,
             current_time=100,
-            current_project_absorption=3,
-            current_offseter_absorption=2,
-            current_yielder_absorption=2,
-            period_project_absorption=2,
-            period_offseter_absorption=2,
-            period_yielder_absorption=2,
+            current_project_absorption=3000000,
+            current_offseter_absorption=2000000,
+            current_yielder_absorption=2000000,
+            period_project_absorption=2000000,
+            period_offseter_absorption=2000000,
+            period_yielder_absorption=2000000,
         )))
     %}
     CarbonableYielder.snapshot();
@@ -66,31 +64,27 @@ func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
         stop_warp()
         stop_mock_getAbsorption()
         stop_mock_getCurrentAbsorption()
-        stop_mock_getTotalClaimable()
-        stop_mock_getTotalClaimed()
-        stop_mock_getClaimableOf()
-        stop_mock_getClaimedOf()
-        stop_mock_getAbsorption = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [3])
-        stop_mock_getCurrentAbsorption = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [6])
-        stop_mock_getTotalClaimable = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1])
-        stop_mock_getTotalClaimed = mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [2])
-        stop_mock_getClaimableOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1])
-        stop_mock_getClaimedOf = mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2])
+        stop_mock_getTotalAbsorption()
+        stop_mock_getAbsorptionOf()
+        mock_call(context.mocks.carbonable_project_address, "getAbsorption", [3000000])
+        mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [6000000])
+        mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [3000000])
+        mock_call(context.mocks.carbonable_offseter_address, "getAbsorptionOf", [3000000])
         store(target_contract_address=ids.contract_address, variable_name="CarbonableYielder_vested_", value=[1], )
         stop_warp = warp(blk_timestamp=200)
         expect_events(dict(name="Snapshot", data=dict(
             project=context.mocks.carbonable_project_address,
             previous_time=100,
-            previous_project_absorption=3,
-            previous_offseter_absorption=2,
-            previous_yielder_absorption=2,
+            previous_project_absorption=3000000,
+            previous_offseter_absorption=2000000,
+            previous_yielder_absorption=2000000,
             current_time=200,
-            current_project_absorption=6,
-            current_offseter_absorption=3,
-            current_yielder_absorption=3,
-            period_project_absorption=3,
-            period_offseter_absorption=1,
-            period_yielder_absorption=1,
+            current_project_absorption=6000000,
+            current_offseter_absorption=3000000,
+            current_yielder_absorption=3000000,
+            period_project_absorption=3000000,
+            period_offseter_absorption=1000000,
+            period_yielder_absorption=1000000,
         )))
     %}
     CarbonableYielder.snapshot();
@@ -130,16 +124,16 @@ func test_snapshot_revert_not_possible{
     let (local contract_address: felt) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [3000000]) %}
 
-    %{ stop_mock_getAbsorption = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ stop_mock_getCurrentAbsorption = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
-
-    // Deposit token #1
-    let (success) = CarbonableOffseter.deposit(token_id=one);
+    // Deposit value 1 from token #1
+    let (success) = CarbonableOffseter.deposit(token_id=one, value=one);
     assert success = 1;
 
     %{

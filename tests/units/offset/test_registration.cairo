@@ -88,7 +88,7 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     %{ stop() %}
 
     let (count) = CarbonableOffseter.total_user_count();
-    assert count = 1;
+    assert count = 2;
 
     let (user) = CarbonableOffseter.user_by_index(index=count - 1);
     assert user = admin_address;

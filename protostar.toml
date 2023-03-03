@@ -19,7 +19,7 @@ CarbonableMetadata = ["src/metadata/metadata.cairo"]
 # CarbonableMinter = ["src/mint/minter.cairo"]
 CarbonableVester = ["src/vesting/vester.cairo"]
 CarbonableOffseter = ["src/offset/offseter.cairo"]
-# CarbonableYielder = ["src/yield/yielder.cairo"]
+CarbonableYielder = ["src/yield/yielder.cairo"]
 
 [test]
 target = ["tests"]

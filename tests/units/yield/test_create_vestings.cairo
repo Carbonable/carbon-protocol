@@ -33,28 +33,18 @@ func test_create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     let (contract_address) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getStartTime", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getFinalTime", [3]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getTonEquivalent", [1000000]) %}
-
-    %{ mock_call(context.mocks.carbonable_minter_address, "getTotalValue", [100, 0]) %}
-
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [2]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2]) %}
-
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
     %{ mock_call(context.mocks.carbonable_vester_address, "withdrawable_amount", [ids.TOTAL_AMOUNT, 0]) %}
     %{ mock_call(context.mocks.carbonable_vester_address, "create_vesting", [1]) %}
 
-    // Deposit token #1
-    CarbonableOffseter.deposit(token_id=one);
+    // Deposit value 1 from token #1
+    CarbonableOffseter.deposit(token_id=one, value=one);
 
     // Snapshot
     %{ stop_warp = warp(blk_timestamp=100) %}
@@ -105,26 +95,20 @@ func test_create_vestings_revert_not_vestable{
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
     let (contract_address) = get_contract_address();
+    let anyone_address = context.signers.anyone;
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3]) %}
-
-    %{ mock_call(context.mocks.carbonable_minter_address, "getTotalValue", [100, 0]) %}
-
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [1]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [2]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2]) %}
-
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
     %{ mock_call(context.mocks.carbonable_vester_address, "withdrawable_amount", [ids.TOTAL_AMOUNT - 1, 0]) %}
 
-    // Deposit token #1
-    CarbonableOffseter.deposit(token_id=one);
+    // Deposit value 1 from token #1
+    CarbonableOffseter.deposit(token_id=one, value=one);
 
     // Snapshot
     %{ stop_warp = warp(blk_timestamp=100) %}
@@ -155,23 +139,17 @@ func test_create_vestings_no_absorption{
     let (contract_address) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [ids.contract_address]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [0]) %}
-
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimable", [0]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalClaimed", [0]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimableOf", [1]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getClaimedOf", [2]) %}
-
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [0]) %}
     %{ mock_call(context.mocks.carbonable_vester_address, "withdrawable_amount", [ids.TOTAL_AMOUNT, 0]) %}
-    %{ mock_call(context.mocks.carbonable_vester_address, "create_vesting", [1]) %}
 
-    // Deposit token #1
-    CarbonableOffseter.deposit(token_id=one);
+    // Deposit value 1 from token #1
+    CarbonableOffseter.deposit(token_id=one, value=one);
 
     // Snapshot
     %{ stop_warp = warp(blk_timestamp=100) %}

@@ -5,14 +5,14 @@
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_in_range
-from starkware.cairo.common.math_cmp import is_not_zero
+from starkware.cairo.common.math import assert_not_zero, assert_in_range
 from starkware.cairo.common.uint256 import (
     Uint256,
     uint256_check,
     uint256_eq,
     uint256_mul_div_mod,
     uint256_le,
+    assert_uint256_le,
 )
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
@@ -256,9 +256,8 @@ namespace CarbonableOffseter {
     func set_min_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         min_claimable: felt
     ) -> () {
-        let not_zero = is_not_zero(min_claimable);
         with_attr error_message("CarbonableOffseter: min claimable balance must be not null") {
-            assert not_zero = TRUE;
+            assert_not_zero(min_claimable);
         }
         CarbonableOffseter_min_claimable_.write(min_claimable);
         return ();
@@ -591,9 +590,8 @@ namespace CarbonableOffseter {
         // [Check] value is less than or equal to the registered value
         let (caller) = get_caller_address();
         let (registered_value) = CarbonableOffseter_registered_value_.read(caller);
-        let (is_lower) = uint256_le(value, registered_value);
         with_attr error_message("CarbonableOffseter: value is higher than the withdrawable value") {
-            assert is_lower = TRUE;
+            assert_uint256_le(value, registered_value);
         }
 
         // [Effect] Store cumulated claimable
@@ -630,29 +628,6 @@ namespace CarbonableOffseter {
 
         // [Effect] Emit event
         Withdraw.emit(address=caller, value=value, time=current_time);
-
-        // [Effect] Remove the caller if registered value reached zero
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(new_value, zero);
-        if (is_zero == TRUE) {
-            let (length) = CarbonableOffseter_users_len_.read();
-            let last_index = length - 1;
-            let (last_user) = CarbonableOffseter_users_.read(last_index);
-            let (user_index) = CarbonableOffseter_users_index_.read(caller);
-
-            // Overwrite user with last user
-            CarbonableOffseter_users_len_.write(last_index);
-            CarbonableOffseter_users_.write(user_index, last_user);
-            CarbonableOffseter_users_index_.write(last_user, user_index);
-            // Remove last user index
-            CarbonableOffseter_users_.write(last_index, 0);
-            // Remove user index
-            CarbonableOffseter_users_index_.write(user_index, 0);
-
-            // [Security] End reetrancy guard
-            ReentrancyGuard.end();
-            return (success=TRUE);
-        }
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
