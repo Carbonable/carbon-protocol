@@ -36,6 +36,12 @@ namespace ICarbonableYielder {
     func renounceOwnership() {
     }
 
+    func setSnapshoter(snapshoter: felt) {
+    }
+
+    func getSnapshoter() -> (snapshoter: felt) {
+    }
+
     //
     // Views
     //
