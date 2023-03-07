@@ -138,7 +138,7 @@ namespace CarbonableYielder {
         alloc_locals;
 
         // [Check] At least 1 user registered
-        CarbonableYielder_assert.is_snapshotable();
+        CarbonableYielder_assert.snapshotable();
 
         let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
         let (slot) = CarbonableOffseter.carbonable_project_slot();
@@ -217,8 +217,8 @@ namespace CarbonableYielder {
         alloc_locals;
 
         // [Check] Snapshot has been executed and vestable
-        CarbonableYielder_assert.is_snapshoted();
-        CarbonableYielder_assert.is_vestable(total_amount);
+        CarbonableYielder_assert.snapshoted();
+        CarbonableYielder_assert.vestable(total_amount);
 
         // [Check] Contribution not null
         let (yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
@@ -371,7 +371,7 @@ namespace CarbonableYielder {
 
 // Assert helpers
 namespace CarbonableYielder_assert {
-    func is_snapshoted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    func snapshoted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         // [Check] Snapshot has been executed
         let (time) = CarbonableYielder.snapshoted_time();
         with_attr error_message(
@@ -381,7 +381,7 @@ namespace CarbonableYielder_assert {
         return ();
     }
 
-    func is_snapshotable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    func snapshotable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         // [Check] Previous vesting has been executed
         let (status) = CarbonableYielder_vested_.read();
         with_attr error_message(
@@ -416,7 +416,7 @@ namespace CarbonableYielder_assert {
         return ();
     }
 
-    func is_vestable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func vestable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         total_amount: felt
     ) {
         // [Check] Vesting has not been already executed
