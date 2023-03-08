@@ -310,12 +310,6 @@ namespace CarbonableMinter {
         let (total_value_uint256) = IERC3525.totalValue(project_address, carbonable_project_slot);
         let (value_uint256) = SafeUint256.sub_le(sold_out_value_uint256, total_value_uint256);
 
-        %{
-            print("total_value", ids.total_value_uint256.low, ids.total_value_uint256.high)
-            print("sold_out_value", ids.sold_out_value_uint256.low, ids.sold_out_value_uint256.high)
-            print("value", ids.value_uint256.low, ids.value_uint256.high)
-        %}
-
         let (nothing_left) = uint256_eq(Uint256(0, 0), value_uint256);
         if (nothing_left != TRUE) {
             // [Interaction] ERC20 transfer
