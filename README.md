@@ -87,17 +87,7 @@ callgraphs.sh
 
 ## 🚀 Deployment
 
-```bash
-# On testnet
-./scripts/deploy.sh -p testnet -a carbonable
-```
-
-With:
-
-- `testnet` profile defined in protostar config file (testnet for alpha-goerli)
-- `carbonable` alias to the admin account (optional if it is your `__default__` acount, see also starknet account [documentation](https://starknet.io/docs/hello_starknet/account_setup.html))
-
-Contract addresses will be logged into the prompt.
+See [How to deploy Carbonable Protocol](https://carbonable.notion.site/How-to-deploy-Carbonable-Protocol-099b947ee1c74ff0923bbcf2178b5979)
 
 ### Inputs
 
