@@ -89,6 +89,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Instantiate minter
     CarbonableMinter.initializer(
         carbonable_project_address=carbonable_project_address,
+        carbonable_project_slot=Uint256(project_slot, 0),
         payment_token_address=payment_token_address,
         public_sale_open=public_sale_open,
         max_value_per_tx=max_value_per_tx,
@@ -96,7 +97,6 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         max_value=max_value,
         unit_price=unit_price,
         reserved_value=reserved_value,
-        project_slot=Uint256(project_slot, 0),
     );
 
     // Instantiate context, useful to avoid many hints in tests

@@ -46,7 +46,7 @@ func test_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
     %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ warp(blk_timestamp=200) %}
-    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, amount=2, time=200))) %}
+    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, value=dict(low=2,high=0), time=200))) %}
     let (success) = CarbonableMinter.public_buy(2);
     assert success = TRUE;
     %{ stop() %}
@@ -54,7 +54,7 @@ func test_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @external
-func test_buy_revert_not_enough_nfts_available{
+func test_buy_revert_not_enough_value_available{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // User: anyone
@@ -78,17 +78,17 @@ func test_buy_revert_not_enough_nfts_available{
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    let amount = 2;
+    let value = 2;
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [10, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    CarbonableMinter.public_buy(amount);
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available value") %}
+    CarbonableMinter.public_buy(value);
     %{ stop() %}
     return ();
 }
 
 @external
-func test_buy_revert_not_enough_free_nfts{
+func test_buy_revert_not_enough_available_value{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // User: anyone
@@ -115,7 +115,7 @@ func test_buy_revert_not_enough_free_nfts{
     let quantity = 2;
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available value") %}
     CarbonableMinter.public_buy(quantity);
     %{ stop() %}
     return ();
@@ -215,7 +215,7 @@ func test_buy_revert_null_quantity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     let quantity = 0;
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: amount must be not null") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: value must be non-negative") %}
     CarbonableMinter.public_buy(quantity);
     %{ stop() %}
     return ();

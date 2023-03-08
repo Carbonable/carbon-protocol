@@ -70,12 +70,12 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, amount=2, time=200))) %}
+    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, value=dict(low=2, high=0), time=200))) %}
     let (success) = CarbonableMinter.pre_buy(
         allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        amount=2,
+        value=2,
     );
     assert success = TRUE;
     %{ stop() %}
@@ -122,12 +122,12 @@ func test_buy_user_whitelisted_but_not_enough_allocation{
     %{ stop=start_prank(context.signers.anyone) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [3, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: amount not allowed") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: value not allowed") %}
     CarbonableMinter.pre_buy(
         allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        amount=6,
+        value=6,
     );
     %{ stop() %}
     return ();
@@ -176,7 +176,7 @@ func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
         allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        amount=5,
+        value=5,
     );
 
     // Expect error
@@ -188,7 +188,7 @@ func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
         allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        amount=1,
+        value=1,
     );
     %{ stop() %}
     return ();
@@ -232,7 +232,7 @@ func test_buy_revert_not_whitelisted{
         allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        amount=2,
+        value=2,
     );
     %{ stop() %}
     return ();

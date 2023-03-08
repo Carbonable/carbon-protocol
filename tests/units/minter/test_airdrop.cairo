@@ -39,7 +39,7 @@ func test_airdrop_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     %{ stop=start_prank(context.signers.admin) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
-    CarbonableMinter.airdrop(to=context.signers.anyone, amount=5);
+    CarbonableMinter.airdrop(to=context.signers.anyone, value=5);
     %{ stop() %}
     return ();
 }
@@ -72,7 +72,7 @@ func test_airdrop_revert_not_enough_value_available{
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [6, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available value") %}
-    CarbonableMinter.airdrop(to=context.signers.anyone, amount=5);
+    CarbonableMinter.airdrop(to=context.signers.anyone, value=5);
     %{ stop() %}
     return ();
 }
@@ -105,7 +105,7 @@ func test_airdrop_revert_not_enough_reserved_value{
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [6, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved value") %}
-    CarbonableMinter.airdrop(to=context.signers.anyone, amount=2);
+    CarbonableMinter.airdrop(to=context.signers.anyone, value=2);
     %{ stop() %}
     return ();
 }
