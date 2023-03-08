@@ -436,7 +436,7 @@ func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return CarbonableMinter.public_buy(quantity);
 }
 
-// @notice Purchase any remaining value less than min-value_per_tx after sold_out
+// @notice Purchase any remaining value less than min_value_per_tx after sold_out
 // @dev The caller must be the owner
 //   The project must be in sold_out state
 //   The transfer must succeed.
