@@ -93,8 +93,9 @@ callgraphs.sh
 ```
 
 With:
+
 - `testnet` profile defined in protostar config file (testnet for alpha-goerli)
-- `carbonable` alias to the admin account (optional if it is your `__default__`  acount, see also starknet account [documentation](https://starknet.io/docs/hello_starknet/account_setup.html))
+- `carbonable` alias to the admin account (optional if it is your `__default__` acount, see also starknet account [documentation](https://starknet.io/docs/hello_starknet/account_setup.html))
 
 Contract addresses will be logged into the prompt.
 
@@ -108,15 +109,15 @@ After deployment, the **admin** account (according to parameters) is the owner o
 So far, you have to do the following actions manually:
 
 - Change the NFT contract owner from **admin** to **Minter contract**
-  * How: _Voyager > Write contract > `transferOwnership`_
-  * Verify: _Voyager > Read contract > `owner`_
+  - How: _Voyager > Write contract > `transferOwnership`_
+  - Verify: _Voyager > Read contract > `owner`_
 - Approve the **Minter contract** to spend the **admin payment tokens**
-  * How: Voyager > _Write contract > `approve`_
-  * Verify: Voyager > _Read contract > `allowance`_
+  - How: Voyager > _Write contract > `approve`_
+  - Verify: Voyager > _Read contract > `allowance`_
 - Buy NFT through the **Minter contract**
-  * How: _Voyager > Write contract > `buy`_
-  * Verify: _Voyager > Read contract > `balanceOf` (of the NFT contract)_
+  - How: _Voyager > Write contract > `buy`_
+  - Verify: _Voyager > Read contract > `balanceOf` (of the NFT contract)_
 
 ## 📄 License
 
-**carbonable-starknet-protocol** is released under the [MIT](LICENSE).
+**carbon-protocol** is released under the [MIT](LICENSE).
