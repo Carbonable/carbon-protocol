@@ -33,6 +33,7 @@ from src.utils.access.library import CarbonableAccessControl
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
+    carbonable_project_slot: Uint256,
     payment_token_address: felt,
     public_sale_open: felt,
     max_value_per_tx: felt,
@@ -40,11 +41,11 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     max_value: felt,
     unit_price: felt,
     reserved_value: felt,
-    project_slot: Uint256,
     owner: felt,
 ) {
     CarbonableMinter.initializer(
         carbonable_project_address,
+        carbonable_project_slot,
         payment_token_address,
         public_sale_open,
         max_value_per_tx,
@@ -52,7 +53,6 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
         max_value,
         unit_price,
         reserved_value,
-        project_slot,
     );
     Ownable.initializer(owner);
     Proxy.initializer(owner);
@@ -192,8 +192,8 @@ func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return CarbonableMinter.public_sale_open();
 }
 
-// @notice Return the max amount that can be purchased in a single tx.
-// @return max_value_per_tx The max amount that can be purchased in a single tx.
+// @notice Return the max value that can be purchased in a single tx.
+// @return max_value_per_tx The max value that can be purchased in a single tx.
 @view
 func getMaxValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max_value_per_tx: felt
@@ -201,8 +201,8 @@ func getMaxValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return CarbonableMinter.max_value_per_tx();
 }
 
-// @notice Return the min amount that can be purchased in a single tx.
-// @return min_value_per_tx The max amount that can be purchased in a single tx.
+// @notice Return the min value that can be purchased in a single tx.
+// @return min_value_per_tx The max value that can be purchased in a single tx.
 @view
 func getMinValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     min_value_per_tx: felt
@@ -261,7 +261,7 @@ func getWhitelistAllocation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 
 // @notice Return the value already minted by an account of the whitelist allocation.
 // @param account The address of the account to check.
-// @return value The amount of claimed .
+// @return value The value already claimed.
 @view
 func getClaimedValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt
@@ -284,7 +284,7 @@ func isSoldOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func getProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     slot: Uint256
 ) {
-    return CarbonableMinter.project_slot();
+    return CarbonableMinter.carbonable_project_slot();
 }
 
 //
@@ -313,9 +313,9 @@ func setPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return CarbonableMinter.set_public_sale_open(public_sale_open);
 }
 
-// @notice Set a new max amount per tx during purchase.
+// @notice Set a new max value per tx during purchase.
 // @dev Only callable by the contract owner.
-// @param max_value_per_tx The max amount per tx.
+// @param max_value_per_tx The max value per tx.
 @external
 func setMaxValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     max_value_per_tx: felt
@@ -324,9 +324,9 @@ func setMaxValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return CarbonableMinter.set_max_value_per_tx(max_value_per_tx);
 }
 
-// @notice Set a new min amount per tx during purchase.
+// @notice Set a new min value per tx during purchase.
 // @dev Only callable by the contract owner.
-// @param min_value_per_tx The min amount per tx.
+// @param min_value_per_tx The min value per tx.
 @external
 func setMinValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     min_value_per_tx: felt
@@ -348,7 +348,7 @@ func setUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
 // @notice Decrease the reserved value for airdrops by the given value.
 // @dev Only callable by the contract owner.
-// @param value The amount of value to substract to the reserved value.
+// @param value The value to substract to the reserved value.
 @external
 func decreaseReservedValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     value: felt
@@ -362,7 +362,7 @@ func decreaseReservedValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 //   The caller can't be the zero address.
 //   The value must be less than or equal to the available reserved value.
 //   The value must be less than or equal to the available value.
-// @param value The amount of value to add to the reserved value.
+// @param value The value to add to the reserved value.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
