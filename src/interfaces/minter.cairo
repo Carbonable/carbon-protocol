@@ -49,7 +49,7 @@ namespace ICarbonableMinter {
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
-    func getProjectSlot() -> (project_slot: Uint256) {
+    func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
     }
 
     func getPaymentTokenAddress() -> (payment_token_address: felt) {
@@ -109,10 +109,10 @@ namespace ICarbonableMinter {
     func setUnitPrice(unit_price: felt) {
     }
 
-    func decreaseReservedVlue(value: felt) {
+    func decreaseReservedValue(value: felt) {
     }
 
-    func airdrop(to: felt, amount: felt) -> (success: felt) {
+    func airdrop(to: felt, value: felt) -> (success: felt) {
     }
 
     func withdraw() -> (success: felt) {
@@ -121,9 +121,9 @@ namespace ICarbonableMinter {
     func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
     }
 
-    func preBuy(value: felt, proof_len: felt, proof: felt*, amount: felt) -> (success: felt) {
+    func preBuy(allocation: felt, proof_len: felt, proof: felt*, value: felt) -> (success: felt) {
     }
 
-    func publicBuy(amount: felt) -> (success: felt) {
+    func publicBuy(value: felt) -> (success: felt) {
     }
 }
