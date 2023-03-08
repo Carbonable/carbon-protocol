@@ -26,23 +26,132 @@ func test_sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
 
-    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalSupply", [9, 0]) %}
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [9, 0]) %}
     let (sold_out) = CarbonableMinter.sold_out();
     assert sold_out = FALSE;
     %{ stop_mock() %}
 
-    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalSupply", [10, 0]) %}
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [10, 0]) %}
     let (sold_out) = CarbonableMinter.sold_out();
     assert sold_out = TRUE;
+    %{ stop_mock() %}
+
+    return ();
+}
+
+@external
+func test_finalize_after_sold_out_without_remaining{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare minter instance
+    let (local context) = prepare(
+        public_sale_open=TRUE,
+        max_value_per_tx=5,
+        min_value_per_tx=2,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
+    );
+
+    // run scenario
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [8, 0]) %}
+    let (sold_out) = CarbonableMinter.sold_out();
+    assert sold_out = FALSE;
+    %{ stop_mock() %}
+
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [10, 0]) %}
+    let (sold_out) = CarbonableMinter.sold_out();
+    assert sold_out = TRUE;
+    %{ stop_mock() %}
+
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [10, 0]) %}
+    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    let (success) = CarbonableMinter.finalize(to=123456789);
+    assert success = TRUE;
+    %{ stop_mock() %}
+
+    return ();
+}
+
+@external
+func test_finalize_after_sold_out_with_remaining{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare minter instance
+    let (local context) = prepare(
+        public_sale_open=TRUE,
+        max_value_per_tx=5,
+        min_value_per_tx=2,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
+    );
+
+    // run scenario
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [8, 0]) %}
+    let (sold_out) = CarbonableMinter.sold_out();
+    assert sold_out = FALSE;
+    %{ stop_mock() %}
+
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [9, 0]) %}
+    let (sold_out) = CarbonableMinter.sold_out();
+    assert sold_out = TRUE;
+    %{ stop_mock() %}
+
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [9, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337, 0]) %}
+    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    let (success) = CarbonableMinter.finalize(to=123456789);
+    assert success = TRUE;
+
+    return ();
+}
+
+@external
+func test_finalize_reverts_before_sold_out{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare minter instance
+    let (local context) = prepare(
+        public_sale_open=TRUE,
+        max_value_per_tx=5,
+        min_value_per_tx=2,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
+    );
+
+    // run scenario
+    %{ stop=start_prank(context.signers.anyone) %}
+
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [8, 0]) %}
+    let (sold_out) = CarbonableMinter.sold_out();
+    assert sold_out = FALSE;
+    %{ stop_mock() %}
+
+    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [8, 0]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not sold out") %}
+    let (success) = CarbonableMinter.finalize(to=123456789);
     %{ stop_mock() %}
 
     return ();

@@ -19,18 +19,20 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
+    let public_sale_open = TRUE;
+    let max_value_per_tx = 20;
+    let min_value_per_tx = 1;
+    let max_value = 1000;
+    let unit_price = 50 * 10 ** 6;
+    let reserved_value = 300;
     // prepare minter instance
-    let public_sale_open = FALSE;
-    let max_buy_per_tx = 5;
-    let unit_price = Uint256(10, 0);
-    let max_supply_for_mint = Uint256(10, 0);
-    let reserved_supply_for_mint = Uint256(5, 0);
     let (local context) = prepare(
         public_sale_open=public_sale_open,
-        max_buy_per_tx=max_buy_per_tx,
+        max_value_per_tx=max_value_per_tx,
+        min_value_per_tx=min_value_per_tx,
+        max_value=max_value,
         unit_price=unit_price,
-        max_supply_for_mint=max_supply_for_mint,
-        reserved_supply_for_mint=reserved_supply_for_mint,
+        reserved_value=reserved_value,
     );
 
     // run scenario
@@ -48,14 +50,20 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (returned_public_sale_open) = CarbonableMinter.public_sale_open();
     assert returned_public_sale_open = public_sale_open;
 
-    let (returned_max_buy_per_tx) = CarbonableMinter.max_buy_per_tx();
-    assert returned_max_buy_per_tx = max_buy_per_tx;
+    let (returned_max_value_per_tx) = CarbonableMinter.max_value_per_tx();
+    assert returned_max_value_per_tx = max_value_per_tx;
+
+    let (returned_min_value_per_tx) = CarbonableMinter.min_value_per_tx();
+    assert returned_min_value_per_tx = min_value_per_tx;
 
     let (returned_unit_price) = CarbonableMinter.unit_price();
     assert returned_unit_price = unit_price;
 
-    let (returned_reserved_supply_for_mint) = CarbonableMinter.reserved_supply_for_mint();
-    assert returned_reserved_supply_for_mint = reserved_supply_for_mint;
+    let (returned_max_value) = CarbonableMinter.max_value();
+    assert returned_max_value = max_value;
+
+    let (returned_reserved_value) = CarbonableMinter.reserved_value();
+    assert returned_reserved_value = reserved_value;
     %{ stop() %}
 
     return ();
@@ -67,45 +75,34 @@ func test_initialization_revert_unit_price_invalid{
 }() {
     alloc_locals;
 
-    // prepare minter instance
-    let public_sale_open = FALSE;
-    let max_buy_per_tx = 5;
-    let unit_price = Uint256(10, -1);
-    let max_supply_for_mint = Uint256(10, 0);
-    let reserved_supply_for_mint = Uint256(5, 0);
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: unit_price is not a valid Uint256") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: unit_price should be non-negative") %}
     let (local context) = prepare(
-        public_sale_open=public_sale_open,
-        max_buy_per_tx=max_buy_per_tx,
-        unit_price=unit_price,
-        max_supply_for_mint=max_supply_for_mint,
-        reserved_supply_for_mint=reserved_supply_for_mint,
+        public_sale_open=FALSE,
+        max_value_per_tx=20,
+        min_value_per_tx=1,
+        max_value=1000,
+        unit_price=-1,
+        reserved_value=300,
     );
 
     return ();
 }
 
 @external
-func test_initialization_revert_max_supply_for_mint_invalid{
+func test_initialization_revert_max_value_invalid{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     alloc_locals;
 
     // prepare minter instance
-    let public_sale_open = FALSE;
-    let max_buy_per_tx = 5;
-    let unit_price = Uint256(10, 0);
-    let max_supply_for_mint = Uint256(10, -1);
-    let reserved_supply_for_mint = Uint256(5, 0);
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: max_supply_for_mint is not a valid Uint256") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: reserved_value should be smaller than max_value") %}
     let (local context) = prepare(
-        public_sale_open=public_sale_open,
-        max_buy_per_tx=max_buy_per_tx,
-        unit_price=unit_price,
-        max_supply_for_mint=max_supply_for_mint,
-        reserved_supply_for_mint=reserved_supply_for_mint,
+        public_sale_open=FALSE,
+        max_value_per_tx=20,
+        min_value_per_tx=1,
+        max_value=-1,
+        unit_price=50 * 10 ** 6,
+        reserved_value=300,
     );
 
     return ();
@@ -118,19 +115,14 @@ func test_initialization_revert_reserved_supply_for_mint_invalid{
     alloc_locals;
 
     // prepare minter instance
-    let public_sale_open = FALSE;
-    let max_buy_per_tx = 5;
-    let unit_price = Uint256(10, 0);
-    let max_supply_for_mint = Uint256(10, 0);
-    let reserved_supply_for_mint = Uint256(5, -1);
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: reserved_supply_for_mint is not a valid Uint256") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: reserved_value should be non-negative") %}
     let (local context) = prepare(
-        public_sale_open=public_sale_open,
-        max_buy_per_tx=max_buy_per_tx,
-        unit_price=unit_price,
-        max_supply_for_mint=max_supply_for_mint,
-        reserved_supply_for_mint=reserved_supply_for_mint,
+        public_sale_open=FALSE,
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=50 * 10 ** 6,
+        reserved_value=-1,
     );
 
     return ();
