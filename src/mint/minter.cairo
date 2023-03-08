@@ -9,10 +9,15 @@ from starkware.cairo.common.uint256 import Uint256
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.upgrades.library import Proxy
+from migrator.library import Migrator
 
 // Local dependencies
 from src.mint.library import CarbonableMinter
 from src.utils.access.library import CarbonableAccessControl
+from src.utils.initializer.library import CarbonableInitializer
+
+// Constants
+const MIGRATION = 'MIGRATION';
 
 //
 // Initializer
@@ -146,6 +151,79 @@ func getWithdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     withdrawer: felt
 ) {
     return CarbonableAccessControl.get_withdrawer();
+}
+
+//
+// Migrator
+//
+
+// @notice Return the 721 source address that has been setup.
+// @return address The 721 source address.
+@view
+func getMigrationSourceAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) -> (address: felt) {
+    CarbonableInitializer.assert_initialized(MIGRATION);
+    let (address) = Migrator.source_address();
+    return (address=address);
+}
+
+// @notice Return the 3525 target address that has been setup.
+// @return address The 3525 target address.
+@view
+func getMigrationTargetAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) -> (address: felt) {
+    CarbonableInitializer.assert_initialized(MIGRATION);
+    let (address) = Migrator.target_address();
+    return (address=address);
+}
+
+// @notice Return the migration slot that has been setup.
+// @return slot The migration slot.
+@view
+func getMigrationSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    slot: Uint256
+) {
+    CarbonableInitializer.assert_initialized(MIGRATION);
+    let (slot) = Migrator.slot();
+    return (slot=slot);
+}
+
+// @notice Return the migration value that has been setup.
+// @return value The migration value.
+@view
+func getMigrationValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    value: Uint256
+) {
+    CarbonableInitializer.assert_initialized(MIGRATION);
+    let (value) = Migrator.value();
+    return (value=value);
+}
+
+// @notice Initialize the migration.
+// @param source_address The 721 source address.
+// @param target_address The 3525 target address.
+// @param slot The target slot to mint in.
+// @param value The target value to mint.
+@external
+func initializeMigration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    source_address: felt, target_address: felt, slot: Uint256, value: Uint256
+) {
+    Ownable.assert_only_owner();
+    Migrator.initializer(source_address, target_address, slot, value);
+    CarbonableInitializer.initialize(MIGRATION);
+    return ();
+}
+
+// @notice Migrate token from 721 to 3525 return the new token id.
+// @param tokenId The 721 token id to migrate.
+// @return newTokenId The new 3525 token minted.
+@external
+func migrate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) -> (
+    newTokenId: Uint256
+) {
+    CarbonableInitializer.assert_initialized(MIGRATION);
+    let (new_token_id) = Migrator.migrate(token_id=tokenId);
+    return (newTokenId=new_token_id);
 }
 
 //

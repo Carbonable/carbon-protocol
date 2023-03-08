@@ -16,6 +16,7 @@ sources:
   offseter: ./src/offset/offseter.cairo
   vester: ./src/vesting/vester.cairo
   badge_minter: ./src/badge/minter.cairo
+  project_3525: ./lib/cairo_erc_3525/src/erc3525/presets/ERC3525MintableBurnable.cairo
 
 selector:
   initializer: 1295919550572838631247819983596733806859788957403169325509326258146877103642
