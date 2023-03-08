@@ -41,10 +41,11 @@ func test_withdraw_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario

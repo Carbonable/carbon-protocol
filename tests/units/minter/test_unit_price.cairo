@@ -22,20 +22,21 @@ func test_set_unit_price_nominal_case{
     alloc_locals;
 
     // prepare minter instance
-    let unit_price = Uint256(10, 0);
+    let unit_price = 10 * 10 ** 6;
     let (local context) = prepare(
-        public_sale_open=FALSE,
-        max_buy_per_tx=5,
+        public_sale_open=TRUE,
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
         unit_price=unit_price,
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        reserved_value=0,
     );
 
     // run scenario
     let (initial_price) = CarbonableMinter.unit_price();
     assert initial_price = unit_price;
 
-    let new_price = Uint256(20, 0);
+    let new_price = 20;
     CarbonableMinter.set_unit_price(new_price);
     let (returned_price) = CarbonableMinter.unit_price();
     assert returned_price = new_price;
@@ -51,16 +52,17 @@ func test_set_unit_price_revert_unit_price_invalid{
 
     // prepare minter instance
     let (local context) = prepare(
-        public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        public_sale_open=TRUE,
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario
-    let new_price = Uint256(20, -1);
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: unit_price is not a valid Uint256") %}
+    let new_price = -1;
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: unit_price should be non-negative") %}
     CarbonableMinter.set_unit_price(new_price);
 
     return ();

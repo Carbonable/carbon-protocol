@@ -33,19 +33,20 @@ func test_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ warp(blk_timestamp=200) %}
-    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, amount=dict(low=20, high=0), quantity=2, time=200))) %}
+    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, amount=2, time=200))) %}
     let (success) = CarbonableMinter.public_buy(2);
     assert success = TRUE;
     %{ stop() %}
@@ -68,19 +69,20 @@ func test_buy_revert_not_enough_nfts_available{
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    let quantity = 2;
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [10, 0]) %}
+    let amount = 2;
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [10, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    CarbonableMinter.public_buy(quantity);
+    CarbonableMinter.public_buy(amount);
     %{ stop() %}
     return ();
 }
@@ -101,16 +103,17 @@ func test_buy_revert_not_enough_free_nfts{
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(9, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=9,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2;
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.public_buy(quantity);
@@ -134,16 +137,17 @@ func test_buy_revert_transfer_failed{
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2;
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: transfer failed") %}
     CarbonableMinter.public_buy(quantity);
@@ -166,16 +170,17 @@ func test_buy_revert_mint_not_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2;
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: public sale is not open") %}
     CarbonableMinter.public_buy(quantity);
@@ -198,18 +203,19 @@ func test_buy_revert_null_quantity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 0;
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: quantity must be not null") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: amount must be not null") %}
     CarbonableMinter.public_buy(quantity);
     %{ stop() %}
     return ();

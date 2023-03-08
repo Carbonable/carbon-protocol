@@ -25,10 +25,11 @@ func test_set_unit_price_nominal_case{
     let public_sale_open = FALSE;
     let (local context) = prepare(
         public_sale_open=public_sale_open,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // run scenario

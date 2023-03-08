@@ -24,10 +24,11 @@ func test_set_whitelist_merkle_root_nominal_case{
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // admin sets whitelist merkle root
@@ -38,13 +39,13 @@ func test_set_whitelist_merkle_root_nominal_case{
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
     CarbonableMinter.set_whitelist_merkle_root(context.whitelist.merkle_root);
-    let (returned_slots) = CarbonableMinter.whitelisted_slots(
+    let (returned_allocation) = CarbonableMinter.whitelist_allocation(
         account=context.signers.anyone,
-        slots=context.whitelist.slots,
+        allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
     );
-    assert returned_slots = context.whitelist.slots;
+    assert returned_allocation = context.whitelist.allocations;
     %{ stop() %}
     return ();
 }

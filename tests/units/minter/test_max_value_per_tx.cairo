@@ -16,28 +16,29 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_set_unit_price_nominal_case{
+func test_set_max_value_per_tx_nominal_case{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     alloc_locals;
 
     // prepare minter instance
-    let max_buy_per_tx = 5;
+    let max_value_per_tx = 20;
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=max_buy_per_tx,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=max_value_per_tx,
+        min_value_per_tx=1,
+        max_value=1000,
+        unit_price=50 * 10 ** 6,
+        reserved_value=300,
     );
 
     // run scenario
-    let (initial_value) = CarbonableMinter.max_buy_per_tx();
-    assert initial_value = max_buy_per_tx;
+    let (initial_value) = CarbonableMinter.max_value_per_tx();
+    assert initial_value = max_value_per_tx;
 
     let new_value = 3;
-    CarbonableMinter.set_max_buy_per_tx(new_value);
-    let (returned_value) = CarbonableMinter.max_buy_per_tx();
+    CarbonableMinter.set_max_value_per_tx(new_value);
+    let (returned_value) = CarbonableMinter.max_value_per_tx();
     assert returned_value = new_value;
 
     return ();
