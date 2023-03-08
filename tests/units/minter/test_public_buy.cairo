@@ -112,11 +112,11 @@ func test_buy_revert_not_enough_available_value{
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    let quantity = 2;
+    let value = 2;
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available value") %}
-    CarbonableMinter.public_buy(quantity);
+    CarbonableMinter.public_buy(value);
     %{ stop() %}
     return ();
 }
@@ -146,11 +146,11 @@ func test_buy_revert_transfer_failed{
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    let quantity = 2;
+    let value = 2;
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: transfer failed") %}
-    CarbonableMinter.public_buy(quantity);
+    CarbonableMinter.public_buy(value);
     %{ stop() %}
     return ();
 }
@@ -179,18 +179,17 @@ func test_buy_revert_mint_not_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    let quantity = 2;
+    let value = 2;
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: public sale is not open") %}
-    CarbonableMinter.public_buy(quantity);
+    CarbonableMinter.public_buy(value);
     %{ stop() %}
     return ();
 }
 
 @external
-func test_buy_revert_null_quantity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) {
+func test_buy_revert_zero_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // User: anyone
     // Wants to buy 0 NFTs
     // Whitelisted sale: CLOSED
@@ -212,11 +211,11 @@ func test_buy_revert_null_quantity{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    let quantity = 0;
+    let value = 0;
     %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: value must be non-negative") %}
-    CarbonableMinter.public_buy(quantity);
+    CarbonableMinter.public_buy(value);
     %{ stop() %}
     return ();
 }

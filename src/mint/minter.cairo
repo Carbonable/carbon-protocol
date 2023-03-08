@@ -281,9 +281,8 @@ func isSoldOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // @notice Return the project slot where tokens will be minted.
 // @return slot The project slot.
 @view
-func getProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    slot: Uint256
-) {
+func getCarbonableProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) -> (slot: Uint256) {
     return CarbonableMinter.carbonable_project_slot();
 }
 
@@ -400,13 +399,13 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return CarbonableMinter.transfer(token_address, recipient, amount);
 }
 
-// @notice Purchase -quantity- tokens while proving the caller is part of the merkle tree while pre sale is open.
-// @dev The pre sale must be open.
+// @notice Purchase -value- while proving the caller is part of the merkle tree during pre-sale.
+// @dev The pre-sale must be open.
 //   The caller must be part of the merkle tree.
 //   The value must be not null.
 //   The value must be less than or equal to the max buy per tx.
 //   The value must be less than or equal to the remaining whitelisted value.
-//   The quvalueantity must be less than or equal to the available value.
+//   The value must be less than or equal to the available value.
 //   The transfer must succeed.
 // @param allocation The associated value recorded in the merkle root.
 // @param proof_len The proof array length.
@@ -420,20 +419,20 @@ func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return CarbonableMinter.pre_buy(allocation, proof_len, proof, value);
 }
 
-// @notice Purchase -quantity- tokens while public sale is open.
+// @notice Purchase -value- while public sale is open.
 // @dev The public sale must be open.
 //   The caller can't be the zero address.
-//   The quantity must be not null.
-//   The quantity must be less than or equal to the max buy per tx.
-//   The quantity must be less than or equal to the available value.
+//   The value must be not null.
+//   The value must be less than or equal to the max value per tx.
+//   The value must be less than or equal to the available value.
 //   The transfer must succeed.
-// @param quantity The quantity of tokens to buy.
+// @param value The value to buy.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
-func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
+func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(value: felt) -> (
     success: felt
 ) {
-    return CarbonableMinter.public_buy(quantity);
+    return CarbonableMinter.public_buy(value);
 }
 
 // @notice Purchase any remaining value less than min_value_per_tx after sold_out
