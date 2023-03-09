@@ -221,7 +221,7 @@ func test_initialize_migration_revert_not_owner{
     alloc_locals;
 
     %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.initialize_migration(0, 0, 0, 0);
+    anyone.initialize_migration(0, 0, 0);
 
     return ();
 }
