@@ -585,8 +585,8 @@ namespace CarbonableMinter {
             assert_le(value, max_value_per_tx);
         }
 
-        // [Effect] If remaining_value is not null and force is enabled
-        // Then replace value by available_value
+        // [Effect] If remaining value is lower than specified value and force is enabled
+        // Then replace the specified value by the remaining value otherwize keep the value unchanged
         let (max_value) = CarbonableMinter_max_value_.read();
         let (reserved_value) = CarbonableMinter_reserved_value_.read();
         let (available_value_u256) = _felt_to_uint(max_value - reserved_value);
@@ -599,11 +599,9 @@ namespace CarbonableMinter {
         let (value_u256) = _felt_to_uint(value);
         let (is_lower) = uint256_lt(remaining_value, value_u256);
 
-        // [Effect] If remaining value is lower than specified value and force is enabled
-        // Then replace the specified value by the remaining value otherwize keep the value unchanged
+        // Set value = condition * remaining_value + (1 - condition) * value
         let (condition) = _felt_to_uint(is_lower * force);
         let (not_condition) = _felt_to_uint(1 - is_lower * force);
-        // Set value = condition * remaining_value + (1 - condition) * value
         let (left) = SafeUint256.mul(condition, remaining_value);
         let (right) = SafeUint256.mul(not_condition, value_u256);
         let (value_u256) = SafeUint256.add(left, right);
