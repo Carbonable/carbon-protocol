@@ -411,12 +411,13 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // @param proof_len The proof array length.
 // @param proof The merkle proof associated to the account and allocation.
 // @param value The token value to buy.
+// @param force A boolean allowing to spend less than desired in case of low supply left.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    allocation: felt, proof_len: felt, proof: felt*, value: felt
+    allocation: felt, proof_len: felt, proof: felt*, value: felt, force: felt
 ) -> (success: felt) {
-    return CarbonableMinter.pre_buy(allocation, proof_len, proof, value);
+    return CarbonableMinter.pre_buy(allocation, proof_len, proof, value, force);
 }
 
 // @notice Purchase -value- while public sale is open.
@@ -427,25 +428,11 @@ func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //   The value must be less than or equal to the available value.
 //   The transfer must succeed.
 // @param value The value to buy.
+// @param force A boolean allowing to spend less than desired in case of low supply left.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
-func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(value: felt) -> (
-    success: felt
-) {
-    return CarbonableMinter.public_buy(value);
-}
-
-// @notice Purchase any remaining value less than min_value_per_tx after sold_out
-// @dev The caller must be the owner
-//   The project must be in sold_out state
-//   The transfer must succeed.
-//   The receiver address cannot be zero
-// @param to The address of the receiver
-// @return success TRUE if it succeeded, FALSE otherwise.
-@external
-func finalize{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(to: felt) -> (
-    success: felt
-) {
-    Ownable.assert_only_owner();
-    return CarbonableMinter.finalize(to);
+func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    value: felt, force: felt
+) -> (success: felt) {
+    return CarbonableMinter.public_buy(value, force);
 }
