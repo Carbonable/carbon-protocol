@@ -76,6 +76,7 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
         value=2,
+        force=FALSE,
     );
     assert success = TRUE;
     %{ stop() %}
@@ -128,6 +129,7 @@ func test_buy_user_whitelisted_but_not_enough_allocation{
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
         value=6,
+        force=FALSE,
     );
     %{ stop() %}
     return ();
@@ -177,6 +179,7 @@ func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
         value=5,
+        force=FALSE,
     );
 
     // Expect error
@@ -189,6 +192,7 @@ func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
         value=1,
+        force=FALSE,
     );
     %{ stop() %}
     return ();
@@ -233,6 +237,7 @@ func test_buy_revert_not_whitelisted{
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
         value=2,
+        force=FALSE,
     );
     %{ stop() %}
     return ();
