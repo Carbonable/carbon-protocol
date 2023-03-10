@@ -35,7 +35,7 @@ from erc3525.IERC3525Full import IERC3525Full as IERC3525
 
 // Local dependencies
 from src.mint.merkletree import MerkleTree
-from src.utils.type.library import _felt_to_uint
+from src.utils.type.library import _felt_to_uint, _uint_to_felt
 
 //
 // Events
@@ -519,17 +519,19 @@ namespace CarbonableMinter {
             assert_le(value, available_value);
         }
 
-        // [Effect] Update claimed value
-        let new_claimed_value = claimed_value + value;
-        CarbonableMinter_claimed_value_.write(caller, new_claimed_value);
-
         // [Interaction] Buy
-        let (success) = buy(value, force);
+        let (minted_value) = buy(value, force);
+        // Safe conversion since the minted value is lower or equal to the specified value in felt
+        let (minted_value_felt) = _uint_to_felt(minted_value);
+
+        // [Effect] Update claimed value
+        let new_claimed_value = claimed_value + minted_value_felt;
+        CarbonableMinter_claimed_value_.write(caller, new_claimed_value);
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
-        return (success,);
+        return (success=TRUE,);
     }
 
     func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -545,12 +547,12 @@ namespace CarbonableMinter {
         }
 
         // [Interaction] Buy
-        let (success) = buy(value, force);
+        buy(value, force);
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
-        return (success,);
+        return (success=TRUE,);
     }
 
     //
@@ -559,7 +561,7 @@ namespace CarbonableMinter {
 
     func buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         value: felt, force: felt
-    ) -> (success: felt) {
+    ) -> (minted_value: Uint256) {
         alloc_locals;
 
         // [Check] value is not zero
@@ -648,9 +650,9 @@ namespace CarbonableMinter {
             // Emit sold out event
             SoldOut.emit(time=current_time);
 
-            return (TRUE,);
+            return (minted_value=value_u256,);
         }
 
-        return (TRUE,);
+        return (minted_value=value_u256,);
     }
 }
