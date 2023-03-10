@@ -269,3 +269,25 @@ func test_buy_revert_zero_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     %{ stop() %}
     return ();
 }
+
+@external
+func test_buy_revert_not_boolean{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
+    alloc_locals;
+
+    // prepare minter instance
+    let (local context) = prepare(
+        public_sale_open=TRUE,
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
+    );
+
+    // run scenario
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: force must be either 0 or 1") %}
+    CarbonableMinter.public_buy(value=1, force=-1);
+
+    return ();
+}

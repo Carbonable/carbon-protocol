@@ -312,8 +312,9 @@ namespace CarbonableMinter {
         public_sale_open: felt
     ) {
         // [Check] Input is a boolean
-        with_attr error_message("CarbonableMinter: public_sale_open must be 0 or 1") {
-            assert_nn_le(public_sale_open, 1);
+        let is_not_boolean = is_not_zero(public_sale_open * (1 - public_sale_open));
+        with_attr error_message("CarbonableMinter: public_sale_open must be either 0 or 1") {
+            assert is_not_boolean = FALSE;
         }
 
         // [Effect] Update storage
@@ -567,8 +568,9 @@ namespace CarbonableMinter {
         }
 
         // [Check] force is a boolean
+        let is_not_boolean = is_not_zero(force * (1 - force));
         with_attr error_message("CarbonableMinter: force must be either 0 or 1") {
-            assert_nn_le(force, 1);
+            assert is_not_boolean = FALSE;
         }
 
         // [Check] Not zero address
