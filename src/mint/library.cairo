@@ -602,11 +602,11 @@ namespace CarbonableMinter {
         let (is_lower) = uint256_lt(remaining_value, value_u256);
 
         // Set value = condition * remaining_value + (1 - condition) * value
-        let (condition) = _felt_to_uint(is_lower * force);
-        let (not_condition) = _felt_to_uint(1 - is_lower * force);
-        let (left) = SafeUint256.mul(condition, remaining_value);
-        let (right) = SafeUint256.mul(not_condition, value_u256);
-        let (value_u256) = SafeUint256.add(left, right);
+        let condition = is_lower * force;
+        let not_condition = 1 - condition;
+        let cond_low = condition * remaining_value.low + not_condition * value_u256.low;
+        let cond_high = condition * remaining_value.high + not_condition * value_u256.high;
+        let value_u256 = Uint256(low=cond_low, high=cond_high);
 
         // [Check] Enough value available
         let (value_after_buy) = SafeUint256.add(total_value, value_u256);
