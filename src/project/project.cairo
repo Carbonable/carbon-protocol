@@ -147,6 +147,62 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
+// @notice Add new minter.
+// @dev Throws if the caller is not the owner.
+// @param minter The minter address.
+@external
+func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256, minter: felt
+) {
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_minter(slot, minter);
+    return ();
+}
+
+// @notice Get the list of minters.
+// @return minters_len The array length.
+// @return minters The minter addresses.
+@view
+func getMinters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
+    minters_len: felt, minters: felt*
+) {
+    return CarbonableAccessControl.get_minters(slot);
+}
+
+// @notice Revoke minter role.
+// @dev Throws if the caller is not the owner.
+// @param minter The minter address.
+@external
+func revokeMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256, minter: felt
+) {
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.revoke_minter(slot, minter);
+    return ();
+}
+
+// @notice Add new certifier.
+// @dev Throws if the caller is not the owner.
+// @param certifier The certifier address.
+@external
+func setCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256, certifier: felt
+) {
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_certifier(slot, certifier);
+    return ();
+}
+
+// @notice Get the certifier.
+// @return certifier The certifier address.
+@view
+func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (certifier: felt) {
+    let (certifier) = CarbonableAccessControl.get_certifier(slot);
+    return (certifier=certifier);
+}
+
 //
 // ERC165
 //
@@ -564,20 +620,20 @@ func setMetadataImplementation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
 // @notice Mint the token id to the specified -to- address.
 // @dev Throws if the caller does not have the MINTER_ROLE role.
 //   Throws if -to- is the zero address.
-//   Throws if -token_id- is not a valid Uint256.
+//   Throws if -tokenId- is not a valid Uint256.
 //   Throws if -slot- is not a valid Uint256.
 //   Throws if -value- is not a valid Uint256.
-//   Throws if token_id already minted.
+//   Throws if tokenId already minted.
 // @param to Recipient address.
-// @param token_id The token id.
+// @param tokenId The token id.
 // @param slot Slot number the new token will belong to.
 // @param value Token value to mint.
 @external
 func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    to: felt, token_id: Uint256, slot: Uint256, value: Uint256
+    to: felt, tokenId: Uint256, slot: Uint256, value: Uint256
 ) {
-    CarbonableAccessControl.assert_only_minter();
-    return ERC3525SlotEnumerable._mint(to, token_id, slot, value);
+    CarbonableAccessControl.assert_only_minter(slot);
+    return ERC3525SlotEnumerable._mint(to, tokenId, slot, value);
 }
 
 // @notice Mint a new token to the specified -to- address.
@@ -591,10 +647,10 @@ func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 @external
 func mintNew{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     to: felt, slot: Uint256, value: Uint256
-) -> (token_id: Uint256) {
-    CarbonableAccessControl.assert_only_minter();
+) -> (tokenId: Uint256) {
+    CarbonableAccessControl.assert_only_minter(slot);
     let (token_id) = ERC3525SlotEnumerable._mint_new(to, slot, value);
-    return (token_id=token_id);
+    return (tokenId=token_id);
 }
 
 // @notice Mint value of the specified token.
@@ -602,40 +658,41 @@ func mintNew{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 //   Throws if -to- is the zero address.
 //   Throws if -slot- is not a valid Uint256.
 //   Throws if -value- is not a valid Uint256.
-// @param token_id The token id.
+// @param tokenId The token id.
 // @param value Token value to mint.
 @external
 func mintValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    token_id: Uint256, value: Uint256
+    tokenId: Uint256, value: Uint256
 ) {
-    CarbonableAccessControl.assert_only_minter();
-    ERC3525._mint_value(token_id, value);
+    let (slot) = ERC3525.slot_of(tokenId);
+    CarbonableAccessControl.assert_only_minter(slot);
+    ERC3525._mint_value(tokenId, value);
     return ();
 }
 
 // @notice Burn the specified token.
 // @dev Throws if the caller is not the token owner nor approved.
-//   Throws if -token_id- is not a valid Uint256.
-// @param token_id The token id.
+//   Throws if -tokenId- is not a valid Uint256.
+// @param tokenId The token id.
 @external
-func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(token_id: Uint256) {
-    ERC721.assert_only_token_owner(token_id);
-    ERC3525SlotEnumerable._burn(token_id);
+func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) {
+    ERC721.assert_only_token_owner(tokenId);
+    ERC3525SlotEnumerable._burn(tokenId);
     return ();
 }
 
 // @notice Burn value of the specified token.
 // @dev Throws if the caller is not the token owner nor approved.
-//   Throws if -token_id- is not a valid Uint256.
+//   Throws if -tokenId- is not a valid Uint256.
 //   Throws if -value- is not a valid Uint256.
-// @param token_id The token id.
+// @param tokenId The token id.
 // @param value The token value to burn.
 @external
 func burnValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    token_id: Uint256, value: Uint256
+    tokenId: Uint256, value: Uint256
 ) {
-    ERC721.assert_only_token_owner(token_id);
-    ERC3525._burn_value(token_id, value);
+    ERC721.assert_only_token_owner(tokenId);
+    ERC3525._burn_value(tokenId, value);
     return ();
 }
 
@@ -810,58 +867,6 @@ func isSetup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(sl
     return CarbonableProject.is_setup(slot=slot);
 }
 
-// @notice Add new minter.
-// @dev Throws if the caller is not the owner.
-// @param minter The minter address.
-@external
-func addMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
-    Ownable.assert_only_owner();
-    CarbonableAccessControl.set_minter(minter);
-    return ();
-}
-
-// @notice Get the list of minters.
-// @return minters_len The array length.
-// @return minters The minter addresses.
-@view
-func getMinters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    minters_len: felt, minters: felt*
-) {
-    return CarbonableAccessControl.get_minters();
-}
-
-// @notice Revoke minter role.
-// @dev Throws if the caller is not the owner.
-// @param minter The minter address.
-@external
-func revokeMinter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter: felt) {
-    Ownable.assert_only_owner();
-    CarbonableAccessControl.revoke_minter(minter);
-    return ();
-}
-
-// @notice Add new certifier.
-// @dev Throws if the caller is not the owner.
-// @param certifier The certifier address.
-@external
-func setCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    certifier: felt
-) {
-    Ownable.assert_only_owner();
-    CarbonableAccessControl.set_certifier(certifier);
-    return ();
-}
-
-// @notice Get the certifier.
-// @return certifier The certifier address.
-@view
-func getCertifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    certifier: felt
-) {
-    let (certifier) = CarbonableAccessControl.get_certifier();
-    return (certifier=certifier);
-}
-
 // @notice Set new absorption values.
 // @dev The caller must have the CERTIFIER_ROLE role.
 //   Throws if -slot- is not Uint256 compliant.
@@ -884,7 +889,7 @@ func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     absorptions: felt*,
     ton_equivalent: felt,
 ) {
-    CarbonableAccessControl.assert_only_certifier();
+    CarbonableAccessControl.assert_only_certifier(slot);
     return CarbonableProject.set_absorptions(
         slot=slot,
         times_len=times_len,
