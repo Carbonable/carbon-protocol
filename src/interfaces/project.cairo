@@ -36,19 +36,19 @@ namespace ICarbonableProject {
     func renounceOwnership() {
     }
 
-    func addMinter(minter: felt) {
+    func addMinter(slot: Uint256, minter: felt) {
     }
 
-    func revokeMinter(minter: felt) {
+    func revokeMinter(slot: Uint256, minter: felt) {
     }
 
-    func getMinters() -> (minters_len: felt, minters: felt*) {
+    func getMinters(slot: Uint256) -> (minters_len: felt, minters: felt*) {
     }
 
-    func setCertifier(certifier: felt) {
+    func setCertifier(slot: Uint256, certifier: felt) {
     }
 
-    func getCertifier() -> (certifier: felt) {
+    func getCertifier(slot: Uint256) -> (certifier: felt) {
     }
 
     //
