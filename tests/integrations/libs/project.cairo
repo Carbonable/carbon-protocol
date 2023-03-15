@@ -120,7 +120,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (minters_len, minters) = ICarbonableProject.getMinters(
-            contract_address=contract_address, slot_u256
+            contract_address=contract_address, slot=slot_u256
         );
         return (minters_len, minters);
     }
@@ -131,7 +131,9 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
-        ICarbonableProject.revokeMinter(contract_address, slot_u256, minter);
+        ICarbonableProject.revokeMinter(
+            contract_address=contract_address, slot=slot_u256, minter=minter
+        );
         %{ stop_prank() %}
         return ();
     }
@@ -142,7 +144,9 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
-        ICarbonableProject.setCertifier(contract_address, slot_u256, certifier);
+        ICarbonableProject.setCertifier(
+            contract_address=contract_address, slot=slot_u256, certifier=certifier
+        );
         %{ stop_prank() %}
         return ();
     }
@@ -153,9 +157,9 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (certifier) = ICarbonableProject.getCertifier(
-            contract_address=contract_address, slot_u256
+            contract_address=contract_address, slot=slot_u256
         );
-        return (certifier);
+        return (certifier,);
     }
 
     //
@@ -166,8 +170,10 @@ namespace instance {
         interface_id: felt
     ) -> (success: felt) {
         let (contract_address) = instance.get_address();
-        let (success) = IERC721.supportsInterface(contract_address=contract_address, interface_id);
-        return (success);
+        let (success) = IERC721.supportsInterface(
+            contract_address=contract_address, interfaceId=interface_id
+        );
+        return (success,);
     }
 
     //
@@ -176,23 +182,23 @@ namespace instance {
 
     func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (name: felt) {
         let (contract_address) = instance.get_address();
-        let (name) = IERC721Metadata.name(contract_address);
-        return (name);
+        let (name) = IERC721Metadata.name(contract_address=contract_address);
+        return (name,);
     }
 
     func symbol{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         symbol: felt
     ) {
         let (contract_address) = instance.get_address();
-        let (symbol) = IERC721Metadata.symbol(contract_address);
-        return (symbol);
+        let (symbol) = IERC721Metadata.symbol(contract_address=contract_address);
+        return (symbol,);
     }
 
     func balance_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         owner: felt
     ) -> (balance: felt) {
         let (contract_address) = instance.get_address();
-        let (balance_u256) = IERC721.balanceOf(contract_address, owner);
+        let (balance_u256) = IERC721.balanceOf(contract_address=contract_address, owner=owner);
         let (balance) = _uint_to_felt(balance_u256);
         return (balance,);
     }
@@ -259,12 +265,12 @@ namespace instance {
     }
 
     func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr, caller: felt}(
-        to: felt, token_id: felt
+        approved: felt, token_id: felt
     ) {
         let (contract_address) = instance.get_address();
         let (token_id_u256) = _felt_to_uint(token_id);
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
-        IERC721.approve(contract_address, to, token_id_u256);
+        IERC721.approve(contract_address, approved, token_id_u256);
         %{ stop_prank() %}
         return ();
     }
@@ -453,7 +459,11 @@ namespace instance {
         let (slot_u256) = _felt_to_uint(slot);
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
         IERC3525.setApprovalForSlot(
-            contract_address=contract_address, owner, slot_u256, operator, approved
+            contract_address=contract_address,
+            owner=owner,
+            slot=slot_u256,
+            operator=operator,
+            approved=approved,
         );
         %{ stop_prank() %}
         return ();
@@ -671,7 +681,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (time) = ICarbonableProject.getStartTime(contract_address, slot_u256);
-        return (time);
+        return (time,);
     }
 
     func get_final_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -680,7 +690,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (time) = ICarbonableProject.getFinalTime(contract_address, slot_u256);
-        return (time);
+        return (time,);
     }
 
     func get_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: felt) -> (
@@ -713,7 +723,7 @@ namespace instance {
         let (absorption) = ICarbonableProject.getAbsorption(
             contract_address=contract_address, slot_u256, time
         );
-        return (absorption);
+        return (absorption,);
     }
 
     func get_current_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -722,9 +732,9 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (absorption) = ICarbonableProject.getCurrentAbsorption(
-            contract_address=contract_address, slot_u256
+            contract_address=contract_address, slot=slot_u256
         );
-        return (absorption);
+        return (absorption,);
     }
 
     func get_final_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -733,9 +743,9 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (absorption) = ICarbonableProject.getFinalAbsorption(
-            contract_address=contract_address, slot_u256
+            contract_address=contract_address, slot=slot_u256
         );
-        return (absorption);
+        return (absorption,);
     }
 
     func get_ton_equivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -744,7 +754,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
-            contract_address=contract_address, slot_u256
+            contract_address=contract_address, slot=slot_u256
         );
         return (ton_equivalent);
     }
@@ -754,7 +764,9 @@ namespace instance {
     ) {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
-        let (status) = ICarbonableProject.isSetup(contract_address, slot_u256);
+        let (status) = ICarbonableProject.isSetup(
+            contract_address=contract_address, slot=slot_u256
+        );
         return (status);
     }
 

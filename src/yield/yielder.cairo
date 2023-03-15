@@ -8,6 +8,7 @@ from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
@@ -136,6 +137,20 @@ func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     snapshoter: felt
 ) {
     return CarbonableAccessControl.get_snapshoter();
+}
+
+//
+// ERC165
+//
+
+// @notice Return the ability status to support the provided interface (EIP 165).
+// @param interfaceId Interface id.
+// @return success TRUE if supported else FALSE.
+@view
+func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    interfaceId: felt
+) -> (success: felt) {
+    return ERC165.supports_interface(interfaceId);
 }
 
 //

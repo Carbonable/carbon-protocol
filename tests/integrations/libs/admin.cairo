@@ -4,20 +4,15 @@
 
 // Starkware dependencies
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.bool import TRUE, FALSE
+from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_eq
-from starkware.cairo.common.math import assert_not_zero, assert_not_equal
-
-// Project dependencies
-from openzeppelin.security.safemath.library import SafeUint256
 
 // Local dependencies
 from tests.integrations.libs.project import instance as carbonable_project_instance
 from tests.integrations.libs.token import instance as payment_token_instance
 from tests.integrations.libs.minter import instance as carbonable_minter_instance
 // from tests.integrations.libs.vester import instance as carbonable_vester_instance
-// from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
+from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
 // from tests.integrations.libs.yielder import instance as carbonable_yielder_instance
 
 //
@@ -52,7 +47,21 @@ namespace instance {
         approved: felt, token_id: felt
     ) {
         let (caller) = get_address();
-        carbonable_project_instance.approve(approved=approved, token_id=token_id, caller=caller);
+        with caller {
+            carbonable_project_instance.approve(approved=approved, token_id=token_id);
+        }
+        return ();
+    }
+
+    func set_approval_for_slot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: felt, operator: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            carbonable_project_instance.set_approval_for_slot(
+                owner=caller, slot=slot, operator=operator, approved=TRUE
+            );
+        }
         return ();
     }
 
@@ -231,6 +240,115 @@ namespace instance {
         }
         let (returned_balance) = payment_token_instance.balance_of(account=caller);
         assert returned_balance = initial_balance + contract_balance;
+        return ();
+    }
+
+    func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        value: felt, force: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            let (success) = carbonable_minter_instance.public_buy(value=value, force=force);
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    // Offseter
+
+    func set_min_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        min_claimable: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            carbonable_offseter_instance.set_min_claimable(min_claimable=min_claimable);
+            let (returned_min_claimable) = carbonable_offseter_instance.get_min_claimable();
+            assert returned_min_claimable = min_claimable;
+        }
+        return ();
+    }
+
+    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) {
+        let (caller) = get_address();
+        with caller {
+            let (initial_claimable) = carbonable_offseter_instance.get_claimable_of(address=caller);
+            let (initial_claimed) = carbonable_offseter_instance.get_claimed_of(address=caller);
+            let (success) = carbonable_offseter_instance.claim(quantity=quantity);
+            assert success = TRUE;
+            let (returned_claimable) = carbonable_offseter_instance.get_claimable_of(
+                address=caller
+            );
+            assert returned_claimable = initial_claimable - quantity;
+            let (returned_claimed) = carbonable_offseter_instance.get_claimed_of(address=caller);
+            assert returned_claimed = initial_claimed + quantity;
+        }
+        return ();
+    }
+
+    func claim_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (caller) = get_address();
+        with caller {
+            let (initial_claimable) = carbonable_offseter_instance.get_claimable_of(address=caller);
+            let (initial_claimed) = carbonable_offseter_instance.get_claimed_of(address=caller);
+            let (success) = carbonable_offseter_instance.claim_all();
+            assert success = TRUE;
+            let (returned_claimable) = carbonable_offseter_instance.get_claimable_of(
+                address=caller
+            );
+            assert returned_claimable = 0;
+            let (returned_claimed) = carbonable_offseter_instance.get_claimed_of(address=caller);
+            assert returned_claimed = initial_claimed + initial_claimable;
+        }
+        return ();
+    }
+
+    func offseter_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: felt, value: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            let (initial_deposited) = carbonable_offseter_instance.get_deposited_of(address=caller);
+            let (success) = carbonable_offseter_instance.deposit(token_id=token_id, value=value);
+            assert success = TRUE;
+            let (returned_deposited) = carbonable_offseter_instance.get_deposited_of(
+                address=caller
+            );
+            assert returned_deposited = initial_deposited + value;
+        }
+        return ();
+    }
+
+    func offseter_withdraw_to{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        value: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            let (initial_deposited) = carbonable_offseter_instance.get_deposited_of(address=caller);
+            let (success) = carbonable_offseter_instance.withdraw_to(value=value);
+            assert success = TRUE;
+            let (returned_deposited) = carbonable_offseter_instance.get_deposited_of(
+                address=caller
+            );
+            assert returned_deposited = initial_deposited - value;
+        }
+        return ();
+    }
+
+    func offseter_withdraw_to_token{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(token_id: felt, value: felt) -> (success: felt) {
+        let (caller) = get_address();
+        with caller {
+            let (initial_deposited) = carbonable_offseter_instance.get_deposited_of(address=caller);
+            let (success) = carbonable_offseter_instance.withdraw_to_token(
+                token_id=token_id, value=value
+            );
+            assert success = TRUE;
+            let (returned_deposited) = carbonable_offseter_instance.get_deposited_of(
+                address=caller
+            );
+            assert returned_deposited = initial_deposited - value;
+        }
         return ();
     }
 }

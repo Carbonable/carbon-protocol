@@ -8,6 +8,7 @@ from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
@@ -110,6 +111,20 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     Ownable.renounce_ownership();
     return ();
+}
+
+//
+// ERC165
+//
+
+// @notice Return the ability status to support the provided interface (EIP 165).
+// @param interfaceId Interface id.
+// @return success TRUE if supported else FALSE.
+@view
+func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    interfaceId: felt
+) -> (success: felt) {
+    return ERC165.supports_interface(interfaceId);
 }
 
 //
@@ -233,9 +248,9 @@ func setMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     return CarbonableOffseter.set_min_claimable(min_claimable=min_claimable);
 }
 
-// @notice Deposit tokens to the project.
+// @notice Claim the specified quantity of claimable.
 // @dev Quantity cannot be higher than the caller total claimable.
-// @param token_id The token id.
+// @param quantity The quantity to claim
 // @return success The success status.
 @external
 func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
