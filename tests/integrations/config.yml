@@ -1,6 +1,9 @@
 project:
   name: Project
   symbol: NFT
+  decimals: 2
+  fee_numerator: 5
+  fee_denominator: 100
 
 token:
   name: Token
@@ -9,11 +12,13 @@ token:
   initial_supply: 1000000
 
 minter:
+  slot: 1
   public_sale_open: 0
-  max_buy_per_tx: 5
+  max_value_per_tx: 5
+  min_value_per_tx: 1
   unit_price: 10
-  max_supply_for_mint: 10
-  reserved_supply_for_mint: 4
+  max_value: 10
+  reserved_value: 4
 
 absorption:
   ton_equivalent: 1000000
