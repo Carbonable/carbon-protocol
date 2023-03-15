@@ -7,17 +7,17 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 // Local dependencies
-from tests.integrations.protocol.libs.project import instance as carbonable_project_instance
-from tests.integrations.protocol.libs.token import instance as payment_token_instance
-from tests.integrations.protocol.libs.minter import instance as carbonable_minter_instance
-from tests.integrations.protocol.libs.vester import instance as carbonable_vester_instance
-from tests.integrations.protocol.libs.offseter import instance as carbonable_offseter_instance
-from tests.integrations.protocol.libs.yielder import instance as carbonable_yielder_instance
-from tests.integrations.protocol.libs.admin import instance as admin_instance
-from tests.integrations.protocol.libs.anyone import instance as anyone_instance
-from tests.integrations.protocol.libs.certifier import instance as certifier_instance
-from tests.integrations.protocol.libs.snapshoter import instance as snapshoter_instance
-from tests.integrations.protocol.libs.withdrawer import instance as withdrawer_instance
+from tests.integrations.libs.project import instance as carbonable_project_instance
+from tests.integrations.libs.token import instance as payment_token_instance
+from tests.integrations.libs.minter import instance as carbonable_minter_instance
+// from tests.integrations.libs.vester import instance as carbonable_vester_instance
+// from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
+// from tests.integrations.libs.yielder import instance as carbonable_yielder_instance
+from tests.integrations.libs.admin import instance as admin_instance
+from tests.integrations.libs.anyone import instance as anyone_instance
+from tests.integrations.libs.certifier import instance as certifier_instance
+// from tests.integrations.libs.snapshoter import instance as snapshoter_instance
+from tests.integrations.libs.withdrawer import instance as withdrawer_instance
 
 //
 // Functions
@@ -25,6 +25,7 @@ from tests.integrations.protocol.libs.withdrawer import instance as withdrawer_i
 
 func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
+    local slot;
     local merkle_root;
     local ton_equivalent;
     local times_len;
@@ -36,7 +37,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         import sys
         sys.path.append('.')
         from tests import load, MerkleTree
-        load("./tests/integrations/minter/config.yml", context)
+        load("./tests/integrations/config.yml", context)
 
         # Admin account deployment
         context.admin_account_contract = deploy_contract(
@@ -59,14 +60,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             contract=context.sources.account,
             constructor_args={
                 "public_key": context.signers.certifier,
-            },
-        ).contract_address
-
-        # Snapshoter account deployment
-        context.snapshoter_account_contract = deploy_contract(
-            contract=context.sources.account,
-            constructor_args={
-                "public_key": context.signers.snapshoter,
             },
         ).contract_address
 
@@ -95,6 +88,10 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         calldata = {
             "name": context.project.name,
             "symbol": context.project.symbol,
+            "decimals": context.project.decimals,
+            "receiver": context.admin_account_contract,
+            "fee_numerator": context.project.fee_numerator,
+            "fee_denominator": context.project.fee_denominator,
             "owner": context.admin_account_contract,
         }
         context.carbonable_project_contract = deploy_contract(
@@ -108,17 +105,18 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
         # Carbonable minter deployment
         context.carbonable_minter_class_hash = declare(contract=context.sources.minter).class_hash
+
         calldata = {
             "carbonable_project_address": context.carbonable_project_contract,
+            "carbonable_project_slot_low": context.minter.slot,
+            "carbonable_project_slot_high": 0,
             "payment_token_address": context.payment_token_contract,
             "public_sale_open": context.minter.public_sale_open,
-            "max_buy_per_tx": context.minter.max_buy_per_tx,
-            "unit_price_low": context.minter.unit_price,
-            "unit_price_high": 0,
-            "max_supply_for_mint_low": context.minter.max_supply_for_mint,
-            "max_supply_for_mint_high": 0,
-            "reserved_supply_for_mint_low": context.minter.reserved_supply_for_mint,
-            "reserved_supply_for_mint_high": 0,
+            "max_value_per_tx": context.minter.max_value_per_tx,
+            "min_value_per_tx": context.minter.min_value_per_tx,
+            "max_value": context.minter.max_value,
+            "unit_price": context.minter.unit_price,
+            "reserved_value": context.minter.reserved_value,
             "owner": context.admin_account_contract,
         }
         context.carbonable_minter_contract = deploy_contract(
@@ -130,58 +128,10 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             }
         ).contract_address
 
-        # Carbonable vester deployment
-        context.carbonable_vester_class_hash = declare(contract=context.sources.vester).class_hash
-        calldata = {
-            "erc20_address": context.payment_token_contract,
-            "owner": context.admin_account_contract,
-        }
-        context.carbonable_vester_contract = deploy_contract(
-            contract=context.sources.proxy,
-            constructor_args={
-                "implementation_hash": context.carbonable_vester_class_hash,
-                "selector": context.selector.initializer,
-                "calldata": calldata.values(),
-            }
-        ).contract_address
-
-        # Carbonable offseter deployment
-        context.carbonable_offseter_class_hash = declare(contract=context.sources.offseter).class_hash
-        calldata = {
-            "carbonable_project_address": context.carbonable_project_contract,
-            "min_claimable": context.absorption.ton_equivalent,
-            "owner": context.admin_account_contract,
-        }
-        context.carbonable_offseter_contract = deploy_contract(
-            contract=context.sources.proxy,
-            constructor_args={
-                "implementation_hash": context.carbonable_offseter_class_hash,
-                "selector": context.selector.initializer,
-                "calldata": calldata.values(),
-            }
-        ).contract_address
-
-        # Carbonable yielder deployment
-        context.carbonable_yielder_class_hash = declare(contract=context.sources.yielder).class_hash
-        calldata = {
-            "carbonable_project_address": context.carbonable_project_contract,
-            "carbonable_offseter_address": context.carbonable_offseter_contract,
-            "carbonable_vester_address": context.carbonable_vester_contract,
-            "owner": context.admin_account_contract,
-        }
-        context.carbonable_yielder_contract = deploy_contract(
-            contract=context.sources.proxy,
-            constructor_args={
-                "implementation_hash": context.carbonable_yielder_class_hash,
-                "selector": context.selector.initializer,
-                "calldata": calldata.values(),
-            }
-        ).contract_address
-
         # Build merkle tree
         recipients = [context.anyone_account_contract, context.admin_account_contract]
-        slots = [5, 5]
-        merkle_leaves = MerkleTree.get_leaves(recipients, slots)
+        allocations = [5, 5]
+        merkle_leaves = MerkleTree.get_leaves(recipients, allocations)
         merkle_root = MerkleTree.generate_merkle_root(merkle_leaves)
         merkle_proofs = [
             MerkleTree.generate_merkle_proof(merkle_leaves, index)
@@ -193,7 +143,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         context.whitelist = dict(
             merkle_root=merkle_root,
             merkle_proofs=merkle_proofs,
-            slots=slots,
+            allocations=allocations,
             recipients=recipients,
         )
         ids.ton_equivalent = context.absorption.ton_equivalent
@@ -203,25 +153,22 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ids.absorptions_len = len(context.absorption.values)
         for idx, value in enumerate(context.absorption.values):
             memory[ids.absorptions + idx] = value
+        ids.slot = context.minter.slot
     %}
     // Get protocol addresses
     let (local admin_address) = admin_instance.get_address();
     let (local certifier_address) = certifier_instance.get_address();
-    let (local snapshoter_address) = snapshoter_instance.get_address();
     let (local withdrawer_address) = withdrawer_instance.get_address();
     let (local carbonable_minter) = carbonable_minter_instance.get_address();
-    let (local carbonable_vester) = carbonable_vester_instance.get_address();
-    let (local carbonable_yielder) = carbonable_yielder_instance.get_address();
 
     // Setup Access control
-    admin_instance.add_minter(carbonable_minter);
-    admin_instance.add_vester(carbonable_yielder);
-    admin_instance.set_certifier(certifier_address);
-    admin_instance.set_snapshoter(snapshoter_address);
+    admin_instance.add_minter(slot, carbonable_minter);
+    admin_instance.set_certifier(slot, certifier_address);
     admin_instance.set_withdrawer(withdrawer_address);
 
     // Set absorptions
     certifier_instance.set_absorptions(
+        slot=slot,
         times_len=times_len,
         times=times,
         absorptions_len=absorptions_len,
@@ -234,9 +181,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
     // Set initial balances between users
     anyone_instance.transfer(admin_address, 500000);
-
-    // Set vesting ownership
-    admin_instance.vester_transfer_ownership(carbonable_yielder);
 
     return ();
 }

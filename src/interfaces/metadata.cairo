@@ -19,4 +19,14 @@ namespace ICarbonableMetadata {
 
     func tokenURI(slot: felt, value: felt, decimals: felt) -> (uri_len: felt, uri: felt*) {
     }
+
+    func getMetadataImplementation() -> (implementation: felt) {
+    }
+
+    //
+    // Externals
+    //
+
+    func setMetadataImplementation(implementation: felt) {
+    }
 }
