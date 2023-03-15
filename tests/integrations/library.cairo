@@ -11,7 +11,7 @@ from tests.integrations.libs.project import instance as carbonable_project_insta
 from tests.integrations.libs.token import instance as payment_token_instance
 from tests.integrations.libs.minter import instance as carbonable_minter_instance
 // from tests.integrations.libs.vester import instance as carbonable_vester_instance
-// from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
+from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
 // from tests.integrations.libs.yielder import instance as carbonable_yielder_instance
 from tests.integrations.libs.admin import instance as admin_instance
 from tests.integrations.libs.anyone import instance as anyone_instance
@@ -105,10 +105,9 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
         # Carbonable minter deployment
         context.carbonable_minter_class_hash = declare(contract=context.sources.minter).class_hash
-
         calldata = {
             "carbonable_project_address": context.carbonable_project_contract,
-            "carbonable_project_slot_low": context.minter.slot,
+            "carbonable_project_slot_low": context.project.slot,
             "carbonable_project_slot_high": 0,
             "payment_token_address": context.payment_token_contract,
             "public_sale_open": context.minter.public_sale_open,
@@ -123,6 +122,24 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             contract=context.sources.proxy,
             constructor_args={
                 "implementation_hash": context.carbonable_minter_class_hash,
+                "selector": context.selector.initializer,
+                "calldata": calldata.values(),
+            }
+        ).contract_address
+
+        # Carbonable offseter deployment
+        context.carbonable_offseter_class_hash = declare(contract=context.sources.offseter).class_hash
+        calldata = {
+            "carbonable_project_address": context.carbonable_project_contract,
+            "carbonable_project_slot_low": context.project.slot,
+            "carbonable_project_slot_high": 0,
+            "min_claimable": context.absorption.ton_equivalent,
+            "owner": context.admin_account_contract,
+        }
+        context.carbonable_offseter_contract = deploy_contract(
+            contract=context.sources.proxy,
+            constructor_args={
+                "implementation_hash": context.carbonable_offseter_class_hash,
                 "selector": context.selector.initializer,
                 "calldata": calldata.values(),
             }
@@ -153,7 +170,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ids.absorptions_len = len(context.absorption.values)
         for idx, value in enumerate(context.absorption.values):
             memory[ids.absorptions + idx] = value
-        ids.slot = context.minter.slot
+        ids.slot = context.project.slot
     %}
     // Get protocol addresses
     let (local admin_address) = admin_instance.get_address();

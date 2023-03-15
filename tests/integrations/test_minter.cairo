@@ -9,6 +9,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 // Local dependencies
 from tests.integrations.library import (
     setup,
+    carbonable_project_instance as project,
     carbonable_minter_instance as minter,
     admin_instance as admin,
     withdrawer_instance as withdrawer,
@@ -18,6 +19,51 @@ from tests.integrations.library import (
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     return setup();
+}
+
+@view
+func test_access_control{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    let slot = 1;
+    let (minters_len, minters) = project.get_minters(slot);
+    assert 1 = minters_len;
+
+    admin.add_minter(slot, 123);
+    admin.add_minter(slot, 456);
+    admin.add_minter(slot, 789);
+    let (minters_len, minters) = project.get_minters(slot);
+    assert 4 = minters_len;
+    assert 789 = [minters + 0];
+    assert 456 = [minters + 1];
+    assert 123 = [minters + 2];
+
+    admin.revoke_minter(slot, 456);
+    let (minters_len, minters) = project.get_minters(slot);
+    assert 3 = minters_len;
+    assert 789 = [minters + 0];
+    assert 123 = [minters + 1];
+
+    admin.revoke_minter(slot, 123);
+    let (minters_len, minters) = project.get_minters(slot);
+    assert 2 = minters_len;
+    assert 789 = [minters + 0];
+
+    admin.revoke_minter(slot, 789);
+    let (minters_len, minters) = project.get_minters(slot);
+    assert 1 = minters_len;
+
+    admin.set_certifier(slot, 1234);
+    let (certifier) = project.get_certifier(slot);
+    assert 1234 = certifier;
+
+    admin.set_certifier(slot, 5678);
+    let (certifier) = project.get_certifier(slot);
+    assert 5678 = certifier;
+
+    admin.set_certifier(slot, 0);
+    let (certifier) = project.get_certifier(slot);
+    assert 0 = certifier;
+
+    return ();
 }
 
 @view

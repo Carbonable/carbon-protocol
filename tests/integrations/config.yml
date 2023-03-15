@@ -4,6 +4,7 @@ project:
   decimals: 2
   fee_numerator: 5
   fee_denominator: 100
+  slot: 1
 
 token:
   name: Token
@@ -12,7 +13,6 @@ token:
   initial_supply: 1000000
 
 minter:
-  slot: 1
   public_sale_open: 0
   max_value_per_tx: 5
   min_value_per_tx: 1
