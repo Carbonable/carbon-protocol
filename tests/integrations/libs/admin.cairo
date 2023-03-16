@@ -11,9 +11,9 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from tests.integrations.libs.project import instance as carbonable_project_instance
 from tests.integrations.libs.token import instance as payment_token_instance
 from tests.integrations.libs.minter import instance as carbonable_minter_instance
-// from tests.integrations.libs.vester import instance as carbonable_vester_instance
+from tests.integrations.libs.vester import instance as carbonable_vester_instance
 from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
-// from tests.integrations.libs.yielder import instance as carbonable_yielder_instance
+from tests.integrations.libs.yielder import instance as carbonable_yielder_instance
 
 //
 // Functions
@@ -34,10 +34,10 @@ namespace instance {
         recipient: felt, amount: felt
     ) {
         let (caller) = get_address();
-        let (success) = payment_token_instance.transfer(
-            recipient=recipient, amount=amount, caller=caller
-        );
-        assert success = TRUE;
+        with caller {
+            let (success) = payment_token_instance.transfer(recipient=recipient, amount=amount);
+            assert success = TRUE;
+        }
         return ();
     }
 
@@ -336,7 +336,7 @@ namespace instance {
 
     func offseter_withdraw_to_token{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-    }(token_id: felt, value: felt) -> (success: felt) {
+    }(token_id: felt, value: felt) {
         let (caller) = get_address();
         with caller {
             let (initial_deposited) = carbonable_offseter_instance.get_deposited_of(address=caller);
@@ -348,6 +348,102 @@ namespace instance {
                 address=caller
             );
             assert returned_deposited = initial_deposited - value;
+        }
+        return ();
+    }
+
+    // Yielder
+
+    func set_snapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(snapshoter: felt) {
+        let (caller) = get_address();
+        with caller {
+            carbonable_yielder_instance.set_snapshoter(snapshoter=snapshoter);
+        }
+        return ();
+    }
+
+    func yielder_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: felt, value: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            let (initial_deposited) = carbonable_yielder_instance.get_deposited_of(address=caller);
+            let (success) = carbonable_yielder_instance.deposit(token_id=token_id, value=value);
+            assert success = TRUE;
+            let (returned_deposited) = carbonable_yielder_instance.get_deposited_of(address=caller);
+            assert returned_deposited = initial_deposited + value;
+        }
+        return ();
+    }
+
+    func yielder_withdraw_to{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        value: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            let (initial_deposited) = carbonable_yielder_instance.get_deposited_of(address=caller);
+            let (success) = carbonable_yielder_instance.withdraw_to(value=value);
+            assert success = TRUE;
+            let (returned_deposited) = carbonable_yielder_instance.get_deposited_of(address=caller);
+            assert returned_deposited = initial_deposited - value;
+        }
+        return ();
+    }
+
+    func yielder_withdraw_to_token{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: felt, value: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            let (initial_deposited) = carbonable_yielder_instance.get_deposited_of(address=caller);
+            let (success) = carbonable_yielder_instance.withdraw_to_token(
+                token_id=token_id, value=value
+            );
+            assert success = TRUE;
+            let (returned_deposited) = carbonable_yielder_instance.get_deposited_of(address=caller);
+            assert returned_deposited = initial_deposited - value;
+        }
+        return ();
+    }
+
+    func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (caller) = get_address();
+        with caller {
+            let (success) = carbonable_yielder_instance.snapshot();
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        total_amount: felt,
+        cliff_delta: felt,
+        start: felt,
+        duration: felt,
+        slice_period_seconds: felt,
+        revocable: felt,
+    ) {
+        let (caller) = get_address();
+        with caller {
+            let (success) = carbonable_yielder_instance.create_vestings(
+                total_amount=total_amount,
+                cliff_delta=cliff_delta,
+                start=start,
+                duration=duration,
+                slice_period_seconds=slice_period_seconds,
+                revocable=revocable,
+            );
+            assert success = TRUE;
+        }
+        return ();
+    }
+
+    // Vester
+
+    func add_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(vester: felt) {
+        let (caller) = get_address();
+        with caller {
+            carbonable_vester_instance.add_vester(vester=vester);
         }
         return ();
     }

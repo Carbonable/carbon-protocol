@@ -4,10 +4,10 @@
 
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
 from src.interfaces.vester import ICarbonableVester
+from src.utils.type.library import _felt_to_uint, _uint_to_felt
 
 //
 // Functions
@@ -16,112 +16,187 @@ from src.interfaces.vester import ICarbonableVester
 namespace instance {
     // Internals
 
-    func get_address() -> (carbonable_vester_contract: felt) {
-        tempvar carbonable_vester_contract;
-        %{ ids.carbonable_vester_contract = context.carbonable_vester_contract %}
-        return (carbonable_vester_contract,);
+    func get_address() -> (contract_address: felt) {
+        tempvar contract_address;
+        %{ ids.contract_address = context.carbonable_vester_contract %}
+        return (contract_address,);
     }
 
-    // Views
+    //
+    // Proxy administration
+    //
 
-    func withdrawable_amount{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(caller: felt) -> (releasable_amount: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        let (releasable_amount) = ICarbonableVester.withdrawable_amount(carbonable_vester);
-        %{ stop_prank() %}
-        return (releasable_amount,);
-    }
-
-    func vesting_count{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(caller: felt) -> (vesting_count: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        let (vesting_count) = ICarbonableVester.vesting_count(carbonable_vester, caller);
-        %{ stop_prank() %}
-        return (vesting_count,);
-    }
-
-    func get_vesting_id{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(vesting_index: felt, caller: felt) -> (vesting_id: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        let (vesting_id) = ICarbonableVester.get_vesting_id(
-            carbonable_vester, caller, vesting_index
+    func get_implementation_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (implementation: felt) {
+        let (contract_address) = instance.get_address();
+        let (implementation) = ICarbonableVester.getImplementationHash(
+            contract_address=contract_address
         );
-        %{ stop_prank() %}
-        return (vesting_id,);
+        return (implementation,);
     }
 
-    func releasable_amount{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(vesting_id: felt, caller: felt) -> (releasable_amount: Uint256) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        let (releasable_amount) = ICarbonableVester.releasable_amount(
-            carbonable_vester, vesting_id
+    func get_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        admin: felt
+    ) {
+        let (contract_address) = instance.get_address();
+        let (admin) = ICarbonableVester.getAdmin(contract_address);
+        return (admin,);
+    }
+
+    func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt}(
+        new_implementation: felt
+    ) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableVester.upgrade(contract_address, new_implementation);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func set_admin{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt}(
+        new_admin: felt
+    ) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableVester.setAdmin(contract_address, new_admin);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    //
+    // Ownership administration
+    //
+
+    func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+        let (contract_address) = instance.get_address();
+        let (owner) = ICarbonableVester.owner(contract_address);
+        return (owner,);
+    }
+
+    func transfer_ownership{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
+    }(newOwner: felt) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableVester.transferOwnership(contract_address, newOwner);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func renounce_ownership{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
+    }() {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableVester.renounceOwnership(contract_address);
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func get_vesters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        vesters_len: felt, vesters: felt*
+    ) {
+        let (contract_address) = instance.get_address();
+        let (vesters_len, vesters) = ICarbonableVester.getVesters(
+            contract_address=contract_address
         );
-        %{ stop_prank() %}
-        return (releasable_amount=releasable_amount);
-    }
-
-    func releasable_of{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(account: felt, caller: felt) -> (releasable_amount: Uint256) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        let (releasable_amount) = ICarbonableVester.releasableOf(carbonable_vester, account);
-        %{ stop_prank() %}
-        return (releasable_amount=releasable_amount);
-    }
-
-    func released_of{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(account: felt, caller: felt) -> (released_amount: Uint256) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        let (released_amount) = ICarbonableVester.releasedOf(carbonable_vester, account);
-        %{ stop_prank() %}
-        return (released_amount=released_amount);
-    }
-
-    func get_vesters{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(caller: felt) -> (vesters_len: felt, vesters: felt*) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        let (vesters_len, vesters) = ICarbonableVester.getVesters(carbonable_vester);
-        %{ stop_prank() %}
         return (vesters_len, vesters);
     }
 
-    // Externals
-
-    func add_vester{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(vester: felt, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        ICarbonableVester.addVester(carbonable_vester, vester);
+    func add_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt}(
+        vester: felt
+    ) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableVester.addVester(contract_address=contract_address, vester=vester);
         %{ stop_prank() %}
         return ();
     }
 
     func revoke_vester{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(vester: felt, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        ICarbonableVester.revokeVester(carbonable_vester, vester);
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
+    }(vester: felt) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableVester.revokeVester(contract_address=contract_address, vester=vester);
         %{ stop_prank() %}
         return ();
     }
 
-    func transfer_ownership{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(newOwner: felt, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        ICarbonableVester.transferOwnership(carbonable_vester, newOwner);
-        %{ stop_prank() %}
-        return ();
+    //
+    // Getters
+    //
+
+    func withdrawable_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        releasable_amount: felt
+    ) {
+        let (contract_address) = instance.get_address();
+        let (releasable_amount_u256) = ICarbonableVester.withdrawable_amount(
+            contract_address=contract_address
+        );
+        let (releasable_amount) = _uint_to_felt(releasable_amount_u256);
+        return (releasable_amount,);
     }
+
+    func vesting_count{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt
+    ) -> (vesting_count: felt) {
+        let (contract_address) = instance.get_address();
+        let (vesting_count) = ICarbonableVester.vesting_count(
+            contract_address=contract_address, account=account
+        );
+        return (vesting_count,);
+    }
+
+    func get_vesting_id{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        vesting_index: felt, account: felt
+    ) -> (vesting_id: felt) {
+        let (contract_address) = instance.get_address();
+        let (vesting_id) = ICarbonableVester.get_vesting_id(
+            contract_address=contract_address, account=account, vesting_index=vesting_index
+        );
+        return (vesting_id,);
+    }
+
+    func releasable_amount{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        vesting_id: felt
+    ) -> (releasable_amount: felt) {
+        let (contract_address) = instance.get_address();
+        let (releasable_amount_u256) = ICarbonableVester.releasable_amount(
+            contract_address=contract_address, vesting_id=vesting_id
+        );
+        let (releasable_amount) = _uint_to_felt(releasable_amount_u256);
+        return (releasable_amount=releasable_amount);
+    }
+
+    func releasable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt
+    ) -> (releasable_amount: felt) {
+        let (contract_address) = instance.get_address();
+        let (releasable_amount_u256) = ICarbonableVester.releasableOf(
+            contract_address=contract_address, account=account
+        );
+        let (releasable_amount) = _uint_to_felt(releasable_amount_u256);
+        return (releasable_amount=releasable_amount);
+    }
+
+    func released_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt
+    ) -> (released_amount: felt) {
+        let (contract_address) = instance.get_address();
+        let (released_amount_u256) = ICarbonableVester.releasedOf(
+            contract_address=contract_address, account=account
+        );
+        let (released_amount) = _uint_to_felt(released_amount_u256);
+        return (released_amount=released_amount);
+    }
+
+    //
+    // Externals
+    //
 
     func create_vesting{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
     }(
         beneficiary: felt,
         cliff_delta: felt,
@@ -129,29 +204,30 @@ namespace instance {
         duration: felt,
         slice_period_seconds: felt,
         revocable: felt,
-        amount_total: Uint256,
-        caller: felt,
+        amount_total: felt,
     ) -> (vesting_id: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
+        let (contract_address) = instance.get_address();
+        let (amount_total_u256) = _felt_to_uint(amount_total);
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
         let (vesting_id) = ICarbonableVester.create_vesting(
-            carbonable_vester,
-            beneficiary,
-            cliff_delta,
-            start,
-            duration,
-            slice_period_seconds,
-            revocable,
-            amount_total,
+            contract_address=contract_address,
+            beneficiary=beneficiary,
+            cliff_delta=cliff_delta,
+            start=start,
+            duration=duration,
+            slice_period_seconds=slice_period_seconds,
+            revocable=revocable,
+            amount_total=amount_total_u256,
         );
         %{ stop_prank() %}
         return (vesting_id,);
     }
 
-    func release_all{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_vester: felt
-    }(caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_vester) %}
-        ICarbonableVester.releaseAll(carbonable_vester);
+    func release_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt}(
+        ) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableVester.releaseAll(contract_address=contract_address);
         %{ stop_prank() %}
         return ();
     }
