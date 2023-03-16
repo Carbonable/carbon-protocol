@@ -23,11 +23,9 @@ namespace instance {
     }
 
     func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        let (carbonable_yielder) = carbonable_yielder_instance.get_address();
         let (caller) = get_address();
-
-        with carbonable_yielder {
-            let (success) = carbonable_yielder_instance.snapshot(caller=caller);
+        with caller {
+            let (success) = carbonable_yielder_instance.snapshot();
             assert success = TRUE;
         }
         return ();

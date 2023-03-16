@@ -7,4 +7,4 @@ install:
 	protostar install
 
 test:
-	protostar test tests/units/ tests/integrations/test_minter.cairo tests/integrations/test_offseter.cairo
+	protostar test
