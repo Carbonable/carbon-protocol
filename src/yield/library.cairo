@@ -7,9 +7,8 @@
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import unsigned_div_rem
-from starkware.cairo.common.math_cmp import is_le, is_not_zero
-from starkware.cairo.common.uint256 import uint256_lt
+from starkware.cairo.common.math import assert_not_zero, assert_in_range, unsigned_div_rem
+from starkware.cairo.common.uint256 import assert_uint256_le
 from starkware.starknet.common.syscalls import get_block_timestamp
 
 // Local dependencies
@@ -139,15 +138,16 @@ namespace CarbonableYielder {
         alloc_locals;
 
         // [Check] At least 1 user registered
-        let (users_len, users) = CarbonableYielder_assert.is_snapshotable();
+        CarbonableYielder_assert.snapshotable();
 
         let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
+        let (slot) = CarbonableOffseter.carbonable_project_slot();
         let (carbonable_offseter_address) = CarbonableYielder_carbonable_offseter_address_.read();
 
         // [Compute] Previous information
         let (previous_time) = CarbonableYielder_snapshoted_time_.read();
         let (previous_project_absorption) = ICarbonableProject.getAbsorption(
-            contract_address=carbonable_project_address, time=previous_time
+            contract_address=carbonable_project_address, slot=slot, time=previous_time
         );
         let (previous_offseter_absorption) = CarbonableYielder_snapshoted_offseter_absorption_.read(
             );
@@ -155,19 +155,12 @@ namespace CarbonableYielder {
 
         // [Compute] Current information
         let (current_project_absorption) = ICarbonableProject.getCurrentAbsorption(
-            contract_address=carbonable_project_address
+            contract_address=carbonable_project_address, slot=slot
         );
-
-        let (current_total_claimable) = ICarbonableOffseter.getTotalClaimable(
+        let (current_offseter_absorption) = ICarbonableOffseter.getTotalAbsorption(
             contract_address=carbonable_offseter_address
         );
-        let (current_total_claimed) = ICarbonableOffseter.getTotalClaimed(
-            contract_address=carbonable_offseter_address
-        );
-        let current_offseter_absorption = current_total_claimed + current_total_claimable;
-
-        // No need to check total claimed for the yielder conctract since claim feature is never used
-        let (current_yielder_absorption) = CarbonableOffseter.total_claimable();
+        let (current_yielder_absorption) = CarbonableOffseter.total_absorption();
 
         // [Compute] Period information
         let period_project_absorption = current_project_absorption - previous_project_absorption;
@@ -177,10 +170,9 @@ namespace CarbonableYielder {
         // [Check] Period duration not null
         let (current_time) = get_block_timestamp();
         let period_duration = current_time - previous_time;
-        let not_zero = is_not_zero(period_duration);
         with_attr error_message(
                 "CarbonableYielder: cannot estimate tCO2 price if the period duration is null") {
-            assert not_zero = TRUE;
+            assert_not_zero(period_duration);
         }
 
         // [Effect] Store snapshot values
@@ -190,7 +182,8 @@ namespace CarbonableYielder {
         CarbonableYielder_snapshoted_yielder_contribution_.write(period_yielder_absorption);
 
         // [Effect] Store period shares per users
-        _snapshot_iter(users_index=users_len - 1, users=users);
+        let (count) = CarbonableOffseter.total_user_count();
+        _snapshot_iter(index=count - 1);
 
         // [Effect] Update vested status
         CarbonableYielder_vested_.write(FALSE);
@@ -224,21 +217,21 @@ namespace CarbonableYielder {
         alloc_locals;
 
         // [Check] Snapshot has been executed and vestable
-        CarbonableYielder_assert.is_snapshoted();
+        CarbonableYielder_assert.snapshoted();
+        CarbonableYielder_assert.vestable(total_amount);
 
         // [Check] Contribution not null
         let (yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
-        let not_zero = is_not_zero(yielder_contribution);
         with_attr error_message(
                 "CarbonableYielder: cannot vest if the total yielder contribution is null") {
-            assert not_zero = TRUE;
+            assert_not_zero(yielder_contribution);
         }
 
         // [Interaction] Run create_vestings
-        let (users_len, users) = CarbonableYielder_assert.is_vestable(total_amount);
         let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
         let (carbonable_vester_address) = CarbonableYielder_carbonable_vester_address_.read();
         let (current_time) = get_block_timestamp();
+        let (count) = CarbonableOffseter.total_user_count();
         _create_vestings_iter(
             contract_address=carbonable_vester_address,
             yielder_contribution=yielder_contribution,
@@ -248,10 +241,9 @@ namespace CarbonableYielder {
             duration=duration,
             slice_period_seconds=slice_period_seconds,
             revocable=revocable,
-            users_index=users_len - 1,
-            users=users,
             carbonable_project_address=carbonable_project_address,
             current_time=current_time,
+            index=count - 1,
         );
 
         // [Effect] Update vested status
@@ -268,32 +260,20 @@ namespace CarbonableYielder {
     //
 
     func _snapshot_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        users_index: felt, users: felt*
+        index: felt
     ) {
         alloc_locals;
 
-        let user = users[users_index];
-
-        // Offseter absorption
-        let (carbonable_offseter_address) = CarbonableYielder_carbonable_offseter_address_.read();
-        let (current_offseter_claimable) = ICarbonableOffseter.getClaimableOf(
-            contract_address=carbonable_offseter_address, address=user
-        );
-        let (current_offseter_claimed) = ICarbonableOffseter.getClaimedOf(
-            contract_address=carbonable_offseter_address, address=user
-        );
-        let current_offseter_absorption = current_offseter_claimable + current_offseter_claimed;
-
-        // Yield absorption and contribution
-        let (current_yielder_absorption) = CarbonableOffseter.claimable_of(user);
+        // [Compute] Yield absorption and contribution
+        let (user) = CarbonableOffseter.user_by_index(index);
+        let (current_yielder_absorption) = CarbonableOffseter.absorption_of(address=user);
         let (
             previous_yielder_absorption
         ) = CarbonableYielder_snapshoted_user_yielder_absorption_.read(user);
 
         // [Check] Yielder contribution overflow
-        let is_lower = is_le(current_yielder_absorption + 1, previous_yielder_absorption);  // is_lt
         with_attr error_message("CarbonableYielder: user yielder contribution overflow detected") {
-            assert is_lower = FALSE;
+            assert_in_range(previous_yielder_absorption, 0, current_yielder_absorption + 1);
         }
         let period_contribution = current_yielder_absorption - previous_yielder_absorption;
 
@@ -304,8 +284,8 @@ namespace CarbonableYielder {
         CarbonableYielder_snapshoted_user_yielder_contribution_.write(user, period_contribution);
 
         // [Check] If not last, then continue
-        if (users_index != 0) {
-            _snapshot_iter(users_index=users_index - 1, users=users);
+        if (index != 0) {
+            _snapshot_iter(index=index - 1);
             return ();
         }
         return ();
@@ -320,14 +300,13 @@ namespace CarbonableYielder {
         duration: felt,
         slice_period_seconds: felt,
         revocable: felt,
-        users_index: felt,
-        users: felt*,
         carbonable_project_address,
         current_time,
+        index: felt,
     ) {
         alloc_locals;
 
-        let beneficiary = users[users_index];
+        let (beneficiary) = CarbonableOffseter.user_by_index(index);
         let (user_contribution) = CarbonableYielder_snapshoted_user_yielder_contribution_.read(
             beneficiary
         );
@@ -335,11 +314,11 @@ namespace CarbonableYielder {
         // [Check] If user abosrption is null, then continue
         if (user_contribution == 0) {
             // [Check] If index is null, then stop
-            if (users_index == 0) {
+            if (index == 0) {
                 return ();
             }
 
-            _create_vestings_iter(
+            return _create_vestings_iter(
                 contract_address=contract_address,
                 yielder_contribution=yielder_contribution,
                 total_amount=total_amount,
@@ -348,12 +327,10 @@ namespace CarbonableYielder {
                 duration=duration,
                 slice_period_seconds=slice_period_seconds,
                 revocable=revocable,
-                users_index=users_index - 1,
-                users=users,
                 carbonable_project_address=carbonable_project_address,
                 current_time=current_time,
+                index=index - 1,
             );
-            return ();
         }
 
         let (amount, _) = unsigned_div_rem(user_contribution * total_amount, yielder_contribution);
@@ -373,8 +350,8 @@ namespace CarbonableYielder {
         );
 
         // [Check] if index is not null, then continue
-        if (users_index != 0) {
-            _create_vestings_iter(
+        if (index != 0) {
+            return _create_vestings_iter(
                 contract_address=contract_address,
                 yielder_contribution=yielder_contribution,
                 total_amount=total_amount,
@@ -383,12 +360,10 @@ namespace CarbonableYielder {
                 duration=duration,
                 slice_period_seconds=slice_period_seconds,
                 revocable=revocable,
-                users_index=users_index - 1,
-                users=users,
                 carbonable_project_address=carbonable_project_address,
                 current_time=current_time,
+                index=index - 1,
             );
-            return ();
         }
         return ();
     }
@@ -396,20 +371,17 @@ namespace CarbonableYielder {
 
 // Assert helpers
 namespace CarbonableYielder_assert {
-    func is_snapshoted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    func snapshoted{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         // [Check] Snapshot has been executed
         let (time) = CarbonableYielder.snapshoted_time();
-        let not_zero = is_not_zero(time);
         with_attr error_message(
                 "CarbonableYielder: create vestings must be executed after snapshot") {
-            assert not_zero = TRUE;
+            assert_not_zero(time);
         }
         return ();
     }
 
-    func is_snapshotable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        users_len: felt, users: felt*
-    ) {
+    func snapshotable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         // [Check] Previous vesting has been executed
         let (status) = CarbonableYielder_vested_.read();
         with_attr error_message(
@@ -420,32 +392,33 @@ namespace CarbonableYielder_assert {
         // [Check] Snapshot timestamp is lower than the current time
         let (current_time) = get_block_timestamp();
         let (snapshoted_time) = CarbonableYielder.snapshoted_time();
-        let is_lower = is_le(current_time, snapshoted_time);
         with_attr error_message(
                 "CarbonableYielder: cannot snapshot at a sooner time that previous snapshot") {
-            assert is_lower = FALSE;
+            assert_in_range(snapshoted_time, 0, current_time);
         }
 
         // [Check] Project is setup
         let (carbonable_project_address) = CarbonableOffseter.carbonable_project_address();
-        let (setup) = ICarbonableProject.isSetup(contract_address=carbonable_project_address);
+        let (slot) = CarbonableOffseter.carbonable_project_slot();
+        let (setup) = ICarbonableProject.isSetup(
+            contract_address=carbonable_project_address, slot=slot
+        );
         with_attr error_message("CarbonableYielder: cannot snapshot if the project is not set up") {
             assert setup = TRUE;
         }
 
         // [Check] At least 1 user registered
-        let (users_len, users) = CarbonableOffseter.registered_users();
-        let not_zero = is_not_zero(users_len);
+        let (count) = CarbonableOffseter.total_user_count();
         with_attr error_message(
                 "CarbonableYielder: cannot snapshot or create vestings if no user has registered") {
-            assert not_zero = TRUE;
+            assert_not_zero(count);
         }
-        return (users_len=users_len, users=users);
+        return ();
     }
 
-    func is_vestable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func vestable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         total_amount: felt
-    ) -> (users_len: felt, users: felt*) {
+    ) {
         // [Check] Vesting has not been already executed
         let (status) = CarbonableYielder_vested_.read();
         with_attr error_message("CarbonableYielder: cannot vest if vesting has already been set") {
@@ -458,18 +431,16 @@ namespace CarbonableYielder_assert {
             contract_address=carbonable_vester_address
         );
         let (total_amount_uint256) = _felt_to_uint(total_amount);
-        let (is_not_enough) = uint256_lt(withdrawable_amount, total_amount_uint256);
         with_attr error_message("CarbonableYielder: not enough unallocated amount into vester") {
-            assert is_not_enough = FALSE;
+            assert_uint256_le(total_amount_uint256, withdrawable_amount);
         }
 
         // [Check] At least 1 user registered
-        let (users_len, users) = CarbonableOffseter.registered_users();
-        let not_zero = is_not_zero(users_len);
+        let (count) = CarbonableOffseter.total_user_count();
         with_attr error_message(
                 "CarbonableYielder: cannot snapshot or create vestings if no user has registered") {
-            assert not_zero = TRUE;
+            assert_not_zero(count);
         }
-        return (users_len=users_len, users=users);
+        return ();
     }
 }

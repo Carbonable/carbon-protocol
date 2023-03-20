@@ -25,7 +25,7 @@ struct Mocks {
 }
 
 struct Whitelist {
-    slots: felt,
+    allocations: felt,
     merkle_root: felt,
     merkle_proof: felt*,
     merkle_proof_len: felt,
@@ -55,10 +55,11 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
 func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     public_sale_open: felt,
-    max_buy_per_tx: felt,
-    unit_price: Uint256,
-    max_supply_for_mint: Uint256,
-    reserved_supply_for_mint: Uint256,
+    max_value_per_tx: felt,
+    min_value_per_tx: felt,
+    max_value: felt,
+    unit_price: felt,
+    reserved_value: felt,
 ) -> (test_context: TestContext) {
     alloc_locals;
 
@@ -66,8 +67,9 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     local admin;
     local anyone;
     local carbonable_project_address;
+    local project_slot;
     local payment_token_address;
-    local slots;
+    local allocations;
     local merkle_root;
     local merkle_proof_len;
     let (local merkle_proof: felt*) = alloc();
@@ -75,8 +77,9 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
+        ids.project_slot = context.mocks.project_slot
         ids.payment_token_address = context.mocks.payment_token_address
-        ids.slots = context.whitelist.slots
+        ids.allocations = context.whitelist.allocations
         ids.merkle_root = context.whitelist.merkle_root
         ids.merkle_proof_len = context.whitelist.merkle_proof_len
         for index, node in enumerate(context.whitelist.merkle_proof):
@@ -86,12 +89,14 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     // Instantiate minter
     CarbonableMinter.initializer(
         carbonable_project_address=carbonable_project_address,
+        carbonable_project_slot=Uint256(project_slot, 0),
         payment_token_address=payment_token_address,
         public_sale_open=public_sale_open,
-        max_buy_per_tx=max_buy_per_tx,
+        max_value_per_tx=max_value_per_tx,
+        min_value_per_tx=min_value_per_tx,
+        max_value=max_value,
         unit_price=unit_price,
-        max_supply_for_mint=max_supply_for_mint,
-        reserved_supply_for_mint=reserved_supply_for_mint,
+        reserved_value=reserved_value,
     );
 
     // Instantiate context, useful to avoid many hints in tests
@@ -100,14 +105,14 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     local mocks: Mocks = Mocks(
         carbonable_project_address=carbonable_project_address,
         payment_token_address=payment_token_address,
-        );
+    );
 
     local whitelist: Whitelist = Whitelist(
-        slots=slots,
+        allocations=allocations,
         merkle_root=merkle_root,
         merkle_proof=merkle_proof,
         merkle_proof_len=merkle_proof_len,
-        );
+    );
 
     local context: TestContext = TestContext(signers=signers, mocks=mocks, whitelist=whitelist);
 

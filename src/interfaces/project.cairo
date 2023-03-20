@@ -36,60 +36,58 @@ namespace ICarbonableProject {
     func renounceOwnership() {
     }
 
-    func addMinter(minter: felt) {
+    func addMinter(slot: Uint256, minter: felt) {
     }
 
-    func revokeMinter(minter: felt) {
+    func revokeMinter(slot: Uint256, minter: felt) {
     }
 
-    func getMinters() -> (minters_len: felt, minters: felt*) {
+    func getMinters(slot: Uint256) -> (minters_len: felt, minters: felt*) {
     }
 
-    func setCertifier(certifier: felt) {
+    func setCertifier(slot: Uint256, certifier: felt) {
     }
 
-    func getCertifier() -> (certifier: felt) {
+    func getCertifier(slot: Uint256) -> (certifier: felt) {
     }
 
     //
     // Views
     //
 
-    func getStartTime() -> (start_time: felt) {
+    func getStartTime(slot: Uint256) -> (start_time: felt) {
     }
 
-    func getFinalTime() -> (final_time: felt) {
+    func getFinalTime(slot: Uint256) -> (final_time: felt) {
     }
 
-    func getTimes() -> (times_len: felt, times: felt*) {
+    func getTimes(slot: Uint256) -> (times_len: felt, times: felt*) {
     }
 
-    func getAbsorptions() -> (absorptions_len: felt, absorptions: felt*) {
+    func getAbsorptions(slot: Uint256) -> (absorptions_len: felt, absorptions: felt*) {
     }
 
-    func getAbsorption(time: felt) -> (absorption: felt) {
+    func getAbsorption(slot: Uint256, time: felt) -> (absorption: felt) {
     }
 
-    func getCurrentAbsorption() -> (absorption: felt) {
+    func getCurrentAbsorption(slot: Uint256) -> (absorption: felt) {
     }
 
-    func getFinalAbsorption() -> (absorption: felt) {
+    func getFinalAbsorption(slot: Uint256) -> (absorption: felt) {
     }
 
-    func getTonEquivalent() -> (ton_equivalent: felt) {
+    func getTonEquivalent(slot: Uint256) -> (ton_equivalent: felt) {
     }
 
-    func isSetup() -> (status: felt) {
+    func isSetup(slot: Uint256) -> (status: felt) {
     }
 
     //
     // Externals
     //
 
-    func mint(to: felt, token_id: Uint256) {
-    }
-
     func setAbsorptions(
+        slot: Uint256,
         times_len: felt,
         times: felt*,
         absorptions_len: felt,

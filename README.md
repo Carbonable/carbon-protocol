@@ -110,4 +110,4 @@ So far, you have to do the following actions manually:
 
 ## 📄 License
 
-**carbonable-starknet-protocol** is released under the [MIT](LICENSE).
+**carbon-protocol** is released under the [MIT](LICENSE).

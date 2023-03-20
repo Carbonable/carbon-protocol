@@ -18,89 +18,94 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 @external
 func test_airdrop_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // User: admin
-    // Wants to aidrop 5 NFTs
+    // Wants to airdrop value 5
     // Whitelisted sale: OPEN
     // Public sale: CLOSED
-    // current NFT totalSupply: 5
-    // current NFT reserved supply: 5
+    // current max_value: 5
+    // current reserved value: 5
     alloc_locals;
 
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(5, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=5,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
-    CarbonableMinter.airdrop(to=context.signers.anyone, quantity=5);
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
+    CarbonableMinter.airdrop(to=context.signers.anyone, value=5);
     %{ stop() %}
     return ();
 }
 
 @external
-func test_airdrop_revert_not_enough_available_nfts{
+func test_airdrop_revert_not_enough_value_available{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // User: admin
-    // Wants to airdrop 5 NFTs then 1 NFT then 1 NFT
+    // Wants to airdrop value 5 then 1 then 1
     // Whitelisted sale: CLOSED
     // Public sale: OPEN
-    // current NFT totalSupply: 6
-    // current NFT reserved supply: 1
+    // current totalValue: 6
+    // current reserved value: 1
     // has enough funds: YES
     alloc_locals;
 
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(1, 0),
+        max_value_per_tx=10,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=50 * 10 ** 6,
+        reserved_value=1,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [6, 0]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
-    CarbonableMinter.airdrop(to=context.signers.anyone, quantity=5);
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [6, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available value") %}
+    CarbonableMinter.airdrop(to=context.signers.anyone, value=5);
     %{ stop() %}
     return ();
 }
 
 @external
-func test_airdrop_revert_not_enough_reserved_nfts{
+func test_airdrop_revert_not_enough_reserved_value{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // User: admin
-    // Wants to airdrop 5 NFTs then 1 NFT then 1 NFT
+    // Wants to airdrop value 5 then 1 then 1
     // Whitelisted sale: CLOSED
     // Public sale: OPEN
-    // current NFT totalSupply: 6
-    // current NFT reserved supply: 1
+    // current totalValue: 6
+    // current reserved value: 1
     // has enough funds: YES
     alloc_locals;
 
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=TRUE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(1, 0),
+        max_value_per_tx=20,
+        min_value_per_tx=1,
+        max_value=1000,
+        unit_price=50 * 10 ** 6,
+        reserved_value=1,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [6, 0]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
-    CarbonableMinter.airdrop(to=context.signers.anyone, quantity=2);
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [6, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved value") %}
+    CarbonableMinter.airdrop(to=context.signers.anyone, value=2);
     %{ stop() %}
     return ();
 }

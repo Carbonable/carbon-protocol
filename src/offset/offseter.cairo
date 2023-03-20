@@ -8,6 +8,7 @@ from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
 from openzeppelin.access.ownable.library import Ownable
+from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
@@ -20,15 +21,19 @@ from src.offset.library import CarbonableOffseter
 // @notice Initialize the contract with the given parameters.
 //   This constructor uses a dedicated initializer that mainly stores the inputs.
 // @param carbonable_project_address The address of the Carbonable project.
+// @param carbonable_project_slot The slot of the Carbonable project.
 // @param min_claimable The minimum threshold of claimable to allow a claim.
 // @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    carbonable_project_address: felt, min_claimable: felt, owner: felt
+    carbonable_project_address: felt,
+    carbonable_project_slot: Uint256,
+    min_claimable: felt,
+    owner: felt,
 ) {
     alloc_locals;
 
-    CarbonableOffseter.initializer(carbonable_project_address);
+    CarbonableOffseter.initializer(carbonable_project_address, carbonable_project_slot);
     CarbonableOffseter.set_min_claimable(min_claimable);
     Ownable.initializer(owner);
     Proxy.initializer(owner);
@@ -109,15 +114,37 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 }
 
 //
+// ERC165
+//
+
+// @notice Return the ability status to support the provided interface (EIP 165).
+// @param interfaceId Interface id.
+// @return success TRUE if supported else FALSE.
+@view
+func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    interfaceId: felt
+) -> (success: felt) {
+    return ERC165.supports_interface(interfaceId);
+}
+
+//
 // Getters
 //
 
-// @notice Return the associated carbonable project.
+// @notice Return the associated carbonable project address.
 // @return carbonable_project_address The address of the corresponding Carbonable project.
 @view
 func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
     return CarbonableOffseter.carbonable_project_address();
+}
+
+// @notice Return the associated carbonable project slot.
+// @return carbonable_project_slot The slot of the corresponding Carbonable project.
+@view
+func getCarbonableProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) -> (carbonable_project_slot: Uint256) {
+    return CarbonableOffseter.carbonable_project_slot();
 }
 
 // @notice Return the minimum claimable quantity.
@@ -129,17 +156,26 @@ func getMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     return CarbonableOffseter.min_claimable();
 }
 
-// @notice Return the total deposited balance of the project.
-// @return balance The total deposited.
+// @notice Return the total value deposited balance of the project.
+// @return value The total value deposited.
 @view
 func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    balance: Uint256
+    value: Uint256
 ) {
     return CarbonableOffseter.total_deposited();
 }
 
+// @notice Return the total absorption of the project.
+// @return total_absorption The total absorption.
+@view
+func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_absorption: felt
+) {
+    return CarbonableOffseter.total_absorption();
+}
+
 // @notice Return the total claimed balance of the project.
-// @return balance The total claimed.
+// @return total_claimed The total claimed.
 @view
 func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_claimed: felt
@@ -154,6 +190,26 @@ func getTotalClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     total_claimable: felt
 ) {
     return CarbonableOffseter.total_claimable();
+}
+
+// @notice Return the total deposited value of the provided address.
+// @param address The address to query.
+// @return value The total value.
+@view
+func getDepositedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (value: Uint256) {
+    return CarbonableOffseter.deposited_of(address=address);
+}
+
+// @notice Return the total absorption of the provided address.
+// @param address The address to query.
+// @return absorption The total absorption.
+@view
+func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (absorption: felt) {
+    return CarbonableOffseter.absorption_of(address=address);
 }
 
 // @notice Return the total claimable balance of the provided address.
@@ -176,37 +232,6 @@ func getClaimedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     return CarbonableOffseter.claimed_of(address=address);
 }
 
-// @notice Return the registered owner of a token id (0 if token is not owned by the contract).
-// @param token_id The token id.
-// @return address The registred owner address.
-@view
-func getRegisteredOwnerOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    token_id: Uint256
-) -> (address: felt) {
-    return CarbonableOffseter.registered_owner_of(token_id=token_id);
-}
-
-// @notice Return the registered time of a token id (0 if token is not owned by the contract).
-// @param token_id The token id.
-// @return time The registred time.
-@view
-func getRegisteredTimeOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    token_id: Uint256
-) -> (time: felt) {
-    return CarbonableOffseter.registered_time_of(token_id=token_id);
-}
-
-// @notice Return the registered tokens of the provided address.
-// @param address The address to query.
-// @return tokens_len The tokens array length.
-// @return tokens The tokens deposited by the provided address.
-@view
-func getRegisteredTokensOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    address: felt
-) -> (tokens_len: felt, tokens: Uint256*) {
-    return CarbonableOffseter.registered_tokens_of(address=address);
-}
-
 //
 // Externals
 //
@@ -223,9 +248,9 @@ func setMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     return CarbonableOffseter.set_min_claimable(min_claimable=min_claimable);
 }
 
-// @notice Deposit tokens to the project.
+// @notice Claim the specified quantity of claimable.
 // @dev Quantity cannot be higher than the caller total claimable.
-// @param token_id The token id.
+// @param quantity The quantity to claim
 // @return success The success status.
 @external
 func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
@@ -246,21 +271,33 @@ func claimAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 // @notice Deposit tokens to the project.
 // @dev Token id must be owned by the caller.
 // @param token_id The token id.
+// @param value The value to transfer.
 // @return success The success status.
 @external
 func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    token_id: Uint256
+    token_id: Uint256, value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.deposit(token_id=token_id);
+    return CarbonableOffseter.deposit(token_id=token_id, value=value);
 }
 
-// @notice Withdraw the specified token id into the contract.
-// @dev Token id must be owned by the contract.
-// @param token_id The token id.
+// @notice Withdraw the specified value to a new token.
+// @param value The value to withdraw.
 // @return success The success status.
 @external
-func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    token_id: Uint256
+func withdrawTo{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.withdraw(token_id=token_id);
+    return CarbonableOffseter.withdraw_to(value=value);
+}
+
+// @notice Withdraw the specified value into the specified token.
+// @dev Token id must be owned by the caller.
+// @param token_id The token id.
+// @param value The value to withdraw.
+// @return success The success status.
+@external
+func withdrawToToken{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    token_id: Uint256, value: Uint256
+) -> (success: felt) {
+    return CarbonableOffseter.withdraw_to_token(token_id=token_id, value=value);
 }

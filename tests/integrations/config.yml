@@ -1,17 +1,10 @@
-badge:
-  uri: ipfs://carbonable/{id}.json
-  name: badge
-
-badge_minter:
-  public_key: 0x07c42ac1a6415ba91ce25cca6ea3ffcf8201151a722e6a07fe2f73e931f221c6
-  badge_type: 0
-  whitelisted_user: 4
-  sig0: 1446613889061454488684584816134311028150072838391055356173753342137386273038
-  sig1: 550323174704161837982944959231864662796077128280001789888940955956125828334
-
 project:
   name: Project
   symbol: NFT
+  decimals: 2
+  fee_numerator: 5
+  fee_denominator: 100
+  slot: 1
 
 token:
   name: Token
@@ -21,10 +14,11 @@ token:
 
 minter:
   public_sale_open: 0
-  max_buy_per_tx: 5
+  max_value_per_tx: 5
+  min_value_per_tx: 1
   unit_price: 10
-  max_supply_for_mint: 10
-  reserved_supply_for_mint: 4
+  max_value: 10
+  reserved_value: 4
 
 absorption:
   ton_equivalent: 1000000

@@ -43,10 +43,16 @@ namespace ICarbonableOffseter {
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
+    func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
+    }
+
     func getMinClaimable() -> (min_claimable: felt) {
     }
 
-    func getTotalDeposited() -> (balance: Uint256) {
+    func getTotalDeposited() -> (value: Uint256) {
+    }
+
+    func getTotalAbsorption() -> (total_absorption: felt) {
     }
 
     func getTotalClaimed() -> (total_claimed: felt) {
@@ -55,27 +61,24 @@ namespace ICarbonableOffseter {
     func getTotalClaimable() -> (total_claimable: felt) {
     }
 
+    func getDepositedOf(address: felt) -> (value: Uint256) {
+    }
+
+    func getAbsorptionOf(address: felt) -> (absorption: felt) {
+    }
+
     func getClaimableOf(address: felt) -> (claimable: felt) {
     }
 
     func getClaimedOf(address: felt) -> (claimed: felt) {
     }
 
-    func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
-    }
-
-    func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
-    }
-
-    func getRegisteredTokensOf(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
-    }
-
-    func setMinClaimable(min_claimable: felt) -> () {
-    }
-
     //
     // Externals
     //
+
+    func setMinClaimable(min_claimable: felt) -> () {
+    }
 
     func claim(quantity: felt) -> (success: felt) {
     }
@@ -83,9 +86,12 @@ namespace ICarbonableOffseter {
     func claimAll() -> (success: felt) {
     }
 
-    func deposit(token_id: Uint256) -> (success: felt) {
+    func deposit(token_id: Uint256, value: Uint256) -> (success: felt) {
     }
 
-    func withdraw(token_id: Uint256) -> (success: felt) {
+    func withdrawTo(value: Uint256) -> (success: felt) {
+    }
+
+    func withdrawToToken(token_id: Uint256, value: Uint256) -> (success: felt) {
     }
 }

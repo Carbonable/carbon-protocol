@@ -3,7 +3,7 @@ name: CI Tests
 on: [push, pull_request, pull_request_target]
 
 env:
-  PROTOSTAR_VERSION: 0.8.1
+  PROTOSTAR_VERSION: 0.9.1
 
 jobs:
   protostar-tests:
@@ -16,10 +16,13 @@ jobs:
           curl -L https://raw.githubusercontent.com/software-mansion/protostar/master/install.sh | bash -s -- -v $PROTOSTAR_VERSION
 
       - name: Install protostar dependencies
-        run: /home/runner/.protostar/dist/protostar/protostar install
+        run: |
+          export PATH="$PATH:/home/runner/.protostar/dist/protostar" && make install
 
       - name: Compile smart contracts
-        run: /home/runner/.protostar/dist/protostar/protostar build
+        run: |
+          export PATH="$PATH:/home/runner/.protostar/dist/protostar" && make build
 
       - name: Run protostar tests
-        run: /home/runner/.protostar/dist/protostar/protostar test
+        run: |
+          export PATH="$PATH:/home/runner/.protostar/dist/protostar" && make test

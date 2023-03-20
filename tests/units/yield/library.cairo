@@ -25,9 +25,14 @@ struct Mocks {
     carbonable_vester_address: felt,
 }
 
+struct Yield {
+    slot: felt,
+}
+
 struct TestContext {
     signers: Signers,
     mocks: Mocks,
+    yield: Yield,
 }
 
 //
@@ -57,18 +62,20 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local carbonable_project_address;
     local carbonable_offseter_address;
     local carbonable_vester_address;
-    local minimum;
+    local slot;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
         ids.carbonable_offseter_address = context.mocks.carbonable_offseter_address
         ids.carbonable_vester_address = context.mocks.carbonable_vester_address
-        ids.minimum = context.claim.minimum
+        ids.slot = context.yielder.slot
     %}
     // Instantiate offset farmer
-    CarbonableOffseter.initializer(carbonable_project_address=carbonable_project_address);
-    CarbonableOffseter.set_min_claimable(minimum);
+    CarbonableOffseter.initializer(
+        carbonable_project_address=carbonable_project_address,
+        carbonable_project_slot=Uint256(low=slot, high=0),
+    );
 
     // Instantiate yield farmer
     CarbonableYielder.initializer(
@@ -84,7 +91,8 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         carbonable_offseter_address=carbonable_offseter_address,
         carbonable_vester_address=carbonable_vester_address,
     );
+    local yield: Yield = Yield(slot=slot);
 
-    local context: TestContext = TestContext(signers=signers, mocks=mocks);
+    local context: TestContext = TestContext(signers=signers, mocks=mocks, yield=yield);
     return (test_context=context);
 }

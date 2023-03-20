@@ -6,14 +6,20 @@
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
-from starkware.cairo.common.math import assert_not_zero
-from starkware.cairo.common.math_cmp import is_le, is_le_felt, is_not_zero
+from starkware.cairo.common.math import (
+    assert_not_zero,
+    assert_le,
+    assert_nn,
+    assert_in_range,
+    assert_nn_le,
+)
+from starkware.cairo.common.math_cmp import is_not_zero
 from starkware.cairo.common.uint256 import (
     Uint256,
     uint256_check,
-    uint256_mul,
-    uint256_le,
     uint256_eq,
+    uint256_lt,
+    assert_uint256_le,
 )
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
@@ -23,13 +29,13 @@ from starkware.starknet.common.syscalls import (
 
 // Project dependencies
 from openzeppelin.token.erc20.IERC20 import IERC20
-from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumerable
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 from openzeppelin.security.safemath.library import SafeUint256
+from erc3525.IERC3525Full import IERC3525Full as IERC3525
 
 // Local dependencies
-from src.interfaces.project import ICarbonableProject
 from src.mint.merkletree import MerkleTree
+from src.utils.type.library import _felt_to_uint, _uint_to_felt
 
 //
 // Events
@@ -56,11 +62,11 @@ func SoldOut(time: felt) {
 }
 
 @event
-func Airdrop(address: felt, quantity: felt, time: felt) {
+func Airdrop(address: felt, value: Uint256, time: felt) {
 }
 
 @event
-func Buy(address: felt, amount: Uint256, quantity: felt, time: felt) {
+func Buy(address: felt, value: Uint256, time: felt) {
 }
 
 //
@@ -72,6 +78,10 @@ func CarbonableMinter_carbonable_project_address_() -> (res: felt) {
 }
 
 @storage_var
+func CarbonableMinter_carbonable_project_slot_() -> (slot: Uint256) {
+}
+
+@storage_var
 func CarbonableMinter_payment_token_address_() -> (res: felt) {
 }
 
@@ -80,19 +90,23 @@ func CarbonableMinter_public_sale_open_() -> (res: felt) {
 }
 
 @storage_var
-func CarbonableMinter_max_buy_per_tx_() -> (res: felt) {
+func CarbonableMinter_max_value_per_tx_() -> (res: felt) {
 }
 
 @storage_var
-func CarbonableMinter_unit_price_() -> (res: Uint256) {
+func CarbonableMinter_min_value_per_tx_() -> (res: felt) {
 }
 
 @storage_var
-func CarbonableMinter_max_supply_for_mint_() -> (res: Uint256) {
+func CarbonableMinter_max_value_() -> (res: felt) {
 }
 
 @storage_var
-func CarbonableMinter_reserved_supply_for_mint_() -> (res: Uint256) {
+func CarbonableMinter_unit_price_() -> (res: felt) {
+}
+
+@storage_var
+func CarbonableMinter_reserved_value_() -> (res: felt) {
 }
 
 @storage_var
@@ -100,7 +114,7 @@ func CarbonableMinter_whitelist_merkle_root_() -> (whitelist_merkle_root: felt) 
 }
 
 @storage_var
-func CarbonableMinter_claimed_slots_(account: felt) -> (slots: felt) {
+func CarbonableMinter_claimed_value_(account: felt) -> (value: felt) {
 }
 
 namespace CarbonableMinter {
@@ -110,32 +124,50 @@ namespace CarbonableMinter {
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         carbonable_project_address: felt,
+        carbonable_project_slot: Uint256,
         payment_token_address: felt,
         public_sale_open: felt,
-        max_buy_per_tx: felt,
-        unit_price: Uint256,
-        max_supply_for_mint: Uint256,
-        reserved_supply_for_mint: Uint256,
+        max_value_per_tx: felt,
+        min_value_per_tx: felt,
+        max_value: felt,
+        unit_price: felt,
+        reserved_value: felt,
     ) {
-        // [Check] Uint256 compliance
-        with_attr error_message("CarbonableMinter: unit_price is not a valid Uint256") {
-            uint256_check(unit_price);
+        // [Check] valid initialization
+        with_attr error_message("CarbonableMinter: min_value_per_tx should be positive") {
+            assert_nn(min_value_per_tx);
+            assert_not_zero(min_value_per_tx);
         }
-        with_attr error_message("CarbonableMinter: max_supply_for_mint is not a valid Uint256") {
-            uint256_check(max_supply_for_mint);
+        with_attr error_message("CarbonableMinter: unit_price should be non-negative") {
+            assert_nn(unit_price);
+        }
+        with_attr error_message("CarbonableMinter: reserved_value should be non-negative") {
+            assert_nn(reserved_value);
         }
         with_attr error_message(
-                "CarbonableMinter: reserved_supply_for_mint is not a valid Uint256") {
-            uint256_check(reserved_supply_for_mint);
+                "CarbonableMinter: reserved_value should be smaller than max_value") {
+            assert_le(reserved_value, max_value);
+        }
+        with_attr error_message(
+                "CarbonableMinter: min_value_per_tx should be smaller than max_value") {
+            assert_le(max_value_per_tx, max_value);
+        }
+
+        // [Check] Uint256 compliance
+        with_attr error_message(
+                "CarbonableMinter: carbonable_project_slot is not a valid Uint256") {
+            uint256_check(carbonable_project_slot);
         }
 
         // [Effect] Set storage variables
         CarbonableMinter_carbonable_project_address_.write(carbonable_project_address);
+        CarbonableMinter_carbonable_project_slot_.write(carbonable_project_slot);
         CarbonableMinter_payment_token_address_.write(payment_token_address);
-        CarbonableMinter_max_buy_per_tx_.write(max_buy_per_tx);
+        CarbonableMinter_max_value_per_tx_.write(max_value_per_tx);
+        CarbonableMinter_min_value_per_tx_.write(min_value_per_tx);
+        CarbonableMinter_max_value_.write(max_value);
         CarbonableMinter_unit_price_.write(unit_price);
-        CarbonableMinter_max_supply_for_mint_.write(max_supply_for_mint);
-        CarbonableMinter_reserved_supply_for_mint_.write(reserved_supply_for_mint);
+        CarbonableMinter_reserved_value_.write(reserved_value);
 
         // Use dedicated function to emit corresponding events
         set_public_sale_open(public_sale_open);
@@ -152,6 +184,12 @@ namespace CarbonableMinter {
     }() -> (carbonable_project_address: felt) {
         let (carbonable_project_address) = CarbonableMinter_carbonable_project_address_.read();
         return (carbonable_project_address,);
+    }
+
+    func carbonable_project_slot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (slot: Uint256) {
+        let (carbonable_project_slot) = CarbonableMinter_carbonable_project_slot_.read();
+        return (carbonable_project_slot,);
     }
 
     func payment_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -175,31 +213,39 @@ namespace CarbonableMinter {
         return (public_sale_open,);
     }
 
-    func max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        max_buy_per_tx: felt
+    func max_value_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        max_value_per_tx: felt
     ) {
-        let (max_buy_per_tx) = CarbonableMinter_max_buy_per_tx_.read();
-        return (max_buy_per_tx,);
+        let (max_value_per_tx) = CarbonableMinter_max_value_per_tx_.read();
+        return (max_value_per_tx,);
+    }
+
+    func min_value_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        min_value_per_tx: felt
+    ) {
+        let (min_value_per_tx) = CarbonableMinter_min_value_per_tx_.read();
+        return (min_value_per_tx,);
+    }
+
+    func max_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        max_value: felt
+    ) {
+        let (max_value) = CarbonableMinter_max_value_.read();
+        return (max_value,);
     }
 
     func unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        unit_price: Uint256
+        unit_price: felt
     ) {
         let (unit_price) = CarbonableMinter_unit_price_.read();
         return (unit_price,);
     }
 
-    func max_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        max_supply_for_mint: Uint256
+    func reserved_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        reserved_value: felt
     ) {
-        let (max_supply_for_mint) = CarbonableMinter_max_supply_for_mint_.read();
-        return (max_supply_for_mint,);
-    }
-
-    func reserved_supply_for_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (reserved_supply_for_mint: Uint256) {
-        let (reserved_supply_for_mint) = CarbonableMinter_reserved_supply_for_mint_.read();
-        return (reserved_supply_for_mint,);
+        let (reserved_value) = CarbonableMinter_reserved_value_.read();
+        return (reserved_value,);
     }
 
     func whitelist_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -208,49 +254,38 @@ namespace CarbonableMinter {
         return (whitelist_merkle_root,);
     }
 
-    func whitelisted_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        account: felt, slots: felt, proof_len: felt, proof: felt*
-    ) -> (slots: felt) {
-        let (leaf) = hash2{hash_ptr=pedersen_ptr}(account, slots);
+    func whitelist_allocation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        account: felt, allocation: felt, proof_len: felt, proof: felt*
+    ) -> (allocation: felt) {
+        let (leaf) = hash2{hash_ptr=pedersen_ptr}(account, allocation);
         let (whitelist_merkle_root) = CarbonableMinter_whitelist_merkle_root_.read();  // 0 by default if not write
         let (whitelisted) = MerkleTree.verify(
             leaf=leaf, merkle_root=whitelist_merkle_root, proof_len=proof_len, proof=proof
         );
-        return (slots=slots * whitelisted);  // 0 if not whitelisted else 1 * slots
+        return (allocation=whitelisted * allocation);  // 0 if not whitelisted else 1 * allocation
     }
 
-    func claimed_slots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func claimed_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         account: felt
-    ) -> (slots: felt) {
-        let (slots) = CarbonableMinter_claimed_slots_.read(account);
-        return (slots,);
+    ) -> (value: felt) {
+        let (value) = CarbonableMinter_claimed_value_.read(account);
+        return (value,);
     }
 
     func sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         status: felt
     ) {
         alloc_locals;
-        let (max_supply) = max_supply_for_mint();
-        let (reserved_supply) = reserved_supply_for_mint();
-        let (max_supply_to_sold_out) = SafeUint256.sub_le(max_supply, reserved_supply);
+        let (max_value) = CarbonableMinter_max_value_.read();
+        let (reserved_value) = CarbonableMinter_reserved_value_.read();
+        let (sold_out_value) = _felt_to_uint(max_value - reserved_value);
 
-        let (project_address) = carbonable_project_address();
-        let (total_supply) = IERC721Enumerable.totalSupply(project_address);
-        let (status) = uint256_eq(total_supply, max_supply_to_sold_out);
+        let (project_address) = CarbonableMinter_carbonable_project_address_.read();
+        let (carbonable_project_slot) = CarbonableMinter_carbonable_project_slot_.read();
+        let (total_value) = IERC3525.totalValue(project_address, carbonable_project_slot);
 
+        let (status) = uint256_eq(sold_out_value, total_value);
         return (status=status);
-    }
-
-    func total_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        total_value: Uint256
-    ) {
-        alloc_locals;
-
-        let (max_supply) = max_supply_for_mint();
-        let (price) = unit_price();
-        let (total_value) = SafeUint256.mul(max_supply, price);
-
-        return (total_value=total_value);
     }
 
     //
@@ -277,9 +312,8 @@ namespace CarbonableMinter {
         public_sale_open: felt
     ) {
         // [Check] Input is a boolean
-        let condition = public_sale_open * (1 - public_sale_open);
-        let is_not_boolean = is_not_zero(condition);
-        with_attr error_message("CarbonableMinter: public_sale_open must be 0 or 1") {
+        let is_not_boolean = is_not_zero(public_sale_open * (1 - public_sale_open));
+        with_attr error_message("CarbonableMinter: public_sale_open must be either 0 or 1") {
             assert is_not_boolean = FALSE;
         }
 
@@ -296,50 +330,69 @@ namespace CarbonableMinter {
         return ();
     }
 
-    func set_max_buy_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        max_buy_per_tx: felt
+    func set_max_value_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        max_value_per_tx: felt
     ) {
-        CarbonableMinter_max_buy_per_tx_.write(max_buy_per_tx);
+        // [Check] 0 <= max_value_per_tx <= max_value
+        with_attr error_message(
+                "CarbonableMinter: max_value_per_tx should be less than max_value") {
+            let (max_value) = CarbonableMinter_max_value_.read();
+            assert_in_range(max_value_per_tx, 0, max_value + 1);
+        }
+        CarbonableMinter_max_value_per_tx_.write(max_value_per_tx);
+        return ();
+    }
+
+    func set_min_value_per_tx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        min_value_per_tx: felt
+    ) {
+        // [Check] 0 <= min_value_per_tx <= max_value_per_tx
+        with_attr error_message(
+                "CarbonableMinter: min_value_per_tx should be less than max_value_per_tx") {
+            let (max_value_per_tx) = CarbonableMinter_max_value_per_tx_.read();
+            assert_in_range(min_value_per_tx, 0, max_value_per_tx + 1);
+        }
+        // [Effect] Set min_value_per_tx
+        CarbonableMinter_min_value_per_tx_.write(min_value_per_tx);
         return ();
     }
 
     func set_unit_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        unit_price: Uint256
+        unit_price: felt
     ) {
-        // [Check] Uint256 compliance
-        with_attr error_message("CarbonableMinter: unit_price is not a valid Uint256") {
-            uint256_check(unit_price);
+        // [Check] Non_negative unit_price
+        with_attr error_message("CarbonableMinter: unit_price should be non-negative") {
+            assert_nn(unit_price);
         }
-
+        // [Effect] Set unit_price
         CarbonableMinter_unit_price_.write(unit_price);
         return ();
     }
 
-    func decrease_reserved_supply_for_mint{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-    }(slots: Uint256) {
+    func decrease_reserved_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        value: felt
+    ) {
         alloc_locals;
 
-        // [Check] Uint256 compliance
-        with_attr error_message("CarbonableMinter: slots is not a valid Uint256") {
-            uint256_check(slots);
+        // [Check] Non_negative value
+        with_attr error_message("CarbonableMinter: value is not valid") {
+            assert_nn(value);
         }
 
-        // [Check] Enough reserved slots
-        let (reserved_supply_for_mint) = CarbonableMinter_reserved_supply_for_mint_.read();
-        let (enough_slots) = uint256_le(slots, reserved_supply_for_mint);
-        with_attr error_message("CarbonableMinter: not enough reserved slots") {
-            assert enough_slots = TRUE;
+        // [Check] Enough reserved value
+        let (reserved_value) = CarbonableMinter_reserved_value_.read();
+        let new_reserved_value = reserved_value - value;
+        with_attr error_message("CarbonableMinter: not enough reserved value") {
+            assert_nn(new_reserved_value);
         }
 
-        // [Effect] Decrease the reserved supply
-        let (new_reserved_supply_for_mint) = SafeUint256.sub_le(reserved_supply_for_mint, slots);
-        CarbonableMinter_reserved_supply_for_mint_.write(new_reserved_supply_for_mint);
+        // [Effect] Decrease the reserved value
+        CarbonableMinter_reserved_value_.write(new_reserved_value);
         return ();
     }
 
     func airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        to: felt, quantity: felt
+        to: felt, value: felt
     ) -> (success: felt) {
         alloc_locals;
 
@@ -351,40 +404,43 @@ namespace CarbonableMinter {
         with_attr error_message("CarbonableMinter: caller is the zero address") {
             assert_not_zero(caller);
         }
+        // [Check] Amount non-negative
+        with_attr error_message("CarbonableMinter: invalid value") {
+            assert_nn(value);
+        }
 
-        // [Check] Enough NFTs available
-        let quantity_uint256 = Uint256(quantity, 0);
+        // [Check] Enough value available
         let (carbonable_project_address) = CarbonableMinter_carbonable_project_address_.read();
-        let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project_address);
-        let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256);
-        let (max_supply_for_mint) = CarbonableMinter_max_supply_for_mint_.read();
-        let (enough_left) = uint256_le(supply_after_buy, max_supply_for_mint);
-        with_attr error_message("CarbonableMinter: not enough available NFTs") {
-            assert enough_left = TRUE;
-        }
-
-        // [Check] Enough reserved NFTs available
-        let (reserved_supply_for_mint) = CarbonableMinter_reserved_supply_for_mint_.read();
-        let (enough_reserved_left) = uint256_le(quantity_uint256, reserved_supply_for_mint);
-        with_attr error_message("CarbonableMinter: not enough available reserved NFTs") {
-            assert enough_reserved_left = TRUE;
-        }
-
-        // [Effect] Remove the minted quantity from the reserved supply
-        let (new_reserved_supply_for_mint) = SafeUint256.sub_le(
-            reserved_supply_for_mint, quantity_uint256
+        let (carbonable_project_slot) = CarbonableMinter_carbonable_project_slot_.read();
+        let (total_value) = IERC3525.totalValue(
+            carbonable_project_address, carbonable_project_slot
         );
-        CarbonableMinter_reserved_supply_for_mint_.write(new_reserved_supply_for_mint);
+        let (max_value_felt) = CarbonableMinter_max_value_.read();
+        let (max_value) = _felt_to_uint(max_value_felt);
+        let (value_left) = SafeUint256.sub_le(max_value, total_value);
+        let (value_u256) = _felt_to_uint(value);
+        with_attr error_message("CarbonableMinter: not enough available value") {
+            assert_uint256_le(value_u256, value_left);
+        }
+
+        // [Check] Enough reserved value available
+        let (reserved_value) = CarbonableMinter_reserved_value_.read();
+        let new_reserved_value = reserved_value - value;
+        with_attr error_message("CarbonableMinter: not enough available reserved value") {
+            assert_nn(new_reserved_value);
+        }
+
+        // [Effect] Remove the minted amount from the reserved value
+        CarbonableMinter_reserved_value_.write(new_reserved_value);
 
         // [Interaction] Mint
-        let starting_index = total_supply;
-        mint_iter(carbonable_project_address, to, starting_index, quantity_uint256);
-
+        IERC3525.mintNew(carbonable_project_address, to, carbonable_project_slot, value_u256);
         // [Effect] Emit event
-        let (current_time) = get_block_timestamp();
-        Airdrop.emit(address=to, quantity=quantity, time=current_time);
 
-        // [Security] End reetrancy guard
+        let (current_time) = get_block_timestamp();
+        Airdrop.emit(address=to, value=value_u256, time=current_time);
+
+        // [Security] End reentrancy guard
         ReentrancyGuard.end();
 
         return (TRUE,);
@@ -434,7 +490,7 @@ namespace CarbonableMinter {
     }
 
     func pre_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slots: felt, proof_len: felt, proof: felt*, quantity: felt
+        allocation: felt, proof_len: felt, proof: felt*, value: felt, force: felt
     ) -> (success: felt) {
         alloc_locals;
 
@@ -449,36 +505,37 @@ namespace CarbonableMinter {
 
         // [Check] Caller is whitelisted
         let (caller) = get_caller_address();
-        let (slots) = whitelisted_slots(
-            account=caller, slots=slots, proof_len=proof_len, proof=proof
+        let (allocation) = whitelist_allocation(
+            account=caller, allocation=allocation, proof_len=proof_len, proof=proof
         );
         with_attr error_message("CarbonableMinter: caller address is not whitelisted") {
-            assert_not_zero(slots);
+            assert_not_zero(allocation);
         }
 
-        // [Check] Caller has available whitelisted slots
-        let (claimed_slots) = CarbonableMinter_claimed_slots_.read(caller);
-        let available_slots = slots - claimed_slots;
-        let enough_slots = is_le(quantity, available_slots);
-        with_attr error_message("CarbonableMinter: not enough whitelisted slots available") {
-            assert enough_slots = TRUE;
+        // [Check] Caller has available whitelisted value
+        let (claimed_value) = CarbonableMinter_claimed_value_.read(caller);
+        let available_value = value - claimed_value;
+        with_attr error_message("CarbonableMinter: not enough allocation available") {
+            assert_le(value, available_value);
         }
-
-        // [Effect] Update claimed slots
-        let new_claimed_slots = claimed_slots + quantity;
-        CarbonableMinter_claimed_slots_.write(caller, new_claimed_slots);
 
         // [Interaction] Buy
-        let (success) = buy(quantity);
+        let (minted_value) = buy(value, force);
+        // Safe conversion since the minted value is lower or equal to the specified value in felt
+        let (minted_value_felt) = _uint_to_felt(minted_value);
+
+        // [Effect] Update claimed value
+        let new_claimed_value = claimed_value + minted_value_felt;
+        CarbonableMinter_claimed_value_.write(caller, new_claimed_value);
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
-        return (success,);
+        return (success=TRUE,);
     }
 
     func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        quantity: felt
+        value: felt, force: felt
     ) -> (success: felt) {
         // [Security] Start reetrancy guard
         ReentrancyGuard.start();
@@ -490,26 +547,32 @@ namespace CarbonableMinter {
         }
 
         // [Interaction] Buy
-        let (success) = buy(quantity);
+        buy(value, force);
 
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
-        return (success,);
+        return (success=TRUE,);
     }
 
     //
     // Internals
     //
 
-    func buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
-        success: felt
-    ) {
+    func buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        value: felt, force: felt
+    ) -> (minted_value: Uint256) {
         alloc_locals;
 
-        // [Check] Quantity is not zero
-        with_attr error_message("CarbonableMinter: quantity must be not null") {
-            assert_not_zero(quantity);
+        // [Check] value is not zero
+        with_attr error_message("CarbonableMinter: value must be non-negative") {
+            assert_not_zero(value);
+        }
+
+        // [Check] force is a boolean
+        let is_not_boolean = is_not_zero(force * (1 - force));
+        with_attr error_message("CarbonableMinter: force must be either 0 or 1") {
+            assert is_not_boolean = FALSE;
         }
 
         // [Check] Not zero address
@@ -518,31 +581,45 @@ namespace CarbonableMinter {
             assert_not_zero(caller);
         }
 
-        // [Check] Desired quantity is lower than maximum allowed per transaction
-        let (max_buy_per_tx) = CarbonableMinter_max_buy_per_tx_.read();
-        let quantity_allowed = is_le(quantity, max_buy_per_tx);
-        with_attr error_message("CarbonableMinter: quantity not allowed") {
-            assert quantity_allowed = TRUE;
+        // [Check] Desired value is within range
+        let (max_value_per_tx) = CarbonableMinter_max_value_per_tx_.read();
+        let (min_value_per_tx) = CarbonableMinter_min_value_per_tx_.read();
+        with_attr error_message("CarbonableMinter: value not allowed") {
+            assert_le(min_value_per_tx, value);
+            assert_le(value, max_value_per_tx);
         }
 
-        // [Check] Enough NFTs available
-        let (carbonable_project_address) = CarbonableMinter_carbonable_project_address_.read();
-        let quantity_uint256 = Uint256(quantity, 0);
-        let (total_supply) = IERC721Enumerable.totalSupply(carbonable_project_address);
-        let (supply_after_buy) = SafeUint256.add(total_supply, quantity_uint256);
-        let (max_supply_for_mint) = CarbonableMinter_max_supply_for_mint_.read();
-        let (reserved_supply_for_mint) = CarbonableMinter_reserved_supply_for_mint_.read();
-        let (available_supply_for_mint) = SafeUint256.sub_le(
-            max_supply_for_mint, reserved_supply_for_mint
-        );
-        let (enough_left) = uint256_le(supply_after_buy, available_supply_for_mint);
-        with_attr error_message("CarbonableMinter: not enough available NFTs") {
-            assert enough_left = TRUE;
+        // [Effect] If remaining value is lower than specified value and force is enabled
+        // Then replace the specified value by the remaining value otherwize keep the value unchanged
+        let (max_value) = CarbonableMinter_max_value_.read();
+        let (reserved_value) = CarbonableMinter_reserved_value_.read();
+        let (available_value_u256) = _felt_to_uint(max_value - reserved_value);
+
+        let (project_address) = CarbonableMinter_carbonable_project_address_.read();
+        let (project_slot) = CarbonableMinter_carbonable_project_slot_.read();
+        let (total_value) = IERC3525.totalValue(project_address, project_slot);
+
+        let (remaining_value) = SafeUint256.sub_le(available_value_u256, total_value);
+        let (value_u256) = _felt_to_uint(value);
+        let (is_lower) = uint256_lt(remaining_value, value_u256);
+
+        // Set value = condition * remaining_value + (1 - condition) * value
+        let condition = is_lower * force;
+        let not_condition = 1 - condition;
+        let cond_low = condition * remaining_value.low + not_condition * value_u256.low;
+        let cond_high = condition * remaining_value.high + not_condition * value_u256.high;
+        let value_u256 = Uint256(low=cond_low, high=cond_high);
+
+        // [Check] Enough value available
+        let (value_after_buy) = SafeUint256.add(total_value, value_u256);
+        with_attr error_message("CarbonableMinter: not enough available value") {
+            assert_uint256_le(value_after_buy, available_value_u256);
         }
 
         // [Interaction] ERC20 transfer
         let (unit_price) = CarbonableMinter_unit_price_.read();
-        let (amount) = SafeUint256.mul(quantity_uint256, unit_price);
+        let (unit_price_u256) = _felt_to_uint(unit_price);
+        let (amount) = SafeUint256.mul(value_u256, unit_price_u256);
         let (contract_address) = get_contract_address();
         let (payment_token_address) = CarbonableMinter_payment_token_address_.read();
         let (transfer_success) = IERC20.transferFrom(
@@ -555,12 +632,11 @@ namespace CarbonableMinter {
         }
 
         // [Interaction] Mint
-        let starting_index = total_supply;
-        mint_iter(carbonable_project_address, caller, starting_index, quantity_uint256);
+        IERC3525.mintNew(project_address, caller, project_slot, value_u256);
 
         // [Effect] Emit event
         let (current_time) = get_block_timestamp();
-        Buy.emit(address=caller, amount=amount, quantity=quantity, time=current_time);
+        Buy.emit(address=caller, value=value_u256, time=current_time);
 
         // [Effect] Close the sale if sold out
         let (is_sold_out) = sold_out();
@@ -574,36 +650,9 @@ namespace CarbonableMinter {
             // Emit sold out event
             SoldOut.emit(time=current_time);
 
-            return (TRUE,);
+            return (minted_value=value_u256,);
         }
 
-        return (TRUE,);
-    }
-
-    // @notice Mint a number of NFTs to a recipient.
-    // @param nft_contract_address The address of the NFT contract
-    // @param to The address of the recipient
-    // @param starting_index The starting index
-    // @param quantity The quantity to mint
-    func mint_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        nft_contract_address: felt, to: felt, starting_index: Uint256, quantity: Uint256
-    ) {
-        alloc_locals;
-
-        // [Check] Stop condition
-        let (no_more_left) = uint256_eq(quantity, Uint256(0, 0));
-        if (no_more_left == TRUE) {
-            return ();
-        }
-
-        // [Interaction] Mint
-        let one = Uint256(1, 0);
-        let (token_id) = SafeUint256.add(starting_index, one);
-        ICarbonableProject.mint(nft_contract_address, to, token_id);
-
-        // [Interaction] Call next mint
-        let (new_quantity) = SafeUint256.sub_le(quantity, one);
-        mint_iter(nft_contract_address, to, token_id, new_quantity);
-        return ();
+        return (minted_value=value_u256,);
     }
 }

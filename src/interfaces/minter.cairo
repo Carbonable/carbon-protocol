@@ -49,6 +49,9 @@ namespace ICarbonableMinter {
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
+    func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
+    }
+
     func getPaymentTokenAddress() -> (payment_token_address: felt) {
     }
 
@@ -58,33 +61,33 @@ namespace ICarbonableMinter {
     func isPublicSaleOpen() -> (public_sale_open: felt) {
     }
 
-    func getMaxBuyPerTx() -> (max_buy_per_tx: felt) {
+    func getMinValuePerTx() -> (min_value_per_tx: felt) {
     }
 
-    func getUnitPrice() -> (unit_price: Uint256) {
+    func getMaxValuePerTx() -> (max_value_per_tx: felt) {
     }
 
-    func getReservedSupplyForMint() -> (reserved_supply_for_mint: Uint256) {
+    func getUnitPrice() -> (unit_price: felt) {
     }
 
-    func getMaxSupplyForMint() -> (max_supply_for_mint: Uint256) {
+    func getReservedValue() -> (reserved_value: felt) {
+    }
+
+    func getMaxValue() -> (max_value: felt) {
     }
 
     func getWhitelistMerkleRoot() -> (whitelist_merkle_root: felt) {
     }
 
-    func getWhitelistedSlots(account: felt, slots: felt, proof_len: felt, proof: felt*) -> (
-        slots: felt
+    func getWhitelistAllocation(account: felt, allocation: felt, proof_len: felt, proof: felt*) -> (
+        allocation: felt
     ) {
     }
 
-    func getClaimedSlots(account: felt) -> (slots: felt) {
+    func getClaimedValue(account: felt) -> (value: felt) {
     }
 
     func isSoldOut() -> (status: felt) {
-    }
-
-    func getTotalValue() -> (total_value: Uint256) {
     }
 
     //
@@ -97,16 +100,19 @@ namespace ICarbonableMinter {
     func setPublicSaleOpen(public_sale_open: felt) {
     }
 
-    func setMaxBuyPerTx(max_buy_per_tx: felt) {
+    func setMaxValuePerTx(max_value_per_tx: felt) {
     }
 
-    func setUnitPrice(unit_price: Uint256) {
+    func setMinValuePerTx(min_value_per_tx: felt) {
     }
 
-    func decreaseReservedSupplyForMint(slots: Uint256) {
+    func setUnitPrice(unit_price: felt) {
     }
 
-    func airdrop(to: felt, quantity: felt) -> (success: felt) {
+    func decreaseReservedValue(value: felt) {
+    }
+
+    func airdrop(to: felt, value: felt) -> (success: felt) {
     }
 
     func withdraw() -> (success: felt) {
@@ -115,9 +121,9 @@ namespace ICarbonableMinter {
     func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
     }
 
-    func preBuy(slots: felt, proof_len: felt, proof: felt*, quantity: felt) -> (success: felt) {
+    func preBuy(allocation: felt, proof_len: felt, proof: felt*, value: felt, force: felt) -> (success: felt) {
     }
 
-    func publicBuy(quantity: felt) -> (success: felt) {
+    func publicBuy(value: felt, force: felt) -> (success: felt) {
     }
 }

@@ -6,21 +6,25 @@
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le, is_not_zero
-from starkware.cairo.common.uint256 import Uint256
-from starkware.starknet.common.syscalls import get_block_timestamp
+from starkware.cairo.common.uint256 import Uint256, uint256_check
+from starkware.starknet.common.syscalls import get_block_timestamp, library_call
+
+// Project dependencies
+from erc3525.library import ERC3525
 
 // Local dependencies
-from src.utils.metadata.library import Metadata
+from src.interfaces.metadata import ICarbonableMetadata
+from src.metadata.library import CarbonableMetadata
+from src.utils.type.library import _uint_to_felt, _felt_to_uint
 
 //
 // Events
 //
 
 @event
-func AbsorptionUpdate(time: felt) {
+func AbsorptionUpdate(slot: Uint256, time: felt) {
 }
 
 //
@@ -28,27 +32,27 @@ func AbsorptionUpdate(time: felt) {
 //
 
 @storage_var
-func CarbonableProject_metadata_() -> (set: felt) {
+func CarbonableProject_metadata_(slot: Uint256) -> (set: felt) {
 }
 
 @storage_var
-func CarbonableProject_times_len_() -> (length: felt) {
+func CarbonableProject_times_len_(slot: Uint256) -> (length: felt) {
 }
 
 @storage_var
-func CarbonableProject_times_(index: felt) -> (time: felt) {
+func CarbonableProject_times_(slot: Uint256, index: felt) -> (time: felt) {
 }
 
 @storage_var
-func CarbonableProject_absorptions_ton_equivalent_() -> (precision: felt) {
+func CarbonableProject_absorptions_ton_equivalent_(slot: Uint256) -> (precision: felt) {
 }
 
 @storage_var
-func CarbonableProject_absorptions_len_() -> (length: felt) {
+func CarbonableProject_absorptions_len_(slot: Uint256) -> (length: felt) {
 }
 
 @storage_var
-func CarbonableProject_absorptions_(index: felt) -> (absorption: felt) {
+func CarbonableProject_absorptions_(slot: Uint256, index: felt) -> (absorption: felt) {
 }
 
 namespace CarbonableProject {
@@ -56,126 +60,201 @@ namespace CarbonableProject {
     // Getters
     //
 
-    func token_uri{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        bitwise_ptr: BitwiseBuiltin*,
-        range_check_ptr,
-    }(token_id: Uint256) -> (uri_len: felt, uri: felt*) {
-        alloc_locals;
-
-        // [Check] Metadata has been set else it will fail reading unkown storage
-        let (is_metadata_set) = CarbonableProject_metadata_.read();
-        if (is_metadata_set != TRUE) {
-            let (local uri: felt*) = alloc();
-            return (uri_len=0, uri=uri);
-        }
-
-        let (uri_len: felt, uri: felt*) = Metadata.uri();
-        return (uri_len=uri_len, uri=uri);
-    }
-
-    func contract_uri{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        bitwise_ptr: BitwiseBuiltin*,
-        range_check_ptr,
-    }() -> (uri_len: felt, uri: felt*) {
-        alloc_locals;
-
-        // [Check] Metadata has been set else it will fail reading unkown storage
-        let (is_metadata_set) = CarbonableProject_metadata_.read();
-        if (is_metadata_set != TRUE) {
-            let (local uri: felt*) = alloc();
-            return (uri_len=0, uri=uri);
-        }
-
-        let (uri_len: felt, uri: felt*) = Metadata.contract_uri();
-        return (uri_len=uri_len, uri=uri);
-    }
-
-    func start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        time: felt
+    func contract_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        uri_len: felt, uri: felt*
     ) {
-        let (time) = CarbonableProject_times_.read(0);
+        alloc_locals;
+
+        let (class_hash) = CarbonableMetadata.get_implementation();
+        let (local array: felt*) = alloc();
+
+        // [Check] Metadata implementation set
+        if (class_hash == 0) {
+            return (uri_len=0, uri=array);
+        }
+
+        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_contractURI(
+            class_hash=class_hash
+        );
+
+        return (uri_len=uri_len, uri=uri);
+    }
+
+    func slot_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (uri_len: felt, uri: felt*) {
+        alloc_locals;
+
+        // [Check] Uint256 compliances
+        with_attr error_message("Metadata: slot is not a valid Uint256") {
+            uint256_check(slot);
+        }
+
+        let (class_hash) = CarbonableMetadata.get_implementation();
+        let (local array: felt*) = alloc();
+
+        // [Check] Metadata implementation set
+        if (class_hash == 0) {
+            return (uri_len=0, uri=array);
+        }
+
+        let (slot_felt) = _uint_to_felt(slot);
+        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_slotURI(
+            class_hash=class_hash, slot=slot_felt
+        );
+
+        return (uri_len=uri_len, uri=uri);
+    }
+
+    func token_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: Uint256
+    ) -> (uri_len: felt, uri: felt*) {
+        alloc_locals;
+
+        // [Check] Uint256 compliances
+        with_attr error_message("Metadata: token_id is not a valid Uint256") {
+            uint256_check(token_id);
+        }
+
+        let (class_hash) = CarbonableMetadata.get_implementation();
+        let (local array: felt*) = alloc();
+
+        // [Check] Metadata implementation set
+        if (class_hash == 0) {
+            return (uri_len=0, uri=array);
+        }
+
+        let (slot) = ERC3525.slot_of(token_id);
+        let (slot_felt) = _uint_to_felt(slot);
+        let (value) = ERC3525.balance_of(token_id);
+        let (value_felt) = _uint_to_felt(value);
+        let (decimals) = ERC3525.value_decimals();
+        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_tokenURI(
+            class_hash=class_hash, slot=slot_felt, value=value_felt, decimals=decimals
+        );
+
+        return (uri_len=uri_len, uri=uri);
+    }
+
+    func start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (time: felt) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (time) = CarbonableProject_times_.read(slot, 0);
         return (time=time);
     }
 
-    func final_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        time: felt
-    ) {
-        let (times_len) = CarbonableProject_times_len_.read();
+    func final_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (time: felt) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (times_len) = CarbonableProject_times_len_.read(slot);
         let index = times_len - 1;
-        let (time) = CarbonableProject_times_.read(index);
+        let (time) = CarbonableProject_times_.read(slot, index);
         return (time=time);
     }
 
-    func times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    func times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
         times_len: felt, times: felt*
     ) {
-        let (times_len, times) = _read_times();
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (times_len, times) = _read_times(slot);
         return (times_len=times_len, times=times);
     }
 
-    func absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        absorptions_len: felt, absorptions: felt*
-    ) {
-        let (absorptions_len, absorptions) = _read_absorptions();
+    func absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (absorptions_len: felt, absorptions: felt*) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (absorptions_len, absorptions) = _read_absorptions(slot=slot);
         return (absorptions_len=absorptions_len, absorptions=absorptions);
     }
 
     func absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        time: felt
+        slot: Uint256, time: felt
     ) -> (absorption: felt) {
-        let (absorption) = _compute_absorption(time=time);
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (absorption) = _compute_absorption(slot=slot, time=time);
         return (absorption=absorption);
     }
 
-    func current_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        absorption: felt
-    ) {
+    func current_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (absorption: felt) {
         alloc_locals;
+
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
         let (current_time) = get_block_timestamp();
-        let (current_absorption) = absorption(time=current_time);
+        let (current_absorption) = absorption(slot=slot, time=current_time);
         return (absorption=current_absorption);
     }
 
-    func final_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        absorption: felt
-    ) {
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
+    func final_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (absorption: felt) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
         let index = absorptions_len - 1;
-        let (absorption) = CarbonableProject_absorptions_.read(index);
+        let (absorption) = CarbonableProject_absorptions_.read(slot, index);
         return (absorption=absorption);
     }
 
-    func ton_equivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        ton_equivalent: felt
-    ) {
-        let (ton_equivalent) = CarbonableProject_absorptions_ton_equivalent_.read();
+    func ton_equivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (ton_equivalent: felt) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (ton_equivalent) = CarbonableProject_absorptions_ton_equivalent_.read(slot);
         return (ton_equivalent=ton_equivalent);
     }
 
-    func is_times_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        status: felt
-    ) {
-        let (times_len) = CarbonableProject_times_len_.read();
+    func is_times_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (status: felt) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (times_len) = CarbonableProject_times_len_.read(slot);
         let status = is_not_zero(times_len);
         return (status=status);
     }
 
     func is_absorptions_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (status: felt) {
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
+        slot: Uint256
+    ) -> (status: felt) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
         let status = is_not_zero(absorptions_len);
         return (status=status);
     }
 
-    func is_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        status: felt
-    ) {
-        let (times_status) = is_times_setup();
-        let (absorptions_status) = is_absorptions_setup();
+    func is_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (status: felt) {
+        alloc_locals;
+
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (times_status) = is_times_setup(slot=slot);
+        let (absorptions_status) = is_absorptions_setup(slot=slot);
         let status = is_not_zero(times_status * absorptions_status);
         return (status=status);
     }
@@ -184,21 +263,8 @@ namespace CarbonableProject {
     // Externals
     //
 
-    func set_uri{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        bitwise_ptr: BitwiseBuiltin*,
-        range_check_ptr,
-    }(uri_len: felt, uri: felt*) {
-        // [Effect] Update metadata status
-        CarbonableProject_metadata_.write(TRUE);
-
-        // [Effect] Update metadata
-        Metadata.set_uri(uri_len, uri);
-        return ();
-    }
-
     func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256,
         times_len: felt,
         times: felt*,
         absorptions_len: felt,
@@ -206,6 +272,9 @@ namespace CarbonableProject {
         ton_equivalent: felt,
     ) {
         alloc_locals;
+
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
 
         // [Check] Consistency
         let is_times_defined = is_not_zero(times_len);
@@ -224,13 +293,13 @@ namespace CarbonableProject {
         }
 
         // [Effect] Update storage
-        _write_times(times_len=times_len, times=times);
-        _write_absorptions(absorptions_len=absorptions_len, absorptions=absorptions);
-        CarbonableProject_absorptions_ton_equivalent_.write(ton_equivalent);
+        _write_times(slot=slot, times_len=times_len, times=times);
+        _write_absorptions(slot=slot, absorptions_len=absorptions_len, absorptions=absorptions);
+        CarbonableProject_absorptions_ton_equivalent_.write(slot, ton_equivalent);
 
         // [Effect] Emit event
         let (current_time) = get_block_timestamp();
-        AbsorptionUpdate.emit(time=current_time);
+        AbsorptionUpdate.emit(slot=slot, time=current_time);
 
         return ();
     }
@@ -239,131 +308,131 @@ namespace CarbonableProject {
     // Internals
     //
 
-    func _read_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        times_len: felt, times: felt*
-    ) {
+    func _read_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (times_len: felt, times: felt*) {
         alloc_locals;
 
-        let (times_len) = CarbonableProject_times_len_.read();
+        let (times_len) = CarbonableProject_times_len_.read(slot);
         let (local times: felt*) = alloc();
 
         // [Check] times have been defined
-        let (status) = is_times_setup();
+        let (status) = is_times_setup(slot=slot);
         if (status != TRUE) {
             return (times_len=times_len, times=times);
         }
 
-        _read_times_iter(index=times_len - 1, times=times);
+        _read_times_iter(slot=slot, index=times_len - 1, times=times);
         return (times_len=times_len, times=times);
     }
 
     func _read_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, times: felt*
+        slot: Uint256, index: felt, times: felt*
     ) {
         alloc_locals;
 
-        let (time) = CarbonableProject_times_.read(index);
+        let (time) = CarbonableProject_times_.read(slot, index);
         assert times[index] = time;
         if (index == 0) {
             return ();
         }
-        _read_times_iter(index=index - 1, times=times);
+        _read_times_iter(slot=slot, index=index - 1, times=times);
         return ();
     }
 
     func _write_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        times_len: felt, times: felt*
+        slot: Uint256, times_len: felt, times: felt*
     ) {
         alloc_locals;
 
-        CarbonableProject_times_len_.write(times_len);
-        _write_times_iter(index=times_len - 1, times=times);
+        CarbonableProject_times_len_.write(slot, times_len);
+        _write_times_iter(slot=slot, index=times_len - 1, times=times);
         return ();
     }
 
     func _write_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, times: felt*
+        slot: Uint256, index: felt, times: felt*
     ) {
         alloc_locals;
 
-        CarbonableProject_times_.write(index, times[index]);
+        CarbonableProject_times_.write(slot, index, times[index]);
         if (index == 0) {
             return ();
         }
-        _write_times_iter(index=index - 1, times=times);
+        _write_times_iter(slot=slot, index=index - 1, times=times);
         return ();
     }
 
-    func _read_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        absorptions_len: felt, absorptions: felt*
-    ) {
+    func _read_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (absorptions_len: felt, absorptions: felt*) {
         alloc_locals;
 
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read();
+        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
         let (local absorptions: felt*) = alloc();
 
         // [Check] absorptions have been defined
-        let (status) = is_times_setup();
+        let (status) = is_times_setup(slot=slot);
         if (status != TRUE) {
             return (absorptions_len=absorptions_len, absorptions=absorptions);
         }
 
-        _read_absorptions_iter(index=absorptions_len - 1, absorptions=absorptions);
+        _read_absorptions_iter(slot=slot, index=absorptions_len - 1, absorptions=absorptions);
         return (absorptions_len=absorptions_len, absorptions=absorptions);
     }
 
     func _read_absorptions_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, absorptions: felt*
+        slot: Uint256, index: felt, absorptions: felt*
     ) {
         alloc_locals;
 
-        let (absorption) = CarbonableProject_absorptions_.read(index);
+        let (absorption) = CarbonableProject_absorptions_.read(slot, index);
         assert absorptions[index] = absorption;
         if (index == 0) {
             return ();
         }
-        _read_absorptions_iter(index=index - 1, absorptions=absorptions);
+        _read_absorptions_iter(slot=slot, index=index - 1, absorptions=absorptions);
         return ();
     }
 
     func _write_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        absorptions_len: felt, absorptions: felt*
+        slot: Uint256, absorptions_len: felt, absorptions: felt*
     ) {
         alloc_locals;
 
-        CarbonableProject_absorptions_len_.write(absorptions_len);
-        _write_absorptions_iter(index=absorptions_len - 1, absorptions=absorptions);
+        CarbonableProject_absorptions_len_.write(slot, absorptions_len);
+        _write_absorptions_iter(slot=slot, index=absorptions_len - 1, absorptions=absorptions);
         return ();
     }
 
     func _write_absorptions_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, absorptions: felt*
+        slot: Uint256, index: felt, absorptions: felt*
     ) {
         alloc_locals;
 
-        CarbonableProject_absorptions_.write(index, absorptions[index]);
+        CarbonableProject_absorptions_.write(slot, index, absorptions[index]);
         if (index == 0) {
             return ();
         }
-        _write_absorptions_iter(index=index - 1, absorptions=absorptions);
+        _write_absorptions_iter(slot=slot, index=index - 1, absorptions=absorptions);
         return ();
     }
 
     func _compute_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        time: felt
+        slot: Uint256, time: felt
     ) -> (computed_absorption: felt) {
         alloc_locals;
-        
+
         // Check times are set
-        let (times_len, times) = _read_times();
+        let (times_len, times) = _read_times(slot=slot);
         if (times_len == 0) {
-            return(computed_absorption=0);
+            return (computed_absorption=0);
         }
 
         // Check absorptions are set
-        let (absorptions_len, absorptions) = _read_absorptions();
+        let (absorptions_len, absorptions) = _read_absorptions(slot=slot);
         if (absorptions_len == 0) {
-            return(computed_absorption=0);
+            return (computed_absorption=0);
         }
 
         // Check if time is before the start_time, then absorption is 0
@@ -443,5 +512,15 @@ namespace CarbonableProject {
             next_absorption=stored_absorption,
         );
         return (computed_absorption=computed_absorption);
+    }
+}
+
+// Assert helpers
+namespace Assert {
+    func u256{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(value: Uint256) {
+        with_attr error_message("CarbonableProject: value is not a valid Uint256") {
+            uint256_check(value);
+        }
+        return ();
     }
 }

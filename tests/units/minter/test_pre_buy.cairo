@@ -40,7 +40,7 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     // Given a deployed payment token contact
     // And the transferFrom function succeeds
     // Given a whitelist merkle tree
-    // And an allocation of 5 whitelist slots to anyone
+    // And an allocation of 5 whitelist to anyone
     // When admin set up the whitelist merkle tree
     // And anyone makes 2 whitelist buy
     // Then no failed transactions expected
@@ -49,10 +49,11 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=20,
+        min_value_per_tx=1,
+        max_value=1000,
+        unit_price=50 * 10 ** 6,
+        reserved_value=5,
     );
 
     // admin sets whitelist merkle root
@@ -66,15 +67,16 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, amount=dict(low=20, high=0), quantity=2, time=200))) %}
+    %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, value=dict(low=2, high=0), time=200))) %}
     let (success) = CarbonableMinter.pre_buy(
-        slots=context.whitelist.slots,
+        allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        quantity=2,
+        value=2,
+        force=FALSE,
     );
     assert success = TRUE;
     %{ stop() %}
@@ -89,7 +91,7 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
 }
 
 @external
-func test_buy_user_whitelisted_but_not_enough_slots{
+func test_buy_user_whitelisted_but_not_enough_allocation{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // User: anyone
@@ -105,10 +107,11 @@ func test_buy_user_whitelisted_but_not_enough_slots{
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // admin sets whitelist merkle root
@@ -118,21 +121,22 @@ func test_buy_user_whitelisted_but_not_enough_slots{
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [3, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [3, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough whitelisted slots available") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: value not allowed") %}
     CarbonableMinter.pre_buy(
-        slots=context.whitelist.slots,
+        allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        quantity=6,
+        value=6,
+        force=FALSE,
     );
     %{ stop() %}
     return ();
 }
 
 @external
-func test_buy_user_whitelisted_but_not_enough_slots_after_claim{
+func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     // User: anyone
@@ -148,10 +152,11 @@ func test_buy_user_whitelisted_but_not_enough_slots_after_claim{
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // admin sets whitelist merkle root
@@ -163,29 +168,31 @@ func test_buy_user_whitelisted_but_not_enough_slots_after_claim{
     %{ stop=start_prank(context.signers.anyone) %}
 
     // Mock
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [3, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [3, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
 
     // First buy
     // Call pre_buy
     CarbonableMinter.pre_buy(
-        slots=context.whitelist.slots,
+        allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        quantity=5,
+        value=5,
+        force=FALSE,
     );
 
     // Expect error
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough whitelisted slots available") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough allocation available") %}
 
     // Second buy
     // Call pre_buy
     CarbonableMinter.pre_buy(
-        slots=context.whitelist.slots,
+        allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        quantity=1,
+        value=1,
+        force=FALSE,
     );
     %{ stop() %}
     return ();
@@ -208,10 +215,11 @@ func test_buy_revert_not_whitelisted{
     // prepare minter instance
     let (local context) = prepare(
         public_sale_open=FALSE,
-        max_buy_per_tx=5,
-        unit_price=Uint256(10, 0),
-        max_supply_for_mint=Uint256(10, 0),
-        reserved_supply_for_mint=Uint256(0, 0),
+        max_value_per_tx=5,
+        min_value_per_tx=1,
+        max_value=10,
+        unit_price=10 * 10 ** 6,
+        reserved_value=0,
     );
 
     // admin sets whitelist merkle root
@@ -221,14 +229,15 @@ func test_buy_revert_not_whitelisted{
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: caller address is not whitelisted") %}
     CarbonableMinter.pre_buy(
-        slots=context.whitelist.slots,
+        allocation=context.whitelist.allocations,
         proof_len=context.whitelist.merkle_proof_len,
         proof=context.whitelist.merkle_proof,
-        quantity=2,
+        value=2,
+        force=FALSE,
     );
     %{ stop() %}
     return ();

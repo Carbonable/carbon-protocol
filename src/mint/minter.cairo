@@ -20,34 +20,39 @@ from src.utils.access.library import CarbonableAccessControl
 
 // @notice Initialize the contract with the given parameters.
 //   This constructor uses a dedicated initializer that mainly stores the inputs.
-// @dev unit_price, max_supply_for_mint and reserved_supply_for_mint must be valid Uint256.
+// @dev unit_price, max_value and reserved_value must be valid Uint256.
 // @param carbonable_project_address The adress of the corresponding Carbonable project.
 // @param payment_token_address The address of the ERC20 token that will be used during sales.
 // @param public_sale_open TRUE to open the public sale right after deployment, FALSE otherwise.
-// @param max_buy_per_tx The max number of NFTs that can be purchased in a single tx.
+// @param max_value_per_tx The max number of NFTs that can be purchased in a single tx.
+// @param min_value_per_tx The max number of NFTs that can be purchased in a single tx.
+// @param max_value The max value available whatever the way to mint.
 // @param unit_price The price per token (based on ERC20 token defined as -payment_token_address-).
-// @param max_supply_for_mint The max supply available whatever the way to mint.
-// @param reserved_supply_for_mint The supply reserved to be airdropped.
+// @param reserved_value The value reserved to be airdropped.
 // @param owner The owner and admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
+    carbonable_project_slot: Uint256,
     payment_token_address: felt,
     public_sale_open: felt,
-    max_buy_per_tx: felt,
-    unit_price: Uint256,
-    max_supply_for_mint: Uint256,
-    reserved_supply_for_mint: Uint256,
+    max_value_per_tx: felt,
+    min_value_per_tx: felt,
+    max_value: felt,
+    unit_price: felt,
+    reserved_value: felt,
     owner: felt,
 ) {
     CarbonableMinter.initializer(
         carbonable_project_address,
+        carbonable_project_slot,
         payment_token_address,
         public_sale_open,
-        max_buy_per_tx,
+        max_value_per_tx,
+        min_value_per_tx,
+        max_value,
         unit_price,
-        max_supply_for_mint,
-        reserved_supply_for_mint,
+        reserved_value,
     );
     Ownable.initializer(owner);
     Proxy.initializer(owner);
@@ -187,39 +192,49 @@ func isPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_chec
     return CarbonableMinter.public_sale_open();
 }
 
-// @notice Return the max amount that can be purchased in a single tx.
-// @return max_buy_per_tx The max amount that can be purchased in a single tx.
+// @notice Return the max value that can be purchased in a single tx.
+// @return max_value_per_tx The max value that can be purchased in a single tx.
 @view
-func getMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    max_buy_per_tx: felt
+func getMaxValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    max_value_per_tx: felt
 ) {
-    return CarbonableMinter.max_buy_per_tx();
+    return CarbonableMinter.max_value_per_tx();
+}
+
+// @notice Return the min value that can be purchased in a single tx.
+// @return min_value_per_tx The max value that can be purchased in a single tx.
+@view
+func getMinValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    min_value_per_tx: felt
+) {
+    return CarbonableMinter.min_value_per_tx();
 }
 
 // @notice Return the unit price per token.
 // @return unit_price The unit price per token.
 @view
 func getUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    unit_price: Uint256
+    unit_price: felt
 ) {
     return CarbonableMinter.unit_price();
 }
 
-// @notice Return the reserved supply available for airdrops.
-// @return reserved_supply_for_mint The reserved supply available for airdrops.
+// @notice Return the reserved value available for airdrops.
+// @return reserved_value The reserved value available for airdrops.
 @view
-func getReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) -> (reserved_supply_for_mint: Uint256) {
-    return CarbonableMinter.reserved_supply_for_mint();
+func getReservedValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    reserved_value: felt
+) {
+    return CarbonableMinter.reserved_value();
 }
 
-// @notice Return the max supply available.
-// @return max_supply_for_mint The max supply.
+// @notice Return the max value available.
+// @return max_value The max value.
 @view
-func getMaxSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    max_supply_for_mint: Uint256
+func getMaxValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    max_value: felt
 ) {
-    return CarbonableMinter.max_supply_for_mint();
+    return CarbonableMinter.max_value();
 }
 
 // @notice Return the whitelist merkle root, 0 means it has not been set yet.
@@ -231,27 +246,27 @@ func getWhitelistMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
     return CarbonableMinter.whitelist_merkle_root();
 }
 
-// @notice Return the whitelist merkle root, 0 means it has not been set yet.
+// @notice Return the whitelist allocation for a given account.
 // @param account The address of the account to check.
-// @param slots The number of slots to check.
+// @param allocation The allocation to check.
 // @param proof_len The length of the proof array.
-// @param proof The merkle proof associated to the account and slots.
-// @return slots 0 if not whitelisted, amount of slots otherwise.
+// @param proof The merkle proof associated to the account and allocation.
+// @return allocation 0 if not whitelisted, value otherwise.
 @view
-func getWhitelistedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    account: felt, slots: felt, proof_len: felt, proof: felt*
-) -> (slots: felt) {
-    return CarbonableMinter.whitelisted_slots(account, slots, proof_len, proof);
+func getWhitelistAllocation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    account: felt, allocation: felt, proof_len: felt, proof: felt*
+) -> (allocation: felt) {
+    return CarbonableMinter.whitelist_allocation(account, allocation, proof_len, proof);
 }
 
-// @notice Return the slots already minted by an account using whitelist slots.
+// @notice Return the value already minted by an account of the whitelist allocation.
 // @param account The address of the account to check.
-// @return slots The amount of claimed slots.
+// @return value The value already claimed.
 @view
-func getClaimedSlots{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getClaimedValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     account: felt
-) -> (slots: felt) {
-    return CarbonableMinter.claimed_slots(account);
+) -> (value: felt) {
+    return CarbonableMinter.claimed_value(account);
 }
 
 // @notice Return the sold out status.
@@ -263,13 +278,12 @@ func isSoldOut{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return CarbonableMinter.sold_out();
 }
 
-// @notice Return the total value of the project.
-// @return total_value The total value expressed in payment token units.
+// @notice Return the project slot where tokens will be minted.
+// @return slot The project slot.
 @view
-func getTotalValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    total_value: Uint256
-) {
-    return CarbonableMinter.total_value();
+func getCarbonableProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) -> (slot: Uint256) {
+    return CarbonableMinter.carbonable_project_slot();
 }
 
 //
@@ -298,15 +312,26 @@ func setPublicSaleOpen{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return CarbonableMinter.set_public_sale_open(public_sale_open);
 }
 
-// @notice Set a new max amount per tx during purchase.
+// @notice Set a new max value per tx during purchase.
 // @dev Only callable by the contract owner.
-// @param max_buy_per_tx The max amount per tx.
+// @param max_value_per_tx The max value per tx.
 @external
-func setMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    max_buy_per_tx: felt
+func setMaxValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    max_value_per_tx: felt
 ) {
     Ownable.assert_only_owner();
-    return CarbonableMinter.set_max_buy_per_tx(max_buy_per_tx);
+    return CarbonableMinter.set_max_value_per_tx(max_value_per_tx);
+}
+
+// @notice Set a new min value per tx during purchase.
+// @dev Only callable by the contract owner.
+// @param min_value_per_tx The min value per tx.
+@external
+func setMinValuePerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    min_value_per_tx: felt
+) {
+    Ownable.assert_only_owner();
+    return CarbonableMinter.set_min_value_per_tx(min_value_per_tx);
 }
 
 // @notice Set a new unit price per token.
@@ -314,36 +339,36 @@ func setMaxBuyPerTx{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 // @param unit_price The unit price.
 @external
 func setUnitPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    unit_price: Uint256
+    unit_price: felt
 ) {
     Ownable.assert_only_owner();
     return CarbonableMinter.set_unit_price(unit_price);
 }
 
-// @notice Decrease the reserved supply for airdrops by the providing amount of slots.
+// @notice Decrease the reserved value for airdrops by the given value.
 // @dev Only callable by the contract owner.
-// @param slots The amount of slots to substract to the reserved supply.
+// @param value The value to substract to the reserved value.
 @external
-func decreaseReservedSupplyForMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    slots: Uint256
+func decreaseReservedValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    value: felt
 ) {
     Ownable.assert_only_owner();
-    return CarbonableMinter.decrease_reserved_supply_for_mint(slots);
+    return CarbonableMinter.decrease_reserved_value(value);
 }
 
-// @notice Increase the reserved supply for airdrops by the providing amount of slots.
+// @notice Increase the reserved value for airdrops by the given value.
 // @dev Only callable by the contract owner.
 //   The caller can't be the zero address.
-//   The quantity must be less than or equal to the available reserved supply.
-//   The quantity must be less than or equal to the available supply.
-// @param slots The amount of slots to add to the reserved supply.
+//   The value must be less than or equal to the available reserved value.
+//   The value must be less than or equal to the available value.
+// @param value The value to add to the reserved value.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func airdrop{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    to: felt, quantity: felt
+    to: felt, value: felt
 ) -> (success: felt) {
     Ownable.assert_only_owner();
-    return CarbonableMinter.airdrop(to, quantity);
+    return CarbonableMinter.airdrop(to, value);
 }
 
 // @notice Transfer the smart contract balance to the contract owner.
@@ -374,38 +399,40 @@ func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return CarbonableMinter.transfer(token_address, recipient, amount);
 }
 
-// @notice Purchase -quantity- tokens while proving the caller is part of the merkle tree while pre sale is open.
-// @dev The pre sale must be open.
+// @notice Purchase -value- while proving the caller is part of the merkle tree during pre-sale.
+// @dev The pre-sale must be open.
 //   The caller must be part of the merkle tree.
-//   The quantity must be not null.
-//   The quantity must be less than or equal to the max buy per tx.
-//   The quantity must be less than or equal to the remaining whitelisted supply.
-//   The quantity must be less than or equal to the available supply.
+//   The value must be not null.
+//   The value must be less than or equal to the max buy per tx.
+//   The value must be less than or equal to the remaining whitelisted value.
+//   The value must be less than or equal to the available value.
 //   The transfer must succeed.
-// @param slots The associated slots recorded in the merkle root.
+// @param allocation The associated value recorded in the merkle root.
 // @param proof_len The proof array length.
-// @param proof The merkle proof associated to the account and slots.
-// @param quantity The quantity of tokens to buy.
+// @param proof The merkle proof associated to the account and allocation.
+// @param value The token value to buy.
+// @param force A boolean allowing to spend less than desired in case of low supply left.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
 func preBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    slots: felt, proof_len: felt, proof: felt*, quantity: felt
+    allocation: felt, proof_len: felt, proof: felt*, value: felt, force: felt
 ) -> (success: felt) {
-    return CarbonableMinter.pre_buy(slots, proof_len, proof, quantity);
+    return CarbonableMinter.pre_buy(allocation, proof_len, proof, value, force);
 }
 
-// @notice Purchase -quantity- tokens while public sale is open.
+// @notice Purchase -value- while public sale is open.
 // @dev The public sale must be open.
 //   The caller can't be the zero address.
-//   The quantity must be not null.
-//   The quantity must be less than or equal to the max buy per tx.
-//   The quantity must be less than or equal to the available supply.
+//   The value must be not null.
+//   The value must be less than or equal to the max value per tx.
+//   The value must be less than or equal to the available value.
 //   The transfer must succeed.
-// @param quantity The quantity of tokens to buy.
+// @param value The value to buy.
+// @param force A boolean allowing to spend less than desired in case of low supply left.
 // @return success TRUE if it succeeded, FALSE otherwise.
 @external
-func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
-    success: felt
-) {
-    return CarbonableMinter.public_buy(quantity);
+func publicBuy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    value: felt, force: felt
+) -> (success: felt) {
+    return CarbonableMinter.public_buy(value, force);
 }

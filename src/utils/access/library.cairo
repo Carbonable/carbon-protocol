@@ -5,6 +5,8 @@
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import FALSE, TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.hash import hash2
 
 from openzeppelin.access.accesscontrol.library import AccessControl
 
@@ -33,27 +35,35 @@ namespace CarbonableAccessControl {
     }
 
     // Minter Role
-    func assert_only_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        AccessControl.assert_only_role(MINTER_ROLE);
-        return ();
-    }
-
-    func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(user: felt) {
-        _set_role(MINTER_ROLE, user);
-        return ();
-    }
-
-    func get_minters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        minters_len: felt, minters: felt*
+    func assert_only_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
     ) {
-        let (minters_len, minters) = _get_role_members(MINTER_ROLE);
+        let (role) = _hash(MINTER_ROLE, slot);
+        AccessControl.assert_only_role(role);
+        return ();
+    }
+
+    func set_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256, user: felt
+    ) {
+        let (role) = _hash(MINTER_ROLE, slot);
+        _set_role(role, user);
+        return ();
+    }
+
+    func get_minters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (minters_len: felt, minters: felt*) {
+        let (role) = _hash(MINTER_ROLE, slot);
+        let (minters_len, minters) = _get_role_members(role);
         return (minters_len=minters_len, minters=minters);
     }
 
     func revoke_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        user: felt
+        slot: Uint256, user: felt
     ) {
-        _revoke_role(MINTER_ROLE, user);
+        let (role) = _hash(MINTER_ROLE, slot);
+        _revoke_role(role, user);
         return ();
     }
 
@@ -83,25 +93,32 @@ namespace CarbonableAccessControl {
     }
 
     // Certifier Role
-    func assert_only_certifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        AccessControl.assert_only_role(CERTIFIER_ROLE);
+    func assert_only_certifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) {
+        let (role) = _hash(CERTIFIER_ROLE, slot);
+        AccessControl.assert_only_role(role);
         return ();
     }
 
     func set_certifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        user: felt
+        slot: Uint256, user: felt
     ) {
-        let (prev_certifier) = get_certifier();
-        AccessControl._revoke_role(CERTIFIER_ROLE, prev_certifier);
-        AccessControl._grant_role(CERTIFIER_ROLE, user);
-        CarbonableAccessControl_role_members_index.write(CERTIFIER_ROLE, 0, user);
+        alloc_locals;
+
+        let (role) = _hash(CERTIFIER_ROLE, slot);
+        let (prev_certifier) = get_certifier(slot);
+        AccessControl._revoke_role(role, prev_certifier);
+        AccessControl._grant_role(role, user);
+        CarbonableAccessControl_role_members_index.write(role, 0, user);
         return ();
     }
 
-    func get_certifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        certifier: felt
-    ) {
-        let (certifier) = CarbonableAccessControl_role_members_index.read(CERTIFIER_ROLE, 0);
+    func get_certifier{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (certifier: felt) {
+        let (role) = _hash(CERTIFIER_ROLE, slot);
+        let (certifier) = CarbonableAccessControl_role_members_index.read(role, 0);
         return (certifier=certifier);
     }
 
@@ -154,6 +171,14 @@ namespace CarbonableAccessControl {
     //
     // Internal functions
     //
+
+    func _hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        role: felt, slot: Uint256
+    ) -> (hash: felt) {
+        let (slot_hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(role, slot_hash);
+        return (hash=hash);
+    }
 
     func _get_role_members{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         role: felt

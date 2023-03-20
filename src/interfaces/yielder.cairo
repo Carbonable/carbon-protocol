@@ -36,10 +36,10 @@ namespace ICarbonableYielder {
     func renounceOwnership() {
     }
 
-    func getSnapshoter() -> (snapshoter: felt) {
+    func setSnapshoter(snapshoter: felt) {
     }
 
-    func setSnapshoter(snapshoter: felt) {
+    func getSnapshoter() -> (snapshoter: felt) {
     }
 
     //
@@ -49,28 +49,25 @@ namespace ICarbonableYielder {
     func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
     }
 
+    func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
+    }
+
     func getCarbonableOffseterAddress() -> (carbonable_offseter_address: felt) {
     }
 
     func getCarbonableVesterAddress() -> (carbonable_vester_address: felt) {
     }
 
-    func getTotalDeposited() -> (balance: Uint256) {
+    func getTotalDeposited() -> (value: Uint256) {
     }
 
     func getTotalAbsorption() -> (total_absorption: felt) {
     }
 
+    func getDepositedOf(address: felt) -> (value: Uint256) {
+    }
+
     func getAbsorptionOf(address: felt) -> (absorption: felt) {
-    }
-
-    func getRegisteredOwnerOf(token_id: Uint256) -> (address: felt) {
-    }
-
-    func getRegisteredTimeOf(token_id: Uint256) -> (time: felt) {
-    }
-
-    func getRegisteredTokensOf(address: felt) -> (tokens_len: felt, tokens: Uint256*) {
     }
 
     func getSnapshotedTime() -> (time: felt) {
@@ -83,10 +80,13 @@ namespace ICarbonableYielder {
     // Externals
     //
 
-    func deposit(token_id: Uint256) -> (success: felt) {
+    func deposit(token_id: Uint256, value: Uint256) -> (success: felt) {
     }
 
-    func withdraw(token_id: Uint256) -> (success: felt) {
+    func withdrawTo(value: Uint256) -> (success: felt) {
+    }
+
+    func withdrawToToken(token_id: Uint256, value: Uint256) -> (success: felt) {
     }
 
     func snapshot() -> (success: felt) {
