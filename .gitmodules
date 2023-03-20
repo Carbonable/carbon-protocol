@@ -13,6 +13,3 @@
 [submodule "cairo_migrator"]
 	path = lib/cairo_migrator
 	url = https://github.com/carbonable-labs/cairo-migrator
-[submodule "cairo_erc_3525"]
-	path = lib/cairo_erc_3525
-	url = https://github.com/carbonable-labs/cairo-erc-3525
