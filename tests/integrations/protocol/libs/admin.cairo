@@ -814,9 +814,10 @@ namespace instance {
     }
 
     func initialize_migration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        source_address: felt, target_address: felt, slot: felt
+        source_address: felt, target_address: felt, slot: felt, value: felt
     ) {
         let slot_u256 = Uint256(low=slot, high=0);
+        let value_u256 = Uint256(low=value, high=0);
         let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
@@ -824,6 +825,7 @@ namespace instance {
                 source_address=source_address,
                 target_address=target_address,
                 slot=slot_u256,
+                value=value_u256,
                 caller=caller,
             );
         }

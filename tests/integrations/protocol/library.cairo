@@ -252,7 +252,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     admin_instance.vester_transfer_ownership(carbonable_yielder);
 
     // Set up migrator
-    admin_instance.initialize_migration(carbonable_project, carbonable_3525_address, 1);
+    admin_instance.initialize_migration(carbonable_project, carbonable_3525_address, 1, 100);
 
     return ();
 }

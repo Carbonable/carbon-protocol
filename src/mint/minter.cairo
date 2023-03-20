@@ -206,10 +206,9 @@ func getMigrationValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 // @param value The target value to mint.
 @external
 func initializeMigration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    source_address: felt, target_address: felt, slot: Uint256
+    source_address: felt, target_address: felt, slot: Uint256, value: Uint256
 ) {
     Ownable.assert_only_owner();
-    let (value) = getUnitPrice();
     Migrator.initializer(source_address, target_address, slot, value);
     CarbonableInitializer.initialize(MIGRATION);
     return ();
