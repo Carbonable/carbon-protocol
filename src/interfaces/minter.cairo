@@ -43,30 +43,6 @@ namespace ICarbonableMinter {
     }
 
     //
-    // Migrator
-    //
-
-    func getMigrationSourceAddress() -> (address: felt) {
-    }
-
-    func getMigrationTargetAddress() -> (address: felt) {
-    }
-
-    func getMigrationSlot() -> (slot: Uint256) {
-    }
-
-    func getMigrationValue() -> (value: Uint256) {
-    }
-
-    func initializeMigration(
-        source_address: felt, target_address: felt, slot: Uint256, value: Uint256
-    ) {
-    }
-
-    func migrate(tokenId: Uint256) -> (newTokenId: Uint256) {
-    }
-
-    //
     // Views
     //
 

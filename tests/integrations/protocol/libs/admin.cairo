@@ -331,8 +331,9 @@ namespace instance {
         withdrawer: felt
     ) {
         let (carbonable_minter) = carbonable_minter_instance.get_address();
+        let (caller) = get_address();
         with carbonable_minter {
-            let (withdrawer) = carbonable_minter_instance.set_withdrawer();
+            let (withdrawer) = carbonable_minter_instance.set_withdrawer(caller=caller);
         }
         return (withdrawer=withdrawer);
     }
@@ -771,78 +772,5 @@ namespace instance {
             let (snapshoter) = carbonable_yielder_instance.set_snapshoter(caller=caller);
         }
         return (snapshoter=snapshoter);
-    }
-
-    func get_migration_source_address{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-    }() -> (address: felt) {
-        let (carbonable_minter) = carbonable_minter_instance.get_address();
-        with carbonable_minter {
-            let (address) = carbonable_minter_instance.get_migration_source_address();
-        }
-        return (address=address);
-    }
-
-    func get_migration_target_address{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-    }() -> (address: felt) {
-        let (carbonable_minter) = carbonable_minter_instance.get_address();
-        with carbonable_minter {
-            let (address) = carbonable_minter_instance.get_migration_target_address();
-        }
-        return (address=address);
-    }
-
-    func get_migration_slot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        slot: felt
-    ) {
-        let (carbonable_minter) = carbonable_minter_instance.get_address();
-        with carbonable_minter {
-            let (slot) = carbonable_minter_instance.get_migration_slot();
-        }
-        return (slot=slot.low);
-    }
-
-    func get_migration_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        value: felt
-    ) {
-        let (carbonable_minter) = carbonable_minter_instance.get_address();
-        with carbonable_minter {
-            let (value) = carbonable_minter_instance.get_migration_value();
-        }
-        return (value=value.low);
-    }
-
-    func initialize_migration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        source_address: felt, target_address: felt, slot: felt, value: felt
-    ) {
-        let slot_u256 = Uint256(low=slot, high=0);
-        let value_u256 = Uint256(low=value, high=0);
-        let (carbonable_minter) = carbonable_minter_instance.get_address();
-        let (caller) = get_address();
-        with carbonable_minter {
-            carbonable_minter_instance.initialize_migration(
-                source_address=source_address,
-                target_address=target_address,
-                slot=slot_u256,
-                value=value_u256,
-                caller=caller,
-            );
-        }
-        return ();
-    }
-
-    func migrate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        token_id: felt
-    ) -> (new_token_id: felt) {
-        let token_id_u256 = Uint256(low=token_id, high=0);
-        let (carbonable_minter) = carbonable_minter_instance.get_address();
-        let (caller) = get_address();
-        with carbonable_minter {
-            let (new_token_id) = carbonable_minter_instance.migrate(
-                token_id=token_id_u256, caller=caller
-            );
-        }
-        return (new_token_id=new_token_id.low);
     }
 }

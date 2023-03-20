@@ -31,7 +31,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     let (local times: felt*) = alloc();
     local absorptions_len;
     let (local absorptions: felt*) = alloc();
-    local carbonable_3525_address;
     %{
         # Load config
         import sys
@@ -104,16 +103,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
                 "implementation_hash": context.carbonable_project_class_hash,
                 "selector": context.selector.initializer,
                 "calldata": calldata.values(),
-            }
-        ).contract_address
-
-        # Carbonable 3525 deployment
-        context.carbonable_3525_contract = deploy_contract(
-            contract=context.sources.project_3525,
-            constructor_args={
-                "name": context.project.name,
-                "symbol": context.project.symbol,
-                "decimals": 2,
             }
         ).contract_address
 
@@ -200,7 +189,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ]
 
         # Externalize required variables
-        ids.carbonable_3525_address = context.carbonable_3525_contract
         ids.merkle_root = merkle_root
         context.whitelist = dict(
             merkle_root=merkle_root,
@@ -221,7 +209,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     let (local certifier_address) = certifier_instance.get_address();
     let (local snapshoter_address) = snapshoter_instance.get_address();
     let (local withdrawer_address) = withdrawer_instance.get_address();
-    let (local carbonable_project) = carbonable_project_instance.get_address();
     let (local carbonable_minter) = carbonable_minter_instance.get_address();
     let (local carbonable_vester) = carbonable_vester_instance.get_address();
     let (local carbonable_yielder) = carbonable_yielder_instance.get_address();
@@ -250,9 +237,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
     // Set vesting ownership
     admin_instance.vester_transfer_ownership(carbonable_yielder);
-
-    // Set up migrator
-    admin_instance.initialize_migration(carbonable_project, carbonable_3525_address, 1, 100);
 
     return ();
 }

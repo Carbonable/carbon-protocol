@@ -213,30 +213,3 @@ func test_revert_set_unit_price_not_owner{
 
     return ();
 }
-
-@view
-func test_initialize_migration_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.initialize_migration(0, 0, 0, 0);
-
-    return ();
-}
-
-@view
-func test_migration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    alloc_locals;
-    let (anyone_address) = anyone.get_address();
-
-    anyone.approve(quantity=5);
-    anyone.whitelist_buy(quantity=5);
-
-    let token_id = 1;
-    %{ expect_revert("TRANSACTION_FAILED", "ERC721: either is not approved or the caller is the zero address") %}
-    let (new_token_id) = anyone.migrate(token_id);
-
-    return ();
-}

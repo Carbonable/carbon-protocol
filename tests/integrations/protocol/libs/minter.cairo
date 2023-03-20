@@ -123,60 +123,14 @@ namespace instance {
 
     func get_withdrawer{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (withdrawer: felt) {
+    }(caller: felt) -> (withdrawer: felt) {
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
         let (withdrawer) = ICarbonableMinter.getWithdrawer(carbonable_minter);
-        return (withdrawer=withdrawer);
-    }
-
-    func get_migration_source_address{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (address: felt) {
-        let (address) = ICarbonableMinter.getMigrationSourceAddress(carbonable_minter);
-        return (address=address);
-    }
-
-    func get_migration_target_address{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (address: felt) {
-        let (address) = ICarbonableMinter.getMigrationTargetAddress(carbonable_minter);
-        return (address=address);
-    }
-
-    func get_migration_slot{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (slot: Uint256) {
-        let (slot) = ICarbonableMinter.getMigrationSlot(carbonable_minter);
-        return (slot=slot);
-    }
-
-    func get_migration_value{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }() -> (value: Uint256) {
-        let (value) = ICarbonableMinter.getMigrationValue(carbonable_minter);
-        return (value);
+        %{ stop_prank() %}
+        return (withdrawer);
     }
 
     // Externals
-
-    func initialize_migration{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(source_address: felt, target_address: felt, slot: Uint256, value: Uint256, caller: felt) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.initializeMigration(
-            carbonable_minter, source_address, target_address, slot, value
-        );
-        %{ stop_prank() %}
-        return ();
-    }
-
-    func migrate{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(tokenId: Uint256, caller: felt) -> (newTokenId: Uint256) {
-        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        let (new_token_id) = ICarbonableMinter.migrate(carbonable_minter, tokenId);
-        %{ stop_prank() %}
-        return (newTokenId=new_token_id);
-    }
 
     func set_withdrawer{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
