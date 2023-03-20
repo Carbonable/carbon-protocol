@@ -4,9 +4,7 @@ lib-path = "lib"
 cairo-path = [
     "./lib/cairopen_contracts/src",
     "./lib/cairo_contracts/src",
-    "./lib/cairo_erc_3525/src",
     "./lib/bal7hazar_contracts/src",
-    "./lib/cairo_migrator/src",
     "./lib/starkvest/src",
     "src",
 ]
