@@ -58,7 +58,7 @@ namespace ICarbonableMinter {
     func getMigrationValue() -> (value: Uint256) {
     }
 
-    func initializeMigration(source_address: felt, target_address: felt, slot: Uint256) {
+    func initializeMigration(target_address: felt, slot: Uint256, value: Uint256) {
     }
 
     func migrate(tokenId: Uint256) -> (newTokenId: Uint256) {
