@@ -1,6 +1,3 @@
-[submodule "starkvest"]
-	path = lib/starkvest
-	url = https://github.com/abdelhamidbakhta/starkvest
 [submodule "cairo"]
 	path = cairo
 	url = https://github.com/starkware-libs/cairo.git
