@@ -43,6 +43,8 @@ mod Minter {
     use starknet::ContractAddress;
     use starknet::ContractAddressZeroable;
     // use starknet::pedersen_hash;
+    use integer::u256;
+    use integer::u256_from_felt252;
     use zeroable::Zeroable;
 
     struct Storage {
@@ -384,12 +386,13 @@ mod Minter {
     ) {
         // [Check] valid initialization
         // Direct felt252 comparisons have been removed from the core library
-        // assert(min_value_per_tx > 0, 'Minter: min_value_per_tx > 0');
-        // assert(unit_price >= 0, 'Minter: unit_price >= 0');
-        // assert(reserved_value >= 0, 'Minter: reserved_value >= 0');
-        // assert(reserved_value <= max_value, 'Minter: reserved <= max_value');
-        // assert(min_value_per_tx <= max_value_per_tx, 'Minter: min_value <= max_value');
-        // assert(max_value_per_tx <= max_value, 'Minter: max_value <= max per tx');
+        let zero_u256 = u256_from_felt252(0);
+        assert(u256_from_felt252(min_value_per_tx) > zero_u256, 'Minter: min_value_per_tx > 0');
+        assert(u256_from_felt252(unit_price) >= zero_u256, 'Minter: unit_price >= 0');
+        assert(u256_from_felt252(reserved_value) >= zero_u256, 'Minter: reserved_value >= 0');
+        assert(u256_from_felt252(reserved_value) <= u256_from_felt252(max_value), 'Minter: reserved <= max_value');
+        assert(u256_from_felt252(min_value_per_tx) <= u256_from_felt252(max_value_per_tx), 'Minter: min_value <= max_value');
+        assert(u256_from_felt252(max_value_per_tx) <= u256_from_felt252(max_value), 'Minter: max_value <= max per tx');
 
         CarbonableMinter_carbonable_project_address_::write(project_address);
         CarbonableMinter_carbonable_project_slot_::write(project_slot);
