@@ -390,9 +390,18 @@ mod Minter {
         assert(u256_from_felt252(min_value_per_tx) > zero_u256, 'Minter: min_value_per_tx > 0');
         assert(u256_from_felt252(unit_price) >= zero_u256, 'Minter: unit_price >= 0');
         assert(u256_from_felt252(reserved_value) >= zero_u256, 'Minter: reserved_value >= 0');
-        assert(u256_from_felt252(reserved_value) <= u256_from_felt252(max_value), 'Minter: reserved <= max_value');
-        assert(u256_from_felt252(min_value_per_tx) <= u256_from_felt252(max_value_per_tx), 'Minter: min_value <= max_value');
-        assert(u256_from_felt252(max_value_per_tx) <= u256_from_felt252(max_value), 'Minter: max_value <= max per tx');
+        assert(
+            u256_from_felt252(reserved_value) <= u256_from_felt252(max_value),
+            'Minter: reserved <= max_value'
+        );
+        assert(
+            u256_from_felt252(min_value_per_tx) <= u256_from_felt252(max_value_per_tx),
+            'Minter: min_value <= max_value'
+        );
+        assert(
+            u256_from_felt252(max_value_per_tx) <= u256_from_felt252(max_value),
+            'Minter: max_value <= max per tx'
+        );
 
         CarbonableMinter_carbonable_project_address_::write(project_address);
         CarbonableMinter_carbonable_project_slot_::write(project_slot);
