@@ -5,9 +5,10 @@
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import BitwiseBuiltin
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
-from src.metadata.library import CarbonableMetadata
+from src.metadata.library import CarbonableMetadataOnchainSvg as CarbonableMetadata
 
 // @notice Return the contract URI (OpenSea).
 // @return uri_len The URI array length
@@ -27,7 +28,7 @@ func contractURI{
 @view
 func slotURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(slot: felt) -> (uri_len: felt, uri: felt*) {
+}(slot: Uint256) -> (uri_len: felt, uri: felt*) {
     let (uri_len, uri) = CarbonableMetadata.slot_uri(slot=slot);
     return (uri_len=uri_len, uri=uri);
 }
@@ -41,7 +42,7 @@ func slotURI{
 @view
 func tokenURI{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
-}(slot: felt, value: felt, decimals: felt) -> (uri_len: felt, uri: felt*) {
-    let (uri_len, uri) = CarbonableMetadata.token_uri(slot=slot, value=value, decimals=decimals);
+}(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
+    let (uri_len, uri) = CarbonableMetadata.token_uri(tokenId=tokenId);
     return (uri_len=uri_len, uri=uri);
 }

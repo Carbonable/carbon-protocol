@@ -19,3 +19,5 @@ build
 *logs.json
 
 .DS_Store
+
+tmp

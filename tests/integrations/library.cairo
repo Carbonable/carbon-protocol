@@ -32,6 +32,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     let (local times: felt*) = alloc();
     local absorptions_len;
     let (local absorptions: felt*) = alloc();
+    local metadata_class_hash;
     %{
         # Load config
         import sys
@@ -187,6 +188,10 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             }
         ).contract_address
 
+        # Carbonable Metadata declaration
+        context.carbonable_metadata_class_hash = declare(contract=context.sources.metadata).class_hash
+        ids.metadata_class_hash = context.carbonable_metadata_class_hash
+
         # Build merkle tree
         recipients = [context.anyone_account_contract, context.admin_account_contract]
         allocations = [5, 5]
@@ -244,6 +249,9 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
     // Set initial balances between users
     anyone_instance.transfer(admin_address, 500000);
+
+    // Set metadata class hash
+    admin_instance.set_metadata_implementation(metadata_class_hash);
 
     return ();
 }

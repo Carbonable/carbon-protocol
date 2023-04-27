@@ -14,10 +14,10 @@ namespace ICarbonableMetadata {
     func contractURI() -> (uri_len: felt, uri: felt*) {
     }
 
-    func slotURI(slot: felt) -> (uri_len: felt, uri: felt*) {
+    func slotURI(slot: Uint256) -> (uri_len: felt, uri: felt*) {
     }
 
-    func tokenURI(slot: felt, value: felt, decimals: felt) -> (uri_len: felt, uri: felt*) {
+    func tokenURI(tokenId: Uint256) -> (uri_len: felt, uri: felt*) {
     }
 
     func getMetadataImplementation() -> (implementation: felt) {

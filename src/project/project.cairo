@@ -28,7 +28,7 @@ from erc4906.library import ERC4906
 
 // Local dependencies
 from src.project.library import CarbonableProject
-from src.metadata.library import CarbonableMetadata
+from src.metadata.library import CarbonableMetadataOnchainSvg as CarbonableMetadata
 from src.utils.access.library import CarbonableAccessControl
 
 //

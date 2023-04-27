@@ -16,7 +16,7 @@ from erc3525.library import ERC3525
 
 // Local dependencies
 from src.interfaces.metadata import ICarbonableMetadata
-from src.metadata.library import CarbonableMetadata
+from src.metadata.library import CarbonableMetadataOnchainSvg as CarbonableMetadata
 from src.utils.type.library import _uint_to_felt, _felt_to_uint
 
 //
@@ -98,9 +98,8 @@ namespace CarbonableProject {
             return (uri_len=0, uri=array);
         }
 
-        let (slot_felt) = _uint_to_felt(slot);
         let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_slotURI(
-            class_hash=class_hash, slot=slot_felt
+            class_hash=class_hash, slot=slot
         );
 
         return (uri_len=uri_len, uri=uri);
@@ -124,13 +123,8 @@ namespace CarbonableProject {
             return (uri_len=0, uri=array);
         }
 
-        let (slot) = ERC3525.slot_of(token_id);
-        let (slot_felt) = _uint_to_felt(slot);
-        let (value) = ERC3525.balance_of(token_id);
-        let (value_felt) = _uint_to_felt(value);
-        let (decimals) = ERC3525.value_decimals();
         let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_tokenURI(
-            class_hash=class_hash, slot=slot_felt, value=value_felt, decimals=decimals
+            class_hash=class_hash, tokenId=token_id
         );
 
         return (uri_len=uri_len, uri=uri);

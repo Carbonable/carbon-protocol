@@ -498,7 +498,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (token_id_u256) = _felt_to_uint(token_id);
         let (uri_len, uri) = ICarbonableMetadata.tokenURI(
-            contract_address=contract_address, token_id_u256
+            contract_address=contract_address, tokenId=token_id_u256
         );
         return (uri_len, uri);
     }
@@ -510,7 +510,7 @@ namespace instance {
         let (implementation) = ICarbonableMetadata.getMetadataImplementation(
             contract_address=contract_address
         );
-        return (implementation);
+        return (implementation,);
     }
 
     func set_metadata_implementation{
@@ -519,7 +519,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
         ICarbonableMetadata.setMetadataImplementation(
-            contract_address=contract_address, implementation
+            contract_address=contract_address, implementation=implementation
         );
         %{ stop_prank() %}
         return ();

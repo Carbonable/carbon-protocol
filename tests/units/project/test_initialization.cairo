@@ -4,11 +4,13 @@
 
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE, FALSE
-from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.cairo_builtins import HashBuiltin, BitwiseBuiltin
 from starkware.cairo.common.uint256 import Uint256
+from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 
 // Local dependencies
 from tests.units.project.library import setup, prepare, CarbonableProject
+from src.metadata.library import CarbonableMetadataOnchainSvg
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -32,7 +34,9 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let final_time = times[times_len - 1];
     assert final_time = context.absorption.times[times_len - 1];
 
-    let (absorptions_len, absorptions) = CarbonableProject.absorptions(slot=context.absorption.slot);
+    let (absorptions_len, absorptions) = CarbonableProject.absorptions(
+        slot=context.absorption.slot
+    );
     assert absorptions_len = context.absorption.values_len;
     let first_absorption = absorptions[0];
     assert first_absorption = context.absorption.values[0];
@@ -42,5 +46,41 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (ton_equivalent) = CarbonableProject.ton_equivalent(slot=context.absorption.slot);
     assert ton_equivalent = context.absorption.ton_equivalent;
 
+    return ();
+}
+
+@external
+func test_metadata{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, bitwise_ptr: BitwiseBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+    let (local instance) = get_contract_address();
+    %{
+        mock_call(ids.instance, "symbol", [123])
+        mock_call(ids.instance, "valueOf", [69420, 0])
+        mock_call(ids.instance, "slotOf", [1337, 0])
+        mock_call(ids.instance, "supportsInterface", [1])
+    %}
+    let (uri_len, local uri: felt*) = CarbonableMetadataOnchainSvg.token_uri(Uint256(1, 0));
+    %{
+        import json
+        uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
+        data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
+        data = json.loads(data[22:])
+    %}
+
+    let (uri_len, local uri: felt*) = CarbonableMetadataOnchainSvg.slot_uri(Uint256(1, 0));
+    %{
+        uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
+        data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
+        assert data.startswith("http")
+    %}
+
+    let (uri_len, local uri: felt*) = CarbonableMetadataOnchainSvg.contract_uri();
+    %{
+        uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
+        data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
+        assert data.startswith("http")
+    %}
     return ();
 }
