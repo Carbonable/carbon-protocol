@@ -9,10 +9,6 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.memcpy import memcpy
 
-// Project dependencies
-from cairopen.string.ASCII import StringCodec
-from cairopen.string.string import String
-
 func array_concat{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     res_len: felt, res: felt*, add_len: felt, add: felt*
 ) -> (res_len: felt, res: felt*) {
