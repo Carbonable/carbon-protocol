@@ -126,6 +126,16 @@ namespace instance {
         return ();
     }
 
+    func set_metadata_implementation{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(implementation: felt) {
+        let (caller) = get_address();
+        with caller {
+            carbonable_project_instance.set_metadata_implementation(implementation=implementation);
+        }
+        return ();
+    }
+
     // Minter
 
     func set_withdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -354,7 +364,9 @@ namespace instance {
 
     // Yielder
 
-    func set_snapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(snapshoter: felt) {
+    func set_snapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        snapshoter: felt
+    ) {
         let (caller) = get_address();
         with caller {
             carbonable_yielder_instance.set_snapshoter(snapshoter=snapshoter);
