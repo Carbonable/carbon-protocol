@@ -1,18 +1,3 @@
-[submodule "cairopen_contracts"]
-	url = https://github.com/CairOpen/cairopen-contracts.git
-	path = lib/cairopen_contracts
-[submodule "cairo_contracts"]
-	path = lib/cairo_contracts
-	url = https://github.com/OpenZeppelin/cairo-contracts
-[submodule "starkvest"]
-	path = lib/starkvest
-	url = https://github.com/abdelhamidbakhta/starkvest
-[submodule "cairo_erc_4906"]
-	path = lib/cairo_erc_4906
-	url = https://github.com/carbonable-labs/cairo-erc-4906
-[submodule "cairo_erc_2981"]
-	path = lib/cairo_erc_2981
-	url = https://github.com/carbonable-labs/cairo-erc-2981
-[submodule "cairo_erc_3525"]
-	path = lib/cairo_erc_3525
-	url = https://github.com/carbonable-labs/cairo-erc-3525
+[submodule "cairo"]
+	path = cairo
+	url = https://github.com/starkware-libs/cairo.git

@@ -1,7 +1,0 @@
-yielder:
-  slot: 1
-
-mocks:
-  carbonable_project_address: 0x072490d3D84CC1f850D4b6dEe9630cAc35Af99980BAA30577A76adEa72474512
-  carbonable_vester_address: 0x072490d3D84CC1f850D4b6dEe9630cAc35Af99980BAA30577A76adEa72474513
-  carbonable_offseter_address: 0x072490d3D84CC1f850D4b6dEe9630cAc35Af99980BAA30577A76adEa72474514
