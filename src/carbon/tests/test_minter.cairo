@@ -6,6 +6,16 @@ use integer::u256;
 use integer::u256_from_felt252;
 
 //
+// Constants
+//
+
+const UNIT_PRICE: felt252 = 1_felt252;
+const MAX_VALUE_PER_TX: felt252 = 1000_felt252;
+const MIN_VALUE_PER_TX: felt252 = 1_felt252;
+const MAX_VALUE: felt252 = 1000000_felt252;
+const RESERVED_VALUE: felt252 = 1000_felt252;
+
+//
 // Helper functions
 //
 
@@ -20,21 +30,16 @@ fn setup() {
     let project_slot: u256 = u256_from_felt252(1);
     let payment_token_address: ContractAddress = contract_address_const::<2>();
     let public_sale_open: bool = true;
-    let max_value_per_tx: felt252 = 1000_felt252;
-    let min_value_per_tx: felt252 = 1_felt252;
-    let max_value: felt252 = 1000000_felt252;
-    let unit_price: felt252 = 1_felt252;
-    let reserved_value: felt252 = 1000_felt252;
     Minter::constructor(
         project_address,
         project_slot,
         payment_token_address,
         public_sale_open,
-        max_value_per_tx,
-        min_value_per_tx,
-        max_value,
-        unit_price,
-        reserved_value,
+        MAX_VALUE_PER_TX,
+        MIN_VALUE_PER_TX,
+        MAX_VALUE,
+        UNIT_PRICE,
+        RESERVED_VALUE,
         owner,
     );
 }
@@ -54,57 +59,84 @@ fn test_initializer() {
     let project_slot: u256 = u256_from_felt252(1);
     let payment_token_address: ContractAddress = contract_address_const::<2>();
     let public_sale_open: bool = true;
-    let max_value_per_tx: felt252 = 1000_felt252;
-    let min_value_per_tx: felt252 = 1_felt252;
-    let max_value: felt252 = 1000000_felt252;
-    let unit_price: felt252 = 1_felt252;
-    let reserved_value: felt252 = 1000_felt252;
     Minter::initializer(
         project_address,
         project_slot,
         payment_token_address,
         public_sale_open,
-        max_value_per_tx,
-        min_value_per_tx,
-        max_value,
-        unit_price,
-        reserved_value,
+        MAX_VALUE_PER_TX,
+        MIN_VALUE_PER_TX,
+        MAX_VALUE,
+        UNIT_PRICE,
+        RESERVED_VALUE,
     );
 
     assert(
-        Minter::get_carbonable_project_address() == project_address, 'Project should be PROJECT'
+        Minter::get_carbonable_project_address() == project_address, 'Should be PROJECT_ADDRESS'
     );
-    assert(Minter::get_carbonable_project_slot() == project_slot, 'Slot should be SLOT');
+    assert(Minter::get_carbonable_project_slot() == project_slot, 'Should be PROJECT_SLOT');
+    assert(Minter::get_payment_token_address() == payment_token_address, 'Should be TOKEN_ADDRESS');
+    assert(Minter::get_max_value() == MAX_VALUE, 'Should be MAX_VALUE');
+    assert(Minter::get_reserved_value() == RESERVED_VALUE, 'Should be RESERVED_VALUE');
 }
-// #[test]
-// #[available_gas(2000000)]
-// fn test_constructor() {
-//     let initial_supply: u256 = u256_from_felt252(2000);
-//     let account: ContractAddress = contract_address_const::<1>();
-//     let decimals: u8 = 18_u8;
 
-//     ERC20::constructor(NAME, SYMBOL, initial_supply, account);
+#[test]
+#[available_gas(2000000)]
+fn test_constructor() {
+    setup();
+}
 
-//     let owner_balance: u256 = ERC20::balance_of(account);
-//     assert(owner_balance == initial_supply, 'Should eq inital_supply');
+#[test]
+#[available_gas(2000000)]
+fn test_set_unit_price() {
+    setup();
+    assert(Minter::get_unit_price() == UNIT_PRICE, 'Should be UNIT_PRICE');
+    let unit_price: felt252 = 2_felt252;
+    Minter::set_unit_price(unit_price);
+    assert(Minter::get_unit_price() == unit_price, 'Should be unit_price');
+}
 
-//     assert(ERC20::total_supply() == initial_supply, 'Should eq inital_supply');
-//     assert(ERC20::name() == NAME, 'Name should be NAME');
-//     assert(ERC20::symbol() == SYMBOL, 'Symbol should be SYMBOL');
-//     assert(ERC20::decimals() == decimals, 'Decimals should be 18');
-// }
+#[test]
+#[available_gas(2000000)]
+fn test_set_max_value_per_tx() {
+    setup();
+    assert(Minter::get_max_value_per_tx() == MAX_VALUE_PER_TX, 'Should be MAX_VALUE_PER_TX');
+    let max_value_per_tx: felt252 = 2000_felt252;
+    Minter::set_max_value_per_tx(max_value_per_tx);
+    assert(Minter::get_max_value_per_tx() == max_value_per_tx, 'Should be max_value_per_tx');
+}
 
-// #[test]
-// #[available_gas(2000000)]
-// fn test_approve() {
-//     let (owner, supply) = setup();
-//     let spender: ContractAddress = contract_address_const::<2>();
-//     let amount: u256 = u256_from_felt252(100);
+#[test]
+#[available_gas(2000000)]
+#[should_panic(expected = ('Minter: min_value <= max_value', ))]
+fn test_set_max_value_per_tx_panic_too_low() {
+    setup();
+    assert(Minter::get_max_value_per_tx() == MAX_VALUE_PER_TX, 'Should be MAX_VALUE_PER_TX');
+    let max_value_per_tx: felt252 = 0_felt252;
+    Minter::set_max_value_per_tx(max_value_per_tx);
+    assert(Minter::get_max_value_per_tx() == max_value_per_tx, 'Should be max_value_per_tx');
+}
 
-//     let success: bool = ERC20::approve(spender, amount);
-//     assert(success, 'Should return true');
-//     assert(ERC20::allowance(owner, spender) == amount, 'Spender not approved correctly');
-// }
+#[test]
+#[available_gas(2000000)]
+#[should_panic(expected = ('Minter: max_per_tx <= max_value', ))]
+fn test_set_max_value_per_tx_panic_too_high() {
+    setup();
+    assert(Minter::get_max_value_per_tx() == MAX_VALUE_PER_TX, 'Should be MAX_VALUE_PER_TX');
+    let max_value_per_tx: felt252 = 2000000_felt252;
+    Minter::set_max_value_per_tx(max_value_per_tx);
+    assert(Minter::get_max_value_per_tx() == max_value_per_tx, 'Should be max_value_per_tx');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn test_set_min_value_per_tx() {
+    setup();
+    assert(Minter::get_min_value_per_tx() == MIN_VALUE_PER_TX, 'Should be MIN_VALUE_PER_TX');
+    let min_value_per_tx: felt252 = 2_felt252;
+    Minter::set_min_value_per_tx(min_value_per_tx);
+    assert(Minter::get_min_value_per_tx() == min_value_per_tx, 'Should be min_value_per_tx');
+}
 
 // #[test]
 // #[available_gas(2000000)]

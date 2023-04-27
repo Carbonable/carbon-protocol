@@ -326,6 +326,16 @@ mod Minter {
 
     #[external]
     fn set_max_value_per_tx(max_value_per_tx: felt252) {
+        let min_value_per_tx = Minter::min_value_per_tx();
+        let max_value = Minter::max_value();
+        assert(
+            u256_from_felt252(min_value_per_tx) <= u256_from_felt252(max_value_per_tx),
+            'Minter: min_value <= max_value'
+        );
+        assert(
+            u256_from_felt252(max_value_per_tx) <= u256_from_felt252(max_value),
+            'Minter: max_per_tx <= max_value'
+        );
         Minter::set_max_value_per_tx(max_value_per_tx)
     }
 
