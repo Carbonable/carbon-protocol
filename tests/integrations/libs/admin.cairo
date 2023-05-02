@@ -374,6 +374,16 @@ namespace instance {
         return ();
     }
 
+    func set_provisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        provisioner: felt
+    ) {
+        let (caller) = get_address();
+        with caller {
+            carbonable_yielder_instance.set_provisioner(provisioner=provisioner);
+        }
+        return ();
+    }
+
     func yielder_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: felt, value: felt
     ) {
@@ -418,6 +428,15 @@ namespace instance {
         return ();
     }
 
+    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        let (caller) = get_address();
+        with caller {
+            let (success) = carbonable_yielder_instance.claim();
+            assert success = TRUE;
+        }
+        return ();
+    }
+
     func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         let (caller) = get_address();
         with caller {
@@ -427,24 +446,10 @@ namespace instance {
         return ();
     }
 
-    func create_vestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        total_amount: felt,
-        cliff_delta: felt,
-        start: felt,
-        duration: felt,
-        slice_period_seconds: felt,
-        revocable: felt,
-    ) {
+    func provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(amount: felt) {
         let (caller) = get_address();
         with caller {
-            let (success) = carbonable_yielder_instance.create_vestings(
-                total_amount=total_amount,
-                cliff_delta=cliff_delta,
-                start=start,
-                duration=duration,
-                slice_period_seconds=slice_period_seconds,
-                revocable=revocable,
-            );
+            let (success) = carbonable_yielder_instance.provision(amount=amount);
             assert success = TRUE;
         }
         return ();

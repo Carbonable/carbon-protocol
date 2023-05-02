@@ -22,7 +22,7 @@ struct Signers {
 struct Mocks {
     carbonable_project_address: felt,
     carbonable_offseter_address: felt,
-    carbonable_vester_address: felt,
+    payment_token_address: felt,
 }
 
 struct Yield {
@@ -61,14 +61,14 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local anyone;
     local carbonable_project_address;
     local carbonable_offseter_address;
-    local carbonable_vester_address;
+    local payment_token_address;
     local slot;
     %{
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.carbonable_project_address = context.mocks.carbonable_project_address
         ids.carbonable_offseter_address = context.mocks.carbonable_offseter_address
-        ids.carbonable_vester_address = context.mocks.carbonable_vester_address
+        ids.payment_token_address = context.mocks.payment_token_address
         ids.slot = context.yielder.slot
     %}
     // Instantiate offset farmer
@@ -80,7 +80,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     // Instantiate yield farmer
     CarbonableYielder.initializer(
         carbonable_offseter_address=carbonable_offseter_address,
-        carbonable_vester_address=carbonable_vester_address,
+        payment_token_address=payment_token_address,
     );
 
     // Instantiate context, useful to avoid many hints in tests
@@ -89,7 +89,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local mocks: Mocks = Mocks(
         carbonable_project_address=carbonable_project_address,
         carbonable_offseter_address=carbonable_offseter_address,
-        carbonable_vester_address=carbonable_vester_address,
+        payment_token_address=payment_token_address,
     );
     local yield: Yield = Yield(slot=slot);
 

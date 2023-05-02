@@ -11,7 +11,7 @@ from starkware.cairo.common.hash import hash2
 from openzeppelin.access.accesscontrol.library import AccessControl
 
 const MINTER_ROLE = 'MINTER';
-const VESTER_ROLE = 'VESTER';
+const PROVISIONER_ROLE = 'PROVISIONER';
 const CERTIFIER_ROLE = 'CERTIFIER';
 const WITHDRAWER_ROLE = 'WITHDRAWER';
 const SNAPSHOTER_ROLE = 'SNAPSHOTER';
@@ -67,29 +67,28 @@ namespace CarbonableAccessControl {
         return ();
     }
 
-    // Vester Role
-    func assert_only_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        AccessControl.assert_only_role(VESTER_ROLE);
+    // Provisioner Role
+    func assert_only_provisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) {
+        AccessControl.assert_only_role(PROVISIONER_ROLE);
         return ();
     }
 
-    func set_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(user: felt) {
-        _set_role(VESTER_ROLE, user);
-        return ();
-    }
-
-    func get_vesters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        vesters_len: felt, vesters: felt*
-    ) {
-        let (vesters_len, vesters) = _get_role_members(VESTER_ROLE);
-        return (vesters_len=vesters_len, vesters=vesters);
-    }
-
-    func revoke_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    func set_provisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         user: felt
     ) {
-        _revoke_role(VESTER_ROLE, user);
+        let (prev_provisioner) = get_provisioner();
+        AccessControl._revoke_role(PROVISIONER_ROLE, prev_provisioner);
+        AccessControl._grant_role(PROVISIONER_ROLE, user);
+        CarbonableAccessControl_role_members_index.write(PROVISIONER_ROLE, 0, user);
         return ();
+    }
+
+    func get_provisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        provisioner: felt
+    ) {
+        let (provisioner) = CarbonableAccessControl_role_members_index.read(PROVISIONER_ROLE, 0);
+        return (provisioner=provisioner);
     }
 
     // Certifier Role

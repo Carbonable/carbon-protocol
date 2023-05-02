@@ -7,7 +7,6 @@ from starkware.starknet.common.syscalls import get_tx_info
 
 from openzeppelin.account.library import Account, AccountCallArray
 
-
 //
 // Constructor
 //

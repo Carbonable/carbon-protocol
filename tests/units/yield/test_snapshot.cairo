@@ -70,7 +70,7 @@ func test_snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
         mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [6000000])
         mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [3000000])
         mock_call(context.mocks.carbonable_offseter_address, "getAbsorptionOf", [3000000])
-        store(target_contract_address=ids.contract_address, variable_name="CarbonableYielder_vested_", value=[1], )
+        store(target_contract_address=ids.contract_address, variable_name="CarbonableYielder_provisioned_", value=[1], )
         stop_warp = warp(blk_timestamp=200)
         expect_events(dict(name="Snapshot", data=dict(
             project=context.mocks.carbonable_project_address,
@@ -106,7 +106,7 @@ func test_snapshot_revert_not_snapshotable{
     %{
         warp(blk_timestamp=200)
         mock_call(context.mocks.carbonable_project_address, "isSetup", [1])
-        expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot or create vestings if no user has registered")
+        expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot or provision if no user has registered")
     %}
     CarbonableYielder.snapshot();
     return ();

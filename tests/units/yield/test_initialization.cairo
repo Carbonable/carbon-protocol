@@ -21,8 +21,8 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     // prepare farmer instance
     let (local context) = prepare();
 
-    let (carbonable_vester_address) = CarbonableYielder.carbonable_vester_address();
-    assert carbonable_vester_address = context.mocks.carbonable_vester_address;
+    let (payment_token_address) = CarbonableYielder.payment_token_address();
+    assert payment_token_address = context.mocks.payment_token_address;
 
     let (carbonable_offseter_address) = CarbonableYielder.carbonable_offseter_address();
     assert carbonable_offseter_address = context.mocks.carbonable_offseter_address;

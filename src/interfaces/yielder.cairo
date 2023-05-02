@@ -42,6 +42,12 @@ namespace ICarbonableYielder {
     func getSnapshoter() -> (snapshoter: felt) {
     }
 
+    func setProvisioner(provisioner: felt) {
+    }
+
+    func getProvisioner() -> (provisioner: felt) {
+    }
+
     //
     // Views
     //
@@ -52,7 +58,7 @@ namespace ICarbonableYielder {
     func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
     }
 
-    func getCarbonableOffseterAddress() -> (carbonable_offseter_address: felt) {
+    func getPaymentTokenAddress() -> (payment_token_address: felt) {
     }
 
     func getCarbonableVesterAddress() -> (carbonable_vester_address: felt) {
@@ -68,6 +74,12 @@ namespace ICarbonableYielder {
     }
 
     func getAbsorptionOf(address: felt) -> (absorption: felt) {
+    }
+
+    func getClaimableOf(address: felt) -> (claimable: felt) {
+    }
+
+    func getClaimedOf(address: felt) -> (claimed: felt) {
     }
 
     func getSnapshotedTime() -> (time: felt) {
@@ -89,16 +101,12 @@ namespace ICarbonableYielder {
     func withdrawToToken(token_id: Uint256, value: Uint256) -> (success: felt) {
     }
 
+    func claim() -> (success: felt) {
+    }
+
     func snapshot() -> (success: felt) {
     }
 
-    func createVestings(
-        total_amount: felt,
-        cliff_delta: felt,
-        start: felt,
-        duration: felt,
-        slice_period_seconds: felt,
-        revocable: felt,
-    ) -> (success: felt) {
+    func provision(amount: felt) -> (success: felt) {
     }
 }

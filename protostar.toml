@@ -1,5 +1,5 @@
 [project]
-protostar-version = "0.9.4"
+protostar-version = "0.10.0"
 lib-path = "lib"
 cairo-path = [
     "./lib/cairopen_contracts/src",
@@ -7,18 +7,15 @@ cairo-path = [
     "./lib/cairo_erc_2981/src",
     "./lib/cairo_erc_3525/src",
     "./lib/cairo_erc_4906/src",
-    "./lib/bal7hazar_contracts/src",
-    "./lib/starkvest/src",
     "src",
 ]
 
 [contracts]
-CarbonableProxy = ["src/proxy/proxy.cairo"]
-CarbonableProject = ["src/project/project.cairo"]
-CarbonableMetadata = ["src/metadata/metadata.cairo"]
-CarbonableMinter = ["src/mint/minter.cairo"]
-CarbonableVester = ["src/vesting/vester.cairo"]
-CarbonableOffseter = ["src/offset/offseter.cairo"]
+# CarbonableProxy = ["src/proxy/proxy.cairo"]
+# CarbonableProject = ["src/project/project.cairo"]
+# CarbonableMetadata = ["src/metadata/metadata.cairo"]
+# CarbonableMinter = ["src/mint/minter.cairo"]
+# CarbonableOffseter = ["src/offset/offseter.cairo"]
 CarbonableYielder = ["src/yield/yielder.cairo"]
 
 [test]
