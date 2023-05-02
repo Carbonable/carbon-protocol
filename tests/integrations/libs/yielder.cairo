@@ -117,7 +117,7 @@ namespace instance {
         provisioner: felt
     ) {
         let (contract_address) = instance.get_address();
-        let (provisioner) = ICarbonableYielder.getprovisioner(contract_address=contract_address);
+        let (provisioner) = ICarbonableYielder.getProvisioner(contract_address=contract_address);
         return (provisioner,);
     }
 
@@ -126,7 +126,7 @@ namespace instance {
     }(provisioner: felt) {
         let (contract_address) = instance.get_address();
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
-        ICarbonableYielder.setprovisioner(
+        ICarbonableYielder.setProvisioner(
             contract_address=contract_address, provisioner=provisioner
         );
         %{ stop_prank() %}
@@ -323,7 +323,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
         let (success) = ICarbonableYielder.provision(
-            contract_address=contract_address, amout=amout
+            contract_address=contract_address, amount=amount
         );
         %{ stop_prank() %}
         return (success,);

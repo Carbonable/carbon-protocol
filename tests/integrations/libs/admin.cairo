@@ -11,7 +11,6 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from tests.integrations.libs.project import instance as carbonable_project_instance
 from tests.integrations.libs.token import instance as payment_token_instance
 from tests.integrations.libs.minter import instance as carbonable_minter_instance
-from tests.integrations.libs.vester import instance as carbonable_vester_instance
 from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
 from tests.integrations.libs.yielder import instance as carbonable_yielder_instance
 
@@ -428,7 +427,7 @@ namespace instance {
         return ();
     }
 
-    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    func yielder_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         let (caller) = get_address();
         with caller {
             let (success) = carbonable_yielder_instance.claim();
@@ -451,16 +450,6 @@ namespace instance {
         with caller {
             let (success) = carbonable_yielder_instance.provision(amount=amount);
             assert success = TRUE;
-        }
-        return ();
-    }
-
-    // Vester
-
-    func add_vester{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(vester: felt) {
-        let (caller) = get_address();
-        with caller {
-            carbonable_vester_instance.add_vester(vester=vester);
         }
         return ();
     }

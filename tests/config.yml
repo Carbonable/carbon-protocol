@@ -5,6 +5,7 @@ signers:
   certifier: 1003
   withdrawer: 1004
   snapshoter: 1005
+  provisioner: 1006
 
 sources:
   proxy: ./src/proxy/proxy.cairo

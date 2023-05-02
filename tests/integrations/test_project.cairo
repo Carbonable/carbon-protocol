@@ -45,7 +45,6 @@ func test_metadata_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
         uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
         data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
         metadata = json.loads(data[22:])
-        print(metadata)
         assert "name" in metadata
         assert "description" in metadata
         assert "image" in metadata

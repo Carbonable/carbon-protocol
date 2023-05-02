@@ -11,11 +11,11 @@ cairo-path = [
 ]
 
 [contracts]
-# CarbonableProxy = ["src/proxy/proxy.cairo"]
-# CarbonableProject = ["src/project/project.cairo"]
-# CarbonableMetadata = ["src/metadata/metadata.cairo"]
-# CarbonableMinter = ["src/mint/minter.cairo"]
-# CarbonableOffseter = ["src/offset/offseter.cairo"]
+CarbonableProxy = ["src/proxy/proxy.cairo"]
+CarbonableProject = ["src/project/project.cairo"]
+CarbonableMetadata = ["src/metadata/metadata.cairo"]
+CarbonableMinter = ["src/mint/minter.cairo"]
+CarbonableOffseter = ["src/offset/offseter.cairo"]
 CarbonableYielder = ["src/yield/yielder.cairo"]
 
 [test]

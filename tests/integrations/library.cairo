@@ -10,13 +10,13 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from tests.integrations.libs.project import instance as carbonable_project_instance
 from tests.integrations.libs.token import instance as payment_token_instance
 from tests.integrations.libs.minter import instance as carbonable_minter_instance
-from tests.integrations.libs.vester import instance as carbonable_vester_instance
 from tests.integrations.libs.offseter import instance as carbonable_offseter_instance
 from tests.integrations.libs.yielder import instance as carbonable_yielder_instance
 from tests.integrations.libs.admin import instance as admin_instance
 from tests.integrations.libs.anyone import instance as anyone_instance
 from tests.integrations.libs.certifier import instance as certifier_instance
 from tests.integrations.libs.snapshoter import instance as snapshoter_instance
+from tests.integrations.libs.provisioner import instance as provisioner_instance
 from tests.integrations.libs.withdrawer import instance as withdrawer_instance
 
 //
@@ -217,6 +217,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     let (local certifier_address) = certifier_instance.get_address();
     let (local withdrawer_address) = withdrawer_instance.get_address();
     let (local snapshoter_address) = snapshoter_instance.get_address();
+    let (local provisioner_address) = provisioner_instance.get_address();
     let (local carbonable_minter) = carbonable_minter_instance.get_address();
 
     // Setup Access control
@@ -240,7 +241,8 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     admin_instance.set_whitelist_merkle_root(merkle_root);
 
     // Set initial balances between users
-    anyone_instance.transfer(admin_address, 500000);
+    anyone_instance.transfer(admin_address, 400000);
+    anyone_instance.transfer(provisioner_address, 100000);
 
     // Set metadata class hash
     admin_instance.set_metadata_implementation(metadata_class_hash);
