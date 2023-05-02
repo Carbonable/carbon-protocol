@@ -121,7 +121,9 @@ namespace ICarbonableMinter {
     func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
     }
 
-    func preBuy(allocation: felt, proof_len: felt, proof: felt*, value: felt, force: felt) -> (success: felt) {
+    func preBuy(allocation: felt, proof_len: felt, proof: felt*, value: felt, force: felt) -> (
+        success: felt
+    ) {
     }
 
     func publicBuy(value: felt, force: felt) -> (success: felt) {

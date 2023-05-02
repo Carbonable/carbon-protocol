@@ -25,20 +25,20 @@ from src.yield.library import CarbonableYielder
 // @param carbonable_project_address The address of the Carbonable project.
 // @param carbonable_project_slot The slot of the Carbonable project.
 // @param carbonable_offseter_address The address of the Carbonable offseter.
-// @param carbonable_vester_address The address of the Carbonable vester.
+// @param payment_token_address The address of the ERC20 token that will be used for rewards.
 // @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
     carbonable_project_slot: Uint256,
     carbonable_offseter_address: felt,
-    carbonable_vester_address: felt,
+    payment_token_address: felt,
     owner: felt,
 ) {
     CarbonableOffseter.initializer(carbonable_project_address, carbonable_project_slot);
     CarbonableYielder.initializer(
         carbonable_offseter_address=carbonable_offseter_address,
-        carbonable_vester_address=carbonable_vester_address,
+        payment_token_address=payment_token_address,
     );
     Ownable.initializer(owner);
     Proxy.initializer(owner);
@@ -118,6 +118,15 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
+// @notice Get the snapshoter.
+// @return snapshoter The address of the snapshoter.
+@view
+func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    snapshoter: felt
+) {
+    return CarbonableAccessControl.get_snapshoter();
+}
+
 // @notice Set the snapshoter.
 // @dev This function is only callable by the owner.
 // @param snapshoter The address of the snapshoter.
@@ -130,13 +139,25 @@ func setSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     return ();
 }
 
-// @notice Get the snapshoter.
-// @return snapshoter The address of the snapshoter.
+// @notice Get the provisioner.
+// @return provisioner The address of the provisioner.
 @view
-func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    snapshoter: felt
+func getProvisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    provisioner: felt
 ) {
-    return CarbonableAccessControl.get_snapshoter();
+    return CarbonableAccessControl.get_provisioner();
+}
+
+// @notice Set the provisioner.
+// @dev This function is only callable by the owner.
+// @param provisioner The address of the provisioner.
+@external
+func setProvisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    provisioner: felt
+) {
+    Ownable.assert_only_owner();
+    CarbonableAccessControl.set_provisioner(provisioner);
+    return ();
 }
 
 //
@@ -181,12 +202,13 @@ func getCarbonableOffseterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     return CarbonableYielder.carbonable_offseter_address();
 }
 
-// @notice Return the associated carbonable vester.
-// @return carbonable_vester_address The address of the corresponding Carbonable vester.
+// @notice Return the associated payment token.
+// @return payment_token_address The address of the ERC20 token that will be used for rewards.
 @view
-func getCarbonableVesterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) -> (carbonable_vester_address: felt) {
-    return CarbonableYielder.carbonable_vester_address();
+func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    payment_token_address: felt
+) {
+    return CarbonableYielder.payment_token_address();
 }
 
 // @notice Return the total value deposited balance of the project.
@@ -225,6 +247,26 @@ func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     address: felt
 ) -> (absorption: felt) {
     return CarbonableOffseter.absorption_of(address=address);
+}
+
+// @notice Return the total claimable balance of the provided address.
+// @param address The address to query.
+// @return claimable The total claimable.
+@view
+func getClaimableOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (claimable: felt) {
+    return CarbonableYielder.claimable_of(address=address);
+}
+
+// @notice Return the total claimed balance of the provided address.
+// @param address The address to query.
+// @return claimed The total claimed.
+@view
+func getClaimedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    address: felt
+) -> (claimed: felt) {
+    return CarbonableYielder.claimed_of(address=address);
 }
 
 // @notice Return the associated carbonable vester.
@@ -284,6 +326,13 @@ func withdrawToToken{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     return CarbonableOffseter.withdraw_to_token(token_id=token_id, value=value);
 }
 
+// @notice Claim the claimable amount of ERC-20.
+// @return success The success status.
+@external
+func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {
+    return CarbonableYielder.claim();
+}
+
 // @notice Snapshot the current state of claimable and claimed per user.
 // @dev The caller must have the SNAPSHOTER_ROLE role.
 // @return success The success status.
@@ -295,33 +344,16 @@ func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     return CarbonableYielder.snapshot();
 }
 
-// @notice The Yielder goes through all assets that are deposited, during the current period, to create a vesting for each of the assets,
-//   on the starkvest smart contract, by allocating shares of the total amount collected from selling carbon credit.
+// @notice Provision the yielder with the amount or ERC-20 value of carbon credits sold for
+//   the snapshoted period.
 // @dev Snapshot must have been executed before.
-//   The caller must be the contract owner.
-// @param total_amount The amount, in ERC-20 value, of carbon credit sold for the current period.
-// @param cliff_delta The time, in seconds, before the first vesting.
-// @param start The start time of the vesting period.
-// @param duration The duration of the vesting period.
-// @param slice_period_seconds The time, in seconds, between each vesting.
-// @param revocable The vesting revocability.
+//   The caller must have the PROVISIONER_ROLE role.
+// @param amount The amount of ERC-20.
 // @return success The success status.
 @external
-func createVestings{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    total_amount: felt,
-    cliff_delta: felt,
-    start: felt,
-    duration: felt,
-    slice_period_seconds: felt,
-    revocable: felt,
-) -> (success: felt) {
-    Ownable.assert_only_owner();
-    return CarbonableYielder.create_vestings(
-        total_amount=total_amount,
-        cliff_delta=cliff_delta,
-        start=start,
-        duration=duration,
-        slice_period_seconds=slice_period_seconds,
-        revocable=revocable,
-    );
+func provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(amount: felt) -> (
+    success: felt
+) {
+    CarbonableAccessControl.assert_only_provisioner();
+    return CarbonableYielder.provision(amount=amount);
 }

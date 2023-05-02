@@ -95,6 +95,14 @@ namespace instance {
         return ();
     }
 
+    func get_snapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        snapshoter: felt
+    ) {
+        let (contract_address) = instance.get_address();
+        let (snapshoter) = ICarbonableYielder.getSnapshoter(contract_address=contract_address);
+        return (snapshoter,);
+    }
+
     func set_snapshoter{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
     }(snapshoter: felt) {
@@ -105,12 +113,24 @@ namespace instance {
         return ();
     }
 
-    func get_snapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        snapshoter: felt
+    func get_provisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        provisioner: felt
     ) {
         let (contract_address) = instance.get_address();
-        let (snapshoter) = ICarbonableYielder.getSnapshoter(contract_address=contract_address);
-        return (snapshoter,);
+        let (provisioner) = ICarbonableYielder.getprovisioner(contract_address=contract_address);
+        return (provisioner,);
+    }
+
+    func set_provisioner{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
+    }(provisioner: felt) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableYielder.setprovisioner(
+            contract_address=contract_address, provisioner=provisioner
+        );
+        %{ stop_prank() %}
+        return ();
     }
 
     //
@@ -147,14 +167,15 @@ namespace instance {
         return (carbonable_offseter_address,);
     }
 
-    func carbonable_vester_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ) -> (carbonable_vester_address: felt) {
+    func payment_token_address{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (payment_token_address: felt) {
         let (contract_address) = instance.get_address();
-        let (carbonable_vester_address) = ICarbonableYielder.getCarbonableVesterAddress(
+        let (payment_token_address) = ICarbonableYielder.getPaymentTokenAddress(
             contract_address=contract_address
         );
-        return (carbonable_vester_address,);
+        return (payment_token_address,);
     }
+
     func get_total_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         value: felt
     ) {
@@ -192,6 +213,26 @@ namespace instance {
             contract_address=contract_address, address=address
         );
         return (absorption,);
+    }
+
+    func get_claimable_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (claimable: felt) {
+        let (contract_address) = instance.get_address();
+        let (claimable) = ICarbonableYielder.getClaimableOf(
+            contract_address=contract_address, address=address
+        );
+        return (claimable,);
+    }
+
+    func get_claimed_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        address: felt
+    ) -> (claimed: felt) {
+        let (contract_address) = instance.get_address();
+        let (claimed) = ICarbonableYielder.getClaimedOf(
+            contract_address=contract_address, address=address
+        );
+        return (claimed,);
     }
 
     func get_snapshoted_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -257,6 +298,16 @@ namespace instance {
         return (success,);
     }
 
+    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt}() -> (
+        success: felt
+    ) {
+        let (contract_address) = instance.get_address();
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        let (success) = ICarbonableYielder.claim(contract_address=contract_address);
+        %{ stop_prank() %}
+        return (success,);
+    }
+
     func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt}(
         ) -> (success: felt) {
         let (contract_address) = instance.get_address();
@@ -266,26 +317,13 @@ namespace instance {
         return (success,);
     }
 
-    func create_vestings{
-        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
-    }(
-        total_amount: felt,
-        cliff_delta: felt,
-        start: felt,
-        duration: felt,
-        slice_period_seconds: felt,
-        revocable: felt,
+    func provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt}(
+        amount: felt
     ) -> (success: felt) {
         let (contract_address) = instance.get_address();
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
-        let (success) = ICarbonableYielder.createVestings(
-            contract_address=contract_address,
-            total_amount=total_amount,
-            cliff_delta=cliff_delta,
-            start=start,
-            duration=duration,
-            slice_period_seconds=slice_period_seconds,
-            revocable=revocable,
+        let (success) = ICarbonableYielder.provision(
+            contract_address=contract_address, amout=amout
         );
         %{ stop_prank() %}
         return (success,);

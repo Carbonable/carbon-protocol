@@ -56,7 +56,9 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 }
 
 @external
-func test_total_claimable_multi_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_total_claimable_multi_users{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
     alloc_locals;
 
     // prepare farmer instance

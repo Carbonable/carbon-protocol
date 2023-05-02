@@ -531,7 +531,7 @@ namespace CarbonableMinter {
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
-        return (success=TRUE,);
+        return (success=TRUE);
     }
 
     func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -552,7 +552,7 @@ namespace CarbonableMinter {
         // [Security] End reetrancy guard
         ReentrancyGuard.end();
 
-        return (success=TRUE,);
+        return (success=TRUE);
     }
 
     //
@@ -650,9 +650,9 @@ namespace CarbonableMinter {
             // Emit sold out event
             SoldOut.emit(time=current_time);
 
-            return (minted_value=value_u256,);
+            return (minted_value=value_u256);
         }
 
-        return (minted_value=value_u256,);
+        return (minted_value=value_u256);
     }
 }

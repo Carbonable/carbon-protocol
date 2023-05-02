@@ -80,6 +80,14 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             },
         ).contract_address
 
+        # Provisioner account deployment
+        context.provisioner_account_contract = deploy_contract(
+            contract=context.sources.account,
+            constructor_args={
+                "public_key": context.signers.provisioner,
+            },
+        ).contract_address
+
         # Payment token deployment
         context.payment_token_contract = deploy_contract(
             contract=context.sources.token,
@@ -154,21 +162,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             }
         ).contract_address
 
-        # Carbonable vester deployment
-        context.carbonable_vester_class_hash = declare(contract=context.sources.vester).class_hash
-        calldata = {
-            "erc20_address": context.payment_token_contract,
-            "owner": context.admin_account_contract,
-        }
-        context.carbonable_vester_contract = deploy_contract(
-            contract=context.sources.proxy,
-            constructor_args={
-                "implementation_hash": context.carbonable_vester_class_hash,
-                "selector": context.selector.initializer,
-                "calldata": calldata.values(),
-            }
-        ).contract_address
-
         # Carbonable yielder deployment
         context.carbonable_yielder_class_hash = declare(contract=context.sources.yielder).class_hash
         calldata = {
@@ -176,7 +169,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             "carbonable_project_slot_low": context.project.slot,
             "carbonable_project_slot_high": 0,
             "carbonable_offseter_address": context.carbonable_offseter_contract,
-            "carbonable_vester_address": context.carbonable_vester_contract,
+            "payment_token_address": context.payment_token_contract,
             "owner": context.admin_account_contract,
         }
         context.carbonable_yielder_contract = deploy_contract(
@@ -225,14 +218,13 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     let (local withdrawer_address) = withdrawer_instance.get_address();
     let (local snapshoter_address) = snapshoter_instance.get_address();
     let (local carbonable_minter) = carbonable_minter_instance.get_address();
-    let (local carbonable_yielder) = carbonable_yielder_instance.get_address();
 
     // Setup Access control
     admin_instance.add_minter(slot, carbonable_minter);
     admin_instance.set_certifier(slot, certifier_address);
     admin_instance.set_withdrawer(withdrawer_address);
     admin_instance.set_snapshoter(snapshoter_address);
-    admin_instance.add_vester(carbonable_yielder);
+    admin_instance.set_provisioner(provisioner_address);
 
     // Set absorptions
     certifier_instance.set_absorptions(

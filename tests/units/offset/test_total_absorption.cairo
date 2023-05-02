@@ -64,7 +64,9 @@ func test_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
 }
 
 @external
-func test_total_absorption_multi_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_total_absorption_multi_users{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
     alloc_locals;
 
     // prepare farmer instance
