@@ -11,10 +11,10 @@ from starkware.cairo.common.hash import hash2
 from openzeppelin.access.accesscontrol.library import AccessControl
 
 const MINTER_ROLE = 'MINTER';
-const PROVISIONER_ROLE = 'PROVISIONER';
 const CERTIFIER_ROLE = 'CERTIFIER';
 const WITHDRAWER_ROLE = 'WITHDRAWER';
 const SNAPSHOTER_ROLE = 'SNAPSHOTER';
+const PROVISIONER_ROLE = 'PROVISIONER';
 
 @storage_var
 func CarbonableAccessControl_role_members_index(role: felt, index: felt) -> (member: felt) {

@@ -58,10 +58,10 @@ namespace ICarbonableYielder {
     func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
     }
 
-    func getPaymentTokenAddress() -> (payment_token_address: felt) {
+    func getCarbonableOffseterAddress() -> (carbonable_offseter_address: felt) {
     }
 
-    func getCarbonableVesterAddress() -> (carbonable_vester_address: felt) {
+    func getPaymentTokenAddress() -> (payment_token_address: felt) {
     }
 
     func getTotalDeposited() -> (value: Uint256) {

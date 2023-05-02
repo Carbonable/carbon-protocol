@@ -3,6 +3,9 @@
 build:
 	protostar build
 
+format:
+	protostar format src tests
+
 install:
 	protostar install
 

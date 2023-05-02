@@ -12,8 +12,8 @@ from tests.integrations.library import (
     admin_instance as admin,
     anyone_instance as anyone,
     snapshoter_instance as snapshoter,
+    provisioner_instance as provisioner,
     carbonable_yielder_instance as yielder,
-    carbonable_vester_instance as vester,
     carbonable_project_instance as project,
 )
 
@@ -35,28 +35,7 @@ func test_snapshot_revert_not_owner{
 }
 
 @view
-func test_create_vestings_revert_not_owner{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    %{ expect_revert("TRANSACTION_FAILED", "Ownable: caller is not the owner") %}
-    anyone.create_vestings(
-        total_amount=1000,
-        cliff_delta=0,
-        start=120,
-        duration=10,
-        slice_period_seconds=1,
-        revocable=TRUE,
-    );
-
-    return ();
-}
-
-@view
-func test_create_vestings_without_any_deposited{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
+func test_snapshot_at_t0{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot at a sooner time that previous snapshot") %}
@@ -66,20 +45,41 @@ func test_create_vestings_without_any_deposited{
 }
 
 @view
-func test_create_vestings_nominal_case{
+func test_snapshot_without_any_deposited{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
+    alloc_locals;
+
+    %{ stop_warp = warp(blk_timestamp=1, target_contract_address=context.carbonable_yielder_contract) %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot or provision if no user has registered") %}
+    snapshoter.snapshot();
+    %{ stop_warp() %}
+
+    return ();
+}
+
+@view
+func test_provision_revert_not_owner{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    %{ expect_revert("TRANSACTION_FAILED", "AccessControl: caller is missing role") %}
+    anyone.provision(amount=1000);
+
+    return ();
+}
+
+@view
+func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
     alloc_locals;
 
     let (admin_address) = admin.get_address();
     let (anyone_address) = anyone.get_address();
     let (project_address) = project.get_address();
     let (yielder_address) = yielder.get_address();
-    let (vester_address) = vester.get_address();
     let slot = 1;
-
-    // Transfer funds to vester
-    admin.transfer(recipient=vester_address, amount=1000);
 
     // Mint tokens with temporary MINTER_ROLE
     admin.add_minter(slot=slot, minter=admin_address);
@@ -128,32 +128,18 @@ func test_create_vestings_nominal_case{
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
-    // Start testing create vestings
-    %{ stop_warp_yielder = warp(blk_timestamp=1706745600, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1706745600, target_contract_address=ids.project_address) %}
+    provisioner.approve(amount=1000);
+    provisioner.provision(amount=1000);
 
-    admin.create_vestings(
-        total_amount=1000,
-        cliff_delta=0,
-        start=1706745600,
-        duration=5,
-        slice_period_seconds=1,
-        revocable=TRUE,
-    );
-    %{ stop_warp_yielder() %}
-    %{ stop_warp_project() %}
-
-    %{ stop_warp = warp(blk_timestamp=1730419200, target_contract_address=ids.vester_address) %}
-    let (releasable_amount) = vester.releasable_of(anyone_address);
-    with_attr error_message("Testing: releasable amount should be expected amount: 600") {
-        assert releasable_amount = 600;
+    let (claimable) = yielder.get_claimable_of(anyone_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 600") {
+        assert claimable = 600;
     }
 
-    let (releasable_amount) = vester.releasable_of(admin_address);
-    with_attr error_message("Testing: releasable amount should be expected amount: 400") {
-        assert releasable_amount = 400;
+    let (claimable) = yielder.get_claimable_of(admin_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 400") {
+        assert claimable = 400;
     }
-    %{ stop_warp %}
 
     return ();
 }
@@ -168,11 +154,7 @@ func test_create_vestings_only_one_deposited{
     let (anyone_address) = anyone.get_address();
     let (project_address) = project.get_address();
     let (yielder_address) = yielder.get_address();
-    let (vester_address) = vester.get_address();
     let slot = 1;
-
-    // Transfer funds to vester
-    admin.transfer(recipient=vester_address, amount=1000);
 
     // Mint tokens with temporary MINTER_ROLE
     admin.add_minter(slot=slot, minter=admin_address);
@@ -216,88 +198,20 @@ func test_create_vestings_only_one_deposited{
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
-    // Start testing create vestings
-    %{ stop_warp_yielder = warp(blk_timestamp=1706745600, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1706745600, target_contract_address=ids.project_address) %}
+    provisioner.approve(amount=1000);
+    provisioner.provision(amount=1000);
 
-    admin.create_vestings(
-        total_amount=1000,
-        cliff_delta=0,
-        start=1706745600,
-        duration=5,
-        slice_period_seconds=1,
-        revocable=TRUE,
-    );
-    %{ stop_warp_yielder() %}
-    %{ stop_warp_project() %}
-
-    %{ stop_warp = warp(blk_timestamp=1730419200, target_contract_address=ids.vester_address) %}
-    let (releasable_amount) = vester.releasable_of(anyone_address);
+    let (claimable) = yielder.get_claimable_of(anyone_address);
     with_attr error_message("Testing: releasable amount should be expected amount: 1000") {
-        assert releasable_amount = 1000;
+        assert claimable = 1000;
     }
 
-    anyone.release_all();
+    anyone.yielder_claim();
 
-    let (released_amount) = vester.released_of(anyone_address);
+    let (claimed) = yielder.get_claimed_of(anyone_address);
     with_attr error_message("Testing: released amount should be expected amount: 1000") {
-        assert released_amount = 1000;
+        assert claimed = 1000;
     }
-
-    %{ stop_warp %}
-
-    return ();
-}
-
-@view
-func test_create_vestings_not_enough_fund_vester{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    let (admin_address) = admin.get_address();
-    let (anyone_address) = anyone.get_address();
-    let (project_address) = project.get_address();
-    let (yielder_address) = yielder.get_address();
-    let (vester_address) = vester.get_address();
-    let slot = 1;
-
-    // Mint tokens with temporary MINTER_ROLE
-    admin.add_minter(slot=slot, minter=admin_address);
-    admin.mint(to=anyone_address, token_id=3, slot=slot, value=100);
-    admin.revoke_minter(slot=slot, minter=admin_address);
-
-    // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
-
-    anyone.set_approval_for_slot(slot=slot, operator=yielder_address);
-    anyone.yielder_deposit(token_id=3, value=100);
-
-    %{ stop_warp_yielder() %}
-    %{ stop_warp_project() %}
-
-    // Snapshoter snapshot
-    %{ stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address) %}
-    snapshoter.snapshot();
-    %{ stop_warp_yielder() %}
-    %{ stop_warp_project() %}
-
-    // Start testing create vestings
-    %{ stop_warp = warp(blk_timestamp=1706745600, target_contract_address=ids.yielder_address) %}
-    admin.transfer(recipient=vester_address, amount=800);
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: not enough unallocated amount into vester") %}
-    admin.create_vestings(
-        total_amount=1000,
-        cliff_delta=0,
-        start=1706745600,
-        duration=10,
-        slice_period_seconds=1,
-        revocable=TRUE,
-    );
-    %{ stop_warp %}
 
     return ();
 }
