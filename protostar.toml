@@ -15,6 +15,7 @@ cairo-path = [
 [contracts]
 CarbonableProxy = ["src/proxy/proxy.cairo"]
 CarbonableProject = ["src/project/project.cairo"]
+CarbonableCertificate = ["src/certificate/certificate.cairo"]
 CarbonableMetadata = ["src/metadata/metadata.cairo"]
 CarbonableMinter = ["src/mint/minter.cairo"]
 CarbonableVester = ["src/vesting/vester.cairo"]
