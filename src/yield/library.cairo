@@ -256,7 +256,9 @@ namespace CarbonableYielder {
         let (previous_offseter_absorption) = CarbonableYielder_snapshoted_offseter_absorption_.read(
             );
         let (previous_yielder_absorption) = CarbonableYielder_snapshoted_yielder_absorption_.read();
-        let (previous_yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
+        let (
+            previous_yielder_contribution
+        ) = CarbonableYielder_snapshoted_yielder_contribution_.read();
 
         // [Compute] Current information
         let (current_project_absorption) = ICarbonableProject.getCurrentAbsorption(
@@ -286,16 +288,20 @@ namespace CarbonableYielder {
         // [Effect] Store period shares per users, previous amount remainder is added to the current amount
         let (count) = CarbonableOffseter.total_user_count();
         let (amount) = CarbonableYielder_amount_.read();
-        let (remainder) = CarbonableYielder_amount_remainder_.read();
-        let (new_remainder) = _snapshot_iter(
+        let (remainder) = _snapshot_iter(
             index=count - 1,
-            amount=amount + remainder,
+            amount=amount,
             previous_yielder_contribution=previous_yielder_contribution,
-            remainder=0,
+            remainder=amount,
         );
 
+        // [Check] Remainder is positive and lower or equal to the amount
+        with_attr error_message("CarbonableYielder: remainder overflow") {
+            assert_in_range(remainder, 0, amount + 1);
+        }
+
         // [Effect] Update provisioned status
-        CarbonableYielder_amount_remainder_.write(new_remainder);
+        CarbonableYielder_amount_remainder_.write(remainder);
         CarbonableYielder_provisioned_.write(FALSE);
         CarbonableYielder_amount_.write(0);
 
@@ -345,9 +351,10 @@ namespace CarbonableYielder {
             assert transfer_success = TRUE;
         }
 
-        // [Effect] Update provision status and amounts
+        // [Effect] Update provision status and amounts, add previous remainder to the current amount
         CarbonableYielder_provisioned_.write(TRUE);
-        CarbonableYielder_amount_.write(amount);
+        let (remainder) = CarbonableYielder_amount_remainder_.read();
+        CarbonableYielder_amount_.write(amount + remainder);
         let (total_amount) = CarbonableYielder_total_amount_.read();
         CarbonableYielder_total_amount_.write(total_amount + amount);
 
@@ -386,17 +393,28 @@ namespace CarbonableYielder {
 
         // [Effect] Store new snapshoted absorptions and contibution
         CarbonableYielder_snapshoted_user_yielder_absorption_.write(user, current_user_absorption);
-        CarbonableYielder_snapshoted_user_yielder_contribution_.write(user, period_user_contribution);
+        CarbonableYielder_snapshoted_user_yielder_contribution_.write(
+            user, period_user_contribution
+        );
 
         // [Effect] Update user claimable if previous_yielder_contribution != 0
-        let new_remainder = 0;
         if (previous_yielder_contribution != 0) {
             let (stored_claimable) = CarbonableYielder_claimable_.read(user);
-            let (new_claimable, rem) = unsigned_div_rem(
+            let (new_claimable, _) = unsigned_div_rem(
                 previous_user_contribution * amount, previous_yielder_contribution
             );
             CarbonableYielder_claimable_.write(user, stored_claimable + new_claimable);
-            new_remainder = rem;
+
+            // [Check] If not last, then continue
+            if (index != 0) {
+                return _snapshot_iter(
+                    index=index - 1,
+                    amount=amount,
+                    previous_yielder_contribution=previous_yielder_contribution,
+                    remainder=remainder - new_claimable,
+                );
+            }
+            return (new_remainder=remainder - new_claimable);
         }
 
         // [Check] If not last, then continue
@@ -405,10 +423,10 @@ namespace CarbonableYielder {
                 index=index - 1,
                 amount=amount,
                 previous_yielder_contribution=previous_yielder_contribution,
-                remainder=remainder + new_remainder,
+                remainder=remainder,
             );
         }
-        return (new_remainder=remainder + new_remainder);
+        return (new_remainder=remainder);
     }
 }
 
