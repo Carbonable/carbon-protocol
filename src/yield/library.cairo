@@ -256,6 +256,7 @@ namespace CarbonableYielder {
         let (previous_offseter_absorption) = CarbonableYielder_snapshoted_offseter_absorption_.read(
             );
         let (previous_yielder_absorption) = CarbonableYielder_snapshoted_yielder_absorption_.read();
+        let (previous_yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
 
         // [Compute] Current information
         let (current_project_absorption) = ICarbonableProject.getCurrentAbsorption(
@@ -266,33 +267,35 @@ namespace CarbonableYielder {
         );
         let (current_yielder_absorption) = CarbonableOffseter.total_absorption();
 
-        // [Compute] Period information
+        // [Check] Yielder contribution not null
         let period_project_absorption = current_project_absorption - previous_project_absorption;
         let period_offseter_absorption = current_offseter_absorption - previous_offseter_absorption;
         let period_yielder_absorption = current_yielder_absorption - previous_yielder_absorption;
-
-        // [Check] Period duration not null
-        let (current_time) = get_block_timestamp();
-        let period_duration = current_time - previous_time;
         with_attr error_message(
-                "CarbonableYielder: cannot estimate tCO2 price if the period duration is null") {
-            assert_not_zero(period_duration);
+                "CarbonableYielder: cannot snapshot if the current yielder contribution is null") {
+            assert_not_zero(period_yielder_absorption);
         }
 
         // [Effect] Store snapshot values
+        let (current_time) = get_block_timestamp();
         CarbonableYielder_snapshoted_time_.write(current_time);
         CarbonableYielder_snapshoted_offseter_absorption_.write(current_offseter_absorption);
         CarbonableYielder_snapshoted_yielder_absorption_.write(current_yielder_absorption);
         CarbonableYielder_snapshoted_yielder_contribution_.write(period_yielder_absorption);
 
-        // [Effect] Store period shares per users
+        // [Effect] Store period shares per users, previous amount remainder is added to the current amount
         let (count) = CarbonableOffseter.total_user_count();
         let (amount) = CarbonableYielder_amount_.read();
-        _snapshot_iter(
-            index=count - 1, amount=amount, previous_yielder_contribution=period_yielder_absorption
+        let (remainder) = CarbonableYielder_amount_remainder_.read();
+        let (new_remainder) = _snapshot_iter(
+            index=count - 1,
+            amount=amount + remainder,
+            previous_yielder_contribution=previous_yielder_contribution,
+            remainder=0,
         );
 
         // [Effect] Update provisioned status
+        CarbonableYielder_amount_remainder_.write(new_remainder);
         CarbonableYielder_provisioned_.write(FALSE);
         CarbonableYielder_amount_.write(0);
 
@@ -328,13 +331,6 @@ namespace CarbonableYielder {
             assert_not_zero(amount);
         }
 
-        // [Check] Contribution not null
-        let (yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
-        with_attr error_message(
-                "CarbonableYielder: cannot provision if the total yielder contribution is null") {
-            assert_not_zero(yielder_contribution);
-        }
-
         // [Interaction] ERC20 transfer
         let (token_address) = CarbonableYielder_payment_token_address_.read();
         let (caller) = get_caller_address();
@@ -368,8 +364,8 @@ namespace CarbonableYielder {
     //
 
     func _snapshot_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, amount: felt, previous_yielder_contribution: felt
-    ) {
+        index: felt, amount: felt, previous_yielder_contribution: felt, remainder: felt
+    ) -> (new_remainder: felt) {
         alloc_locals;
 
         // [Compute] User absorptions and contribution
@@ -386,31 +382,33 @@ namespace CarbonableYielder {
         with_attr error_message("CarbonableYielder: user contribution overflow detected") {
             assert_in_range(previous_user_absorption, 0, current_user_absorption + 1);
         }
-        let period_contribution = current_user_absorption - previous_user_absorption;
+        let period_user_contribution = current_user_absorption - previous_user_absorption;
 
         // [Effect] Store new snapshoted absorptions and contibution
         CarbonableYielder_snapshoted_user_yielder_absorption_.write(user, current_user_absorption);
-        CarbonableYielder_snapshoted_user_yielder_contribution_.write(user, period_contribution);
+        CarbonableYielder_snapshoted_user_yielder_contribution_.write(user, period_user_contribution);
 
         // [Effect] Update user claimable if previous_yielder_contribution != 0
+        let new_remainder = 0;
         if (previous_yielder_contribution != 0) {
             let (stored_claimable) = CarbonableYielder_claimable_.read(user);
-            let (new_claimable, _) = unsigned_div_rem(
+            let (new_claimable, rem) = unsigned_div_rem(
                 previous_user_contribution * amount, previous_yielder_contribution
             );
             CarbonableYielder_claimable_.write(user, stored_claimable + new_claimable);
+            new_remainder = rem;
         }
 
         // [Check] If not last, then continue
         if (index != 0) {
-            _snapshot_iter(
+            return _snapshot_iter(
                 index=index - 1,
                 amount=amount,
                 previous_yielder_contribution=previous_yielder_contribution,
+                remainder=remainder + new_remainder,
             );
-            return ();
         }
-        return ();
+        return (new_remainder=remainder + new_remainder);
     }
 }
 

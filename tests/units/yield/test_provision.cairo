@@ -6,7 +6,7 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.uint256 import Uint256
-from starkware.starknet.common.syscalls import get_contract_address
+from starkware.starknet.common.syscalls import get_contract_address, get_caller_address
 
 // Local dependencies
 from tests.units.yield.library import setup, prepare, CarbonableOffseter, CarbonableYielder
@@ -43,6 +43,7 @@ func test_provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
 
     // Deposit value 1 from token #1
+    let (caller) = get_caller_address();
     CarbonableOffseter.deposit(token_id=one, value=one);
 
     // Snapshot
@@ -142,39 +143,6 @@ func test_provision_revert_null_amount{
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot provision with a null amount") %}
     let (success) = CarbonableYielder.provision(amount=0);
-    return ();
-}
-
-@external
-func test_provision_revert_no_absorption{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
-    alloc_locals;
-
-    // prepare farmer instance
-    let (local context) = prepare();
-    let one = Uint256(low=1, high=0);
-    let (contract_address) = get_contract_address();
-
-    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [0]) %}
-    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [0]) %}
-
-    // Deposit value 1 from token #1
-    CarbonableOffseter.deposit(token_id=one, value=one);
-
-    // Snapshot
-    %{ stop_warp = warp(blk_timestamp=100) %}
-    CarbonableYielder.snapshot();
-    %{ stop_warp() %}
-
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot provision if the total yielder contribution is null") %}
-    let (success) = CarbonableYielder.provision(amount=TOTAL_AMOUNT);
     return ();
 }
 

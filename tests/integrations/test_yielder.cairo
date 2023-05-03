@@ -133,8 +133,15 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
             time=1682899200,
         )))
     %}
-    provisioner.approve(amount=1000);
-    provisioner.provision(amount=1000);
+
+    admin.yielder_withdraw_to(value=200);
+    let (claimable) = yielder.get_claimable_of(admin_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 0") {
+        assert claimable = 0;
+    }
+
+    provisioner.approve(amount=1001);
+    provisioner.provision(amount=1001);
 
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
@@ -163,6 +170,16 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 
     let (total_provisioned) = yielder.get_total_provisioned();
     assert total_provisioned = 2000 + 1000;
+
+    let (claimable) = yielder.get_claimable_of(anyone_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 600") {
+        assert claimable = 2601;
+    }
+
+    let (claimable) = yielder.get_claimable_of(admin_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 400") {
+        assert claimable = 400;
+    }
 
     return ();
 }
