@@ -143,3 +143,35 @@ func test_snapshot_revert_not_possible{
     CarbonableYielder.snapshot();
     return ();
 }
+
+@external
+func test_snapshot_revert_no_contribution{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    // prepare farmer instance
+    let (local context) = prepare();
+    let one = Uint256(low=1, high=0);
+    let (local contract_address: felt) = get_contract_address();
+
+    %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [0]) %}
+    %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [0]) %}
+
+    // Deposit value 1 from token #1
+    let (success) = CarbonableOffseter.deposit(token_id=one, value=one);
+    assert success = 1;
+
+    %{
+        stop_warp = warp(blk_timestamp=200)
+        expect_revert("TRANSACTION_FAILED", "CarbonableYielder: cannot snapshot if the current yielder contribution is null")
+    %}
+    CarbonableYielder.snapshot();
+    return ();
+}
