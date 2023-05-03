@@ -109,6 +109,10 @@ func CarbonableYielder_total_amount_() -> (amount: felt) {
 func CarbonableYielder_amount_() -> (amount: felt) {
 }
 
+@storage_var
+func CarbonableYielder_amount_remainder_() -> (amount: felt) {
+}
+
 namespace CarbonableYielder {
     //
     // Constructor
@@ -284,7 +288,9 @@ namespace CarbonableYielder {
         // [Effect] Store period shares per users
         let (count) = CarbonableOffseter.total_user_count();
         let (amount) = CarbonableYielder_amount_.read();
-        _snapshot_iter(index=count - 1, amount=amount, total=previous_yielder_absorption);
+        _snapshot_iter(
+            index=count - 1, amount=amount, previous_yielder_contribution=period_yielder_absorption
+        );
 
         // [Effect] Update provisioned status
         CarbonableYielder_provisioned_.write(FALSE);
@@ -362,7 +368,7 @@ namespace CarbonableYielder {
     //
 
     func _snapshot_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, amount: felt, total: felt
+        index: felt, amount: felt, previous_yielder_contribution: felt
     ) {
         alloc_locals;
 
@@ -386,16 +392,22 @@ namespace CarbonableYielder {
         CarbonableYielder_snapshoted_user_yielder_absorption_.write(user, current_user_absorption);
         CarbonableYielder_snapshoted_user_yielder_contribution_.write(user, period_contribution);
 
-        // [Effect] Update user claimable if total != 0
-        if (total != 0) {
+        // [Effect] Update user claimable if previous_yielder_contribution != 0
+        if (previous_yielder_contribution != 0) {
             let (stored_claimable) = CarbonableYielder_claimable_.read(user);
-            let (new_claimable, _) = unsigned_div_rem(previous_user_contribution * amount, total);
+            let (new_claimable, _) = unsigned_div_rem(
+                previous_user_contribution * amount, previous_yielder_contribution
+            );
             CarbonableYielder_claimable_.write(user, stored_claimable + new_claimable);
         }
 
         // [Check] If not last, then continue
         if (index != 0) {
-            _snapshot_iter(index=index - 1, amount=amount, total=total);
+            _snapshot_iter(
+                index=index - 1,
+                amount=amount,
+                previous_yielder_contribution=previous_yielder_contribution,
+            );
             return ();
         }
         return ();
