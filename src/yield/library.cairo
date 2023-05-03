@@ -196,6 +196,12 @@ namespace CarbonableYielder {
         let claimed = stored_claimed + claimable;
         CarbonableYielder_claimed_.write(caller, claimed);
 
+        // [Check] Claimable is null
+        let (new_claimable) = claimable_of(caller);
+        with_attr error_message("CarbonableYielder: nothing to claim") {
+            assert new_claimable = 0;
+        }
+
         // [Interaction] ERC20 transfer
         let (token_address) = CarbonableYielder_payment_token_address_.read();
         let (claimable_u256) = _felt_to_uint(claimable);
