@@ -194,6 +194,15 @@ namespace instance {
         return (total_absorption,);
     }
 
+    func get_total_provisioned{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (total_provisioned: felt) {
+        let (contract_address) = instance.get_address();
+        let (total_provisioned) = ICarbonableYielder.getTotalProvisioned(
+            contract_address=contract_address
+        );
+        return (total_provisioned,);
+    }
+
     func get_deposited_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
     ) -> (value: felt) {

@@ -102,6 +102,10 @@ func CarbonableYielder_provisioned_() -> (status: felt) {
 }
 
 @storage_var
+func CarbonableYielder_total_amount_() -> (amount: felt) {
+}
+
+@storage_var
 func CarbonableYielder_amount_() -> (amount: felt) {
 }
 
@@ -134,6 +138,13 @@ namespace CarbonableYielder {
         ) -> (payment_token_address: felt) {
         let (payment_token_address) = CarbonableYielder_payment_token_address_.read();
         return (payment_token_address=payment_token_address);
+    }
+
+    func total_provisioned{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        total_provisioned: felt
+    ) {
+        let (amount) = CarbonableYielder_total_amount_.read();
+        return (total_provisioned=amount);
     }
 
     func snapshoted_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -332,9 +343,11 @@ namespace CarbonableYielder {
             assert transfer_success = TRUE;
         }
 
-        // [Effect] Update provision status
+        // [Effect] Update provision status and amounts
         CarbonableYielder_provisioned_.write(TRUE);
         CarbonableYielder_amount_.write(amount);
+        let (total_amount) = CarbonableYielder_total_amount_.read();
+        CarbonableYielder_total_amount_.write(total_amount + amount);
 
         // [Event] Emit provision event
         let (current_time) = get_block_timestamp();

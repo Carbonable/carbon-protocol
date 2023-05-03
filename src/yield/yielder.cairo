@@ -229,6 +229,15 @@ func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     return CarbonableOffseter.total_absorption();
 }
 
+// @notice Return the total provisioned of the yielder.
+// @return total_provisioned The total provisioned.
+@view
+func getTotalProvisioned{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_provisioned: felt
+) {
+    return CarbonableYielder.total_provisioned();
+}
+
 // @notice Return the total deposited value of the provided address.
 // @param address The address to query.
 // @return value The total value.
