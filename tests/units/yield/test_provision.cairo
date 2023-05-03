@@ -53,6 +53,9 @@ func test_provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     let (success) = CarbonableYielder.provision(amount=TOTAL_AMOUNT);
     assert success = 1;
 
+    let (total_provisioned) = CarbonableYielder.total_provisioned();
+    assert total_provisioned = TOTAL_AMOUNT;
+
     return ();
 }
 

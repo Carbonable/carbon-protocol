@@ -70,6 +70,9 @@ namespace ICarbonableYielder {
     func getTotalAbsorption() -> (total_absorption: felt) {
     }
 
+    func getTotalProvisioned() -> (total_provisioned: felt) {
+    }
+
     func getDepositedOf(address: felt) -> (value: Uint256) {
     }
 

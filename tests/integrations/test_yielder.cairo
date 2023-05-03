@@ -125,11 +125,19 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
         )))
     %}
     snapshoter.snapshot();
-    %{ stop_warp_yielder() %}
-    %{ stop_warp_project() %}
 
+    %{
+        expect_events(dict(name="Provision", data=dict(
+            project=context.carbonable_project_contract,
+            amount=1000,
+            time=1682899200,
+        )))
+    %}
     provisioner.approve(amount=1000);
     provisioner.provision(amount=1000);
+
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     let (claimable) = yielder.get_claimable_of(anyone_address);
     with_attr error_message("Testing: claimable amount should be expected amount: 600") {
@@ -140,6 +148,21 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     with_attr error_message("Testing: claimable amount should be expected amount: 400") {
         assert claimable = 400;
     }
+
+    // Snapshoter snapshot
+    %{
+        stop_warp_yielder = warp(blk_timestamp=1682899800, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=1682899800, target_contract_address=ids.project_address)
+    %}
+    snapshoter.snapshot();
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
+
+    provisioner.approve(amount=2000);
+    provisioner.provision(amount=2000);
+
+    let (total_provisioned) = yielder.get_total_provisioned();
+    assert total_provisioned = 2000 + 1000;
 
     return ();
 }
