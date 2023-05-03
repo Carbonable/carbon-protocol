@@ -66,11 +66,11 @@ func CarbonableYielder_payment_token_address_() -> (address: felt) {
 }
 
 @storage_var
-func CarbonableYielder_claimable_(address: felt) -> (absorption: felt) {
+func CarbonableYielder_claimable_(address: felt) -> (amount: felt) {
 }
 
 @storage_var
-func CarbonableYielder_claimed_(address: felt) -> (absorption: felt) {
+func CarbonableYielder_claimed_(address: felt) -> (amount: felt) {
 }
 
 @storage_var
@@ -301,7 +301,6 @@ namespace CarbonableYielder {
         CarbonableYielder_assert.provisionable();
 
         // [Check] Amount is not null
-        let (yielder_contribution) = CarbonableYielder_snapshoted_yielder_contribution_.read();
         with_attr error_message("CarbonableYielder: cannot provision with a null amount") {
             assert_not_zero(amount);
         }
