@@ -164,7 +164,7 @@ namespace CarbonableYielder {
 
         // [Check] Overflow
         with_attr error_message("CarbonableYielder: overflow while computing claimable") {
-            assert_in_range(claimable, 0, amount + 1);
+            assert_in_range(computed_claimable, 0, amount + 1);
         }
 
         return (claimable=claimable);
