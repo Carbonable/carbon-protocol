@@ -129,7 +129,7 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     %{
         expect_events(dict(name="Provision", data=dict(
             project=context.carbonable_project_contract,
-            amount=1000,
+            amount=1001,
             time=1682899200,
         )))
     %}
@@ -158,8 +158,8 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 
     // Snapshoter snapshot
     %{
-        stop_warp_yielder = warp(blk_timestamp=1682899800, target_contract_address=ids.yielder_address)
-        stop_warp_project = warp(blk_timestamp=1682899800, target_contract_address=ids.project_address)
+        stop_warp_yielder = warp(blk_timestamp=1722470400, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=1722470400, target_contract_address=ids.project_address)
     %}
     snapshoter.snapshot();
     %{ stop_warp_yielder() %}
@@ -169,10 +169,10 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     provisioner.provision(amount=2000);
 
     let (total_provisioned) = yielder.get_total_provisioned();
-    assert total_provisioned = 2000 + 1000;
+    assert total_provisioned = 2000 + 1001;
 
     let (claimable) = yielder.get_claimable_of(anyone_address);
-    with_attr error_message("Testing: claimable amount should be expected amount: 600") {
+    with_attr error_message("Testing: claimable amount should be expected amount: 2601") {
         assert claimable = 2601;
     }
 
