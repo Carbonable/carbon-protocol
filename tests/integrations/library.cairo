@@ -246,6 +246,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
     // Set metadata class hash
     admin_instance.set_metadata_implementation(metadata_class_hash);
+    admin_instance.set_slot_metadata_implementation(1, metadata_class_hash);
 
     return ();
 }
