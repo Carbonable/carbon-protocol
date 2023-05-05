@@ -9,15 +9,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le, is_not_zero
 from starkware.cairo.common.uint256 import Uint256, uint256_check
-from starkware.starknet.common.syscalls import get_block_timestamp, library_call
-
-// Project dependencies
-from erc3525.library import ERC3525
-
-// Local dependencies
-from src.interfaces.metadata import ICarbonableMetadata
-from src.metadata.library import CarbonableMetadataOnchainSvg as CarbonableMetadata
-from src.utils.type.library import _uint_to_felt, _felt_to_uint
+from starkware.starknet.common.syscalls import get_block_timestamp
 
 //
 // Events
@@ -30,10 +22,6 @@ func AbsorptionUpdate(slot: Uint256, time: felt) {
 //
 // Storage
 //
-
-@storage_var
-func CarbonableProject_metadata_(slot: Uint256) -> (set: felt) {
-}
 
 @storage_var
 func CarbonableProject_times_len_(slot: Uint256) -> (length: felt) {
@@ -59,76 +47,6 @@ namespace CarbonableProject {
     //
     // Getters
     //
-
-    func contract_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        uri_len: felt, uri: felt*
-    ) {
-        alloc_locals;
-
-        let (class_hash) = CarbonableMetadata.get_implementation();
-        let (local array: felt*) = alloc();
-
-        // [Check] Metadata implementation set
-        if (class_hash == 0) {
-            return (uri_len=0, uri=array);
-        }
-
-        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_contractURI(
-            class_hash=class_hash
-        );
-
-        return (uri_len=uri_len, uri=uri);
-    }
-
-    func slot_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256
-    ) -> (uri_len: felt, uri: felt*) {
-        alloc_locals;
-
-        // [Check] Uint256 compliances
-        with_attr error_message("Metadata: slot is not a valid Uint256") {
-            uint256_check(slot);
-        }
-
-        let (class_hash) = CarbonableMetadata.get_implementation();
-        let (local array: felt*) = alloc();
-
-        // [Check] Metadata implementation set
-        if (class_hash == 0) {
-            return (uri_len=0, uri=array);
-        }
-
-        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_slotURI(
-            class_hash=class_hash, slot=slot
-        );
-
-        return (uri_len=uri_len, uri=uri);
-    }
-
-    func token_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        token_id: Uint256
-    ) -> (uri_len: felt, uri: felt*) {
-        alloc_locals;
-
-        // [Check] Uint256 compliances
-        with_attr error_message("Metadata: token_id is not a valid Uint256") {
-            uint256_check(token_id);
-        }
-
-        let (class_hash) = CarbonableMetadata.get_implementation();
-        let (local array: felt*) = alloc();
-
-        // [Check] Metadata implementation set
-        if (class_hash == 0) {
-            return (uri_len=0, uri=array);
-        }
-
-        let (uri_len: felt, uri: felt*) = ICarbonableMetadata.library_call_tokenURI(
-            class_hash=class_hash, tokenId=token_id
-        );
-
-        return (uri_len=uri_len, uri=uri);
-    }
 
     func start_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         slot: Uint256
