@@ -48,6 +48,9 @@ func test_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     %{ stop=start_prank(context.signers.anyone) %}
     CarbonableOffseter.deposit(token_id=one, value=one);
 
+    let (claimable) = CarbonableYielder.claimable_of(anyone_address);
+    assert claimable = 0;
+
     // Snapshot
     %{ stop_warp = warp(blk_timestamp=100) %}
     CarbonableYielder.snapshot();
