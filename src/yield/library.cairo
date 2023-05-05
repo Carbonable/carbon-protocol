@@ -174,6 +174,11 @@ namespace CarbonableYielder {
         let (stored_claimed) = CarbonableYielder_claimed_.read(address);
         let (contribution) = CarbonableYielder_snapshoted_user_yielder_contribution_.read(address);
         let (total) = CarbonableYielder_snapshoted_yielder_contribution_.read();
+
+        if (total == 0) {
+            return (claimable=0);
+        }
+
         let (computed_claimable, _) = unsigned_div_rem(amount * contribution, total);
         let claimable = stored_claimable + computed_claimable - stored_claimed;
 
@@ -199,6 +204,8 @@ namespace CarbonableYielder {
     func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         success: felt
     ) {
+        alloc_locals;
+
         // [Check] Claimable is not null
         let (caller) = get_caller_address();
         let (claimable) = claimable_of(caller);
