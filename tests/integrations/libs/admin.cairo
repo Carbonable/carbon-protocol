@@ -135,6 +135,18 @@ namespace instance {
         return ();
     }
 
+    func set_slot_metadata_implementation{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(slot: felt, implementation: felt) {
+        let (caller) = get_address();
+        with caller {
+            carbonable_project_instance.set_slot_metadata_implementation(
+                slot=slot, implementation=implementation
+            );
+        }
+        return ();
+    }
+
     // Minter
 
     func set_withdrawer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

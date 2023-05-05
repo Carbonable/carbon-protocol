@@ -487,7 +487,7 @@ namespace instance {
         let (contract_address) = instance.get_address();
         let (slot_u256) = _felt_to_uint(slot);
         let (uri_len, uri) = ICarbonableMetadata.slotURI(
-            contract_address=contract_address, slot_u256
+            contract_address=contract_address, slot=slot_u256
         );
         return (uri_len, uri);
     }
@@ -513,6 +513,17 @@ namespace instance {
         return (implementation,);
     }
 
+    func get_slot_metadata_implementation{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(slot: felt) -> (implementation: felt) {
+        let (contract_address) = instance.get_address();
+        let (slot_u256) = _felt_to_uint(slot);
+        let (implementation) = ICarbonableMetadata.getSlotMetadataImplementation(
+            contract_address=contract_address, slot=slot_u256
+        );
+        return (implementation,);
+    }
+
     func set_metadata_implementation{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
     }(implementation: felt) {
@@ -520,6 +531,19 @@ namespace instance {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
         ICarbonableMetadata.setMetadataImplementation(
             contract_address=contract_address, implementation=implementation
+        );
+        %{ stop_prank() %}
+        return ();
+    }
+
+    func set_slot_metadata_implementation{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
+    }(slot: felt, implementation: felt) {
+        let (contract_address) = instance.get_address();
+        let (slot_u256) = _felt_to_uint(slot);
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableMetadata.setSlotMetadataImplementation(
+            contract_address=contract_address, slot=slot_u256, implementation=implementation
         );
         %{ stop_prank() %}
         return ();

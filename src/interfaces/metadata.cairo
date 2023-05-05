@@ -23,10 +23,16 @@ namespace ICarbonableMetadata {
     func getMetadataImplementation() -> (implementation: felt) {
     }
 
+    func getSlotMetadataImplementation(slot: Uint256) -> (implementation: felt) {
+    }
+
     //
     // Externals
     //
 
     func setMetadataImplementation(implementation: felt) {
+    }
+
+    func setSlotMetadataImplementation(slot: Uint256, implementation: felt) {
     }
 }

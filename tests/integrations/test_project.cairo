@@ -38,19 +38,29 @@ func test_metadata_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, 
     let (implementation) = project.get_metadata_implementation();
     assert_not_zero(implementation);
 
-    // Get token metadata
+    // Get contract metadata
+    let (uri_len, uri) = project.contract_uri();
+    %{
+        uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
+        assert uri_data == [int.from_bytes(b"Contract: mock contractURI", 'big')]
+    %}
+
+    // Get slot implementation class hash
+    let (implementation) = project.get_slot_metadata_implementation(1);
+    assert_not_zero(implementation);
+
+    // Get contract metadata
+    let (uri_len, uri) = project.slot_uri(slot=1);
+    %{
+        uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
+        assert uri_data == [int.from_bytes(b"Contract: mock slotURI", 'big')]
+    %}
+
     let (uri_len, uri) = project.token_uri(token_id=1);
     %{
-        import json
         uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
-        data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
-        metadata = json.loads(data[22:])
-        assert "name" in metadata
-        assert "description" in metadata
-        assert "image" in metadata
-        assert "slot" in metadata
-        assert "value" in metadata
-        assert "attributes" in metadata
+        assert uri_data == [int.from_bytes(b"Contract: mock tokenURI", 'big')]
     %}
+
     return ();
 }

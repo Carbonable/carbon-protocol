@@ -22,14 +22,13 @@ from erc3525.extensions.slotenumerable.library import (
     _add_token_to_slot_enumeration,
 )
 from erc3525.library import ERC3525
-from erc3525.periphery.library import ERC3525MetadataDescriptor
 from erc2981.library import ERC2981
 from erc4906.library import ERC4906
 
 // Local dependencies
 from src.project.library import CarbonableProject
-from src.metadata.library import CarbonableMetadataOnchainSvg as CarbonableMetadata
 from src.utils.access.library import CarbonableAccessControl
+from src.utils.metadata.library import CarbonableMetadata
 
 //
 // Initializer
@@ -562,7 +561,7 @@ func setApprovalForSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
 func contractURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     uri_len: felt, uri: felt*
 ) {
-    let (uri_len, uri) = CarbonableProject.contract_uri();
+    let (uri_len, uri) = CarbonableMetadata.contract_uri();
     return (uri_len=uri_len, uri=uri);
 }
 
@@ -575,7 +574,7 @@ func contractURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 func slotURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(slot: Uint256) -> (
     uri_len: felt, uri: felt*
 ) {
-    let (uri_len, uri) = CarbonableProject.slot_uri(slot=slot);
+    let (uri_len, uri) = CarbonableMetadata.slot_uri(slot=slot);
     return (uri_len=uri_len, uri=uri);
 }
 
@@ -588,7 +587,7 @@ func slotURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(sl
 func tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     tokenId: Uint256
 ) -> (uri_len: felt, uri: felt*) {
-    let (uri_len, uri) = CarbonableProject.token_uri(token_id=tokenId);
+    let (uri_len, uri) = CarbonableMetadata.token_uri(token_id=tokenId);
     return (uri_len=uri_len, uri=uri);
 }
 
@@ -610,6 +609,28 @@ func setMetadataImplementation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
 ) {
     Ownable.assert_only_owner();
     CarbonableMetadata.set_implementation(implementation=implementation);
+    return ();
+}
+
+// @notice Get the slot metadata implementation.
+// @return implementation The slot metadata implementation class hash.
+@view
+func getSlotMetadataImplementation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (implementation: felt) {
+    let (implementation) = CarbonableMetadata.get_slot_implementation(slot);
+    return (implementation=implementation);
+}
+
+// @notice Set the slot metadata implementation.
+// @dev Throws if the caller is not the owner.
+// @param implementation The slot metadata implementation class hash.
+@external
+func setSlotMetadataImplementation{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256, implementation: felt
+) {
+    Ownable.assert_only_owner();
+    CarbonableMetadata.set_slot_implementation(slot=slot, implementation=implementation);
     return ();
 }
 

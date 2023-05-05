@@ -10,7 +10,7 @@ from starkware.starknet.common.syscalls import get_caller_address, get_contract_
 
 // Local dependencies
 from tests.units.project.library import setup, prepare, CarbonableProject
-from src.metadata.library import CarbonableMetadataOnchainSvg
+from src.utils.metadata.library import CarbonableMetadata
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -61,26 +61,22 @@ func test_metadata{
         mock_call(ids.instance, "slotOf", [1337, 0])
         mock_call(ids.instance, "supportsInterface", [1])
     %}
-    let (uri_len, local uri: felt*) = CarbonableMetadataOnchainSvg.token_uri(Uint256(1, 0));
+    let (uri_len, local uri: felt*) = CarbonableMetadata.token_uri(Uint256(1, 0));
     %{
-        import json
         uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
-        data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
-        data = json.loads(data[22:])
+        assert uri_data == []
     %}
 
-    let (uri_len, local uri: felt*) = CarbonableMetadataOnchainSvg.slot_uri(Uint256(1, 0));
+    let (uri_len, local uri: felt*) = CarbonableMetadata.slot_uri(Uint256(1, 0));
     %{
         uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
-        data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
-        assert data.startswith("http")
+        assert uri_data == []
     %}
 
-    let (uri_len, local uri: felt*) = CarbonableMetadataOnchainSvg.contract_uri();
+    let (uri_len, local uri: felt*) = CarbonableMetadata.contract_uri();
     %{
         uri_data = [memory[ids.uri + i] for i in range(ids.uri_len)]
-        data = "".join(map(lambda val: bytes.fromhex(hex(val)[2:]).decode(), uri_data))
-        assert data.startswith("http")
+        assert uri_data == []
     %}
     return ();
 }
