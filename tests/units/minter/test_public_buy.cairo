@@ -42,6 +42,7 @@ func test_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [5, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ warp(blk_timestamp=200) %}
@@ -78,6 +79,7 @@ func test_buy_revert_not_enough_nfts_available{
     %{ stop=start_prank(context.signers.anyone) %}
     let quantity = 2;
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [10, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [10, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.public_buy(quantity);

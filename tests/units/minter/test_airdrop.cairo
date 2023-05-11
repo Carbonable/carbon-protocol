@@ -37,6 +37,35 @@ func test_airdrop_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
+    CarbonableMinter.airdrop(to=context.signers.anyone, quantity=5);
+    %{ stop() %}
+    return ();
+}
+
+@external
+func test_airdrop_total_supply_null{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    // User: admin
+    // Wants to aidrop 5 NFTs
+    // Whitelisted sale: OPEN
+    // Public sale: CLOSED
+    // current NFT totalSupply: 5
+    // current NFT reserved supply: 5
+    alloc_locals;
+
+    // prepare minter instance
+    let (local context) = prepare(
+        public_sale_open=FALSE,
+        max_buy_per_tx=5,
+        unit_price=Uint256(10, 0),
+        max_supply_for_mint=Uint256(10, 0),
+        reserved_supply_for_mint=Uint256(5, 0),
+    );
+
+    // run scenario
+    %{ stop=start_prank(context.signers.admin) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
     CarbonableMinter.airdrop(to=context.signers.anyone, quantity=5);
     %{ stop() %}
@@ -68,6 +97,7 @@ func test_airdrop_revert_not_enough_available_nfts{
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [6, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [6, 0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available NFTs") %}
     CarbonableMinter.airdrop(to=context.signers.anyone, quantity=5);
     %{ stop() %}
@@ -99,6 +129,7 @@ func test_airdrop_revert_not_enough_reserved_nfts{
     // run scenario
     %{ stop=start_prank(context.signers.admin) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [6, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [6, 0]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough available reserved NFTs") %}
     CarbonableMinter.airdrop(to=context.signers.anyone, quantity=2);
     %{ stop() %}

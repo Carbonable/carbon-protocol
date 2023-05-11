@@ -67,6 +67,7 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [5, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, amount=dict(low=20, high=0), quantity=2, time=200))) %}
@@ -119,6 +120,7 @@ func test_buy_user_whitelisted_but_not_enough_slots{
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [3, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [3, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough whitelisted slots available") %}
     CarbonableMinter.pre_buy(
@@ -164,6 +166,7 @@ func test_buy_user_whitelisted_but_not_enough_slots_after_claim{
 
     // Mock
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [3, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [3, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "mint", []) %}
 
@@ -222,6 +225,7 @@ func test_buy_revert_not_whitelisted{
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     %{ mock_call(context.mocks.carbonable_project_address, "totalSupply", [5, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "tokenByIndex", [5, 0]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: caller address is not whitelisted") %}
     CarbonableMinter.pre_buy(
