@@ -171,9 +171,9 @@ namespace instance {
 
     func migrate{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(tokenId: Uint256, caller: felt) -> (newTokenId: Uint256) {
+    }(tokenIds_len: felt, tokenIds: Uint256*, caller: felt) -> (newTokenId: Uint256) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        let (new_token_id) = ICarbonableMinter.migrate(carbonable_minter, tokenId);
+        let (new_token_id) = ICarbonableMinter.migrate(carbonable_minter, tokenIds_len, tokenIds);
         %{ stop_prank() %}
         return (newTokenId=new_token_id);
     }

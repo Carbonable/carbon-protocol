@@ -20,7 +20,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 @external
 func test_claim_nominal_case{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }() {
     alloc_locals;
 
@@ -31,7 +31,7 @@ func test_claim_nominal_case{
     local sig0: felt;
     local sig1: felt;
     local badge_type: felt;
-    %{ 
+    %{
         ids.minter_contract_address = context.badge_minter.contract_address
         ids.badge_contract_address = context.badge.contract_address
         ids.whitelisted_user = context.badge_minter.whitelisted_user
@@ -53,7 +53,7 @@ func test_claim_nominal_case{
 
 @external
 func test_claim_revert_invalid_user{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }() {
     alloc_locals;
 
@@ -63,7 +63,7 @@ func test_claim_revert_invalid_user{
     local badge_type: felt;
     local minter_contract_address: felt;
     local whitelisted_user: felt;
-    %{ 
+    %{
         ids.sig0 = context.badge_minter.sig0
         ids.sig1 = context.badge_minter.sig1
         ids.badge_type = context.badge_minter.badge_type
@@ -87,7 +87,7 @@ func test_claim_revert_invalid_user{
 
 @external
 func test_claim_revert_whitelisted_user_but_invalid_badge_type{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }() {
     alloc_locals;
 
@@ -98,7 +98,7 @@ func test_claim_revert_whitelisted_user_but_invalid_badge_type{
     local sig0: felt;
     local sig1: felt;
     local badge_type: felt;
-    %{ 
+    %{
         ids.minter_contract_address = context.badge_minter.contract_address
         ids.badge_contract_address = context.badge.contract_address
         ids.whitelisted_user = context.badge_minter.whitelisted_user
@@ -111,7 +111,7 @@ func test_claim_revert_whitelisted_user_but_invalid_badge_type{
     let badge_type = badge_type + 1;
 
     // Claim the badge
-    %{ 
+    %{
         stop_prank_callable = start_prank(context.badge_minter.whitelisted_user, target_contract_address=context.badge_minter.contract_address)
         expect_revert("TRANSACTION_FAILED", "CarbonableBadge: invalid signature")
     %}

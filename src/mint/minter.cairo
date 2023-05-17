@@ -219,11 +219,11 @@ func initializeMigration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 // @param tokenId The 721 token id to migrate.
 // @return newTokenId The new 3525 token minted.
 @external
-func migrate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: Uint256) -> (
-    newTokenId: Uint256
-) {
+func migrate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenIds_len: felt, tokenIds: Uint256*
+) -> (newTokenId: Uint256) {
     CarbonableInitializer.assert_initialized(MIGRATION);
-    let (new_token_id) = Migrator.migrate(token_id=tokenId);
+    let (new_token_id) = Migrator.migrate(token_ids_len=tokenIds_len, token_ids=tokenIds);
     return (newTokenId=new_token_id);
 }
 

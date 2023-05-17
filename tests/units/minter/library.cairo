@@ -100,14 +100,14 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     local mocks: Mocks = Mocks(
         carbonable_project_address=carbonable_project_address,
         payment_token_address=payment_token_address,
-        );
+    );
 
     local whitelist: Whitelist = Whitelist(
         slots=slots,
         merkle_root=merkle_root,
         merkle_proof=merkle_proof,
         merkle_proof_len=merkle_proof_len,
-        );
+    );
 
     local context: TestContext = TestContext(signers=signers, mocks=mocks, whitelist=whitelist);
 

@@ -26,17 +26,12 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 }
 
 func prepare{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
-} (
-    contract_owner: felt,
-    public_key: felt,
-    badge_contract_address: felt,
-    proxy_admin: felt
-) -> () {
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
+}(contract_owner: felt, public_key: felt, badge_contract_address: felt, proxy_admin: felt) -> () {
     alloc_locals;
 
     // Instantiate minter
     CarbonableBadgeMinter.initializer(public_key, badge_contract_address);
-    
+
     return ();
 }

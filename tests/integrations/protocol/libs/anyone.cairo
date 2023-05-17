@@ -684,12 +684,16 @@ namespace instance {
     func migrate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: felt
     ) -> (new_token_id: felt) {
+        alloc_locals;
+
+        let (local token_ids: Uint256*) = alloc();
         let token_id_u256 = Uint256(low=token_id, high=0);
+        assert [token_ids] = token_id_u256;
         let (carbonable_minter) = carbonable_minter_instance.get_address();
         let (caller) = get_address();
         with carbonable_minter {
             let (new_token_id) = carbonable_minter_instance.migrate(
-                tokenId=token_id_u256, caller=caller
+                tokenIds_len=1, tokenIds=token_ids, caller=caller
             );
         }
         return (new_token_id=new_token_id.low);

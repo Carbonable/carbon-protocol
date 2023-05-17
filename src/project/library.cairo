@@ -353,17 +353,17 @@ namespace CarbonableProject {
         time: felt
     ) -> (computed_absorption: felt) {
         alloc_locals;
-        
+
         // Check times are set
         let (times_len, times) = _read_times();
         if (times_len == 0) {
-            return(computed_absorption=0);
+            return (computed_absorption=0);
         }
 
         // Check absorptions are set
         let (absorptions_len, absorptions) = _read_absorptions();
         if (absorptions_len == 0) {
-            return(computed_absorption=0);
+            return (computed_absorption=0);
         }
 
         // Check if time is before the start_time, then absorption is 0

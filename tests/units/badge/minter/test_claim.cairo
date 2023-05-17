@@ -18,7 +18,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 @external
 func test_claim_nominal_case{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }() {
     alloc_locals;
 
@@ -30,7 +30,7 @@ func test_claim_nominal_case{
     local sig0: felt;
     local sig1: felt;
     local badge_type: felt;
-    %{ 
+    %{
         ids.minter_owner = context.mocks.owner
         ids.proxy_admin = context.mocks.proxy_admin
         ids.carbonable_badge_contract_address = context.mocks.carbonable_badge_contract_address
@@ -56,7 +56,7 @@ func test_claim_nominal_case{
 
 @external
 func test_claim_revert_invalid_user{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }() {
     alloc_locals;
 
@@ -68,7 +68,7 @@ func test_claim_revert_invalid_user{
     local sig0: felt;
     local sig1: felt;
     local badge_type: felt;
-    %{ 
+    %{
         ids.minter_owner = context.mocks.owner
         ids.proxy_admin = context.mocks.proxy_admin
         ids.carbonable_badge_contract_address = context.mocks.carbonable_badge_contract_address
@@ -93,7 +93,7 @@ func test_claim_revert_invalid_user{
 
 @external
 func test_claim_revert_whitelisted_user_but_invalid_badge_type{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr : SignatureBuiltin*
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }() {
     alloc_locals;
 
@@ -105,7 +105,7 @@ func test_claim_revert_whitelisted_user_but_invalid_badge_type{
     local sig0: felt;
     local sig1: felt;
     local badge_type: felt;
-    %{ 
+    %{
         ids.minter_owner = context.mocks.owner
         ids.proxy_admin = context.mocks.proxy_admin
         ids.carbonable_badge_contract_address = context.mocks.carbonable_badge_contract_address

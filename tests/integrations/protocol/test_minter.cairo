@@ -235,6 +235,7 @@ func test_migration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     anyone.whitelist_buy(quantity=5);
 
     let token_id = 1;
+    
     %{ expect_revert("TRANSACTION_FAILED", "ERC721: either is not approved or the caller is the zero address") %}
     let (new_token_id) = anyone.migrate(token_id);
 
