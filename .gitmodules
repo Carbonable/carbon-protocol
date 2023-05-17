@@ -1,18 +1,15 @@
 [submodule "cairopen_contracts"]
 	url = https://github.com/CairOpen/cairopen-contracts.git
 	path = lib/cairopen_contracts
-[submodule "cairo_contracts"]
-	path = lib/cairo_contracts
-	url = https://github.com/OpenZeppelin/cairo-contracts
 [submodule "bal7hazar_contracts"]
 	path = lib/bal7hazar_contracts
 	url = https://github.com/Bal7hazar/cairo-contracts
 [submodule "starkvest"]
 	path = lib/starkvest
 	url = https://github.com/abdelhamidbakhta/starkvest
-[submodule "cairo_migrator"]
-	path = lib/cairo_migrator
-	url = https://github.com/carbonable-labs/cairo-migrator
 [submodule "cairo_erc_3525"]
 	path = lib/cairo_erc_3525
 	url = https://github.com/carbonable-labs/cairo-erc-3525
+[submodule "cairo_contracts"]
+	path = lib/cairo_contracts
+	url = https://github.com/OpenZeppelin/cairo-contracts
