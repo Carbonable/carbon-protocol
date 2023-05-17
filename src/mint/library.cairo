@@ -377,8 +377,7 @@ namespace CarbonableMinter {
         CarbonableMinter_reserved_supply_for_mint_.write(new_reserved_supply_for_mint);
 
         // [Interaction] Mint
-        let starting_index = total_supply;
-        mint_iter(carbonable_project_address, to, starting_index, quantity_uint256);
+        _mint(carbonable_project_address, to, total_supply, quantity_uint256);
 
         // [Effect] Emit event
         let (current_time) = get_block_timestamp();
@@ -555,8 +554,7 @@ namespace CarbonableMinter {
         }
 
         // [Interaction] Mint
-        let starting_index = total_supply;
-        mint_iter(carbonable_project_address, caller, starting_index, quantity_uint256);
+        _mint(carbonable_project_address, caller, total_supply, quantity_uint256);
 
         // [Effect] Emit event
         let (current_time) = get_block_timestamp();
@@ -583,10 +581,36 @@ namespace CarbonableMinter {
     // @notice Mint a number of NFTs to a recipient.
     // @param nft_contract_address The address of the NFT contract
     // @param to The address of the recipient
-    // @param starting_index The starting index
+    // @param total_supply The nft_contract_address total supply
     // @param quantity The quantity to mint
-    func mint_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        nft_contract_address: felt, to: felt, starting_index: Uint256, quantity: Uint256
+    func _mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        nft_contract_address: felt, to: felt, total_supply: Uint256, quantity: Uint256
+    ) {
+        alloc_locals;
+        
+        // [Check] Total supply is zero
+        let zero = Uint256(0, 0);
+        let (is_zero) = uint256_eq(total_supply, zero);
+
+        // If first mint, consider token_id as zero
+        if (is_zero == TRUE) {
+            return _mint_iter(nft_contract_address, to, zero, quantity);
+        }
+
+        // Else get the latest token_id
+        let one = Uint256(1, 0);
+        let (index) = SafeUint256.sub_le(total_supply, one);
+        let (token_id) = IERC721Enumerable.tokenByIndex(nft_contract_address, index);
+        return _mint_iter(nft_contract_address, to, token_id, quantity);
+    }
+
+    // @notice Mint a number of NFTs to a recipient.
+    // @param nft_contract_address The address of the NFT contract
+    // @param to The address of the recipient
+    // @param latest_token_id The starting index
+    // @param quantity The quantity to mint
+    func _mint_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        nft_contract_address: felt, to: felt, latest_token_id: Uint256, quantity: Uint256
     ) {
         alloc_locals;
 
@@ -598,12 +622,12 @@ namespace CarbonableMinter {
 
         // [Interaction] Mint
         let one = Uint256(1, 0);
-        let (token_id) = SafeUint256.add(starting_index, one);
+        let (token_id) = SafeUint256.add(latest_token_id, one);
         ICarbonableProject.mint(nft_contract_address, to, token_id);
 
         // [Interaction] Call next mint
         let (new_quantity) = SafeUint256.sub_le(quantity, one);
-        mint_iter(nft_contract_address, to, token_id, new_quantity);
+        _mint_iter(nft_contract_address, to, token_id, new_quantity);
         return ();
     }
 }

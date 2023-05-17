@@ -160,11 +160,9 @@ namespace instance {
 
     func initialize_migration{
         syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, carbonable_minter: felt
-    }(source_address: felt, target_address: felt, slot: Uint256, caller: felt) {
+    }(target_address: felt, slot: Uint256, value: Uint256, caller: felt) {
         %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.carbonable_minter) %}
-        ICarbonableMinter.initializeMigration(
-            carbonable_minter, source_address, target_address, slot
-        );
+        ICarbonableMinter.initializeMigration(carbonable_minter, target_address, slot, value);
         %{ stop_prank() %}
         return ();
     }
