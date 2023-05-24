@@ -3,18 +3,14 @@
 %lang starknet
 
 // Starkware dependencies
-from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.uint256 import Uint256, uint256_eq
-from starkware.starknet.common.syscalls import get_contract_address
+from starkware.cairo.common.uint256 import Uint256
 
 // Project dependencies
-from openzeppelin.access.accesscontrol.library import AccessControl
 from openzeppelin.access.ownable.library import Ownable
 from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.token.erc721.library import ERC721
 from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
-from openzeppelin.security.safemath.library import SafeUint256
 from openzeppelin.upgrades.library import Proxy
 from erc3525.extensions.slotapprovable.library import ERC3525SlotApprovable
 from erc3525.extensions.slotenumerable.library import (
@@ -866,6 +862,18 @@ func getFinalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     return CarbonableProject.final_absorption(slot=slot);
 }
 
+// @notice Return the project value to be minted.
+// @dev Throws if -slot- is not Uint256 compliant.
+// @param slot The collection slot.
+// @return projectValue The project value to be minted.
+@view
+func getProjectValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256
+) -> (projectValue: Uint256) {
+    let (projectValue) = CarbonableProject.project_value(slot=slot);
+    return (projectValue=projectValue);
+}
+
 // @notice Return the ton equivalent in absorption unit.
 // @dev Throws if -slot- is not Uint256 compliant.
 // @param slot The collection slot.
@@ -919,4 +927,19 @@ func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
         absorptions=absorptions,
         ton_equivalent=ton_equivalent,
     );
+}
+
+// @notice Set the project value
+// @dev The caller must have the OWNER role.
+//   Throws if -slot- is not Uint256 compliant.
+//   Throws if -projectValue- is not Uint256 compliant.
+//   Throws if -projectValue- is zero
+// @param slot The collection slot.
+// @param projectValue The project max value to be minted.
+@external
+func setProjectValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    slot: Uint256, projectValue: Uint256
+) {
+    Ownable.assert_only_owner();
+    return CarbonableProject.set_project_value(slot=slot, project_value=projectValue);
 }

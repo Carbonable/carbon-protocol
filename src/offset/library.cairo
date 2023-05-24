@@ -11,7 +11,6 @@ from starkware.cairo.common.uint256 import (
     uint256_check,
     uint256_eq,
     uint256_mul_div_mod,
-    uint256_le,
     assert_uint256_le,
 )
 from starkware.starknet.common.syscalls import (
@@ -26,7 +25,6 @@ from openzeppelin.token.erc721.enumerable.IERC721Enumerable import IERC721Enumer
 from openzeppelin.security.reentrancyguard.library import ReentrancyGuard
 from openzeppelin.security.safemath.library import SafeUint256
 from erc3525.IERC3525 import IERC3525
-from erc3525.IERC3525Full import IERC3525Full
 
 // Local dependencies
 from src.interfaces.project import ICarbonableProject
@@ -461,13 +459,15 @@ namespace CarbonableOffseter {
             return (claimable=0);
         }
 
-        // [Compute] Get project total value
+        // [Compute] Get project value
         let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
         let (slot) = CarbonableOffseter_carbonable_project_slot_.read();
-        let (total_value) = IERC3525Full.totalValue(contract_address=contract_address, slot=slot);
+        let (project_value) = ICarbonableProject.getProjectValue(
+            contract_address=contract_address, slot=slot
+        );
 
-        // [Check] total value is not zero
-        let (is_zero) = uint256_eq(total_value, zero);
+        // [Check] project value is not zero
+        let (is_zero) = uint256_eq(project_value, zero);
         if (is_zero == TRUE) {
             return (claimable=0);
         }
@@ -494,8 +494,8 @@ namespace CarbonableOffseter {
         let (total_absorption) = _felt_to_uint(total_absorption_felt);
 
         // [Compute] Otherwise returns the absorption corresponding to the ratio
-        // Keep quotient_low only since user_value <= total_value
-        let (quotient_low, _, _) = uint256_mul_div_mod(user_value, total_absorption, total_value);
+        // Keep quotient_low only since user_value <= project_value
+        let (quotient_low, _, _) = uint256_mul_div_mod(user_value, total_absorption, project_value);
         let (claimable) = _uint_to_felt(quotient_low);
         return (claimable=claimable);
     }
@@ -520,7 +520,7 @@ namespace CarbonableOffseter {
     ) -> (success: felt) {
         alloc_locals;
 
-        // [Security] Start reetrancy guard
+        // [Security] Start reentrancy guard
         ReentrancyGuard.start();
 
         // [Interaction] Transfer value from from_token_id to to_token_id
@@ -569,12 +569,12 @@ namespace CarbonableOffseter {
             CarbonableOffseter_users_.write(index, caller);
             CarbonableOffseter_users_index_.write(caller, index);
 
-            // [Security] End reetrancy guard
+            // [Security] End reentrancy guard
             ReentrancyGuard.end();
             return (success=TRUE);
         }
 
-        // [Security] End reetrancy guard
+        // [Security] End reentrancy guard
         ReentrancyGuard.end();
         return (success=TRUE);
     }
@@ -584,7 +584,7 @@ namespace CarbonableOffseter {
     ) -> (success: felt) {
         alloc_locals;
 
-        // [Security] Start reetrancy guard
+        // [Security] Start reentrancy guard
         ReentrancyGuard.start();
 
         // [Check] value is less than or equal to the registered value
@@ -629,7 +629,7 @@ namespace CarbonableOffseter {
         // [Effect] Emit event
         Withdraw.emit(address=caller, value=value, time=current_time);
 
-        // [Security] End reetrancy guard
+        // [Security] End reentrancy guard
         ReentrancyGuard.end();
         return (success=TRUE);
     }
