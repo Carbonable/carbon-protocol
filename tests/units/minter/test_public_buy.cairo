@@ -31,25 +31,34 @@ func test_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     alloc_locals;
 
     // prepare minter instance
+    let project_value = 10;
     let (local context) = prepare(
         public_sale_open=TRUE,
         max_value_per_tx=5,
         min_value_per_tx=1,
-        max_value=10,
+        max_value=project_value,
         unit_price=10 * 10 ** 6,
         reserved_value=0,
     );
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337, 0]) %}
-    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{
+        stop_mocks = [
+            mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]),
+            mock_call(context.mocks.carbonable_project_address, "getProjectValue", [ids.project_value, 0]),
+            mock_call(context.mocks.payment_token_address, "transferFrom", [1]),
+            mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]),
+        ]
+    %}
     %{ warp(blk_timestamp=200) %}
     %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, value=dict(low=2,high=0), time=200))) %}
     let (success) = CarbonableMinter.public_buy(value=2, force=FALSE);
     assert success = TRUE;
-    %{ stop() %}
+    %{
+        stop()
+        for stop_mock in stop_mocks: stop_mock()
+    %}
     return ();
 }
 
@@ -126,11 +135,12 @@ func test_force_buy_over_min{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     alloc_locals;
 
     // prepare minter instance
+    let project_value = 10;
     let (local context) = prepare(
         public_sale_open=TRUE,
         max_value_per_tx=5,
         min_value_per_tx=1,
-        max_value=10,
+        max_value=project_value,
         unit_price=10 * 10 ** 6,
         reserved_value=9,
     );
@@ -138,11 +148,19 @@ func test_force_buy_over_min{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let value = 2;
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337, 0]) %}
-    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{
+        stop_mocks = [
+            mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]),
+            mock_call(context.mocks.carbonable_project_address, "getProjectValue", [ids.project_value, 0]),
+            mock_call(context.mocks.payment_token_address, "transferFrom", [1]),
+            mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]),
+        ]
+    %}
     CarbonableMinter.public_buy(value=value, force=TRUE);
-    %{ stop() %}
+    %{
+        stop()
+        for stop_mock in stop_mocks: stop_mock()
+    %}
     return ();
 }
 
@@ -151,11 +169,12 @@ func test_force_buy_below_min{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
     alloc_locals;
 
     // prepare minter instance
+    let project_value = 10;
     let (local context) = prepare(
         public_sale_open=TRUE,
         max_value_per_tx=5,
         min_value_per_tx=2,
-        max_value=10,
+        max_value=project_value,
         unit_price=10 * 10 ** 6,
         reserved_value=9,
     );
@@ -163,11 +182,19 @@ func test_force_buy_below_min{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
     let value = 2;
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337, 0]) %}
-    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{
+        stop_mocks = [
+            mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]),
+            mock_call(context.mocks.carbonable_project_address, "getProjectValue", [ids.project_value, 0]),
+            mock_call(context.mocks.payment_token_address, "transferFrom", [1]),
+            mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]),
+        ]
+    %}
     CarbonableMinter.public_buy(value=value, force=TRUE);
-    %{ stop() %}
+    %{
+        stop()
+        for stop_mock in stop_mocks: stop_mock()
+    %}
     return ();
 }
 

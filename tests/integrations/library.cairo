@@ -5,6 +5,7 @@
 // Starkware dependencies
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.uint256 import Uint256
 
 // Local dependencies
 from tests.integrations.libs.project import instance as carbonable_project_instance
@@ -32,6 +33,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     let (local times: felt*) = alloc();
     local absorptions_len;
     let (local absorptions: felt*) = alloc();
+    local project_value;
     local metadata_class_hash;
     %{
         # Load config
@@ -119,7 +121,12 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
                 "calldata": calldata.values(),
             }
         ).contract_address
-
+        ids.project_value = context.minter.max_value
+        ids.slot = context.project.slot
+    %}
+    // Set projectValue
+    admin_instance.set_project_value(slot, project_value);
+    %{
         # Carbonable minter deployment
         context.carbonable_minter_class_hash = declare(contract=context.sources.minter).class_hash
         calldata = {
@@ -210,7 +217,6 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
         ids.absorptions_len = len(context.absorption.values)
         for idx, value in enumerate(context.absorption.values):
             memory[ids.absorptions + idx] = value
-        ids.slot = context.project.slot
     %}
     // Get protocol addresses
     let (local admin_address) = admin_instance.get_address();

@@ -90,6 +90,10 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     admin.mint(to=anyone_address, token_id=5, slot=slot, value=100);
     admin.revoke_minter(slot=slot, minter=admin_address);
 
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value);
+
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
     %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
     %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
@@ -185,7 +189,7 @@ func test_provision_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 }
 
 @view
-func test_create_vestings_only_one_deposited{
+func test_provision_not_fully_minted_case{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     alloc_locals;
@@ -203,7 +207,131 @@ func test_create_vestings_only_one_deposited{
     admin.mint(to=anyone_address, token_id=3, slot=slot, value=100);
     admin.mint(to=anyone_address, token_id=4, slot=slot, value=100);
     admin.mint(to=anyone_address, token_id=5, slot=slot, value=100);
+
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value * 10);
+
+    // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
+    %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
+
+    admin.set_approval_for_slot(slot=slot, operator=yielder_address);
+    anyone.set_approval_for_slot(slot=slot, operator=yielder_address);
+    admin.yielder_deposit(token_id=1, value=100);
+    admin.yielder_deposit(token_id=2, value=100);
+    anyone.yielder_deposit(token_id=3, value=100);
+    anyone.yielder_deposit(token_id=4, value=100);
+    anyone.yielder_deposit(token_id=5, value=100);
+
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
+
+    // Snapshoter snapshot
+    %{
+        stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address)
+        expect_events(dict(name="Snapshot", data=dict(
+            project=context.carbonable_project_contract,
+            previous_time=0,
+            previous_project_absorption=0,
+            previous_offseter_absorption=0,
+            previous_yielder_absorption=0,
+            current_time=1682899200,
+            current_project_absorption=4719000,
+            current_offseter_absorption=0,
+            current_yielder_absorption=471900, # 10% of 4719000
+            period_project_absorption=4719000,
+            period_offseter_absorption=0,
+            period_yielder_absorption=471900, # 10% of 4719000
+        )))
+    %}
+    snapshoter.snapshot();
+
+    %{
+        expect_events(dict(name="Provision", data=dict(
+            project=context.carbonable_project_contract,
+            amount=1001,
+            time=1682899200,
+        )))
+    %}
+
+    admin.yielder_withdraw_to(value=200);
+    let (claimable) = yielder.get_claimable_of(admin_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 0") {
+        assert claimable = 0;
+    }
+
+    provisioner.approve(amount=1001);
+    provisioner.provision(amount=1001);
+
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
+
+    let (claimable) = yielder.get_claimable_of(anyone_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 600") {
+        assert claimable = 600;
+    }
+
+    let (claimable) = yielder.get_claimable_of(admin_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 400") {
+        assert claimable = 400;
+    }
+
+    admin.mint(to=anyone_address, token_id=8, slot=slot, value=500);
     admin.revoke_minter(slot=slot, minter=admin_address);
+
+    // Snapshoter snapshot
+    %{
+        stop_warp_yielder = warp(blk_timestamp=1722470400, target_contract_address=ids.yielder_address)
+        stop_warp_project = warp(blk_timestamp=1722470400, target_contract_address=ids.project_address)
+    %}
+    snapshoter.snapshot();
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
+
+    provisioner.approve(amount=2000);
+    provisioner.provision(amount=2000);
+
+    let (total_provisioned) = yielder.get_total_provisioned();
+    assert total_provisioned = 2000 + 1001;
+
+    let (claimable) = yielder.get_claimable_of(anyone_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 2601") {
+        assert claimable = 2601;
+    }
+
+    let (claimable) = yielder.get_claimable_of(admin_address);
+    with_attr error_message("Testing: claimable amount should be expected amount: 400") {
+        assert claimable = 400;
+    }
+
+    return ();
+}
+
+@view
+func test_claim_only_one_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
+    alloc_locals;
+
+    let (admin_address) = admin.get_address();
+    let (anyone_address) = anyone.get_address();
+    let (project_address) = project.get_address();
+    let (yielder_address) = yielder.get_address();
+    let slot = 1;
+
+    // Mint tokens with temporary MINTER_ROLE
+    admin.add_minter(slot=slot, minter=admin_address);
+    admin.mint(to=admin_address, token_id=1, slot=slot, value=100);
+    admin.mint(to=admin_address, token_id=2, slot=slot, value=100);
+    admin.mint(to=anyone_address, token_id=3, slot=slot, value=100);
+    admin.mint(to=anyone_address, token_id=4, slot=slot, value=100);
+    admin.mint(to=anyone_address, token_id=5, slot=slot, value=100);
+    admin.revoke_minter(slot=slot, minter=admin_address);
+
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
     %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
@@ -252,6 +380,5 @@ func test_create_vestings_only_one_deposited{
     with_attr error_message("Testing: released amount should be expected amount: 1000") {
         assert claimed = 1000;
     }
-
     return ();
 }
