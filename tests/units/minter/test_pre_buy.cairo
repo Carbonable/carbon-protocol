@@ -47,11 +47,12 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
     alloc_locals;
 
     // prepare minter instance
+    let project_value = 1000;
     let (local context) = prepare(
         public_sale_open=FALSE,
         max_value_per_tx=20,
         min_value_per_tx=1,
-        max_value=1000,
+        max_value=project_value,
         unit_price=50 * 10 ** 6,
         reserved_value=5,
     );
@@ -67,9 +68,14 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
 
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
-    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
+    %{
+        stop_mocks = [
+            mock_call(context.mocks.carbonable_project_address, "totalValue", [5, 0]),
+            mock_call(context.mocks.carbonable_project_address, "getProjectValue", [ids.project_value, 0]),
+            mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]),
+            mock_call(context.mocks.payment_token_address, "transferFrom", [1])
+        ]
+    %}
     %{ expect_events(dict(name="Buy", data=dict(address=context.signers.anyone, value=dict(low=2, high=0), time=200))) %}
     let (success) = CarbonableMinter.pre_buy(
         allocation=context.whitelist.allocations,
@@ -79,7 +85,10 @@ func test_pre_buy_nominal_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, r
         force=FALSE,
     );
     assert success = TRUE;
-    %{ stop() %}
+    %{
+        stop()
+        for stop_mock in stop_mocks: stop_mock()
+    %}
 
     // admin sets whitelist merkle root
     %{ expect_events(dict(name="PreSaleClose", data=dict(time=200))) %}
@@ -150,11 +159,12 @@ func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
     alloc_locals;
 
     // prepare minter instance
+    let project_value = 10;
     let (local context) = prepare(
         public_sale_open=FALSE,
         max_value_per_tx=5,
         min_value_per_tx=1,
-        max_value=10,
+        max_value=project_value,
         unit_price=10 * 10 ** 6,
         reserved_value=0,
     );
@@ -168,10 +178,14 @@ func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
     %{ stop=start_prank(context.signers.anyone) %}
 
     // Mock
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [3, 0]) %}
-    %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0]) %}
-
+    %{
+        stop_mocks = [
+            mock_call(context.mocks.carbonable_project_address, "totalValue", [3, 0]),
+            mock_call(context.mocks.carbonable_project_address, "getProjectValue", [ids.project_value, 0]),
+            mock_call(context.mocks.payment_token_address, "transferFrom", [1]),
+            mock_call(context.mocks.carbonable_project_address, "mintNew", [1337,0])
+        ]
+    %}
     // First buy
     // Call pre_buy
     CarbonableMinter.pre_buy(
@@ -181,6 +195,7 @@ func test_buy_user_whitelisted_but_not_enough_allocation_after_claim{
         value=5,
         force=FALSE,
     );
+    %{ for stop_mock in stop_mocks: stop_mock() %}
 
     // Expect error
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableMinter: not enough allocation available") %}

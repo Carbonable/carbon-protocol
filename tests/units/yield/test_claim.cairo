@@ -37,7 +37,7 @@ func test_claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
@@ -91,7 +91,7 @@ func test_claim_revert_nothing_to_claim{
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
@@ -130,7 +130,7 @@ func test_claim_revert_transfer_failed{
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}

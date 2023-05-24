@@ -36,6 +36,14 @@ func test_nominal_single_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
     admin.mint(to=anyone_address, token_id=1, slot=slot, value=100);
     admin.revoke_minter(slot=slot, minter=admin_address);
 
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value);
+
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value);
+
     // At t = 0
     %{ stop_warp_offseter = warp(blk_timestamp=0, target_contract_address=ids.offseter_address) %}
     %{ stop_warp_project = warp(blk_timestamp=0, target_contract_address=ids.project_address) %}
@@ -155,6 +163,10 @@ func test_nominal_multi_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     admin.mint(to=anyone_address, token_id=4, slot=slot, value=100);
     admin.mint(to=anyone_address, token_id=5, slot=slot, value=100);
     admin.revoke_minter(slot=slot, minter=admin_address);
+
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value);
 
     // At t = 0
     %{ stop_warp_offseter = warp(blk_timestamp=0, target_contract_address=ids.offseter_address) %}

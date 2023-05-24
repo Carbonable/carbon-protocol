@@ -46,6 +46,9 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (ton_equivalent) = CarbonableProject.ton_equivalent(slot=context.absorption.slot);
     assert ton_equivalent = context.absorption.ton_equivalent;
 
+    let (project_value) = CarbonableProject.project_value(slot=context.absorption.slot);
+    assert project_value = Uint256(context.project_value, 0);
+
     return ();
 }
 

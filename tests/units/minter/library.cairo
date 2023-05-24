@@ -87,6 +87,12 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     %}
 
     // Instantiate minter
+    %{
+        stop_mocks = [
+            mock_call(context.mocks.carbonable_project_address, "totalValue", [0, 0]),
+            mock_call(context.mocks.carbonable_project_address, "getProjectValue", [ids.max_value, 0])
+        ]
+    %}
     CarbonableMinter.initializer(
         carbonable_project_address=carbonable_project_address,
         carbonable_project_slot=Uint256(project_slot, 0),
@@ -98,6 +104,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         unit_price=unit_price,
         reserved_value=reserved_value,
     );
+    %{ for stop in stop_mocks: stop() %}
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);

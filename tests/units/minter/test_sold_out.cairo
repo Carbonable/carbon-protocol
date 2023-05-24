@@ -36,15 +36,25 @@ func test_sold_out{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     // run scenario
     %{ stop=start_prank(context.signers.anyone) %}
 
-    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [9, 0]) %}
+    %{
+        stop_mocks=[
+               mock_call(context.mocks.carbonable_project_address, "totalValue", [9, 0]),
+               mock_call(context.mocks.carbonable_project_address, "getProjectValue", [10, 0])
+               ]
+    %}
     let (sold_out) = CarbonableMinter.sold_out();
     assert sold_out = FALSE;
-    %{ stop_mock() %}
+    %{ for stop in stop_mocks: stop() %}
 
-    %{ stop_mock=mock_call(context.mocks.carbonable_project_address, "totalValue", [10, 0]) %}
+    %{
+        stop_mocks=[
+               mock_call(context.mocks.carbonable_project_address, "totalValue", [10, 0]),
+               mock_call(context.mocks.carbonable_project_address, "getProjectValue", [10, 0])
+               ]
+    %}
     let (sold_out) = CarbonableMinter.sold_out();
     assert sold_out = TRUE;
-    %{ stop_mock() %}
+    %{ for stop in stop_mocks: stop() %}
 
     return ();
 }

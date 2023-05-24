@@ -29,7 +29,7 @@ func test_total_claimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
@@ -88,7 +88,7 @@ func test_total_claimed_multi_users{
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [1, 0]) %}
     %{ stop_mock_1 = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ stop_mock_2 = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
@@ -134,7 +134,7 @@ func test_claimed_revert_claimable_negligible{
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [100, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [1999999]) %}
 
@@ -174,7 +174,7 @@ func test_claimed_revert_too_high_quantity{
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "totalValue", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 

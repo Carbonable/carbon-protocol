@@ -821,4 +821,19 @@ namespace instance {
         %{ stop_prank() %}
         return ();
     }
+
+    func set_project_value{
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, caller: felt
+    }(slot: felt, project_value: felt) {
+        alloc_locals;
+        let (contract_address) = instance.get_address();
+        let (slot_u256) = _felt_to_uint(slot);
+        let (project_value_u256) = _felt_to_uint(project_value);
+        %{ stop_prank = start_prank(caller_address=ids.caller, target_contract_address=ids.contract_address) %}
+        ICarbonableProject.setProjectValue(
+            contract_address=contract_address, slot=slot_u256, project_value=project_value_u256
+        );
+        %{ stop_prank() %}
+        return ();
+    }
 }
