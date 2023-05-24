@@ -79,6 +79,9 @@ namespace ICarbonableProject {
     func getTonEquivalent(slot: Uint256) -> (ton_equivalent: felt) {
     }
 
+    func getProjectValue(slot: Uint256) -> (value: Uint256) {
+    }
+
     func isSetup(slot: Uint256) -> (status: felt) {
     }
 
@@ -94,5 +97,8 @@ namespace ICarbonableProject {
         absorptions: felt*,
         ton_equivalent: felt,
     ) {
+    }
+
+    func setProjectValue(slot: Uint256, project_value: Uint256) {
     }
 }

@@ -6,14 +6,8 @@
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
-from starkware.cairo.common.math import (
-    assert_not_zero,
-    assert_le,
-    assert_nn,
-    assert_in_range,
-    assert_nn_le,
-)
-from starkware.cairo.common.math_cmp import is_not_zero
+from starkware.cairo.common.math import assert_not_zero, assert_le, assert_nn, assert_in_range
+from starkware.cairo.common.math_cmp import is_not_zero, is_nn_le
 from starkware.cairo.common.uint256 import (
     Uint256,
     uint256_check,
@@ -36,6 +30,7 @@ from erc3525.IERC3525Full import IERC3525Full as IERC3525
 // Local dependencies
 from src.mint.merkletree import MerkleTree
 from src.utils.type.library import _felt_to_uint, _uint_to_felt
+from src.interfaces.project import ICarbonableProject
 
 //
 // Events
@@ -133,6 +128,7 @@ namespace CarbonableMinter {
         unit_price: felt,
         reserved_value: felt,
     ) {
+        alloc_locals;
         // [Check] valid initialization
         with_attr error_message("CarbonableMinter: min_value_per_tx should be positive") {
             assert_nn(min_value_per_tx);
@@ -162,6 +158,14 @@ namespace CarbonableMinter {
         // [Effect] Set storage variables
         CarbonableMinter_carbonable_project_address_.write(carbonable_project_address);
         CarbonableMinter_carbonable_project_slot_.write(carbonable_project_slot);
+
+        // [Check] Max value is valid
+        let (max_value_u256) = _felt_to_uint(max_value);
+        let (remaining_value) = project_remaining_value();
+        with_attr error_message("CarbonableMinter: max_value is not valid") {
+            assert_uint256_le(max_value_u256, remaining_value);
+        }
+
         CarbonableMinter_payment_token_address_.write(payment_token_address);
         CarbonableMinter_max_value_per_tx_.write(max_value_per_tx);
         CarbonableMinter_min_value_per_tx_.write(min_value_per_tx);
@@ -396,7 +400,7 @@ namespace CarbonableMinter {
     ) -> (success: felt) {
         alloc_locals;
 
-        // [Security] Start reetrancy guard
+        // [Security] Start reentrancy guard
         ReentrancyGuard.start();
 
         // [Check] Not zero address
@@ -494,7 +498,7 @@ namespace CarbonableMinter {
     ) -> (success: felt) {
         alloc_locals;
 
-        // [Security] Start reetrancy guard
+        // [Security] Start reentrancy guard
         ReentrancyGuard.start();
 
         // [Check] Whitelisted sale is open
@@ -528,7 +532,7 @@ namespace CarbonableMinter {
         let new_claimed_value = claimed_value + minted_value_felt;
         CarbonableMinter_claimed_value_.write(caller, new_claimed_value);
 
-        // [Security] End reetrancy guard
+        // [Security] End reentrancy guard
         ReentrancyGuard.end();
 
         return (success=TRUE);
@@ -537,7 +541,7 @@ namespace CarbonableMinter {
     func public_buy{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         value: felt, force: felt
     ) -> (success: felt) {
-        // [Security] Start reetrancy guard
+        // [Security] Start reentrancy guard
         ReentrancyGuard.start();
 
         // [Check] if at least pre or public sale is open
@@ -549,7 +553,7 @@ namespace CarbonableMinter {
         // [Interaction] Buy
         buy(value, force);
 
-        // [Security] End reetrancy guard
+        // [Security] End reentrancy guard
         ReentrancyGuard.end();
 
         return (success=TRUE);
@@ -654,5 +658,16 @@ namespace CarbonableMinter {
         }
 
         return (minted_value=value_u256);
+    }
+
+    func project_remaining_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (remaining_value: Uint256) {
+        alloc_locals;
+        let (project_address) = CarbonableMinter_carbonable_project_address_.read();
+        let (project_slot) = CarbonableMinter_carbonable_project_slot_.read();
+        let (total_value) = IERC3525.totalValue(project_address, project_slot);
+        let (project_value) = ICarbonableProject.getProjectValue(project_address, project_slot);
+        let (remaining_value) = SafeUint256.sub_le(project_value, total_value);
+        return (remaining_value=remaining_value);
     }
 }

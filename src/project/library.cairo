@@ -4,11 +4,11 @@
 
 // Starkware dependencies
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.bool import TRUE
+from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le, is_not_zero
-from starkware.cairo.common.uint256 import Uint256, uint256_check
+from starkware.cairo.common.uint256 import Uint256, uint256_check, uint256_eq
 from starkware.starknet.common.syscalls import get_block_timestamp
 
 //
@@ -17,6 +17,10 @@ from starkware.starknet.common.syscalls import get_block_timestamp
 
 @event
 func AbsorptionUpdate(slot: Uint256, time: felt) {
+}
+
+@event
+func ProjectValueUpdate(slot: Uint256, projectValue: Uint256) {
 }
 
 //
@@ -41,6 +45,10 @@ func CarbonableProject_absorptions_len_(slot: Uint256) -> (length: felt) {
 
 @storage_var
 func CarbonableProject_absorptions_(slot: Uint256, index: felt) -> (absorption: felt) {
+}
+
+@storage_var
+func CarbonableProject_project_value_(slot: Uint256) -> (project_value: Uint256) {
 }
 
 namespace CarbonableProject {
@@ -165,10 +173,28 @@ namespace CarbonableProject {
         // [Check] Uint256 compliancy
         Assert.u256(value=slot);
 
-        let (times_status) = is_times_setup(slot=slot);
-        let (absorptions_status) = is_absorptions_setup(slot=slot);
-        let status = is_not_zero(times_status * absorptions_status);
+        let (project_value) = CarbonableProject_project_value_.read(slot);
+        let (project_value_status) = uint256_eq(project_value, Uint256(0, 0));
+        let project_value_status = 1 - project_value_status;
+
+        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
+        let absorptions_status = is_not_zero(absorptions_len);
+
+        let (times_len) = CarbonableProject_times_len_.read(slot);
+        let times_status = is_not_zero(times_len);
+
+        let status = is_not_zero(times_status * absorptions_status * project_value_status);
         return (status=status);
+    }
+
+    func project_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256
+    ) -> (project_value: Uint256) {
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+
+        let (project_value) = CarbonableProject_project_value_.read(slot);
+        return (project_value=project_value);
     }
 
     //
@@ -213,6 +239,25 @@ namespace CarbonableProject {
         let (current_time) = get_block_timestamp();
         AbsorptionUpdate.emit(slot=slot, time=current_time);
 
+        return ();
+    }
+
+    func set_project_value{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        slot: Uint256, project_value: Uint256
+    ) {
+        alloc_locals;
+        // [Check] Uint256 compliancy
+        Assert.u256(value=slot);
+        Assert.u256(value=project_value);
+
+        // [Check] Project value is not zero
+        let (is_zero) = uint256_eq(project_value, Uint256(0, 0));
+        with_attr error_message("CarbonableProject: project value must be defined positive") {
+            assert FALSE = is_zero;
+        }
+
+        CarbonableProject_project_value_.write(slot, project_value);
+        ProjectValueUpdate.emit(slot=slot, projectValue=project_value);
         return ();
     }
 
