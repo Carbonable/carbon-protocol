@@ -5,7 +5,7 @@ export ACCOUNT=0x063675fa1ecea10063722e61557ed7f49ed2503d6cdd74f4b31e9770b473650
 export NETWORK=alpha-goerli
 
 build:
-	protostar build
+	protostar build-cairo0
 
 format:
 	protostar format src tests
@@ -14,7 +14,7 @@ install:
 	protostar install
 
 test:
-	protostar test
+	protostar test-cairo0
 
 declare:
 ifdef NONCE

@@ -1,5 +1,5 @@
 [project]
-protostar-version = "0.10.0"
+protostar-version = "0.11.0"
 lib-path = "lib"
 cairo-path = [
     "./lib/cairopen_contracts/src",
@@ -18,7 +18,7 @@ CarbonableOffseter = ["src/offset/offseter.cairo"]
 CarbonableYielder = ["src/yield/yielder.cairo"]
 
 [test]
-target = ["tests"]
+target = ["./tests"]
 
 [profile.testnet.project]
 network = "testnet"
