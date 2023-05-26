@@ -34,7 +34,12 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     // Anyone
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
 
     // Total claimable is 0
     let (total_claimable) = CarbonableOffseter.total_claimable();
@@ -50,7 +55,7 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 
     let (claimable) = CarbonableOffseter.claimable_of(anyone_address);
     assert claimable = total_claimable;
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     return ();
 }
@@ -77,22 +82,37 @@ func test_total_claimable_multi_users{
     %{ stop_mock_2 = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     // Anyone
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
     // Deposit 1 from token #1 and claim
     CarbonableOffseter.deposit(token_id=one, value=one);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     // Admin
-    %{ stop=start_prank(context.signers.admin) %}
+    %{
+        stops = [
+            start_prank(context.signers.admin),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.admin])
+        ]
+    %}
     // Deposit 1 from token #2 and claim
     CarbonableOffseter.deposit(token_id=two, value=one);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     // Someone
-    %{ stop=start_prank(context.signers.someone) %}
+    %{
+        stops = [
+            start_prank(context.signers.someone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.someone])
+        ]
+    %}
     // Deposit 1 from token #3 and claim
     CarbonableOffseter.deposit(token_id=three, value=one);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     // Total claimable is 6000000;
     let (total_claimable) = CarbonableOffseter.total_claimable();

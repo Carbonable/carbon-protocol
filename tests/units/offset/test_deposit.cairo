@@ -34,17 +34,27 @@ func test_deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
 
     // Simple deposit
 
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
     let (success) = CarbonableOffseter.deposit(token_id=one, value=two);
     assert success = 1;
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     let (deposited) = CarbonableOffseter.deposited_of(address=anyone_address);
     assert deposited = two;
 
     // Double deposit
 
-    %{ stop=start_prank(context.signers.admin) %}
+    %{
+        stops = [
+            start_prank(context.signers.admin),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.admin])
+        ]
+    %}
     let (success) = CarbonableOffseter.deposit(token_id=two, value=one);
     assert success = 1;
 
