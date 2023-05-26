@@ -315,6 +315,9 @@ namespace CarbonableOffseter {
             assert is_zero = FALSE;
         }
 
+        // [Check] Token id is owned by caller
+        CarbonableOffseter_assert.caller_is_owner(token_id=token_id);
+
         // [Effect] If owned token id exists then deposit to (create a new token)
         let (to_token_id) = _get_token_id();
         let (is_zero) = uint256_eq(to_token_id, zero);
@@ -362,6 +365,9 @@ namespace CarbonableOffseter {
         with_attr error_message("CarbonableOffseter: value is not a valid Uint256") {
             uint256_check(value);
         }
+
+        // [Check] Token id is owned by caller
+        CarbonableOffseter_assert.caller_is_owner(token_id=token_id);
 
         // [Effect] Withdraw to token id
         let (success) = _withdraw(to_token_id=token_id, to=0, value=value);
@@ -643,6 +649,18 @@ namespace CarbonableOffseter_assert {
         let (minimum) = CarbonableOffseter.min_claimable();
         with_attr error_message("CarbonableOffseter: claimable balance must be not negligible") {
             assert_in_range(value=minimum, lower=0, upper=claimable + 1);
+        }
+        return ();
+    }
+
+    func caller_is_owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: Uint256
+    ) {
+        let (caller) = get_caller_address();
+        let (contract_address) = CarbonableOffseter_carbonable_project_address_.read();
+        let (owner) = IERC721.ownerOf(contract_address=contract_address, tokenId=token_id);
+        with_attr error_message("CarbonableOffseter: caller is not the owner of the token") {
+            assert caller = owner;
         }
         return ();
     }
