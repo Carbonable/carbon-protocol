@@ -214,3 +214,74 @@ func test_nominal_multi_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 
     return ();
 }
+
+@view
+func test_deposit_someone_else_token_revert{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    let (admin_address) = admin.get_address();
+    let (anyone_address) = anyone.get_address();
+    let (project_address) = project.get_address();
+    let (offseter_address) = offseter.get_address();
+    let slot = 1;
+
+    // Mint tokens with temporary MINTER_ROLE
+    admin.add_minter(slot=slot, minter=admin_address);
+    admin.mint(to=admin_address, token_id=1, slot=slot, value=100);
+    admin.mint(to=anyone_address, token_id=2, slot=slot, value=100);
+    admin.revoke_minter(slot=slot, minter=admin_address);
+
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value);
+
+    // Deposit 3 NFT from anyone and 2 NFT from admin into offseter
+    %{ stop_warp_offseter = warp(blk_timestamp=1651363200, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
+
+    admin.set_approval_for_slot(slot=slot, operator=offseter_address);
+    anyone.set_approval_for_slot(slot=slot, operator=offseter_address);
+    anyone.offseter_deposit(token_id=2, value=100);
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: caller is not the owner of the token") %}
+    anyone.offseter_deposit(token_id=1, value=100);
+    return ();
+}
+
+@view
+func test_withdraw_to_someone_else_token_revert{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
+    alloc_locals;
+
+    let (admin_address) = admin.get_address();
+    let (anyone_address) = anyone.get_address();
+    let (project_address) = project.get_address();
+    let (offseter_address) = offseter.get_address();
+    let slot = 1;
+
+    // Mint tokens with temporary MINTER_ROLE
+    admin.add_minter(slot=slot, minter=admin_address);
+    admin.mint(to=admin_address, token_id=1, slot=slot, value=100);
+    admin.mint(to=anyone_address, token_id=2, slot=slot, value=100);
+    admin.revoke_minter(slot=slot, minter=admin_address);
+
+    // Set project value to total minted value
+    let (project_value) = project.total_value(slot=slot);
+    admin.set_project_value(slot=slot, project_value=project_value);
+
+    // Deposit 3 NFT from anyone and 2 NFT from admin into offseter
+    %{ stop_warp_offseter = warp(blk_timestamp=1651363200, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
+
+    admin.set_approval_for_slot(slot=slot, operator=offseter_address);
+    anyone.set_approval_for_slot(slot=slot, operator=offseter_address);
+    anyone.offseter_deposit(token_id=2, value=100);
+    admin.offseter_deposit(token_id=1, value=100);
+
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: caller is not the owner of the token") %}
+    anyone.offseter_withdraw_to_token(token_id=1, value=100);
+    return ();
+}
