@@ -33,7 +33,12 @@ func test_withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
     let (success) = CarbonableOffseter.deposit(token_id=one, value=two);
     assert success = 1;
 
@@ -42,7 +47,7 @@ func test_withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 
     let (success) = CarbonableOffseter.withdraw_to_token(token_id=one, value=one);
     assert success = 1;
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     return ();
 }
@@ -63,14 +68,19 @@ func test_withdraw_to_revert_too_high_value{
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
 
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
     let (success) = CarbonableOffseter.deposit(token_id=one, value=one);
     assert success = 1;
 
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: value is higher than the withdrawable value") %}
     let (success) = CarbonableOffseter.withdraw_to(value=two);
-    assert success = 1;
-    %{ stop() %}
+    assert success = 0;
+    %{ for stop in stops: stop() %}
 
     return ();
 }

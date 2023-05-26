@@ -37,9 +37,14 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
     // Anyone deposit
 
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
     CarbonableOffseter.deposit(token_id=one, value=two);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     let (count) = CarbonableOffseter.total_user_count();
     assert count = 1;
@@ -49,9 +54,14 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
     // Admin deposit
 
-    %{ stop=start_prank(context.signers.admin) %}
+    %{
+        stops = [
+            start_prank(context.signers.admin),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.admin])
+        ]
+    %}
     CarbonableOffseter.deposit(token_id=two, value=one);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     let (count) = CarbonableOffseter.total_user_count();
     assert count = 2;
@@ -59,9 +69,14 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     let (user) = CarbonableOffseter.user_by_index(index=count - 1);
     assert user = admin_address;
 
-    %{ stop=start_prank(context.signers.admin) %}
+    %{
+        stops = [
+            start_prank(context.signers.admin),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.admin])
+        ]
+    %}
     CarbonableOffseter.deposit(token_id=two, value=one);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     let (count) = CarbonableOffseter.total_user_count();
     assert count = 2;
@@ -71,9 +86,14 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
     // Anyone withdraw 50%
 
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
     CarbonableOffseter.withdraw_to(value=one);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     let (count) = CarbonableOffseter.total_user_count();
     assert count = 2;
@@ -83,9 +103,14 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
     // Anyone withdraw 100%
 
-    %{ stop=start_prank(context.signers.anyone) %}
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
     CarbonableOffseter.withdraw_to(value=one);
-    %{ stop() %}
+    %{ for stop in stops: stop() %}
 
     let (count) = CarbonableOffseter.total_user_count();
     assert count = 2;

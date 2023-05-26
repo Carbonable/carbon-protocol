@@ -4,19 +4,12 @@
 
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.uint256 import Uint256
-from starkware.starknet.common.syscalls import get_contract_address, get_caller_address
 
 // Local dependencies
 from tests.units.yield.library import setup, prepare, CarbonableOffseter, CarbonableYielder
 
 const TOTAL_AMOUNT = 24663812000000000000000;  // 24663.812 ETH
-const CLIFF_DELTA = 0;
-const START = 1;
-const DURATION = 1;
-const SLICE_PERIOD_SECONDS = 1;
-const REVOCABLE = TRUE;
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -30,7 +23,6 @@ func test_provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     // prepare farmer instance
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
-    let (contract_address) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
@@ -39,11 +31,11 @@ func test_provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [0]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
 
     // Deposit value 1 from token #1
-    let (caller) = get_caller_address();
     CarbonableOffseter.deposit(token_id=one, value=one);
 
     // Snapshot
@@ -83,7 +75,6 @@ func test_provision_revert_already_set{
     // prepare farmer instance
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
-    let (contract_address) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
@@ -92,6 +83,7 @@ func test_provision_revert_already_set{
     %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [0]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [1]) %}
 
@@ -121,8 +113,6 @@ func test_provision_revert_null_amount{
     // prepare farmer instance
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
-    let (contract_address) = get_contract_address();
-    let anyone_address = context.signers.anyone;
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
@@ -131,6 +121,7 @@ func test_provision_revert_null_amount{
     %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [0]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
 
     // Deposit value 1 from token #1
@@ -155,7 +146,6 @@ func test_provision_revert_transfer_failed{
     // prepare farmer instance
     let (local context) = prepare();
     let one = Uint256(low=1, high=0);
-    let (contract_address) = get_contract_address();
 
     %{ mock_call(context.mocks.carbonable_project_address, "isSetup", [1]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
@@ -164,6 +154,7 @@ func test_provision_revert_transfer_failed{
     %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [100, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "ownerOf", [0]) %}
     %{ mock_call(context.mocks.carbonable_offseter_address, "getTotalAbsorption", [2000000]) %}
     %{ mock_call(context.mocks.payment_token_address, "transferFrom", [0]) %}
 
