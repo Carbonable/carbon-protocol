@@ -427,7 +427,7 @@ func test_claim_redeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 
     // Claim and withdraw
     anyone.yielder_claim();
-    anyone.yielder_withdraw_to(value=100);
+    anyone.yielder_withdraw_to_token(token_id=3, value=100);
 
     // Deposite again
     %{ stop_warp_yielder = warp(blk_timestamp=1700000000, target_contract_address=ids.yielder_address) %}
