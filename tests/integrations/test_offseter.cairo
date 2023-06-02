@@ -169,8 +169,8 @@ func test_nominal_multi_user_case{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
     admin.set_project_value(slot=slot, project_value=project_value);
 
     // At t = 0
-    %{ stop_warp_offseter = warp(blk_timestamp=0, target_contract_address=ids.offseter_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=0, target_contract_address=ids.project_address) %}
+    %{ stop_warp_offseter = warp(blk_timestamp=1, target_contract_address=ids.offseter_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1, target_contract_address=ids.project_address) %}
 
     // Admin deposits tokens #1, #2
     // Anyone deposits tokens #3, #4, #5
