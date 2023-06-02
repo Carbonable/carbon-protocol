@@ -22,12 +22,14 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
     // prepare farmer instance
     let (local context) = prepare();
+    let zero = Uint256(low=0, high=0);
     let one = Uint256(low=1, high=0);
     let two = Uint256(low=2, high=0);
     let (contract_address) = get_contract_address();
     let anyone_address = context.signers.anyone;
     let admin_address = context.signers.admin;
 
+    %{ warp(blk_timestamp=1) %}
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
@@ -110,6 +112,26 @@ func test_registration{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
         ]
     %}
     CarbonableOffseter.withdraw_to(value=one);
+    %{ for stop in stops: stop() %}
+
+    let (count) = CarbonableOffseter.total_user_count();
+    assert count = 2;
+
+    let (user) = CarbonableOffseter.user_by_index(index=count - 1);
+    assert user = admin_address;
+
+    let (deposited) = CarbonableOffseter.deposited_of(address=anyone_address);
+    assert deposited = zero;
+
+    // Anyone deposit
+
+    %{
+        stops = [
+            start_prank(context.signers.anyone),
+            mock_call(context.mocks.carbonable_project_address, "ownerOf", [context.signers.anyone])
+        ]
+    %}
+    CarbonableOffseter.deposit(token_id=one, value=one);
     %{ for stop in stops: stop() %}
 
     let (count) = CarbonableOffseter.total_user_count();

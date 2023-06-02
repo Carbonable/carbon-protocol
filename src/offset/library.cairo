@@ -558,6 +558,7 @@ namespace CarbonableOffseter {
         // [Effect] Register the caller with the new value and the current timestamp
         let (current_time) = get_block_timestamp();
         let (previous_value) = CarbonableOffseter_registered_value_.read(caller);
+        let (previous_time) = CarbonableOffseter_registered_time_.read(caller);
         let (new_value) = SafeUint256.add(previous_value, value);
         CarbonableOffseter_registered_time_.write(caller, current_time);
         CarbonableOffseter_registered_value_.write(caller, new_value);
@@ -566,9 +567,7 @@ namespace CarbonableOffseter {
         Deposit.emit(address=caller, value=value, time=current_time);
 
         // [Effect] Register the caller if first deposit
-        let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(previous_value, zero);
-        if (is_zero == TRUE) {
+        if (previous_time == 0) {
             let (index) = CarbonableOffseter_users_len_.read();
             // Create new user
             CarbonableOffseter_users_len_.write(index + 1);
