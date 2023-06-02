@@ -409,15 +409,15 @@ func test_claim_redeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
     anyone.set_approval_for_slot(slot=slot, operator=yielder_address);
 
     // Deposit 3 NFT from anyone and 2 NFT from admin into yielder
-    %{ stop_warp_yielder = warp(blk_timestamp=1650000000, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1650000000, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1651363200, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1651363200, target_contract_address=ids.project_address) %}
     anyone.yielder_deposit(token_id=3, value=100);
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
     // Snapshoter snapshot
-    %{ stop_warp_yielder = warp(blk_timestamp=1680000000, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1680000000, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1659312000, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1659312000, target_contract_address=ids.project_address) %}
     snapshoter.snapshot();
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
@@ -427,18 +427,23 @@ func test_claim_redeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 
     // Claim and withdraw
     anyone.yielder_claim();
+
+    %{ stop_warp_yielder = warp(blk_timestamp=1659312000, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1659312000, target_contract_address=ids.project_address) %}
     anyone.yielder_withdraw_to_token(token_id=3, value=100);
+    %{ stop_warp_yielder() %}
+    %{ stop_warp_project() %}
 
     // Deposite again
-    %{ stop_warp_yielder = warp(blk_timestamp=1700000000, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1700000000, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1675209600, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1675209600, target_contract_address=ids.project_address) %}
     anyone.yielder_deposit(token_id=3, value=100);
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
 
     // Snapshoter snapshot
-    %{ stop_warp_yielder = warp(blk_timestamp=1710000000, target_contract_address=ids.yielder_address) %}
-    %{ stop_warp_project = warp(blk_timestamp=1710000000, target_contract_address=ids.project_address) %}
+    %{ stop_warp_yielder = warp(blk_timestamp=1682899200, target_contract_address=ids.yielder_address) %}
+    %{ stop_warp_project = warp(blk_timestamp=1682899200, target_contract_address=ids.project_address) %}
     snapshoter.snapshot();
     %{ stop_warp_yielder() %}
     %{ stop_warp_project() %}
