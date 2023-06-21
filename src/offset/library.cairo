@@ -38,6 +38,16 @@ func CarbonableOffseter_claimed_(address: felt) -> (claimed: felt) {
 
 namespace CarbonableOffseter {
     //
+    // Constructor
+    //
+
+    func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        min_claimable: felt
+    ) {
+        CarbonableOffseter.set_min_claimable(min_claimable);
+        return ();
+    }
+    //
     // Getters
     //
 

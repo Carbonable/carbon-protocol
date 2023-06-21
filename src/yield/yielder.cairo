@@ -12,8 +12,7 @@ from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
-from src.offset.library import CarbonableOffseter
-from src.utils.access.library import CarbonableAccessControl
+from src.farming.library import CarbonableFarming
 from src.yield.library import CarbonableYielder
 
 //
@@ -24,22 +23,17 @@ from src.yield.library import CarbonableYielder
 //   This constructor uses a dedicated initializer that mainly stores the inputs.
 // @param carbonable_project_address The address of the Carbonable project.
 // @param carbonable_project_slot The slot of the Carbonable project.
-// @param carbonable_offseter_address The address of the Carbonable offseter.
 // @param payment_token_address The address of the ERC20 token that will be used for rewards.
 // @param owner The owner and Admin address.
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     carbonable_project_address: felt,
     carbonable_project_slot: Uint256,
-    carbonable_offseter_address: felt,
     payment_token_address: felt,
     owner: felt,
 ) {
-    CarbonableOffseter.initializer(carbonable_project_address, carbonable_project_slot);
-    CarbonableYielder.initializer(
-        carbonable_offseter_address=carbonable_offseter_address,
-        payment_token_address=payment_token_address,
-    );
+    CarbonableFarming.initializer(carbonable_project_address, carbonable_project_slot);
+    CarbonableYielder.initializer(payment_token_address=payment_token_address);
     Ownable.initializer(owner);
     Proxy.initializer(owner);
     return ();
@@ -118,15 +112,6 @@ func renounceOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
-// @notice Get the snapshoter.
-// @return snapshoter The address of the snapshoter.
-@view
-func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    snapshoter: felt
-) {
-    return CarbonableAccessControl.get_snapshoter();
-}
-
 //
 // ERC165
 //
@@ -150,7 +135,7 @@ func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 @view
 func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
-    return CarbonableOffseter.carbonable_project_address();
+    return CarbonableFarming.carbonable_project_address();
 }
 
 // @notice Return the associated carbonable project slot.
@@ -158,7 +143,7 @@ func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 @view
 func getCarbonableProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_slot: Uint256) {
-    return CarbonableOffseter.carbonable_project_slot();
+    return CarbonableFarming.carbonable_project_slot();
 }
 
 // @notice Return the associated payment token.
@@ -176,7 +161,7 @@ func getPaymentTokenAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, rang
 func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     value: Uint256
 ) {
-    return CarbonableOffseter.total_deposited();
+    return CarbonableFarming.total_deposited();
 }
 
 // @notice Return the total absorption of the project.
@@ -185,16 +170,28 @@ func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_absorption: felt
 ) {
-    return CarbonableOffseter.total_absorption();
+    let (total_absorption) = CarbonableFarming.total_absorption();
+    return (total_absorption=total_absorption);
 }
 
-// @notice Return the total provisioned of the yielder.
-// @return total_provisioned The total provisioned.
+// @notice Return the total claimable reward of the project.
+// @return total_claimable The total claimable.
 @view
-func getTotalProvisioned{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    total_provisioned: felt
+func getTotalClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_claimable: felt
 ) {
-    return CarbonableYielder.total_provisioned();
+    let (total_claimable) = CarbonableYielder.total_claimable();
+    return (total_claimable=total_claimable);
+}
+
+// @notice Return the total claimed balance of the project.
+// @return total_claimed The total claimed.
+@view
+func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_claimed: felt
+) {
+    let (total_claimed) = CarbonableYielder.total_claimed();
+    return (total_claimed=total_claimed);
 }
 
 // @notice Return the total deposited value of the provided address.
@@ -204,7 +201,7 @@ func getTotalProvisioned{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 func getDepositedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (value: Uint256) {
-    return CarbonableOffseter.deposited_of(address=address);
+    return CarbonableFarming.deposited_of(address=address);
 }
 
 // @notice Return the total absorption of the provided address.
@@ -214,7 +211,7 @@ func getDepositedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (absorption: felt) {
-    return CarbonableOffseter.absorption_of(address=address);
+    return CarbonableFarming.absorption_of(address=address);
 }
 
 // @notice Return the total claimable balance of the provided address.
@@ -237,23 +234,28 @@ func getClaimedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     return CarbonableYielder.claimed_of(address=address);
 }
 
-// @notice Return the associated carbonable vester.
-// @return time The last snapshot time.
 @view
-func getSnapshotedTime{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    time: felt
+func getCurrentPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    current_price: felt
 ) {
-    return CarbonableYielder.snapshoted_time();
+    return CarbonableFarming.current_price();
 }
 
-// @notice Return the snapshoted absorption of the provided address.
-// @param address The address of the user.
-// @return absorption The snapshoted absorption.
 @view
-func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    address: felt
-) -> (absorption: felt) {
-    return CarbonableYielder.snapshoted_of(address=address);
+func getPrices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    times_len: felt, times: felt*, prices_len: felt, prices: felt*, updated_prices_len: felt, updated_prices: felt*, cumsales_len: felt, cumsales: felt*
+) {
+    let (len, times, prices, updated_prices, cumsales) = CarbonableFarming.prices();
+    return (
+        times_len=len,
+        times=times,
+        prices_len=len,
+        prices=prices,
+        updated_prices_len=len,
+        updated_prices=updated_prices,
+        cumsales_len=len,
+        cumsales=cumsales
+    );
 }
 
 //
@@ -269,7 +271,7 @@ func getSnapshotedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256, value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.deposit(token_id=token_id, value=value);
+    return CarbonableFarming.deposit(token_id=token_id, value=value);
 }
 
 // @notice Withdraw the specified value to a new token.
@@ -279,7 +281,7 @@ func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func withdrawTo{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.withdraw_to(value=value);
+    return CarbonableFarming.withdraw_to(value=value);
 }
 
 // @notice Withdraw the specified value into the specified token.
@@ -291,37 +293,30 @@ func withdrawTo{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 func withdrawToToken{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256, value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.withdraw_to_token(token_id=token_id, value=value);
+    return CarbonableFarming.withdraw_to_token(token_id=token_id, value=value);
 }
 
 // @notice Claim the claimable amount of ERC-20.
 // @return success The success status.
 @external
-func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (success: felt) {
+func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     return CarbonableYielder.claim();
 }
 
-// @notice Snapshot the current state of claimable and claimed per user.
-// @dev The caller must have the SNAPSHOTER_ROLE role.
-// @return success The success status.
 @external
-func snapshot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    success: felt
+func addPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    time: felt, price: felt
 ) {
-    CarbonableAccessControl.assert_only_snapshoter();
-    return CarbonableYielder.snapshot();
+    Ownable.assert_only_owner();
+    CarbonableFarming.add_price(time=time, price=price);
+    return ();
 }
 
-// @notice Provision the yielder with the amount or ERC-20 value of carbon credits sold for
-//   the snapshoted period.
-// @dev Snapshot must have been executed before.
-//   The caller must have the PROVISIONER_ROLE role.
-// @param amount The amount of ERC-20.
-// @return success The success status.
 @external
-func provision{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(amount: felt) -> (
-    success: felt
+func updateLastPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    time: felt, price: felt
 ) {
-    CarbonableAccessControl.assert_only_provisioner();
-    return CarbonableYielder.provision(amount=amount);
+    Ownable.assert_only_owner();
+    CarbonableFarming.update_last_price(time=time, price=price);
+    return ();
 }

@@ -77,7 +77,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         carbonable_project_address=carbonable_project_address,
         carbonable_project_slot=Uint256(low=carbonable_project_slot, high=0),
     );
-    CarbonableOffseter.set_min_claimable(minimum);
+    CarbonableOffseter.initializer(minimum);
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone, someone=someone);

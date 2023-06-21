@@ -70,7 +70,10 @@ namespace ICarbonableYielder {
     func getTotalAbsorption() -> (total_absorption: felt) {
     }
 
-    func getTotalProvisioned() -> (total_provisioned: felt) {
+    func getTotalClaimable() -> (total_claimable: felt) {
+    }
+
+    func getTotalClaimed() -> (total_claimed: felt) {
     }
 
     func getDepositedOf(address: felt) -> (value: Uint256) {
@@ -85,10 +88,12 @@ namespace ICarbonableYielder {
     func getClaimedOf(address: felt) -> (claimed: felt) {
     }
 
-    func getSnapshotedTime() -> (time: felt) {
+    func getCurrentPrice() -> (current_price: felt) {
     }
 
-    func getSnapshotedOf(address: felt) -> (absorption: felt) {
+    func getPrices() -> (
+        len: felt, times: felt*, prices: felt*, updated_prices: felt*, cumsales: felt*
+    ) {
     }
 
     //
@@ -104,12 +109,12 @@ namespace ICarbonableYielder {
     func withdrawToToken(token_id: Uint256, value: Uint256) -> (success: felt) {
     }
 
-    func claim() -> (success: felt) {
+    func claim() {
     }
 
-    func snapshot() -> (success: felt) {
+    func addPrice(time: felt, price: felt) {
     }
 
-    func provision(amount: felt) -> (success: felt) {
+    func updateLastPrice(time: felt, price: felt) {
     }
 }
