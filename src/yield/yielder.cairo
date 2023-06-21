@@ -243,7 +243,14 @@ func getCurrentPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 
 @view
 func getPrices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    times_len: felt, times: felt*, prices_len: felt, prices: felt*, updated_prices_len: felt, updated_prices: felt*, cumsales_len: felt, cumsales: felt*
+    times_len: felt,
+    times: felt*,
+    prices_len: felt,
+    prices: felt*,
+    updated_prices_len: felt,
+    updated_prices: felt*,
+    cumsales_len: felt,
+    cumsales: felt*,
 ) {
     let (len, times, prices, updated_prices, cumsales) = CarbonableFarming.prices();
     return (
@@ -254,7 +261,7 @@ func getPrices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         updated_prices_len=len,
         updated_prices=updated_prices,
         cumsales_len=len,
-        cumsales=cumsales
+        cumsales=cumsales,
     );
 }
 
