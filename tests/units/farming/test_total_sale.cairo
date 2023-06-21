@@ -62,9 +62,8 @@ func test_total_sale{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @external
-func test_total_sale_multi_users{
-    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
-}() {
+func test_total_sale_multi_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
     alloc_locals;
 
     // prepare farmer instance

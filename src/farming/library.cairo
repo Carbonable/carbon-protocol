@@ -89,7 +89,6 @@ func CarbonableFarming_total_sale_() -> (sale: felt) {
 func CarbonableFarming_total_registered_value_() -> (value: Uint256) {
 }
 
-
 @storage_var
 func CarbonableFarming_total_registered_time_() -> (time: felt) {
 }
@@ -118,8 +117,7 @@ namespace CarbonableFarming {
     //
 
     func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        carbonable_project_address: felt,
-        carbonable_project_slot: Uint256, 
+        carbonable_project_address: felt, carbonable_project_slot: Uint256
     ) {
         CarbonableFarming_carbonable_project_address_.write(carbonable_project_address);
         CarbonableFarming_carbonable_project_slot_.write(carbonable_project_slot);
@@ -200,7 +198,9 @@ namespace CarbonableFarming {
         let (project_value) = ICarbonableProject.getProjectValue(
             contract_address=contract_address, slot=slot
         );
-        let (first_time) = ICarbonableProject.getStartTime(contract_address=contract_address, slot=slot);
+        let (first_time) = ICarbonableProject.getStartTime(
+            contract_address=contract_address, slot=slot
+        );
         return _compute_sale(value=project_value, time=first_time);
     }
 
@@ -240,8 +240,7 @@ namespace CarbonableFarming {
     //
 
     func add_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        time: felt,
-        price: felt,
+        time: felt, price: felt
     ) {
         alloc_locals;
 
@@ -286,8 +285,7 @@ namespace CarbonableFarming {
     }
 
     func update_last_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        time: felt,
-        price: felt,
+        time: felt, price: felt
     ) {
         alloc_locals;
 
@@ -555,9 +553,8 @@ namespace CarbonableFarming {
         return (success=TRUE);
     }
 
-    func _compute_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        absorption: felt
-    ) {
+    func _compute_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (absorption: felt) {
         alloc_locals;
 
         // [Compute] Total deposited value and registered time
@@ -690,8 +687,17 @@ namespace CarbonableFarming {
         }
 
         // [Compute] Total sale
-        let initial_cumsale = Math.interpolate(x=time, len=len, xs=times, ys=cumsales, interpolation=LINEAR, extrapolation=CONSTANT);
-        let final_cumsale = Math.interpolate(x=current_time, len=len, xs=times, ys=cumsales, interpolation=LINEAR, extrapolation=CONSTANT);
+        let initial_cumsale = Math.interpolate(
+            x=time, len=len, xs=times, ys=cumsales, interpolation=LINEAR, extrapolation=CONSTANT
+        );
+        let final_cumsale = Math.interpolate(
+            x=current_time,
+            len=len,
+            xs=times,
+            ys=cumsales,
+            interpolation=LINEAR,
+            extrapolation=CONSTANT,
+        );
 
         // [Check] Sale overflow
         with_attr error_message("CarbonableFarming: Error while computing sale") {
@@ -712,8 +718,9 @@ namespace CarbonableFarming {
         return (sale=sale);
     }
 
-    func _compute_cumsales{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) -> (len: felt, times: felt*, cumsales: felt*) {
+    func _compute_cumsales{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        len: felt, times: felt*, cumsales: felt*
+    ) {
         alloc_locals;
 
         let (local sales: felt*) = alloc();
@@ -733,13 +740,29 @@ namespace CarbonableFarming {
         // [Compute] Project information
         let (contract_address) = CarbonableFarming_carbonable_project_address_.read();
         let (slot) = CarbonableFarming_carbonable_project_slot_.read();
-        let (len, sales) = _compute_sales_iter(index=0, absorption=0, len=len, times=times, prices=prices, contract_address=contract_address, slot=slot, sales=sales);
+        let (len, sales) = _compute_sales_iter(
+            index=0,
+            absorption=0,
+            len=len,
+            times=times,
+            prices=prices,
+            contract_address=contract_address,
+            slot=slot,
+            sales=sales,
+        );
         let (len, cumsales) = Math.cumsum(len=len, xs=sales);
         return (len=len, times=times, cumsales=cumsales);
     }
 
     func _compute_sales_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        index: felt, absorption: felt, len: felt, times: felt*, prices: felt*, contract_address: felt, slot: Uint256, sales: felt*
+        index: felt,
+        absorption: felt,
+        len: felt,
+        times: felt*,
+        prices: felt*,
+        contract_address: felt,
+        slot: Uint256,
+        sales: felt*,
     ) -> (len: felt, sales: felt*) {
         alloc_locals;
 
@@ -749,11 +772,22 @@ namespace CarbonableFarming {
         }
 
         // [Check] Times
-        let (first_time) = ICarbonableProject.getStartTime(contract_address=contract_address, slot=slot);
+        let (first_time) = ICarbonableProject.getStartTime(
+            contract_address=contract_address, slot=slot
+        );
         let time = times[index];
         let is_lower = is_le(time, first_time);
         if (is_lower == TRUE) {
-            return _compute_sales_iter(index=index + 1, absorption=absorption, len=len, times=times, prices=prices, contract_address=contract_address, slot=slot, sales=sales);
+            return _compute_sales_iter(
+                index=index + 1,
+                absorption=absorption,
+                len=len,
+                times=times,
+                prices=prices,
+                contract_address=contract_address,
+                slot=slot,
+                sales=sales,
+            );
         }
 
         // [Check] First iteration (special case)
@@ -768,9 +802,18 @@ namespace CarbonableFarming {
             );
             let absorption = final_absorption - initial_absorption;
             assert sales[index] = absorption * price;
-            return _compute_sales_iter(index=index + 1, absorption=absorption, len=len, times=times, prices=prices, contract_address=contract_address, slot=slot, sales=sales);
+            return _compute_sales_iter(
+                index=index + 1,
+                absorption=absorption,
+                len=len,
+                times=times,
+                prices=prices,
+                contract_address=contract_address,
+                slot=slot,
+                sales=sales,
+            );
         }
-        
+
         // [Compute] Current time and price
         let previous_time = times[index - 1];
 
@@ -800,7 +843,16 @@ namespace CarbonableFarming {
         let (positive_update, _) = unsigned_div_rem(positive_delta, absorption);
         let updated_price = price - negative_update + positive_update;
         assert sales[index] = (final_absorption - initial_absorption) * updated_price;
-        return _compute_sales_iter(index=index + 1, absorption=absorption, len=len, times=times, prices=prices, contract_address=contract_address, slot=slot, sales=sales);
+        return _compute_sales_iter(
+            index=index + 1,
+            absorption=absorption,
+            len=len,
+            times=times,
+            prices=prices,
+            contract_address=contract_address,
+            slot=slot,
+            sales=sales,
+        );
     }
 }
 

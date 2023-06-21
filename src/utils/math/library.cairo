@@ -35,7 +35,7 @@ namespace Math {
         }
         return value_2;
     }
-    
+
     // @notice: This function compute an interpolate y value at x on the curve defined by xs and ys
     // @dev: The extrapolation method is defined constant over the data points
     // @param x: The absissa for which to interpolate
@@ -56,13 +56,15 @@ namespace Math {
         }
 
         // [Check] interpolation method is valid
-        let validity = (interpolation - LINEAR) * (interpolation - CONST_LEFT) * (interpolation - CONST_RIGHT); 
+        let validity = (interpolation - LINEAR) * (interpolation - CONST_LEFT) * (
+            interpolation - CONST_RIGHT
+        );
         with_attr error_message("Math: interpolation method is not valid") {
             assert validity = 0;
         }
 
         // [Check] extrapolation method is valid
-        let validity = (extrapolation - CONSTANT) * (extrapolation - NULL) * extrapolation; 
+        let validity = (extrapolation - CONSTANT) * (extrapolation - NULL) * extrapolation;
         with_attr error_message("Math: extrapolation method is not valid") {
             assert validity = 0;
         }
@@ -124,12 +126,7 @@ namespace Math {
 
         // [Compute] Else iter over xs to get the cumsum ys
         let (local ys: felt*) = alloc();
-        return _cumsum_iter(
-            index=0,
-            len=len,
-            xs=xs,
-            ys=ys,
-        );
+        return _cumsum_iter(index=0, len=len, xs=xs, ys=ys);
     }
 
     func diff{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -144,12 +141,7 @@ namespace Math {
 
         // [Compute] Else iter over xs to get the diff ys
         let (local ys: felt*) = alloc();
-        return _diff_iter(
-            index=len - 1,
-            len=len,
-            xs=xs,
-            ys=ys,
-        );
+        return _diff_iter(index=len - 1, len=len, xs=xs, ys=ys);
     }
 
     func mul{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -164,24 +156,12 @@ namespace Math {
 
         // [Compute] Else iter over xs to get the diff ys
         let (local zs: felt*) = alloc();
-        return _mul_iter(
-            index=len - 1,
-            len=len,
-            xs=xs,
-            ys=ys,
-            zs=zs,
-        );
+        return _mul_iter(index=len - 1, len=len, xs=xs, ys=ys, zs=zs);
     }
 }
 
 func _interpolate_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    x: felt,
-    index: felt,
-    xs: felt*,
-    ys: felt*,
-    next_x: felt,
-    next_y: felt,
-    interpolation: felt,
+    x: felt, index: felt, xs: felt*, ys: felt*, next_x: felt, next_y: felt, interpolation: felt
 ) -> felt {
     let read_x = xs[index];
     let read_y = ys[index];
@@ -246,22 +226,12 @@ func _cumsum_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     // [Check] index is null, the sum is 0
     if (index == 0) {
         assert ys[index] = x;
-        return _cumsum_iter(
-            index=index + 1,
-            len=len,
-            xs=xs,
-            ys=ys,
-        );
+        return _cumsum_iter(index=index + 1, len=len, xs=xs, ys=ys);
     }
 
     let y = ys[index - 1];
     assert ys[index] = x + y;
-    return _cumsum_iter(
-        index=index + 1,
-        len=len,
-        xs=xs,
-        ys=ys,
-    );
+    return _cumsum_iter(index=index + 1, len=len, xs=xs, ys=ys);
 }
 
 func _diff_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

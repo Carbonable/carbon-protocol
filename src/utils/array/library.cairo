@@ -21,16 +21,16 @@ namespace Array {
         let (value) = Array_.read(key, index);
         return (value=value);
     }
-    func read_len{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        key: felt
-    ) -> (len: felt) {
+    func read_len{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(key: felt) -> (
+        len: felt
+    ) {
         let (len) = Array_len_.read(key);
         return (len=len);
     }
 
-    func load{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        key: felt
-    ) -> (len: felt, values: felt*) {
+    func load{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(key: felt) -> (
+        len: felt, values: felt*
+    ) {
         alloc_locals;
 
         let (len) = Array_len_.read(key);
@@ -81,8 +81,7 @@ namespace Array {
         let (len, values) = Array.load(key=key);
         return _remove_iter(key=key, index=index, len=len, values=values);
     }
- }
-
+}
 
 func _read_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     key: felt, index: felt, len: felt, values: felt*

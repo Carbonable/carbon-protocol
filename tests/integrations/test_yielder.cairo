@@ -384,8 +384,7 @@ func test_claim_only_one_deposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin
 }
 
 @view
-func test_claim_redeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) {
+func test_claim_redeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     let (admin_address) = admin.get_address();

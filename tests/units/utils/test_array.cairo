@@ -9,13 +9,12 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 // Local dependencies
 from src.utils.array.library import Array
 
-
 @external
 func test_store_read{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     let input_len = 3;
-    let (local input : felt*) = alloc();
+    let (local input: felt*) = alloc();
     assert input[0] = 10;
     assert input[1] = 20;
     assert input[2] = 30;
@@ -44,7 +43,7 @@ func test_add{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     alloc_locals;
 
     let input_len = 3;
-    let (local input : felt*) = alloc();
+    let (local input: felt*) = alloc();
     assert input[0] = 10;
     assert input[1] = 20;
     assert input[2] = 30;
@@ -85,7 +84,7 @@ func test_replace{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     alloc_locals;
 
     let input_len = 3;
-    let (local input : felt*) = alloc();
+    let (local input: felt*) = alloc();
     assert input[0] = 10;
     assert input[1] = 20;
     assert input[2] = 30;
@@ -110,7 +109,7 @@ func test_remove{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     alloc_locals;
 
     let input_len = 3;
-    let (local input : felt*) = alloc();
+    let (local input: felt*) = alloc();
     assert input[0] = 10;
     assert input[1] = 20;
     assert input[2] = 30;

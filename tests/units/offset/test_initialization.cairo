@@ -20,7 +20,7 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 
     // prepare farmer instance
     let (local context) = prepare();
-    
+
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     let (min_claimable) = CarbonableOffseter.min_claimable();

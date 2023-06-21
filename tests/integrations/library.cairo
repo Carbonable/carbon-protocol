@@ -233,11 +233,7 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
 
     // Set absorptions
     certifier_instance.set_absorptions(
-        slot=slot,
-        len=len,
-        times=times,
-        absorptions=absorptions,
-        ton_equivalent=ton_equivalent,
+        slot=slot, len=len, times=times, absorptions=absorptions, ton_equivalent=ton_equivalent
     );
 
     // Set merkle root
