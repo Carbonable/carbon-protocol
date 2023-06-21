@@ -256,7 +256,7 @@ namespace CarbonableFarming {
 
         // [Check] Time is later than the last stored time
         let (last_time) = Array.read(key=TIME_SK, index=len - 1);
-        with_attr error_message("CarbonableFarming: value is null") {
+        with_attr error_message("CarbonableFarming: time is sooner than the last stored time") {
             assert_le(time, last_time + 1);
         }
 
