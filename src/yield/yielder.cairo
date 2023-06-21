@@ -327,3 +327,11 @@ func updateLastPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     CarbonableFarming.update_last_price(time=time, price=price);
     return ();
 }
+@external
+func set_prices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    times_len: felt, times: felt*, prices_len: felt, prices: felt*
+) {
+    Ownable.assert_only_owner();
+    CarbonableFarming.set_prices(times_len=times_len, times=times, prices_len=prices_len, prices=prices);
+    return ();
+}

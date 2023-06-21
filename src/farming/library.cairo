@@ -266,6 +266,18 @@ namespace CarbonableFarming {
     // Externals
     //
 
+    func set_prices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        times_len: felt, times: felt*, prices_len, prices: felt*
+    ) {
+        alloc_locals;
+
+        Array.store(key=TIME_SK, len=times_len, values=times);
+        Array.store(key=PRICE_SK, len=prices_len, values=prices);
+
+        return ();
+
+    }
+
     func add_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         time: felt, price: felt
     ) {
@@ -781,6 +793,8 @@ namespace CarbonableFarming {
         let (len, updated_prices, sales) = _compute_sales_iter(
             index=0,
             absorption=0,
+            negative_delta=0,
+            positive_delta=0,
             len=len,
             times=times,
             prices=prices,
@@ -798,6 +812,8 @@ namespace CarbonableFarming {
     func _compute_sales_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         index: felt,
         absorption: felt,
+        negative_delta: felt,
+        positive_delta: felt,
         len: felt,
         times: felt*,
         prices: felt*,
@@ -833,6 +849,8 @@ namespace CarbonableFarming {
             return _compute_sales_iter(
                 index=index + 1,
                 absorption=absorption,
+                negative_delta=negative_delta,
+                positive_delta=positive_delta,
                 len=len,
                 times=times,
                 prices=prices,
@@ -864,18 +882,23 @@ namespace CarbonableFarming {
         let real_sale = absorption * price;
         let previous_sale = sales[index - 1];
         let is_lower = is_le(real_sale, previous_sale);
-        let negative_delta = (previous_sale - real_sale) * is_lower;
-        let positive_delta = (real_sale - previous_sale) * (1 - is_lower);
+        let negative_delta = negative_delta + (previous_sale - real_sale) * is_lower;
+        let positive_delta = positive_delta + (real_sale - previous_sale) * (1 - is_lower);
 
         // [Compute] Updated price
         let (negative_update, _) = unsigned_div_rem(negative_delta, new_absorption);
         let (positive_update, _) = unsigned_div_rem(positive_delta, new_absorption);
-        let updated_price = price - negative_update + positive_update;
+        
+        // [Check] Overflow, if too much to compensate then price drop to zero
+        let is_lower = is_le(negative_update, price + positive_update);
+        let updated_price = (price + positive_update - negative_update) * is_lower;
         assert sales[index] = new_absorption * updated_price;
         assert updated_prices[index] = updated_price;
         return _compute_sales_iter(
             index=index + 1,
             absorption=new_absorption,
+            negative_delta=negative_delta,
+            positive_delta=positive_delta,
             len=len,
             times=times,
             prices=prices,
