@@ -80,10 +80,10 @@ namespace ICarbonableOffseter {
     func setMinClaimable(min_claimable: felt) -> () {
     }
 
-    func claim(quantity: felt) -> (success: felt) {
+    func claim(quantity: felt) {
     }
 
-    func claimAll() -> (success: felt) {
+    func claimAll() {
     }
 
     func deposit(token_id: Uint256, value: Uint256) -> (success: felt) {

@@ -12,6 +12,7 @@ from openzeppelin.introspection.erc165.library import ERC165
 from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
+from src.farming.library import CarbonableFarming
 from src.offset.library import CarbonableOffseter
 
 //
@@ -33,8 +34,8 @@ func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 ) {
     alloc_locals;
 
-    CarbonableOffseter.initializer(carbonable_project_address, carbonable_project_slot);
-    CarbonableOffseter.set_min_claimable(min_claimable);
+    CarbonableFarming.initializer(carbonable_project_address, carbonable_project_slot);
+    CarbonableOffseter.initializer(min_claimable);
     Ownable.initializer(owner);
     Proxy.initializer(owner);
     return ();
@@ -136,7 +137,7 @@ func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 @view
 func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_address: felt) {
-    return CarbonableOffseter.carbonable_project_address();
+    return CarbonableFarming.carbonable_project_address();
 }
 
 // @notice Return the associated carbonable project slot.
@@ -144,7 +145,7 @@ func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 @view
 func getCarbonableProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_slot: Uint256) {
-    return CarbonableOffseter.carbonable_project_slot();
+    return CarbonableFarming.carbonable_project_slot();
 }
 
 // @notice Return the minimum claimable quantity.
@@ -162,7 +163,7 @@ func getMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     value: Uint256
 ) {
-    return CarbonableOffseter.total_deposited();
+    return CarbonableFarming.total_deposited();
 }
 
 // @notice Return the total absorption of the project.
@@ -171,16 +172,8 @@ func getTotalDeposited{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 func getTotalAbsorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_absorption: felt
 ) {
-    return CarbonableOffseter.total_absorption();
-}
-
-// @notice Return the total claimed balance of the project.
-// @return total_claimed The total claimed.
-@view
-func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    total_claimed: felt
-) {
-    return CarbonableOffseter.total_claimed();
+    let (total_absorption) = CarbonableFarming.total_absorption();
+    return (total_absorption=total_absorption);
 }
 
 // @notice Return the total claimable absorption of the project.
@@ -189,7 +182,18 @@ func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 func getTotalClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     total_claimable: felt
 ) {
-    return CarbonableOffseter.total_claimable();
+    let (total_claimable) = CarbonableOffseter.total_claimable();
+    return (total_claimable=total_claimable);
+}
+
+// @notice Return the total claimed balance of the project.
+// @return total_claimed The total claimed.
+@view
+func getTotalClaimed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_claimed: felt
+) {
+    let (total_claimed) = CarbonableOffseter.total_claimed();
+    return (total_claimed=total_claimed);
 }
 
 // @notice Return the total deposited value of the provided address.
@@ -199,7 +203,7 @@ func getTotalClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 func getDepositedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (value: Uint256) {
-    return CarbonableOffseter.deposited_of(address=address);
+    return CarbonableFarming.deposited_of(address=address);
 }
 
 // @notice Return the total absorption of the provided address.
@@ -209,7 +213,7 @@ func getDepositedOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 func getAbsorptionOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
 ) -> (absorption: felt) {
-    return CarbonableOffseter.absorption_of(address=address);
+    return CarbonableFarming.absorption_of(address=address);
 }
 
 // @notice Return the total claimable balance of the provided address.
@@ -253,18 +257,14 @@ func setMinClaimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 // @param quantity The quantity to claim
 // @return success The success status.
 @external
-func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) -> (
-    success: felt
-) {
+func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) {
     return CarbonableOffseter.claim(quantity=quantity);
 }
 
 // @notice Claim all the total claimable of the caller address.
 // @return success The success status.
 @external
-func claimAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    success: felt
-) {
+func claimAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     return CarbonableOffseter.claim_all();
 }
 
@@ -277,7 +277,7 @@ func claimAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256, value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.deposit(token_id=token_id, value=value);
+    return CarbonableFarming.deposit(token_id=token_id, value=value);
 }
 
 // @notice Withdraw the specified value to a new token.
@@ -287,7 +287,7 @@ func deposit{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func withdrawTo{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.withdraw_to(value=value);
+    return CarbonableFarming.withdraw_to(value=value);
 }
 
 // @notice Withdraw the specified value into the specified token.
@@ -299,5 +299,5 @@ func withdrawTo{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 func withdrawToToken{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     token_id: Uint256, value: Uint256
 ) -> (success: felt) {
-    return CarbonableOffseter.withdraw_to_token(token_id=token_id, value=value);
+    return CarbonableFarming.withdraw_to_token(token_id=token_id, value=value);
 }

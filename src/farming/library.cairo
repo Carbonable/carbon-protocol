@@ -31,7 +31,7 @@ from erc3525.IERC3525 import IERC3525
 // Local dependencies
 from src.interfaces.project import ICarbonableProject
 from src.utils.array.library import Array
-from src.utils.math.library import Math, LINEAR, CONSTANT
+from src.utils.math.library import Math, LINEAR, CONSTANT, CONST_LEFT, NULL
 from src.utils.type.library import _felt_to_uint, _uint_to_felt
 
 //
@@ -235,6 +235,33 @@ namespace CarbonableFarming {
         return (sale=computed + stored);
     }
 
+    func current_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        current_price: felt
+    ) {
+        alloc_locals;
+
+        let (len, times, _, updated_prices, _) = CarbonableFarming._compute_cumsales();
+        let (time) = get_block_timestamp();
+        let current_price = Math.interpolate(
+            x=time,
+            len=len,
+            xs=times,
+            ys=updated_prices,
+            interpolation=CONST_LEFT,
+            extrapolation=NULL,
+        );
+
+        return (current_price=current_price);
+    }
+
+    func prices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        len: felt, times: felt*, prices: felt*, updated_prices: felt*, cumsales: felt*
+    ) {
+        alloc_locals;
+
+        return CarbonableFarming._compute_cumsales();
+    }
+
     //
     // Externals
     //
@@ -243,6 +270,16 @@ namespace CarbonableFarming {
         time: felt, price: felt
     ) {
         alloc_locals;
+
+        // [Check] Time is later than the project start time
+        let (contract_address) = CarbonableFarming_carbonable_project_address_.read();
+        let (slot) = CarbonableFarming_carbonable_project_slot_.read();
+        let (first_time) = ICarbonableProject.getStartTime(
+            contract_address=contract_address, slot=slot
+        );
+        with_attr error_message("CarbonableFarming: time is sooner than the project start time") {
+            assert_le(first_time + 1, time);
+        }
 
         // [Check] First time to store
         let (len) = Array.read_len(key=TIME_SK);
@@ -257,12 +294,10 @@ namespace CarbonableFarming {
         // [Check] Time is later than the last stored time
         let (last_time) = Array.read(key=TIME_SK, index=len - 1);
         with_attr error_message("CarbonableFarming: time is sooner than the last stored time") {
-            assert_le(time, last_time + 1);
+            assert_le(last_time + 1, time);
         }
 
         // [Check] Absorption is captured between these times
-        let (contract_address) = CarbonableFarming_carbonable_project_address_.read();
-        let (slot) = CarbonableFarming_carbonable_project_slot_.read();
         let (initial_absorption) = ICarbonableProject.getAbsorption(
             contract_address=contract_address, slot=slot, time=last_time
         );
@@ -679,7 +714,7 @@ namespace CarbonableFarming {
 
         // [Compute] Interpolated sales
         let (current_time) = get_block_timestamp();
-        let (len, times, cumsales) = CarbonableFarming._compute_cumsales();
+        let (len, times, _, _, cumsales) = CarbonableFarming._compute_cumsales();
 
         // [Check] Times and prices are set
         if (len == 0) {
@@ -719,28 +754,29 @@ namespace CarbonableFarming {
     }
 
     func _compute_cumsales{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        len: felt, times: felt*, cumsales: felt*
+        len: felt, times: felt*, prices: felt*, updated_prices: felt*, cumsales: felt*
     ) {
         alloc_locals;
 
-        let (local sales: felt*) = alloc();
+        let (local empty: felt*) = alloc();
 
         // [Check] Times are set
         let (len, times) = Array.load(key=TIME_SK);
         if (len == 0) {
-            return (len=0, times=times, cumsales=sales);
+            return (len=0, times=empty, prices=empty, updated_prices=empty, cumsales=empty);
         }
 
         // [Check] Prices are set
         let (len, prices) = Array.load(key=PRICE_SK);
         if (len == 0) {
-            return (len=0, times=times, cumsales=sales);
+            return (len=0, times=empty, prices=empty, updated_prices=empty, cumsales=empty);
         }
 
         // [Compute] Project information
+        let (local updated_prices: felt*) = alloc();
         let (contract_address) = CarbonableFarming_carbonable_project_address_.read();
         let (slot) = CarbonableFarming_carbonable_project_slot_.read();
-        let (len, sales) = _compute_sales_iter(
+        let (len, updated_prices, sales) = _compute_sales_iter(
             index=0,
             absorption=0,
             len=len,
@@ -748,10 +784,13 @@ namespace CarbonableFarming {
             prices=prices,
             contract_address=contract_address,
             slot=slot,
-            sales=sales,
+            sales=empty,
+            updated_prices=updated_prices,
         );
         let (len, cumsales) = Math.cumsum(len=len, xs=sales);
-        return (len=len, times=times, cumsales=cumsales);
+        return (
+            len=len, times=times, prices=prices, updated_prices=updated_prices, cumsales=cumsales
+        );
     }
 
     func _compute_sales_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -763,37 +802,23 @@ namespace CarbonableFarming {
         contract_address: felt,
         slot: Uint256,
         sales: felt*,
-    ) -> (len: felt, sales: felt*) {
+        updated_prices: felt*,
+    ) -> (len: felt, updated_prices: felt*, sales: felt*) {
         alloc_locals;
 
         // [Check] End criteria
         if (index == len) {
-            return (len=len, sales=sales);
-        }
-
-        // [Check] Times
-        let (first_time) = ICarbonableProject.getStartTime(
-            contract_address=contract_address, slot=slot
-        );
-        let time = times[index];
-        let is_lower = is_le(time, first_time);
-        if (is_lower == TRUE) {
-            return _compute_sales_iter(
-                index=index + 1,
-                absorption=absorption,
-                len=len,
-                times=times,
-                prices=prices,
-                contract_address=contract_address,
-                slot=slot,
-                sales=sales,
-            );
+            return (len=len, updated_prices=updated_prices, sales=sales);
         }
 
         // [Check] First iteration (special case)
+        let time = times[index];
         let price = prices[index];
         if (index == 0) {
             // [Compute] Interpolated absorptions
+            let (first_time) = ICarbonableProject.getStartTime(
+                contract_address=contract_address, slot=slot
+            );
             let (initial_absorption) = ICarbonableProject.getAbsorption(
                 contract_address=contract_address, slot=slot, time=first_time
             );
@@ -802,6 +827,7 @@ namespace CarbonableFarming {
             );
             let absorption = final_absorption - initial_absorption;
             assert sales[index] = absorption * price;
+            assert updated_prices[index] = price;
             return _compute_sales_iter(
                 index=index + 1,
                 absorption=absorption,
@@ -811,6 +837,7 @@ namespace CarbonableFarming {
                 contract_address=contract_address,
                 slot=slot,
                 sales=sales,
+                updated_prices=updated_prices,
             );
         }
 
@@ -843,6 +870,7 @@ namespace CarbonableFarming {
         let (positive_update, _) = unsigned_div_rem(positive_delta, absorption);
         let updated_price = price - negative_update + positive_update;
         assert sales[index] = (final_absorption - initial_absorption) * updated_price;
+        assert updated_prices[index] = updated_price;
         return _compute_sales_iter(
             index=index + 1,
             absorption=absorption,
@@ -852,6 +880,7 @@ namespace CarbonableFarming {
             contract_address=contract_address,
             slot=slot,
             sales=sales,
+            updated_prices=updated_prices,
         );
     }
 }

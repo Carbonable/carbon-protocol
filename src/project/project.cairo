@@ -921,9 +921,8 @@ func setAbsorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     CarbonableAccessControl.assert_only_certifier(slot);
     return CarbonableProject.set_absorptions(
         slot=slot,
-        times_len=times_len,
+        len=times_len,
         times=times,
-        absorptions_len=absorptions_len,
         absorptions=absorptions,
         ton_equivalent=ton_equivalent,
     );
