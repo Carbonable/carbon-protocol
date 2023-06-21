@@ -285,7 +285,9 @@ namespace CarbonableFarming {
         let (len) = Array.read_len(key=TIME_SK);
         if (len == 0) {
             // [Effect] Update storage
+            Array.add(key=TIME_SK, value=first_time);
             Array.add(key=TIME_SK, value=time);
+            Array.add(key=PRICE_SK, value=price);
             Array.add(key=PRICE_SK, value=price);
 
             return ();
@@ -851,11 +853,11 @@ namespace CarbonableFarming {
         let (final_absorption) = ICarbonableProject.getAbsorption(
             contract_address=contract_address, slot=slot, time=time
         );
-        let absorption = final_absorption - initial_absorption;
+        let new_absorption = final_absorption - initial_absorption;
 
         // [Check] Absorption cannot wrap a null absorption
         with_attr error_message("CarbonableFarming: Prices cannot wrap a null absorption") {
-            assert_not_zero(absorption);
+            assert_not_zero(new_absorption);
         }
 
         // [Compute] Delta to compensate from the previous sale
@@ -866,14 +868,14 @@ namespace CarbonableFarming {
         let positive_delta = (real_sale - previous_sale) * (1 - is_lower);
 
         // [Compute] Updated price
-        let (negative_update, _) = unsigned_div_rem(negative_delta, absorption);
-        let (positive_update, _) = unsigned_div_rem(positive_delta, absorption);
+        let (negative_update, _) = unsigned_div_rem(negative_delta, new_absorption);
+        let (positive_update, _) = unsigned_div_rem(positive_delta, new_absorption);
         let updated_price = price - negative_update + positive_update;
-        assert sales[index] = (final_absorption - initial_absorption) * updated_price;
+        assert sales[index] = new_absorption * updated_price;
         assert updated_prices[index] = updated_price;
         return _compute_sales_iter(
             index=index + 1,
-            absorption=absorption,
+            absorption=new_absorption,
             len=len,
             times=times,
             prices=prices,
