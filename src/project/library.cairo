@@ -3,13 +3,24 @@
 %lang starknet
 
 // Starkware dependencies
-from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le, is_not_zero
 from starkware.cairo.common.uint256 import Uint256, uint256_check, uint256_eq
 from starkware.starknet.common.syscalls import get_block_timestamp
+
+// Local dependencies
+from src.utils.array.library import Array
+from src.utils.math.library import Math, CONSTANT, LINEAR
+
+//
+// Constants
+//
+
+const TIME_SK = 'TIME';
+const ABSORPTION_SK = 'ABSORPTION';
 
 //
 // Events
@@ -28,23 +39,7 @@ func ProjectValueUpdate(slot: Uint256, projectValue: Uint256) {
 //
 
 @storage_var
-func CarbonableProject_times_len_(slot: Uint256) -> (length: felt) {
-}
-
-@storage_var
-func CarbonableProject_times_(slot: Uint256, index: felt) -> (time: felt) {
-}
-
-@storage_var
 func CarbonableProject_absorptions_ton_equivalent_(slot: Uint256) -> (precision: felt) {
-}
-
-@storage_var
-func CarbonableProject_absorptions_len_(slot: Uint256) -> (length: felt) {
-}
-
-@storage_var
-func CarbonableProject_absorptions_(slot: Uint256, index: felt) -> (absorption: felt) {
 }
 
 @storage_var
@@ -62,7 +57,12 @@ namespace CarbonableProject {
         // [Check] Uint256 compliancy
         Assert.u256(value=slot);
 
-        let (time) = CarbonableProject_times_.read(slot, 0);
+        // [Compute] Storage key
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(hash, TIME_SK);
+
+        // [Compute] Storage value
+        let (time) = Array.read(hash, 0);
         return (time=time);
     }
 
@@ -72,9 +72,13 @@ namespace CarbonableProject {
         // [Check] Uint256 compliancy
         Assert.u256(value=slot);
 
-        let (times_len) = CarbonableProject_times_len_.read(slot);
-        let index = times_len - 1;
-        let (time) = CarbonableProject_times_.read(slot, index);
+        // [Compute] Storage key
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(hash, TIME_SK);
+
+        // [Compute] Read storage
+        let (len) = Array.read_len(hash);
+        let (time) = Array.read(hash, len - 1);
         return (time=time);
     }
 
@@ -84,8 +88,13 @@ namespace CarbonableProject {
         // [Check] Uint256 compliancy
         Assert.u256(value=slot);
 
-        let (times_len, times) = _read_times(slot);
-        return (times_len=times_len, times=times);
+        // [Compute] Storage key
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(hash, TIME_SK);
+ 
+        // [Compute] Read storage
+        let (len, values) = Array.load(hash);
+        return (times_len=len, times=values);
     }
 
     func absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -94,8 +103,13 @@ namespace CarbonableProject {
         // [Check] Uint256 compliancy
         Assert.u256(value=slot);
 
-        let (absorptions_len, absorptions) = _read_absorptions(slot=slot);
-        return (absorptions_len=absorptions_len, absorptions=absorptions);
+        // [Compute] Storage key
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(hash, ABSORPTION_SK);
+ 
+        // [Compute] Read storage
+        let (len, values) = Array.load(hash);
+        return (absorptions_len=len, absorptions=values);
     }
 
     func absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -127,10 +141,14 @@ namespace CarbonableProject {
         // [Check] Uint256 compliancy
         Assert.u256(value=slot);
 
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
-        let index = absorptions_len - 1;
-        let (absorption) = CarbonableProject_absorptions_.read(slot, index);
-        return (absorption=absorption);
+        // [Compute] Storage key
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(hash, ABSORPTION_SK);
+
+        // [Compute] Read storage
+        let (len) = Array.read_len(hash);
+        let (value) = Array.read(hash, len - 1);
+        return (absorption=value);
     }
 
     func ton_equivalent{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -143,28 +161,6 @@ namespace CarbonableProject {
         return (ton_equivalent=ton_equivalent);
     }
 
-    func is_times_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256
-    ) -> (status: felt) {
-        // [Check] Uint256 compliancy
-        Assert.u256(value=slot);
-
-        let (times_len) = CarbonableProject_times_len_.read(slot);
-        let status = is_not_zero(times_len);
-        return (status=status);
-    }
-
-    func is_absorptions_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256
-    ) -> (status: felt) {
-        // [Check] Uint256 compliancy
-        Assert.u256(value=slot);
-
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
-        let status = is_not_zero(absorptions_len);
-        return (status=status);
-    }
-
     func is_setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         slot: Uint256
     ) -> (status: felt) {
@@ -173,17 +169,22 @@ namespace CarbonableProject {
         // [Check] Uint256 compliancy
         Assert.u256(value=slot);
 
+        // [Compute] Project status
         let (project_value) = CarbonableProject_project_value_.read(slot);
         let (project_value_status) = uint256_eq(project_value, Uint256(0, 0));
-        let project_value_status = 1 - project_value_status;
 
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
-        let absorptions_status = is_not_zero(absorptions_len);
+        // [Compute] Time status
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (time_hash) = hash2{hash_ptr=pedersen_ptr}(hash, TIME_SK);
+        let (len) = Array.read_len(time_hash);
+        let times_status = is_not_zero(len);
 
-        let (times_len) = CarbonableProject_times_len_.read(slot);
-        let times_status = is_not_zero(times_len);
+        // [Compute] Absorption status
+        let (absorption_hash) = hash2{hash_ptr=pedersen_ptr}(hash, ABSORPTION_SK);
+        let (len) = Array.read_len(absorption_hash);
+        let absorptions_status = is_not_zero(len);
 
-        let status = is_not_zero(times_status * absorptions_status * project_value_status);
+        let status = is_not_zero(times_status * absorptions_status * (1 - project_value_status));
         return (status=status);
     }
 
@@ -203,9 +204,8 @@ namespace CarbonableProject {
 
     func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         slot: Uint256,
-        times_len: felt,
+        len: felt,
         times: felt*,
-        absorptions_len: felt,
         absorptions: felt*,
         ton_equivalent: felt,
     ) {
@@ -215,13 +215,10 @@ namespace CarbonableProject {
         Assert.u256(value=slot);
 
         // [Check] Consistency
-        let is_times_defined = is_not_zero(times_len);
-        let is_absorptions_defined = is_not_zero(absorptions_len);
+        let is_defined = is_not_zero(len);
         with_attr error_message(
                 "CarbonableProject: times and absorptions must be defined and equal") {
-            assert is_times_defined = TRUE;
-            assert is_absorptions_defined = TRUE;
-            assert times_len = absorptions_len;
+            assert is_defined = TRUE;
         }
 
         // [Check] Precision is not null
@@ -230,9 +227,14 @@ namespace CarbonableProject {
             assert not_zero = TRUE;
         }
 
+        // [Compute] Storage key
+        let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
+        let (time_hash) = hash2{hash_ptr=pedersen_ptr}(hash, TIME_SK);
+        let (absorption_hash) = hash2{hash_ptr=pedersen_ptr}(hash, ABSORPTION_SK);
+
         // [Effect] Update storage
-        _write_times(slot=slot, times_len=times_len, times=times);
-        _write_absorptions(slot=slot, absorptions_len=absorptions_len, absorptions=absorptions);
+        Array.store(key=time_hash, len=len, values=times);
+        Array.store(key=absorption_hash, len=len, values=absorptions);
         CarbonableProject_absorptions_ton_equivalent_.write(slot, ton_equivalent);
 
         // [Effect] Emit event
@@ -265,209 +267,24 @@ namespace CarbonableProject {
     // Internals
     //
 
-    func _read_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256
-    ) -> (times_len: felt, times: felt*) {
-        alloc_locals;
-
-        let (times_len) = CarbonableProject_times_len_.read(slot);
-        let (local times: felt*) = alloc();
-
-        // [Check] times have been defined
-        let (status) = is_times_setup(slot=slot);
-        if (status != TRUE) {
-            return (times_len=times_len, times=times);
-        }
-
-        _read_times_iter(slot=slot, index=times_len - 1, times=times);
-        return (times_len=times_len, times=times);
-    }
-
-    func _read_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256, index: felt, times: felt*
-    ) {
-        alloc_locals;
-
-        let (time) = CarbonableProject_times_.read(slot, index);
-        assert times[index] = time;
-        if (index == 0) {
-            return ();
-        }
-        _read_times_iter(slot=slot, index=index - 1, times=times);
-        return ();
-    }
-
-    func _write_times{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256, times_len: felt, times: felt*
-    ) {
-        alloc_locals;
-
-        CarbonableProject_times_len_.write(slot, times_len);
-        _write_times_iter(slot=slot, index=times_len - 1, times=times);
-        return ();
-    }
-
-    func _write_times_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256, index: felt, times: felt*
-    ) {
-        alloc_locals;
-
-        CarbonableProject_times_.write(slot, index, times[index]);
-        if (index == 0) {
-            return ();
-        }
-        _write_times_iter(slot=slot, index=index - 1, times=times);
-        return ();
-    }
-
-    func _read_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256
-    ) -> (absorptions_len: felt, absorptions: felt*) {
-        alloc_locals;
-
-        let (absorptions_len) = CarbonableProject_absorptions_len_.read(slot);
-        let (local absorptions: felt*) = alloc();
-
-        // [Check] absorptions have been defined
-        let (status) = is_times_setup(slot=slot);
-        if (status != TRUE) {
-            return (absorptions_len=absorptions_len, absorptions=absorptions);
-        }
-
-        _read_absorptions_iter(slot=slot, index=absorptions_len - 1, absorptions=absorptions);
-        return (absorptions_len=absorptions_len, absorptions=absorptions);
-    }
-
-    func _read_absorptions_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256, index: felt, absorptions: felt*
-    ) {
-        alloc_locals;
-
-        let (absorption) = CarbonableProject_absorptions_.read(slot, index);
-        assert absorptions[index] = absorption;
-        if (index == 0) {
-            return ();
-        }
-        _read_absorptions_iter(slot=slot, index=index - 1, absorptions=absorptions);
-        return ();
-    }
-
-    func _write_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256, absorptions_len: felt, absorptions: felt*
-    ) {
-        alloc_locals;
-
-        CarbonableProject_absorptions_len_.write(slot, absorptions_len);
-        _write_absorptions_iter(slot=slot, index=absorptions_len - 1, absorptions=absorptions);
-        return ();
-    }
-
-    func _write_absorptions_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256, index: felt, absorptions: felt*
-    ) {
-        alloc_locals;
-
-        CarbonableProject_absorptions_.write(slot, index, absorptions[index]);
-        if (index == 0) {
-            return ();
-        }
-        _write_absorptions_iter(slot=slot, index=index - 1, absorptions=absorptions);
-        return ();
-    }
-
     func _compute_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         slot: Uint256, time: felt
     ) -> (computed_absorption: felt) {
         alloc_locals;
 
         // Check times are set
-        let (times_len, times) = _read_times(slot=slot);
+        let (times_len, times) = CarbonableProject.times(slot=slot);
         if (times_len == 0) {
             return (computed_absorption=0);
         }
 
         // Check absorptions are set
-        let (absorptions_len, absorptions) = _read_absorptions(slot=slot);
+        let (absorptions_len, absorptions) = CarbonableProject.absorptions(slot=slot);
         if (absorptions_len == 0) {
             return (computed_absorption=0);
         }
 
-        // Check if time is before the start_time, then absorption is 0
-        let stored_start_time = times[0];
-        let is_before = is_le(time + 1, stored_start_time);  // is_lt
-        if (is_before == TRUE) {
-            return (computed_absorption=0);
-        }
-
-        // Check if time is after the final_time, then absorption is the latest stored
-        let index = absorptions_len - 1;
-        let stored_final_time = times[index];
-        let final_absorption = absorptions[index];
-        let is_after = is_le(stored_final_time + 1, time);  // is_lt
-        if (is_after == TRUE) {
-            return (computed_absorption=final_absorption);
-        }
-
-        // Else iter over times to get the value
-        let (computed_absorption) = _compute_absorption_iter(
-            time=time,
-            index=index - 1,
-            absorptions=absorptions,
-            times=times,
-            next_time=stored_final_time,
-            next_absorption=final_absorption,
-        );
-        return (computed_absorption=computed_absorption);
-    }
-
-    func _compute_absorption_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        time: felt,
-        index: felt,
-        absorptions: felt*,
-        times: felt*,
-        next_time: felt,
-        next_absorption: felt,
-    ) -> (computed_absorption: felt) {
-        let stored_absorption = absorptions[index];
-        let stored_time = times[index];
-        let is_after = is_le(stored_time, time);
-        if (is_after == TRUE) {
-            // [Check] exact time
-            if (time == stored_time) {
-                return (computed_absorption=stored_absorption);
-            }
-
-            // [Compute] linear interpolation
-            // Overflow is riskless since time is < 1E10 and absorption is <1E12 which is << 1E38
-            // y = [(xb - x) * ya + (x - xa) * yb] / (xb - xa)
-            let den = next_time - stored_time;
-            let alpha = next_time - time;
-            let beta = time - stored_time;
-            let num = alpha * stored_absorption + beta * next_absorption;
-
-            // [Check] Zero division
-            let den_not_zero = is_not_zero(den);
-            with_attr error_message(
-                    "CarbonableProject: division by zero, two consecutive times are equals") {
-                assert den_not_zero = TRUE;
-            }
-            let (computed_absorption, _) = unsigned_div_rem(num, den);
-            return (computed_absorption=computed_absorption);
-        }
-
-        // [Check] index is null
-        if (index == 0) {
-            return (computed_absorption=0);
-        }
-
-        let (computed_absorption) = _compute_absorption_iter(
-            time=time,
-            index=index - 1,
-            absorptions=absorptions,
-            times=times,
-            next_time=stored_time,
-            next_absorption=stored_absorption,
-        );
+        let computed_absorption = Math.interpolate(x=time, len=times_len, xs=times, ys=absorptions, interpolation=LINEAR, extrapolation=CONSTANT);
         return (computed_absorption=computed_absorption);
     }
 }

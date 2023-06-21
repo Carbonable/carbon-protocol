@@ -14,7 +14,7 @@ install:
 	protostar install
 
 test:
-	protostar test-cairo0 tests/
+	protostar test-cairo0 tests/units
 
 declare:
 ifdef NONCE
