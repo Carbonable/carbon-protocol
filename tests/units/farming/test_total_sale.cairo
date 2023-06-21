@@ -32,8 +32,6 @@ func test_total_sale{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getStartTime", [0]) %}
 
-    CarbonableFarming.add_price(time=1, price=5);
-
     // Anyone
     %{
         stops = [
@@ -80,8 +78,6 @@ func test_total_sale_multi_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getStartTime", [0]) %}
-
-    CarbonableFarming.add_price(time=1, price=5);
 
     // Anyone
     %{
