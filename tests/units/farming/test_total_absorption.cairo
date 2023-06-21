@@ -4,12 +4,11 @@
 
 // Starkware dependencies
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_contract_address
 
 // Local dependencies
-from tests.units.offset.library import setup, prepare, CarbonableFarming, CarbonableOffseter
+from tests.units.farming.library import setup, prepare, CarbonableFarming
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -17,7 +16,7 @@ func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @external
-func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_total_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
     // prepare farmer instance
@@ -40,26 +39,26 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
         ]
     %}
 
-    // Total claimable is 0
-    let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = 0;
-
     // Deposit token #1
     let (success) = CarbonableFarming.deposit(token_id=one, value=one);
     assert success = 1;
 
-    let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = 2000000;
-
-    let (claimable) = CarbonableOffseter.claimable_of(anyone_address);
-    assert claimable = total_claimable;
     %{ for stop in stops: stop() %}
+
+    let (total_absorption) = CarbonableFarming.total_absorption();
+    assert total_absorption = 2000000;
+
+    let (max_absorption) = CarbonableFarming.max_absorption();
+    assert max_absorption = 3000000;
+
+    let (absorption) = CarbonableFarming.absorption_of(anyone_address);
+    assert absorption = total_absorption;
 
     return ();
 }
 
 @external
-func test_total_claimable_multi_users{
+func test_total_absorption_multi_users{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 }() {
     alloc_locals;
@@ -75,8 +74,8 @@ func test_total_claimable_multi_users{
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [1, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
+    %{ stop_mock_1 = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
+    %{ stop_mock_2 = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     // Anyone
     %{
@@ -111,10 +110,9 @@ func test_total_claimable_multi_users{
     CarbonableFarming.deposit(token_id=three, value=one);
     %{ for stop in stops: stop() %}
 
-    // Total absorption is 20000 = (0 + 2000000) + (0 + 0) + (0 + 0);
-    // Max absorption is 3000000 which triggers overflow security
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: overflow while computing claimable") %}
-    let (total_claimable) = CarbonableOffseter.total_claimable();
+    // Total absorption is 12000000 = (0 + 2000000) + (2000000 + 2000000) + (2000000 + 4000000);
+    let (total_absorption) = CarbonableFarming.total_absorption();
+    assert total_absorption = 12000000;
 
     return ();
 }

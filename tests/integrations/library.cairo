@@ -29,9 +29,8 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     local slot;
     local merkle_root;
     local ton_equivalent;
-    local times_len;
+    local len;
     let (local times: felt*) = alloc();
-    local absorptions_len;
     let (local absorptions: felt*) = alloc();
     local project_value;
     local metadata_class_hash;
@@ -211,10 +210,9 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
             recipients=recipients,
         )
         ids.ton_equivalent = context.absorption.ton_equivalent
-        ids.times_len = len(context.absorption.times)
+        ids.len = len(context.absorption.times)
         for idx, time in enumerate(context.absorption.times):
             memory[ids.times + idx] = time
-        ids.absorptions_len = len(context.absorption.values)
         for idx, value in enumerate(context.absorption.values):
             memory[ids.absorptions + idx] = value
     %}
@@ -236,9 +234,8 @@ func setup{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // Set absorptions
     certifier_instance.set_absorptions(
         slot=slot,
-        times_len=times_len,
+        len=len,
         times=times,
-        absorptions_len=absorptions_len,
         absorptions=absorptions,
         ton_equivalent=ton_equivalent,
     );

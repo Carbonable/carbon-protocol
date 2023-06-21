@@ -20,15 +20,23 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
 
     // prepare farmer instance
     let (local context) = prepare();
+    
+    %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
     let (payment_token_address) = CarbonableYielder.payment_token_address();
     assert payment_token_address = context.mocks.payment_token_address;
 
-    let (carbonable_offseter_address) = CarbonableYielder.carbonable_offseter_address();
-    assert carbonable_offseter_address = context.mocks.carbonable_offseter_address;
+    let (total_claimable) = CarbonableYielder.total_claimable();
+    assert total_claimable = 0;
 
-    let (snapshoted_time) = CarbonableYielder.snapshoted_time();
-    assert snapshoted_time = 0;
+    let (total_claimed) = CarbonableYielder.total_claimed();
+    assert total_claimed = 0;
+
+    let (claimable) = CarbonableYielder.claimable_of(context.signers.anyone);
+    assert claimable = 0;
+
+    let (claimed) = CarbonableYielder.claimed_of(context.signers.anyone);
+    assert claimed = 0;
 
     return ();
 }

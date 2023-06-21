@@ -21,9 +21,8 @@ struct Signers {
 
 struct Absorption {
     slot: Uint256,
-    times_len: felt,
+    len: felt,
     times: felt*,
-    values_len: felt,
     values: felt*,
     ton_equivalent: felt,
 }
@@ -59,9 +58,8 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     local admin;
     local anyone;
     local slot;
-    local times_len;
+    local len;
     let (local times: felt*) = alloc();
-    local absorptions_len;
     let (local absorptions: felt*) = alloc();
     local ton_equivalent;
     local project_value;
@@ -69,8 +67,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
         ids.admin = context.signers.admin
         ids.anyone = context.signers.anyone
         ids.slot = context.absorption.slot
-        ids.times_len = len(context.absorption.times)
-        ids.absorptions_len = len(context.absorption.values)
+        ids.len = len(context.absorption.times)
         for idx, absorption in enumerate(context.absorption.values):
             memory[ids.absorptions + idx] = absorption
         for idx, time in enumerate(context.absorption.times):
@@ -80,9 +77,8 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     %}
     CarbonableProject.set_absorptions(
         slot=Uint256(low=slot, high=0),
-        times_len=times_len,
+        len=len,
         times=times,
-        absorptions_len=absorptions_len,
         absorptions=absorptions,
         ton_equivalent=ton_equivalent,
     );
@@ -96,9 +92,8 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
 
     local absorption: Absorption = Absorption(
         slot=Uint256(low=slot, high=0),
-        times_len=times_len,
+        len=len,
         times=times,
-        values_len=absorptions_len,
         values=absorptions,
         ton_equivalent=ton_equivalent,
     );

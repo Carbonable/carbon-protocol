@@ -127,39 +127,6 @@ func getSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
     return CarbonableAccessControl.get_snapshoter();
 }
 
-// @notice Set the snapshoter.
-// @dev This function is only callable by the owner.
-// @param snapshoter The address of the snapshoter.
-@external
-func setSnapshoter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    snapshoter: felt
-) {
-    Ownable.assert_only_owner();
-    CarbonableAccessControl.set_snapshoter(snapshoter);
-    return ();
-}
-
-// @notice Get the provisioner.
-// @return provisioner The address of the provisioner.
-@view
-func getProvisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-    provisioner: felt
-) {
-    return CarbonableAccessControl.get_provisioner();
-}
-
-// @notice Set the provisioner.
-// @dev This function is only callable by the owner.
-// @param provisioner The address of the provisioner.
-@external
-func setProvisioner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    provisioner: felt
-) {
-    Ownable.assert_only_owner();
-    CarbonableAccessControl.set_provisioner(provisioner);
-    return ();
-}
-
 //
 // ERC165
 //
@@ -192,14 +159,6 @@ func getCarbonableProjectAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
 func getCarbonableProjectSlot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     ) -> (carbonable_project_slot: Uint256) {
     return CarbonableOffseter.carbonable_project_slot();
-}
-
-// @notice Return the associated carbonable offseter.
-// @return carbonable_offseter_address The address of the corresponding Carbonable offseter.
-@view
-func getCarbonableOffseterAddress{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    ) -> (carbonable_offseter_address: felt) {
-    return CarbonableYielder.carbonable_offseter_address();
 }
 
 // @notice Return the associated payment token.

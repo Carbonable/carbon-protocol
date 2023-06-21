@@ -49,7 +49,7 @@ func test_final_time{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     let (local context) = prepare();
 
     let (time) = CarbonableProject.final_time(slot=context.absorption.slot);
-    assert time = context.absorption.times[context.absorption.times_len - 1];
+    assert time = context.absorption.times[context.absorption.len - 1];
     return ();
 }
 

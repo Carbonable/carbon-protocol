@@ -28,7 +28,7 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     assert status = TRUE;
 
     let (times_len, times) = CarbonableProject.times(context.absorption.slot);
-    assert times_len = context.absorption.times_len;
+    assert times_len = context.absorption.len;
     let first_time = times[0];
     assert first_time = context.absorption.times[0];
     let final_time = times[times_len - 1];
@@ -37,7 +37,7 @@ func test_initialization{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_c
     let (absorptions_len, absorptions) = CarbonableProject.absorptions(
         slot=context.absorption.slot
     );
-    assert absorptions_len = context.absorption.values_len;
+    assert absorptions_len = context.absorption.len;
     let first_absorption = absorptions[0];
     assert first_absorption = context.absorption.values[0];
     let final_absorption = absorptions[absorptions_len - 1];

@@ -9,7 +9,7 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_contract_address
 
 // Local dependencies
-from tests.units.offset.library import setup, prepare, CarbonableFarming, CarbonableOffseter
+from tests.units.yield.library import setup, prepare, CarbonableFarming, CarbonableYielder
 
 @view
 func __setup__{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -41,17 +41,17 @@ func test_total_claimable{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     %}
 
     // Total claimable is 0
-    let (total_claimable) = CarbonableOffseter.total_claimable();
+    let (total_claimable) = CarbonableYielder.total_claimable();
     assert total_claimable = 0;
 
     // Deposit token #1
     let (success) = CarbonableFarming.deposit(token_id=one, value=one);
     assert success = 1;
 
-    let (total_claimable) = CarbonableOffseter.total_claimable();
-    assert total_claimable = 2000000;
+    let (total_claimable) = CarbonableYielder.total_claimable();
+    assert total_claimable = 0;
 
-    let (claimable) = CarbonableOffseter.claimable_of(anyone_address);
+    let (claimable) = CarbonableYielder.claimable_of(anyone_address);
     assert claimable = total_claimable;
     %{ for stop in stops: stop() %}
 
@@ -111,10 +111,8 @@ func test_total_claimable_multi_users{
     CarbonableFarming.deposit(token_id=three, value=one);
     %{ for stop in stops: stop() %}
 
-    // Total absorption is 20000 = (0 + 2000000) + (0 + 0) + (0 + 0);
-    // Max absorption is 3000000 which triggers overflow security
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableOffseter: overflow while computing claimable") %}
-    let (total_claimable) = CarbonableOffseter.total_claimable();
+    let (total_claimable) = CarbonableYielder.total_claimable();
+    assert total_claimable = 0;
 
     return ();
 }
