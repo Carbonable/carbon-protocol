@@ -116,9 +116,7 @@ func test_current_absorption{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
         context.absorption.values[context.absorption.len - 2] + 86000, absorption
     );
     assert is_higher = TRUE;
-    let is_lower = is_le(
-        absorption + 86000, context.absorption.values[context.absorption.len - 1]
-    );
+    let is_lower = is_le(absorption + 86000, context.absorption.values[context.absorption.len - 1]);
     assert is_lower = TRUE;
     %{ stop_warp() %}
 
@@ -192,11 +190,7 @@ func test_set_absorptions_revert_not_defined{
     let (local absorptions: felt*) = alloc();
     %{ expect_revert("TRANSACTION_FAILED", "CarbonableProject: times and absorptions must be defined and equal") %}
     CarbonableProject.set_absorptions(
-        slot=one,
-        len=0,
-        times=times,
-        absorptions=absorptions,
-        ton_equivalent=1,
+        slot=one, len=0, times=times, absorptions=absorptions, ton_equivalent=1
     );
     return ();
 }

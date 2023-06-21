@@ -6,10 +6,7 @@
 from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_nn_le
-from starkware.starknet.common.syscalls import (
-    get_block_timestamp,
-    get_caller_address,
-)
+from starkware.starknet.common.syscalls import get_block_timestamp, get_caller_address
 
 // Project dependencies
 from openzeppelin.token.erc20.IERC20 import IERC20

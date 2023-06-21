@@ -71,9 +71,7 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     );
 
     // Instantiate yield farmer
-    CarbonableYielder.initializer(
-        payment_token_address=payment_token_address,
-    );
+    CarbonableYielder.initializer(payment_token_address=payment_token_address);
 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone);

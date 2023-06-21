@@ -91,7 +91,7 @@ namespace CarbonableProject {
         // [Compute] Storage key
         let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
         let (hash) = hash2{hash_ptr=pedersen_ptr}(hash, TIME_SK);
- 
+
         // [Compute] Read storage
         let (len, values) = Array.load(hash);
         return (times_len=len, times=values);
@@ -106,7 +106,7 @@ namespace CarbonableProject {
         // [Compute] Storage key
         let (hash) = hash2{hash_ptr=pedersen_ptr}(slot.low, slot.high);
         let (hash) = hash2{hash_ptr=pedersen_ptr}(hash, ABSORPTION_SK);
- 
+
         // [Compute] Read storage
         let (len, values) = Array.load(hash);
         return (absorptions_len=len, absorptions=values);
@@ -203,11 +203,7 @@ namespace CarbonableProject {
     //
 
     func set_absorptions{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        slot: Uint256,
-        len: felt,
-        times: felt*,
-        absorptions: felt*,
-        ton_equivalent: felt,
+        slot: Uint256, len: felt, times: felt*, absorptions: felt*, ton_equivalent: felt
     ) {
         alloc_locals;
 
@@ -284,7 +280,14 @@ namespace CarbonableProject {
             return (computed_absorption=0);
         }
 
-        let computed_absorption = Math.interpolate(x=time, len=times_len, xs=times, ys=absorptions, interpolation=LINEAR, extrapolation=CONSTANT);
+        let computed_absorption = Math.interpolate(
+            x=time,
+            len=times_len,
+            xs=times,
+            ys=absorptions,
+            interpolation=LINEAR,
+            extrapolation=CONSTANT,
+        );
         return (computed_absorption=computed_absorption);
     }
 }

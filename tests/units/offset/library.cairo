@@ -82,7 +82,10 @@ func prepare{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() 
     // Instantiate context, useful to avoid many hints in tests
     local signers: Signers = Signers(admin=admin, anyone=anyone, someone=someone);
 
-    local mocks: Mocks = Mocks(carbonable_project_address=carbonable_project_address, carbonable_project_slot=carbonable_project_slot);
+    local mocks: Mocks = Mocks(
+        carbonable_project_address=carbonable_project_address,
+        carbonable_project_slot=carbonable_project_slot,
+    );
     local offset: Offset = Offset(minimum=minimum);
 
     local context: TestContext = TestContext(signers=signers, mocks=mocks, offset=offset);

@@ -6,10 +6,7 @@
 from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero, assert_nn_le
-from starkware.starknet.common.syscalls import (
-    get_block_timestamp,
-    get_caller_address,
-)
+from starkware.starknet.common.syscalls import get_block_timestamp, get_caller_address
 
 // Local dependencies
 from src.farming.library import CarbonableFarming
@@ -111,11 +108,9 @@ namespace CarbonableOffseter {
         return ();
     }
 
-    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        quantity: felt
-    ) {
+    func claim{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(quantity: felt) {
         alloc_locals;
-        
+
         // [Check] Quantity is lower or equal to the total claimable
         let (caller) = get_caller_address();
         let (claimable) = claimable_of(caller);
@@ -169,8 +164,6 @@ namespace CarbonableOffseter {
     }
 }
 
-
-
 // Assert helpers
 namespace Assert {
     func quantity_not_negligible{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -183,4 +176,3 @@ namespace Assert {
         return ();
     }
 }
-

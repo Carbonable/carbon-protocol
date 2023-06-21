@@ -9,17 +9,16 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 // Local dependencies
 from src.utils.math.library import Math, CONSTANT, NULL, CONST_LEFT, CONST_RIGHT, LINEAR
 
-
 @external
 func test_max{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    assert Math.max(1, 2) = 2; 
+    assert Math.max(1, 2) = 2;
     assert Math.max(1, 2) = Math.max(2, 1);
     return ();
 }
 
 @external
 func test_min{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    assert Math.min(1, 2) = 1; 
+    assert Math.min(1, 2) = 1;
     assert Math.min(1, 2) = Math.min(2, 1);
     return ();
 }
@@ -28,23 +27,29 @@ func test_min{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
 func test_linear_interpolate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
 
-    let (local ys : felt*) = alloc();
+    let (local ys: felt*) = alloc();
     assert ys[0] = 100;
     assert ys[1] = 200;
     assert ys[2] = 300;
 
-    let y = Math.interpolate(x=15, len=3, xs=xs, ys=ys, interpolation=LINEAR, extrapolation=CONSTANT);
+    let y = Math.interpolate(
+        x=15, len=3, xs=xs, ys=ys, interpolation=LINEAR, extrapolation=CONSTANT
+    );
     assert y = 150;
-    
-    let y = Math.interpolate(x=0, len=3, xs=xs, ys=ys, interpolation=LINEAR, extrapolation=CONSTANT);
+
+    let y = Math.interpolate(
+        x=0, len=3, xs=xs, ys=ys, interpolation=LINEAR, extrapolation=CONSTANT
+    );
     assert y = 100;
 
-    let y = Math.interpolate(x=40, len=3, xs=xs, ys=ys, interpolation=LINEAR, extrapolation=CONSTANT);
+    let y = Math.interpolate(
+        x=40, len=3, xs=xs, ys=ys, interpolation=LINEAR, extrapolation=CONSTANT
+    );
     assert y = 300;
 
     let y = Math.interpolate(x=0, len=3, xs=xs, ys=ys, interpolation=LINEAR, extrapolation=NULL);
@@ -57,67 +62,83 @@ func test_linear_interpolate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 }
 
 @external
-func test_const_left_interpolate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_const_left_interpolate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
 
-    let (local ys : felt*) = alloc();
+    let (local ys: felt*) = alloc();
     assert ys[0] = 100;
     assert ys[1] = 200;
     assert ys[2] = 300;
 
-    let y = Math.interpolate(x=15, len=3, xs=xs, ys=ys, interpolation=CONST_LEFT, extrapolation=CONSTANT);
+    let y = Math.interpolate(
+        x=15, len=3, xs=xs, ys=ys, interpolation=CONST_LEFT, extrapolation=CONSTANT
+    );
     assert y = 200;
-    
-    let y = Math.interpolate(x=0, len=3, xs=xs, ys=ys, interpolation=CONST_LEFT, extrapolation=CONSTANT);
+
+    let y = Math.interpolate(
+        x=0, len=3, xs=xs, ys=ys, interpolation=CONST_LEFT, extrapolation=CONSTANT
+    );
     assert y = 100;
 
-    let y = Math.interpolate(x=40, len=3, xs=xs, ys=ys, interpolation=CONST_LEFT, extrapolation=CONSTANT);
+    let y = Math.interpolate(
+        x=40, len=3, xs=xs, ys=ys, interpolation=CONST_LEFT, extrapolation=CONSTANT
+    );
     assert y = 300;
 
     return ();
 }
 
 @external
-func test_const_right_interpolate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_const_right_interpolate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    ) {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
 
-    let (local ys : felt*) = alloc();
+    let (local ys: felt*) = alloc();
     assert ys[0] = 100;
     assert ys[1] = 200;
     assert ys[2] = 300;
 
-    let y = Math.interpolate(x=15, len=3, xs=xs, ys=ys, interpolation=CONST_RIGHT, extrapolation=CONSTANT);
-    assert y = 100;
-    
-    let y = Math.interpolate(x=0, len=3, xs=xs, ys=ys, interpolation=CONST_RIGHT, extrapolation=CONSTANT);
+    let y = Math.interpolate(
+        x=15, len=3, xs=xs, ys=ys, interpolation=CONST_RIGHT, extrapolation=CONSTANT
+    );
     assert y = 100;
 
-    let y = Math.interpolate(x=40, len=3, xs=xs, ys=ys, interpolation=CONST_RIGHT, extrapolation=CONSTANT);
+    let y = Math.interpolate(
+        x=0, len=3, xs=xs, ys=ys, interpolation=CONST_RIGHT, extrapolation=CONSTANT
+    );
+    assert y = 100;
+
+    let y = Math.interpolate(
+        x=40, len=3, xs=xs, ys=ys, interpolation=CONST_RIGHT, extrapolation=CONSTANT
+    );
     assert y = 300;
 
     return ();
 }
 
 @external
-func test_extrapolate_before_revert_not_allowed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_extrapolate_before_revert_not_allowed{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
 
-    let (local ys : felt*) = alloc();
+    let (local ys: felt*) = alloc();
     assert ys[0] = 100;
     assert ys[1] = 200;
     assert ys[2] = 300;
@@ -130,15 +151,17 @@ func test_extrapolate_before_revert_not_allowed{syscall_ptr: felt*, pedersen_ptr
 }
 
 @external
-func test_extrapolate_after_revert_not_allowed{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func test_extrapolate_after_revert_not_allowed{
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+}() {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
 
-    let (local ys : felt*) = alloc();
+    let (local ys: felt*) = alloc();
     assert ys[0] = 100;
     assert ys[1] = 200;
     assert ys[2] = 300;
@@ -154,7 +177,7 @@ func test_extrapolate_after_revert_not_allowed{syscall_ptr: felt*, pedersen_ptr:
 func test_cumsum{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
@@ -172,7 +195,7 @@ func test_cumsum{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 func test_diff{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
@@ -191,12 +214,12 @@ func test_diff{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 func test_mul{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     alloc_locals;
 
-    let (local xs : felt*) = alloc();
+    let (local xs: felt*) = alloc();
     assert xs[0] = 10;
     assert xs[1] = 20;
     assert xs[2] = 30;
 
-    let (local ys : felt*) = alloc();
+    let (local ys: felt*) = alloc();
     assert ys[0] = 1;
     assert ys[1] = 2;
     assert ys[2] = 3;
