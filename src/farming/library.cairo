@@ -171,37 +171,63 @@ namespace CarbonableFarming {
     func total_sale{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         sale: felt
     ) {
+        alloc_locals;
+
         // [Check] Price is setup, otherwise return 0
         let (len) = Array.read_len(key=TIME_SK);
         if (len == 0) {
+            return (sale=0);
+        }
+
+        // [Check] Ton equivalent is not zero
+        let (contract_address) = CarbonableFarming_carbonable_project_address_.read();
+        let (slot) = CarbonableFarming_carbonable_project_slot_.read();
+        let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
+            contract_address=contract_address, slot=slot
+        );
+        if (ton_equivalent == 0) {
             return (sale=0);
         }
 
         // [Compute] Total sale
         let (computed) = _compute_total_sale();
         let (stored) = CarbonableFarming_total_sale_.read();
-        return (sale=computed + stored);
+        let (sale_in_dollars, _) = unsigned_div_rem(computed + stored, ton_equivalent);
+
+        return (sale=sale_in_dollars);
     }
 
     func max_sale{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         sale: felt
     ) {
+        alloc_locals;
+
         // [Check] Price is setup, otherwise return 0
         let (len) = Array.read_len(key=TIME_SK);
         if (len == 0) {
             return (sale=0);
         }
 
-        // [Compute] Max sale, which is the whole project sale until now
+        // [Check] Ton equivalent is not zero
         let (contract_address) = CarbonableFarming_carbonable_project_address_.read();
         let (slot) = CarbonableFarming_carbonable_project_slot_.read();
+        let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
+            contract_address=contract_address, slot=slot
+        );
+        if (ton_equivalent == 0) {
+            return (sale=0);
+        }
+
+        // [Compute] Max sale, which is the whole project sale until now
         let (project_value) = ICarbonableProject.getProjectValue(
             contract_address=contract_address, slot=slot
         );
         let (first_time) = ICarbonableProject.getStartTime(
             contract_address=contract_address, slot=slot
         );
-        return _compute_sale(value=project_value, time=first_time);
+        let (sale) = _compute_sale(value=project_value, time=first_time);
+        let (sale_in_dollars, _) = unsigned_div_rem(sale, ton_equivalent);
+        return (sale=sale_in_dollars);
     }
 
     func deposited_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -223,16 +249,30 @@ namespace CarbonableFarming {
     func sale_of{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         address: felt
     ) -> (sale: felt) {
+        alloc_locals;
+
         // [Check] Price is setup, otherwise return 0
         let (len) = Array.read_len(key=TIME_SK);
         if (len == 0) {
             return (sale=0);
         }
 
-        // [Compute] User sale
+        // [Check] Ton equivalent is not zero
+        let (contract_address) = CarbonableFarming_carbonable_project_address_.read();
+        let (slot) = CarbonableFarming_carbonable_project_slot_.read();
+        let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
+            contract_address=contract_address, slot=slot
+        );
+        if (ton_equivalent == 0) {
+            return (sale=0);
+        }
+
+        // [Compute] User sale and convert from g * µ$/t to µ$
         let (computed) = _compute_user_sale(address=address);
         let (stored) = CarbonableFarming_sale_.read(address);
-        return (sale=computed + stored);
+        let (sale_in_dollars, _) = unsigned_div_rem(computed + stored, ton_equivalent);
+
+        return (sale=sale_in_dollars);
     }
 
     func current_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -275,7 +315,6 @@ namespace CarbonableFarming {
         Array.store(key=PRICE_SK, len=prices_len, values=prices);
 
         return ();
-
     }
 
     func add_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -888,7 +927,7 @@ namespace CarbonableFarming {
         // [Compute] Updated price
         let (negative_update, _) = unsigned_div_rem(negative_delta, new_absorption);
         let (positive_update, _) = unsigned_div_rem(positive_delta, new_absorption);
-        
+
         // [Check] Overflow, if too much to compensate then price drop to zero
         let is_lower = is_le(negative_update, price + positive_update);
         let updated_price = (price + positive_update - negative_update) * is_lower;
