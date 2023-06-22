@@ -5,7 +5,7 @@
 __pycache__
 env
 .env
-test.py
+test.*
 
 # starknet 
 node.json
