@@ -74,7 +74,7 @@ func test_total_sale_multi_users{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [3, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "getStartTime", [0]) %}

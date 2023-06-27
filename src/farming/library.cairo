@@ -14,6 +14,7 @@ from starkware.cairo.common.uint256 import (
     uint256_eq,
     uint256_mul_div_mod,
     assert_uint256_le,
+    assert_uint256_eq,
 )
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
@@ -781,9 +782,8 @@ namespace CarbonableFarming {
 
         // [Check] No underflow
         let zero = Uint256(low=0, high=0);
-        let (is_zero) = uint256_eq(quotient_high, zero);
         with_attr error_message("CarbonableFarming: Unexpected underflow") {
-            assert is_zero = FALSE;
+            assert_uint256_eq(quotient_high, zero);
         }
 
         let (absorption) = _uint_to_felt(quotient_low);

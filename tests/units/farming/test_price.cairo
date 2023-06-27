@@ -27,7 +27,7 @@ func test_add_price_revert_sooner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*
 
     CarbonableFarming.add_price(time=1, price=0);
 
-    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarming: time is sooner than the last stored time") %}
+    %{ expect_revert("TRANSACTION_FAILED", "CarbonableFarming: time is later than the last stored time") %}
     CarbonableFarming.add_price(time=1, price=0);
 
     return ();

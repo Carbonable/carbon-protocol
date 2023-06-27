@@ -73,7 +73,7 @@ func test_total_absorption_multi_users{
     %{ mock_call(context.mocks.carbonable_project_address, "transferValueFrom", [0, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "balanceOf", [1, 0]) %}
     %{ mock_call(context.mocks.carbonable_project_address, "tokenOfOwnerByIndex", [0, 0]) %}
-    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [1, 0]) %}
+    %{ mock_call(context.mocks.carbonable_project_address, "getProjectValue", [3, 0]) %}
     %{ stop_mock_1 = mock_call(context.mocks.carbonable_project_address, "getAbsorption", [1000000]) %}
     %{ stop_mock_2 = mock_call(context.mocks.carbonable_project_address, "getCurrentAbsorption", [3000000]) %}
 
@@ -110,9 +110,9 @@ func test_total_absorption_multi_users{
     CarbonableFarming.deposit(token_id=three, value=one);
     %{ for stop in stops: stop() %}
 
-    // Total absorption is 12000000 = (0 + 2000000) + (2000000 + 2000000) + (2000000 + 4000000);
+    // Total absorption is 3999999 = (0 + 2000000) + (2000000 + 2000000) + (2000000 + 4000000) / 3;
     let (total_absorption) = CarbonableFarming.total_absorption();
-    assert total_absorption = 12000000;
+    assert total_absorption = 3999999;
 
     return ();
 }
