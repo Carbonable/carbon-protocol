@@ -5,7 +5,7 @@
 // Starkware dependencies
 from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_nn_le
+from starkware.cairo.common.math import assert_nn_le, assert_in_range
 from starkware.starknet.common.syscalls import get_block_timestamp, get_caller_address
 
 // Project dependencies
@@ -13,6 +13,7 @@ from openzeppelin.token.erc20.IERC20 import IERC20
 
 // Local dependencies
 from src.farming.library import CarbonableFarming
+from src.utils.math.library import Math
 from src.utils.type.library import _felt_to_uint
 
 //
@@ -148,3 +149,19 @@ namespace CarbonableYielder {
         return ();
     }
 }
+
+// Assert helpers
+namespace Assert {
+    func price_in_range{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        price: felt
+    ) {
+        let (contract_address) = CarbonableYielder_payment_token_address_.read();
+        let (decimals) = IERC20.decimals(contract_address=contract_address);
+        let unit = Math.pow(10, decimals);
+        with_attr error_message("CarbonableYielder: unexpected price") {
+            assert_in_range(price, 1 * unit, 1000 * unit + 1);
+        }
+        return ();
+    }
+}
+

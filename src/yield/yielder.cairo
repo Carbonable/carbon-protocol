@@ -13,7 +13,7 @@ from openzeppelin.upgrades.library import Proxy
 
 // Local dependencies
 from src.farming.library import CarbonableFarming
-from src.yield.library import CarbonableYielder
+from src.yield.library import CarbonableYielder, Assert
 
 //
 // Initializer
@@ -265,6 +265,13 @@ func getPrices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     );
 }
 
+@view
+func getApr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter_address: felt) -> (
+    num: felt, den: felt
+) {
+    return CarbonableFarming.apr(minter_address=minter_address);
+}
+
 //
 // Externals
 //
@@ -315,6 +322,7 @@ func addPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     time: felt, price: felt
 ) {
     Ownable.assert_only_owner();
+    Assert.price_in_range(price=price);
     CarbonableFarming.add_price(time=time, price=price);
     return ();
 }
@@ -324,6 +332,7 @@ func updateLastPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     time: felt, price: felt
 ) {
     Ownable.assert_only_owner();
+    Assert.price_in_range(price=price);
     CarbonableFarming.update_last_price(time=time, price=price);
     return ();
 }
