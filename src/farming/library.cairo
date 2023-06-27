@@ -30,8 +30,9 @@ from erc3525.IERC3525 import IERC3525
 
 // Local dependencies
 from src.interfaces.project import ICarbonableProject
+from src.interfaces.minter import ICarbonableMinter
 from src.utils.array.library import Array
-from src.utils.math.library import Math, LINEAR, CONSTANT, CONST_LEFT, NULL
+from src.utils.math.library import Math, LINEAR, CONSTANT, CONST_LEFT, NULL, NEXT
 from src.utils.type.library import _felt_to_uint, _uint_to_felt
 
 //
@@ -40,6 +41,7 @@ from src.utils.type.library import _felt_to_uint, _uint_to_felt
 
 const TIME_SK = 'TIME';
 const PRICE_SK = 'PRICE';
+const YEAR_SECONDS = 31556925;
 
 //
 // Events
@@ -54,11 +56,7 @@ func Withdraw(address: felt, value: Uint256, time: felt) {
 }
 
 @event
-func Claim(address: felt, absorption: felt, time: felt) {
-}
-
-@event
-func PriceUpdate(time: felt) {
+func PriceUpdate(time: felt, price: felt) {
 }
 
 //
@@ -302,6 +300,61 @@ namespace CarbonableFarming {
         return CarbonableFarming._compute_cumsales();
     }
 
+    func apr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter_address: felt) -> (
+        num: felt, den: felt
+    ) {
+        alloc_locals;
+
+        let (len, times, _, _, cumsales) = CarbonableFarming._compute_cumsales();
+
+        // [Compute] Current cumsale
+        let (time) = get_block_timestamp();
+        let current_cumsale = Math.interpolate(
+            x=time,
+            len=len,
+            xs=times,
+            ys=cumsales,
+            interpolation=LINEAR,
+            extrapolation=CONSTANT,
+        );
+
+        // [Compute] Latest cumsale
+        let (closest_index) = Math.closest_index(
+            x=time,
+            len=len,
+            xs=times,
+            side=NEXT,
+        );
+        let next_time = times[closest_index];
+        let next_cumsale = cumsales[closest_index];
+
+        // [Check] Overflow
+        with_attr error_message("CarbonableFarming: apr overflow") {
+            assert_le(time + 1, next_time);
+            assert_le(current_cumsale, next_cumsale);
+        }
+
+        // [Compute] Total investement
+        let (project_address) = CarbonableFarming_carbonable_project_address_.read();
+        let (project_slot) = CarbonableFarming_carbonable_project_slot_.read();
+        let (project_value_u256) = ICarbonableProject.getProjectValue(
+            contract_address=project_address,
+            slot=project_slot,
+        );
+        let (project_value) = _uint_to_felt(project_value_u256);
+        let (unit_price) = ICarbonableMinter.getUnitPrice(contract_address=minter_address);
+        let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
+            contract_address=project_address,
+            slot=project_slot,
+        );
+
+        // [Compute] APR
+        return (
+            num=(next_cumsale - current_cumsale) * YEAR_SECONDS,
+            den=project_value * unit_price * (next_time - time) * ton_equivalent
+        );
+    }
+
     //
     // Externals
     //
@@ -334,6 +387,7 @@ namespace CarbonableFarming {
 
         // [Check] First time to store
         let (len) = Array.read_len(key=TIME_SK);
+        let (current_time) = get_block_timestamp();
         if (len == 0) {
             // [Effect] Update storage
             Array.add(key=TIME_SK, value=first_time);
@@ -341,12 +395,15 @@ namespace CarbonableFarming {
             Array.add(key=PRICE_SK, value=price);
             Array.add(key=PRICE_SK, value=price);
 
+            // [Event] Emit event
+            PriceUpdate.emit(time=time, price=price);
+
             return ();
         }
 
         // [Check] Time is later than the last stored time
         let (last_time) = Array.read(key=TIME_SK, index=len - 1);
-        with_attr error_message("CarbonableFarming: time is sooner than the last stored time") {
+        with_attr error_message("CarbonableFarming: time is later than the last stored time") {
             assert_le(last_time + 1, time);
         }
 
@@ -358,7 +415,7 @@ namespace CarbonableFarming {
             contract_address=contract_address, slot=slot, time=time
         );
         with_attr error_message("CarbonableFarming: the period must capture absorption") {
-            assert_not_zero(final_absorption - initial_absorption);
+            assert_le(initial_absorption + 1, final_absorption);
         }
 
         // [Effect] Update storage
@@ -366,8 +423,7 @@ namespace CarbonableFarming {
         Array.add(key=PRICE_SK, value=price);
 
         // [Event] Emit event
-        let (current_time) = get_block_timestamp();
-        PriceUpdate.emit(time=current_time);
+        PriceUpdate.emit(time=time, price=price);
 
         return ();
     }
@@ -383,11 +439,16 @@ namespace CarbonableFarming {
             assert_le(2, len);
         }
 
-        // [Check] Current time is lower than the last 2 stored times
+        // [Check] Current time is sooner than the last 2 stored times and specified time is later than the last stored time
         let (current_time) = get_block_timestamp();
         let (before_last_time) = Array.read(key=TIME_SK, index=len - 2);
         with_attr error_message("CarbonableFarming: current time is too high") {
             assert_le(current_time, before_last_time + 1);
+        }
+
+        // [Check] Specified time is later than the before last stored time
+        with_attr error_message("CarbonableFarming: current time is too high") {
+            assert_le(before_last_time + 1, time);
         }
 
         // [Check] Absorption is captured between the 2 new last times
@@ -409,7 +470,7 @@ namespace CarbonableFarming {
         Array.replace(key=PRICE_SK, index=len - 1, value=price);
 
         // [Event] Emit event
-        PriceUpdate.emit(time=current_time);
+        PriceUpdate.emit(time=time, price=price);
 
         return ();
     }
@@ -709,9 +770,22 @@ namespace CarbonableFarming {
         }
         let (total_absorption_u256) = _felt_to_uint(total_absorption);
 
+        // [Check] Value is lower than or equal to project value
+        with_attr error_message("CarbonableFarming: Unexpected underflow") {
+            assert_uint256_le(value, project_value);
+        }
+
         // [Compute] Otherwise returns the absorption corresponding to the ratio
         // Keep quotient_low only since value <= project_value
-        let (quotient_low, _, _) = uint256_mul_div_mod(value, total_absorption_u256, project_value);
+        let (quotient_low, quotient_high, _) = uint256_mul_div_mod(value, total_absorption_u256, project_value);
+
+        // [Check] No underflow
+        let zero = Uint256(low=0, high=0);
+        let (is_zero) = uint256_eq(quotient_high, zero);
+        with_attr error_message("CarbonableFarming: Unexpected underflow") {
+            assert is_zero = FALSE;
+        }
+
         let (absorption) = _uint_to_felt(quotient_low);
         return (absorption=absorption);
     }

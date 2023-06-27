@@ -14,6 +14,8 @@ const NULL = 'NULL';
 const LINEAR = 'LINEAR';
 const CONST_LEFT = 'CONSTANT_LEFT';
 const CONST_RIGHT = 'CONSTANT_RIGHT';
+const NEXT = 'NEXT';
+const PREV = 'PREV';
 
 namespace Math {
     func max{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -158,6 +160,39 @@ namespace Math {
         let (local zs: felt*) = alloc();
         return _mul_iter(index=len - 1, len=len, xs=xs, ys=ys, zs=zs);
     }
+
+    func closest_index{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        x: felt, len: felt, xs: felt*, side: felt
+    ) -> (index: felt) {
+        alloc_locals;
+
+        // [Check] len is > 0
+        with_attr error_message("Math: xs len must be defined") {
+            assert_not_zero(len);
+        }
+
+        // [Check] Side is valid
+        with_attr error_message("Math: side must be a valid option") {
+            assert (side - NEXT) * (side - PREV) = 0;
+        }
+
+        if (side == NEXT) {
+            return _closest_next_index_iter(x=x, xs=xs, len=len, index=0);
+        }
+        return _closest_prev_index_iter(x=x, xs=xs, index=len - 1);
+    }
+
+    func pow{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        x: felt, n: felt
+    ) -> felt {
+        if (n == 0) {
+            return 1;
+        }
+        if ((n - 1) * x == 0) {
+            return x;
+        }
+        return _pow_iter(x=x, n=n, res=1);
+    }
 }
 
 func _interpolate_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
@@ -271,4 +306,45 @@ func _mul_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         return (len=len, zs=zs);
     }
     return _mul_iter(index=index - 1, len=len, xs=xs, ys=ys, zs=zs);
+}
+
+func _closest_prev_index_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    x: felt, xs: felt*, index: felt
+) -> (index: felt) {
+    alloc_locals;
+
+    if (index == 0) {
+        return (index=index);
+    }
+
+    let is_lower = is_le(xs[index], x);
+    if (is_lower == TRUE) {
+        return(index=index);
+    }
+    return _closest_prev_index_iter(x=x, xs=xs, index=index - 1);
+}
+
+func _closest_next_index_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    x: felt, xs: felt*, len: felt, index: felt
+) -> (index: felt) {
+    alloc_locals;
+
+    if (index + 1 == len) {
+        return (index=index);
+    }
+
+    let is_lower = is_le(x, xs[index]);
+    if (is_lower == TRUE) {
+        return(index=index);
+    }
+    return _closest_next_index_iter(x=x, xs=xs, len=len, index=index + 1);
+}
+
+func _pow_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    x: felt, n: felt, res: felt
+) -> felt {
+    if (n == 0) {
+        return res;
+    }
+    return _pow_iter(x=x, n=n - 1, res=res * x);
 }

@@ -7,7 +7,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 // Local dependencies
-from src.utils.math.library import Math, CONSTANT, NULL, CONST_LEFT, CONST_RIGHT, LINEAR
+from src.utils.math.library import Math, CONSTANT, NULL, CONST_LEFT, CONST_RIGHT, LINEAR, NEXT, PREV
 
 @external
 func test_max{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
@@ -230,6 +230,69 @@ func test_mul{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}()
     assert 10 = zs[0];
     assert 40 = zs[1];
     assert 90 = zs[2];
+
+    return ();
+}
+
+@external
+func test_closest_next{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    alloc_locals;
+
+    let (local xs: felt*) = alloc();
+    assert xs[0] = 10;
+    assert xs[1] = 20;
+
+    let (index) = Math.closest_index(x=5, len=2, xs=xs, side=PREV);
+    assert index = 0;
+
+    let (index) = Math.closest_index(x=5, len=2, xs=xs, side=NEXT);
+    assert index = 0;
+
+    let (index) = Math.closest_index(x=10, len=2, xs=xs, side=PREV);
+    assert index = 0;
+
+    let (index) = Math.closest_index(x=10, len=2, xs=xs, side=NEXT);
+    assert index = 0;
+
+    let (index) = Math.closest_index(x=15, len=2, xs=xs, side=PREV);
+    assert index = 0;
+
+    let (index) = Math.closest_index(x=15, len=2, xs=xs, side=NEXT);
+    assert index = 1;
+
+    let (index) = Math.closest_index(x=20, len=2, xs=xs, side=PREV);
+    assert index = 1;
+
+    let (index) = Math.closest_index(x=20, len=2, xs=xs, side=NEXT);
+    assert index = 1;
+
+    let (index) = Math.closest_index(x=25, len=2, xs=xs, side=PREV);
+    assert index = 1;
+
+    let (index) = Math.closest_index(x=25, len=2, xs=xs, side=NEXT);
+    assert index = 1;
+
+    return ();
+}
+
+@external
+func test_pow{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    alloc_locals;
+
+    let y = Math.pow(x=2, n=3);
+    assert y = 8;
+
+    let y = Math.pow(x=2, n=0);
+    assert y = 1;
+
+    let y = Math.pow(x=0, n=3);
+    assert y = 0;
+
+    let y = Math.pow(x=1, n=3);
+    assert y = 1;
+
+    let y = Math.pow(x=2, n=1);
+    assert y = 2;
 
     return ();
 }
