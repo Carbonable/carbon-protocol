@@ -266,9 +266,9 @@ func getPrices{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 }
 
 @view
-func getApr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter_address: felt) -> (
-    num: felt, den: felt
-) {
+func getApr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    minter_address: felt
+) -> (num: felt, den: felt) {
     return CarbonableFarming.apr(minter_address=minter_address);
 }
 
