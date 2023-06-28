@@ -301,9 +301,9 @@ namespace CarbonableFarming {
         return CarbonableFarming._compute_cumsales();
     }
 
-    func apr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(minter_address: felt) -> (
-        num: felt, den: felt
-    ) {
+    func apr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        minter_address: felt
+    ) -> (num: felt, den: felt) {
         alloc_locals;
 
         let (len, times, _, _, cumsales) = CarbonableFarming._compute_cumsales();
@@ -311,21 +311,11 @@ namespace CarbonableFarming {
         // [Compute] Current cumsale
         let (time) = get_block_timestamp();
         let current_cumsale = Math.interpolate(
-            x=time,
-            len=len,
-            xs=times,
-            ys=cumsales,
-            interpolation=LINEAR,
-            extrapolation=CONSTANT,
+            x=time, len=len, xs=times, ys=cumsales, interpolation=LINEAR, extrapolation=CONSTANT
         );
 
         // [Compute] Latest cumsale
-        let (closest_index) = Math.closest_index(
-            x=time,
-            len=len,
-            xs=times,
-            side=NEXT,
-        );
+        let (closest_index) = Math.closest_index(x=time, len=len, xs=times, side=NEXT);
         let next_time = times[closest_index];
         let next_cumsale = cumsales[closest_index];
 
@@ -339,20 +329,18 @@ namespace CarbonableFarming {
         let (project_address) = CarbonableFarming_carbonable_project_address_.read();
         let (project_slot) = CarbonableFarming_carbonable_project_slot_.read();
         let (project_value_u256) = ICarbonableProject.getProjectValue(
-            contract_address=project_address,
-            slot=project_slot,
+            contract_address=project_address, slot=project_slot
         );
         let (project_value) = _uint_to_felt(project_value_u256);
         let (unit_price) = ICarbonableMinter.getUnitPrice(contract_address=minter_address);
         let (ton_equivalent) = ICarbonableProject.getTonEquivalent(
-            contract_address=project_address,
-            slot=project_slot,
+            contract_address=project_address, slot=project_slot
         );
 
         // [Compute] APR
         return (
             num=(next_cumsale - current_cumsale) * YEAR_SECONDS,
-            den=project_value * unit_price * (next_time - time) * ton_equivalent
+            den=project_value * unit_price * (next_time - time) * ton_equivalent,
         );
     }
 
@@ -778,7 +766,9 @@ namespace CarbonableFarming {
 
         // [Compute] Otherwise returns the absorption corresponding to the ratio
         // Keep quotient_low only since value <= project_value
-        let (quotient_low, quotient_high, _) = uint256_mul_div_mod(value, total_absorption_u256, project_value);
+        let (quotient_low, quotient_high, _) = uint256_mul_div_mod(
+            value, total_absorption_u256, project_value
+        );
 
         // [Check] No underflow
         let zero = Uint256(low=0, high=0);

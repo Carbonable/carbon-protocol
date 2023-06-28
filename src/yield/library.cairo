@@ -159,9 +159,8 @@ namespace Assert {
         let (decimals) = IERC20.decimals(contract_address=contract_address);
         let unit = Math.pow(10, decimals);
         with_attr error_message("CarbonableYielder: unexpected price") {
-            assert_in_range(price, 1 * unit, 1000 * unit + 1);
+            assert_in_range(price, 0, 1000 * unit + 1);
         }
         return ();
     }
 }
-

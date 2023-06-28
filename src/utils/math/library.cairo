@@ -319,7 +319,7 @@ func _closest_prev_index_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 
     let is_lower = is_le(xs[index], x);
     if (is_lower == TRUE) {
-        return(index=index);
+        return (index=index);
     }
     return _closest_prev_index_iter(x=x, xs=xs, index=index - 1);
 }
@@ -335,7 +335,7 @@ func _closest_next_index_iter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ra
 
     let is_lower = is_le(x, xs[index]);
     if (is_lower == TRUE) {
-        return(index=index);
+        return (index=index);
     }
     return _closest_next_index_iter(x=x, xs=xs, len=len, index=index + 1);
 }
