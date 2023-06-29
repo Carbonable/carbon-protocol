@@ -1,104 +1,95 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: Apache-2.0
 
-%lang starknet
+use array::ArrayTrait;
+use starknet::ContractAddress;
 
-// Starkware dependencies
-from starkware.cairo.common.uint256 import Uint256
-
-@contract_interface
-namespace ICarbonableProject {
+#[starknet::interface]
+trait IProject<TContractState> {
     //
     // Proxy administration
     //
 
-    func getImplementationHash() -> (implementation: felt) {
-    }
+    #[view]
+    fn getImplementationHash(self: @TContractState) -> felt252;
 
-    func getAdmin() -> (admin: felt) {
-    }
+    #[view]
+    fn getAdmin(self: @TContractState) -> felt252;
 
-    func upgrade(new_implementation: felt) {
-    }
+    #[external]
+    fn upgrade(ref self: TContractState, new_implementation: felt252);
 
-    func setAdmin(new_admin: felt) {
-    }
+    #[external]
+    fn setAdmin(ref self: TContractState, new_admin: ContractAddress);
 
     //
     // Ownership administration
     //
 
-    func owner() -> (owner: felt) {
-    }
+    #[view]
+    fn owner(self: @TContractState) -> ContractAddress;
 
-    func transferOwnership(newOwner: felt) {
-    }
+    #[external]
+    fn transferOwnership(self: @TContractState, newOwner: ContractAddress);
 
-    func renounceOwnership() {
-    }
-
-    func addMinter(slot: Uint256, minter: felt) {
-    }
-
-    func revokeMinter(slot: Uint256, minter: felt) {
-    }
-
-    func getMinters(slot: Uint256) -> (minters_len: felt, minters: felt*) {
-    }
-
-    func setCertifier(slot: Uint256, certifier: felt) {
-    }
-
-    func getCertifier(slot: Uint256) -> (certifier: felt) {
-    }
+    #[external]
+    fn renounceOwnership(self: @TContractState);
 
     //
-    // Views
+    // Access control administration
     //
 
-    func getStartTime(slot: Uint256) -> (start_time: felt) {
-    }
+    #[view]
+    fn getMinters(self: @TContractState, slot: u256) -> Array<ContractAddress>;
 
-    func getFinalTime(slot: Uint256) -> (final_time: felt) {
-    }
+    #[external]
+    fn addMinter(self: @TContractState, slot: u256, minter: ContractAddress);
 
-    func getTimes(slot: Uint256) -> (times_len: felt, times: felt*) {
-    }
+    #[external]
+    fn revokeMinter(self: @TContractState, slot: u256, minter: ContractAddress);
 
-    func getAbsorptions(slot: Uint256) -> (absorptions_len: felt, absorptions: felt*) {
-    }
+    #[view]
+    fn getCertifier(self: @TContractState, slot: u256) -> ContractAddress;
 
-    func getAbsorption(slot: Uint256, time: felt) -> (absorption: felt) {
-    }
-
-    func getCurrentAbsorption(slot: Uint256) -> (absorption: felt) {
-    }
-
-    func getFinalAbsorption(slot: Uint256) -> (absorption: felt) {
-    }
-
-    func getTonEquivalent(slot: Uint256) -> (ton_equivalent: felt) {
-    }
-
-    func getProjectValue(slot: Uint256) -> (value: Uint256) {
-    }
-
-    func isSetup(slot: Uint256) -> (status: felt) {
-    }
+    #[external]
+    fn setCertifier(self: @TContractState, slot: u256, certifier: ContractAddress);
 
     //
-    // Externals
+    // Project
     //
 
-    func setAbsorptions(
-        slot: Uint256,
-        times_len: felt,
-        times: felt*,
-        absorptions_len: felt,
-        absorptions: felt*,
-        ton_equivalent: felt,
-    ) {
-    }
+    #[view]
+    fn getStartTime(self: @TContractState, slot: u256) -> felt252;
 
-    func setProjectValue(slot: Uint256, project_value: Uint256) {
-    }
+    #[view]
+    fn getFinalTime(self: @TContractState, slot: u256) -> felt252;
+
+    #[view]
+    fn getTimes(self: @TContractState, slot: u256) -> Array<felt252>;
+
+    #[view]
+    fn getAbsorptions(self: @TContractState, slot: u256) -> Array<felt252>;
+
+    #[view]
+    fn getAbsorption(self: @TContractState, slot: u256, time: felt252) -> felt252;
+
+    #[view]
+    fn getCurrentAbsorption(self: @TContractState, slot: u256) -> felt252;
+
+    #[view]
+    fn getFinalAbsorption(self: @TContractState, slot: u256) -> felt252;
+
+    #[view]
+    fn getTonEquivalent(self: @TContractState, slot: u256) -> felt252;
+
+    #[view]
+    fn getProjectValue(self: @TContractState, slot: u256) -> u256;
+
+    #[view]
+    fn isSetup(self: @TContractState, slot: u256) -> bool;
+
+    #[external]
+    fn setAbsorptions(self: @TContractState, slot: u256, times: Array<felt252>, absorptions: Array<felt252>, ton_equivalent: felt252);
+
+    #[external]
+    fn setProjectValue(self: @TContractState, slot: u256, project_value: u256);
 }

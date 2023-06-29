@@ -1,6 +1,0 @@
-mocks:
-  carbonable_project_address: 0xADD2E55
-  carbonable_project_slot: 1
-
-offseter:
-  minimum: 1000000

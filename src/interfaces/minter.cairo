@@ -1,131 +1,128 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: Apache-2.0
 
-%lang starknet
+use array::ArrayTrait;
+use starknet::ContractAddress;
 
-// Starkware dependencies
-from starkware.cairo.common.uint256 import Uint256
-
-@contract_interface
-namespace ICarbonableMinter {
+#[starknet::interface]
+trait IMinter<TContractState> {
     //
     // Proxy administration
     //
 
-    func getImplementationHash() -> (implementation: felt) {
-    }
+    #[view]
+    fn getImplementationHash(self: @TContractState) -> felt252;
 
-    func getAdmin() -> (admin: felt) {
-    }
+    #[view]
+    fn getAdmin(self: @TContractState) -> felt252;
 
-    func upgrade(new_implementation: felt) {
-    }
+    #[external]
+    fn upgrade(ref self: TContractState, new_implementation: felt252);
 
-    func setAdmin(new_admin: felt) {
-    }
+    #[external]
+    fn setAdmin(ref self: TContractState, new_admin: ContractAddress);
 
     //
     // Ownership administration
     //
 
-    func owner() -> (owner: felt) {
-    }
+    #[view]
+    fn owner(self: @TContractState) -> ContractAddress;
 
-    func transferOwnership(newOwner: felt) {
-    }
+    #[external]
+    fn transferOwnership(self: @TContractState, newOwner: ContractAddress);
 
-    func renounceOwnership() {
-    }
-
-    func setWithdrawer(withdrawer: felt) {
-    }
-
-    func getWithdrawer() -> (withdrawer: felt) {
-    }
+    #[external]
+    fn renounceOwnership(self: @TContractState);
 
     //
-    // Views
+    // Access control administration
     //
 
-    func getCarbonableProjectAddress() -> (carbonable_project_address: felt) {
-    }
+    #[view]
+    fn getWithdrawer(self: @TContractState, slot: u256) -> ContractAddress;
 
-    func getCarbonableProjectSlot() -> (carbonable_project_slot: Uint256) {
-    }
-
-    func getPaymentTokenAddress() -> (payment_token_address: felt) {
-    }
-
-    func isPreSaleOpen() -> (pre_sale_open: felt) {
-    }
-
-    func isPublicSaleOpen() -> (public_sale_open: felt) {
-    }
-
-    func getMinValuePerTx() -> (min_value_per_tx: felt) {
-    }
-
-    func getMaxValuePerTx() -> (max_value_per_tx: felt) {
-    }
-
-    func getUnitPrice() -> (unit_price: felt) {
-    }
-
-    func getReservedValue() -> (reserved_value: felt) {
-    }
-
-    func getMaxValue() -> (max_value: felt) {
-    }
-
-    func getWhitelistMerkleRoot() -> (whitelist_merkle_root: felt) {
-    }
-
-    func getWhitelistAllocation(account: felt, allocation: felt, proof_len: felt, proof: felt*) -> (
-        allocation: felt
-    ) {
-    }
-
-    func getClaimedValue(account: felt) -> (value: felt) {
-    }
-
-    func isSoldOut() -> (status: felt) {
-    }
+    #[external]
+    fn setWithdrawer(self: @TContractState, slot: u256, withdrawer: ContractAddress);
 
     //
-    // Externals
+    // Minter
     //
 
-    func setWhitelistMerkleRoot(whitelist_merkle_root: felt) {
-    }
+    #[view]
+    fn getCarbonableProjectAddress(self: @TContractState) -> ContractAddress;
 
-    func setPublicSaleOpen(public_sale_open: felt) {
-    }
+    #[view]
+    fn getCarbonableProjectSlot(self: @TContractState) -> u256;
 
-    func setMaxValuePerTx(max_value_per_tx: felt) {
-    }
+    #[view]
+    fn getPaymentTokenAddress(self: @TContractState) -> ContractAddress;
 
-    func setMinValuePerTx(min_value_per_tx: felt) {
-    }
+    #[view]
+    fn isPreSaleOpen(self: @TContractState) -> bool;
 
-    func setUnitPrice(unit_price: felt) {
-    }
+    #[view]
+    fn isPublicSaleOpen(self: @TContractState) -> bool;
 
-    func decreaseReservedValue(value: felt) {
-    }
+    #[view]
+    fn getMinValuePerTx(self: @TContractState) -> u256;
 
-    func airdrop(to: felt, value: felt) -> (success: felt) {
-    }
+    #[view]
+    fn getMaxValuePerTx(self: @TContractState) -> u256;
 
-    func withdraw() -> (success: felt) {
-    }
+    #[view]
+    fn getUnitPrice(self: @TContractState) -> u256;
 
-    func transfer(token_address: felt, recipient: felt, amount: Uint256) -> (success: felt) {
-    }
+    #[view]
+    fn getReservedValue(self: @TContractState) -> u256;
 
-    func preBuy(allocation: felt, proof_len: felt, proof: felt*, value: felt, force: felt) -> (
-        success: felt
-    ) {
-    }
+    #[view]
+    fn getMaxValue(self: @TContractState) -> u256;
 
-    func publicBuy(value: felt, force: felt) -> (success: felt) {
-    }
+    #[view]
+    fn getWhitelistMerkleRoot(self: @TContractState) -> felt252;
+
+    #[view]
+    fn getWhitelistMerkleRoot(self: @TContractState) -> felt252;
+
+    #[view]
+    fn getWhitelistAllocation(self: @TContractState, account: ContractAddress, allocation: u256, proof: Array<felt252>) -> u256;
+
+    #[view]
+    fn getClaimedValue(self: @TContractState, account: ContractAddress) -> u256;
+
+    #[view]
+    fn isSoldOut(self: @TContractState) -> bool;
+
+    #[external]
+    fn setWhitelistMerkleRoot(self: @TContractState, root: felt252);
+
+    #[external]
+    fn setPublicSaleOpen(self: @TContractState, status: bool);
+
+    #[external]
+    fn setMaxValuePerTx(self: @TContractState, value: u256);
+
+    #[external]
+    fn setMinValuePerTx(self: @TContractState, value: u256);
+
+    #[external]
+    fn setUnitPrice(self: @TContractState, price: u256);
+
+    #[external]
+    fn decreaseReservedValue(self: @TContractState, value: u256);
+
+    #[external]
+    fn airdrop(self: @TContractState, to: ContractAddress, value: u256);
+
+    #[external]
+    fn withdraw(self: @TContractState);
+
+    #[external]
+    fn transfer(self: @TContractState, recipient: ContractAddress, amount: u256);
+
+    #[external]
+    fn preBuy(self: @TContractState, allocation: u256, proof: Array<felt252>, value: u256, force: bool);
+
+    #[external]
+    fn publicBuy(self: @TContractState, value: u256, force: bool);
 }
