@@ -272,6 +272,30 @@ func getApr{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return CarbonableFarming.apr(minter_address=minter_address);
 }
 
+@view
+func getTotalSale{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    total_sale: felt
+) {
+    let (total_sale) = CarbonableFarming.total_sale();
+    return (total_sale=total_sale);
+}
+
+@view
+func getMaxSale{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    max_sale: felt
+) {
+    let (max_sale) = CarbonableFarming.max_sale();
+    return (max_sale=max_sale);
+}
+
+@view
+func getSaleOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(address: felt) -> (
+    sale: felt
+) {
+    let (sale) = CarbonableFarming.sale_of(address=address);
+    return (sale=sale);
+}
+
 //
 // Externals
 //
