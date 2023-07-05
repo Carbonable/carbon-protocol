@@ -190,10 +190,10 @@ namespace CarbonableFarming {
 
         // [Compute] Total sale
         let (computed) = _compute_total_sale();
-        let (stored) = CarbonableFarming_total_sale_.read();
-        let (sale_in_dollars, _) = unsigned_div_rem(computed + stored, ton_equivalent);
+        let (computed_in_dollars, _) = unsigned_div_rem(computed, ton_equivalent);
+        let (stored_in_dollars) = CarbonableFarming_total_sale_.read();
 
-        return (sale=sale_in_dollars);
+        return (sale=computed_in_dollars + stored_in_dollars);
     }
 
     func max_sale{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
@@ -268,10 +268,10 @@ namespace CarbonableFarming {
 
         // [Compute] User sale and convert from g * µ$/t to µ$
         let (computed) = _compute_user_sale(address=address);
-        let (stored) = CarbonableFarming_sale_.read(address);
-        let (sale_in_dollars, _) = unsigned_div_rem(computed + stored, ton_equivalent);
+        let (computed_in_dollars, _) = unsigned_div_rem(computed, ton_equivalent);
+        let (stored_in_dollars) = CarbonableFarming_sale_.read(address);
 
-        return (sale=sale_in_dollars);
+        return (sale=computed_in_dollars + stored_in_dollars);
     }
 
     func current_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
