@@ -26,3 +26,27 @@ trait IProject<TContractState> {
     fn set_absorptions(ref self: TContractState, slot: u256, times: Array<u64>, absorptions: Array<u64>, ton_equivalent: u64);
     fn set_project_value(ref self: TContractState, slot: u256, project_value: u256);
 }
+
+#[starknet::interface]
+trait IProjectLegacy<TContractState> {
+    // Access control administration
+    fn getMinters(self: @TContractState, slot: u256) -> Array<ContractAddress>;
+    fn addMinter(ref self: TContractState, slot: u256, minter: ContractAddress);
+    fn revokeMinter(ref self: TContractState, slot: u256, minter: ContractAddress);
+    fn getCertifier(self: @TContractState, slot: u256) -> ContractAddress;
+    fn setCertifier(ref self: TContractState, slot: u256, certifier: ContractAddress);
+
+    // Project
+    fn getStartTime(self: @TContractState, slot: u256) -> u64;
+    fn getFinalTime(self: @TContractState, slot: u256) -> u64;
+    fn getTimes(self: @TContractState, slot: u256) -> Array<u64>;
+    fn getAbsorptions(self: @TContractState, slot: u256) -> Array<u64>;
+    fn getAbsorption(self: @TContractState, slot: u256, time: u64) -> u64;
+    fn getCurrentAbsorption(self: @TContractState, slot: u256) -> u64;
+    fn getFinalAbsorption(self: @TContractState, slot: u256) -> u64;
+    fn getTonEquivalent(self: @TContractState, slot: u256) -> u64;
+    fn getProjectValue(self: @TContractState, slot: u256) -> u256;
+    fn isSetup(self: @TContractState, slot: u256) -> bool;
+    fn setAbsorptions(ref self: TContractState, slot: u256, times: Array<u64>, absorptions: Array<u64>, ton_equivalent: u64);
+    fn setProjectValue(ref self: TContractState, slot: u256, project_value: u256);
+}

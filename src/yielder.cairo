@@ -17,7 +17,7 @@ mod yielder {
     use protocol::interfaces::erc20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use protocol::interfaces::erc721::{IERC721Dispatcher, IERC721DispatcherTrait};
     use protocol::interfaces::erc3525::{IERC3525Dispatcher, IERC3525DispatcherTrait};
-    use protocol::interfaces::project::{IProjectDispatcher, IProjectDispatcherTrait};
+    use protocol::interfaces::project::{IProjectLegacyDispatcher, IProjectLegacyDispatcherTrait};
     use protocol::interfaces::minter::{IMinterDispatcher, IMinterDispatcherTrait};
 
     const YEAR_SECONDS: u64 = 31556925;
@@ -27,7 +27,7 @@ mod yielder {
         // Ownable module
         _owner: ContractAddress,
         // Farmer module
-        _project: IProjectDispatcher,
+        _project: IProjectLegacyDispatcher,
         _slot: u256,
         _total_absorption: u256,
         _total_sale: u256,
@@ -86,7 +86,7 @@ mod yielder {
         ref self: ContractState,
         project: ContractAddress,
         slot: u256,
-        token: ContractAddress,
+        erc20: ContractAddress,
         owner: ContractAddress,
     ) {
         // [Check] Inputs
@@ -95,9 +95,9 @@ mod yielder {
         assert(!owner.is_zero(), 'Owner cannot be 0');
 
         // [Effect] Store inputs
-        self._project.write(IProjectDispatcher { contract_address: project });
+        self._project.write(IProjectLegacyDispatcher { contract_address: project });
         self._slot.write(slot);
-        self._erc20.write(IERC20Dispatcher { contract_address: token });
+        self._erc20.write(IERC20Dispatcher { contract_address: erc20 });
         self._owner.write(owner);
     }
 
@@ -156,7 +156,7 @@ mod yielder {
         fn get_max_absorption(self: @ContractState) -> u256 {
             let project = self._project.read();
             let slot = self._slot.read();
-            project.get_current_absorption(slot).into()
+            project.getCurrentAbsorption(slot).into()
         }
         fn get_total_sale(self: @ContractState) -> u256 {
             // [Compute] Total sale
@@ -174,9 +174,9 @@ mod yielder {
         fn get_max_sale(self: @ContractState) -> u256 {
             let project = self._project.read();
             let slot = self._slot.read();
-            let ton_equivalent = project.get_ton_equivalent(slot);
-            let project_value = project.get_project_value(slot);
-            let start_time = project.get_start_time(slot);
+            let ton_equivalent = project.getTonEquivalent(slot);
+            let project_value = project.getProjectValue(slot);
+            let start_time = project.getStartTime(slot);
             let current_time = get_block_timestamp();
             self._compute_sale(project_value, start_time, current_time)
 
@@ -272,9 +272,9 @@ mod yielder {
             // [Compute] Total investement
             let project = self._project.read();
             let slot = self._slot.read();
-            let project_value = project.get_project_value(slot);
+            let project_value = project.getProjectValue(slot);
             let unit_price = IMinterDispatcher { contract_address: minter }.getUnitPrice();
-            let ton_equivalent = project.get_ton_equivalent(slot);
+            let ton_equivalent = project.getTonEquivalent(slot);
 
             // [Compute] APR
             let num = (next_cumsale - current_cumsale) * YEAR_SECONDS.into();
@@ -313,7 +313,7 @@ mod yielder {
             // [Check] Time is later than the project start time
             let project = self._project.read();
             let slot = self._slot.read();
-            let start_time = project.get_start_time(slot);
+            let start_time = project.getStartTime(slot);
             assert(time > start_time, 'Time is before start time');
 
             // [Check] First time to store
@@ -332,8 +332,8 @@ mod yielder {
             assert(time > last_time, 'Time is before last time');
 
             // [Check] Absorption is stored between these times
-            let initial_absorption = project.get_absorption(slot, last_time);
-            let final_absorption = project.get_absorption(slot, time);
+            let initial_absorption = project.getAbsorption(slot, last_time);
+            let final_absorption = project.getAbsorption(slot, time);
             assert(final_absorption > initial_absorption, 'No absorption captured');
 
             // [Effect] Update storage
@@ -357,8 +357,8 @@ mod yielder {
             // [Check] Absorption is captured between the 2 new last times
             let slot = self._slot.read();
             let project = self._project.read();
-            let initial_absorption = project.get_absorption(slot, before_last_time);
-            let final_absorption = project.get_absorption(slot, time);
+            let initial_absorption = project.getAbsorption(slot, before_last_time);
+            let final_absorption = project.getAbsorption(slot, time);
             assert(final_absorption > initial_absorption, 'No absorption captured');
 
             // [Effect] Update storage
@@ -539,14 +539,14 @@ mod yielder {
             // [Check] Project vlaue is not null, otherwise return 0
             let project = self._project.read();
             let slot = self._slot.read();
-            let project_value = project.get_project_value(slot);
+            let project_value = project.getProjectValue(slot);
             if project_value == 0_u256 {
                 return 0_u256;
             }
 
             // [Compute] Interpolated absorptions
-            let initial_absorption = project.get_absorption(slot, start_time);
-            let final_absorption = project.get_absorption(slot, end_time);
+            let initial_absorption = project.getAbsorption(slot, start_time);
+            let final_absorption = project.getAbsorption(slot, end_time);
 
             // [Check] Overflow
             assert(initial_absorption <= final_absorption, 'Overflow');
@@ -563,7 +563,7 @@ mod yielder {
             // [Check] Project vlaue is not null, otherwise return 0
             let project = self._project.read();
             let slot = self._slot.read();
-            let project_value = project.get_project_value(slot);
+            let project_value = project.getProjectValue(slot);
             if project_value == 0_u256 {
                 return 0_u256;
             }
@@ -615,11 +615,11 @@ mod yielder {
                 // [Check] First iteration (special case)
                 if index == 0 {
                     // [Compute] Interpolated absorptions
-                    let start_time = project.get_start_time(slot);
+                    let start_time = project.getStartTime(slot);
                     let end_time = times.get(index).expect('Index out of bounds');
                     let price = prices.get(index).expect('Index out of bounds');
-                    let initial_absorption = project.get_absorption(slot, start_time);
-                    let final_absorption = project.get_absorption(slot, end_time);
+                    let initial_absorption = project.getAbsorption(slot, start_time);
+                    let final_absorption = project.getAbsorption(slot, end_time);
                     let sale : u256 = (final_absorption - initial_absorption).into() * price;
                     sales.append(sale);
                     updated_prices.append(price);
@@ -629,8 +629,8 @@ mod yielder {
                 let start_time = times.get(index - 1).expect('Index out of bounds');
                 let end_time = times.get(index).expect('Index out of bounds');
                 let price = prices.get(index).expect('Index out of bounds');
-                let initial_absorption = project.get_absorption(slot, start_time);
-                let final_absorption = project.get_absorption(slot, end_time);
+                let initial_absorption = project.getAbsorption(slot, start_time);
+                let final_absorption = project.getAbsorption(slot, end_time);
 
                 // [Check] Absorption is not null
                 assert(initial_absorption < final_absorption, 'No absorption');
