@@ -11,6 +11,7 @@ mod yielder {
     use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
     use alexandria_numeric::cumsum::cumsum;
     use alexandria_storage::list::{List, ListTrait};
+    use debug::PrintTrait;
     use protocol::interfaces::ownable::IOwnable;
     use protocol::interfaces::farmer::IFarmer;
     use protocol::interfaces::yielder::IYielder;
@@ -179,7 +180,6 @@ mod yielder {
             let start_time = project.getStartTime(slot);
             let current_time = get_block_timestamp();
             self._compute_sale(project_value, start_time, current_time)
-
         }
         fn get_deposited_of(self: @ContractState, account: ContractAddress) -> u256 {
             self._registered_value.read(account)
@@ -288,7 +288,7 @@ mod yielder {
             // [Check] Caller is owner
             let erc721 = IERC721Dispatcher { contract_address: self._project.read().contract_address };
             let caller = get_caller_address();
-            let owner = erc721.ownerOf(self._slot.read());
+            let owner = erc721.ownerOf(token_id);
             assert(caller == owner, 'Caller is not owner');
 
             // [Effect] Deposit
@@ -621,8 +621,12 @@ mod yielder {
                     let initial_absorption = project.getAbsorption(slot, start_time);
                     let final_absorption = project.getAbsorption(slot, end_time);
                     let sale : u256 = (final_absorption - initial_absorption).into() * price;
+                    times_u256.append(end_time.into());
                     sales.append(sale);
                     updated_prices.append(price);
+
+                    index += 1;
+                    continue;
                 }
 
                 // [Compute] Interpolated absorptions
@@ -632,7 +636,7 @@ mod yielder {
                 let initial_absorption = project.getAbsorption(slot, start_time);
                 let final_absorption = project.getAbsorption(slot, end_time);
 
-                // [Check] Absorption is not null
+                // [Check] Absorption is not null otherwise return 0
                 assert(initial_absorption < final_absorption, 'No absorption');
                 let new_absorption : u256 = (final_absorption - initial_absorption).into();
 
