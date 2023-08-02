@@ -5,11 +5,8 @@ version = "0.1.0"
 # See more keys and their definitions at https://docs.swmansion.com/scarb/docs/reference/manifest
 
 [dependencies]
-alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria" }
-alexandria_data_structures = { git = "https://github.com/keep-starknet-strange/alexandria" }
-alexandria_numeric = { git = "https://github.com/keep-starknet-strange/alexandria" }
-alexandria_storage = { git = "https://github.com/Bal7hazar/alexandria", branch="feat/storage-array" }
-starknet = "2.0.0-rc6"
+alexandria = { git = "https://github.com/keep-starknet-strange/alexandria" }
+starknet = "2.0.2"
 
 [[target.starknet-contract]]
 allowed-libfuncs-list.name = "experimental"

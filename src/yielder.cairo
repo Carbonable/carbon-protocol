@@ -8,9 +8,9 @@ mod yielder {
     use array::{Array, ArrayTrait};
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
-    use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
-    use alexandria_numeric::cumsum::cumsum;
-    use alexandria_storage::list::{List, ListTrait};
+    use alexandria::numeric::interpolate::{interpolate, Interpolation, Extrapolation};
+    use alexandria::numeric::cumsum::cumsum;
+    use alexandria::storage::list::{List, ListTrait};
     use debug::PrintTrait;
     use protocol::interfaces::ownable::IOwnable;
     use protocol::interfaces::farmer::IFarmer;
@@ -224,7 +224,7 @@ mod yielder {
                 times_u256.append(times[index].into());
                 index += 1;
             };
-            interpolate(current_time, @times_u256, @prices.array(), Interpolation::Linear(()), Extrapolation::Constant(()))
+            interpolate(current_time, times_u256.span(), prices.array().span(), Interpolation::Linear(()), Extrapolation::Constant(()))
         }
         fn get_prices(self: @ContractState) -> (Array<u64>, Array<u256>, Array<u256>, Array<u256>) {
             let times = self._times.read().array();
@@ -249,7 +249,7 @@ mod yielder {
 
             // [Compute] Current cumsale
             let (times_u256, _, cumsales) = self._compute_cumsales();
-            let current_cumsale = interpolate(current_time.into(), @times_u256, @cumsales, Interpolation::Linear(()), Extrapolation::Constant(()));
+            let current_cumsale = interpolate(current_time.into(), times_u256.span(), cumsales.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
 
             // [Compute] Next cumsale
             let mut index = 0;
@@ -570,8 +570,8 @@ mod yielder {
 
             // [Compute] Interpolated sales
             let (times, _, cumsales) = self._compute_cumsales();
-            let initial_cumsale = interpolate(start_time.into(), @times, @cumsales, Interpolation::Linear(()), Extrapolation::Constant(()));
-            let final_cumsale = interpolate(end_time.into(), @times, @cumsales, Interpolation::Linear(()), Extrapolation::Constant(()));
+            let initial_cumsale = interpolate(start_time.into(), times.span(), cumsales.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
+            let final_cumsale = interpolate(end_time.into(), times.span(), cumsales.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
 
             // [Check] Overflow
             assert(initial_cumsale <= final_cumsale, 'Overflow');
@@ -665,7 +665,7 @@ mod yielder {
                 absorption = new_absorption;
                 index += 1;
             };
-            let cumsales = cumsum(@sales);
+            let cumsales = cumsum(sales.span());
             (times_u256, updated_prices, cumsales)
         }
     }
