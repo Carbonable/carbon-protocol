@@ -47,14 +47,16 @@ trait Farming<TContractState> {
 }
 
 #[starknet::component]
-impl FarmingImpl<TContractState, impl I: GetComponent<TContractState, FarmingState>> of Farming<TContractState> {
+impl FarmingImpl<
+    TContractState, impl I: GetComponent<TContractState, FarmingState>
+> of Farming<TContractState> {
     fn initializer(self: @TContractState, project: ContractAddress, slot: u256) {
         self.component_snap().project.write(project);
         self.component_snap().slot.write(slot);
     }
 
     fn get_project(self: @TContractState) -> ContractAddress {
-        self.component_snap().project.read(); 
+        self.component_snap().project.read();
     }
 
     fn get_slot(self: @TContractState) -> u256 {
@@ -62,9 +64,8 @@ impl FarmingImpl<TContractState, impl I: GetComponent<TContractState, FarmingSta
     }
 
     fn get_max_absorption(self: @TContractState) -> u256 {
-        IProjectDispatcher { contract_address: self.component_snap().project.read() }.getCurrentAbsorption(
-            slot: self.component_snap().slot.read()
-        )
+        IProjectDispatcher { contract_address: self.component_snap().project.read() }
+            .getCurrentAbsorption(slot: self.component_snap().slot.read())
     }
 
     fn get_max_sale(self: @TContractState) -> u256 {
@@ -108,10 +109,8 @@ impl FarmingImpl<TContractState, impl I: GetComponent<TContractState, FarmingSta
         assert(value != 0_u256, 'Farming: value is null');
 
         // [Check] Token id is owned by caller
-        let owner = IProjectDispatcher.ownerOf(
-            contract_address=self.component_snap().project.read(), 
-            token_id=token_id
-        );
+        let owner = IProjectDispatcher
+            .ownerOf(contract_address = self.component_snap().project.read(), token_id = token_id);
         let caller = get_caller_address();
         assert(owner == caller, 'Farming: not the token owner');
 
@@ -119,18 +118,21 @@ impl FarmingImpl<TContractState, impl I: GetComponent<TContractState, FarmingSta
         let to_token_id = _get_token_id();
         if to_token_id == 0_u256 {
             let this = get_contract_address();
-
         }
     }
 
-    fn _deposit(self: @TContractState, from_token_id: u256, to_token_id: u256, to: ContractAddress, value: u256) {
+    fn _deposit(
+        self: @TContractState,
+        from_token_id: u256,
+        to_token_id: u256,
+        to: ContractAddress,
+        value: u256
+    ) {
         // [Effect] Store absorption
         let caller = get_caller_address();
-        let absorption = Farming.get_absorption_of(account=caller);
-        Farming.set_absorption_of(account=caller, value=absorption + value);
+        let absorption = Farming.get_absorption_of(account = caller);
+        Farming.set_absorption_of(account = caller, value = absorption + value);
     }
-    
-
 }
 
 fn _compute_total_absorption() -> u256 {
@@ -143,10 +145,8 @@ fn _compute_total_sale() -> u256 {
 fn _get_token_id() -> u256 {
     // [Check] Contract token balance
     let this = get_contract_address();
-    let balance = IProject.balanceOf(
-        contract_address=self.component_snap().project.read(), 
-        owner=this
-    );
+    let balance = IProject
+        .balanceOf(contract_address = self.component_snap().project.read(), owner = this);
 
     // [Check] Balance is null then return 0
     if balance == 0_u256 {
@@ -154,9 +154,8 @@ fn _get_token_id() -> u256 {
     }
 
     // [Check] Otherwise return the first token id
-    IProject.tokenOfOwnerByIndex(
-        contract_address=self.component_snap().project.read(), 
-        owner=this, 
-        index=0_u256
-    )
+    IProject
+        .tokenOfOwnerByIndex(
+            contract_address = self.component_snap().project.read(), owner = this, index = 0_u256
+        )
 }

@@ -23,7 +23,13 @@ trait IProject<TContractState> {
     fn get_ton_equivalent(self: @TContractState, slot: u256) -> u64;
     fn get_project_value(self: @TContractState, slot: u256) -> u256;
     fn is_setup(self: @TContractState, slot: u256) -> bool;
-    fn set_absorptions(ref self: TContractState, slot: u256, times: Array<u64>, absorptions: Array<u64>, ton_equivalent: u64);
+    fn set_absorptions(
+        ref self: TContractState,
+        slot: u256,
+        times: Array<u64>,
+        absorptions: Array<u64>,
+        ton_equivalent: u64
+    );
     fn set_project_value(ref self: TContractState, slot: u256, project_value: u256);
 }
 
@@ -47,6 +53,12 @@ trait IProjectLegacy<TContractState> {
     fn getTonEquivalent(self: @TContractState, slot: u256) -> u64;
     fn getProjectValue(self: @TContractState, slot: u256) -> u256;
     fn isSetup(self: @TContractState, slot: u256) -> bool;
-    fn setAbsorptions(ref self: TContractState, slot: u256, times: Array<u64>, absorptions: Array<u64>, ton_equivalent: u64);
+    fn setAbsorptions(
+        ref self: TContractState,
+        slot: u256,
+        times: Array<u64>,
+        absorptions: Array<u64>,
+        ton_equivalent: u64
+    );
     fn setProjectValue(ref self: TContractState, slot: u256, project_value: u256);
 }

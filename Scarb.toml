@@ -5,8 +5,12 @@ version = "0.1.0"
 # See more keys and their definitions at https://docs.swmansion.com/scarb/docs/reference/manifest
 
 [dependencies]
-alexandria = { git = "https://github.com/keep-starknet-strange/alexandria" }
-starknet = "2.0.2"
+starknet = ">=2.2.0"
+alexandria_storage = { git = "https://github.com/keep-starknet-strange/alexandria", tag = "cairo-v2.1.0" }
+alexandria_numeric = { git = "https://github.com/keep-starknet-strange/alexandria", tag = "cairo-v2.1.0" }
+openzeppelin = { git = "https://github.com/OpenZeppelin/cairo-contracts.git", tag = "v0.7.0-rc.0" }
+cairo_erc_721 = { git = "https://github.com/carbonable-labs/cairo-erc-721" }
+cairo_erc_3525 = { git = "https://github.com/carbonable-labs/cairo-erc-3525", tag = "2.0.4" }
 
 [[target.starknet-contract]]
 allowed-libfuncs-list.name = "experimental"

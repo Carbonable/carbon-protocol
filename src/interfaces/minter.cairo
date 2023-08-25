@@ -21,7 +21,9 @@ trait IMinter<TContractState> {
     fn getReservedValue(self: @TContractState) -> u256;
     fn getMaxValue(self: @TContractState) -> u256;
     fn getWhitelistMerkleRoot(self: @TContractState) -> felt252;
-    fn getWhitelistAllocation(self: @TContractState, account: ContractAddress, allocation: u256, proof: Array<felt252>) -> u256;
+    fn getWhitelistAllocation(
+        self: @TContractState, account: ContractAddress, allocation: u256, proof: Array<felt252>
+    ) -> u256;
     fn getClaimedValue(self: @TContractState, account: ContractAddress) -> u256;
     fn isSoldOut(self: @TContractState) -> bool;
     fn setWhitelistMerkleRoot(self: @TContractState, root: felt252);
@@ -33,6 +35,8 @@ trait IMinter<TContractState> {
     fn airdrop(self: @TContractState, to: ContractAddress, value: u256);
     fn withdraw(self: @TContractState);
     fn transfer(self: @TContractState, recipient: ContractAddress, amount: u256);
-    fn preBuy(self: @TContractState, allocation: u256, proof: Array<felt252>, value: u256, force: bool);
+    fn preBuy(
+        self: @TContractState, allocation: u256, proof: Array<felt252>, value: u256, force: bool
+    );
     fn publicBuy(self: @TContractState, value: u256, force: bool);
 }

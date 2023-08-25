@@ -1,5 +1,3 @@
-use core::traits::TryInto;
-
 #[starknet::contract]
 mod yielder {
     use zeroable::Zeroable;
@@ -8,10 +6,9 @@ mod yielder {
     use array::{Array, ArrayTrait};
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
-    use alexandria::numeric::interpolate::{interpolate, Interpolation, Extrapolation};
-    use alexandria::numeric::cumsum::cumsum;
-    use alexandria::storage::list::{List, ListTrait};
-    use debug::PrintTrait;
+    use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
+    use alexandria_numeric::cumsum::cumsum;
+    use alexandria_storage::list::{List, ListTrait};
     use protocol::interfaces::ownable::IOwnable;
     use protocol::interfaces::farmer::IFarmer;
     use protocol::interfaces::yielder::IYielder;
@@ -224,7 +221,13 @@ mod yielder {
                 times_u256.append(times[index].into());
                 index += 1;
             };
-            interpolate(current_time, times_u256.span(), prices.array().span(), Interpolation::Linear(()), Extrapolation::Constant(()))
+            interpolate(
+                current_time,
+                times_u256.span(),
+                prices.array().span(),
+                Interpolation::Linear(()),
+                Extrapolation::Constant(())
+            )
         }
         fn get_prices(self: @ContractState) -> (Array<u64>, Array<u256>, Array<u256>, Array<u256>) {
             let times = self._times.read().array();
@@ -243,13 +246,19 @@ mod yielder {
             // [Check] Current time is not later than the latest time
             let current_time = get_block_timestamp();
             let latest_time = times[times_len - 1];
-            if  latest_time <= current_time {
+            if latest_time <= current_time {
                 return (0_u256, 0_u256);
             }
 
             // [Compute] Current cumsale
             let (times_u256, _, cumsales) = self._compute_cumsales();
-            let current_cumsale = interpolate(current_time.into(), times_u256.span(), cumsales.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
+            let current_cumsale = interpolate(
+                current_time.into(),
+                times_u256.span(),
+                cumsales.span(),
+                Interpolation::Linear(()),
+                Extrapolation::Constant(())
+            );
 
             // [Compute] Next cumsale
             let mut index = 0;
@@ -267,7 +276,7 @@ mod yielder {
 
             // [Check] Overflow
             assert(current_time.into() < next_time, 'Time overflow');
-            assert(current_cumsale <= next_cumsale , 'Cumsale overflow');
+            assert(current_cumsale <= next_cumsale, 'Cumsale overflow');
 
             // [Compute] Total investement
             let project = self._project.read();
@@ -278,7 +287,10 @@ mod yielder {
 
             // [Compute] APR
             let num = (next_cumsale - current_cumsale) * YEAR_SECONDS.into();
-            let den = project_value * unit_price * (next_time - current_time.into()) * ton_equivalent.into();
+            let den = project_value
+                * unit_price
+                * (next_time - current_time.into())
+                * ton_equivalent.into();
             (num, den)
         }
         fn deposit(ref self: ContractState, token_id: u256, value: u256) {
@@ -286,7 +298,9 @@ mod yielder {
             assert(value != 0_u256, 'Value cannot be 0');
 
             // [Check] Caller is owner
-            let erc721 = IERC721Dispatcher { contract_address: self._project.read().contract_address };
+            let erc721 = IERC721Dispatcher {
+                contract_address: self._project.read().contract_address
+            };
             let caller = get_caller_address();
             let owner = erc721.ownerOf(token_id);
             assert(caller == owner, 'Caller is not owner');
@@ -301,7 +315,9 @@ mod yielder {
         }
         fn withdraw_to_token(ref self: ContractState, token_id: u256, value: u256) {
             // [Check] Caller is owner
-            let erc721 = IERC721Dispatcher { contract_address: self._project.read().contract_address };
+            let erc721 = IERC721Dispatcher {
+                contract_address: self._project.read().contract_address
+            };
             let caller = get_caller_address();
             let owner = erc721.ownerOf(self._slot.read());
             assert(caller == owner, 'Caller is not owner');
@@ -445,7 +461,9 @@ mod yielder {
     #[generate_trait]
     impl Internal of InternalTrait {
         fn _get_token_id(self: @ContractState) -> u256 {
-            let erc721 = IERC721Dispatcher { contract_address: self._project.read().contract_address };
+            let erc721 = IERC721Dispatcher {
+                contract_address: self._project.read().contract_address
+            };
             let contract_address = get_contract_address();
             let balance = erc721.balanceOf(contract_address);
             if balance == 0_u256 {
@@ -453,7 +471,9 @@ mod yielder {
             }
             erc721.tokenOfOwnerByIndex(contract_address, 0_u256)
         }
-        fn _deposit(ref self: ContractState, from_token_id: u256, to: ContractAddress, value: u256) {
+        fn _deposit(
+            ref self: ContractState, from_token_id: u256, to: ContractAddress, value: u256
+        ) {
             // [Effect] Store caller and total absorptions
             let caller = get_caller_address();
             let absorption = self.get_absorption_of(caller);
@@ -481,15 +501,14 @@ mod yielder {
             // [Interaction] Transfer value from from_token_id to to_token_id
             let to_token_id = self._get_token_id();
             let project = self._project.read();
-            IERC3525Dispatcher { contract_address: project.contract_address }.transferValueFrom(
-                from_token_id,
-                to_token_id,
-                to,
-                value
-            );
+            IERC3525Dispatcher { contract_address: project.contract_address }
+                .transferValueFrom(from_token_id, to_token_id, to, value);
 
             // [Event] Emit event
-            self.emit(Event::Deposit(Deposit { address: caller, value: value, time: current_time }));
+            self
+                .emit(
+                    Event::Deposit(Deposit { address: caller, value: value, time: current_time })
+                );
         }
         fn _withdraw(ref self: ContractState, to_token_id: u256, to: ContractAddress, value: u256) {
             // [Effect] Store caller and total absorptions
@@ -503,7 +522,7 @@ mod yielder {
             self._sale.write(caller, sale);
             let total_sale = self.get_total_sale();
             self._total_sale.write(total_sale);
-            
+
             // [Check] Value is less than or equal to the registered values
             let current_time = get_block_timestamp();
             let stored_value = self._registered_value.read(caller);
@@ -520,17 +539,18 @@ mod yielder {
             // [Interaction] Transfer value from contract to caller
             let from_token_id = self._get_token_id();
             let project = self._project.read();
-            IERC3525Dispatcher { contract_address: project.contract_address }.transferValueFrom(
-                from_token_id,
-                to_token_id,
-                to,
-                value
-            );
+            IERC3525Dispatcher { contract_address: project.contract_address }
+                .transferValueFrom(from_token_id, to_token_id, to, value);
 
             // [Event] Emit event
-            self.emit(Event::Withdraw(Withdraw { address: caller, value: value, time: current_time }));
+            self
+                .emit(
+                    Event::Withdraw(Withdraw { address: caller, value: value, time: current_time })
+                );
         }
-        fn _compute_absorption(self: @ContractState, value: u256, start_time: u64, end_time: u64) -> u256 {
+        fn _compute_absorption(
+            self: @ContractState, value: u256, start_time: u64, end_time: u64
+        ) -> u256 {
             // [Check] Value is not null, otherwise return 0
             if value == 0_u256 {
                 return 0_u256;
@@ -552,9 +572,11 @@ mod yielder {
             assert(initial_absorption <= final_absorption, 'Overflow');
 
             // [Compute] Absorption corresponding to the ratio
-            value  * (final_absorption - initial_absorption).into() / project_value
+            value * (final_absorption - initial_absorption).into() / project_value
         }
-        fn _compute_sale(self: @ContractState, value: u256, start_time: u64, end_time: u64) -> u256 {
+        fn _compute_sale(
+            self: @ContractState, value: u256, start_time: u64, end_time: u64
+        ) -> u256 {
             // [Check] Value is not null, otherwise return 0
             if value == 0_u256 {
                 return 0_u256;
@@ -570,8 +592,20 @@ mod yielder {
 
             // [Compute] Interpolated sales
             let (times, _, cumsales) = self._compute_cumsales();
-            let initial_cumsale = interpolate(start_time.into(), times.span(), cumsales.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
-            let final_cumsale = interpolate(end_time.into(), times.span(), cumsales.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
+            let initial_cumsale = interpolate(
+                start_time.into(),
+                times.span(),
+                cumsales.span(),
+                Interpolation::Linear(()),
+                Extrapolation::Constant(())
+            );
+            let final_cumsale = interpolate(
+                end_time.into(),
+                times.span(),
+                cumsales.span(),
+                Interpolation::Linear(()),
+                Extrapolation::Constant(())
+            );
 
             // [Check] Overflow
             assert(initial_cumsale <= final_cumsale, 'Overflow');
@@ -581,19 +615,23 @@ mod yielder {
                 return 0_u256;
             }
             // [Compute] Otherwise returns the sale corresponding to the ratio
-            value  * (final_cumsale - initial_cumsale) / project_value
+            value * (final_cumsale - initial_cumsale) / project_value
         }
         fn _compute_cumsales(self: @ContractState) -> (Array<u256>, Array<u256>, Array<u256>) {
             // [Check] Times are set
             let times = self._times.read();
             if times.len() == 0 {
-                return (ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new());
+                return (
+                    ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new()
+                );
             }
 
             // [Check] Prices are set
             let prices = self._prices.read();
             if prices.len() == 0 {
-                return (ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new());
+                return (
+                    ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new(), ArrayTrait::<u256>::new()
+                );
             }
 
             // [Compute] Sales
@@ -603,9 +641,9 @@ mod yielder {
             let mut index = 0;
             let project = self._project.read();
             let slot = self._slot.read();
-            let mut absorption : u256 = 0;
-            let mut negative_delta : u256 = 0;
-            let mut positive_delta : u256 = 0;
+            let mut absorption: u256 = 0;
+            let mut negative_delta: u256 = 0;
+            let mut positive_delta: u256 = 0;
             loop {
                 // [Check] End criteria
                 if index == times.len() {
@@ -620,7 +658,7 @@ mod yielder {
                     let price = prices.get(index).expect('Index out of bounds');
                     let initial_absorption = project.getAbsorption(slot, start_time);
                     let final_absorption = project.getAbsorption(slot, end_time);
-                    let sale : u256 = (final_absorption - initial_absorption).into() * price;
+                    let sale: u256 = (final_absorption - initial_absorption).into() * price;
                     times_u256.append(end_time.into());
                     sales.append(sale);
                     updated_prices.append(price);
@@ -638,7 +676,7 @@ mod yielder {
 
                 // [Check] Absorption is not null otherwise return 0
                 assert(initial_absorption < final_absorption, 'No absorption');
-                let new_absorption : u256 = (final_absorption - initial_absorption).into();
+                let new_absorption: u256 = (final_absorption - initial_absorption).into();
 
                 // [Compute] Delta to compensate from the previous sale
                 let real_sale = absorption * price;

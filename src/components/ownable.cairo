@@ -11,8 +11,10 @@ trait Ownable<TContractState> {
 }
 
 #[starknet::component]
-impl OwnableImpl<TContractState, impl I: GetComponent<TContractState, OwnableState>> of Ownable<TContractState> {
+impl OwnableImpl<
+    TContractState, impl I: GetComponent<TContractState, OwnableState>
+> of Ownable<TContractState> {
     fn is_owner(self: @TContractState, addr: ContractAddress) -> bool {
-        self.component_snap().owner.read() == addr  
+        self.component_snap().owner.read() == addr
     }
 }
