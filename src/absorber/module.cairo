@@ -38,7 +38,11 @@ mod Absorber {
     impl AbsorberImpl of IAbsorber<ContractState> {
         // Absorption
         fn get_start_time(self: @ContractState, slot: u256) -> u64 {
-            self._times.read(slot)[0]
+            let times = self._times.read(slot);
+            if times.len() == 0 {
+                return 0;
+            }
+            times[0]
         }
         fn get_final_time(self: @ContractState, slot: u256) -> u64 {
             let times = self._times.read(slot);
@@ -55,7 +59,15 @@ mod Absorber {
         }
         fn get_absorption(self: @ContractState, slot: u256, time: u64) -> u64 {
             let times = self._times.read(slot).array();
+            if times.len() == 0 {
+                return 0;
+            }
+
             let absorptions = self._absorptions.read(slot).array();
+            if absorptions.len() == 0 {
+                return 0;
+            }
+
             interpolate(
                 time,
                 times.span(),
@@ -96,6 +108,7 @@ mod Absorber {
             // [Check] Times and prices are defined
             assert(times.len() == absorptions.len(), 'Times and absorptions mismatch');
             assert(times.len() > 0, 'Inputs cannot be empty');
+            assert(ton_equivalent > 0, 'Ton equivalent must be positive');
 
             // [Effect] Clean times and absorptions
             let mut stored_times = self._times.read(slot);
@@ -134,5 +147,247 @@ mod Absorber {
         fn set_project_value(ref self: ContractState, slot: u256, project_value: u256) {
             self._project_value.write(slot, project_value);
         }
+    }
+}
+
+
+#[cfg(test)]
+mod Test {
+    use starknet::testing::set_block_timestamp;
+    use super::Absorber;
+
+    fn STATE() -> Absorber::ContractState {
+        Absorber::contract_state_for_testing()
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_setup() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 1;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+        let project_value = 100;
+        Absorber::AbsorberImpl::set_project_value(ref state, 0, project_value);
+        // [Assert] Absorber is setup
+        let is_setup = Absorber::AbsorberImpl::is_setup(@state, 0);
+        assert(is_setup, 'Absorber is not setup');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_not_setup_missing_project_value() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 1;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+        // [Assert] Absorber is setup
+        let is_setup = Absorber::AbsorberImpl::is_setup(@state, 0);
+        assert(!is_setup, 'Absorber is not setup');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_not_setup_missing_absorptions() {
+        // [Setup]
+        let mut state = STATE();
+        let project_value = 100;
+        Absorber::AbsorberImpl::set_project_value(ref state, 0, project_value);
+        // [Assert] Absorber is setup
+        let is_setup = Absorber::AbsorberImpl::is_setup(@state, 0);
+        assert(!is_setup, 'Absorber is not setup');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_project_value() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Project value is 0 by default
+        let project_value = Absorber::AbsorberImpl::get_project_value(@state, 0);
+        assert(project_value == 0, 'Wrong project value');
+        Absorber::AbsorberImpl::set_project_value(ref state, 0, 100);
+        // [Assert] Project value is set correctly
+        let project_value = Absorber::AbsorberImpl::get_project_value(@state, 0);
+        assert(project_value == 100, 'Wrong project value');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_absorptions() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 1;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+        // [Assert] Times are set correctly
+        let stored_times = Absorber::AbsorberImpl::get_times(@state, 0);
+        assert(stored_times == times, 'Wrong times');
+        // [Assert] Absorptions are set correctly
+        let stored_absorptions = Absorber::AbsorberImpl::get_absorptions(@state, 0);
+        assert(stored_absorptions == absorptions, 'Wrong absorptions');
+        // [Assert] Ton equivalent is set correctly
+        let stored_ton_equivalent = Absorber::AbsorberImpl::get_ton_equivalent(@state, 0);
+        assert(stored_ton_equivalent == ton_equivalent, 'Wrong ton equivalent');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_current_absorption() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 1000000;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+        // [Assert] Before start, absorption = 0
+        set_block_timestamp(*times.at(0) - 86000);
+        let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
+        assert(absorption == 0, 'Wrong absorption');
+        // [Assert] At start, absorption = absorptions[0]
+        set_block_timestamp(*times.at(0));
+        let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
+        assert(absorption == *absorptions.at(0), 'Wrong absorption');
+        // [Assert] After start, absorptions[0] < absorption < absorptions[1]
+        set_block_timestamp(*times.at(0) + 86000);
+        let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
+        assert(absorption > *absorptions.at(0), 'Wrong absorption');
+        assert(absorption < *absorptions.at(1), 'Wrong absorption');
+        // [Assert] Before end, absorptions[-2] < absorption < absorptions[-1]
+        set_block_timestamp(*times.at(times.len() - 1) - 86000);
+        let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
+        assert(absorption > *absorptions.at(absorptions.len() - 2), 'Wrong absorption');
+        assert(absorption < *absorptions.at(absorptions.len() - 1), 'Wrong absorption');
+        // [Assert] At end, absorption = absorptions[-1]
+        set_block_timestamp(*times.at(times.len() - 1));
+        let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
+        assert(absorption == *absorptions.at(absorptions.len() - 1), 'Wrong absorption');
+        // [Assert] After end, absorption = absorptions[-1]
+        set_block_timestamp(*times.at(times.len() - 1) + 86000);
+        let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
+        assert(absorption == *absorptions.at(absorptions.len() - 1), 'Wrong absorption');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_current_absorption_zero_not_set() {
+        // [Setup]
+        let mut state = STATE();
+        set_block_timestamp(86000);
+        let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
+        assert(absorption == 0, 'Wrong absorption');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_start_time() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 1000000;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+        // [Assert] Start time = times[0]
+        let time = Absorber::AbsorberImpl::get_start_time(@state, 0);
+        assert(time == *times.at(0), 'Wrong time');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_start_time_zero_not_set() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Start time = 0
+        let time = Absorber::AbsorberImpl::get_start_time(@state, 0);
+        assert(time == 0, 'Wrong time');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_final_time() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 1000000;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+        // [Assert] Final time = times[-1]
+        let time = Absorber::AbsorberImpl::get_final_time(@state, 0);
+        assert(time == *times.at(times.len() - 1), 'Wrong time');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_final_time_zero_not_set() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Final time = times[-1]
+        let time = Absorber::AbsorberImpl::get_final_time(@state, 0);
+        assert(time == 0, 'Wrong time');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_final_absorption() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 1000000;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+        // [Assert] Final absorption = absorptions[-1]
+        let absorption = Absorber::AbsorberImpl::get_final_absorption(@state, 0);
+        assert(absorption == *absorptions.at(absorptions.len() - 1), 'Wrong absorption');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_final_absorption_zero_not_set() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Final absorption = absorptions[-1]
+        let absorption = Absorber::AbsorberImpl::get_final_absorption(@state, 0);
+        assert(absorption == 0, 'Wrong absorption');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Times and absorptions mismatch',))]
+    fn test_set_absorptions_revert_mismatch() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![].span();
+        let ton_equivalent = 0;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Inputs cannot be empty',))]
+    fn test_set_absorptions_revert_empty() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![].span();
+        let absorptions : Span<u64> = array![].span();
+        let ton_equivalent = 0;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Ton equivalent must be positive',))]
+    fn test_set_absorptions_revert_not_positive() {
+        // [Setup]
+        let mut state = STATE();
+        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
+        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let ton_equivalent = 0;
+        Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
     }
 }
