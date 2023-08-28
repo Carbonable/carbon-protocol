@@ -165,8 +165,9 @@ mod Test {
     fn test_setup() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 1;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
         let project_value = 100;
@@ -181,8 +182,9 @@ mod Test {
     fn test_not_setup_missing_project_value() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 1;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
         // [Assert] Absorber is setup
@@ -221,8 +223,9 @@ mod Test {
     fn test_absorptions() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 1;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
         // [Assert] Times are set correctly
@@ -241,14 +244,15 @@ mod Test {
     fn test_current_absorption() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 1000000;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
-        // [Assert] Before start, absorption = 0
+        // [Assert] Before start, absorption = absorptions[0]
         set_block_timestamp(*times.at(0) - 86000);
         let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
-        assert(absorption == 0, 'Wrong absorption');
+        assert(absorption == *absorptions.at(0), 'Wrong absorption');
         // [Assert] At start, absorption = absorptions[0]
         set_block_timestamp(*times.at(0));
         let absorption = Absorber::AbsorberImpl::get_current_absorption(@state, 0);
@@ -288,8 +292,9 @@ mod Test {
     fn test_start_time() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 1000000;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
         // [Assert] Start time = times[0]
@@ -312,8 +317,9 @@ mod Test {
     fn test_final_time() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 1000000;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
         // [Assert] Final time = times[-1]
@@ -336,8 +342,9 @@ mod Test {
     fn test_final_absorption() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 1000000;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
         // [Assert] Final absorption = absorptions[-1]
@@ -361,8 +368,9 @@ mod Test {
     fn test_set_absorptions_revert_mismatch() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![].span();
         let ton_equivalent = 0;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
     }
@@ -373,8 +381,8 @@ mod Test {
     fn test_set_absorptions_revert_empty() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![].span();
-        let absorptions : Span<u64> = array![].span();
+        let times: Span<u64> = array![].span();
+        let absorptions: Span<u64> = array![].span();
         let ton_equivalent = 0;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
     }
@@ -385,8 +393,9 @@ mod Test {
     fn test_set_absorptions_revert_not_positive() {
         // [Setup]
         let mut state = STATE();
-        let times : Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200].span();
-        let absorptions : Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
+            .span();
+        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 0;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
     }

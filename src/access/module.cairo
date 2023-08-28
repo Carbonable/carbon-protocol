@@ -219,6 +219,15 @@ mod Test {
 
     #[test]
     #[available_gas(20_000_000)]
+    fn test_initialization() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Initialization pass
+        Access::InternalImpl::initializer(ref state);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
     fn test_minter() {
         // [Setup]
         let mut state = STATE();
@@ -263,7 +272,7 @@ mod Test {
         set_caller_address(ANYONE());
         Access::InternalImpl::assert_only_minter(@state, 0);
     }
-    
+
     #[test]
     #[available_gas(20_000_000)]
     fn test_certifier() {
