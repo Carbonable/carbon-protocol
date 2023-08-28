@@ -186,7 +186,7 @@ mod Access {
 
 #[cfg(test)]
 mod Test {
-    use starknet::testing::set_contract_address;
+    use starknet::testing::set_caller_address;
     use super::Access;
 
     fn STATE() -> Access::ContractState {
@@ -248,7 +248,7 @@ mod Test {
         let mut state = STATE();
         Access::MinterImpl::add_minter(ref state, 0, MINTER());
         // [Assert] Minter
-        set_contract_address(MINTER());
+        set_caller_address(MINTER());
         Access::InternalImpl::assert_only_minter(@state, 0);
     }
 
@@ -260,7 +260,7 @@ mod Test {
         let mut state = STATE();
         Access::MinterImpl::add_minter(ref state, 0, MINTER());
         // [Assert] Minter
-        set_contract_address(ANYONE());
+        set_caller_address(ANYONE());
         Access::InternalImpl::assert_only_minter(@state, 0);
     }
     
@@ -290,7 +290,7 @@ mod Test {
         let mut state = STATE();
         Access::CertifierImpl::set_certifier(ref state, 0, CERTIFIER());
         // [Assert] Certifier
-        set_contract_address(CERTIFIER());
+        set_caller_address(CERTIFIER());
         Access::InternalImpl::assert_only_certifier(@state, 0);
     }
 
@@ -302,7 +302,7 @@ mod Test {
         let mut state = STATE();
         Access::CertifierImpl::set_certifier(ref state, 0, CERTIFIER());
         // [Assert] Certifier
-        set_contract_address(ANYONE());
+        set_caller_address(ANYONE());
         Access::InternalImpl::assert_only_certifier(@state, 0);
     }
 
@@ -332,7 +332,7 @@ mod Test {
         let mut state = STATE();
         Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
         // [Assert] Withdrawer
-        set_contract_address(WITHDRAWER());
+        set_caller_address(WITHDRAWER());
         Access::InternalImpl::assert_only_withdrawer(@state, 0);
     }
 
@@ -344,7 +344,7 @@ mod Test {
         let mut state = STATE();
         Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
         // [Assert] Withdrawer
-        set_contract_address(ANYONE());
+        set_caller_address(ANYONE());
         Access::InternalImpl::assert_only_withdrawer(@state, 0);
     }
 
@@ -374,7 +374,7 @@ mod Test {
         let mut state = STATE();
         Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
         // [Assert] Provisioner
-        set_contract_address(PROVISIONER());
+        set_caller_address(PROVISIONER());
         Access::InternalImpl::assert_only_provisioner(@state, 0);
     }
 
@@ -386,7 +386,7 @@ mod Test {
         let mut state = STATE();
         Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
         // [Assert] Provisioner
-        set_contract_address(ANYONE());
+        set_caller_address(ANYONE());
         Access::InternalImpl::assert_only_provisioner(@state, 0);
     }
 }
