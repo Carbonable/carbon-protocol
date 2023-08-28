@@ -210,8 +210,8 @@ mod Test {
         // [Assert] Project value is 0 by default
         let project_value = Absorber::AbsorberImpl::get_project_value(@state, 0);
         assert(project_value == 0, 'Wrong project value');
-        Absorber::AbsorberImpl::set_project_value(ref state, 0, 100);
         // [Assert] Project value is set correctly
+        Absorber::AbsorberImpl::set_project_value(ref state, 0, 100);
         let project_value = Absorber::AbsorberImpl::get_project_value(@state, 0);
         assert(project_value == 100, 'Wrong project value');
     }

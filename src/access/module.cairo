@@ -183,3 +183,210 @@ mod Access {
         }
     }
 }
+
+#[cfg(test)]
+mod Test {
+    use starknet::testing::set_contract_address;
+    use super::Access;
+
+    fn STATE() -> Access::ContractState {
+        Access::unsafe_new_contract_state()
+    }
+
+    fn MINTER() -> starknet::ContractAddress {
+        starknet::contract_address_const::<'MINTER'>()
+    }
+
+    fn CERTIFIER() -> starknet::ContractAddress {
+        starknet::contract_address_const::<'CERTIFIER'>()
+    }
+
+    fn WITHDRAWER() -> starknet::ContractAddress {
+        starknet::contract_address_const::<'WITHDRAWER'>()
+    }
+
+    fn PROVISIONER() -> starknet::ContractAddress {
+        starknet::contract_address_const::<'PROVISIONER'>()
+    }
+
+    fn ANYONE() -> starknet::ContractAddress {
+        starknet::contract_address_const::<'ANYONE'>()
+    }
+
+    fn ZERO() -> starknet::ContractAddress {
+        starknet::contract_address_const::<0>()
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_minter() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Minters are null
+        let minters = Access::MinterImpl::get_minters(@state, 0);
+        assert(minters == array![].span(), 'Wrong minters');
+        // [Assert] Add minters
+        Access::MinterImpl::add_minter(ref state, 0, CERTIFIER());
+        Access::MinterImpl::add_minter(ref state, 0, ANYONE());
+        Access::MinterImpl::add_minter(ref state, 0, MINTER());
+        let minters = Access::MinterImpl::get_minters(@state, 0);
+        assert(minters == array![CERTIFIER(), ANYONE(), MINTER()].span(), 'Wrong minters');
+        // [Assert] Remove 2nd minter
+        Access::MinterImpl::revoke_minter(ref state, 0, ANYONE());
+        let minters = Access::MinterImpl::get_minters(@state, 0);
+        assert(minters == array![CERTIFIER(), MINTER()].span(), 'Wrong minters');
+        // [Assert] Remove 1st minter
+        Access::MinterImpl::revoke_minter(ref state, 0, CERTIFIER());
+        let minters = Access::MinterImpl::get_minters(@state, 0);
+        assert(minters == array![MINTER()].span(), 'Wrong minters');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_assert_minter() {
+        // [Setup]
+        let mut state = STATE();
+        Access::MinterImpl::add_minter(ref state, 0, MINTER());
+        // [Assert] Minter
+        set_contract_address(MINTER());
+        Access::InternalImpl::assert_only_minter(@state, 0);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Caller is missing role',))]
+    fn test_assert_minter_revert_not_minter() {
+        // [Setup]
+        let mut state = STATE();
+        Access::MinterImpl::add_minter(ref state, 0, MINTER());
+        // [Assert] Minter
+        set_contract_address(ANYONE());
+        Access::InternalImpl::assert_only_minter(@state, 0);
+    }
+    
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_certifier() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Certifier is null
+        let certifier = Access::CertifierImpl::get_certifier(@state, 0);
+        assert(certifier == ZERO(), 'Wrong certifier');
+        // [Assert] Certifier is set correctly
+        Access::CertifierImpl::set_certifier(ref state, 0, CERTIFIER());
+        let certifier = Access::CertifierImpl::get_certifier(@state, 0);
+        assert(certifier == CERTIFIER(), 'Wrong certifier');
+        // [Assert] Certifier is changed correctly
+        Access::CertifierImpl::set_certifier(ref state, 0, ZERO());
+        let certifier = Access::CertifierImpl::get_certifier(@state, 0);
+        assert(certifier != CERTIFIER(), 'Wrong certifier');
+        assert(certifier == ZERO(), 'Wrong certifier');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_assert_certifier() {
+        // [Setup]
+        let mut state = STATE();
+        Access::CertifierImpl::set_certifier(ref state, 0, CERTIFIER());
+        // [Assert] Certifier
+        set_contract_address(CERTIFIER());
+        Access::InternalImpl::assert_only_certifier(@state, 0);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Caller is missing role',))]
+    fn test_assert_certifier_revert_not_certifier() {
+        // [Setup]
+        let mut state = STATE();
+        Access::CertifierImpl::set_certifier(ref state, 0, CERTIFIER());
+        // [Assert] Certifier
+        set_contract_address(ANYONE());
+        Access::InternalImpl::assert_only_certifier(@state, 0);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_withdrawer() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Withdrawer is null
+        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state, 0);
+        assert(withdrawer == ZERO(), 'Wrong withdrawer');
+        // [Assert] Withdrawer is set correctly
+        Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
+        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state, 0);
+        assert(withdrawer == WITHDRAWER(), 'Wrong withdrawer');
+        // [Assert] Withdrawer is changed correctly
+        Access::WithdrawerImpl::set_withdrawer(ref state, 0, ZERO());
+        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state, 0);
+        assert(withdrawer != WITHDRAWER(), 'Wrong withdrawer');
+        assert(withdrawer == ZERO(), 'Wrong withdrawer');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_assert_withdrawer() {
+        // [Setup]
+        let mut state = STATE();
+        Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
+        // [Assert] Withdrawer
+        set_contract_address(WITHDRAWER());
+        Access::InternalImpl::assert_only_withdrawer(@state, 0);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Caller is missing role',))]
+    fn test_assert_withdrawer_revert_not_withdrawer() {
+        // [Setup]
+        let mut state = STATE();
+        Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
+        // [Assert] Withdrawer
+        set_contract_address(ANYONE());
+        Access::InternalImpl::assert_only_withdrawer(@state, 0);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_provisioner() {
+        // [Setup]
+        let mut state = STATE();
+        // [Assert] Provisioner is null
+        let provisioner = Access::ProvisionerImpl::get_provisioner(@state, 0);
+        assert(provisioner == ZERO(), 'Wrong provisioner');
+        // [Assert] Provisioner is set correctly
+        Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
+        let provisioner = Access::ProvisionerImpl::get_provisioner(@state, 0);
+        assert(provisioner == PROVISIONER(), 'Wrong provisioner');
+        // [Assert] Provisioner is changed correctly
+        Access::ProvisionerImpl::set_provisioner(ref state, 0, ZERO());
+        let provisioner = Access::ProvisionerImpl::get_provisioner(@state, 0);
+        assert(provisioner != PROVISIONER(), 'Wrong provisioner');
+        assert(provisioner == ZERO(), 'Wrong provisioner');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_assert_provisioner() {
+        // [Setup]
+        let mut state = STATE();
+        Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
+        // [Assert] Provisioner
+        set_contract_address(PROVISIONER());
+        Access::InternalImpl::assert_only_provisioner(@state, 0);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Caller is missing role',))]
+    fn test_assert_provisioner_revert_not_provisioner() {
+        // [Setup]
+        let mut state = STATE();
+        Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
+        // [Assert] Provisioner
+        set_contract_address(ANYONE());
+        Access::InternalImpl::assert_only_provisioner(@state, 0);
+    }
+}
