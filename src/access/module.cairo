@@ -10,7 +10,6 @@ mod Access {
     const MINTER_ROLE: felt252 = 'MINTER';
     const CERTIFIER_ROLE: felt252 = 'CERTIFIER';
     const WITHDRAWER_ROLE: felt252 = 'WITHDRAWER';
-    const PROVISIONER_ROLE: felt252 = 'PROVISIONER';
 
     #[storage]
     struct Storage {
@@ -77,26 +76,6 @@ mod Access {
         }
     }
 
-    #[external(v0)]
-    impl ProvisionerImpl of IProvisioner<ContractState> {
-        fn get_provisioner(self: @ContractState, slot: u256) -> ContractAddress {
-            let role = self._hash(PROVISIONER_ROLE, slot);
-            self._role_members.read((role, 0))
-        }
-
-        fn set_provisioner(ref self: ContractState, slot: u256, user: ContractAddress) {
-            // [Effect] Revoke current provisioner
-            let role = self._hash(PROVISIONER_ROLE, slot);
-            let provisioner = self._role_members.read((role, 0));
-            let mut unsafe_state = AccessControl::unsafe_new_contract_state();
-            AccessControl::InternalImpl::_revoke_role(ref unsafe_state, role, provisioner);
-
-            // [Effect] Set new provisioner
-            AccessControl::InternalImpl::_grant_role(ref unsafe_state, role, user);
-            self._role_members.write((role, 0), user);
-        }
-    }
-
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn initializer(ref self: ContractState) {
@@ -118,12 +97,6 @@ mod Access {
 
         fn assert_only_withdrawer(self: @ContractState, slot: u256) {
             let role = self._hash(WITHDRAWER_ROLE, slot);
-            let unsafe_state = AccessControl::unsafe_new_contract_state();
-            AccessControl::InternalImpl::assert_only_role(@unsafe_state, role);
-        }
-
-        fn assert_only_provisioner(self: @ContractState, slot: u256) {
-            let role = self._hash(PROVISIONER_ROLE, slot);
             let unsafe_state = AccessControl::unsafe_new_contract_state();
             AccessControl::InternalImpl::assert_only_role(@unsafe_state, role);
         }
@@ -355,47 +328,5 @@ mod Test {
         // [Assert] Withdrawer
         set_caller_address(ANYONE());
         Access::InternalImpl::assert_only_withdrawer(@state, 0);
-    }
-
-    #[test]
-    #[available_gas(20_000_000)]
-    fn test_provisioner() {
-        // [Setup]
-        let mut state = STATE();
-        // [Assert] Provisioner is null
-        let provisioner = Access::ProvisionerImpl::get_provisioner(@state, 0);
-        assert(provisioner == ZERO(), 'Wrong provisioner');
-        // [Assert] Provisioner is set correctly
-        Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
-        let provisioner = Access::ProvisionerImpl::get_provisioner(@state, 0);
-        assert(provisioner == PROVISIONER(), 'Wrong provisioner');
-        // [Assert] Provisioner is changed correctly
-        Access::ProvisionerImpl::set_provisioner(ref state, 0, ZERO());
-        let provisioner = Access::ProvisionerImpl::get_provisioner(@state, 0);
-        assert(provisioner != PROVISIONER(), 'Wrong provisioner');
-        assert(provisioner == ZERO(), 'Wrong provisioner');
-    }
-
-    #[test]
-    #[available_gas(20_000_000)]
-    fn test_assert_provisioner() {
-        // [Setup]
-        let mut state = STATE();
-        Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
-        // [Assert] Provisioner
-        set_caller_address(PROVISIONER());
-        Access::InternalImpl::assert_only_provisioner(@state, 0);
-    }
-
-    #[test]
-    #[available_gas(20_000_000)]
-    #[should_panic(expected: ('Caller is missing role',))]
-    fn test_assert_provisioner_revert_not_provisioner() {
-        // [Setup]
-        let mut state = STATE();
-        Access::ProvisionerImpl::set_provisioner(ref state, 0, PROVISIONER());
-        // [Assert] Provisioner
-        set_caller_address(ANYONE());
-        Access::InternalImpl::assert_only_provisioner(@state, 0);
     }
 }

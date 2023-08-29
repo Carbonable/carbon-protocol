@@ -22,3 +22,9 @@ trait IFarm<TContractState> {
     fn update_last_price(ref self: TContractState, time: u64, price: u256);
     fn set_prices(ref self: TContractState, times: Span<u64>, prices: Span<u256>);
 }
+
+// TODO: Move to minter after migration
+#[starknet::interface]
+trait IMinter<TContractState> {
+    fn getUnitPrice(self: @TContractState) -> u256;
+}

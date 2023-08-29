@@ -7,7 +7,7 @@ trait IExternal<ContractState> {
     fn mint_value(ref self: ContractState, token_id: u256, value: u256);
     fn burn(ref self: ContractState, token_id: u256);
     fn burn_value(ref self: ContractState, token_id: u256, value: u256);
-    fn set_token_uri(self: @ContractState, token_id: u256, token_uri: felt252);
+    fn set_token_uri(ref self: ContractState, token_id: u256, token_uri: felt252);
     fn set_contract_uri(ref self: ContractState, uri: felt252);
     fn set_slot_uri(ref self: ContractState, slot: u256, uri: felt252);
 }
@@ -30,22 +30,15 @@ mod Project {
     use openzeppelin::introspection::src5::SRC5;
 
     // ERC721
-    use cairo_erc_721::module::ERC721;
-    use cairo_erc_721::interface::IERC721;
-    use cairo_erc_721::extensions::metadata::module::ERC721Metadata;
-    use cairo_erc_721::extensions::metadata::interface::IERC721Metadata;
-    use cairo_erc_721::extensions::enumerable::module::ERC721Enumerable;
+    use openzeppelin::token::erc721::interface::{IERC721, IERC721Metadata};
     use cairo_erc_721::extensions::enumerable::interface::IERC721Enumerable;
 
     // ERC3525
-    use cairo_erc_3525::module::ERC3525;
     use cairo_erc_3525::interface::IERC3525;
-    use cairo_erc_3525::extensions::metadata::module::ERC3525Metadata;
     use cairo_erc_3525::extensions::metadata::interface::IERC3525Metadata;
-    use cairo_erc_3525::extensions::slotapprovable::module::ERC3525SlotApprovable;
     use cairo_erc_3525::extensions::slotapprovable::interface::IERC3525SlotApprovable;
-    use cairo_erc_3525::extensions::slotenumerable::module::ERC3525SlotEnumerable;
     use cairo_erc_3525::extensions::slotenumerable::interface::IERC3525SlotEnumerable;
+    use cairo_erc_3525::presets::erc3525_mintable_burnable_metadata_enumerable_slot_approvable_slot_enumerable::ERC3525MintableBurnableEMSASE as ERC3525;
 
     // Access control
     use protocol::access::interface::{IMinter, ICertifier};
@@ -168,44 +161,44 @@ mod Project {
     #[external(v0)]
     impl ERC721Impl of IERC721<ContractState> {
         fn balance_of(self: @ContractState, account: ContractAddress) -> u256 {
-            let unsafe_state = ERC721::unsafe_new_contract_state();
-            ERC721::ERC721Impl::balance_of(@unsafe_state, account)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::balance_of(@unsafe_state, account)
         }
 
         fn owner_of(self: @ContractState, token_id: u256) -> ContractAddress {
-            let unsafe_state = ERC721::unsafe_new_contract_state();
-            ERC721::ERC721Impl::owner_of(@unsafe_state, token_id)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::owner_of(@unsafe_state, token_id)
         }
 
         fn get_approved(self: @ContractState, token_id: u256) -> ContractAddress {
-            let unsafe_state = ERC721::unsafe_new_contract_state();
-            ERC721::ERC721Impl::get_approved(@unsafe_state, token_id)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::get_approved(@unsafe_state, token_id)
         }
 
         fn is_approved_for_all(
             self: @ContractState, owner: ContractAddress, operator: ContractAddress
         ) -> bool {
-            let unsafe_state = ERC721::unsafe_new_contract_state();
-            ERC721::ERC721Impl::is_approved_for_all(@unsafe_state, owner, operator)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::is_approved_for_all(@unsafe_state, owner, operator)
         }
 
         fn approve(ref self: ContractState, to: ContractAddress, token_id: u256) {
-            let mut unsafe_state = ERC721::unsafe_new_contract_state();
-            ERC721::ERC721Impl::approve(ref unsafe_state, to, token_id)
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::approve(ref unsafe_state, to, token_id)
         }
 
         fn set_approval_for_all(
             ref self: ContractState, operator: ContractAddress, approved: bool
         ) {
-            let mut unsafe_state = ERC721::unsafe_new_contract_state();
-            ERC721::ERC721Impl::set_approval_for_all(ref unsafe_state, operator, approved)
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::set_approval_for_all(ref unsafe_state, operator, approved)
         }
 
         fn transfer_from(
             ref self: ContractState, from: ContractAddress, to: ContractAddress, token_id: u256
         ) {
-            let mut unsafe_state = ERC721Enumerable::unsafe_new_contract_state();
-            ERC721Enumerable::InternalImpl::transfer_from(ref unsafe_state, from, to, token_id)
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::transfer_from(ref unsafe_state, from, to, token_id)
         }
 
         fn safe_transfer_from(
@@ -215,8 +208,8 @@ mod Project {
             token_id: u256,
             data: Span<felt252>
         ) {
-            let mut unsafe_state = ERC721Enumerable::unsafe_new_contract_state();
-            ERC721Enumerable::InternalImpl::safe_transfer_from(
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::safe_transfer_from(
                 ref unsafe_state, from, to, token_id, data
             )
         }
@@ -225,38 +218,38 @@ mod Project {
     #[external(v0)]
     impl ERC721MetadataImpl of IERC721Metadata<ContractState> {
         fn name(self: @ContractState) -> felt252 {
-            let unsafe_state = ERC721Metadata::unsafe_new_contract_state();
-            ERC721Metadata::ERC721MetadataImpl::name(@unsafe_state)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721MetadataImpl::name(@unsafe_state)
         }
 
         fn symbol(self: @ContractState) -> felt252 {
-            let unsafe_state = ERC721Metadata::unsafe_new_contract_state();
-            ERC721Metadata::ERC721MetadataImpl::symbol(@unsafe_state)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721MetadataImpl::symbol(@unsafe_state)
         }
 
         fn token_uri(self: @ContractState, token_id: u256) -> felt252 {
-            let unsafe_state = ERC721Metadata::unsafe_new_contract_state();
-            ERC721Metadata::ERC721MetadataImpl::token_uri(@unsafe_state, token_id)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721MetadataImpl::token_uri(@unsafe_state, token_id)
         }
     }
 
     #[external(v0)]
     impl ERC721EnumerableImpl of IERC721Enumerable<ContractState> {
         fn total_supply(self: @ContractState) -> u256 {
-            let unsafe_state = ERC721Enumerable::unsafe_new_contract_state();
-            ERC721Enumerable::ERC721EnumerableImpl::total_supply(@unsafe_state)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721EnumerableImpl::total_supply(@unsafe_state)
         }
 
         fn token_by_index(self: @ContractState, index: u256) -> u256 {
-            let unsafe_state = ERC721Enumerable::unsafe_new_contract_state();
-            ERC721Enumerable::ERC721EnumerableImpl::token_by_index(@unsafe_state, index)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721EnumerableImpl::token_by_index(@unsafe_state, index)
         }
 
         fn token_of_owner_by_index(
             self: @ContractState, owner: ContractAddress, index: u256
         ) -> u256 {
-            let unsafe_state = ERC721Enumerable::unsafe_new_contract_state();
-            ERC721Enumerable::ERC721EnumerableImpl::token_of_owner_by_index(
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721EnumerableImpl::token_of_owner_by_index(
                 @unsafe_state, owner, index
             )
         }
@@ -284,9 +277,8 @@ mod Project {
         fn approve_value(
             ref self: ContractState, token_id: u256, operator: ContractAddress, value: u256
         ) {
-            // Overwrite ERC3525 Impl with ERC3525 SlotApprovable Impl
-            let mut unsafe_state = ERC3525SlotApprovable::unsafe_new_contract_state();
-            ERC3525SlotApprovable::ExternalImpl::approve_value(
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525Impl::approve_value(
                 ref unsafe_state, token_id, operator, value
             )
         }
@@ -303,29 +295,23 @@ mod Project {
             to: ContractAddress,
             value: u256
         ) -> u256 {
-            // Overwrite ERC3525 Impl with ERC3525 SlotApprovable Impl
-            let mut unsafe_state = ERC3525SlotApprovable::unsafe_new_contract_state();
-            let token_id = ERC3525SlotApprovable::ExternalImpl::transfer_value_from(
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525Impl::transfer_value_from(
                 ref unsafe_state, from_token_id, to_token_id, to, value
-            );
-            let mut unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::InternalImpl::_after_transfer_value_from(
-                ref unsafe_state, token_id
-            );
-            token_id
+            )
         }
     }
 
     #[external(v0)]
     impl ERC3525MetadataImpl of IERC3525Metadata<ContractState> {
         fn contract_uri(self: @ContractState) -> felt252 {
-            let unsafe_state = ERC3525Metadata::unsafe_new_contract_state();
-            ERC3525Metadata::ERC3525MetadataImpl::contract_uri(@unsafe_state)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525MetadataImpl::contract_uri(@unsafe_state)
         }
 
         fn slot_uri(self: @ContractState, slot: u256) -> felt252 {
-            let unsafe_state = ERC3525Metadata::unsafe_new_contract_state();
-            ERC3525Metadata::ERC3525MetadataImpl::slot_uri(@unsafe_state, slot)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525MetadataImpl::slot_uri(@unsafe_state, slot)
         }
     }
 
@@ -338,8 +324,8 @@ mod Project {
             operator: ContractAddress,
             approved: bool
         ) {
-            let mut unsafe_state = ERC3525SlotApprovable::unsafe_new_contract_state();
-            ERC3525SlotApprovable::ERC3525SlotApprovableImpl::set_approval_for_slot(
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525SlotApprovableImpl::set_approval_for_slot(
                 ref unsafe_state, owner, slot, operator, approved
             )
         }
@@ -347,8 +333,8 @@ mod Project {
         fn is_approved_for_slot(
             self: @ContractState, owner: ContractAddress, slot: u256, operator: ContractAddress
         ) -> bool {
-            let unsafe_state = ERC3525SlotApprovable::unsafe_new_contract_state();
-            ERC3525SlotApprovable::ERC3525SlotApprovableImpl::is_approved_for_slot(
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525SlotApprovableImpl::is_approved_for_slot(
                 @unsafe_state, owner, slot, operator
             )
         }
@@ -357,25 +343,25 @@ mod Project {
     #[external(v0)]
     impl ERC3525SlotEnumerableImpl of IERC3525SlotEnumerable<ContractState> {
         fn slot_count(self: @ContractState) -> u256 {
-            let unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::ERC3525SlotEnumerableImpl::slot_count(@unsafe_state)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525SlotEnumerableImpl::slot_count(@unsafe_state)
         }
 
         fn slot_by_index(self: @ContractState, index: u256) -> u256 {
-            let unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::ERC3525SlotEnumerableImpl::slot_by_index(@unsafe_state, index)
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525SlotEnumerableImpl::slot_by_index(@unsafe_state, index)
         }
 
         fn token_supply_in_slot(self: @ContractState, slot: u256) -> u256 {
-            let unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::ERC3525SlotEnumerableImpl::token_supply_in_slot(
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525SlotEnumerableImpl::token_supply_in_slot(
                 @unsafe_state, slot
             )
         }
 
         fn token_in_slot_by_index(self: @ContractState, slot: u256, index: u256) -> u256 {
-            let unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::ERC3525SlotEnumerableImpl::token_in_slot_by_index(
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC3525SlotEnumerableImpl::token_in_slot_by_index(
                 @unsafe_state, slot, index
             )
         }
@@ -387,7 +373,7 @@ mod Project {
     impl ExternalImpl of super::IExternal<ContractState> {
         fn total_value(self: @ContractState, slot: u256) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::InternalImpl::_total_value(@unsafe_state, slot)
+            ERC3525::ExternalImpl::total_value(@unsafe_state, slot)
         }
 
         fn mint(ref self: ContractState, to: ContractAddress, slot: u256, value: u256) -> u256 {
@@ -395,8 +381,8 @@ mod Project {
             let unsafe_state = Access::unsafe_new_contract_state();
             Access::InternalImpl::assert_only_minter(@unsafe_state, slot);
             // [Effect] Mint value
-            let mut unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::InternalImpl::_mint_new(ref unsafe_state, to, slot, value)
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ExternalImpl::mint(ref unsafe_state, to, slot, value)
         }
 
         fn mint_value(ref self: ContractState, token_id: u256, value: u256) {
@@ -407,36 +393,26 @@ mod Project {
             Access::InternalImpl::assert_only_minter(@unsafe_state, slot);
             // [Effect] Mint value
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::InternalImpl::_mint_value(ref unsafe_state, token_id, value)
+            ERC3525::ExternalImpl::mint_value(ref unsafe_state, token_id, value)
         }
 
         fn burn(ref self: ContractState, token_id: u256) {
-            // [Check] Ensure that the caller is the owner of the token
-            let unsafe_state = ERC721::unsafe_new_contract_state();
-            let owner = ERC721::InternalImpl::_owner_of(@unsafe_state, token_id);
-            assert(get_caller_address() == owner, 'ERC721Burnable: wrong caller');
-            // [Effect] Burn the token
-            let mut unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::InternalImpl::_burn(ref unsafe_state, token_id)
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ExternalImpl::burn(ref unsafe_state, token_id)
         }
 
         fn burn_value(ref self: ContractState, token_id: u256, value: u256) {
-            // [Check] Ensure that the caller is the owner of the token
-            let unsafe_state = ERC721::unsafe_new_contract_state();
-            let owner = ERC721::InternalImpl::_owner_of(@unsafe_state, token_id);
-            assert(get_caller_address() == owner, 'ERC3525Burnable: wrong caller');
-            // [Effect] Burn the token
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::InternalImpl::_burn_value(ref unsafe_state, token_id, value)
+            ERC3525::ExternalImpl::burn_value(ref unsafe_state, token_id, value)
         }
 
-        fn set_token_uri(self: @ContractState, token_id: u256, token_uri: felt252) {
+        fn set_token_uri(ref self: ContractState, token_id: u256, token_uri: felt252) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
             // [Effect] Set token URI
-            let mut unsafe_state = ERC721Metadata::unsafe_new_contract_state();
-            ERC721Metadata::InternalImpl::_set_token_uri(ref unsafe_state, token_id, token_uri);
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ExternalImpl::set_token_uri(ref unsafe_state, token_id, token_uri);
         }
 
         fn set_contract_uri(ref self: ContractState, uri: felt252) {
@@ -444,8 +420,8 @@ mod Project {
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
             // [Effect] Set contract URI
-            let mut unsafe_state = ERC3525Metadata::unsafe_new_contract_state();
-            ERC3525Metadata::InternalImpl::_set_contract_uri(ref unsafe_state, uri)
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ExternalImpl::set_contract_uri(ref unsafe_state, uri)
         }
 
         fn set_slot_uri(ref self: ContractState, slot: u256, uri: felt252) {
@@ -453,8 +429,8 @@ mod Project {
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
             // [Effect] Set slot URI
-            let mut unsafe_state = ERC3525Metadata::unsafe_new_contract_state();
-            ERC3525Metadata::InternalImpl::_set_slot_uri(ref unsafe_state, slot, uri)
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ExternalImpl::set_slot_uri(ref unsafe_state, slot, uri)
         }
     }
 
@@ -548,22 +524,9 @@ mod Project {
             value_decimals: u8,
             owner: ContractAddress
         ) {
-            // ERC721
-            let mut unsafe_state = ERC721::unsafe_new_contract_state();
-            ERC721::InternalImpl::initializer(ref unsafe_state);
-            let mut unsafe_state = ERC721Metadata::unsafe_new_contract_state();
-            ERC721Metadata::InternalImpl::initializer(ref unsafe_state, name, symbol);
-            let mut unsafe_state = ERC721Enumerable::unsafe_new_contract_state();
-            ERC721Enumerable::InternalImpl::initializer(ref unsafe_state);
-            // ERC3525
+            // ERC721 & ERC3525
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::InternalImpl::initializer(ref unsafe_state, value_decimals);
-            let mut unsafe_state = ERC3525Metadata::unsafe_new_contract_state();
-            ERC3525Metadata::InternalImpl::initializer(ref unsafe_state);
-            let mut unsafe_state = ERC3525SlotApprovable::unsafe_new_contract_state();
-            ERC3525SlotApprovable::InternalImpl::initializer(ref unsafe_state);
-            let mut unsafe_state = ERC3525SlotEnumerable::unsafe_new_contract_state();
-            ERC3525SlotEnumerable::InternalImpl::initializer(ref unsafe_state);
+            ERC3525::InternalImpl::initializer(ref unsafe_state, name, symbol, value_decimals);
             // Access control
             let mut unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::initializer(ref unsafe_state, owner);

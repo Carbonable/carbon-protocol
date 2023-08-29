@@ -1,3 +1,5 @@
+
+
 #[starknet::contract]
 mod Farm {
     use zeroable::Zeroable;
@@ -16,9 +18,8 @@ mod Farm {
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
-    use protocol::farm::interface::IFarm;
+    use protocol::farm::interface::{IFarm, IMinterDispatcher, IMinterDispatcherTrait};
     use protocol::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
-    use protocol::interfaces::minter::{IMinterDispatcher, IMinterDispatcherTrait};
 
     const YEAR_SECONDS: u64 = 31556925;
 
@@ -480,28 +481,17 @@ mod Farm {
         fn _compute_absorption(
             self: @ContractState, value: u256, start_time: u64, end_time: u64
         ) -> u256 {
-            // [Check] Value is not null, otherwise return 0
-            if value == 0_u256 {
-                return 0_u256;
-            }
-
-            // [Check] Project vlaue is not null, otherwise return 0
+            // [Compute] Project value
             let project = self._project.read();
             let slot = self._slot.read();
             let project_value = project.get_project_value(slot);
-            if project_value == 0_u256 {
-                return 0_u256;
-            }
 
             // [Compute] Interpolated absorptions
             let initial_absorption = project.get_absorption(slot, start_time);
             let final_absorption = project.get_absorption(slot, end_time);
 
-            // [Check] Overflow
-            assert(initial_absorption <= final_absorption, 'Overflow');
-
-            // [Compute] Absorption corresponding to the ratio
-            value * (final_absorption - initial_absorption).into() / project_value
+            // [Compute] Absorption corresponding to the share
+            self.__compute_absorption(value, project_value, initial_absorption, final_absorption)
         }
         
         fn _compute_sale(
@@ -512,7 +502,7 @@ mod Farm {
                 return 0_u256;
             }
 
-            // [Check] Project vlaue is not null, otherwise return 0
+            // [Check] Project value is not null, otherwise return 0
             let project = self._project.read();
             let slot = self._slot.read();
             let project_value = project.get_project_value(slot);
@@ -636,6 +626,30 @@ mod Farm {
             };
             let cumsales = cumsum(sales.span());
             (times_u256, updated_prices, cumsales)
+        }
+    }
+
+    #[generate_trait]
+    impl PrivateImpl of PrivateTrait {
+        #[inline(always)]
+        fn __compute_absorption(
+            self: @ContractState, value: u256, project_value: u256, initial_absorption: u64, final_absorption: u64
+        ) -> u256 {
+            // [Check] Value is not null, otherwise return 0
+            if value == 0_u256 {
+                return 0_u256;
+            }
+
+            // [Check] Project value is not null, otherwise return 0
+            if project_value == 0_u256 {
+                return 0_u256;
+            }
+
+            // [Check] Overflow
+            assert(initial_absorption <= final_absorption, 'Overflow');
+
+            // [Compute] Absorption corresponding to the ratio
+            value * (final_absorption - initial_absorption).into() / project_value
         }
     }
 }

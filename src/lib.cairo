@@ -13,9 +13,17 @@ mod farm {
     mod module;
 }
 
-mod interfaces;
+mod yield {
+    mod interface;
+    mod module;
+}
+
 mod project;
-// mod yielder;
-// mod tests;
+mod yielder;
+
+#[cfg(test)]
+mod tests {
+    mod test_yielder;
+}
 
 

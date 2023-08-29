@@ -1,22 +1,9 @@
 #[starknet::contract]
-mod Yielder {
-    use starknet::{get_caller_address, ContractAddress, ClassHash};
+mod Yield {
+    use starknet::{get_caller_address, get_block_timestamp, ContractAddress};
 
-    // Ownable
-    use openzeppelin::access::ownable::interface::IOwnable;
-    use openzeppelin::access::ownable::ownable::Ownable;
-
-    // Upgradable
-    use openzeppelin::upgrades::interface::IUpgradeable;
-    use openzeppelin::upgrades::upgradeable::Upgradeable;
-
-    // SRC5
-    use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
-    use openzeppelin::introspection::src5::SRC5;
-
-    // Access control
-    use protocol::access::interface::IProvisioner;
-    use protocol::access::module::Access;
+    // ERC20
+    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 
     // Farm
     use protocol::farm::interface::IFarm;
@@ -24,74 +11,31 @@ mod Yielder {
 
     // Yield
     use protocol::yield::interface::IYield;
-    use protocol::yield::module::Yield;
 
     #[storage]
-    struct Storage {}
+    struct Storage {
+        _erc20: IERC20Dispatcher,
+        _total_claimed: u256,
+        _claimed: LegacyMap::<ContractAddress, u256>,
+    }
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        Claim: Claim,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Claim {
+        address: ContractAddress,
+        amount: u256,
+        time: u64,
+    }
 
     #[constructor]
-    fn constructor(
-        ref self: ContractState,
-        project: ContractAddress,
-        slot: u256,
-        erc20: ContractAddress,
-        owner: ContractAddress,
-    ) {
-        self.initializer(project, slot, erc20, owner);
+    fn constructor(ref self: ContractState, project: ContractAddress, slot: u256, erc20: ContractAddress) {
+        self.initializer(project, slot, erc20);
     }
-
-    // Upgradable
-
-    #[external(v0)]
-    impl UpgradeableImpl of IUpgradeable<ContractState> {
-        fn upgrade(ref self: ContractState, impl_hash: ClassHash) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Upgrade
-            let mut unsafe_state = Upgradeable::unsafe_new_contract_state();
-            Upgradeable::InternalImpl::_upgrade(ref unsafe_state, impl_hash)
-        }
-    }
-
-    // Access control
-
-    #[external(v0)]
-    impl OwnableImpl of IOwnable<ContractState> {
-        fn owner(self: @ContractState) -> ContractAddress {
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::OwnableImpl::owner(@unsafe_state)
-        }
-
-        fn transfer_ownership(ref self: ContractState, new_owner: ContractAddress) {
-            let mut unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::OwnableImpl::transfer_ownership(ref unsafe_state, new_owner)
-        }
-
-        fn renounce_ownership(ref self: ContractState) {
-            let mut unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::OwnableImpl::renounce_ownership(ref unsafe_state)
-        }
-    }
-
-    // SRC5
-
-    #[external(v0)]
-    impl SRC5Impl of ISRC5<ContractState> {
-        fn supports_interface(self: @ContractState, interface_id: felt252) -> bool {
-            let unsafe_state = SRC5::unsafe_new_contract_state();
-            SRC5::SRC5Impl::supports_interface(@unsafe_state, interface_id)
-        }
-    }
-
-    #[external(v0)]
-    impl SRC5CamelImpl of ISRC5Camel<ContractState> {
-        fn supportsInterface(self: @ContractState, interfaceId: felt252) -> bool {
-            self.supports_interface(interfaceId)
-        }
-    }
-
-    // Farming
 
     #[external(v0)]
     impl FarmImpl of IFarm<ContractState> {
@@ -176,88 +120,79 @@ mod Yielder {
         }
 
         fn add_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Add price
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::FarmImpl::add_price(ref unsafe_state, time, price);
         }
 
         fn update_last_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Update last price
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::FarmImpl::update_last_price(ref unsafe_state, time, price);
         }
 
         fn set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Set prices
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::FarmImpl::set_prices(ref unsafe_state, times, prices);
         }
     }
 
-    // Yield
-
     #[external(v0)]
     impl YieldImpl of IYield<ContractState> {
         fn get_payment_token_address(self: @ContractState) -> ContractAddress {
-            let unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldImpl::get_payment_token_address(@unsafe_state)
+            self._erc20.read().contract_address
         }
 
         fn get_total_claimable(self: @ContractState) -> u256 {
-            let unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldImpl::get_total_claimable(@unsafe_state)
+            let total_sale = self.get_total_sale();
+            let claimed = self._total_claimed.read();
+            total_sale + claimed
         }
 
         fn get_total_claimed(self: @ContractState) -> u256 {
-            let unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldImpl::get_total_claimed(@unsafe_state)
+            self._total_claimed.read()
         }
 
         fn get_claimable_of(self: @ContractState, account: ContractAddress) -> u256 {
-            let unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldImpl::get_claimable_of(@unsafe_state, account)
+            let sale = self.get_sale_of(account);
+            let claimed = self._claimed.read(account);
+            sale - claimed
         }
 
         fn get_claimed_of(self: @ContractState, account: ContractAddress) -> u256 {
-            let unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldImpl::get_claimed_of(@unsafe_state, account)
+            self._claimed.read(account)
         }
 
         fn claim(ref self: ContractState) {
-            let mut unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldImpl::claim(ref unsafe_state);
+            // [Effect] Update user claimed
+            let caller = get_caller_address();
+            let amount = self.get_claimable_of(caller);
+            let stored_amount = self._claimed.read(caller);
+            self._claimed.write(caller, stored_amount + amount);
+
+            // [Effect] Update total claimed
+            let total_claimed = self._total_claimed.read();
+            self._total_claimed.write(total_claimed + amount);
+
+            // [Interaction] ERC20 transfer
+            let erc20 = self._erc20.read();
+            let success = erc20.transfer(caller, amount);
+
+            // [Check] Transfer successful
+            assert(success, 'Transfer failed');
+
+            // [Event] Emit event
+            let current_time = get_block_timestamp();
+            self.emit(Event::Claim(Claim { address: caller, amount: amount, time: current_time }));
         }
     }
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        fn initializer(
-            ref self: ContractState,
-            project: ContractAddress,
-            slot: u256,
-            erc20: ContractAddress,
-            owner: ContractAddress,
-        ) {
-            // [Check] Inputs
-            assert(!owner.is_zero(), 'Owner cannot be 0');
-
-            // [Effect] Access control
-            let mut unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::initializer(ref unsafe_state, owner);
-            let mut unsafe_state = Access::unsafe_new_contract_state();
-            Access::InternalImpl::initializer(ref unsafe_state);
-            // [Effect] Yield
-            let mut unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::InternalImpl::initializer(ref unsafe_state, project, slot, erc20);
+        fn initializer(ref self: ContractState, project: ContractAddress, slot: u256, erc20: ContractAddress) {
+            // [Effect] Initialize farm
+            let mut unsafe_state = Farm::unsafe_new_contract_state();
+            Farm::InternalImpl::initializer(ref unsafe_state, project, slot);
+            // [Effect] Initialize yield
+            self._erc20.write(IERC20Dispatcher { contract_address: erc20 });
         }
     }
 }
