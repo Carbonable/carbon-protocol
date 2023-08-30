@@ -150,9 +150,14 @@ mod Yielder {
             Farm::FarmImpl::get_current_price(@unsafe_state)
         }
 
-        fn get_prices(self: @ContractState) -> (Span<u64>, Span<u256>, Span<u256>, Span<u256>) {
+        fn get_prices(self: @ContractState) -> (Span<u64>, Span<u256>) {
             let unsafe_state = Farm::unsafe_new_contract_state();
             Farm::FarmImpl::get_prices(@unsafe_state)
+        }
+
+        fn get_cumsales(self: @ContractState) -> (Span<u64>, Span<u256>, Span<u256>) {
+            let unsafe_state = Farm::unsafe_new_contract_state();
+            Farm::FarmImpl::get_cumsales(@unsafe_state)
         }
 
         fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
