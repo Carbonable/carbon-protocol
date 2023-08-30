@@ -1,3 +1,5 @@
+// Core deps
+
 use array::ArrayTrait;
 use result::ResultTrait;
 use option::OptionTrait;
@@ -5,30 +7,37 @@ use traits::{Into, TryInto};
 use zeroable::Zeroable;
 use debug::PrintTrait;
 
+// Starknet deps
+
 use starknet::ContractAddress;
 use starknet::deploy_syscall;
 use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+
+// External deps
 
 use openzeppelin::account::account::Account;
 use openzeppelin::token::erc20::erc20::ERC20;
 use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
-
 use cairo_erc_3525::presets::erc3525_mintable_burnable::{
     IExternalDispatcher as IERC3525Dispatcher, IExternalDispatcherTrait as IERC3525DispatcherTrait
 };
 
-use protocol::project::{
-    Project, IExternalDispatcher as IProjectDispatcher,
-    IExternalDispatcherTrait as IProjectDispatcherTrait
-};
-use protocol::yielder::Yielder;
+// Components
 
 use protocol::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
 use protocol::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
 use protocol::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
 use protocol::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
 use protocol::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
+
+// Contracts
+
+use protocol::contracts::project::{
+    Project, IExternalDispatcher as IProjectDispatcher,
+    IExternalDispatcherTrait as IProjectDispatcherTrait
+};
+use protocol::contracts::yielder::Yielder;
 
 // Constants
 

@@ -31,11 +31,11 @@ use protocol::components::offset::interface::{IOffsetDispatcher, IOffsetDispatch
 
 // Contracts
 
-use protocol::project::{
+use protocol::contracts::project::{
     Project, IExternalDispatcher as IProjectDispatcher,
     IExternalDispatcherTrait as IProjectDispatcherTrait
 };
-use protocol::offseter::Offseter;
+use protocol::contracts::offseter::Offseter;
 
 // Constants
 

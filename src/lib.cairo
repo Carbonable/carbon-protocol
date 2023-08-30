@@ -21,9 +21,11 @@ mod components {
     }
 }
 
-mod project;
-mod offseter;
-mod yielder;
+mod contracts {
+    mod project;
+    mod offseter;
+    mod yielder;
+}
 
 #[cfg(test)]
 mod tests {
