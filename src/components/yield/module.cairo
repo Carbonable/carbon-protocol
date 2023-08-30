@@ -34,7 +34,9 @@ mod Yield {
     }
 
     #[constructor]
-    fn constructor(ref self: ContractState, project: ContractAddress, slot: u256, erc20: ContractAddress) {
+    fn constructor(
+        ref self: ContractState, project: ContractAddress, slot: u256, erc20: ContractAddress
+    ) {
         self.initializer(project, slot, erc20);
     }
 
@@ -193,7 +195,9 @@ mod Yield {
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        fn initializer(ref self: ContractState, project: ContractAddress, slot: u256, erc20: ContractAddress) {
+        fn initializer(
+            ref self: ContractState, project: ContractAddress, slot: u256, erc20: ContractAddress
+        ) {
             // [Effect] Initialize farm
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::InternalImpl::initializer(ref unsafe_state, project, slot);

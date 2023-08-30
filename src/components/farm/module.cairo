@@ -1,5 +1,3 @@
-
-
 #[starknet::contract]
 mod Farm {
     use zeroable::Zeroable;
@@ -526,7 +524,7 @@ mod Farm {
             // [Compute] Absorption corresponding to the share
             self.__compute_absorption(value, project_value, initial_absorption, final_absorption)
         }
-        
+
         fn _compute_sale(
             self: @ContractState, value: u256, start_time: u64, end_time: u64
         ) -> u256 {
@@ -549,7 +547,7 @@ mod Farm {
 
             // [Compute] Convert times from Array<u64> into Array<u256>
             let (times, _, cumsales) = self.get_cumsales();
-            let times_u256 : Span<u256> = self.__span_u64_into_u256(times);
+            let times_u256: Span<u256> = self.__span_u64_into_u256(times);
 
             // [Compute] Sale
             let initial_cumsale = interpolate(
@@ -599,8 +597,8 @@ mod Farm {
             let absorption_times = project.get_times(slot);
             let price_times = self._times.read().array().span();
             let price_times_u256 = self.__span_u64_into_u256(price_times);
-            let times : Span<u64> = self.__merge_and_sort(absorption_times, price_times);
-            let times_u256 : Span<u256>  = self.__span_u64_into_u256(times);
+            let times: Span<u64> = self.__merge_and_sort(absorption_times, price_times);
+            let times_u256: Span<u256> = self.__span_u64_into_u256(times);
 
             let prices = self._prices.read().array().span();
             let mut sales = ArrayTrait::<u256>::new();
@@ -681,7 +679,11 @@ mod Farm {
     impl PrivateImpl of PrivateTrait {
         #[inline(always)]
         fn __compute_absorption(
-            self: @ContractState, value: u256, project_value: u256, initial_absorption: u64, final_absorption: u64
+            self: @ContractState,
+            value: u256,
+            project_value: u256,
+            initial_absorption: u64,
+            final_absorption: u64
         ) -> u256 {
             // [Check] Value is not null, otherwise return 0
             if value == 0_u256 {
@@ -727,7 +729,7 @@ mod Farm {
         }
 
         fn __merge_and_sort(self: @ContractState, arr1: Span<u64>, arr2: Span<u64>) -> Span<u64> {
-            let mut array : Array<u64> = ArrayTrait::new();
+            let mut array: Array<u64> = ArrayTrait::new();
             let mut index1 = 0;
             let mut index2 = 0;
             loop {
@@ -820,7 +822,10 @@ mod Test {
         let mut state = STATE();
         Farm::InternalImpl::initializer(ref state, PROJECT(), SLOT);
         // [Assert] Project and slot are stored
-        assert(Farm::FarmImpl::get_carbonable_project_address(@state) == PROJECT(), 'Wrong project address');
+        assert(
+            Farm::FarmImpl::get_carbonable_project_address(@state) == PROJECT(),
+            'Wrong project address'
+        );
         assert(Farm::FarmImpl::get_carbonable_project_slot(@state) == SLOT, 'Wrong slot');
     }
 
@@ -899,7 +904,6 @@ mod Test {
         set_block_timestamp(*times.at(times.len() - 1) + 5);
         let price = Farm::FarmImpl::get_current_price(@state);
         assert(price == *prices.at(prices.len() - 1), 'Wrong price');
-
     }
 
     #[test]

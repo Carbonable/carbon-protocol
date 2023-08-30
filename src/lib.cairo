@@ -31,4 +31,3 @@ mod tests {
     mod test_yielder;
 }
 
-

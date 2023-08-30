@@ -31,10 +31,7 @@ mod Offseter {
 
     #[constructor]
     fn constructor(
-        ref self: ContractState,
-        project: ContractAddress,
-        slot: u256,
-        owner: ContractAddress,
+        ref self: ContractState, project: ContractAddress, slot: u256, owner: ContractAddress,
     ) {
         self.initializer(project, slot, owner);
     }
@@ -245,10 +242,7 @@ mod Offseter {
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn initializer(
-            ref self: ContractState,
-            project: ContractAddress,
-            slot: u256,
-            owner: ContractAddress,
+            ref self: ContractState, project: ContractAddress, slot: u256, owner: ContractAddress,
         ) {
             // [Check] Inputs
             assert(!owner.is_zero(), 'Owner cannot be 0');

@@ -209,9 +209,7 @@ mod Project {
             data: Span<felt252>
         ) {
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC721Impl::safe_transfer_from(
-                ref unsafe_state, from, to, token_id, data
-            )
+            ERC3525::ERC721Impl::safe_transfer_from(ref unsafe_state, from, to, token_id, data)
         }
     }
 
@@ -249,9 +247,7 @@ mod Project {
             self: @ContractState, owner: ContractAddress, index: u256
         ) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC721EnumerableImpl::token_of_owner_by_index(
-                @unsafe_state, owner, index
-            )
+            ERC3525::ERC721EnumerableImpl::token_of_owner_by_index(@unsafe_state, owner, index)
         }
     }
 
@@ -278,9 +274,7 @@ mod Project {
             ref self: ContractState, token_id: u256, operator: ContractAddress, value: u256
         ) {
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC3525Impl::approve_value(
-                ref unsafe_state, token_id, operator, value
-            )
+            ERC3525::ERC3525Impl::approve_value(ref unsafe_state, token_id, operator, value)
         }
 
         fn allowance(self: @ContractState, token_id: u256, operator: ContractAddress) -> u256 {
@@ -354,16 +348,12 @@ mod Project {
 
         fn token_supply_in_slot(self: @ContractState, slot: u256) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC3525SlotEnumerableImpl::token_supply_in_slot(
-                @unsafe_state, slot
-            )
+            ERC3525::ERC3525SlotEnumerableImpl::token_supply_in_slot(@unsafe_state, slot)
         }
 
         fn token_in_slot_by_index(self: @ContractState, slot: u256, index: u256) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC3525SlotEnumerableImpl::token_in_slot_by_index(
-                @unsafe_state, slot, index
-            )
+            ERC3525::ERC3525SlotEnumerableImpl::token_in_slot_by_index(@unsafe_state, slot, index)
         }
     }
 
