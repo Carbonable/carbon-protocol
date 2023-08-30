@@ -119,6 +119,12 @@ mod Farm {
         }
 
         fn get_total_sale(self: @ContractState) -> u256 {
+            // [Check] Prices are set, return 0 otherwise
+            let prices = self._prices.read();
+            if prices.len() == 0 {
+                return 0_u256;
+            }
+
             // [Compute] Total sale
             let value = self._total_registered_value.read();
             let time = self._total_registered_time.read();
@@ -133,6 +139,13 @@ mod Farm {
         }
 
         fn get_max_sale(self: @ContractState) -> u256 {
+            // [Check] Prices are set, return 0 otherwise
+            let prices = self._prices.read();
+            if prices.len() == 0 {
+                return 0_u256;
+            }
+
+            // [Compute] Max possible sale
             let project = self._project.read();
             let slot = self._slot.read();
             let ton_equivalent = project.get_ton_equivalent(slot);
@@ -161,6 +174,12 @@ mod Farm {
         }
 
         fn get_sale_of(self: @ContractState, account: ContractAddress) -> u256 {
+            // [Check] Prices are set, return 0 otherwise
+            let prices = self._prices.read();
+            if prices.len() == 0 {
+                return 0_u256;
+            }
+
             // [Compute] Account sale
             let value = self._registered_value.read(account);
             let time = self._registered_time.read(account);
