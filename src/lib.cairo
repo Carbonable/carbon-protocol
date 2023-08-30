@@ -1,26 +1,24 @@
-mod absorber {
-    mod interface;
-    mod module;
-}
-
-mod access {
-    mod interface;
-    mod module;
-}
-
-mod farm {
-    mod interface;
-    mod module;
-}
-
-mod offset {
-    mod interface;
-    mod module;
-}
-
-mod yield {
-    mod interface;
-    mod module;
+mod components {
+    mod absorber {
+        mod interface;
+        mod module;
+    }
+    mod access {
+        mod interface;
+        mod module;
+    }
+    mod farm {
+        mod interface;
+        mod module;
+    }
+    mod offset {
+        mod interface;
+        mod module;
+    }
+    mod yield {
+        mod interface;
+        mod module;
+    }
 }
 
 mod project;

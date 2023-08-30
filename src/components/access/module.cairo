@@ -5,7 +5,7 @@ mod Access {
     use array::ArrayTrait;
     use traits::Into;
     use openzeppelin::access::accesscontrol::accesscontrol::AccessControl;
-    use protocol::access::interface::{IMinter, ICertifier, IWithdrawer, IProvisioner};
+    use protocol::components::access::interface::{IMinter, ICertifier, IWithdrawer, IProvisioner};
 
     const MINTER_ROLE: felt252 = 'MINTER';
     const CERTIFIER_ROLE: felt252 = 'CERTIFIER';

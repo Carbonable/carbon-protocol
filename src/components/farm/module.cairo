@@ -20,8 +20,8 @@ mod Farm {
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
-    use protocol::farm::interface::{IFarm, IMinterDispatcher, IMinterDispatcherTrait};
-    use protocol::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use protocol::components::farm::interface::{IFarm, IMinterDispatcher, IMinterDispatcherTrait};
+    use protocol::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
 
     const YEAR_SECONDS: u64 = 31556925;
 

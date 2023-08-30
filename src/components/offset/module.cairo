@@ -7,11 +7,11 @@ mod Offset {
     use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 
     // Farm
-    use protocol::farm::interface::IFarm;
-    use protocol::farm::module::Farm;
+    use protocol::components::farm::interface::IFarm;
+    use protocol::components::farm::module::Farm;
 
     // Offset
-    use protocol::offset::interface::IOffset;
+    use protocol::components::offset::interface::IOffset;
 
     #[storage]
     struct Storage {

@@ -15,16 +15,16 @@ mod Offseter {
     use openzeppelin::introspection::src5::SRC5;
 
     // Access control
-    use protocol::access::interface::IProvisioner;
-    use protocol::access::module::Access;
+    use protocol::components::access::interface::IProvisioner;
+    use protocol::components::access::module::Access;
 
     // Farm
-    use protocol::farm::interface::IFarm;
-    use protocol::farm::module::Farm;
+    use protocol::components::farm::interface::IFarm;
+    use protocol::components::farm::module::Farm;
 
     // Offset
-    use protocol::offset::interface::IOffset;
-    use protocol::offset::module::Offset;
+    use protocol::components::offset::interface::IOffset;
+    use protocol::components::offset::module::Offset;
 
     #[storage]
     struct Storage {}

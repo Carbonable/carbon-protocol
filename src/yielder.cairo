@@ -15,16 +15,16 @@ mod Yielder {
     use openzeppelin::introspection::src5::SRC5;
 
     // Access control
-    use protocol::access::interface::IProvisioner;
-    use protocol::access::module::Access;
+    use protocol::components::access::interface::IProvisioner;
+    use protocol::components::access::module::Access;
 
     // Farm
-    use protocol::farm::interface::IFarm;
-    use protocol::farm::module::Farm;
+    use protocol::components::farm::interface::IFarm;
+    use protocol::components::farm::module::Farm;
 
     // Yield
-    use protocol::yield::interface::IYield;
-    use protocol::yield::module::Yield;
+    use protocol::components::yield::interface::IYield;
+    use protocol::components::yield::module::Yield;
 
     #[storage]
     struct Storage {}

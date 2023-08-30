@@ -19,13 +19,13 @@ use cairo_erc_3525::presets::erc3525_mintable_burnable::{IExternalDispatcher as 
 use protocol::project::{Project, IExternalDispatcher as IProjectDispatcher, IExternalDispatcherTrait as IProjectDispatcherTrait};
 use protocol::yielder::Yielder;
 
-use protocol::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
-use protocol::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
-use protocol::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
-use protocol::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
-use protocol::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
+use protocol::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+use protocol::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+use protocol::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+use protocol::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+use protocol::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
 
-// Project
+// Constants
 
 const NAME: felt252 = 'NAME';
 const SYMBOL: felt252 = 'SYMBOL';
