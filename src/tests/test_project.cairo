@@ -20,7 +20,8 @@ mod Test {
     use openzeppelin::account::account::Account;
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::presets::erc3525_mintable_burnable::{
-        IExternalDispatcher as IERC3525Dispatcher, IExternalDispatcherTrait as IERC3525DispatcherTrait
+        IExternalDispatcher as IERC3525Dispatcher,
+        IExternalDispatcherTrait as IERC3525DispatcherTrait
     };
 
     // Components
@@ -166,7 +167,7 @@ mod Test {
 
     #[test]
     #[available_gas(5_000_000)]
-    #[should_panic]  // Caller is missing role
+    #[should_panic] // Caller is missing role
     fn test_project_mint_revert_not_minter() {
         // [Setup]
         let (signers, contracts) = setup();
@@ -178,7 +179,7 @@ mod Test {
 
     #[test]
     #[available_gas(4_000_000)]
-    #[should_panic]  // Caller is missing role
+    #[should_panic] // Caller is missing role
     fn test_project_mint_value_revert_not_minter() {
         // [Setup]
         let (signers, contracts) = setup();
@@ -190,7 +191,7 @@ mod Test {
 
     #[test]
     #[available_gas(4_000_000)]
-    #[should_panic]  // Caller is missing role
+    #[should_panic] // Caller is missing role
     fn test_project_set_absorptions_revert_not_certifier() {
         // [Setup]
         let (signers, contracts) = setup();
@@ -198,12 +199,13 @@ mod Test {
         let project = IProjectDispatcher { contract_address: contracts.project };
 
         // [Revert] Set absorptions
-        absorber.set_absorptions(SLOT, array![1, 2, 3].span(), array![1, 2, 3].span(), TON_EQUIVALENT);
+        absorber
+            .set_absorptions(SLOT, array![1, 2, 3].span(), array![1, 2, 3].span(), TON_EQUIVALENT);
     }
 
     #[test]
     #[available_gas(4_000_000)]
-    #[should_panic]  // Caller is not the owner
+    #[should_panic] // Caller is not the owner
     fn test_project_set_token_uri_revert_not_owner() {
         // [Setup]
         let (signers, contracts) = setup();
@@ -215,7 +217,7 @@ mod Test {
 
     #[test]
     #[available_gas(4_000_000)]
-    #[should_panic]  // Caller is not the owner
+    #[should_panic] // Caller is not the owner
     fn test_project_set_contract_uri_revert_not_owner() {
         // [Setup]
         let (signers, contracts) = setup();
@@ -227,7 +229,7 @@ mod Test {
 
     #[test]
     #[available_gas(4_000_000)]
-    #[should_panic]  // Caller is not the owner
+    #[should_panic] // Caller is not the owner
     fn test_project_set_slot_uri_revert_not_owner() {
         // [Setup]
         let (signers, contracts) = setup();
