@@ -15,4 +15,3 @@ cairo_erc_721 = { git = "https://github.com/carbonable-labs/cairo-erc-721" }
 cairo_erc_3525 = { git = "https://github.com/carbonable-labs/cairo-erc-3525", tag = "2.0.6" }
 
 [[target.starknet-contract]]
-allowed-libfuncs-list.name = "experimental"
