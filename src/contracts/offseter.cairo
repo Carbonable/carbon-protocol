@@ -10,13 +10,13 @@ mod Offseter {
     use openzeppelin::upgrades::interface::IUpgradeable;
     use openzeppelin::upgrades::upgradeable::Upgradeable;
 
+    // Security
+    use openzeppelin::security::pausable::{Pausable, IPausable};
+    use openzeppelin::security::reentrancyguard::ReentrancyGuard;
+
     // SRC5
     use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
     use openzeppelin::introspection::src5::SRC5;
-
-    // Access control
-    use protocol::components::access::interface::IProvisioner;
-    use protocol::components::access::module::Access;
 
     // Farm
     use protocol::components::farm::interface::IFarm;
@@ -50,7 +50,7 @@ mod Offseter {
         }
     }
 
-    // Access control
+    // Ownable
 
     #[external(v0)]
     impl OwnableImpl of IOwnable<ContractState> {
@@ -67,6 +67,42 @@ mod Offseter {
         fn renounce_ownership(ref self: ContractState) {
             let mut unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::OwnableImpl::renounce_ownership(ref unsafe_state)
+        }
+    }
+
+    // Pausable
+
+    #[external(v0)]
+    impl PausableImpl of IPausable<ContractState> {
+        fn is_paused(self: @ContractState) -> bool {
+            let unsafe_state = Pausable::unsafe_new_contract_state();
+            Pausable::PausableImpl::is_paused(@unsafe_state)
+        }
+    }
+
+    #[external(v0)]
+    #[generate_trait]
+    impl PausableExtraImpl of PausableTrait {
+        fn pause(ref self: ContractState) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Check] Not paused
+            let mut unsafe_state = Pausable::unsafe_new_contract_state();
+            Pausable::InternalImpl::assert_not_paused(@unsafe_state);
+            // [Effect] Pause
+            Pausable::InternalImpl::_pause(ref unsafe_state)
+        }
+
+        fn unpause(ref self: ContractState) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Check] Paused
+            let mut unsafe_state = Pausable::unsafe_new_contract_state();
+            Pausable::InternalImpl::assert_paused(@unsafe_state);
+            // [Effect] Unpause
+            Pausable::InternalImpl::_unpause(ref unsafe_state)
         }
     }
 
@@ -162,18 +198,36 @@ mod Offseter {
         }
 
         fn deposit(ref self: ContractState, token_id: u256, value: u256) {
+            // [Security] ReentrancyGuard
+            let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
+            ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
+            // [Effect] Deposit
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::FarmImpl::deposit(ref unsafe_state, token_id, value);
+            // [Security] ReentrancyGuard
+            ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
 
         fn withdraw_to(ref self: ContractState, value: u256) {
+            // [Security] ReentrancyGuard
+            let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
+            ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
+            // [Effect] Withdraw
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::FarmImpl::withdraw_to(ref unsafe_state, value);
+            // [Security] ReentrancyGuard
+            ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
 
         fn withdraw_to_token(ref self: ContractState, token_id: u256, value: u256) {
+            // [Security] ReentrancyGuard
+            let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
+            ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
+            // [Effect] Withdraw
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::FarmImpl::withdraw_to_token(ref unsafe_state, token_id, value);
+            // [Security] ReentrancyGuard
+            ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
 
         fn add_price(ref self: ContractState, time: u64, price: u256) {
@@ -229,13 +283,25 @@ mod Offseter {
         }
 
         fn claim(ref self: ContractState, amount: u256) {
+            // [Security] ReentrancyGuard
+            let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
+            ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
+            // [Effect] Claim
             let mut unsafe_state = Offset::unsafe_new_contract_state();
             Offset::OffsetImpl::claim(ref unsafe_state, amount);
+            // [Security] ReentrancyGuard
+            ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
 
         fn claim_all(ref self: ContractState) {
+            // [Security] ReentrancyGuard
+            let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
+            ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
+            // [Effect] Claim
             let mut unsafe_state = Offset::unsafe_new_contract_state();
             Offset::OffsetImpl::claim_all(ref unsafe_state);
+            // [Security] ReentrancyGuard
+            ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
     }
 
@@ -247,11 +313,9 @@ mod Offseter {
             // [Check] Inputs
             assert(!owner.is_zero(), 'Owner cannot be 0');
 
-            // [Effect] Access control
+            // [Effect] Ownable control
             let mut unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::initializer(ref unsafe_state, owner);
-            let mut unsafe_state = Access::unsafe_new_contract_state();
-            Access::InternalImpl::initializer(ref unsafe_state);
             // [Effect] Offset
             let mut unsafe_state = Offset::unsafe_new_contract_state();
             Offset::InternalImpl::initializer(ref unsafe_state, project, slot);
