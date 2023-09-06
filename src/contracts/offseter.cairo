@@ -19,12 +19,12 @@ mod Offseter {
     use openzeppelin::introspection::src5::SRC5;
 
     // Farm
-    use protocol::components::farm::interface::IFarm;
-    use protocol::components::farm::module::Farm;
+    use carbon::components::farm::interface::IFarm;
+    use carbon::components::farm::module::Farm;
 
     // Offset
-    use protocol::components::offset::interface::IOffset;
-    use protocol::components::offset::module::Offset;
+    use carbon::components::offset::interface::IOffset;
+    use carbon::components::offset::module::Offset;
 
     #[storage]
     struct Storage {}

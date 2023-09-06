@@ -26,13 +26,13 @@ mod Test {
 
     // Components
 
-    use protocol::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
-    use protocol::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
-    use protocol::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
 
     // Contracts
 
-    use protocol::contracts::project::{
+    use carbon::contracts::project::{
         Project, IExternalDispatcher as IProjectDispatcher,
         IExternalDispatcherTrait as IProjectDispatcherTrait
     };

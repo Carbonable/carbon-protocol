@@ -5,7 +5,7 @@ mod Absorber {
     use array::{ArrayTrait, SpanTrait};
     use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
     use alexandria_storage::list::{List, ListTrait};
-    use protocol::components::absorber::interface::IAbsorber;
+    use carbon::components::absorber::interface::IAbsorber;
 
     #[storage]
     struct Storage {

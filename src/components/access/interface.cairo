@@ -15,12 +15,6 @@ trait ICertifier<TContractState> {
 
 #[starknet::interface]
 trait IWithdrawer<TContractState> {
-    fn get_withdrawer(self: @TContractState, slot: u256) -> ContractAddress;
-    fn set_withdrawer(ref self: TContractState, slot: u256, user: ContractAddress);
-}
-
-#[starknet::interface]
-trait IProvisioner<TContractState> {
-    fn get_provisioner(self: @TContractState, slot: u256) -> ContractAddress;
-    fn set_provisioner(ref self: TContractState, slot: u256, user: ContractAddress);
+    fn get_withdrawer(self: @TContractState) -> ContractAddress;
+    fn set_withdrawer(ref self: TContractState, user: ContractAddress);
 }

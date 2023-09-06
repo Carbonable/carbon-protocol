@@ -23,19 +23,19 @@ use cairo_erc_3525::presets::erc3525_mintable_burnable::{
 
 // Components
 
-use protocol::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
-use protocol::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
-use protocol::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
-use protocol::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
-use protocol::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
+use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
 
 // Contracts
 
-use protocol::contracts::project::{
+use carbon::contracts::project::{
     Project, IExternalDispatcher as IProjectDispatcher,
     IExternalDispatcherTrait as IProjectDispatcherTrait
 };
-use protocol::contracts::offseter::Offseter;
+use carbon::contracts::offseter::Offseter;
 
 // Constants
 

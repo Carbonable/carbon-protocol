@@ -41,12 +41,12 @@ mod Project {
     use cairo_erc_3525::presets::erc3525_mintable_burnable_metadata_enumerable_slot_approvable_slot_enumerable::ERC3525MintableBurnableEMSASE as ERC3525;
 
     // Access control
-    use protocol::components::access::interface::{IMinter, ICertifier};
-    use protocol::components::access::module::Access;
+    use carbon::components::access::interface::{IMinter, ICertifier};
+    use carbon::components::access::module::Access;
 
     // Absorber
-    use protocol::components::absorber::interface::IAbsorber;
-    use protocol::components::absorber::module::Absorber;
+    use carbon::components::absorber::interface::IAbsorber;
+    use carbon::components::absorber::module::Absorber;
 
     #[storage]
     struct Storage {}

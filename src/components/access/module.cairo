@@ -5,7 +5,7 @@ mod Access {
     use array::ArrayTrait;
     use traits::Into;
     use openzeppelin::access::accesscontrol::accesscontrol::AccessControl;
-    use protocol::components::access::interface::{IMinter, ICertifier, IWithdrawer, IProvisioner};
+    use carbon::components::access::interface::{IMinter, ICertifier, IWithdrawer};
 
     const MINTER_ROLE: felt252 = 'MINTER';
     const CERTIFIER_ROLE: felt252 = 'CERTIFIER';
@@ -58,21 +58,19 @@ mod Access {
 
     #[external(v0)]
     impl WithdrawerImpl of IWithdrawer<ContractState> {
-        fn get_withdrawer(self: @ContractState, slot: u256) -> ContractAddress {
-            let role = self._hash(WITHDRAWER_ROLE, slot);
-            self._role_members.read((role, 0))
+        fn get_withdrawer(self: @ContractState) -> ContractAddress {
+            self._role_members.read((WITHDRAWER_ROLE, 0))
         }
 
-        fn set_withdrawer(ref self: ContractState, slot: u256, user: ContractAddress) {
+        fn set_withdrawer(ref self: ContractState, user: ContractAddress) {
             // [Effect] Revoke current withdrawer
-            let role = self._hash(WITHDRAWER_ROLE, slot);
-            let withdrawer = self._role_members.read((role, 0));
+            let withdrawer = self._role_members.read((WITHDRAWER_ROLE, 0));
             let mut unsafe_state = AccessControl::unsafe_new_contract_state();
-            AccessControl::InternalImpl::_revoke_role(ref unsafe_state, role, withdrawer);
+            AccessControl::InternalImpl::_revoke_role(ref unsafe_state, WITHDRAWER_ROLE, withdrawer);
 
             // [Effect] Set new withdrawer
-            AccessControl::InternalImpl::_grant_role(ref unsafe_state, role, user);
-            self._role_members.write((role, 0), user);
+            AccessControl::InternalImpl::_grant_role(ref unsafe_state, WITHDRAWER_ROLE, user);
+            self._role_members.write((WITHDRAWER_ROLE, 0), user);
         }
     }
 
@@ -95,10 +93,9 @@ mod Access {
             AccessControl::InternalImpl::assert_only_role(@unsafe_state, role);
         }
 
-        fn assert_only_withdrawer(self: @ContractState, slot: u256) {
-            let role = self._hash(WITHDRAWER_ROLE, slot);
+        fn assert_only_withdrawer(self: @ContractState) {
             let unsafe_state = AccessControl::unsafe_new_contract_state();
-            AccessControl::InternalImpl::assert_only_role(@unsafe_state, role);
+            AccessControl::InternalImpl::assert_only_role(@unsafe_state, WITHDRAWER_ROLE);
         }
 
         fn _hash(self: @ContractState, role: felt252, slot: u256) -> felt252 {
@@ -294,15 +291,15 @@ mod Test {
         // [Setup]
         let mut state = STATE();
         // [Assert] Withdrawer is null
-        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state, 0);
+        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state);
         assert(withdrawer == ZERO(), 'Wrong withdrawer');
         // [Assert] Withdrawer is set correctly
-        Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
-        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state, 0);
+        Access::WithdrawerImpl::set_withdrawer(ref state, WITHDRAWER());
+        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state);
         assert(withdrawer == WITHDRAWER(), 'Wrong withdrawer');
         // [Assert] Withdrawer is changed correctly
-        Access::WithdrawerImpl::set_withdrawer(ref state, 0, ZERO());
-        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state, 0);
+        Access::WithdrawerImpl::set_withdrawer(ref state, ZERO());
+        let withdrawer = Access::WithdrawerImpl::get_withdrawer(@state);
         assert(withdrawer != WITHDRAWER(), 'Wrong withdrawer');
         assert(withdrawer == ZERO(), 'Wrong withdrawer');
     }
@@ -312,10 +309,10 @@ mod Test {
     fn test_assert_withdrawer() {
         // [Setup]
         let mut state = STATE();
-        Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
+        Access::WithdrawerImpl::set_withdrawer(ref state, WITHDRAWER());
         // [Assert] Withdrawer
         set_caller_address(WITHDRAWER());
-        Access::InternalImpl::assert_only_withdrawer(@state, 0);
+        Access::InternalImpl::assert_only_withdrawer(@state);
     }
 
     #[test]
@@ -324,9 +321,9 @@ mod Test {
     fn test_assert_withdrawer_revert_not_withdrawer() {
         // [Setup]
         let mut state = STATE();
-        Access::WithdrawerImpl::set_withdrawer(ref state, 0, WITHDRAWER());
+        Access::WithdrawerImpl::set_withdrawer(ref state, WITHDRAWER());
         // [Assert] Withdrawer
         set_caller_address(ANYONE());
-        Access::InternalImpl::assert_only_withdrawer(@state, 0);
+        Access::InternalImpl::assert_only_withdrawer(@state);
     }
 }

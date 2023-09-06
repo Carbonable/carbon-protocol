@@ -7,11 +7,11 @@ mod Yield {
     use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 
     // Farm
-    use protocol::components::farm::interface::IFarm;
-    use protocol::components::farm::module::Farm;
+    use carbon::components::farm::interface::IFarm;
+    use carbon::components::farm::module::Farm;
 
     // Yield
-    use protocol::components::yield::interface::IYield;
+    use carbon::components::yield::interface::IYield;
 
     #[storage]
     struct Storage {

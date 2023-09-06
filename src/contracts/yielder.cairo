@@ -19,12 +19,12 @@ mod Yielder {
     use openzeppelin::introspection::src5::SRC5;
 
     // Farm
-    use protocol::components::farm::interface::IFarm;
-    use protocol::components::farm::module::Farm;
+    use carbon::components::farm::interface::IFarm;
+    use carbon::components::farm::module::Farm;
 
     // Yield
-    use protocol::components::yield::interface::IYield;
-    use protocol::components::yield::module::Yield;
+    use carbon::components::yield::interface::IYield;
+    use carbon::components::yield::module::Yield;
 
     #[storage]
     struct Storage {}
