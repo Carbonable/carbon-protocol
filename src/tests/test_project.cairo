@@ -166,6 +166,38 @@ mod Test {
     }
 
     #[test]
+    #[available_gas(16_000_000)]
+    fn test_project_reset_absorptions() {
+        // [Setup]
+        let (signers, contracts) = setup();
+        let certifier = ICertifierDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+
+        // [Assert] Provide certifier rights to anyone
+        set_contract_address(signers.owner);
+        certifier.set_certifier(SLOT, signers.anyone);
+        assert(certifier.get_certifier(SLOT) == signers.anyone, 'Wrong certifier');
+
+        // [Assert] Set absorptions
+        set_contract_address(signers.anyone);
+        let absorptions = array![1, 2, 3].span();
+        let times = array![1, 2, 3].span();
+        absorber.set_absorptions(SLOT, times, absorptions, TON_EQUIVALENT);
+        assert(absorber.get_times(SLOT) == times, 'Wrong times');
+        assert(absorber.get_absorptions(SLOT) == absorptions, 'Wrong absorptions');
+        assert(absorber.get_ton_equivalent(SLOT) == TON_EQUIVALENT, 'Wrong ton equivalent');
+
+        // [Assert] Reset absorptions
+        let absorptions = array![4].span();
+        let times = array![4].span();
+        absorber.set_absorptions(SLOT, times, absorptions, TON_EQUIVALENT);
+        assert(absorber.get_times(SLOT) == times, 'Wrong times');
+        assert(absorber.get_absorptions(SLOT) == absorptions, 'Wrong absorptions');
+        assert(absorber.get_ton_equivalent(SLOT) == TON_EQUIVALENT, 'Wrong ton equivalent');
+
+    }
+
+    #[test]
     #[available_gas(5_000_000)]
     #[should_panic] // Caller is missing role
     fn test_project_mint_revert_not_minter() {

@@ -112,16 +112,9 @@ mod Absorber {
 
             // [Effect] Clean times and absorptions
             let mut stored_times = self._times.read(slot);
+            stored_times.len = 0;
             let mut stored_absorptions = self._absorptions.read(slot);
-            let mut index = stored_times.len();
-            loop {
-                if index == 0 {
-                    break;
-                }
-                stored_times.pop_front();
-                stored_absorptions.pop_front();
-                index -= 1;
-            };
+            stored_absorptions.len = 0;
 
             // [Effect] Store new times and absorptions
             let mut index = 0;

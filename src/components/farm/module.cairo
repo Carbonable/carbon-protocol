@@ -486,16 +486,9 @@ mod Farm {
         fn _set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {
             // [Effect] Clean times and prices
             let mut stored_times = self._times.read();
+            stored_times.len = 0;
             let mut stored_prices = self._prices.read();
-            let mut index = stored_times.len();
-            loop {
-                if index == 0 {
-                    break;
-                }
-                stored_times.pop_front();
-                stored_prices.pop_front();
-                index -= 1;
-            };
+            stored_prices.len = 0;
 
             // [Effect] Store new times and prices
             let mut index = 0;
@@ -579,17 +572,9 @@ mod Farm {
         fn _update_cumsales(self: @ContractState) {
             // [Effect] Clean updated_prices and cumsales
             let mut updated_prices = self._updated_prices.read();
+            updated_prices.len = 0;
             let mut cumsales = self._cumsales.read();
-            assert(updated_prices.len() == cumsales.len(), 'Lengths mismatch');
-            let mut index = updated_prices.len();
-            loop {
-                if index == 0 {
-                    break;
-                }
-                updated_prices.pop_front();
-                cumsales.pop_front();
-                index -= 1;
-            };
+            cumsales.len = 0;
 
             // [Effect] Compute sales and store updated prices
             let project = self._project.read();
