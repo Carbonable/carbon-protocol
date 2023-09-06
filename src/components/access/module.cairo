@@ -66,7 +66,9 @@ mod Access {
             // [Effect] Revoke current withdrawer
             let withdrawer = self._role_members.read((WITHDRAWER_ROLE, 0));
             let mut unsafe_state = AccessControl::unsafe_new_contract_state();
-            AccessControl::InternalImpl::_revoke_role(ref unsafe_state, WITHDRAWER_ROLE, withdrawer);
+            AccessControl::InternalImpl::_revoke_role(
+                ref unsafe_state, WITHDRAWER_ROLE, withdrawer
+            );
 
             // [Effect] Set new withdrawer
             AccessControl::InternalImpl::_grant_role(ref unsafe_state, WITHDRAWER_ROLE, user);

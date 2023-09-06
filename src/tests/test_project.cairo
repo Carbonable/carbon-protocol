@@ -194,7 +194,6 @@ mod Test {
         assert(absorber.get_times(SLOT) == times, 'Wrong times');
         assert(absorber.get_absorptions(SLOT) == absorptions, 'Wrong absorptions');
         assert(absorber.get_ton_equivalent(SLOT) == TON_EQUIVALENT, 'Wrong ton equivalent');
-
     }
 
     #[test]

@@ -18,7 +18,10 @@ mod Mint {
 
     use carbon::components::mint::interface::IMint;
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
-    use carbon::contracts::project::{IExternalDispatcher as IProjectDispatcher, IExternalDispatcherTrait as IProjectDispatcherTrait};
+    use carbon::contracts::project::{
+        IExternalDispatcher as IProjectDispatcher,
+        IExternalDispatcherTrait as IProjectDispatcherTrait
+    };
 
     #[storage]
     struct Storage {
@@ -48,25 +51,39 @@ mod Mint {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct PreSaleOpen { time: u64 }
+    struct PreSaleOpen {
+        time: u64
+    }
 
     #[derive(Drop, starknet::Event)]
-    struct PreSaleClose { time: u64 }
+    struct PreSaleClose {
+        time: u64
+    }
 
     #[derive(Drop, starknet::Event)]
-    struct PublicSaleOpen { time: u64 }
+    struct PublicSaleOpen {
+        time: u64
+    }
 
     #[derive(Drop, starknet::Event)]
-    struct PublicSaleClose { time: u64 }
+    struct PublicSaleClose {
+        time: u64
+    }
 
     #[derive(Drop, starknet::Event)]
-    struct SoldOut { time: u64 }
+    struct SoldOut {
+        time: u64
+    }
 
     #[derive(Drop, starknet::Event)]
-    struct Airdrop { time: u64 }
+    struct Airdrop {
+        time: u64
+    }
 
     #[derive(Drop, starknet::Event)]
-    struct Buy { time: u64 }
+    struct Buy {
+        time: u64
+    }
 
     impl MintImpl of IMint<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
@@ -114,24 +131,32 @@ mod Mint {
             self.CarbonableMinter_whitelist_merkle_root_.read()
         }
 
-        fn get_whitelist_allocation(self: @ContractState, account: ContractAddress, allocation: u256, proof: Span<felt252>) -> u256 {
+        fn get_whitelist_allocation(
+            self: @ContractState, account: ContractAddress, allocation: u256, proof: Span<felt252>
+        ) -> u256 {
             let root = self.CarbonableMinter_whitelist_merkle_root_.read();
             let leaf = LegacyHash::hash(account.into(), allocation);
             let mut tree: MerkleTree = MerkleTreeTrait::new();
             let whitelisted = tree.verify(root, leaf, proof);
-            allocation * if whitelisted { 1 } else { 0 }
+            allocation * if whitelisted {
+                1
+            } else {
+                0
+            }
         }
 
         fn get_claimed_value(self: @ContractState, account: ContractAddress) -> u256 {
             self.CarbonableMinter_claimed_value_.read(account)
         }
-        
+
         fn is_sold_out(self: @ContractState) -> bool {
             let project_address = self.CarbonableMinter_carbonable_project_address_.read();
             let slot = self.CarbonableMinter_carbonable_project_slot_.read();
-            let max_value = IAbsorberDispatcher { contract_address: project_address }.get_project_value(slot);
+            let max_value = IAbsorberDispatcher { contract_address: project_address }
+                .get_project_value(slot);
             let reserved_value = self.CarbonableMinter_reserved_value_.read();
-            let total_value = IProjectDispatcher { contract_address: project_address }.total_value(slot);
+            let total_value = IProjectDispatcher { contract_address: project_address }
+                .total_value(slot);
             total_value + reserved_value >= max_value
         }
 
@@ -143,9 +168,19 @@ mod Mint {
         fn decrease_reserved_value(ref self: ContractState, value: u256) {}
         fn airdrop(ref self: ContractState, to: ContractAddress, value: u256) {}
         fn withdraw(ref self: ContractState) {}
-        fn transfer(ref self: ContractState, token_address: ContractAddress, recipient: ContractAddress, amount: u256) {}
-        fn pre_buy(ref self: ContractState, allocation: u256, proof: Span<felt252>, value: u256, force: bool) {}
+        fn transfer(
+            ref self: ContractState,
+            token_address: ContractAddress,
+            recipient: ContractAddress,
+            amount: u256
+        ) {}
+        fn pre_buy(
+            ref self: ContractState,
+            allocation: u256,
+            proof: Span<felt252>,
+            value: u256,
+            force: bool
+        ) {}
         fn public_buy(ref self: ContractState, value: u256, force: bool) {}
     }
-
 }
