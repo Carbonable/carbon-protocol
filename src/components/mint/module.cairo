@@ -25,17 +25,17 @@ mod Mint {
 
     #[storage]
     struct Storage {
-        _mint_carbonable_project_address_: ContractAddress,
-        _mint_carbonable_project_slot_: u256,
-        _mint_payment_token_address_: ContractAddress,
-        _mint_public_sale_open_: bool,
-        _mint_max_value_per_tx_: u256,
-        _mint_min_value_per_tx_: u256,
-        _mint_max_value_: u256,
-        _mint_unit_price_: u256,
-        _mint_reserved_value_: u256,
-        _mint_whitelist_merkle_root_: felt252,
-        _mint_claimed_value_: LegacyMap<ContractAddress, u256>,
+        _mint_carbonable_project_address: ContractAddress,
+        _mint_carbonable_project_slot: u256,
+        _mint_payment_token_address: ContractAddress,
+        _mint_public_sale_open: bool,
+        _mint_max_value_per_tx: u256,
+        _mint_min_value_per_tx: u256,
+        _mint_max_value: u256,
+        _mint_unit_price: u256,
+        _mint_reserved_value: u256,
+        _mint_whitelist_merkle_root: felt252,
+        _mint_claimed_value: LegacyMap<ContractAddress, u256>,
     }
 
     #[event]
@@ -91,54 +91,54 @@ mod Mint {
 
     impl MintImpl of IMint<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
-            self._mint_carbonable_project_address_.read()
+            self._mint_carbonable_project_address.read()
         }
 
         fn get_carbonable_project_slot(self: @ContractState) -> u256 {
-            self._mint_carbonable_project_slot_.read()
+            self._mint_carbonable_project_slot.read()
         }
 
         fn get_payment_token_address(self: @ContractState) -> ContractAddress {
-            self._mint_payment_token_address_.read()
+            self._mint_payment_token_address.read()
         }
 
         fn is_pre_sale_open(self: @ContractState) -> bool {
-            let merkle_root = self._mint_whitelist_merkle_root_.read();
+            let merkle_root = self._mint_whitelist_merkle_root.read();
             merkle_root != 0
         }
 
         fn is_public_sale_open(self: @ContractState) -> bool {
-            self._mint_public_sale_open_.read()
+            self._mint_public_sale_open.read()
         }
 
         fn get_min_value_per_tx(self: @ContractState) -> u256 {
-            self._mint_min_value_per_tx_.read()
+            self._mint_min_value_per_tx.read()
         }
 
         fn get_max_value_per_tx(self: @ContractState) -> u256 {
-            self._mint_max_value_per_tx_.read()
+            self._mint_max_value_per_tx.read()
         }
 
         fn get_unit_price(self: @ContractState) -> u256 {
-            self._mint_unit_price_.read()
+            self._mint_unit_price.read()
         }
 
         fn get_reserved_value(self: @ContractState) -> u256 {
-            self._mint_reserved_value_.read()
+            self._mint_reserved_value.read()
         }
 
         fn get_max_value(self: @ContractState) -> u256 {
-            self._mint_max_value_.read()
+            self._mint_max_value.read()
         }
 
         fn get_whitelist_merkle_root(self: @ContractState) -> felt252 {
-            self._mint_whitelist_merkle_root_.read()
+            self._mint_whitelist_merkle_root.read()
         }
 
         fn get_whitelist_allocation(
             self: @ContractState, account: ContractAddress, allocation: felt252, proof: Span<felt252>
         ) -> felt252 {
-            let root = self._mint_whitelist_merkle_root_.read();
+            let root = self._mint_whitelist_merkle_root.read();
             let leaf = LegacyHash::hash(account.into(), allocation);
             let mut tree: MerkleTree = MerkleTreeTrait::new();
             let whitelisted = tree.verify(root, leaf, proof);
@@ -150,15 +150,15 @@ mod Mint {
         }
 
         fn get_claimed_value(self: @ContractState, account: ContractAddress) -> u256 {
-            self._mint_claimed_value_.read(account)
+            self._mint_claimed_value.read(account)
         }
 
         fn is_sold_out(self: @ContractState) -> bool {
-            let project_address = self._mint_carbonable_project_address_.read();
-            let slot = self._mint_carbonable_project_slot_.read();
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
             let max_value = IAbsorberDispatcher { contract_address: project_address }
                 .get_project_value(slot);
-            let reserved_value = self._mint_reserved_value_.read();
+            let reserved_value = self._mint_reserved_value.read();
             let total_value = IProjectDispatcher { contract_address: project_address }
                 .total_value(slot);
             total_value + reserved_value >= max_value
@@ -166,7 +166,7 @@ mod Mint {
 
         fn set_whitelist_merkle_root(ref self: ContractState, whitelist_merkle_root: felt252) {
             // [Effect] Update storage
-            self._mint_whitelist_merkle_root_.write(whitelist_merkle_root);
+            self._mint_whitelist_merkle_root.write(whitelist_merkle_root);
 
             // [Event] Emit event
             let current_time = get_block_timestamp();
@@ -179,7 +179,7 @@ mod Mint {
 
         fn set_public_sale_open(ref self: ContractState, public_sale_open: bool) {
             // [Effect] Update storage
-            self._mint_public_sale_open_.write(public_sale_open);
+            self._mint_public_sale_open.write(public_sale_open);
 
             // [Event] Emit event
             let current_time = get_block_timestamp();
@@ -191,21 +191,38 @@ mod Mint {
         }
 
         fn set_max_value_per_tx(ref self: ContractState, max_value_per_tx: u256) {
-            self._mint_max_value_per_tx_.write(max_value_per_tx);
+            // [Check] Value in range
+            let max_value = self._mint_max_value.read();
+            assert(max_value_per_tx <= max_value, 'Invalid max value per tx');
+            let min_value_per_tx = self._mint_min_value_per_tx.read();
+            assert(max_value_per_tx >= min_value_per_tx, 'Invalid max value per tx');
+            // [Effect] Store value
+            self._mint_max_value_per_tx.write(max_value_per_tx);
         }
 
         fn set_min_value_per_tx(ref self: ContractState, min_value_per_tx: u256) {
-            self._mint_min_value_per_tx_.write(min_value_per_tx);
+            // [Check] Value in range
+            let max_value_per_tx = self._mint_max_value_per_tx.read();
+            assert(max_value_per_tx >= min_value_per_tx, 'Invalid min value per tx');
+            // [Effect] Store value
+            self._mint_min_value_per_tx.write(min_value_per_tx);
         }
 
         fn set_unit_price(ref self: ContractState, unit_price: u256) {
-            self._mint_unit_price_.write(unit_price);
+            // [Check] Value not null
+            assert(unit_price > 0, 'Invalid unit price');
+            // [Effect] Store value
+            self._mint_unit_price.write(unit_price);
         }
 
         fn decrease_reserved_value(ref self: ContractState, value: u256) {
-            let reserved_value = self._mint_reserved_value_.read();
+            // [Check] Value not null
+            assert(value > 0, 'Invalid value');
+            // [Check] Enough reserved value available
+            let reserved_value = self._mint_reserved_value.read();
             assert(reserved_value >= value, 'Not enough reserved value');
-            self._mint_reserved_value_.write(reserved_value - value);
+            // [Effect] Update reserved value
+            self._mint_reserved_value.write(reserved_value - value);
         }
 
         fn airdrop(ref self: ContractState, to: ContractAddress, value: u256) {
@@ -213,9 +230,12 @@ mod Mint {
             let caller_address = get_caller_address();
             assert(!caller_address.is_zero(), 'Invalid caller');
 
+            // [Check] Value not null
+            assert(value > 0, 'Invalid value');
+
             // [Check] Enough value available
-            let project_address = self._mint_carbonable_project_address_.read();
-            let slot = self._mint_carbonable_project_slot_.read();
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
             let project = IProjectDispatcher { contract_address: project_address };
             let total_value = project.total_value(slot);
             let absorber = IAbsorberDispatcher { contract_address: project_address };
@@ -223,11 +243,11 @@ mod Mint {
             assert(total_value + value <= project_value, 'Not enough value');
 
             // [Check] Enough reserved value available
-            let reserved_value = self._mint_reserved_value_.read();
+            let reserved_value = self._mint_reserved_value.read();
             assert(value <= reserved_value, 'Not enough reserved value');
 
             // [Effect] Update reserved value
-            self._mint_reserved_value_.write(reserved_value - value);
+            self._mint_reserved_value.write(reserved_value - value);
 
             // [Interaction] Mint
             project.mint(to, slot, value);
@@ -239,7 +259,7 @@ mod Mint {
 
         fn withdraw(ref self: ContractState) {
             // [Compute] Balance to withdraw
-            let token_address = self._mint_payment_token_address_.read();
+            let token_address = self._mint_payment_token_address.read();
             let erc20 = IERC20Dispatcher { contract_address: token_address };
             let contract_address = get_contract_address();
             let balance = erc20.balance_of(contract_address);
@@ -269,7 +289,7 @@ mod Mint {
             force: bool
         ) {
             // [Check] Pre sale is open
-            let merkle_root = self._mint_whitelist_merkle_root_.read();
+            let merkle_root = self._mint_whitelist_merkle_root.read();
             assert(merkle_root != 0, 'Pre sale is closed');
 
             // [Check] Caller is whitelisted
@@ -278,19 +298,19 @@ mod Mint {
             assert(allocation.into() > 0_u256, 'Caller is not whitelisted');
 
             // [Check] Enough allocation value available
-            let claimed_value = self._mint_claimed_value_.read(caller_address);
+            let claimed_value = self._mint_claimed_value.read(caller_address);
             assert(claimed_value + value <= allocation.into(), 'Not enough allocation value');
 
             // [Interaction] Buy
             let minted_value = self.buy(value, force);
 
             // [Effect] Update claimed value
-            self._mint_claimed_value_.write(caller_address, claimed_value + minted_value);
+            self._mint_claimed_value.write(caller_address, claimed_value + minted_value);
         }
 
         fn public_buy(ref self: ContractState, value: u256, force: bool) {
             // [Check] Public sale is open
-            let public_sale_open = self._mint_public_sale_open_.read();
+            let public_sale_open = self._mint_public_sale_open.read();
             assert(public_sale_open, 'Sale is closed');
 
             // [Interaction] Buy
@@ -321,20 +341,20 @@ mod Mint {
             assert(reserved_value <= max_value, 'Invalid reserved value');
 
             // [Effect] Update storage
-            self._mint_carbonable_project_address_.write(carbonable_project_address);
-            self._mint_carbonable_project_slot_.write(carbonable_project_slot);
+            self._mint_carbonable_project_address.write(carbonable_project_address);
+            self._mint_carbonable_project_slot.write(carbonable_project_slot);
 
             // [Check] Max value is valid
             let remaining_value = self.project_remaining_value();
             assert(max_value <= remaining_value, 'Invalid max value');
 
             // [Effect] Update storage
-            self._mint_payment_token_address_.write(payment_token_address);
-            self._mint_max_value_per_tx_.write(max_value_per_tx);
-            self._mint_min_value_per_tx_.write(min_value_per_tx);
-            self._mint_max_value_.write(max_value);
-            self._mint_unit_price_.write(unit_price);
-            self._mint_reserved_value_.write(reserved_value);
+            self._mint_payment_token_address.write(payment_token_address);
+            self._mint_max_value_per_tx.write(max_value_per_tx);
+            self._mint_min_value_per_tx.write(min_value_per_tx);
+            self._mint_max_value.write(max_value);
+            self._mint_unit_price.write(unit_price);
+            self._mint_reserved_value.write(reserved_value);
 
             // [Effect] Use dedicated function to emit corresponding events
             self.set_public_sale_open(public_sale_open);
@@ -349,19 +369,19 @@ mod Mint {
             assert(!caller_address.is_zero(), 'Invalid caller');
 
             // [Check] Allowed value
-            let min_value_per_tx = self._mint_min_value_per_tx_.read();
+            let min_value_per_tx = self._mint_min_value_per_tx.read();
             assert(value >= min_value_per_tx, 'Value too low');
-            let max_value_per_tx = self._mint_max_value_per_tx_.read();
+            let max_value_per_tx = self._mint_max_value_per_tx.read();
             assert(value <= max_value_per_tx, 'Value too high');
 
             // [Compute] If remaining value is lower than specified value and force is enabled
             // Then replace the specified value by the remaining value otherwize keep the value unchanged
-            let max_value = self._mint_max_value_.read();
-            let reserved_value = self._mint_reserved_value_.read();
+            let max_value = self._mint_max_value.read();
+            let reserved_value = self._mint_reserved_value.read();
             let available_value = max_value - reserved_value;
 
-            let project_address = self._mint_carbonable_project_address_.read();
-            let slot = self._mint_carbonable_project_slot_.read();
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
             let project = IProjectDispatcher { contract_address: project_address };
             let total_value = project.total_value(slot);
             let remaining_value = available_value - total_value;
@@ -376,9 +396,9 @@ mod Mint {
             assert(value <= remaining_value, 'Not enough value');
 
             // [Interaction] Pay
-            let unit_price = self._mint_unit_price_.read();
+            let unit_price = self._mint_unit_price.read();
             let amount = value * unit_price;
-            let token_address = self._mint_payment_token_address_.read();
+            let token_address = self._mint_payment_token_address.read();
             let erc20 = IERC20Dispatcher { contract_address: token_address };
             let contract_address = get_contract_address();
             let success = erc20.transfer_from(caller_address, contract_address, amount);
@@ -414,8 +434,8 @@ mod Mint {
 
         fn project_remaining_value(self: @ContractState) -> u256 {
             // [Compute] Total remaining value
-            let project_address = self._mint_carbonable_project_address_.read();
-            let slot = self._mint_carbonable_project_slot_.read();
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
             let project = IProjectDispatcher { contract_address: project_address };
             let total_value = project.total_value(slot);
             let absorber = IAbsorberDispatcher { contract_address: project_address };
@@ -433,6 +453,8 @@ mod Test {
     use starknet::ContractAddress;
     use starknet::testing::set_block_timestamp;
     use super::Mint;
+    use super::Mint::_mint_max_value_per_tx::InternalContractMemberStateTrait as MintMaxValuePerTxTrait;
+    use super::Mint::_mint_max_value::InternalContractMemberStateTrait as MintMaxValueTrait;
 
     const MAX_VALUE_PER_TX: u256 = 100;
     const MIN_VALUE_PER_TX: u256 = 5;
@@ -480,6 +502,7 @@ mod Test {
     fn test_mint_max_value_per_tx() {
         // [Setup]
         let mut state = STATE();
+        state._mint_max_value.write(1000);
         Mint::MintImpl::set_max_value_per_tx(ref state, MAX_VALUE_PER_TX);
         // [Assert] Storage
         let max_value_per_tx = Mint::MintImpl::get_max_value_per_tx(@state);
@@ -491,6 +514,7 @@ mod Test {
     fn test_mint_min_value_per_tx() {
         // [Setup]
         let mut state = STATE();
+        state._mint_max_value_per_tx.write(100);
         Mint::MintImpl::set_min_value_per_tx(ref state, MIN_VALUE_PER_TX);
         // [Assert] Storage
         let min_value_per_tx = Mint::MintImpl::get_min_value_per_tx(@state);
