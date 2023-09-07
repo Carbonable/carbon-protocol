@@ -13,9 +13,9 @@ mod Access {
 
     #[storage]
     struct Storage {
-        _role_members: LegacyMap<(felt252, u32), ContractAddress>,
-        _role_members_index: LegacyMap<(felt252, ContractAddress), u32>,
-        _role_members_len: LegacyMap<felt252, u32>,
+        _access_role_members: LegacyMap<(felt252, u32), ContractAddress>,
+        _access_role_members_index: LegacyMap<(felt252, ContractAddress), u32>,
+        _access_role_members_len: LegacyMap<felt252, u32>,
     }
 
     #[external(v0)]
@@ -40,31 +40,31 @@ mod Access {
     impl CertifierImpl of ICertifier<ContractState> {
         fn get_certifier(self: @ContractState, slot: u256) -> ContractAddress {
             let role = self._hash(CERTIFIER_ROLE, slot);
-            self._role_members.read((role, 0))
+            self._access_role_members.read((role, 0))
         }
 
         fn set_certifier(ref self: ContractState, slot: u256, user: ContractAddress) {
             // [Effect] Revoke current certifier
             let role = self._hash(CERTIFIER_ROLE, slot);
-            let certifier = self._role_members.read((role, 0));
+            let certifier = self._access_role_members.read((role, 0));
             let mut unsafe_state = AccessControl::unsafe_new_contract_state();
             AccessControl::InternalImpl::_revoke_role(ref unsafe_state, role, certifier);
 
             // [Effect] Set new certifier
             AccessControl::InternalImpl::_grant_role(ref unsafe_state, role, user);
-            self._role_members.write((role, 0), user);
+            self._access_role_members.write((role, 0), user);
         }
     }
 
     #[external(v0)]
     impl WithdrawerImpl of IWithdrawer<ContractState> {
         fn get_withdrawer(self: @ContractState) -> ContractAddress {
-            self._role_members.read((WITHDRAWER_ROLE, 0))
+            self._access_role_members.read((WITHDRAWER_ROLE, 0))
         }
 
         fn set_withdrawer(ref self: ContractState, user: ContractAddress) {
             // [Effect] Revoke current withdrawer
-            let withdrawer = self._role_members.read((WITHDRAWER_ROLE, 0));
+            let withdrawer = self._access_role_members.read((WITHDRAWER_ROLE, 0));
             let mut unsafe_state = AccessControl::unsafe_new_contract_state();
             AccessControl::InternalImpl::_revoke_role(
                 ref unsafe_state, WITHDRAWER_ROLE, withdrawer
@@ -72,7 +72,7 @@ mod Access {
 
             // [Effect] Set new withdrawer
             AccessControl::InternalImpl::_grant_role(ref unsafe_state, WITHDRAWER_ROLE, user);
-            self._role_members.write((WITHDRAWER_ROLE, 0), user);
+            self._access_role_members.write((WITHDRAWER_ROLE, 0), user);
         }
     }
 
@@ -109,14 +109,14 @@ mod Access {
         }
 
         fn _get_role_members(self: @ContractState, role: felt252) -> Span<ContractAddress> {
-            let len = self._role_members_len.read(role);
+            let len = self._access_role_members_len.read(role);
             let mut members: Array<ContractAddress> = ArrayTrait::new();
             let mut index = 0;
             loop {
                 if index == len {
                     break;
                 }
-                members.append(self._role_members.read((role, index)));
+                members.append(self._access_role_members.read((role, index)));
                 index += 1;
             };
             members.span()
@@ -131,10 +131,10 @@ mod Access {
 
             // [Effect] Add user role
             AccessControl::InternalImpl::_grant_role(ref unsafe_sate, role, user);
-            let index = self._role_members_len.read(role);
-            self._role_members.write((role, index), user);
-            self._role_members_index.write((role, user), index);
-            self._role_members_len.write(role, index + 1);
+            let index = self._access_role_members_len.read(role);
+            self._access_role_members.write((role, index), user);
+            self._access_role_members_index.write((role, user), index);
+            self._access_role_members_len.write(role, index + 1);
         }
 
         fn _revoke_role(ref self: ContractState, role: felt252, user: ContractAddress) {
@@ -145,12 +145,12 @@ mod Access {
             }
 
             // [Effect] Remove user role
-            let len = self._role_members_len.read(role);
-            let user_index = self._role_members_index.read((role, user));
-            let last_user = self._role_members.read((role, len - 1));
-            self._role_members_len.write(role, len - 1);
-            self._role_members.write((role, user_index), last_user);
-            self._role_members_index.write((role, last_user), user_index);
+            let len = self._access_role_members_len.read(role);
+            let user_index = self._access_role_members_index.read((role, user));
+            let last_user = self._access_role_members.read((role, len - 1));
+            self._access_role_members_len.write(role, len - 1);
+            self._access_role_members.write((role, user_index), last_user);
+            self._access_role_members_index.write((role, last_user), user_index);
             AccessControl::InternalImpl::_revoke_role(ref unsafe_sate, role, user);
         }
     }

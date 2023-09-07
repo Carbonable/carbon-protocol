@@ -15,9 +15,9 @@ mod Yield {
 
     #[storage]
     struct Storage {
-        _erc20: IERC20Dispatcher,
-        _total_claimed: u256,
-        _claimed: LegacyMap::<ContractAddress, u256>,
+        _yield_erc20: IERC20Dispatcher,
+        _yield_total_claimed: u256,
+        _yield_claimed: LegacyMap::<ContractAddress, u256>,
     }
 
     #[event]
@@ -146,42 +146,42 @@ mod Yield {
     #[external(v0)]
     impl YieldImpl of IYield<ContractState> {
         fn get_payment_token_address(self: @ContractState) -> ContractAddress {
-            self._erc20.read().contract_address
+            self._yield_erc20.read().contract_address
         }
 
         fn get_total_claimable(self: @ContractState) -> u256 {
             let total_sale = self.get_total_sale();
-            let claimed = self._total_claimed.read();
+            let claimed = self._yield_total_claimed.read();
             total_sale + claimed
         }
 
         fn get_total_claimed(self: @ContractState) -> u256 {
-            self._total_claimed.read()
+            self._yield_total_claimed.read()
         }
 
         fn get_claimable_of(self: @ContractState, account: ContractAddress) -> u256 {
             let sale = self.get_sale_of(account);
-            let claimed = self._claimed.read(account);
+            let claimed = self._yield_claimed.read(account);
             sale - claimed
         }
 
         fn get_claimed_of(self: @ContractState, account: ContractAddress) -> u256 {
-            self._claimed.read(account)
+            self._yield_claimed.read(account)
         }
 
         fn claim(ref self: ContractState) {
             // [Effect] Update user claimed
             let caller = get_caller_address();
             let amount = self.get_claimable_of(caller);
-            let stored_amount = self._claimed.read(caller);
-            self._claimed.write(caller, stored_amount + amount);
+            let stored_amount = self._yield_claimed.read(caller);
+            self._yield_claimed.write(caller, stored_amount + amount);
 
             // [Effect] Update total claimed
-            let total_claimed = self._total_claimed.read();
-            self._total_claimed.write(total_claimed + amount);
+            let total_claimed = self._yield_total_claimed.read();
+            self._yield_total_claimed.write(total_claimed + amount);
 
             // [Interaction] ERC20 transfer
-            let erc20 = self._erc20.read();
+            let erc20 = self._yield_erc20.read();
             let success = erc20.transfer(caller, amount);
 
             // [Check] Transfer successful
@@ -202,7 +202,7 @@ mod Yield {
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::InternalImpl::initializer(ref unsafe_state, project, slot);
             // [Effect] Initialize yield
-            self._erc20.write(IERC20Dispatcher { contract_address: erc20 });
+            self._yield_erc20.write(IERC20Dispatcher { contract_address: erc20 });
         }
     }
 }

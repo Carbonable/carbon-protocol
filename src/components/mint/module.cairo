@@ -25,17 +25,17 @@ mod Mint {
 
     #[storage]
     struct Storage {
-        CarbonableMinter_carbonable_project_address_: ContractAddress,
-        CarbonableMinter_carbonable_project_slot_: u256,
-        CarbonableMinter_payment_token_address_: ContractAddress,
-        CarbonableMinter_public_sale_open_: bool,
-        CarbonableMinter_max_value_per_tx_: u256,
-        CarbonableMinter_min_value_per_tx_: u256,
-        CarbonableMinter_max_value_: u256,
-        CarbonableMinter_unit_price_: u256,
-        CarbonableMinter_reserved_value_: u256,
-        CarbonableMinter_whitelist_merkle_root_: felt252,
-        CarbonableMinter_claimed_value_: LegacyMap<ContractAddress, u256>,
+        _mint_carbonable_project_address_: ContractAddress,
+        _mint_carbonable_project_slot_: u256,
+        _mint_payment_token_address_: ContractAddress,
+        _mint_public_sale_open_: bool,
+        _mint_max_value_per_tx_: u256,
+        _mint_min_value_per_tx_: u256,
+        _mint_max_value_: u256,
+        _mint_unit_price_: u256,
+        _mint_reserved_value_: u256,
+        _mint_whitelist_merkle_root_: felt252,
+        _mint_claimed_value_: LegacyMap<ContractAddress, u256>,
     }
 
     #[event]
@@ -87,54 +87,54 @@ mod Mint {
 
     impl MintImpl of IMint<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
-            self.CarbonableMinter_carbonable_project_address_.read()
+            self._mint_carbonable_project_address_.read()
         }
 
         fn get_carbonable_project_slot(self: @ContractState) -> u256 {
-            self.CarbonableMinter_carbonable_project_slot_.read()
+            self._mint_carbonable_project_slot_.read()
         }
 
         fn get_payment_token_address(self: @ContractState) -> ContractAddress {
-            self.CarbonableMinter_payment_token_address_.read()
+            self._mint_payment_token_address_.read()
         }
 
         fn is_pre_sale_open(self: @ContractState) -> bool {
-            let merkle_root = self.CarbonableMinter_whitelist_merkle_root_.read();
+            let merkle_root = self._mint_whitelist_merkle_root_.read();
             merkle_root != 0
         }
 
         fn is_public_sale_open(self: @ContractState) -> bool {
-            self.CarbonableMinter_public_sale_open_.read()
+            self._mint_public_sale_open_.read()
         }
 
         fn get_min_value_per_tx(self: @ContractState) -> u256 {
-            self.CarbonableMinter_min_value_per_tx_.read()
+            self._mint_min_value_per_tx_.read()
         }
 
         fn get_max_value_per_tx(self: @ContractState) -> u256 {
-            self.CarbonableMinter_max_value_per_tx_.read()
+            self._mint_max_value_per_tx_.read()
         }
 
         fn get_unit_price(self: @ContractState) -> u256 {
-            self.CarbonableMinter_unit_price_.read()
+            self._mint_unit_price_.read()
         }
 
         fn get_reserved_value(self: @ContractState) -> u256 {
-            self.CarbonableMinter_reserved_value_.read()
+            self._mint_reserved_value_.read()
         }
 
         fn get_max_value(self: @ContractState) -> u256 {
-            self.CarbonableMinter_max_value_.read()
+            self._mint_max_value_.read()
         }
 
         fn get_whitelist_merkle_root(self: @ContractState) -> felt252 {
-            self.CarbonableMinter_whitelist_merkle_root_.read()
+            self._mint_whitelist_merkle_root_.read()
         }
 
         fn get_whitelist_allocation(
             self: @ContractState, account: ContractAddress, allocation: u256, proof: Span<felt252>
         ) -> u256 {
-            let root = self.CarbonableMinter_whitelist_merkle_root_.read();
+            let root = self._mint_whitelist_merkle_root_.read();
             let leaf = LegacyHash::hash(account.into(), allocation);
             let mut tree: MerkleTree = MerkleTreeTrait::new();
             let whitelisted = tree.verify(root, leaf, proof);
@@ -146,15 +146,15 @@ mod Mint {
         }
 
         fn get_claimed_value(self: @ContractState, account: ContractAddress) -> u256 {
-            self.CarbonableMinter_claimed_value_.read(account)
+            self._mint_claimed_value_.read(account)
         }
 
         fn is_sold_out(self: @ContractState) -> bool {
-            let project_address = self.CarbonableMinter_carbonable_project_address_.read();
-            let slot = self.CarbonableMinter_carbonable_project_slot_.read();
+            let project_address = self._mint_carbonable_project_address_.read();
+            let slot = self._mint_carbonable_project_slot_.read();
             let max_value = IAbsorberDispatcher { contract_address: project_address }
                 .get_project_value(slot);
-            let reserved_value = self.CarbonableMinter_reserved_value_.read();
+            let reserved_value = self._mint_reserved_value_.read();
             let total_value = IProjectDispatcher { contract_address: project_address }
                 .total_value(slot);
             total_value + reserved_value >= max_value

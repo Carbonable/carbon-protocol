@@ -15,8 +15,8 @@ mod Offset {
 
     #[storage]
     struct Storage {
-        _total_claimed: u256,
-        _claimed: LegacyMap::<ContractAddress, u256>,
+        _offset_total_claimed: u256,
+        _offset_claimed: LegacyMap::<ContractAddress, u256>,
     }
 
     #[event]
@@ -144,22 +144,22 @@ mod Offset {
     impl OffsetImpl of IOffset<ContractState> {
         fn get_total_claimable(self: @ContractState) -> u256 {
             let total_absorption = self.get_total_absorption();
-            let claimed = self._total_claimed.read();
+            let claimed = self._offset_total_claimed.read();
             total_absorption + claimed
         }
 
         fn get_total_claimed(self: @ContractState) -> u256 {
-            self._total_claimed.read()
+            self._offset_total_claimed.read()
         }
 
         fn get_claimable_of(self: @ContractState, account: ContractAddress) -> u256 {
             let absorption = self.get_absorption_of(account);
-            let claimed = self._claimed.read(account);
+            let claimed = self._offset_claimed.read(account);
             absorption - claimed
         }
 
         fn get_claimed_of(self: @ContractState, account: ContractAddress) -> u256 {
-            self._claimed.read(account)
+            self._offset_claimed.read(account)
         }
 
         fn claim(ref self: ContractState, amount: u256) {
@@ -169,12 +169,12 @@ mod Offset {
             assert(amount <= claimable, 'Claim amount is too high');
 
             // [Effect] Update user claimed
-            let stored_amount = self._claimed.read(caller);
-            self._claimed.write(caller, stored_amount + amount);
+            let stored_amount = self._offset_claimed.read(caller);
+            self._offset_claimed.write(caller, stored_amount + amount);
 
             // [Effect] Update total claimed
-            let total_claimed = self._total_claimed.read();
-            self._total_claimed.write(total_claimed + amount);
+            let total_claimed = self._offset_total_claimed.read();
+            self._offset_total_claimed.write(total_claimed + amount);
 
             // [Event] Emit event
             let current_time = get_block_timestamp();

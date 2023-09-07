@@ -9,10 +9,10 @@ mod Absorber {
 
     #[storage]
     struct Storage {
-        _ton_equivalent: LegacyMap<u256, u64>,
-        _project_value: LegacyMap<u256, u256>,
-        _times: LegacyMap<u256, List<u64>>,
-        _absorptions: LegacyMap<u256, List<u64>>,
+        _absorber_ton_equivalent: LegacyMap<u256, u64>,
+        _absorber_project_value: LegacyMap<u256, u256>,
+        _absorber_times: LegacyMap<u256, List<u64>>,
+        _absorber_absorptions: LegacyMap<u256, List<u64>>,
     }
 
     #[event]
@@ -38,32 +38,32 @@ mod Absorber {
     impl AbsorberImpl of IAbsorber<ContractState> {
         // Absorption
         fn get_start_time(self: @ContractState, slot: u256) -> u64 {
-            let times = self._times.read(slot);
+            let times = self._absorber_times.read(slot);
             if times.len() == 0 {
                 return 0;
             }
             times[0]
         }
         fn get_final_time(self: @ContractState, slot: u256) -> u64 {
-            let times = self._times.read(slot);
+            let times = self._absorber_times.read(slot);
             if times.len() == 0 {
                 return 0;
             }
             times[times.len() - 1]
         }
         fn get_times(self: @ContractState, slot: u256) -> Span<u64> {
-            self._times.read(slot).array().span()
+            self._absorber_times.read(slot).array().span()
         }
         fn get_absorptions(self: @ContractState, slot: u256) -> Span<u64> {
-            self._absorptions.read(slot).array().span()
+            self._absorber_absorptions.read(slot).array().span()
         }
         fn get_absorption(self: @ContractState, slot: u256, time: u64) -> u64 {
-            let times = self._times.read(slot).array();
+            let times = self._absorber_times.read(slot).array();
             if times.len() == 0 {
                 return 0;
             }
 
-            let absorptions = self._absorptions.read(slot).array();
+            let absorptions = self._absorber_absorptions.read(slot).array();
             if absorptions.len() == 0 {
                 return 0;
             }
@@ -80,23 +80,23 @@ mod Absorber {
             self.get_absorption(slot, get_block_timestamp())
         }
         fn get_final_absorption(self: @ContractState, slot: u256) -> u64 {
-            let absorptions = self._absorptions.read(slot);
+            let absorptions = self._absorber_absorptions.read(slot);
             if absorptions.len() == 0 {
                 return 0;
             }
             absorptions[absorptions.len() - 1]
         }
         fn get_project_value(self: @ContractState, slot: u256) -> u256 {
-            self._project_value.read(slot)
+            self._absorber_project_value.read(slot)
         }
         fn get_ton_equivalent(self: @ContractState, slot: u256) -> u64 {
-            self._ton_equivalent.read(slot)
+            self._absorber_ton_equivalent.read(slot)
         }
         fn is_setup(self: @ContractState, slot: u256) -> bool {
-            self._project_value.read(slot)
-                * self._times.read(slot).len().into()
-                * self._absorptions.read(slot).len().into()
-                * self._ton_equivalent.read(slot).into() != 0
+            self._absorber_project_value.read(slot)
+                * self._absorber_times.read(slot).len().into()
+                * self._absorber_absorptions.read(slot).len().into()
+                * self._absorber_ton_equivalent.read(slot).into() != 0
         }
         fn set_absorptions(
             ref self: ContractState,
@@ -111,9 +111,9 @@ mod Absorber {
             assert(ton_equivalent > 0, 'Ton equivalent must be positive');
 
             // [Effect] Clean times and absorptions
-            let mut stored_times = self._times.read(slot);
+            let mut stored_times = self._absorber_times.read(slot);
             stored_times.len = 0;
-            let mut stored_absorptions = self._absorptions.read(slot);
+            let mut stored_absorptions = self._absorber_absorptions.read(slot);
             stored_absorptions.len = 0;
 
             // [Effect] Store new times and absorptions
@@ -135,10 +135,10 @@ mod Absorber {
             };
 
             // [Effect] Store new ton equivalent
-            self._ton_equivalent.write(slot, ton_equivalent);
+            self._absorber_ton_equivalent.write(slot, ton_equivalent);
         }
         fn set_project_value(ref self: ContractState, slot: u256, project_value: u256) {
-            self._project_value.write(slot, project_value);
+            self._absorber_project_value.write(slot, project_value);
         }
     }
 }

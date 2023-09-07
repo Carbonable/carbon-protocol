@@ -25,21 +25,21 @@ mod Farm {
 
     #[storage]
     struct Storage {
-        _project: IAbsorberDispatcher,
-        _slot: u256,
-        _token_id: u256,
-        _total_absorption: u256,
-        _total_sale: u256,
-        _total_registered_value: u256,
-        _total_registered_time: u64,
-        _absorption: LegacyMap::<ContractAddress, u256>,
-        _sale: LegacyMap::<ContractAddress, u256>,
-        _registered_value: LegacyMap::<ContractAddress, u256>,
-        _registered_time: LegacyMap::<ContractAddress, u64>,
-        _times: List::<u64>,
-        _prices: List::<u256>,
-        _updated_prices: List::<u256>,
-        _cumsales: List::<u256>,
+        _farm_project: IAbsorberDispatcher,
+        _farm_slot: u256,
+        _farm_token_id: u256,
+        _farm_total_absorption: u256,
+        _farm_total_sale: u256,
+        _farm_total_registered_value: u256,
+        _farm_total_registered_time: u64,
+        _farm_absorption: LegacyMap::<ContractAddress, u256>,
+        _farm_sale: LegacyMap::<ContractAddress, u256>,
+        _farm_registered_value: LegacyMap::<ContractAddress, u256>,
+        _farm_registered_time: LegacyMap::<ContractAddress, u64>,
+        _farm_times: List::<u64>,
+        _farm_prices: List::<u256>,
+        _farm_updated_prices: List::<u256>,
+        _farm_cumsales: List::<u256>,
     }
 
     #[event]
@@ -85,24 +85,24 @@ mod Farm {
     #[external(v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
-            self._project.read().contract_address
+            self._farm_project.read().contract_address
         }
 
         fn get_carbonable_project_slot(self: @ContractState) -> u256 {
-            self._slot.read()
+            self._farm_slot.read()
         }
 
         fn get_total_deposited(self: @ContractState) -> u256 {
-            self._total_registered_value.read()
+            self._farm_total_registered_value.read()
         }
 
         fn get_total_absorption(self: @ContractState) -> u256 {
             // [Compute] Total absorption
-            let value = self._total_registered_value.read();
-            let time = self._total_registered_time.read();
+            let value = self._farm_total_registered_value.read();
+            let time = self._farm_total_registered_time.read();
             let current_time = get_block_timestamp();
             let computed = self._compute_absorption(value, time, current_time);
-            let stored = self._total_absorption.read();
+            let stored = self._farm_total_absorption.read();
             let total_absorption = computed + stored;
 
             // [Check] Overflow
@@ -111,24 +111,24 @@ mod Farm {
         }
 
         fn get_max_absorption(self: @ContractState) -> u256 {
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             project.get_current_absorption(slot).into()
         }
 
         fn get_total_sale(self: @ContractState) -> u256 {
             // [Check] Prices are set, return 0 otherwise
-            let prices = self._prices.read();
+            let prices = self._farm_prices.read();
             if prices.len() == 0 {
                 return 0_u256;
             }
 
             // [Compute] Total sale
-            let value = self._total_registered_value.read();
-            let time = self._total_registered_time.read();
+            let value = self._farm_total_registered_value.read();
+            let time = self._farm_total_registered_time.read();
             let current_time = get_block_timestamp();
             let computed = self._compute_sale(value, time, current_time);
-            let stored = self._total_sale.read();
+            let stored = self._farm_total_sale.read();
             let total_sale = computed + stored;
 
             // [Check] Overflow
@@ -138,14 +138,14 @@ mod Farm {
 
         fn get_max_sale(self: @ContractState) -> u256 {
             // [Check] Prices are set, return 0 otherwise
-            let prices = self._prices.read();
+            let prices = self._farm_prices.read();
             if prices.len() == 0 {
                 return 0_u256;
             }
 
             // [Compute] Max possible sale
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             let ton_equivalent = project.get_ton_equivalent(slot);
             let project_value = project.get_project_value(slot);
             let start_time = project.get_start_time(slot);
@@ -154,16 +154,16 @@ mod Farm {
         }
 
         fn get_deposited_of(self: @ContractState, account: ContractAddress) -> u256 {
-            self._registered_value.read(account)
+            self._farm_registered_value.read(account)
         }
 
         fn get_absorption_of(self: @ContractState, account: ContractAddress) -> u256 {
             // [Compute] Account absorption
-            let value = self._registered_value.read(account);
-            let time = self._registered_time.read(account);
+            let value = self._farm_registered_value.read(account);
+            let time = self._farm_registered_time.read(account);
             let current_time = get_block_timestamp();
             let computed = self._compute_absorption(value, time, current_time);
-            let stored = self._absorption.read(account);
+            let stored = self._farm_absorption.read(account);
             let absorption = computed + stored;
 
             // [Check] Overflow
@@ -173,17 +173,17 @@ mod Farm {
 
         fn get_sale_of(self: @ContractState, account: ContractAddress) -> u256 {
             // [Check] Prices are set, return 0 otherwise
-            let prices = self._prices.read();
+            let prices = self._farm_prices.read();
             if prices.len() == 0 {
                 return 0_u256;
             }
 
             // [Compute] Account sale
-            let value = self._registered_value.read(account);
-            let time = self._registered_time.read(account);
+            let value = self._farm_registered_value.read(account);
+            let time = self._farm_registered_time.read(account);
             let current_time = get_block_timestamp();
             let computed = self._compute_sale(value, time, current_time);
-            let stored = self._sale.read(account);
+            let stored = self._farm_sale.read(account);
             let sale = computed + stored;
 
             // [Check] Overflow
@@ -192,8 +192,8 @@ mod Farm {
         }
 
         fn get_current_price(self: @ContractState) -> u256 {
-            let mut times = self._times.read();
-            let mut prices = self._prices.read();
+            let mut times = self._farm_times.read();
+            let mut prices = self._farm_prices.read();
             let current_time: u256 = get_block_timestamp().into();
             let times_u256: Span<u256> = self.__list_u64_into_u256(@times);
             interpolate(
@@ -206,25 +206,25 @@ mod Farm {
         }
 
         fn get_prices(self: @ContractState) -> (Span<u64>, Span<u256>) {
-            let times = self._times.read().array().span();
-            let prices = self._prices.read().array().span();
+            let times = self._farm_times.read().array().span();
+            let prices = self._farm_prices.read().array().span();
             (times, prices)
         }
 
         fn get_cumsales(self: @ContractState) -> (Span<u64>, Span<u256>, Span<u256>) {
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             let absorption_times = project.get_times(slot);
-            let price_times = self._times.read().array().span();
+            let price_times = self._farm_times.read().array().span();
             let times = self.__merge_and_sort(absorption_times, price_times);
-            let updated_prices = self._updated_prices.read().array().span();
-            let cumsales = self._cumsales.read().array().span();
+            let updated_prices = self._farm_updated_prices.read().array().span();
+            let cumsales = self._farm_cumsales.read().array().span();
             (times, updated_prices, cumsales)
         }
 
         fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
             // [Check] Arrays are defined
-            let times = self._times.read();
+            let times = self._farm_times.read();
             let times_len = times.len();
             if times_len == 0 {
                 return (0_u256, 0_u256);
@@ -239,7 +239,7 @@ mod Farm {
 
             // [Compute] Current cumsale
             let times_u256: Span<u256> = self.__list_u64_into_u256(@times);
-            let cumsales = self._cumsales.read().array();
+            let cumsales = self._farm_cumsales.read().array();
             let current_cumsale = interpolate(
                 current_time.into(),
                 times_u256,
@@ -267,8 +267,8 @@ mod Farm {
             assert(current_cumsale <= next_cumsale, 'Cumsale overflow');
 
             // [Compute] Total investement
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             let project_value = project.get_project_value(slot);
             let unit_price = IMinterDispatcher { contract_address: minter }.getUnitPrice();
             let ton_equivalent = project.get_ton_equivalent(slot);
@@ -288,7 +288,7 @@ mod Farm {
 
             // [Check] Caller is owner
             let erc721 = IERC721Dispatcher {
-                contract_address: self._project.read().contract_address
+                contract_address: self._farm_project.read().contract_address
             };
             let caller = get_caller_address();
             let owner = erc721.owner_of(token_id);
@@ -307,7 +307,7 @@ mod Farm {
         fn withdraw_to_token(ref self: ContractState, token_id: u256, value: u256) {
             // [Check] Caller is owner
             let erc721 = IERC721Dispatcher {
-                contract_address: self._project.read().contract_address
+                contract_address: self._farm_project.read().contract_address
             };
             let caller = get_caller_address();
             let owner = erc721.owner_of(token_id);
@@ -319,14 +319,14 @@ mod Farm {
 
         fn add_price(ref self: ContractState, time: u64, price: u256) {
             // [Check] Time is later than the project start time
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             let start_time = project.get_start_time(slot);
             assert(time > start_time, 'Time is before start time');
 
             // [Check] First time to store
-            let mut stored_times = self._times.read();
-            let mut stored_prices = self._prices.read();
+            let mut stored_times = self._farm_times.read();
+            let mut stored_prices = self._farm_prices.read();
             if stored_times.len() == 0 {
                 stored_times.append(start_time);
                 stored_times.append(time);
@@ -352,8 +352,8 @@ mod Farm {
 
         fn update_last_price(ref self: ContractState, time: u64, price: u256) {
             // [Check] At least 2 prices stored
-            let mut stored_times = self._times.read();
-            let mut stored_prices = self._prices.read();
+            let mut stored_times = self._farm_times.read();
+            let mut stored_prices = self._farm_prices.read();
             assert(stored_times.len() > 1, 'Not enough prices stored');
 
             // [Check] Current time is sooner than the last 2 stored times
@@ -365,8 +365,8 @@ mod Farm {
             assert(time > before_last_time, 'Time is before the last 2 times');
 
             // [Check] Absorption is captured between the 2 new last times
-            let slot = self._slot.read();
-            let project = self._project.read();
+            let slot = self._farm_slot.read();
+            let project = self._farm_project.read();
             let initial_absorption = project.get_absorption(slot, before_last_time);
             let final_absorption = project.get_absorption(slot, time);
             assert(final_absorption > initial_absorption, 'No absorption captured');
@@ -396,8 +396,8 @@ mod Farm {
             assert(slot != 0_u256, 'Slot cannot be 0');
 
             // [Effect] Store inputs
-            self._project.write(IAbsorberDispatcher { contract_address: project });
-            self._slot.write(slot);
+            self._farm_project.write(IAbsorberDispatcher { contract_address: project });
+            self._farm_slot.write(slot);
         }
 
         fn _deposit(
@@ -406,35 +406,35 @@ mod Farm {
             // [Effect] Store caller and total absorptions
             let caller = get_caller_address();
             let absorption = self.get_absorption_of(caller);
-            self._absorption.write(caller, absorption);
+            self._farm_absorption.write(caller, absorption);
             let total_absorption = self.get_total_absorption();
-            self._total_absorption.write(total_absorption);
+            self._farm_total_absorption.write(total_absorption);
 
             // [Effect] Store caller and total sales
             let sale = self.get_sale_of(caller);
-            self._sale.write(caller, sale);
+            self._farm_sale.write(caller, sale);
             let total_sale = self.get_total_sale();
-            self._total_sale.write(total_sale);
+            self._farm_total_sale.write(total_sale);
 
             // [Effect] Register the new caller value and the current timestamp
             let current_time = get_block_timestamp();
-            let stored_value = self._registered_value.read(caller);
-            self._registered_time.write(caller, current_time);
-            self._registered_value.write(caller, stored_value + value);
+            let stored_value = self._farm_registered_value.read(caller);
+            self._farm_registered_time.write(caller, current_time);
+            self._farm_registered_value.write(caller, stored_value + value);
 
             // [Effect] Register the new total value and the current timestamp
-            let stored_total_value = self._total_registered_value.read();
-            self._total_registered_time.write(current_time);
-            self._total_registered_value.write(stored_total_value + value);
+            let stored_total_value = self._farm_total_registered_value.read();
+            self._farm_total_registered_time.write(current_time);
+            self._farm_total_registered_value.write(stored_total_value + value);
 
             // [Interaction] Transfer value from from_token_id to to_token_id
-            let to_token_id = self._token_id.read();
-            let project = self._project.read();
+            let to_token_id = self._farm_token_id.read();
+            let project = self._farm_project.read();
             if to_token_id == 0 {
                 // [Effect] If first time, store the new token_id
                 let token_id = IERC3525Dispatcher { contract_address: project.contract_address }
                     .transfer_value_from(from_token_id, to_token_id, to, value);
-                self._token_id.write(token_id);
+                self._farm_token_id.write(token_id);
             } else {
                 let zero = starknet::contract_address_const::<0>();
                 IERC3525Dispatcher { contract_address: project.contract_address }
@@ -450,31 +450,31 @@ mod Farm {
             // [Effect] Store caller and total absorptions
             let caller = get_caller_address();
             let absorption = self.get_absorption_of(caller);
-            self._absorption.write(caller, absorption);
+            self._farm_absorption.write(caller, absorption);
             let total_absorption = self.get_total_absorption();
-            self._total_absorption.write(total_absorption);
+            self._farm_total_absorption.write(total_absorption);
             // [Effect] Store caller and total sales
             let sale = self.get_sale_of(caller);
-            self._sale.write(caller, sale);
+            self._farm_sale.write(caller, sale);
             let total_sale = self.get_total_sale();
-            self._total_sale.write(total_sale);
+            self._farm_total_sale.write(total_sale);
 
             // [Check] Value is less than or equal to the registered values
             let current_time = get_block_timestamp();
-            let stored_value = self._registered_value.read(caller);
+            let stored_value = self._farm_registered_value.read(caller);
             assert(value <= stored_value, 'Value exceeds internal balance');
-            let stored_total_value = self._total_registered_value.read();
+            let stored_total_value = self._farm_total_registered_value.read();
             assert(value <= stored_total_value, 'Value exceeds internal balance');
             // [Effect] Register the new caller value and the current timestamp
-            self._registered_time.write(caller, current_time);
-            self._registered_value.write(caller, stored_value - value);
+            self._farm_registered_time.write(caller, current_time);
+            self._farm_registered_value.write(caller, stored_value - value);
             // [Effect] Register the new total value and current timestamp
-            self._total_registered_time.write(current_time);
-            self._total_registered_value.write(stored_total_value - value);
+            self._farm_total_registered_time.write(current_time);
+            self._farm_total_registered_value.write(stored_total_value - value);
 
             // [Interaction] Transfer value from contract to caller
-            let from_token_id = self._token_id.read();
-            let project = self._project.read();
+            let from_token_id = self._farm_token_id.read();
+            let project = self._farm_project.read();
             IERC3525Dispatcher { contract_address: project.contract_address }
                 .transfer_value_from(from_token_id, to_token_id, to, value);
 
@@ -485,9 +485,9 @@ mod Farm {
 
         fn _set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {
             // [Effect] Clean times and prices
-            let mut stored_times = self._times.read();
+            let mut stored_times = self._farm_times.read();
             stored_times.len = 0;
-            let mut stored_prices = self._prices.read();
+            let mut stored_prices = self._farm_prices.read();
             stored_prices.len = 0;
 
             // [Effect] Store new times and prices
@@ -506,8 +506,8 @@ mod Farm {
             self: @ContractState, value: u256, start_time: u64, end_time: u64
         ) -> u256 {
             // [Compute] Project value
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             let project_value = project.get_project_value(slot);
 
             // [Compute] Interpolated absorptions
@@ -527,16 +527,16 @@ mod Farm {
             }
 
             // [Check] Project value is not null, otherwise return 0
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             let project_value = project.get_project_value(slot);
             if project_value == 0_u256 {
                 return 0_u256;
             }
 
             // [Compute] Interpolated sales
-            let cumsales = self._cumsales.read().array().span();
-            let times = self._times.read();
+            let cumsales = self._farm_cumsales.read().array().span();
+            let times = self._farm_times.read();
 
             // [Compute] Convert times from Array<u64> into Array<u256>
             let (times, _, cumsales) = self.get_cumsales();
@@ -571,21 +571,21 @@ mod Farm {
 
         fn _update_cumsales(self: @ContractState) {
             // [Effect] Clean updated_prices and cumsales
-            let mut updated_prices = self._updated_prices.read();
+            let mut updated_prices = self._farm_updated_prices.read();
             updated_prices.len = 0;
-            let mut cumsales = self._cumsales.read();
+            let mut cumsales = self._farm_cumsales.read();
             cumsales.len = 0;
 
             // [Effect] Compute sales and store updated prices
-            let project = self._project.read();
-            let slot = self._slot.read();
+            let project = self._farm_project.read();
+            let slot = self._farm_slot.read();
             let absorption_times = project.get_times(slot);
-            let price_times = self._times.read().array().span();
+            let price_times = self._farm_times.read().array().span();
             let price_times_u256 = self.__span_u64_into_u256(price_times);
             let times: Span<u64> = self.__merge_and_sort(absorption_times, price_times);
             let times_u256: Span<u256> = self.__span_u64_into_u256(times);
 
-            let prices = self._prices.read().array().span();
+            let prices = self._farm_prices.read().array().span();
             let mut sales = ArrayTrait::<u256>::new();
             let mut index = 0;
             let mut absorption: u256 = 0;
@@ -769,17 +769,17 @@ mod Test {
     use alexandria_storage::list::{List, ListTrait};
 
     use super::Farm;
-    use super::Farm::_token_id::InternalContractMemberStateTrait as TokenIdTrait;
-    use super::Farm::_total_absorption::InternalContractMemberStateTrait as TotalAbsorptionTrait;
-    use super::Farm::_total_sale::InternalContractMemberStateTrait as TotalSaleTrait;
-    use super::Farm::_total_registered_value::InternalContractMemberStateTrait as TotalRegisteredValueTrait;
-    use super::Farm::_total_registered_time::InternalContractMemberStateTrait as TotalRegisteredTimeTrait;
-    use super::Farm::_absorption::InternalContractMemberStateTrait as AbsorptionTrait;
-    use super::Farm::_sale::InternalContractMemberStateTrait as SaleTrait;
-    use super::Farm::_registered_value::InternalContractMemberStateTrait as RegisteredValueTrait;
-    use super::Farm::_registered_time::InternalContractMemberStateTrait as RegisteredTimeTrait;
-    use super::Farm::_times::InternalContractMemberStateTrait as TimesTrait;
-    use super::Farm::_prices::InternalContractMemberStateTrait as PricesTrait;
+    use super::Farm::_farm_token_id::InternalContractMemberStateTrait as TokenIdTrait;
+    use super::Farm::_farm_total_absorption::InternalContractMemberStateTrait as TotalAbsorptionTrait;
+    use super::Farm::_farm_total_sale::InternalContractMemberStateTrait as TotalSaleTrait;
+    use super::Farm::_farm_total_registered_value::InternalContractMemberStateTrait as TotalRegisteredValueTrait;
+    use super::Farm::_farm_total_registered_time::InternalContractMemberStateTrait as TotalRegisteredTimeTrait;
+    use super::Farm::_farm_absorption::InternalContractMemberStateTrait as AbsorptionTrait;
+    use super::Farm::_farm_sale::InternalContractMemberStateTrait as SaleTrait;
+    use super::Farm::_farm_registered_value::InternalContractMemberStateTrait as RegisteredValueTrait;
+    use super::Farm::_farm_registered_time::InternalContractMemberStateTrait as RegisteredTimeTrait;
+    use super::Farm::_farm_times::InternalContractMemberStateTrait as TimesTrait;
+    use super::Farm::_farm_prices::InternalContractMemberStateTrait as PricesTrait;
 
     const SLOT: u256 = 1;
     const VALUE: u256 = 1000;
@@ -824,8 +824,8 @@ mod Test {
         let times = array![10, 20, 30, 40, 50].span();
         let prices = array![100, 200, 300, 400, 500].span();
         Farm::InternalImpl::_set_prices(ref state, times, prices);
-        assert(state._times.read().array().span() == times, 'Wrong times');
-        assert(state._prices.read().array().span() == prices, 'Wrong prices');
+        assert(state._farm_times.read().array().span() == times, 'Wrong times');
+        assert(state._farm_prices.read().array().span() == prices, 'Wrong prices');
     }
 
     #[test]
