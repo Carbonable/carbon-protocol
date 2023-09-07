@@ -27,6 +27,7 @@ mod components {
 
 mod contracts {
     mod project;
+    mod minter;
     mod offseter;
     mod yielder;
 }

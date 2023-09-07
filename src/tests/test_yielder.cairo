@@ -79,7 +79,10 @@ fn deploy_erc20(owner: ContractAddress) -> ContractAddress {
     let billion = 1000000000000;
     let mut calldata = array![NAME, SYMBOL, billion, 0, owner.into()];
     let (address, _) = deploy_syscall(
-        ERC20::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'), 0, calldata.span(), false
+        ERC20::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
+        0,
+        calldata.span(),
+        false
     )
         .expect('ERC20 deploy failed');
     address

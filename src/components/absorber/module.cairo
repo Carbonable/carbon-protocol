@@ -136,9 +136,22 @@ mod Absorber {
 
             // [Effect] Store new ton equivalent
             self._absorber_ton_equivalent.write(slot, ton_equivalent);
+
+            // [Event] Emit event
+            let current_time = get_block_timestamp();
+            self.emit(Event::AbsorptionUpdate(AbsorptionUpdate { slot: slot, time: current_time }));
         }
         fn set_project_value(ref self: ContractState, slot: u256, project_value: u256) {
+            // [Event] Update storage
             self._absorber_project_value.write(slot, project_value);
+
+            // [Event] Emit event
+            self
+                .emit(
+                    Event::ProjectValueUpdate(
+                        ProjectValueUpdate { slot: slot, value: project_value }
+                    )
+                );
         }
     }
 }
