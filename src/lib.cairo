@@ -35,6 +35,7 @@ mod contracts {
 #[cfg(test)]
 mod tests {
     mod test_project;
+    mod test_minter;
     mod test_offseter;
     mod test_yielder;
 }
