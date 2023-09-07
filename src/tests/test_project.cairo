@@ -63,7 +63,7 @@ mod Test {
     fn deploy_account(public_key: felt252) -> ContractAddress {
         let mut calldata = array![public_key];
         let (address, _) = deploy_syscall(
-            Account::TEST_CLASS_HASH.try_into().expect('Account declare failed'),
+            Account::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
             0,
             calldata.span(),
             false
@@ -75,7 +75,7 @@ mod Test {
     fn deploy_project(owner: ContractAddress) -> ContractAddress {
         let mut calldata = array![NAME, SYMBOL, DECIMALS.into(), owner.into()];
         let (address, _) = deploy_syscall(
-            Project::TEST_CLASS_HASH.try_into().expect('Project declare failed'),
+            Project::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
             0,
             calldata.span(),
             false

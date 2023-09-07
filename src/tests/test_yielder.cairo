@@ -66,7 +66,7 @@ struct Contracts {
 fn deploy_account(public_key: felt252) -> ContractAddress {
     let mut calldata = array![public_key];
     let (address, _) = deploy_syscall(
-        Account::TEST_CLASS_HASH.try_into().expect('Account declare failed'),
+        Account::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
         0,
         calldata.span(),
         false
@@ -79,7 +79,7 @@ fn deploy_erc20(owner: ContractAddress) -> ContractAddress {
     let billion = 1000000000000;
     let mut calldata = array![NAME, SYMBOL, billion, 0, owner.into()];
     let (address, _) = deploy_syscall(
-        ERC20::TEST_CLASS_HASH.try_into().expect('ERC20 declare failed'), 0, calldata.span(), false
+        ERC20::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'), 0, calldata.span(), false
     )
         .expect('ERC20 deploy failed');
     address
@@ -88,7 +88,7 @@ fn deploy_erc20(owner: ContractAddress) -> ContractAddress {
 fn deploy_project(owner: ContractAddress) -> ContractAddress {
     let mut calldata = array![NAME, SYMBOL, DECIMALS.into(), owner.into()];
     let (address, _) = deploy_syscall(
-        Project::TEST_CLASS_HASH.try_into().expect('Project declare failed'),
+        Project::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
         0,
         calldata.span(),
         false
@@ -104,7 +104,7 @@ fn deploy_yielder(
         project.into(), SLOT.low.into(), SLOT.high.into(), erc20.into(), owner.into()
     ];
     let (address, _) = deploy_syscall(
-        Yielder::TEST_CLASS_HASH.try_into().expect('Yielder declare failed'),
+        Yielder::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
         0,
         calldata.span(),
         false
