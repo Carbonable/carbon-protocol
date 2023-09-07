@@ -136,8 +136,8 @@ mod Mint {
         }
 
         fn get_whitelist_allocation(
-            self: @ContractState, account: ContractAddress, allocation: u256, proof: Span<felt252>
-        ) -> u256 {
+            self: @ContractState, account: ContractAddress, allocation: felt252, proof: Span<felt252>
+        ) -> felt252 {
             let root = self._mint_whitelist_merkle_root_.read();
             let leaf = LegacyHash::hash(account.into(), allocation);
             let mut tree: MerkleTree = MerkleTreeTrait::new();
@@ -263,7 +263,7 @@ mod Mint {
 
         fn pre_buy(
             ref self: ContractState,
-            allocation: u256,
+            allocation: felt252,
             proof: Span<felt252>,
             value: u256,
             force: bool
@@ -275,11 +275,11 @@ mod Mint {
             // [Check] Caller is whitelisted
             let caller_address = get_caller_address();
             let allocation = self.get_whitelist_allocation(caller_address, allocation, proof);
-            assert(allocation > 0, 'Caller is not whitelisted');
+            assert(allocation.into() > 0_u256, 'Caller is not whitelisted');
 
             // [Check] Enough allocation value available
             let claimed_value = self._mint_claimed_value_.read(caller_address);
-            assert(claimed_value + value <= allocation, 'Not enough allocation value');
+            assert(claimed_value + value <= allocation.into(), 'Not enough allocation value');
 
             // [Interaction] Buy
             let minted_value = self.buy(value, force);
@@ -422,5 +422,89 @@ mod Mint {
             let project_value = absorber.get_project_value(slot);
             project_value - total_value
         }
+    }
+}
+
+
+#[cfg(test)]
+mod Test {
+    use array::ArrayTrait;
+    use traits::TryInto;
+    use starknet::ContractAddress;
+    use starknet::testing::set_block_timestamp;
+    use super::Mint;
+
+    const MAX_VALUE_PER_TX: u256 = 100;
+    const MIN_VALUE_PER_TX: u256 = 5;
+    const UNIT_PRICE: u256 = 10;
+    const MERKLE_ROOT: felt252 = 3236969588476960619958150604131083087415975923122021901088942336874683133579;
+    const ALLOCATION: felt252 = 5;
+    const PROOF: felt252 = 1489335374474017495857579265074565262713421005832572026644103123081435719307;
+
+    fn STATE() -> Mint::ContractState {
+        Mint::contract_state_for_testing()
+    }
+
+    fn ACCOUNT() -> starknet::ContractAddress {
+        starknet::contract_address_const::<1001>()
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_mint_public_sale() {
+        // [Setup]
+        let mut state = STATE();
+        Mint::MintImpl::set_public_sale_open(ref state, true);
+        // [Assert] Storage
+        let public_sale_open = Mint::MintImpl::is_public_sale_open(@state);
+        assert(public_sale_open, 'Public sale is not open');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_mint_merkle_root() {
+        // [Setup]
+        let mut state = STATE();
+        Mint::MintImpl::set_whitelist_merkle_root(ref state, MERKLE_ROOT);
+        // [Assert] Storage
+        let merkle_root = Mint::MintImpl::get_whitelist_merkle_root(@state);
+        assert(merkle_root == MERKLE_ROOT, 'Invalid merkle root');
+        // [Assert] Verify
+        let proof = array![PROOF].span();
+        let allocation = Mint::MintImpl::get_whitelist_allocation(@state, ACCOUNT(), ALLOCATION, proof);
+        assert(allocation == ALLOCATION, 'Invalid allocation');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_mint_max_value_per_tx() {
+        // [Setup]
+        let mut state = STATE();
+        Mint::MintImpl::set_max_value_per_tx(ref state, MAX_VALUE_PER_TX);
+        // [Assert] Storage
+        let max_value_per_tx = Mint::MintImpl::get_max_value_per_tx(@state);
+        assert(max_value_per_tx == MAX_VALUE_PER_TX, 'Invalid max value per tx');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_mint_min_value_per_tx() {
+        // [Setup]
+        let mut state = STATE();
+        Mint::MintImpl::set_min_value_per_tx(ref state, MIN_VALUE_PER_TX);
+        // [Assert] Storage
+        let min_value_per_tx = Mint::MintImpl::get_min_value_per_tx(@state);
+        assert(min_value_per_tx == MIN_VALUE_PER_TX, 'Invalid min value per tx');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_mint_unit_price() {
+        // [Setup]
+        let mut state = STATE();
+        Mint::MintImpl::set_unit_price(ref state, UNIT_PRICE);
+        // [Assert] Storage
+        let unit_price = Mint::MintImpl::get_unit_price(@state);
+        assert(unit_price == UNIT_PRICE, 'Invalid unit price');
     }
 }

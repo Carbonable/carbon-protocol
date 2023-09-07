@@ -14,8 +14,8 @@ trait IMint<TContractState> {
     fn get_max_value(self: @TContractState) -> u256;
     fn get_whitelist_merkle_root(self: @TContractState) -> felt252;
     fn get_whitelist_allocation(
-        self: @TContractState, account: ContractAddress, allocation: u256, proof: Span<felt252>
-    ) -> u256;
+        self: @TContractState, account: ContractAddress, allocation: felt252, proof: Span<felt252>
+    ) -> felt252;
     fn get_claimed_value(self: @TContractState, account: ContractAddress) -> u256;
     fn is_sold_out(self: @TContractState) -> bool;
     fn set_whitelist_merkle_root(ref self: TContractState, whitelist_merkle_root: felt252);
@@ -33,7 +33,7 @@ trait IMint<TContractState> {
         amount: u256
     );
     fn pre_buy(
-        ref self: TContractState, allocation: u256, proof: Span<felt252>, value: u256, force: bool
+        ref self: TContractState, allocation: felt252, proof: Span<felt252>, value: u256, force: bool
     );
     fn public_buy(ref self: TContractState, value: u256, force: bool);
 }
