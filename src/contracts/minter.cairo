@@ -141,7 +141,10 @@ mod Minter {
             Mint::MintImpl::get_whitelist_merkle_root(@unsafe_state)
         }
         fn get_whitelist_allocation(
-            self: @ContractState, account: ContractAddress, allocation: felt252, proof: Span<felt252>
+            self: @ContractState,
+            account: ContractAddress,
+            allocation: felt252,
+            proof: Span<felt252>
         ) -> felt252 {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::get_whitelist_allocation(@unsafe_state, account, allocation, proof)

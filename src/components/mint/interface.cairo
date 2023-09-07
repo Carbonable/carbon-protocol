@@ -33,7 +33,11 @@ trait IMint<TContractState> {
         amount: u256
     );
     fn pre_buy(
-        ref self: TContractState, allocation: felt252, proof: Span<felt252>, value: u256, force: bool
+        ref self: TContractState,
+        allocation: felt252,
+        proof: Span<felt252>,
+        value: u256,
+        force: bool
     );
     fn public_buy(ref self: TContractState, value: u256, force: bool);
 }

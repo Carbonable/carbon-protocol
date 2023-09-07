@@ -107,14 +107,16 @@ fn deploy_erc20(owner: ContractAddress) -> ContractAddress {
     address
 }
 
-fn deploy_minter(project: ContractAddress, erc20: ContractAddress, owner: ContractAddress) -> ContractAddress {
+fn deploy_minter(
+    project: ContractAddress, erc20: ContractAddress, owner: ContractAddress
+) -> ContractAddress {
     let public_sale_open: bool = false;
     let mut calldata: Array<felt252> = array![
         project.into(),
         SLOT.low.into(),
         SLOT.high.into(),
         erc20.into(),
-        public_sale_open.into(),  // public_sale_open = false
+        public_sale_open.into(), // public_sale_open = false
         MAX_VALUE_PER_TX.low.into(),
         MAX_VALUE_PER_TX.high.into(),
         MIN_VALUE_PER_TX.low.into(),
