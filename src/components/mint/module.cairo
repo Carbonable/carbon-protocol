@@ -5,12 +5,13 @@ mod Mint {
     use option::OptionTrait;
     use array::{Array, ArrayTrait};
     use debug::PrintTrait;
-    use hash::LegacyHash;
+    use hash::HashStateTrait;
+    use pedersen::PedersenTrait;
 
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
 
-    use alexandria_data_structures::merkle_tree::{MerkleTree, MerkleTreeTrait};
+    use alexandria_data_structures::merkle_tree::{MerkleTree, MerkleTreeTrait, HashMethod};
 
     use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
@@ -142,8 +143,10 @@ mod Mint {
             proof: Span<felt252>
         ) -> felt252 {
             let root = self._mint_whitelist_merkle_root.read();
-            let leaf = LegacyHash::hash(account.into(), allocation);
-            let mut tree: MerkleTree = MerkleTreeTrait::new();
+            let mut state = PedersenTrait::new(account.into());
+            state = state.update(allocation);
+            let leaf = state.finalize();
+            let mut tree: MerkleTree = MerkleTreeTrait::new(HashMethod::Pedersen(()));
             let whitelisted = tree.verify(root, leaf, proof);
             allocation * if whitelisted {
                 1
