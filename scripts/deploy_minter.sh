@@ -2,7 +2,7 @@
 source ../.env
 
 SIERRA_FILE=../target/dev/carbon_Minter.sierra.json
-PROJECT=0x0448922595c703bde016aa4726d7e04c87517d756b5866d9e93b8711944932d9
+PROJECT=0x050da7d4a7815efafaa8b731b30b8b0abdad519a7626f52c602f5ec4b3c4d2ad
 SLOT=1
 ERC20=0x005a643907b9a4bc6a55e9069c4fd5fd1f5c79a22470690f75556c4736e34426
 PUBLIC_SALE_OPEN=0
@@ -61,5 +61,17 @@ deploy() {
     echo $address
 }
 
-contract_address=$(deploy)
+setup() {
+    contract=$(deploy)
+    output=$(starkli invoke $PROJECT add_minter u256:$SLOT $contract --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
+
+    if [[ $output == *"Error"* ]]; then
+        echo "Error: $output"
+        exit 1
+    fi
+
+    echo $contract
+}
+
+contract_address=$(setup)
 echo $contract_address

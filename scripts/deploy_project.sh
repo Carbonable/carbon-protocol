@@ -8,6 +8,9 @@ DECIMALS=6
 OWNER=0x063675fa1ecea10063722e61557ed7f49ed2503d6cdd74f4b31e9770b473650c
 SLOT=1
 PROJECT_VALUE=100000000
+TIMES="2 1688169600 1719792000"
+ABSORPTIONS="2 0 2746197000000"
+TON_EQUIVALENT=1000000
 
 # build the solution
 build() {
@@ -53,8 +56,20 @@ deploy() {
 
 setup() {
     contract=$(deploy)
-    output=$(starkli invoke $contract set_project_value u256:$SLOT u256:$PROJECT_VALUE --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
+    output=$(starkli invoke $contract set_project_value u256:$SLOT u256:$PROJECT_VALUE --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
+    if [[ $output == *"Error"* ]]; then
+        echo "Error: $output"
+        exit 1
+    fi
+
+    output=$(starkli invoke $contract set_certifier u256:$SLOT $OWNER --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
+    if [[ $output == *"Error"* ]]; then
+        echo "Error: $output"
+        exit 1
+    fi
+
+    output=$(starkli invoke $contract set_absorptions u256:$SLOT $TIMES $ABSORPTIONS $TON_EQUIVALENT --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
     if [[ $output == *"Error"* ]]; then
         echo "Error: $output"
         exit 1
