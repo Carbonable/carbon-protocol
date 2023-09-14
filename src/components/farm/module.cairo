@@ -14,7 +14,6 @@ mod Farm {
     use alexandria_storage::list::{List, ListTrait};
     use alexandria_data_structures::array_ext::ArrayTraitExt;
 
-    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 

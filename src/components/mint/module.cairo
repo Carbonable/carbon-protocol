@@ -13,7 +13,7 @@ mod Mint {
 
     use alexandria_data_structures::merkle_tree::{MerkleTree, MerkleTreeTrait, HashMethod};
 
-    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc20::interface::{IERC20CamelDispatcher, IERC20CamelDispatcherTrait};
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
@@ -266,9 +266,9 @@ mod Mint {
         fn withdraw(ref self: ContractState) {
             // [Compute] Balance to withdraw
             let token_address = self._mint_payment_token_address.read();
-            let erc20 = IERC20Dispatcher { contract_address: token_address };
+            let erc20 = IERC20CamelDispatcher { contract_address: token_address };
             let contract_address = get_contract_address();
-            let balance = erc20.balance_of(contract_address);
+            let balance = erc20.balanceOf(contract_address);
 
             // [Interaction] Transfer tokens
             let caller_address = get_caller_address();
@@ -282,7 +282,7 @@ mod Mint {
             recipient: ContractAddress,
             amount: u256
         ) {
-            let erc20 = IERC20Dispatcher { contract_address: token_address };
+            let erc20 = IERC20CamelDispatcher { contract_address: token_address };
             let success = erc20.transfer(recipient, amount);
             assert(success, 'Transfer failed');
         }
@@ -405,9 +405,9 @@ mod Mint {
             let unit_price = self._mint_unit_price.read();
             let amount = value * unit_price;
             let token_address = self._mint_payment_token_address.read();
-            let erc20 = IERC20Dispatcher { contract_address: token_address };
+            let erc20 = IERC20CamelDispatcher { contract_address: token_address };
             let contract_address = get_contract_address();
-            let success = erc20.transfer_from(caller_address, contract_address, amount);
+            let success = erc20.transferFrom(caller_address, contract_address, amount);
 
             // [Check] Transfer successful
             assert(success, 'Transfer failed');

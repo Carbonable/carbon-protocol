@@ -4,7 +4,7 @@ mod Yield {
     use debug::PrintTrait;
 
     // ERC20
-    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc20::interface::{IERC20CamelDispatcher, IERC20CamelDispatcherTrait};
 
     // Farm
     use carbon::components::farm::interface::IFarm;
@@ -15,7 +15,7 @@ mod Yield {
 
     #[storage]
     struct Storage {
-        _yield_erc20: IERC20Dispatcher,
+        _yield_erc20: IERC20CamelDispatcher,
         _yield_total_claimed: u256,
         _yield_claimed: LegacyMap::<ContractAddress, u256>,
     }
@@ -202,7 +202,7 @@ mod Yield {
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::InternalImpl::initializer(ref unsafe_state, project, slot);
             // [Effect] Initialize yield
-            self._yield_erc20.write(IERC20Dispatcher { contract_address: erc20 });
+            self._yield_erc20.write(IERC20CamelDispatcher { contract_address: erc20 });
         }
     }
 }
