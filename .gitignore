@@ -1,5 +1,7 @@
 # IDE
 .vscode
+account.json
+keystore.json
 
 # Python
 __pycache__
