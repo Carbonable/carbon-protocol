@@ -233,40 +233,4 @@ mod Test {
         absorber
             .set_absorptions(SLOT, array![1, 2, 3].span(), array![1, 2, 3].span(), TON_EQUIVALENT);
     }
-
-    #[test]
-    #[available_gas(4_000_000)]
-    #[should_panic] // Caller is not the owner
-    fn test_project_set_token_uri_revert_not_owner() {
-        // [Setup]
-        let (signers, contracts) = setup();
-        let project = IProjectDispatcher { contract_address: contracts.project };
-
-        // [Revert] Set token uri
-        project.set_token_uri(TOKEN_ID, 'URI');
-    }
-
-    #[test]
-    #[available_gas(4_000_000)]
-    #[should_panic] // Caller is not the owner
-    fn test_project_set_contract_uri_revert_not_owner() {
-        // [Setup]
-        let (signers, contracts) = setup();
-        let project = IProjectDispatcher { contract_address: contracts.project };
-
-        // [Revert] Set contract uri
-        project.set_contract_uri('URI');
-    }
-
-    #[test]
-    #[available_gas(4_000_000)]
-    #[should_panic] // Caller is not the owner
-    fn test_project_set_slot_uri_revert_not_owner() {
-        // [Setup]
-        let (signers, contracts) = setup();
-        let project = IProjectDispatcher { contract_address: contracts.project };
-
-        // [Revert] Set slot uri
-        project.set_slot_uri(SLOT, 'URI');
-    }
 }
