@@ -9,7 +9,7 @@ starknet = ">=2.2.0"
 alexandria_storage = { git = "https://github.com/keep-starknet-strange/alexandria", tag = "cairo-v2.1.0" }
 alexandria_numeric = { git = "https://github.com/keep-starknet-strange/alexandria", tag = "cairo-v2.1.0" }
 # alexandria_data_structures = { git = "https://github.com/keep-starknet-strange/alexandria", tag = "cairo-v2.1.0" }
-alexandria_data_structures = { git = "https://github.com/Bal7hazar/alexandria", branch = "feat/merkle-tree-generation" }
+alexandria_data_structures = { git = "https://github.com/Bal7hazar/alexandria", rev="04a4be633c885a2ed6a00987402a5530768f4741" }
 openzeppelin = { git = "https://github.com/OpenZeppelin/cairo-contracts.git", tag = "v0.7.0-rc.0" }
 cairo_erc_721 = { git = "https://github.com/carbonable-labs/cairo-erc-721" }
 cairo_erc_3525 = { git = "https://github.com/carbonable-labs/cairo-erc-3525", tag = "2.0.6" }
