@@ -7,9 +7,6 @@ trait IExternal<ContractState> {
     fn mint_value(ref self: ContractState, token_id: u256, value: u256);
     fn burn(ref self: ContractState, token_id: u256);
     fn burn_value(ref self: ContractState, token_id: u256, value: u256);
-    fn set_token_uri(ref self: ContractState, token_id: u256, token_uri: felt252);
-    fn set_contract_uri(ref self: ContractState, uri: felt252);
-    fn set_slot_uri(ref self: ContractState, slot: u256, uri: felt252);
 }
 
 
@@ -31,14 +28,13 @@ mod Project {
 
     // ERC721
     use openzeppelin::token::erc721::interface::{IERC721, IERC721Metadata};
-    use cairo_erc_721::extensions::enumerable::interface::IERC721Enumerable;
 
     // ERC3525
     use cairo_erc_3525::interface::IERC3525;
     use cairo_erc_3525::extensions::metadata::interface::IERC3525Metadata;
     use cairo_erc_3525::extensions::slotapprovable::interface::IERC3525SlotApprovable;
     use cairo_erc_3525::extensions::slotenumerable::interface::IERC3525SlotEnumerable;
-    use cairo_erc_3525::presets::erc3525_mintable_burnable_metadata_enumerable_slot_approvable_slot_enumerable::ERC3525MintableBurnableEMSASE as ERC3525;
+    use cairo_erc_3525::presets::erc3525_mintable_burnable_metadata_slot_approvable_slot_enumerable::ERC3525MintableBurnableMSASE as ERC3525;
 
     // Access control
     use carbon::components::access::interface::{IMinter, ICertifier};
@@ -47,6 +43,10 @@ mod Project {
     // Absorber
     use carbon::components::absorber::interface::IAbsorber;
     use carbon::components::absorber::module::Absorber;
+
+    // Metadata
+    use carbon::components::metadata::interface::{IContractDescriptor, ISlotDescriptor, IMetadata};
+    use carbon::components::metadata::module::Metadata;
 
     #[storage]
     struct Storage {}
@@ -213,8 +213,9 @@ mod Project {
         }
     }
 
+    #[generate_trait]
     #[external(v0)]
-    impl ERC721MetadataImpl of IERC721Metadata<ContractState> {
+    impl ERC721MetadataImpl of IERC721MetadataFeltSpan {
         fn name(self: @ContractState) -> felt252 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
             ERC3525::ERC721MetadataImpl::name(@unsafe_state)
@@ -225,29 +226,9 @@ mod Project {
             ERC3525::ERC721MetadataImpl::symbol(@unsafe_state)
         }
 
-        fn token_uri(self: @ContractState, token_id: u256) -> felt252 {
-            let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC721MetadataImpl::token_uri(@unsafe_state, token_id)
-        }
-    }
-
-    #[external(v0)]
-    impl ERC721EnumerableImpl of IERC721Enumerable<ContractState> {
-        fn total_supply(self: @ContractState) -> u256 {
-            let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC721EnumerableImpl::total_supply(@unsafe_state)
-        }
-
-        fn token_by_index(self: @ContractState, index: u256) -> u256 {
-            let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC721EnumerableImpl::token_by_index(@unsafe_state, index)
-        }
-
-        fn token_of_owner_by_index(
-            self: @ContractState, owner: ContractAddress, index: u256
-        ) -> u256 {
-            let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC721EnumerableImpl::token_of_owner_by_index(@unsafe_state, owner, index)
+        fn token_uri(self: @ContractState, token_id: u256) -> Span<felt252> {
+            let unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::SlotDescriptorImpl::construct_token_uri(@unsafe_state, token_id)
         }
     }
 
@@ -296,16 +277,17 @@ mod Project {
         }
     }
 
+    #[generate_trait]
     #[external(v0)]
-    impl ERC3525MetadataImpl of IERC3525Metadata<ContractState> {
-        fn contract_uri(self: @ContractState) -> felt252 {
-            let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC3525MetadataImpl::contract_uri(@unsafe_state)
+    impl ERC3525MetadataImpl of IERC3525MetadataFeltSpan {
+        fn contract_uri(self: @ContractState) -> Span<felt252> {
+            let unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::ContractDescriptorImpl::construct_contract_uri(@unsafe_state)
         }
 
-        fn slot_uri(self: @ContractState, slot: u256) -> felt252 {
-            let unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ERC3525MetadataImpl::slot_uri(@unsafe_state, slot)
+        fn slot_uri(self: @ContractState, slot: u256) -> Span<felt252> {
+            let unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::SlotDescriptorImpl::construct_slot_uri(@unsafe_state, slot)
         }
     }
 
@@ -395,33 +377,6 @@ mod Project {
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
             ERC3525::ExternalImpl::burn_value(ref unsafe_state, token_id, value)
         }
-
-        fn set_token_uri(ref self: ContractState, token_id: u256, token_uri: felt252) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Set token URI
-            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ExternalImpl::set_token_uri(ref unsafe_state, token_id, token_uri);
-        }
-
-        fn set_contract_uri(ref self: ContractState, uri: felt252) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Set contract URI
-            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ExternalImpl::set_contract_uri(ref unsafe_state, uri)
-        }
-
-        fn set_slot_uri(ref self: ContractState, slot: u256, uri: felt252) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Set slot URI
-            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
-            ERC3525::ExternalImpl::set_slot_uri(ref unsafe_state, slot, uri)
-        }
     }
 
     // Absorber
@@ -502,6 +457,42 @@ mod Project {
             // [Effect] Set project value
             let mut unsafe_state = Absorber::unsafe_new_contract_state();
             Absorber::AbsorberImpl::set_project_value(ref unsafe_state, slot, project_value)
+        }
+    }
+
+    // Metadata
+
+    #[external(v0)]
+    impl MetadataImpl of IMetadata<ContractState> {
+        fn get_contract_uri_implementation(self: @ContractState) -> ClassHash {
+            let unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::MetadataImpl::get_contract_uri_implementation(@unsafe_state)
+        }
+        fn get_slot_uri_implementation(self: @ContractState, slot: u256) -> ClassHash {
+            let unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::MetadataImpl::get_slot_uri_implementation(@unsafe_state, slot)
+        }
+        fn set_contract_uri_implementation(ref self: ContractState, implementation: ClassHash) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set contract metadata implementation
+            let mut unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::MetadataImpl::set_contract_uri_implementation(
+                ref unsafe_state, implementation
+            )
+        }
+        fn set_slot_uri_implementation(
+            ref self: ContractState, slot: u256, implementation: ClassHash
+        ) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set slot metadata implementation
+            let mut unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::MetadataImpl::set_slot_uri_implementation(
+                ref unsafe_state, slot, implementation
+            )
         }
     }
 
