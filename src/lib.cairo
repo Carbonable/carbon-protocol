@@ -11,6 +11,10 @@ mod components {
         mod interface;
         mod module;
     }
+    mod metadata {
+        mod interface;
+        mod module;
+    }
     mod mint {
         mod interface;
         mod module;
