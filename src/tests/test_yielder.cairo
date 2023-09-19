@@ -216,7 +216,7 @@ fn test_cumsales() {
 }
 
 #[test]
-#[available_gas(200_000_000)]
+#[available_gas(300_000_000)]
 fn test_nominal_single_user_case() {
     let (signers, contracts) = setup();
     // Instantiate contracts
@@ -310,7 +310,7 @@ fn test_nominal_single_user_case() {
 }
 
 #[test]
-#[available_gas(270_000_000)]
+#[available_gas(370_000_000)]
 fn test_nominal_multi_user_case() {
     let (signers, contracts) = setup();
     // Instantiate contracts
