@@ -58,23 +58,28 @@ mod Absorber {
             self._absorber_absorptions.read(slot).array().span()
         }
         fn get_absorption(self: @ContractState, slot: u256, time: u64) -> u64 {
-            let times = self._absorber_times.read(slot).array();
+            let times = self._absorber_times.read(slot);
             if times.len() == 0 {
                 return 0;
             }
 
-            let absorptions = self._absorber_absorptions.read(slot).array();
+            let absorptions = self._absorber_absorptions.read(slot);
             if absorptions.len() == 0 {
                 return 0;
             }
 
-            interpolate(
-                time,
-                times.span(),
-                absorptions.span(),
+            // [Compute] Convert into u256 to avoid overflow
+            let time_u256: u256 = time.into();
+            let times_u256 = self.__list_u64_into_u256(@times);
+            let absorptions_u256 = self.__list_u64_into_u256(@absorptions);
+            let absorption = interpolate(
+                time_u256,
+                times_u256,
+                absorptions_u256,
                 Interpolation::Linear(()),
                 Extrapolation::Constant(())
-            )
+            );
+            absorption.try_into().expect('Absorber: Absorption overflow')
         }
         fn get_current_absorption(self: @ContractState, slot: u256) -> u64 {
             self.get_absorption(slot, get_block_timestamp())
@@ -152,6 +157,22 @@ mod Absorber {
                         ProjectValueUpdate { slot: slot, value: project_value }
                     )
                 );
+        }
+    }
+
+    #[generate_trait]
+    impl PrivateImpl of PrivateTrait {
+        fn __list_u64_into_u256(self: @ContractState, list: @List<u64>) -> Span<u256> {
+            let mut array = ArrayTrait::<u256>::new();
+            let mut index = 0;
+            loop {
+                if index == list.len() {
+                    break ();
+                }
+                array.append(list[index].into());
+                index += 1;
+            };
+            array.span()
         }
     }
 }
@@ -252,7 +273,10 @@ mod Test {
         let mut state = STATE();
         let times: Span<u64> = array![1651363200, 1659312000, 1667260800, 1675209600, 1682899200]
             .span();
-        let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
+        let absorptions: Span<u64> = array![
+            0, 1179750000000, 2359500000000, 3539250000000, 4719000000000
+        ]
+            .span();
         let ton_equivalent = 1000000;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
         // [Assert] Before start, absorption = absorptions[0]
