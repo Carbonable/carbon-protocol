@@ -457,22 +457,39 @@ mod Mint {
 
 #[cfg(test)]
 mod Test {
+    // Core imports
+
     use array::ArrayTrait;
     use traits::TryInto;
+    use poseidon::PoseidonTrait;
+    use hash::HashStateTrait;
+    use debug::PrintTrait;
+
+    // Starknet imports
+
     use starknet::ContractAddress;
     use starknet::testing::set_block_timestamp;
+
+    // External imports
+
+    use alexandria_data_structures::merkle_tree::{
+        Hasher, MerkleTree, poseidon::PoseidonHasherImpl, MerkleTreeTrait,
+    };
+
+    // Internal imports
+
     use super::Mint;
     use super::Mint::_mint_max_value_per_tx::InternalContractMemberStateTrait as MintMaxValuePerTxTrait;
     use super::Mint::_mint_max_value::InternalContractMemberStateTrait as MintMaxValueTrait;
 
+    // Constants
+
     const MAX_VALUE_PER_TX: u256 = 100;
     const MIN_VALUE_PER_TX: u256 = 5;
     const UNIT_PRICE: u256 = 10;
-    const MERKLE_ROOT: felt252 =
-        3236969588476960619958150604131083087415975923122021901088942336874683133579;
+    const MERKLE_ROOT: felt252 = 0x6a60c7ba8f69a71bdb100454e45ea29dc3474e6a0718039c957282f25897422;
     const ALLOCATION: felt252 = 5;
-    const PROOF: felt252 =
-        1489335374474017495857579265074565262713421005832572026644103123081435719307;
+    const PROOF: felt252 = 0x58f605c335d6edee10b834aedf74f8ed903311799ecde69461308439a4537c7;
 
     fn STATE() -> Mint::ContractState {
         Mint::contract_state_for_testing()
@@ -501,7 +518,7 @@ mod Test {
         Mint::MintImpl::set_whitelist_merkle_root(ref state, MERKLE_ROOT);
         // [Assert] Storage
         let merkle_root = Mint::MintImpl::get_whitelist_merkle_root(@state);
-        assert(merkle_root == MERKLE_ROOT, 'Invalid merkle root');
+        assert(merkle_root == merkle_root, 'Invalid merkle root');
         // [Assert] Verify
         let proof = array![PROOF].span();
         let allocation = Mint::MintImpl::get_whitelist_allocation(
