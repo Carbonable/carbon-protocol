@@ -6,13 +6,13 @@ mod Mint {
     use array::{Array, ArrayTrait};
     use debug::PrintTrait;
     use hash::HashStateTrait;
-    use pedersen::PedersenTrait;
+    use poseidon::PoseidonTrait;
 
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
 
     use alexandria_data_structures::merkle_tree::{
-        Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait,
+        Hasher, MerkleTree, poseidon::PoseidonHasherImpl, MerkleTreeTrait,
     };
 
     use openzeppelin::token::erc20::interface::{IERC20CamelDispatcher, IERC20CamelDispatcherTrait};
@@ -145,7 +145,8 @@ mod Mint {
             proof: Span<felt252>
         ) -> felt252 {
             let root = self._mint_whitelist_merkle_root.read();
-            let mut state = PedersenTrait::new(account.into());
+            let mut state = PoseidonTrait::new();
+            state = state.update(account.into());
             state = state.update(allocation);
             let leaf = state.finalize();
             let mut tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
