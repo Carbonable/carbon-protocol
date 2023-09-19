@@ -7,7 +7,7 @@ use traits::{Into, TryInto};
 use zeroable::Zeroable;
 use debug::PrintTrait;
 use hash::HashStateTrait;
-use pedersen::PedersenTrait;
+use poseidon::PoseidonTrait;
 
 // Starknet deps
 
@@ -18,7 +18,7 @@ use starknet::testing::{set_caller_address, set_contract_address, set_block_time
 // External deps
 
 use alexandria_data_structures::merkle_tree::{
-    Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait,
+    Hasher, MerkleTree, poseidon::PoseidonHasherImpl, MerkleTreeTrait,
 };
 use openzeppelin::account::account::Account;
 use openzeppelin::token::erc20::erc20::ERC20;
@@ -205,10 +205,12 @@ fn test_minter_setup_whitelist_revert_not_owner() {
 fn test_minter_pre_buy() {
     let (signers, contracts) = setup();
     // [Setup] Compute merkle tree and proof
-    let mut state = PedersenTrait::new(signers.owner.into());
+    let mut state = PoseidonTrait::new();
+    state = state.update(signers.owner.into());
     state = state.update(1);
     let left = state.finalize();
-    let mut state = PedersenTrait::new(signers.anyone.into());
+    let mut state = PoseidonTrait::new();
+    state = state.update(signers.anyone.into());
     state = state.update(ALLOCATION);
     let right = state.finalize();
     let leaves: Array<felt252> = array![left, right];
@@ -263,10 +265,12 @@ fn test_minter_pre_buy_revert_closed() {
 fn test_minter_airdrop() {
     let (signers, contracts) = setup();
     // [Setup] Compute merkle tree and proof
-    let mut state = PedersenTrait::new(signers.owner.into());
+    let mut state = PoseidonTrait::new();
+    state = state.update(signers.owner.into());
     state = state.update(1);
     let left = state.finalize();
-    let mut state = PedersenTrait::new(signers.anyone.into());
+    let mut state = PoseidonTrait::new();
+    state = state.update(signers.anyone.into());
     state = state.update(ALLOCATION);
     let right = state.finalize();
     let leaves: Array<felt252> = array![left, right];
