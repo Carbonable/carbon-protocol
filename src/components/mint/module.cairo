@@ -11,7 +11,9 @@ mod Mint {
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
 
-    use alexandria_data_structures::merkle_tree::{MerkleTree, MerkleTreeTrait, HashMethod};
+    use alexandria_data_structures::merkle_tree::{
+        Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait,
+    };
 
     use openzeppelin::token::erc20::interface::{IERC20CamelDispatcher, IERC20CamelDispatcherTrait};
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
@@ -146,7 +148,7 @@ mod Mint {
             let mut state = PedersenTrait::new(account.into());
             state = state.update(allocation);
             let leaf = state.finalize();
-            let mut tree: MerkleTree = MerkleTreeTrait::new(HashMethod::Pedersen(()));
+            let mut tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
             let whitelisted = tree.verify(root, leaf, proof);
             allocation * if whitelisted {
                 1

@@ -17,7 +17,9 @@ use starknet::testing::{set_caller_address, set_contract_address, set_block_time
 
 // External deps
 
-use alexandria_data_structures::merkle_tree::{MerkleTree, MerkleTreeTrait, HashMethod};
+use alexandria_data_structures::merkle_tree::{
+    Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait,
+};
 use openzeppelin::account::account::Account;
 use openzeppelin::token::erc20::erc20::ERC20;
 use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
@@ -210,7 +212,7 @@ fn test_minter_pre_buy() {
     state = state.update(ALLOCATION);
     let right = state.finalize();
     let leaves: Array<felt252> = array![left, right];
-    let mut tree: MerkleTree = MerkleTreeTrait::new(HashMethod::Pedersen(()));
+    let mut tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
     let proof = tree.compute_proof(leaves, 1);
     let root = tree.compute_root(right, proof);
     // [Setup] Whitelist
@@ -268,7 +270,7 @@ fn test_minter_airdrop() {
     state = state.update(ALLOCATION);
     let right = state.finalize();
     let leaves: Array<felt252> = array![left, right];
-    let mut tree: MerkleTree = MerkleTreeTrait::new(HashMethod::Pedersen(()));
+    let mut tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
     let proof = tree.compute_proof(leaves, 1);
     let root = tree.compute_root(right, proof);
     // [Setup] Whitelist
