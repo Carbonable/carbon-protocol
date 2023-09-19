@@ -2,7 +2,7 @@
 source ../.env
 
 SIERRA_FILE=../target/dev/carbon_Offseter.sierra.json
-PROJECT=0x050da7d4a7815efafaa8b731b30b8b0abdad519a7626f52c602f5ec4b3c4d2ad
+PROJECT=0x007afb15db3fb57839fec89c20754eb59f8d7e3f87d953ee68b0a99b6f527b3e
 SLOT=1
 OWNER=0x063675fa1ecea10063722e61557ed7f49ed2503d6cdd74f4b31e9770b473650c
 

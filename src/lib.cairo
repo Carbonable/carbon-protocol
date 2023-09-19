@@ -36,6 +36,10 @@ mod contracts {
     mod yielder;
 }
 
+mod mocks {
+    mod metadata;
+}
+
 #[cfg(test)]
 mod tests {
     mod test_project;
