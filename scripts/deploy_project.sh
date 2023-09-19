@@ -43,6 +43,8 @@ declare() {
 # $4 - Owner
 deploy() {
     class_hash=$(declare | tail -n 1)
+    sleep 5
+    
     output=$(starkli deploy $class_hash str:"$NAME" str:"$SYMBOL" "$DECIMALS" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
     if [[ $output == *"Error"* ]]; then
@@ -56,6 +58,7 @@ deploy() {
 
 setup() {
     contract=$(deploy)
+    sleep 5
 
     output=$(starkli invoke $contract set_project_value u256:$SLOT u256:$PROJECT_VALUE --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
     if [[ $output == *"Error"* ]]; then
