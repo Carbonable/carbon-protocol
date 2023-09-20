@@ -136,6 +136,11 @@ mod Minter {
             Mint::MintImpl::get_remaining_value(@unsafe_state)
         }
 
+        fn get_available_value(self: @ContractState) -> u256 {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::get_available_value(@unsafe_state)
+        }
+
         fn get_whitelist_merkle_root(self: @ContractState) -> felt252 {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::get_whitelist_merkle_root(@unsafe_state)
