@@ -10,7 +10,7 @@ mod Absorber {
     use starknet::{get_block_timestamp, get_caller_address, ContractAddress};
 
     // External imports
-    
+
     use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
     use alexandria_storage::list::{List, ListTrait};
 
