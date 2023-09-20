@@ -190,7 +190,7 @@ mod Yield {
 
             // [Event] Emit event
             let current_time = get_block_timestamp();
-            self.emit(Event::Claim(Claim { address: caller, amount: amount, time: current_time }));
+            self.emit(Claim { address: caller, amount: amount, time: current_time });
         }
     }
 

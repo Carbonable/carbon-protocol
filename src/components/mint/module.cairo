@@ -61,8 +61,8 @@ mod Mint {
         PublicSaleClose: PublicSaleClose,
         SoldOut: SoldOut,
         Airdrop: Airdrop,
-        BookingClaimed: BookingClaimed,
         BookingHandled: BookingHandled,
+        BookingClaimed: BookingClaimed,
         BookingRefund: BookingRefund,
     }
 
@@ -203,9 +203,9 @@ mod Mint {
             // [Event] Emit event
             let current_time = get_block_timestamp();
             if whitelist_merkle_root != 0 {
-                self.emit(Event::PreSaleOpen(PreSaleOpen { time: current_time }));
+                self.emit(PreSaleOpen { time: current_time });
             } else {
-                self.emit(Event::PreSaleClose(PreSaleClose { time: current_time }));
+                self.emit(PreSaleClose { time: current_time });
             };
         }
 
@@ -216,9 +216,9 @@ mod Mint {
             // [Event] Emit event
             let current_time = get_block_timestamp();
             if public_sale_open {
-                self.emit(Event::PublicSaleOpen(PublicSaleOpen { time: current_time }));
+                self.emit(PublicSaleOpen { time: current_time });
             } else {
-                self.emit(Event::PublicSaleClose(PublicSaleClose { time: current_time }));
+                self.emit(PublicSaleClose { time: current_time });
             };
         }
 
@@ -283,7 +283,7 @@ mod Mint {
 
             // [Event] Emit event
             let current_time = get_block_timestamp();
-            self.emit(Event::Airdrop(Airdrop { to: to, value: value, time: current_time }));
+            self.emit(Airdrop { to: to, value: value, time: current_time });
         }
 
         fn withdraw(ref self: ContractState) {
@@ -365,8 +365,7 @@ mod Mint {
             project.mint(user_address.into(), slot, booking.value);
 
             // [Event] Emit
-            let event = BookingClaimed { address: user_address, id, value: booking.value, };
-            self.emit(Event::BookingClaimed(event));
+            self.emit(BookingClaimed { address: user_address, id, value: booking.value, });
         }
 
         fn refund(ref self: ContractState, user_address: ContractAddress, id: u32) {
@@ -386,8 +385,7 @@ mod Mint {
             assert(success, 'Transfer failed');
 
             // [Event] Emit
-            let event = BookingRefund { address: user_address, id, value: booking.value, };
-            self.emit(Event::BookingRefund(event));
+            self.emit(BookingRefund { address: user_address, id, value: booking.value, });
         }
 
         fn refund_to(
@@ -412,8 +410,7 @@ mod Mint {
             assert(success, 'Transfer failed');
 
             // [Event] Emit
-            let event = BookingRefund { address: user_address, id, value: booking.value, };
-            self.emit(Event::BookingRefund(event));
+            self.emit(BookingRefund { address: user_address, id, value: booking.value, });
         }
     }
 
@@ -571,8 +568,7 @@ mod Mint {
             self._mint_booked_values.write((user_address, mint_id), booking);
 
             // [Event] Emit event
-            let event = BookingHandled { address: user_address, id: mint_id, value };
-            self.emit(Event::BookingHandled(event));
+            self.emit(BookingHandled { address: user_address, id: mint_id, value });
 
             // [Effect] Close the sale if sold out
             if self.is_sold_out() {
@@ -583,8 +579,7 @@ mod Mint {
                 self.set_public_sale_open(false);
 
                 // [Event] Emit sold out event
-                let event = SoldOut { time: get_block_timestamp() };
-                self.emit(Event::SoldOut(event));
+                self.emit(SoldOut { time: get_block_timestamp() });
             };
         }
 
@@ -613,7 +608,7 @@ mod Mint {
 mod Test {
     // Core imports
 
-    use array::ArrayTrait;
+    use array::{ArrayTrait, SpanTrait};
     use traits::TryInto;
     use poseidon::PoseidonTrait;
     use hash::HashStateTrait;
@@ -621,7 +616,7 @@ mod Test {
 
     // Starknet imports
 
-    use starknet::ContractAddress;
+    use starknet::{ContractAddress, get_contract_address, get_block_timestamp};
     use starknet::testing::{set_block_timestamp, set_caller_address, set_contract_address};
 
     // External imports
@@ -847,8 +842,18 @@ mod Test {
         Mint::MintImpl::set_public_sale_open(ref state, true);
         // [Assert] Book
         set_caller_address(ACCOUNT());
-        Mint::MintImpl::book(ref state, 10, false);
-    // [Assert] Events - Enable when test is contract
+        let value: u256 = 10;
+        Mint::MintImpl::book(ref state, value, false);
+        // [Assert] Not sold out
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        // [Assert] Events
+        let contract = get_contract_address();
+        let event = starknet::testing::pop_log::<Mint::PublicSaleOpen>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingHandled>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
     }
 
     #[test]
@@ -868,7 +873,26 @@ mod Test {
         // [Assert] Sold out
         set_caller_address(ACCOUNT());
         assert(Mint::MintImpl::is_sold_out(@state), 'Contract not sold out');
-    // [Assert] Events - Enable when test is contract
+        // [Assert] Claim
+        Mint::MintImpl::claim(ref state, ACCOUNT(), 1);
+        // [Assert] Events
+        let contract = get_contract_address();
+        let event = starknet::testing::pop_log::<Mint::PublicSaleOpen>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingHandled>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
+        let event = starknet::testing::pop_log::<Mint::PreSaleClose>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::PublicSaleClose>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::SoldOut>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingClaimed>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
     }
 
     #[test]
@@ -963,6 +987,18 @@ mod Test {
         assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
         // [Assert] Refund
         Mint::MintImpl::refund(ref state, ACCOUNT(), 1);
+        // [Assert] Events
+        let contract = get_contract_address();
+        let event = starknet::testing::pop_log::<Mint::PublicSaleOpen>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingHandled>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
+        let event = starknet::testing::pop_log::<Mint::BookingRefund>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
     }
 
     #[test]
@@ -984,6 +1020,18 @@ mod Test {
         assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
         // [Assert] Refund
         Mint::MintImpl::refund_to(ref state, ACCOUNT(), ACCOUNT(), 1);
+        // [Assert] Events
+        let contract = get_contract_address();
+        let event = starknet::testing::pop_log::<Mint::PublicSaleOpen>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingHandled>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
+        let event = starknet::testing::pop_log::<Mint::BookingRefund>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
     }
 
     #[test]
@@ -1040,12 +1088,30 @@ mod Test {
         Mint::MintImpl::set_public_sale_open(ref state, true);
         // [Assert] Book
         set_caller_address(ACCOUNT());
-        Mint::MintImpl::book(ref state, 1000, true);
+        let value: u256 = 1000;
+        Mint::MintImpl::book(ref state, value, true);
         // [Assert] Sold out
         assert(Mint::MintImpl::is_sold_out(@state), 'Contract not sold out');
         // [Assert] Claim
         Mint::MintImpl::claim(ref state, ACCOUNT(), 1);
-    // [Assert] Events - Enable when test is contract
+        // [Assert] Events
+        let contract = get_contract_address();
+        let event = starknet::testing::pop_log::<Mint::PublicSaleOpen>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingHandled>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
+        let event = starknet::testing::pop_log::<Mint::PreSaleClose>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::PublicSaleClose>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::SoldOut>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingClaimed>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
     }
 
     #[test]

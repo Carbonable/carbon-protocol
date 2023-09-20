@@ -154,7 +154,7 @@ mod Absorber {
 
             // [Event] Emit event
             let current_time = get_block_timestamp();
-            self.emit(Event::AbsorptionUpdate(AbsorptionUpdate { slot: slot, time: current_time }));
+            self.emit(AbsorptionUpdate { slot: slot, time: current_time });
         }
         fn set_project_value(ref self: ContractState, slot: u256, project_value: u256) {
             // [Event] Update storage
