@@ -4,29 +4,20 @@ use traits::{Into, TryInto, PartialEq};
 use option::OptionTrait;
 use debug::PrintTrait;
 
-// Starknet imports
-
-use starknet::{Store, StorageBaseAddress};
-use starknet::SyscallResult;
-use starknet::{
-    storage_access, storage_read_syscall, storage_write_syscall,
-    storage_address_from_base_and_offset
-};
-
-#[derive(storage_access::StorageAccess, Drop, Copy)]
-struct Booking {
-    value: u256,
-    amount: u256,
-    status: u8,
-}
-
-#[derive(storage_access::StorageAccess, Drop, Copy)]
+#[derive(Drop, Copy)]
 enum BookingStatus {
     Unknown: (),
     Booked: (),
     Failed: (),
     Minted: (),
     Refunded: (),
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
+struct Booking {
+    value: u256,
+    amount: u256,
+    status: u8,
 }
 
 trait BookingTrait {
@@ -79,86 +70,5 @@ impl U8TryIntoBookingStatus of TryInto<u8, BookingStatus> {
         } else {
             return Option::None;
         }
-    }
-}
-
-impl StoreBooking of Store<Booking> {
-    fn read(address_domain: u32, base: StorageBaseAddress) -> SyscallResult::<Booking> {
-        StoreBooking::read_at_offset(address_domain, base, 0)
-    }
-    fn read_at_offset(
-        address_domain: u32, base: StorageBaseAddress, mut offset: u8
-    ) -> SyscallResult::<Booking> {
-        Result::Ok(
-            Booking {
-                value: u256 {
-                    low: storage_read_syscall(
-                        address_domain, storage_address_from_base_and_offset(base, 0_u8 + offset)
-                    )?
-                        .try_into()
-                        .unwrap(),
-                    high: storage_read_syscall(
-                        address_domain, storage_address_from_base_and_offset(base, 1_u8 + offset)
-                    )?
-                        .try_into()
-                        .unwrap()
-                },
-                amount: u256 {
-                    low: storage_read_syscall(
-                        address_domain, storage_address_from_base_and_offset(base, 2_u8 + offset)
-                    )?
-                        .try_into()
-                        .unwrap(),
-                    high: storage_read_syscall(
-                        address_domain, storage_address_from_base_and_offset(base, 3_u8 + offset)
-                    )?
-                        .try_into()
-                        .unwrap()
-                },
-                status: storage_read_syscall(
-                    address_domain, storage_address_from_base_and_offset(base, 4_u8 + offset)
-                )?
-                    .try_into()
-                    .unwrap(),
-            }
-        )
-    }
-
-    fn write(address_domain: u32, base: StorageBaseAddress, value: Booking) -> SyscallResult::<()> {
-        StoreBooking::write_at_offset(address_domain, base, 0, value)
-    }
-
-    fn write_at_offset(
-        address_domain: u32, base: StorageBaseAddress, offset: u8, value: Booking
-    ) -> SyscallResult::<()> {
-        storage_write_syscall(
-            address_domain,
-            storage_address_from_base_and_offset(base, 0_u8 + offset),
-            value.value.low.into()
-        )?;
-        storage_write_syscall(
-            address_domain,
-            storage_address_from_base_and_offset(base, 1_u8 + offset),
-            value.value.high.into()
-        )?;
-        storage_write_syscall(
-            address_domain,
-            storage_address_from_base_and_offset(base, 2_u8 + offset),
-            value.amount.low.into()
-        )?;
-        storage_write_syscall(
-            address_domain,
-            storage_address_from_base_and_offset(base, 3_u8 + offset),
-            value.amount.high.into()
-        )?;
-        storage_write_syscall(
-            address_domain,
-            storage_address_from_base_and_offset(base, 4_u8 + offset),
-            value.status.into()
-        )
-    }
-
-    fn size() -> u8 {
-        5 * Store::<felt252>::size()
     }
 }
