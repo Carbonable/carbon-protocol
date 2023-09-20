@@ -1,25 +1,34 @@
 #[starknet::contract]
 mod Farm {
+    // Core imports
+
     use zeroable::Zeroable;
     use traits::{Into, TryInto};
     use option::OptionTrait;
     use array::{Array, ArrayTrait};
     use debug::PrintTrait;
 
+    // Starknet imports
+
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
+
+    // External imports
 
     use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
     use alexandria_numeric::cumsum::cumsum;
     use alexandria_storage::list::{List, ListTrait};
     use alexandria_data_structures::array_ext::ArrayTraitExt;
-
-    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
+    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+
+    // Internal imports
 
     use carbon::components::mint::interface::{IMintDispatcher, IMintDispatcherTrait};
     use carbon::components::farm::interface::{IFarm, IYieldFarm};
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+
+    // Constants
 
     const YEAR_SECONDS: u64 = 31556925;
 

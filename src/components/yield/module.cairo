@@ -1,16 +1,17 @@
 #[starknet::contract]
 mod Yield {
-    use starknet::{get_caller_address, get_block_timestamp, ContractAddress};
-    use debug::PrintTrait;
+    // Starknet imports
 
-    // ERC20
+    use starknet::{get_caller_address, get_block_timestamp, ContractAddress};
+
+    // External imports
+
     use openzeppelin::token::erc20::interface::{IERC20CamelDispatcher, IERC20CamelDispatcherTrait};
 
-    // Farm
+    // Internal imports
+
     use carbon::components::farm::interface::{IFarm, IYieldFarm};
     use carbon::components::farm::module::Farm;
-
-    // Yield
     use carbon::components::yield::interface::IYield;
 
     #[storage]

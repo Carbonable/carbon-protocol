@@ -1,11 +1,25 @@
 #[starknet::contract]
 mod Access {
-    use starknet::ContractAddress;
-    use poseidon::poseidon_hash_span;
+    // Core imports
+
+    use poseidon::PoseidonTrait;
+    use hash::HashStateTrait;
     use array::ArrayTrait;
     use traits::Into;
+
+    // Starknet imports
+
+    use starknet::ContractAddress;
+
+    // External imports
+
     use openzeppelin::access::accesscontrol::accesscontrol::AccessControl;
+
+    // Internal imports
+
     use carbon::components::access::interface::{IMinter, ICertifier, IWithdrawer};
+
+    // Constants
 
     const MINTER_ROLE: felt252 = 'MINTER';
     const CERTIFIER_ROLE: felt252 = 'CERTIFIER';
@@ -98,11 +112,11 @@ mod Access {
         }
 
         fn _hash(self: @ContractState, role: felt252, slot: u256) -> felt252 {
-            let mut inputs: Array<felt252> = ArrayTrait::new();
-            inputs.append(slot.low.into());
-            inputs.append(slot.high.into());
-            inputs.append(role);
-            poseidon_hash_span(inputs.span())
+            let mut state = PoseidonTrait::new();
+            state = state.update(slot.low.into());
+            state = state.update(slot.high.into());
+            state = state.update(role);
+            state.finalize()
         }
 
         fn _get_role_members(self: @ContractState, role: felt252) -> Span<ContractAddress> {
