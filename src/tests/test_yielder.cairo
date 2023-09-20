@@ -28,7 +28,9 @@ use cairo_erc_3525::presets::erc3525_mintable_burnable::{
 use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
 use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
 use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
-use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+use carbon::components::farm::interface::{
+    IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
+};
 use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
 
 // Contracts
@@ -153,7 +155,7 @@ fn setup_yielder(
 ) {
     // Setup prices
     set_contract_address(*signers.owner);
-    let farmer = IFarmDispatcher { contract_address: yielder };
+    let farmer = IYieldFarmDispatcher { contract_address: yielder };
     let times: Array<u64> = array![1659312000, 2598134400];
     let prices: Array<u256> = array![10, 10];
     farmer.set_prices(times.span(), prices.span());
@@ -187,7 +189,7 @@ fn setup() -> (Signers, Contracts) {
 fn test_cumsales() {
     let (signers, contracts) = setup();
     // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
 
     // [Assert] times, prices and cumsales
     let (times, prices, cumsales) = farmer.get_cumsales();

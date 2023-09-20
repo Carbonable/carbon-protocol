@@ -17,7 +17,8 @@ mod Farm {
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
-    use carbon::components::farm::interface::{IFarm, IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::mint::interface::{IMintDispatcher, IMintDispatcherTrait};
+    use carbon::components::farm::interface::{IFarm, IYieldFarm};
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
 
     const YEAR_SECONDS: u64 = 31556925;
@@ -115,6 +116,62 @@ mod Farm {
             project.get_current_absorption(slot).into()
         }
 
+        fn get_deposited_of(self: @ContractState, account: ContractAddress) -> u256 {
+            self._farm_registered_value.read(account)
+        }
+
+        fn get_absorption_of(self: @ContractState, account: ContractAddress) -> u256 {
+            // [Compute] Account absorption
+            let value = self._farm_registered_value.read(account);
+            let time = self._farm_registered_time.read(account);
+            let current_time = get_block_timestamp();
+            let computed = self._compute_absorption(value, time, current_time);
+            let stored = self._farm_absorption.read(account);
+            let absorption = computed + stored;
+
+            // [Check] Overflow
+            assert(absorption <= self.get_total_absorption(), 'Abs exceeds total abs');
+            absorption
+        }
+
+        fn deposit(ref self: ContractState, token_id: u256, value: u256) {
+            // [Check] Value is not null
+            assert(value != 0_u256, 'Value cannot be 0');
+
+            // [Check] Caller is owner
+            let erc721 = IERC721Dispatcher {
+                contract_address: self._farm_project.read().contract_address
+            };
+            let caller = get_caller_address();
+            let owner = erc721.owner_of(token_id);
+            assert(caller == owner, 'Caller is not owner');
+
+            // [Effect] Deposit
+            self._deposit(token_id, get_contract_address(), value);
+        }
+
+        fn withdraw_to(ref self: ContractState, value: u256) {
+            // [Effect] Withdraw
+            let caller = get_caller_address();
+            self._withdraw(to_token_id: 0_u256, to: caller, value: value);
+        }
+
+        fn withdraw_to_token(ref self: ContractState, token_id: u256, value: u256) {
+            // [Check] Caller is owner
+            let erc721 = IERC721Dispatcher {
+                contract_address: self._farm_project.read().contract_address
+            };
+            let caller = get_caller_address();
+            let owner = erc721.owner_of(token_id);
+            assert(caller == owner, 'Caller is not owner');
+
+            // [Effect] Withdraw
+            self._withdraw(to_token_id: token_id, to: Zeroable::zero(), value: value);
+        }
+    }
+
+    #[external(v0)]
+    impl YieldFarmImpl of IYieldFarm<ContractState> {
         fn get_total_sale(self: @ContractState) -> u256 {
             // [Check] Prices are set, return 0 otherwise
             let prices = self._farm_prices.read();
@@ -150,24 +207,6 @@ mod Farm {
             let start_time = project.get_start_time(slot);
             let current_time = get_block_timestamp();
             self._compute_sale(project_value, start_time, current_time)
-        }
-
-        fn get_deposited_of(self: @ContractState, account: ContractAddress) -> u256 {
-            self._farm_registered_value.read(account)
-        }
-
-        fn get_absorption_of(self: @ContractState, account: ContractAddress) -> u256 {
-            // [Compute] Account absorption
-            let value = self._farm_registered_value.read(account);
-            let time = self._farm_registered_time.read(account);
-            let current_time = get_block_timestamp();
-            let computed = self._compute_absorption(value, time, current_time);
-            let stored = self._farm_absorption.read(account);
-            let absorption = computed + stored;
-
-            // [Check] Overflow
-            assert(absorption <= self.get_total_absorption(), 'Abs exceeds total abs');
-            absorption
         }
 
         fn get_sale_of(self: @ContractState, account: ContractAddress) -> u256 {
@@ -269,7 +308,7 @@ mod Farm {
             let project = self._farm_project.read();
             let slot = self._farm_slot.read();
             let project_value = project.get_project_value(slot);
-            let unit_price = IMinterDispatcher { contract_address: minter }.getUnitPrice();
+            let unit_price = IMintDispatcher { contract_address: minter }.get_unit_price();
             let ton_equivalent = project.get_ton_equivalent(slot);
 
             // [Compute] APR
@@ -279,41 +318,6 @@ mod Farm {
                 * (next_time - current_time.into())
                 * ton_equivalent.into();
             (num, den)
-        }
-
-        fn deposit(ref self: ContractState, token_id: u256, value: u256) {
-            // [Check] Value is not null
-            assert(value != 0_u256, 'Value cannot be 0');
-
-            // [Check] Caller is owner
-            let erc721 = IERC721Dispatcher {
-                contract_address: self._farm_project.read().contract_address
-            };
-            let caller = get_caller_address();
-            let owner = erc721.owner_of(token_id);
-            assert(caller == owner, 'Caller is not owner');
-
-            // [Effect] Deposit
-            self._deposit(token_id, get_contract_address(), value);
-        }
-
-        fn withdraw_to(ref self: ContractState, value: u256) {
-            // [Effect] Withdraw
-            let caller = get_caller_address();
-            self._withdraw(to_token_id: 0_u256, to: caller, value: value);
-        }
-
-        fn withdraw_to_token(ref self: ContractState, token_id: u256, value: u256) {
-            // [Check] Caller is owner
-            let erc721 = IERC721Dispatcher {
-                contract_address: self._farm_project.read().contract_address
-            };
-            let caller = get_caller_address();
-            let owner = erc721.owner_of(token_id);
-            assert(caller == owner, 'Caller is not owner');
-
-            // [Effect] Withdraw
-            self._withdraw(to_token_id: token_id, to: Zeroable::zero(), value: value);
         }
 
         fn add_price(ref self: ContractState, time: u64, price: u256) {
@@ -837,7 +841,7 @@ mod Test {
         // [Assert] Prices
         let times = array![10, 20, 30, 40, 50].span();
         let prices = array![].span();
-        Farm::FarmImpl::set_prices(ref state, times, prices);
+        Farm::YieldFarmImpl::set_prices(ref state, times, prices);
     }
 
     #[test]
@@ -850,7 +854,7 @@ mod Test {
         // [Assert] Prices
         let times = array![].span();
         let prices = array![].span();
-        Farm::FarmImpl::set_prices(ref state, times, prices);
+        Farm::YieldFarmImpl::set_prices(ref state, times, prices);
     }
 
     #[test]
@@ -864,29 +868,29 @@ mod Test {
         Farm::InternalImpl::_set_prices(ref state, times, prices);
         // [Assert] Before start, price = prices[0]
         set_block_timestamp(*times.at(0) - 5);
-        let price = Farm::FarmImpl::get_current_price(@state);
+        let price = Farm::YieldFarmImpl::get_current_price(@state);
         assert(price == *prices.at(0), 'Wrong price');
         // [Assert] At start, price = prices[0]
         set_block_timestamp(*times.at(0));
-        let price = Farm::FarmImpl::get_current_price(@state);
+        let price = Farm::YieldFarmImpl::get_current_price(@state);
         assert(price == *prices.at(0), 'Wrong price');
         // [Assert] After start, prices[0] < price < prices[1]
         set_block_timestamp(*times.at(0) + 5);
-        let price = Farm::FarmImpl::get_current_price(@state);
+        let price = Farm::YieldFarmImpl::get_current_price(@state);
         assert(price > *prices.at(0), 'Wrong price');
         assert(price < *prices.at(1), 'Wrong price');
         // [Assert] Before end, prices[-2] < price < prices[-1]
         set_block_timestamp(*times.at(times.len() - 1) - 5);
-        let price = Farm::FarmImpl::get_current_price(@state);
+        let price = Farm::YieldFarmImpl::get_current_price(@state);
         assert(price > *prices.at(prices.len() - 2), 'Wrong price');
         assert(price < *prices.at(prices.len() - 1), 'Wrong price');
         // [Assert] At end, price = prices[-1]
         set_block_timestamp(*times.at(times.len() - 1));
-        let price = Farm::FarmImpl::get_current_price(@state);
+        let price = Farm::YieldFarmImpl::get_current_price(@state);
         assert(price == *prices.at(prices.len() - 1), 'Wrong price');
         // [Assert] After end, price = prices[-1]
         set_block_timestamp(*times.at(times.len() - 1) + 5);
-        let price = Farm::FarmImpl::get_current_price(@state);
+        let price = Farm::YieldFarmImpl::get_current_price(@state);
         assert(price == *prices.at(prices.len() - 1), 'Wrong price');
     }
 

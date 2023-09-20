@@ -16,6 +16,7 @@ mod components {
         mod module;
     }
     mod mint {
+        mod booking;
         mod interface;
         mod module;
     }

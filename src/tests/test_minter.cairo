@@ -202,7 +202,7 @@ fn test_minter_setup_whitelist_revert_not_owner() {
 
 #[test]
 #[available_gas(200_000_000)]
-fn test_minter_pre_buy() {
+fn test_minter_prebook() {
     let (signers, contracts) = setup();
     // [Setup] Compute merkle tree and proof
     let mut state = PoseidonTrait::new();
@@ -221,11 +221,11 @@ fn test_minter_pre_buy() {
     set_contract_address(signers.owner);
     let minter = IMintDispatcher { contract_address: contracts.minter };
     minter.set_whitelist_merkle_root(root);
-    // [Assert] Whitelist buy
+    // [Assert] Whitelist book
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * ALLOCATION.into());
-    minter.pre_buy(ALLOCATION, proof, 5, false);
+    minter.prebook(ALLOCATION, proof, 5, false);
     // [Assert] Sold out
     let status = minter.is_sold_out();
     assert(!status, 'Wrong sold out status');
@@ -234,30 +234,30 @@ fn test_minter_pre_buy() {
 #[test]
 #[available_gas(200_000_000)]
 #[should_panic(expected: ('Caller is not whitelisted', 'ENTRYPOINT_FAILED',))]
-fn test_minter_pre_buy_revert_not_whitelisted() {
+fn test_minter_prebook_revert_not_whitelisted() {
     let (signers, contracts) = setup();
     // [Setup] Whitelist
     set_contract_address(signers.owner);
     let minter = IMintDispatcher { contract_address: contracts.minter };
     minter.set_whitelist_merkle_root(1);
-    // [Assert] Whitelist buy
+    // [Assert] Whitelist book
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * ALLOCATION.into());
-    minter.pre_buy(ALLOCATION, array![1, 2].span(), 5, false);
+    minter.prebook(ALLOCATION, array![1, 2].span(), 5, false);
 }
 
 #[test]
 #[available_gas(200_000_000)]
 #[should_panic(expected: ('Pre sale is closed', 'ENTRYPOINT_FAILED',))]
-fn test_minter_pre_buy_revert_closed() {
+fn test_minter_prebook_revert_closed() {
     let (signers, contracts) = setup();
-    // [Assert] Whitelist buy
+    // [Assert] Whitelist book
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * ALLOCATION.into());
     let minter = IMintDispatcher { contract_address: contracts.minter };
-    minter.pre_buy(ALLOCATION, array![1, 2].span(), 5, false);
+    minter.prebook(ALLOCATION, array![1, 2].span(), 5, false);
 }
 
 #[test]
@@ -281,11 +281,11 @@ fn test_minter_airdrop() {
     set_contract_address(signers.owner);
     let minter = IMintDispatcher { contract_address: contracts.minter };
     minter.set_whitelist_merkle_root(root);
-    // [Assert] Pre buy
+    // [Assert] Pre book
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
-    minter.pre_buy(ALLOCATION, proof, 5, false);
+    minter.prebook(ALLOCATION, proof, 5, false);
     // [Assert] Open public sale
     set_contract_address(signers.owner);
     minter.set_public_sale_open(true);
@@ -293,10 +293,10 @@ fn test_minter_airdrop() {
     minter.airdrop(signers.anyone, 3);
     // [Assert] Decrease reserve value
     minter.decrease_reserved_value(1);
-    // [Assert] Public buy
+    // [Assert] Public book
     set_contract_address(signers.anyone);
-    minter.public_buy(1, false);
-    minter.public_buy(2, true);
+    minter.book(1, false);
+    minter.book(2, true);
     // [Assert] Withdraw
     set_contract_address(signers.owner);
     minter.withdraw();
@@ -304,19 +304,19 @@ fn test_minter_airdrop() {
 
 #[test]
 #[available_gas(200_000_000)]
-#[should_panic(expected: ('Not enough value', 'ENTRYPOINT_FAILED',))]
-fn test_minter_public_buy_revert_not_enough_available_value() {
+#[should_panic(expected: ('Not enough available value', 'ENTRYPOINT_FAILED',))]
+fn test_minter_book_revert_not_enough_available_value() {
     let (signers, contracts) = setup();
     // [Assert] Open public sale
     set_contract_address(signers.owner);
     let minter = IMintDispatcher { contract_address: contracts.minter };
     minter.set_public_sale_open(true);
-    // [Assert] Pre buy
+    // [Assert] Pre book
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * 7);
-    minter.public_buy(5, false);
-    minter.public_buy(2, false);
+    minter.book(5, false);
+    minter.book(2, false);
 }
 
 #[test]
@@ -332,8 +332,8 @@ fn test_minter_airdrop_revert_not_enough_reserved_value() {
 
 #[test]
 #[available_gas(200_000_000)]
-#[should_panic(expected: ('Not enough value', 'ENTRYPOINT_FAILED',))]
-fn test_minter_airdrop_revert_not_enough_value() {
+#[should_panic(expected: ('Not enough available value', 'ENTRYPOINT_FAILED',))]
+fn test_minter_airdrop_revert_not_enough_available_value() {
     let (signers, contracts) = setup();
     // [Assert] Airdrop
     set_contract_address(signers.owner);
