@@ -11,7 +11,7 @@ trait IMint<TContractState> {
     fn get_max_value_per_tx(self: @TContractState) -> u256;
     fn get_unit_price(self: @TContractState) -> u256;
     fn get_reserved_value(self: @TContractState) -> u256;
-    fn get_max_value(self: @TContractState) -> u256;
+    fn get_remaining_value(self: @TContractState) -> u256;
     fn get_whitelist_merkle_root(self: @TContractState) -> felt252;
     fn get_whitelist_allocation(
         self: @TContractState, account: ContractAddress, allocation: felt252, proof: Span<felt252>
@@ -32,12 +32,34 @@ trait IMint<TContractState> {
         recipient: ContractAddress,
         amount: u256
     );
-    fn pre_buy(
+    fn prebook(
         ref self: TContractState,
         allocation: felt252,
         proof: Span<felt252>,
         value: u256,
         force: bool
     );
-    fn public_buy(ref self: TContractState, value: u256, force: bool);
+    fn book(ref self: TContractState, value: u256, force: bool);
+    fn claim(ref self: TContractState, user_address: ContractAddress, id: u32);
+    fn refund(ref self: TContractState, user_address: ContractAddress, id: u32);
+    fn refund_to(
+        ref self: TContractState, to: ContractAddress, user_address: ContractAddress, id: u32
+    );
+}
+
+#[starknet::interface]
+trait IL1Mint<TContractState> {
+    fn get_l1_minter_address(self: @TContractState) -> felt252;
+    fn set_l1_minter_address(ref self: TContractState, l1_address: felt252);
+}
+
+#[starknet::interface]
+trait IL1Handler<TContractState> {
+    fn book_from_l1(
+        ref self: TContractState,
+        from_address: felt252,
+        user_address: ContractAddress,
+        value: u256,
+        amount: u256,
+    );
 }

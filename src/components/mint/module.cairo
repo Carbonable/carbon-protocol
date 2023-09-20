@@ -1,5 +1,7 @@
 #[starknet::contract]
 mod Mint {
+    // Core imports
+
     use zeroable::Zeroable;
     use traits::{Into, TryInto};
     use option::OptionTrait;
@@ -8,18 +10,24 @@ mod Mint {
     use hash::HashStateTrait;
     use poseidon::PoseidonTrait;
 
+    // Starknet imports
+
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
+
+    // External imports
 
     use alexandria_data_structures::merkle_tree::{
         Hasher, MerkleTree, poseidon::PoseidonHasherImpl, MerkleTreeTrait,
     };
-
     use openzeppelin::token::erc20::interface::{IERC20CamelDispatcher, IERC20CamelDispatcherTrait};
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
-    use carbon::components::mint::interface::IMint;
+    // Internal imports
+
+    use carbon::components::mint::interface::{IMint, IL1Mint, IL1Handler};
+    use carbon::components::mint::booking::{Booking, BookingStatus, BookingTrait, StoreBooking};
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
     use carbon::contracts::project::{
         IExternalDispatcher as IProjectDispatcher,
@@ -39,6 +47,10 @@ mod Mint {
         _mint_reserved_value: u256,
         _mint_whitelist_merkle_root: felt252,
         _mint_claimed_value: LegacyMap<ContractAddress, u256>,
+        _mint_remaining_value: u256,
+        _mint_l1_minter_address: felt252,
+        _mint_count: LegacyMap::<ContractAddress, u32>,
+        _mint_booked_values: LegacyMap::<(ContractAddress, u32), Booking>,
     }
 
     #[event]
@@ -50,7 +62,9 @@ mod Mint {
         PublicSaleClose: PublicSaleClose,
         SoldOut: SoldOut,
         Airdrop: Airdrop,
-        Buy: Buy,
+        BookingClaimed: BookingClaimed,
+        BookingHandled: BookingHandled,
+        BookingRefund: BookingRefund,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -86,10 +100,25 @@ mod Mint {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct Buy {
+    struct BookingHandled {
         address: ContractAddress,
+        id: u32,
         value: u256,
         time: u64
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct BookingClaimed {
+        address: ContractAddress,
+        id: u32,
+        value: u256,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct BookingRefund {
+        address: ContractAddress,
+        id: u32,
+        value: u256,
     }
 
     impl MintImpl of IMint<ContractState> {
@@ -106,8 +135,7 @@ mod Mint {
         }
 
         fn is_pre_sale_open(self: @ContractState) -> bool {
-            let merkle_root = self._mint_whitelist_merkle_root.read();
-            merkle_root != 0
+            self._mint_whitelist_merkle_root.read() != 0
         }
 
         fn is_public_sale_open(self: @ContractState) -> bool {
@@ -130,8 +158,8 @@ mod Mint {
             self._mint_reserved_value.read()
         }
 
-        fn get_max_value(self: @ContractState) -> u256 {
-            self._mint_max_value.read()
+        fn get_remaining_value(self: @ContractState) -> u256 {
+            self._mint_remaining_value.read()
         }
 
         fn get_whitelist_merkle_root(self: @ContractState) -> felt252 {
@@ -201,8 +229,6 @@ mod Mint {
 
         fn set_max_value_per_tx(ref self: ContractState, max_value_per_tx: u256) {
             // [Check] Value in range
-            let max_value = self._mint_max_value.read();
-            assert(max_value_per_tx <= max_value, 'Invalid max value per tx');
             let min_value_per_tx = self._mint_min_value_per_tx.read();
             assert(max_value_per_tx >= min_value_per_tx, 'Invalid max value per tx');
             // [Effect] Store value
@@ -243,22 +269,21 @@ mod Mint {
             assert(value > 0, 'Invalid value');
 
             // [Check] Enough value available
-            let project_address = self._mint_carbonable_project_address.read();
-            let slot = self._mint_carbonable_project_slot.read();
-            let project = IProjectDispatcher { contract_address: project_address };
-            let total_value = project.total_value(slot);
-            let absorber = IAbsorberDispatcher { contract_address: project_address };
-            let project_value = absorber.get_project_value(slot);
-            assert(total_value + value <= project_value, 'Not enough value');
+            let remaining_value = self._mint_remaining_value.read();
+            assert(value <= remaining_value, 'Not enough avaialble value');
 
             // [Check] Enough reserved value available
             let reserved_value = self._mint_reserved_value.read();
             assert(value <= reserved_value, 'Not enough reserved value');
 
-            // [Effect] Update reserved value
+            // [Effect] Update remaining value and reserved value
+            self._mint_remaining_value.write(remaining_value - value);
             self._mint_reserved_value.write(reserved_value - value);
 
             // [Interaction] Mint
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
+            let project = IProjectDispatcher { contract_address: project_address };
             project.mint(to, slot, value);
 
             // [Event] Emit event
@@ -290,7 +315,7 @@ mod Mint {
             assert(success, 'Transfer failed');
         }
 
-        fn pre_buy(
+        fn prebook(
             ref self: ContractState,
             allocation: felt252,
             proof: Span<felt252>,
@@ -311,19 +336,133 @@ mod Mint {
             assert(claimed_value + value <= allocation.into(), 'Not enough allocation value');
 
             // [Interaction] Buy
-            let minted_value = self.buy(value, force);
+            let minted_value = self._safe_book(value, force);
 
             // [Effect] Update claimed value
             self._mint_claimed_value.write(caller_address, claimed_value + minted_value);
         }
 
-        fn public_buy(ref self: ContractState, value: u256, force: bool) {
+        fn book(ref self: ContractState, value: u256, force: bool) {
             // [Check] Public sale is open
             let public_sale_open = self._mint_public_sale_open.read();
             assert(public_sale_open, 'Sale is closed');
 
             // [Interaction] Buy
-            self.buy(value, force);
+            self._safe_book(value, force);
+        }
+
+        fn claim(ref self: ContractState, user_address: ContractAddress, id: u32) {
+            // [Check] Project is sold out
+            assert(self.is_sold_out(), 'Contract not sold out');
+
+            // [Check] Booking
+            let mut booking = self._mint_booked_values.read((user_address, id));
+            assert(booking.get_status() == BookingStatus::Booked, 'Booking not found');
+
+            // [Effect] Update Booking status
+            booking.set_status(BookingStatus::Minted);
+            self._mint_booked_values.write((user_address.into(), id), booking);
+
+            // [Interaction] Mint
+            let projects_contract = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
+            let project = IProjectDispatcher { contract_address: projects_contract };
+            project.mint(user_address.into(), slot, booking.value);
+
+            // [Event] Emit
+            let event = BookingClaimed { address: user_address, id, value: booking.value, };
+            self.emit(Event::BookingClaimed(event));
+        }
+
+        fn refund(ref self: ContractState, user_address: ContractAddress, id: u32) {
+            // [Check] Booking
+            let mut booking = self._mint_booked_values.read((user_address, id));
+            assert(booking.get_status() == BookingStatus::Failed, 'Booking not failed');
+
+            // [Effect] Update Booking status
+            booking.set_status(BookingStatus::Refunded);
+            self._mint_booked_values.write((user_address.into(), id), booking);
+
+            // [Interaction] Refund
+            let token_address = self._mint_payment_token_address.read();
+            let erc20 = IERC20CamelDispatcher { contract_address: token_address };
+            let contract_address = get_contract_address();
+            let success = erc20.transfer(user_address, booking.value);
+            assert(success, 'Transfer failed');
+
+            // [Event] Emit
+            let event = BookingRefund { address: user_address, id, value: booking.value, };
+            self.emit(Event::BookingRefund(event));
+        }
+
+        fn refund_to(
+            ref self: ContractState, to: ContractAddress, user_address: ContractAddress, id: u32
+        ) {
+            // [Check] Booking
+            let mut booking = self._mint_booked_values.read((user_address, id));
+            assert(booking.get_status() == BookingStatus::Failed, 'Booking not failed');
+
+            // [Effect] Update Booking status
+            booking.set_status(BookingStatus::Refunded);
+            self._mint_booked_values.write((user_address.into(), id), booking);
+
+            // [Interaction] Refund
+            let token_address = self._mint_payment_token_address.read();
+            let erc20 = IERC20CamelDispatcher { contract_address: token_address };
+            let contract_address = get_contract_address();
+            let success = erc20.transfer(to, booking.value);
+            assert(success, 'Transfer failed');
+
+            // [Event] Emit
+            let event = BookingRefund { address: user_address, id, value: booking.value, };
+            self.emit(Event::BookingRefund(event));
+        }
+    }
+
+    impl L1MintImpl of IL1Mint<ContractState> {
+        fn get_l1_minter_address(self: @ContractState) -> felt252 {
+            self._mint_l1_minter_address.read()
+        }
+
+        fn set_l1_minter_address(ref self: ContractState, l1_address: felt252) {
+            assert(!l1_address.is_zero(), 'L1 address cannot be zero');
+            let _l1_address = self._mint_l1_minter_address.read();
+            assert(_l1_address.is_zero(), 'L1 address already set');
+            self._mint_l1_minter_address.write(l1_address);
+        }
+    }
+
+    impl L1HandlerImpl of IL1Handler<ContractState> {
+        fn book_from_l1(
+            ref self: ContractState,
+            from_address: felt252,
+            user_address: ContractAddress,
+            value: u256,
+            amount: u256,
+        ) {
+            // [Check] Can only be called by L1 minter, this method shouldn't fail otherwise.
+            assert(
+                from_address == self._mint_l1_minter_address.read(), 'Only L1 minter can mint value'
+            );
+
+            // [Effect] Assert booking status and update remaining supply
+            let public_sale_open = self._mint_public_sale_open.read();
+            let unit_price = self._mint_unit_price.read();
+            let remaining_value = self._mint_remaining_value.read();
+            let max_value_per_tx = self._mint_max_value_per_tx.read();
+            let min_value_per_tx = self._mint_min_value_per_tx.read();
+            let mut status = if (!user_address.is_zero()
+                && public_sale_open
+                && value <= max_value_per_tx
+                && value >= min_value_per_tx
+                && amount == unit_price
+                * value && value <= remaining_value) {
+                BookingStatus::Booked
+            } else {
+                BookingStatus::Failed
+            };
+
+            self._book(user_address, amount, value, status);
         }
     }
 
@@ -345,7 +484,7 @@ mod Mint {
             assert(max_value_per_tx > 0, 'Invalid max value per tx');
             assert(min_value_per_tx > 0, 'Invalid min value per tx');
             assert(max_value_per_tx >= min_value_per_tx, 'Invalid max/min value per tx');
-            assert(max_value_per_tx <= max_value, 'Invalid max value');
+            assert(max_value >= max_value_per_tx, 'Invalid max value');
             assert(unit_price > 0, 'Invalid unit price');
             assert(reserved_value <= max_value, 'Invalid reserved value');
 
@@ -354,22 +493,22 @@ mod Mint {
             self._mint_carbonable_project_slot.write(carbonable_project_slot);
 
             // [Check] Max value is valid
-            let remaining_value = self.project_remaining_value();
+            let remaining_value = self._project_remaining_value();
             assert(max_value <= remaining_value, 'Invalid max value');
 
             // [Effect] Update storage
             self._mint_payment_token_address.write(payment_token_address);
             self._mint_max_value_per_tx.write(max_value_per_tx);
             self._mint_min_value_per_tx.write(min_value_per_tx);
-            self._mint_max_value.write(max_value);
             self._mint_unit_price.write(unit_price);
             self._mint_reserved_value.write(reserved_value);
+            self._mint_remaining_value.write(max_value);
 
             // [Effect] Use dedicated function to emit corresponding events
             self.set_public_sale_open(public_sale_open);
         }
 
-        fn buy(ref self: ContractState, value: u256, force: bool) -> u256 {
+        fn _safe_book(ref self: ContractState, value: u256, force: bool) -> u256 {
             // [Check] Value not null
             assert(value > 0, 'Invalid value');
 
@@ -383,26 +522,17 @@ mod Mint {
             let max_value_per_tx = self._mint_max_value_per_tx.read();
             assert(value <= max_value_per_tx, 'Value too high');
 
-            // [Compute] If remaining value is lower than specified value and force is enabled
+            // [Compute] If available value is lower than specified value and force is enabled
             // Then replace the specified value by the remaining value otherwize keep the value unchanged
-            let max_value = self._mint_max_value.read();
-            let reserved_value = self._mint_reserved_value.read();
-            let available_value = max_value - reserved_value;
-
-            let project_address = self._mint_carbonable_project_address.read();
-            let slot = self._mint_carbonable_project_slot.read();
-            let project = IProjectDispatcher { contract_address: project_address };
-            let total_value = project.total_value(slot);
-            let remaining_value = available_value - total_value;
-
-            let value = if remaining_value < value && force {
-                remaining_value
+            let available_value = self._available_public_value();
+            let value = if available_value < value && force {
+                available_value
             } else {
                 value
             };
 
             // [Check] Value after buy
-            assert(value <= remaining_value, 'Not enough value');
+            assert(value <= available_value, 'Not enough available value');
 
             // [Interaction] Pay
             let unit_price = self._mint_unit_price.read();
@@ -415,15 +545,35 @@ mod Mint {
             // [Check] Transfer successful
             assert(success, 'Transfer failed');
 
-            // [Interaction] Mint
-            project.mint(caller_address, slot, value);
+            // [Effect] Book
+            self._book(caller_address, amount, value, BookingStatus::Booked);
+
+            // [Return] Value
+            value
+        }
+
+        fn _book(
+            ref self: ContractState,
+            user_address: ContractAddress,
+            amount: u256,
+            value: u256,
+            status: BookingStatus
+        ) {
+            // [Effect] Compute and update user mint count
+            let mint_id = self._mint_count.read(user_address) + 1_u32;
+            self._mint_count.write(user_address, mint_id);
+
+            // [Effect] Update remaining value
+            self._mint_remaining_value.write(self._mint_remaining_value.read() - value);
+
+            // [Effect] Store booking
+            let booking = BookingTrait::new(value, amount, status);
+            self._mint_booked_values.write((user_address, mint_id), booking);
 
             // [Event] Emit event
-            let current_time = get_block_timestamp();
-            self
-                .emit(
-                    Event::Buy(Buy { address: caller_address, value: value, time: current_time })
-                );
+            let time = get_block_timestamp();
+            let event = BookingHandled { address: user_address, id: mint_id, value, time };
+            self.emit(Event::BookingHandled(event));
 
             // [Effect] Close the sale if sold out
             if self.is_sold_out() {
@@ -434,14 +584,12 @@ mod Mint {
                 self.set_public_sale_open(false);
 
                 // [Event] Emit sold out event
-                self.emit(Event::SoldOut(SoldOut { time: current_time }));
+                let event = SoldOut { time };
+                self.emit(Event::SoldOut(event));
             };
-
-            // [Return] Value
-            value
         }
 
-        fn project_remaining_value(self: @ContractState) -> u256 {
+        fn _project_remaining_value(self: @ContractState) -> u256 {
             // [Compute] Total remaining value
             let project_address = self._mint_carbonable_project_address.read();
             let slot = self._mint_carbonable_project_slot.read();
@@ -450,6 +598,13 @@ mod Mint {
             let absorber = IAbsorberDispatcher { contract_address: project_address };
             let project_value = absorber.get_project_value(slot);
             project_value - total_value
+        }
+
+        fn _available_public_value(self: @ContractState) -> u256 {
+            // [Compute] Available value
+            let remaining_value = self._mint_remaining_value.read();
+            let reserved_value = self._mint_reserved_value.read();
+            remaining_value - reserved_value
         }
     }
 }
@@ -480,7 +635,6 @@ mod Test {
 
     use super::Mint;
     use super::Mint::_mint_max_value_per_tx::InternalContractMemberStateTrait as MintMaxValuePerTxTrait;
-    use super::Mint::_mint_max_value::InternalContractMemberStateTrait as MintMaxValueTrait;
 
     // Constants
 
@@ -532,7 +686,6 @@ mod Test {
     fn test_mint_max_value_per_tx() {
         // [Setup]
         let mut state = STATE();
-        state._mint_max_value.write(1000);
         Mint::MintImpl::set_max_value_per_tx(ref state, MAX_VALUE_PER_TX);
         // [Assert] Storage
         let max_value_per_tx = Mint::MintImpl::get_max_value_per_tx(@state);

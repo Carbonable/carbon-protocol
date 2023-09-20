@@ -20,7 +20,6 @@ mod Offseter {
 
     // Farm
     use carbon::components::farm::interface::IFarm;
-    use carbon::components::farm::module::Farm;
 
     // Offset
     use carbon::components::offset::interface::IOffset;
@@ -128,73 +127,38 @@ mod Offseter {
     #[external(v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_carbonable_project_address(@unsafe_state)
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::get_carbonable_project_address(@unsafe_state)
         }
 
         fn get_carbonable_project_slot(self: @ContractState) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_carbonable_project_slot(@unsafe_state)
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::get_carbonable_project_slot(@unsafe_state)
         }
 
         fn get_total_deposited(self: @ContractState) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_total_deposited(@unsafe_state)
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::get_total_deposited(@unsafe_state)
         }
 
         fn get_total_absorption(self: @ContractState) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_total_absorption(@unsafe_state)
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::get_total_absorption(@unsafe_state)
         }
 
         fn get_max_absorption(self: @ContractState) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_max_absorption(@unsafe_state)
-        }
-
-        fn get_total_sale(self: @ContractState) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_total_sale(@unsafe_state)
-        }
-
-        fn get_max_sale(self: @ContractState) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_max_sale(@unsafe_state)
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::get_max_absorption(@unsafe_state)
         }
 
         fn get_deposited_of(self: @ContractState, account: ContractAddress) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_deposited_of(@unsafe_state, account)
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::get_deposited_of(@unsafe_state, account)
         }
 
         fn get_absorption_of(self: @ContractState, account: ContractAddress) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_absorption_of(@unsafe_state, account)
-        }
-
-        fn get_sale_of(self: @ContractState, account: ContractAddress) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_sale_of(@unsafe_state, account)
-        }
-
-        fn get_current_price(self: @ContractState) -> u256 {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_current_price(@unsafe_state)
-        }
-
-        fn get_prices(self: @ContractState) -> (Span<u64>, Span<u256>) {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_prices(@unsafe_state)
-        }
-
-        fn get_cumsales(self: @ContractState) -> (Span<u64>, Span<u256>, Span<u256>) {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_cumsales(@unsafe_state)
-        }
-
-        fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
-            let unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::get_apr(@unsafe_state, minter)
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::get_absorption_of(@unsafe_state, account)
         }
 
         fn deposit(ref self: ContractState, token_id: u256, value: u256) {
@@ -202,8 +166,8 @@ mod Offseter {
             let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
             ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
             // [Effect] Deposit
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::deposit(ref unsafe_state, token_id, value);
+            let mut unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::deposit(ref unsafe_state, token_id, value);
             // [Security] ReentrancyGuard
             ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
@@ -213,8 +177,8 @@ mod Offseter {
             let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
             ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
             // [Effect] Withdraw
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::withdraw_to(ref unsafe_state, value);
+            let mut unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::withdraw_to(ref unsafe_state, value);
             // [Security] ReentrancyGuard
             ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
@@ -224,37 +188,10 @@ mod Offseter {
             let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
             ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
             // [Effect] Withdraw
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::withdraw_to_token(ref unsafe_state, token_id, value);
+            let mut unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::FarmImpl::withdraw_to_token(ref unsafe_state, token_id, value);
             // [Security] ReentrancyGuard
             ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
-        }
-
-        fn add_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Add price
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::add_price(ref unsafe_state, time, price);
-        }
-
-        fn update_last_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Update last price
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::update_last_price(ref unsafe_state, time, price);
-        }
-
-        fn set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Set prices
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::FarmImpl::set_prices(ref unsafe_state, times, prices);
         }
     }
 
