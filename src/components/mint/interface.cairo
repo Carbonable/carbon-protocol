@@ -12,6 +12,7 @@ trait IMint<TContractState> {
     fn get_unit_price(self: @TContractState) -> u256;
     fn get_reserved_value(self: @TContractState) -> u256;
     fn get_remaining_value(self: @TContractState) -> u256;
+    fn get_available_value(self: @TContractState) -> u256;
     fn get_whitelist_merkle_root(self: @TContractState) -> felt252;
     fn get_whitelist_allocation(
         self: @TContractState, account: ContractAddress, allocation: felt252, proof: Span<felt252>

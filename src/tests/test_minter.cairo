@@ -33,6 +33,7 @@ use cairo_erc_3525::presets::erc3525_mintable_burnable::{
 use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
 use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
 use carbon::components::mint::interface::{IMintDispatcher, IMintDispatcherTrait};
+use carbon::components::mint::module::Mint;
 
 // Contracts
 
@@ -221,7 +222,7 @@ fn test_minter_prebook() {
     set_contract_address(signers.owner);
     let minter = IMintDispatcher { contract_address: contracts.minter };
     minter.set_whitelist_merkle_root(root);
-    // [Assert] Whitelist book
+    // [Assert] Pre book
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * ALLOCATION.into());
@@ -229,6 +230,19 @@ fn test_minter_prebook() {
     // [Assert] Sold out
     let status = minter.is_sold_out();
     assert(!status, 'Wrong sold out status');
+    // [Assert] Book
+    set_contract_address(signers.owner);
+    minter.set_public_sale_open(true);
+    set_contract_address(signers.anyone);
+    let available_value = minter.get_available_value();
+    erc20.approve(contracts.minter, UNIT_PRICE * available_value);
+    minter.book(available_value, false);
+    // [Assert] Sold out
+    let status = minter.is_sold_out();
+    assert(status, 'Wrong sold out status');
+    // [Assert] Claim
+    minter.claim(signers.anyone, 1);
+    minter.claim(signers.anyone, 2);
 }
 
 #[test]
@@ -297,6 +311,10 @@ fn test_minter_airdrop() {
     set_contract_address(signers.anyone);
     minter.book(1, false);
     minter.book(2, true);
+    // [Assert] Claim
+    minter.claim(signers.anyone, 1);
+    minter.claim(signers.anyone, 2);
+    minter.claim(signers.anyone, 3);
     // [Assert] Withdraw
     set_contract_address(signers.owner);
     minter.withdraw();

@@ -157,7 +157,11 @@ mod Mint {
         }
 
         fn get_remaining_value(self: @ContractState) -> u256 {
-            self._mint_remaining_value.read()
+            self._mint_reserved_value.read()
+        }
+
+        fn get_available_value(self: @ContractState) -> u256 {
+            self._mint_remaining_value.read() - self._mint_reserved_value.read()
         }
 
         fn get_whitelist_merkle_root(self: @ContractState) -> felt252 {
@@ -189,7 +193,7 @@ mod Mint {
         }
 
         fn is_sold_out(self: @ContractState) -> bool {
-            self._mint_remaining_value.read() == 0
+            self.get_available_value() == 0
         }
 
         fn set_whitelist_merkle_root(ref self: ContractState, whitelist_merkle_root: felt252) {
