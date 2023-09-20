@@ -18,7 +18,6 @@ mod Access {
         _access_role_members_len: LegacyMap<felt252, u32>,
     }
 
-    #[external(v0)]
     impl MinterImpl of IMinter<ContractState> {
         fn get_minters(self: @ContractState, slot: u256) -> Span<ContractAddress> {
             let role = self._hash(MINTER_ROLE, slot);
@@ -36,7 +35,6 @@ mod Access {
         }
     }
 
-    #[external(v0)]
     impl CertifierImpl of ICertifier<ContractState> {
         fn get_certifier(self: @ContractState, slot: u256) -> ContractAddress {
             let role = self._hash(CERTIFIER_ROLE, slot);
@@ -56,7 +54,6 @@ mod Access {
         }
     }
 
-    #[external(v0)]
     impl WithdrawerImpl of IWithdrawer<ContractState> {
         fn get_withdrawer(self: @ContractState) -> ContractAddress {
             self._access_role_members.read((WITHDRAWER_ROLE, 0))

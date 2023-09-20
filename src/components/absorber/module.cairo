@@ -34,7 +34,6 @@ mod Absorber {
         value: u256
     }
 
-    #[external(v0)]
     impl AbsorberImpl of IAbsorber<ContractState> {
         // Absorption
         fn get_start_time(self: @ContractState, slot: u256) -> u64 {

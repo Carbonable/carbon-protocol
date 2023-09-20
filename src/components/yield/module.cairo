@@ -40,7 +40,6 @@ mod Yield {
         self.initializer(project, slot, erc20);
     }
 
-    #[external(v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Farm::unsafe_new_contract_state();
@@ -93,7 +92,6 @@ mod Yield {
         }
     }
 
-    #[external(v0)]
     impl YieldFarmImpl of IYieldFarm<ContractState> {
         fn get_total_sale(self: @ContractState) -> u256 {
             let unsafe_state = Farm::unsafe_new_contract_state();
@@ -146,7 +144,6 @@ mod Yield {
         }
     }
 
-    #[external(v0)]
     impl YieldImpl of IYield<ContractState> {
         fn get_payment_token_address(self: @ContractState) -> ContractAddress {
             self._yield_erc20.read().contract_address

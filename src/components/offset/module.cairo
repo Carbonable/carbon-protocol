@@ -37,7 +37,6 @@ mod Offset {
         self.initializer(project, slot);
     }
 
-    #[external(v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Farm::unsafe_new_contract_state();
@@ -90,7 +89,6 @@ mod Offset {
         }
     }
 
-    #[external(v0)]
     impl OffsetImpl of IOffset<ContractState> {
         fn get_total_claimable(self: @ContractState) -> u256 {
             let total_absorption = self.get_total_absorption();

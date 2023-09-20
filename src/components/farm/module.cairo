@@ -82,7 +82,6 @@ mod Farm {
         self.initializer(project, slot);
     }
 
-    #[external(v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             self._farm_project.read().contract_address
@@ -170,7 +169,6 @@ mod Farm {
         }
     }
 
-    #[external(v0)]
     impl YieldFarmImpl of IYieldFarm<ContractState> {
         fn get_total_sale(self: @ContractState) -> u256 {
             // [Check] Prices are set, return 0 otherwise

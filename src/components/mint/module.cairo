@@ -270,7 +270,7 @@ mod Mint {
 
             // [Check] Enough value available
             let remaining_value = self._mint_remaining_value.read();
-            assert(value <= remaining_value, 'Not enough avaialble value');
+            assert(value <= remaining_value, 'Not enough available value');
 
             // [Check] Enough reserved value available
             let reserved_value = self._mint_reserved_value.read();
