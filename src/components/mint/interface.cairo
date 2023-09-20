@@ -49,15 +49,15 @@ trait IMint<TContractState> {
 
 #[starknet::interface]
 trait IL1Mint<TContractState> {
-    fn get_l1_minter_address(self: @TContractState) -> felt252;
-    fn set_l1_minter_address(ref self: TContractState, l1_address: felt252);
+    fn get_l1_minter_address(self: @TContractState) -> ContractAddress;
+    fn set_l1_minter_address(ref self: TContractState, l1_address: ContractAddress);
 }
 
 #[starknet::interface]
 trait IL1Handler<TContractState> {
     fn book_from_l1(
         ref self: TContractState,
-        from_address: felt252,
+        from_address: ContractAddress,
         user_address: ContractAddress,
         value: u256,
         amount: u256,
