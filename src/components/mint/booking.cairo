@@ -8,7 +8,7 @@ use option::OptionTrait;
 use starknet::{Store, StorageBaseAddress};
 use starknet::SyscallResult;
 use starknet::{
-    storage_access, storage_read_syscall, storage_write_syscall, storage_base_address_from_felt252,
+    storage_access, storage_read_syscall, storage_write_syscall,
     storage_address_from_base_and_offset
 };
 
@@ -58,7 +58,7 @@ impl BookingStatusIntoU8 of Into<BookingStatus, u8> {
     }
 }
 
-impl U8IntoBookingStatus of TryInto<u8, BookingStatus> {
+impl U8TryIntoBookingStatus of TryInto<u8, BookingStatus> {
     fn try_into(self: u8) -> Option<BookingStatus> {
         if self == 0 {
             return Option::Some(BookingStatus::Unknown);
