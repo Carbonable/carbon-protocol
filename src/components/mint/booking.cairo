@@ -2,6 +2,7 @@
 
 use traits::{Into, TryInto, PartialEq};
 use option::OptionTrait;
+use debug::PrintTrait;
 
 // Starknet imports
 
@@ -19,7 +20,7 @@ struct Booking {
     status: u8,
 }
 
-#[derive(storage_access::StorageAccess, Drop)]
+#[derive(storage_access::StorageAccess, Drop, Copy)]
 enum BookingStatus {
     Unknown: (),
     Booked: (),
@@ -32,6 +33,7 @@ trait BookingTrait {
     fn new(value: u256, amount: u256, status: BookingStatus) -> Booking;
     fn get_status(ref self: Booking) -> BookingStatus;
     fn set_status(ref self: Booking, status: BookingStatus);
+    fn is_status(ref self: Booking, status: BookingStatus) -> bool;
 }
 
 impl BookingImpl of BookingTrait {
@@ -43,6 +45,9 @@ impl BookingImpl of BookingTrait {
     }
     fn set_status(ref self: Booking, status: BookingStatus) {
         self.status = status.into();
+    }
+    fn is_status(ref self: Booking, status: BookingStatus) -> bool {
+        self.status == status.into()
     }
 }
 
@@ -60,6 +65,7 @@ impl BookingStatusIntoU8 of Into<BookingStatus, u8> {
 
 impl U8TryIntoBookingStatus of TryInto<u8, BookingStatus> {
     fn try_into(self: u8) -> Option<BookingStatus> {
+        self.print();
         if self == 0 {
             return Option::Some(BookingStatus::Unknown);
         } else if self == 1 {
@@ -73,15 +79,6 @@ impl U8TryIntoBookingStatus of TryInto<u8, BookingStatus> {
         } else {
             return Option::None;
         }
-    }
-}
-
-impl BookingStatusPartialEq of PartialEq<BookingStatus> {
-    fn eq(lhs: @BookingStatus, rhs: @BookingStatus) -> bool {
-        lhs.into() == rhs.into()
-    }
-    fn ne(lhs: @BookingStatus, rhs: @BookingStatus) -> bool {
-        lhs.into() != rhs.into()
     }
 }
 

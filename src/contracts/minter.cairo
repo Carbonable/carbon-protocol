@@ -286,12 +286,12 @@ mod Minter {
 
     #[external(v0)]
     impl L1MintImpl of IL1Mint<ContractState> {
-        fn get_l1_minter_address(self: @ContractState) -> felt252 {
+        fn get_l1_minter_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::L1MintImpl::get_l1_minter_address(@unsafe_state)
         }
 
-        fn set_l1_minter_address(ref self: ContractState, l1_address: felt252) {
+        fn set_l1_minter_address(ref self: ContractState, l1_address: ContractAddress) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
@@ -305,7 +305,7 @@ mod Minter {
     impl L1HandlerImpl of IL1Handler<ContractState> {
         fn book_from_l1(
             ref self: ContractState,
-            from_address: felt252,
+            from_address: ContractAddress,
             user_address: ContractAddress,
             value: u256,
             amount: u256,
