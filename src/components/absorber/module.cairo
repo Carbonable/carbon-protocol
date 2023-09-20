@@ -1,10 +1,21 @@
 #[starknet::contract]
 mod Absorber {
-    use starknet::{get_block_timestamp, get_caller_address, ContractAddress};
+    // Core imports
+
     use traits::Into;
     use array::{ArrayTrait, SpanTrait};
+
+    // Starknet imports
+
+    use starknet::{get_block_timestamp, get_caller_address, ContractAddress};
+
+    // External imports
+    
     use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
     use alexandria_storage::list::{List, ListTrait};
+
+    // Internal imports
+
     use carbon::components::absorber::interface::IAbsorber;
 
     #[storage]

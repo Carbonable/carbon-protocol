@@ -1,16 +1,17 @@
 #[starknet::contract]
 mod Offset {
-    use starknet::{get_caller_address, get_block_timestamp, ContractAddress};
-    use debug::PrintTrait;
+    // Starknet imports
 
-    // ERC20
+    use starknet::{get_caller_address, get_block_timestamp, ContractAddress};
+
+    // External imports
+
     use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 
-    // Farm
+    // Internal imports
+
     use carbon::components::farm::interface::IFarm;
     use carbon::components::farm::module::Farm;
-
-    // Offset
     use carbon::components::offset::interface::IOffset;
 
     #[storage]

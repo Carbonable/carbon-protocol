@@ -1,8 +1,14 @@
 #[starknet::contract]
 mod Metadata {
+    // Starknet imports
+
     use starknet::ClassHash;
 
+    // External imports
+
     use cairo_erc_3525::presets::erc3525_mintable_burnable_metadata_slot_approvable_slot_enumerable::ERC3525MintableBurnableMSASE as ERC3525;
+
+    // Internal imports
 
     use carbon::components::metadata::interface::{
         IContractDescriptor, ISlotDescriptor, IMetadata, IContractDescriptorLibraryDispatcher,
