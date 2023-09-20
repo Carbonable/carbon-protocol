@@ -26,7 +26,7 @@ mod Mint {
     // Internal imports
 
     use carbon::components::mint::interface::{IMint, IL1Mint, IL1Handler};
-    use carbon::components::mint::booking::{Booking, BookingStatus, BookingTrait, StoreBooking};
+    use carbon::components::mint::booking::{Booking, BookingStatus, BookingTrait};
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
     use carbon::contracts::project::{
         IExternalDispatcher as IProjectDispatcher,
