@@ -124,7 +124,7 @@ fn deploy_minter(
         SLOT.low.into(),
         SLOT.high.into(),
         erc20.into(),
-        public_sale_open.into(), // public_sale_open = false
+        public_sale_open.into(),
         MAX_VALUE_PER_TX.low.into(),
         MAX_VALUE_PER_TX.high.into(),
         MIN_VALUE_PER_TX.low.into(),
