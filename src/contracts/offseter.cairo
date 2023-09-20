@@ -162,6 +162,9 @@ mod Offseter {
         }
 
         fn deposit(ref self: ContractState, token_id: u256, value: u256) {
+            // [Check] Not paused
+            let mut unsafe_state = Pausable::unsafe_new_contract_state();
+            Pausable::InternalImpl::assert_not_paused(@unsafe_state);
             // [Security] ReentrancyGuard
             let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
             ReentrancyGuard::InternalImpl::start(ref unsafe_rg_state);
