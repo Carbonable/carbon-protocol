@@ -449,8 +449,8 @@ mod Mint {
                 && public_sale_open
                 && value <= max_value_per_tx
                 && value >= min_value_per_tx
-                && amount == unit_price * value
-                && value <= remaining_value) {
+                && amount == unit_price
+                * value && value <= remaining_value) {
                 BookingStatus::Booked
             } else {
                 BookingStatus::Failed
@@ -674,9 +674,7 @@ mod Test {
             fn total_value(self: @ContractState, slot: u256) -> u256 {
                 0
             }
-            fn mint(
-                ref self: ContractState, to: ContractAddress, slot: u256, value: u256
-            ) -> u256 {
+            fn mint(ref self: ContractState, to: ContractAddress, slot: u256, value: u256) -> u256 {
                 0
             }
         }
@@ -700,11 +698,9 @@ mod Test {
             ) -> bool {
                 true
             }
-            fn transfer(
-                ref self: ContractState, to: ContractAddress, value: u256
-            ) -> bool {
+            fn transfer(ref self: ContractState, to: ContractAddress, value: u256) -> bool {
                 true
-            } 
+            }
         }
     }
 
@@ -848,7 +844,7 @@ mod Test {
         // [Assert] Book
         set_caller_address(ACCOUNT());
         Mint::MintImpl::book(ref state, 10, false);
-        // [Assert] Events - Enable when test is contract
+    // [Assert] Events - Enable when test is contract
     }
 
     #[test]
@@ -868,7 +864,7 @@ mod Test {
         // [Assert] Sold out
         set_caller_address(ACCOUNT());
         assert(Mint::MintImpl::is_sold_out(@state), 'Contract not sold out');
-        // [Assert] Events - Enable when test is contract
+    // [Assert] Events - Enable when test is contract
     }
 
     #[test]
@@ -1022,7 +1018,9 @@ mod Test {
         Mint::MintImpl::set_public_sale_open(ref state, true);
         // [Assert] Book
         let value: u256 = 1000;
-        Mint::L1HandlerImpl::book_from_l1(ref state, ACCOUNT(), ACCOUNT(), value, value * UNIT_PRICE);
+        Mint::L1HandlerImpl::book_from_l1(
+            ref state, ACCOUNT(), ACCOUNT(), value, value * UNIT_PRICE
+        );
     }
 
     #[test]
@@ -1043,7 +1041,7 @@ mod Test {
         assert(Mint::MintImpl::is_sold_out(@state), 'Contract not sold out');
         // [Assert] Claim
         Mint::MintImpl::claim(ref state, ACCOUNT(), 1);
-        // [Assert] Events - Enable when test is contract
+    // [Assert] Events - Enable when test is contract
     }
 
     #[test]
