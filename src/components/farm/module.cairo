@@ -452,8 +452,8 @@ mod Farm {
             }
 
             // [Event] Emit event
-            let deposit = Deposit { address: caller, value: value, time: current_time };
-            self.emit(Event::Deposit(deposit));
+            let event = Deposit { address: caller, value: value, time: current_time };
+            self.emit(event);
         }
 
         fn _withdraw(ref self: ContractState, to_token_id: u256, to: ContractAddress, value: u256) {
