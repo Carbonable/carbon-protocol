@@ -44,6 +44,7 @@ const SYMBOL: felt252 = 'SYMBOL';
 const DECIMALS: u8 = 6;
 const SLOT: u256 = 1;
 const TON_EQUIVALENT: u64 = 1_000_000;
+const MIN_CLAIMABLE: u256 = 1;
 const VALUE: u256 = 100;
 
 // Signers
@@ -86,7 +87,12 @@ fn deploy_project(owner: ContractAddress) -> ContractAddress {
 
 fn deploy_offseter(project: ContractAddress, owner: ContractAddress) -> ContractAddress {
     let mut calldata: Array<felt252> = array![
-        project.into(), SLOT.low.into(), SLOT.high.into(), owner.into()
+        project.into(),
+        SLOT.low.into(),
+        SLOT.high.into(),
+        MIN_CLAIMABLE.low.into(),
+        MIN_CLAIMABLE.high.into(),
+        owner.into()
     ];
     let (address, _) = deploy_syscall(
         Offseter::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
@@ -150,7 +156,7 @@ fn setup() -> (Signers, Contracts) {
 
 #[test]
 #[available_gas(200_000_000)]
-fn test_nominal_single_user_case() {
+fn test_offseter_nominal_single_user_case() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.offseter };
@@ -242,7 +248,7 @@ fn test_nominal_single_user_case() {
 
 #[test]
 #[available_gas(270_000_000)]
-fn test_nominal_multi_user_case() {
+fn test_offseter_nominal_multi_user_case() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.offseter };
@@ -314,9 +320,9 @@ fn test_nominal_multi_user_case() {
 
 #[test]
 #[available_gas(70_000_000)]
-// #[should_panic(expected: ('Caller is not owner',))]
+#[should_panic(expected: ('Caller is not owner', 'ENTRYPOINT_FAILED'))]
 #[should_panic]
-fn test_deposit_revert_not_token_owner() {
+fn test_offseter_deposit_revert_not_token_owner() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.offseter };
@@ -352,9 +358,8 @@ fn test_deposit_revert_not_token_owner() {
 
 #[test]
 #[available_gas(105_000_000)]
-// #[should_panic(expected: ('Caller is not owner',))]
-#[should_panic]
-fn test_withdraw_revert_not_token_owner() {
+#[should_panic(expected: ('Caller is not owner', 'ENTRYPOINT_FAILED'))]
+fn test_offseter_withdraw_revert_not_token_owner() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.offseter };
@@ -392,4 +397,44 @@ fn test_withdraw_revert_not_token_owner() {
 
     // Withdraw to token #1
     farmer.withdraw_to_token(one, VALUE);
+}
+
+#[test]
+#[available_gas(105_000_000)]
+#[should_panic(expected: ('Claim amount is too low', 'ENTRYPOINT_FAILED'))]
+fn test_offseter_withdraw_revert_claim_amount_too_low() {
+    let (signers, contracts) = setup();
+    // Instantiate contracts
+    let farmer = IFarmDispatcher { contract_address: contracts.offseter };
+    let offseter = IOffsetDispatcher { contract_address: contracts.offseter };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+
+    // Prank caller as owner
+    set_contract_address(signers.owner);
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    minter.add_minter(SLOT, signers.owner);
+    let one = project.mint(signers.owner, SLOT, VALUE);
+    let two = project.mint(signers.anyone, SLOT, VALUE);
+    minter.revoke_minter(SLOT, signers.owner);
+
+    // Setup project value
+    let project_value = erc3525.total_value(SLOT);
+    absorber.set_project_value(SLOT, project_value);
+
+    // Prank caller as anyone
+    set_contract_address(signers.anyone);
+
+    // At t = 0
+    set_block_timestamp(0);
+
+    // Owner deposits value 100
+    set_contract_address(signers.owner);
+    farmer.deposit(one, VALUE);
+
+    // Owner claims all
+    offseter.claim_all();
 }

@@ -186,7 +186,7 @@ fn setup() -> (Signers, Contracts) {
 
 #[test]
 #[available_gas(40_000_000)]
-fn test_cumsales() {
+fn test_yielder_cumsales() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
@@ -219,7 +219,7 @@ fn test_cumsales() {
 
 #[test]
 #[available_gas(300_000_000)]
-fn test_nominal_single_user_case() {
+fn test_yielder_nominal_single_user_case() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };
@@ -313,7 +313,7 @@ fn test_nominal_single_user_case() {
 
 #[test]
 #[available_gas(370_000_000)]
-fn test_nominal_multi_user_case() {
+fn test_yielder_nominal_multi_user_case() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };
@@ -384,10 +384,10 @@ fn test_nominal_multi_user_case() {
 }
 
 #[test]
-#[available_gas(70_000_000)]
-// #[should_panic(expected: ('Caller is not owner',))]
+#[available_gas(75_000_000)]
+#[should_panic(expected: ('Caller is not owner', 'ENTRYPOINT_FAILED'))]
 #[should_panic]
-fn test_deposit_revert_not_token_owner() {
+fn test_yielder_deposit_revert_not_token_owner() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };
@@ -422,10 +422,9 @@ fn test_deposit_revert_not_token_owner() {
 }
 
 #[test]
-#[available_gas(105_000_000)]
-// #[should_panic(expected: ('Caller is not owner',))]
-#[should_panic]
-fn test_withdraw_revert_not_token_owner() {
+#[available_gas(110_000_000)]
+#[should_panic(expected: ('Caller is not owner', 'ENTRYPOINT_FAILED'))]
+fn test_yielder_withdraw_revert_not_token_owner() {
     let (signers, contracts) = setup();
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };

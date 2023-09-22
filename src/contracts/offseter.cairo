@@ -30,9 +30,13 @@ mod Offseter {
 
     #[constructor]
     fn constructor(
-        ref self: ContractState, project: ContractAddress, slot: u256, owner: ContractAddress,
+        ref self: ContractState,
+        project: ContractAddress,
+        slot: u256,
+        min_claimable: u256,
+        owner: ContractAddress,
     ) {
-        self.initializer(project, slot, owner);
+        self.initializer(project, slot, min_claimable, owner);
     }
 
     // Upgradable
@@ -222,6 +226,11 @@ mod Offseter {
             Offset::OffsetImpl::get_claimed_of(@unsafe_state, account)
         }
 
+        fn get_min_claimable(self: @ContractState) -> u256 {
+            let unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::OffsetImpl::get_min_claimable(@unsafe_state)
+        }
+
         fn claim(ref self: ContractState, amount: u256) {
             // [Security] ReentrancyGuard
             let mut unsafe_rg_state = ReentrancyGuard::unsafe_new_contract_state();
@@ -243,12 +252,25 @@ mod Offseter {
             // [Security] ReentrancyGuard
             ReentrancyGuard::InternalImpl::end(ref unsafe_rg_state);
         }
+
+        fn set_min_claimable(ref self: ContractState, min_claimable: u256) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set min claimable
+            let mut unsafe_state = Offset::unsafe_new_contract_state();
+            Offset::OffsetImpl::set_min_claimable(ref unsafe_state, min_claimable);
+        }
     }
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn initializer(
-            ref self: ContractState, project: ContractAddress, slot: u256, owner: ContractAddress,
+            ref self: ContractState,
+            project: ContractAddress,
+            slot: u256,
+            min_claimable: u256,
+            owner: ContractAddress,
         ) {
             // [Check] Inputs
             assert(!owner.is_zero(), 'Owner cannot be 0');
@@ -258,7 +280,7 @@ mod Offseter {
             Ownable::InternalImpl::initializer(ref unsafe_state, owner);
             // [Effect] Offset
             let mut unsafe_state = Offset::unsafe_new_contract_state();
-            Offset::InternalImpl::initializer(ref unsafe_state, project, slot);
+            Offset::InternalImpl::initializer(ref unsafe_state, project, slot, min_claimable);
         }
     }
 }

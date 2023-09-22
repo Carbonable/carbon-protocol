@@ -34,13 +34,6 @@ mod Yield {
         time: u64,
     }
 
-    #[constructor]
-    fn constructor(
-        ref self: ContractState, project: ContractAddress, slot: u256, erc20: ContractAddress
-    ) {
-        self.initializer(project, slot, erc20);
-    }
-
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Farm::unsafe_new_contract_state();

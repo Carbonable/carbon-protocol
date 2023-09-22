@@ -18,6 +18,7 @@ mod Offset {
     struct Storage {
         _offset_total_claimed: u256,
         _offset_claimed: LegacyMap::<ContractAddress, u256>,
+        _offset_min_claimable: u256,
     }
 
     #[event]
@@ -31,11 +32,6 @@ mod Offset {
         address: ContractAddress,
         amount: u256,
         time: u64,
-    }
-
-    #[constructor]
-    fn constructor(ref self: ContractState, project: ContractAddress, slot: u256) {
-        self.initializer(project, slot);
     }
 
     impl FarmImpl of IFarm<ContractState> {
@@ -111,11 +107,19 @@ mod Offset {
             self._offset_claimed.read(account)
         }
 
+        fn get_min_claimable(self: @ContractState) -> u256 {
+            self._offset_min_claimable.read()
+        }
+
         fn claim(ref self: ContractState, amount: u256) {
             // [Check] Check amount
             let caller = get_caller_address();
             let claimable = self.get_claimable_of(caller);
             assert(amount <= claimable, 'Claim amount is too high');
+
+            // [Check] Check min claimable
+            let min_claimable = self.get_min_claimable();
+            assert(amount >= min_claimable, 'Claim amount is too low');
 
             // [Effect] Update user claimed
             let stored_amount = self._offset_claimed.read(caller);
@@ -136,14 +140,22 @@ mod Offset {
             let amount = self.get_claimable_of(caller);
             self.claim(amount);
         }
+
+        fn set_min_claimable(ref self: ContractState, min_claimable: u256) {
+            self._offset_min_claimable.write(min_claimable);
+        }
     }
 
     #[generate_trait]
     impl InternalImpl of InternalTrait {
-        fn initializer(ref self: ContractState, project: ContractAddress, slot: u256) {
+        fn initializer(
+            ref self: ContractState, project: ContractAddress, slot: u256, min_claimable: u256
+        ) {
             // [Effect] Initialize farm
             let mut unsafe_state = Farm::unsafe_new_contract_state();
             Farm::InternalImpl::initializer(ref unsafe_state, project, slot);
+            // [Effect] Min claimable
+            self._offset_min_claimable.write(min_claimable);
         }
     }
 }
