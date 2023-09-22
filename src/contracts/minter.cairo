@@ -165,6 +165,11 @@ mod Minter {
             Mint::MintImpl::is_sold_out(@unsafe_state)
         }
 
+        fn is_canceled(self: @ContractState) -> bool {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::is_canceled(@unsafe_state)
+        }
+
         fn set_whitelist_merkle_root(ref self: ContractState, whitelist_merkle_root: felt252) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -286,6 +291,15 @@ mod Minter {
             // [Effect] Refund to address
             let mut unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::refund_to(ref unsafe_state, to, user_address, id)
+        }
+
+        fn cancel(ref self: ContractState) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Cancel the mint
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::cancel(ref unsafe_state)
         }
     }
 

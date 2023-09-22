@@ -19,6 +19,7 @@ trait IMint<TContractState> {
     ) -> felt252;
     fn get_claimed_value(self: @TContractState, account: ContractAddress) -> u256;
     fn is_sold_out(self: @TContractState) -> bool;
+    fn is_canceled(self: @TContractState) -> bool;
     fn set_whitelist_merkle_root(ref self: TContractState, whitelist_merkle_root: felt252);
     fn set_public_sale_open(ref self: TContractState, public_sale_open: bool);
     fn set_max_value_per_tx(ref self: TContractState, max_value_per_tx: u256);
@@ -46,6 +47,7 @@ trait IMint<TContractState> {
     fn refund_to(
         ref self: TContractState, to: ContractAddress, user_address: ContractAddress, id: u32
     );
+    fn cancel(ref self: TContractState);
 }
 
 #[starknet::interface]
