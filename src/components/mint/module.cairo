@@ -63,7 +63,7 @@ mod Mint {
         Airdrop: Airdrop,
         BookingHandled: BookingHandled,
         BookingClaimed: BookingClaimed,
-        BookingRefund: BookingRefund,
+        BookingRefunded: BookingRefunded,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -113,7 +113,7 @@ mod Mint {
     }
 
     #[derive(Drop, starknet::Event)]
-    struct BookingRefund {
+    struct BookingRefunded {
         address: ContractAddress,
         id: u32,
         value: u256,
@@ -385,7 +385,7 @@ mod Mint {
             assert(success, 'Transfer failed');
 
             // [Event] Emit
-            self.emit(BookingRefund { address: user_address, id, value: booking.value, });
+            self.emit(BookingRefunded { address: user_address, id, value: booking.value, });
         }
 
         fn refund_to(
@@ -410,7 +410,7 @@ mod Mint {
             assert(success, 'Transfer failed');
 
             // [Event] Emit
-            self.emit(BookingRefund { address: user_address, id, value: booking.value, });
+            self.emit(BookingRefunded { address: user_address, id, value: booking.value, });
         }
     }
 
@@ -995,7 +995,7 @@ mod Test {
         assert(event.address == ACCOUNT(), 'Wrong event address');
         assert(event.id == 1, 'Wrong event id');
         assert(event.value == value, 'Wrong event value');
-        let event = starknet::testing::pop_log::<Mint::BookingRefund>(contract).unwrap();
+        let event = starknet::testing::pop_log::<Mint::BookingRefunded>(contract).unwrap();
         assert(event.address == ACCOUNT(), 'Wrong event address');
         assert(event.id == 1, 'Wrong event id');
         assert(event.value == value, 'Wrong event value');
@@ -1028,7 +1028,7 @@ mod Test {
         assert(event.address == ACCOUNT(), 'Wrong event address');
         assert(event.id == 1, 'Wrong event id');
         assert(event.value == value, 'Wrong event value');
-        let event = starknet::testing::pop_log::<Mint::BookingRefund>(contract).unwrap();
+        let event = starknet::testing::pop_log::<Mint::BookingRefunded>(contract).unwrap();
         assert(event.address == ACCOUNT(), 'Wrong event address');
         assert(event.id == 1, 'Wrong event id');
         assert(event.value == value, 'Wrong event value');
