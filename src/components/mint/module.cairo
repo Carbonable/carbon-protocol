@@ -50,6 +50,7 @@ mod Mint {
         _mint_l1_minter_address: ContractAddress,
         _mint_count: LegacyMap::<ContractAddress, u32>,
         _mint_booked_values: LegacyMap::<(ContractAddress, u32), Booking>,
+        _mint_cancel: bool,
     }
 
     #[event]
@@ -64,6 +65,7 @@ mod Mint {
         BookingHandled: BookingHandled,
         BookingClaimed: BookingClaimed,
         BookingRefunded: BookingRefunded,
+        Cancel: Cancel,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -117,6 +119,11 @@ mod Mint {
         address: ContractAddress,
         id: u32,
         value: u256,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Cancel {
+        time: u64
     }
 
     impl MintImpl of IMint<ContractState> {
@@ -194,6 +201,10 @@ mod Mint {
 
         fn is_sold_out(self: @ContractState) -> bool {
             self.get_available_value() == 0
+        }
+
+        fn is_canceled(self: @ContractState) -> bool {
+            self._mint_cancel.read()
         }
 
         fn set_whitelist_merkle_root(ref self: ContractState, whitelist_merkle_root: felt252) {
@@ -348,7 +359,10 @@ mod Mint {
 
         fn claim(ref self: ContractState, user_address: ContractAddress, id: u32) {
             // [Check] Project is sold out
-            assert(self.is_sold_out(), 'Contract not sold out');
+            assert(self.is_sold_out(), 'Mint not sold out');
+
+            // [Check] Project is not canceled
+            assert(!self.is_canceled(), 'Mint canceled');
 
             // [Check] Booking
             let mut booking = self._mint_booked_values.read((user_address, id));
@@ -371,7 +385,10 @@ mod Mint {
         fn refund(ref self: ContractState, user_address: ContractAddress, id: u32) {
             // [Check] Booking
             let mut booking = self._mint_booked_values.read((user_address, id));
-            assert(booking.is_status(BookingStatus::Failed), 'Booking not found');
+            assert(
+                booking.is_status(BookingStatus::Failed) || self.is_canceled(),
+                'Booking not refundable'
+            );
 
             // [Effect] Update Booking status
             booking.set_status(BookingStatus::Refunded);
@@ -396,7 +413,10 @@ mod Mint {
 
             // [Check] Booking
             let mut booking = self._mint_booked_values.read((user_address, id));
-            assert(booking.is_status(BookingStatus::Failed), 'Booking not found');
+            assert(
+                booking.is_status(BookingStatus::Failed) || self.is_canceled(),
+                'Booking not refundable'
+            );
 
             // [Effect] Update Booking status
             booking.set_status(BookingStatus::Refunded);
@@ -411,6 +431,18 @@ mod Mint {
 
             // [Event] Emit
             self.emit(BookingRefunded { address: user_address, id, value: booking.value, });
+        }
+
+        fn cancel(ref self: ContractState) {
+            // [Check] Mint is not already canceled
+            assert(!self.is_canceled(), 'Mint already canceled');
+
+            // [Effect] Update storage
+            self._mint_cancel.write(true);
+
+            // [Event] Emit
+            let current_time = get_block_timestamp();
+            self.emit(Cancel { time: current_time });
         }
     }
 
@@ -447,6 +479,7 @@ mod Mint {
             let max_value_per_tx = self._mint_max_value_per_tx.read();
             let min_value_per_tx = self._mint_min_value_per_tx.read();
             let mut status = if (!user_address.is_zero()
+                && !self.is_canceled()
                 && public_sale_open
                 && value <= max_value_per_tx
                 && value >= min_value_per_tx
@@ -504,6 +537,9 @@ mod Mint {
         }
 
         fn _safe_book(ref self: ContractState, value: u256, force: bool) -> u256 {
+            // [Check] Project is not canceled
+            assert(!self.is_canceled(), 'Mint canceled');
+
             // [Check] Value not null
             assert(value > 0, 'Invalid value');
 
@@ -831,6 +867,26 @@ mod Test {
 
     #[test]
     #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Mint canceled',))]
+    fn test_mint_book_revert_canceled() {
+        // [Setup]
+        let mut state = STATE();
+        state._mint_carbonable_project_address.write(project_mock());
+        state._mint_payment_token_address.write(erc20_mock());
+        state._mint_remaining_value.write(1000);
+        Mint::MintImpl::set_unit_price(ref state, UNIT_PRICE);
+        Mint::MintImpl::set_max_value_per_tx(ref state, MAX_VALUE_PER_TX);
+        Mint::MintImpl::set_public_sale_open(ref state, true);
+        // [Assert] Cancel mint
+        Mint::MintImpl::cancel(ref state);
+        // [Assert] Book
+        set_caller_address(ACCOUNT());
+        let value: u256 = 10;
+        Mint::MintImpl::book(ref state, value, false);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
     fn test_mint_book() {
         // [Setup]
         let mut state = STATE();
@@ -844,8 +900,10 @@ mod Test {
         set_caller_address(ACCOUNT());
         let value: u256 = 10;
         Mint::MintImpl::book(ref state, value, false);
+        // [Assert] Cancel mint
+        Mint::MintImpl::cancel(ref state);
         // [Assert] Not sold out
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
         // [Assert] Events
         let contract = get_contract_address();
         let event = starknet::testing::pop_log::<Mint::PublicSaleOpen>(contract).unwrap();
@@ -854,6 +912,8 @@ mod Test {
         assert(event.address == ACCOUNT(), 'Wrong event address');
         assert(event.id == 1, 'Wrong event id');
         assert(event.value == value, 'Wrong event value');
+        let event = starknet::testing::pop_log::<Mint::Cancel>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
     }
 
     #[test]
@@ -910,7 +970,7 @@ mod Test {
         let value: u256 = 1000;
         Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, 0);
         // [Assert] Not sold out
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
     }
 
     #[test]
@@ -928,7 +988,7 @@ mod Test {
         let value: u256 = 1000;
         Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, value * UNIT_PRICE);
         // [Assert] Not sold out
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
     }
 
     #[test]
@@ -946,7 +1006,7 @@ mod Test {
         let value: u256 = 1000;
         Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, value * UNIT_PRICE);
         // [Assert] Not sold out
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
     }
 
     #[test]
@@ -959,13 +1019,69 @@ mod Test {
         state._mint_remaining_value.write(100);
         Mint::MintImpl::set_unit_price(ref state, UNIT_PRICE);
         Mint::MintImpl::set_max_value_per_tx(ref state, 1000);
-        Mint::MintImpl::set_min_value_per_tx(ref state, 500);
+        Mint::MintImpl::set_public_sale_open(ref state, false);
+        Mint::MintImpl::cancel(ref state);
+        // [Assert] Book
+        let value: u256 = 100;
+        Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, value * UNIT_PRICE);
+        // [Assert] Not sold out
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_mint_booking_failed_mint_canceled() {
+        // [Setup]
+        let mut state = STATE();
+        state._mint_carbonable_project_address.write(project_mock());
+        state._mint_payment_token_address.write(erc20_mock());
+        state._mint_remaining_value.write(100);
+        Mint::MintImpl::set_unit_price(ref state, UNIT_PRICE);
+        Mint::MintImpl::set_max_value_per_tx(ref state, 1000);
+        Mint::MintImpl::set_min_value_per_tx(ref state, 1);
         Mint::MintImpl::set_public_sale_open(ref state, false);
         // [Assert] Book
         let value: u256 = 100;
         Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, value * UNIT_PRICE);
         // [Assert] Not sold out
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    fn test_mint_refund_canceled() {
+        // [Setup]
+        let mut state = STATE();
+        state._mint_carbonable_project_address.write(project_mock());
+        state._mint_payment_token_address.write(erc20_mock());
+        state._mint_remaining_value.write(1000);
+        Mint::MintImpl::set_unit_price(ref state, UNIT_PRICE);
+        Mint::MintImpl::set_max_value_per_tx(ref state, MAX_VALUE_PER_TX);
+        Mint::MintImpl::set_public_sale_open(ref state, true);
+        // [Assert] Book
+        set_caller_address(ACCOUNT());
+        let value: u256 = 10;
+        Mint::MintImpl::book(ref state, value, false);
+        // [Assert] Cancel mint
+        Mint::MintImpl::cancel(ref state);
+        // [Assert] Not sold out
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
+        // [Assert] Refund
+        Mint::MintImpl::refund(ref state, ACCOUNT(), 1);
+        // [Assert] Events
+        let contract = get_contract_address();
+        let event = starknet::testing::pop_log::<Mint::PublicSaleOpen>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingHandled>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
+        let event = starknet::testing::pop_log::<Mint::Cancel>(contract).unwrap();
+        assert(event.time == get_block_timestamp(), 'Wrong event timestamp');
+        let event = starknet::testing::pop_log::<Mint::BookingRefunded>(contract).unwrap();
+        assert(event.address == ACCOUNT(), 'Wrong event address');
+        assert(event.id == 1, 'Wrong event id');
+        assert(event.value == value, 'Wrong event value');
     }
 
     #[test]
@@ -984,7 +1100,7 @@ mod Test {
         Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, value * UNIT_PRICE);
         // [Assert] Not sold out
         set_caller_address(ACCOUNT());
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
         // [Assert] Refund
         Mint::MintImpl::refund(ref state, ACCOUNT(), 1);
         // [Assert] Events
@@ -1017,7 +1133,7 @@ mod Test {
         Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, 0);
         // [Assert] Not sold out
         set_caller_address(ACCOUNT());
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
         // [Assert] Refund
         Mint::MintImpl::refund_to(ref state, ACCOUNT(), ACCOUNT(), 1);
         // [Assert] Events
@@ -1051,7 +1167,7 @@ mod Test {
         Mint::L1HandlerImpl::book_from_l1(ref state, ZERO(), ACCOUNT(), value, 0);
         // [Assert] Not sold out
         set_caller_address(ACCOUNT());
-        assert(!Mint::MintImpl::is_sold_out(@state), 'Contract sold out');
+        assert(!Mint::MintImpl::is_sold_out(@state), 'Mint sold out');
         // [Assert] Refund
         Mint::MintImpl::refund_to(ref state, ZERO(), ACCOUNT(), 1);
     }
@@ -1138,6 +1254,24 @@ mod Test {
 
     #[test]
     #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Mint canceled',))]
+    fn test_mint_claim_revert_canceled() {
+        // [Setup]
+        let mut state = STATE();
+        state._mint_carbonable_project_address.write(project_mock());
+        state._mint_payment_token_address.write(erc20_mock());
+        state._mint_remaining_value.write(1000);
+        Mint::MintImpl::set_unit_price(ref state, UNIT_PRICE);
+        Mint::MintImpl::set_max_value_per_tx(ref state, 1000);
+        Mint::MintImpl::set_public_sale_open(ref state, true);
+        Mint::MintImpl::cancel(ref state);
+        // [Assert] Book
+        set_caller_address(ACCOUNT());
+        Mint::MintImpl::book(ref state, 1000, true);
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
     fn test_mint_l1_minter_address() {
         // [Setup]
         let mut state = STATE();
@@ -1147,5 +1281,18 @@ mod Test {
         Mint::L1MintImpl::set_l1_minter_address(ref state, ACCOUNT());
         let l1_minter = Mint::L1MintImpl::get_l1_minter_address(@state);
         assert(l1_minter == ACCOUNT(), 'Invalid l1 minter address');
+    }
+
+    #[test]
+    #[available_gas(20_000_000)]
+    #[should_panic(expected: ('Mint already canceled',))]
+    fn test_mint_cancel_twice() {
+        // [Setup]
+        let mut state = STATE();
+        let cancel_status = Mint::MintImpl::is_canceled(@state);
+        assert(cancel_status == false, 'Wrong cancel status');
+        // [Assert] Cancel
+        Mint::MintImpl::cancel(ref state);
+        Mint::MintImpl::cancel(ref state);
     }
 }
