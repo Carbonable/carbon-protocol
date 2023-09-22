@@ -271,6 +271,9 @@ mod Mint {
             let caller_address = get_caller_address();
             assert(!caller_address.is_zero(), 'Invalid caller');
 
+            // [Check] Mint not canceled
+            assert(!self.is_canceled(), 'Mint canceled');
+
             // [Check] Value not null
             assert(value > 0, 'Invalid value');
 
