@@ -247,8 +247,38 @@ fn test_minter_prebook() {
 
 #[test]
 #[available_gas(200_000_000)]
-#[should_panic(expected: ('Caller is not whitelisted', 'ENTRYPOINT_FAILED',))]
+#[should_panic(expected: ('Mint canceled', 'ENTRYPOINT_FAILED',))]
 fn test_minter_prebook_revert_not_whitelisted() {
+    let (signers, contracts) = setup();
+    // [Setup] Compute merkle tree and proof
+    let mut state = PoseidonTrait::new();
+    state = state.update(signers.owner.into());
+    state = state.update(1);
+    let left = state.finalize();
+    let mut state = PoseidonTrait::new();
+    state = state.update(signers.anyone.into());
+    state = state.update(ALLOCATION);
+    let right = state.finalize();
+    let leaves: Array<felt252> = array![left, right];
+    let mut tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
+    let proof = tree.compute_proof(leaves, 1);
+    let root = tree.compute_root(right, proof);
+    // [Setup] Whitelist
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.set_whitelist_merkle_root(root);
+    minter.cancel();
+    // [Assert] Pre book
+    set_contract_address(signers.anyone);
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    erc20.approve(contracts.minter, UNIT_PRICE * ALLOCATION.into());
+    minter.prebook(ALLOCATION, proof, 5, false);
+}
+
+#[test]
+#[available_gas(200_000_000)]
+#[should_panic(expected: ('Caller is not whitelisted', 'ENTRYPOINT_FAILED',))]
+fn test_minter_prebook_revert_canceled() {
     let (signers, contracts) = setup();
     // [Setup] Whitelist
     set_contract_address(signers.owner);
@@ -322,6 +352,19 @@ fn test_minter_airdrop() {
 
 #[test]
 #[available_gas(200_000_000)]
+#[should_panic(expected: ('Mint canceled', 'ENTRYPOINT_FAILED',))]
+fn test_minter_airdrop_revert_canceled() {
+    let (signers, contracts) = setup();
+    // [Setup] Cancel
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.cancel();
+    // [Assert] Airdrop
+    minter.airdrop(signers.anyone, 3);
+}
+
+#[test]
+#[available_gas(200_000_000)]
 #[should_panic(expected: ('Not enough available value', 'ENTRYPOINT_FAILED',))]
 fn test_minter_book_revert_not_enough_available_value() {
     let (signers, contracts) = setup();
@@ -367,6 +410,16 @@ fn test_minter_set_public_sale_revert_not_owner() {
     // [Assert] Open public sale
     let minter = IMintDispatcher { contract_address: contracts.minter };
     minter.set_public_sale_open(true);
+}
+
+#[test]
+#[available_gas(200_000_000)]
+#[should_panic(expected: ('Caller is not the owner', 'ENTRYPOINT_FAILED',))]
+fn test_minter_cancel_revert_not_owner() {
+    let (signers, contracts) = setup();
+    // [Assert] Open public sale
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.cancel();
 }
 
 #[test]
