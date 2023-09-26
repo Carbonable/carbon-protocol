@@ -3,6 +3,7 @@ mod Metadata {
     // Starknet imports
 
     use starknet::ClassHash;
+    use starknet::ContractAddress;
 
     // External imports
 
@@ -18,6 +19,7 @@ mod Metadata {
 
     #[storage]
     struct Storage {
+        _metadata_provider: ContractAddress,
         _metadata_contract_implementation: ClassHash,
         _metadata_slot_implementation: LegacyMap<u256, ClassHash>,
     }
@@ -76,6 +78,14 @@ mod Metadata {
             assert(slot.is_non_zero(), 'Slot cannot be 0');
             self._metadata_slot_implementation.write(slot, implementation);
         }
+
+        fn get_component_provider(self: @ContractState) -> ContractAddress {
+            self._metadata_provider.read()
+        }
+
+        fn set_component_provider(ref self: ContractState, provider: ContractAddress) {
+            self._metadata_provider.write(provider);
+        }
     }
 }
 
@@ -130,6 +140,8 @@ mod Test {
         assert(class.is_zero(), 'Implementation should be 0');
         let class = Metadata::MetadataImpl::get_slot_uri_implementation(@state, 1);
         assert(class.is_zero(), 'Implementation should be 0');
+        let address = Metadata::MetadataImpl::get_component_provider(@state);
+        assert(address.is_zero(), 'Implementation should be 0');
     }
 
     #[test]
