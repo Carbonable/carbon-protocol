@@ -1,4 +1,5 @@
 use starknet::ClassHash;
+use starknet::ContractAddress;
 
 #[starknet::interface]
 trait IContractDescriptor<T> {
@@ -12,6 +13,8 @@ trait ISlotDescriptor<T> {
 
 #[starknet::interface]
 trait IMetadata<T> {
+    fn get_component_provider(self: @T) -> ContractAddress;
+    fn set_component_provider(ref self: T, provider: ContractAddress);
     fn get_contract_uri_implementation(self: @T) -> ClassHash;
     fn get_slot_uri_implementation(self: @T, slot: u256) -> ClassHash;
     fn set_contract_uri_implementation(ref self: T, implementation: ClassHash);
