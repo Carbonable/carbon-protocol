@@ -472,6 +472,10 @@ mod Project {
             let unsafe_state = Metadata::unsafe_new_contract_state();
             Metadata::MetadataImpl::get_slot_uri_implementation(@unsafe_state, slot)
         }
+        fn get_component_provider(self: @ContractState) -> ContractAddress {
+            let unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::MetadataImpl::get_component_provider(@unsafe_state)
+        }
         fn set_contract_uri_implementation(ref self: ContractState, implementation: ClassHash) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -493,6 +497,14 @@ mod Project {
             Metadata::MetadataImpl::set_slot_uri_implementation(
                 ref unsafe_state, slot, implementation
             )
+        }
+        fn set_component_provider(ref self: ContractState, provider: ContractAddress) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set component provider contract
+            let mut unsafe_state = Metadata::unsafe_new_contract_state();
+            Metadata::MetadataImpl::set_component_provider(ref unsafe_state, provider);
         }
     }
 
