@@ -224,9 +224,9 @@ mod Yielder {
             Yield::YieldFarmImpl::get_current_price(@unsafe_state)
         }
 
-        fn get_times(self: @ContractState) -> Span<u64> {
+        fn get_price_times(self: @ContractState) -> Span<u64> {
             let unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldFarmImpl::get_times(@unsafe_state)
+            Yield::YieldFarmImpl::get_price_times(@unsafe_state)
         }
 
         fn get_prices(self: @ContractState) -> Span<u256> {
@@ -234,7 +234,17 @@ mod Yielder {
             Yield::YieldFarmImpl::get_prices(@unsafe_state)
         }
 
-        fn get_cumsales(self: @ContractState) -> (Span<u64>, Span<u256>, Span<u256>) {
+        fn get_cumsale_times(self: @ContractState) -> Span<u64> {
+            let unsafe_state = Yield::unsafe_new_contract_state();
+            Yield::YieldFarmImpl::get_cumsale_times(@unsafe_state)
+        }
+
+        fn get_updated_prices(self: @ContractState) -> Span<u256> {
+            let unsafe_state = Yield::unsafe_new_contract_state();
+            Yield::YieldFarmImpl::get_updated_prices(@unsafe_state)
+        }
+
+        fn get_cumsales(self: @ContractState) -> Span<u256> {
             let unsafe_state = Yield::unsafe_new_contract_state();
             Yield::YieldFarmImpl::get_cumsales(@unsafe_state)
         }
