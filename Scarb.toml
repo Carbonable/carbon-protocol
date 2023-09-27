@@ -10,6 +10,6 @@ alexandria_storage = { git = "https://github.com/keep-starknet-strange/alexandri
 alexandria_numeric = { git = "https://github.com/keep-starknet-strange/alexandria", rev="eb93e9b9b0e6b3fb4dfd2d53f58738f7a48682af" }
 alexandria_data_structures = { git = "https://github.com/keep-starknet-strange/alexandria", rev="eb93e9b9b0e6b3fb4dfd2d53f58738f7a48682af" }
 openzeppelin = { git = "https://github.com/OpenZeppelin/cairo-contracts.git", rev="fcdd6d1b02306f18f1089656f15b87d1701ffde3" }
-cairo_erc_3525 = { git = "https://github.com/carbonable-labs/cairo-erc-3525", tag = "2.0.8" }
+cairo_erc_3525 = { git = "https://github.com/carbonable-labs/cairo-erc-3525", tag = "2.0.9" }
 
 [[target.starknet-contract]]
