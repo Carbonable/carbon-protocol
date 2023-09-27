@@ -192,7 +192,9 @@ fn test_yielder_cumsales() {
     let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
 
     // [Assert] times, prices and cumsales
-    let (times, prices, cumsales) = farmer.get_cumsales();
+    let times = farmer.get_cumsale_times();
+    let prices = farmer.get_updated_prices();
+    let cumsales = farmer.get_cumsales();
     assert(
         times == array![
             1651363200,

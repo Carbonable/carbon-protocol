@@ -250,23 +250,29 @@ mod Farm {
             )
         }
 
-        fn get_times(self: @ContractState) -> Span<u64> {
-            self._farm_times.read().array().span()
+        fn get_price_times(self: @ContractState) -> Span<u64> {
+            let times = self._farm_times.read().array().span();
+            times
         }
 
         fn get_prices(self: @ContractState) -> Span<u256> {
             self._farm_prices.read().array().span()
         }
 
-        fn get_cumsales(self: @ContractState) -> (Span<u64>, Span<u256>, Span<u256>) {
+        fn get_cumsale_times(self: @ContractState) -> Span<u64> {
             let project = self._farm_project.read();
             let slot = self._farm_slot.read();
             let absorption_times = project.get_times(slot);
             let price_times = self._farm_times.read().array().span();
-            let times = self.__merge_and_sort(absorption_times, price_times);
-            let updated_prices = self._farm_updated_prices.read().array().span();
-            let cumsales = self._farm_cumsales.read().array().span();
-            (times, updated_prices, cumsales)
+            self.__merge_and_sort(absorption_times, price_times)
+        }
+
+        fn get_updated_prices(self: @ContractState) -> Span<u256> {
+            self._farm_updated_prices.read().array().span()
+        }
+
+        fn get_cumsales(self: @ContractState) -> Span<u256> {
+            self._farm_cumsales.read().array().span()
         }
 
         fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
@@ -491,7 +497,8 @@ mod Farm {
             let times = self._farm_times.read();
 
             // [Compute] Convert times from Array<u64> into Array<u256>
-            let (times, _, cumsales) = self.get_cumsales();
+            let times = self.get_cumsale_times();
+            let cumsales = self.get_cumsales();
             let times_u256: Span<u256> = self.__span_u64_into_u256(times);
 
             // [Compute] Sale
