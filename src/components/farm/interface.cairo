@@ -20,10 +20,9 @@ trait IYieldFarm<TContractState> {
     fn get_max_sale(self: @TContractState) -> u256;
     fn get_sale_of(self: @TContractState, account: ContractAddress) -> u256;
     fn get_current_price(self: @TContractState) -> u256;
-    fn get_prices(self: @TContractState) -> (Span<u64>, Span<u256>);
+    fn get_times(self: @TContractState) -> Span<u64>;
+    fn get_prices(self: @TContractState) -> Span<u256>;
     fn get_cumsales(self: @TContractState) -> (Span<u64>, Span<u256>, Span<u256>);
     fn get_apr(self: @TContractState, minter: ContractAddress) -> (u256, u256);
-    fn add_price(ref self: TContractState, time: u64, price: u256);
-    fn update_last_price(ref self: TContractState, time: u64, price: u256);
     fn set_prices(ref self: TContractState, times: Span<u64>, prices: Span<u256>);
 }

@@ -107,7 +107,12 @@ mod Yield {
             Farm::YieldFarmImpl::get_current_price(@unsafe_state)
         }
 
-        fn get_prices(self: @ContractState) -> (Span<u64>, Span<u256>) {
+        fn get_times(self: @ContractState) -> Span<u64> {
+            let unsafe_state = Farm::unsafe_new_contract_state();
+            Farm::YieldFarmImpl::get_times(@unsafe_state)
+        }
+
+        fn get_prices(self: @ContractState) -> Span<u256> {
             let unsafe_state = Farm::unsafe_new_contract_state();
             Farm::YieldFarmImpl::get_prices(@unsafe_state)
         }
@@ -120,16 +125,6 @@ mod Yield {
         fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
             let unsafe_state = Farm::unsafe_new_contract_state();
             Farm::YieldFarmImpl::get_apr(@unsafe_state, minter)
-        }
-
-        fn add_price(ref self: ContractState, time: u64, price: u256) {
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::YieldFarmImpl::add_price(ref unsafe_state, time, price);
-        }
-
-        fn update_last_price(ref self: ContractState, time: u64, price: u256) {
-            let mut unsafe_state = Farm::unsafe_new_contract_state();
-            Farm::YieldFarmImpl::update_last_price(ref unsafe_state, time, price);
         }
 
         fn set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {

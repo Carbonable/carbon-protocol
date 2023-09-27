@@ -224,7 +224,12 @@ mod Yielder {
             Yield::YieldFarmImpl::get_current_price(@unsafe_state)
         }
 
-        fn get_prices(self: @ContractState) -> (Span<u64>, Span<u256>) {
+        fn get_times(self: @ContractState) -> Span<u64> {
+            let unsafe_state = Yield::unsafe_new_contract_state();
+            Yield::YieldFarmImpl::get_times(@unsafe_state)
+        }
+
+        fn get_prices(self: @ContractState) -> Span<u256> {
             let unsafe_state = Yield::unsafe_new_contract_state();
             Yield::YieldFarmImpl::get_prices(@unsafe_state)
         }
@@ -237,24 +242,6 @@ mod Yielder {
         fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
             let unsafe_state = Yield::unsafe_new_contract_state();
             Yield::YieldFarmImpl::get_apr(@unsafe_state, minter)
-        }
-
-        fn add_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Add price
-            let mut unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldFarmImpl::add_price(ref unsafe_state, time, price);
-        }
-
-        fn update_last_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Update last price
-            let mut unsafe_state = Yield::unsafe_new_contract_state();
-            Yield::YieldFarmImpl::update_last_price(ref unsafe_state, time, price);
         }
 
         fn set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {

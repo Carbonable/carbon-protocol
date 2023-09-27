@@ -250,10 +250,12 @@ mod Farm {
             )
         }
 
-        fn get_prices(self: @ContractState) -> (Span<u64>, Span<u256>) {
-            let times = self._farm_times.read().array().span();
-            let prices = self._farm_prices.read().array().span();
-            (times, prices)
+        fn get_times(self: @ContractState) -> Span<u64> {
+            self._farm_times.read().array().span()
+        }
+
+        fn get_prices(self: @ContractState) -> Span<u256> {
+            self._farm_prices.read().array().span()
         }
 
         fn get_cumsales(self: @ContractState) -> (Span<u64>, Span<u256>, Span<u256>) {
@@ -325,66 +327,6 @@ mod Farm {
                 * (next_time - current_time.into())
                 * ton_equivalent.into();
             (num, den)
-        }
-
-        fn add_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] Time is later than the project start time
-            let project = self._farm_project.read();
-            let slot = self._farm_slot.read();
-            let start_time = project.get_start_time(slot);
-            assert(time > start_time, 'Time is before start time');
-
-            // [Check] First time to store
-            let mut stored_times = self._farm_times.read();
-            let mut stored_prices = self._farm_prices.read();
-            if stored_times.len() == 0 {
-                stored_times.append(start_time);
-                stored_times.append(time);
-                stored_prices.append(price);
-                stored_prices.append(price);
-                return;
-            }
-
-            // [Check] Time is later than the last stored time
-            let last_time = stored_times[stored_times.len() - 1];
-            assert(time > last_time, 'Time is before last time');
-
-            // [Check] Absorption is stored between these times
-            let initial_absorption = project.get_absorption(slot, last_time);
-            let final_absorption = project.get_absorption(slot, time);
-            assert(final_absorption > initial_absorption, 'No absorption captured');
-
-            // [Effect] Update storage
-            stored_times.append(time);
-            stored_prices.append(price);
-            self._update_cumsales();
-        }
-
-        fn update_last_price(ref self: ContractState, time: u64, price: u256) {
-            // [Check] At least 2 prices stored
-            let mut stored_times = self._farm_times.read();
-            let mut stored_prices = self._farm_prices.read();
-            assert(stored_times.len() > 1, 'Not enough prices stored');
-
-            // [Check] Current time is sooner than the last 2 stored times
-            let current_time = get_block_timestamp();
-            let before_last_time = stored_times[stored_times.len() - 2];
-            assert(current_time < before_last_time, 'Current time is too late');
-
-            // [Check] Specified time is later than the before last stored time
-            assert(time > before_last_time, 'Time is before the last 2 times');
-
-            // [Check] Absorption is captured between the 2 new last times
-            let slot = self._farm_slot.read();
-            let project = self._farm_project.read();
-            let initial_absorption = project.get_absorption(slot, before_last_time);
-            let final_absorption = project.get_absorption(slot, time);
-            assert(final_absorption > initial_absorption, 'No absorption captured');
-
-            // [Effect] Update storage
-            stored_times.set(stored_times.len() - 1, time);
-            stored_prices.set(stored_prices.len() - 1, price);
-            self._update_cumsales();
         }
 
         fn set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {
