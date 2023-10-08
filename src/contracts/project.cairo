@@ -284,7 +284,7 @@ mod Project {
 
         fn tokenURI(self: @ContractState, tokenId: u256) -> Span<felt252> {
             let unsafe_state = Metadata::unsafe_new_contract_state();
-            self.token_uri( tokenId)
+            self.token_uri(tokenId)
         }
     }
 

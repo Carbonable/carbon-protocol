@@ -368,7 +368,9 @@ mod Test {
         let mut state = STATE();
         Access::InternalImpl::initializer(ref state);
         assert(
-            Access::SRC5Impl::supports_interface(@state, Access::IERC165_BACKWARD_COMPATIBLE_ID.into()),
+            Access::SRC5Impl::supports_interface(
+                @state, Access::IERC165_BACKWARD_COMPATIBLE_ID.into()
+            ),
             'Should support own interface'
         );
     }
@@ -381,7 +383,7 @@ mod Test {
         let UNSUPPORTED_INTERFACE_ID: u32 = 0x80ac5848_u32;
         Access::InternalImpl::initializer(ref state);
         assert(
-           Access::SRC5Impl::supports_interface(@state, UNSUPPORTED_INTERFACE_ID.into()),
+            Access::SRC5Impl::supports_interface(@state, UNSUPPORTED_INTERFACE_ID.into()),
             'Should not support interface'
         );
     }
