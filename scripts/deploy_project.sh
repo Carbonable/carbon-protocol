@@ -45,7 +45,7 @@ deploy() {
     class_hash=$(declare | tail -n 1)
     sleep 5
     
-    output=$(starkli deploy $class_hash str:"$NAME" str:"$SYMBOL" "$DECIMALS" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
+    output=$(starkli deploy $class_hash "$NAME" str:"$SYMBOL" "$DECIMALS" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
     if [[ $output == *"Error"* ]]; then
         echo "Error: $output"
