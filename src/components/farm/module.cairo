@@ -276,7 +276,6 @@ mod Farm {
         }
 
         fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
-            // [Check] Arrays are defined
             let times = self._farm_times.read();
             let times_len = times.len();
             if times_len == 0 {
@@ -291,7 +290,7 @@ mod Farm {
             }
 
             // [Compute] Current cumsale
-            let times_u256: Span<u256> = self.__list_u64_into_u256(@times);
+            let times_u256: Span<u256> = self.__span_u64_into_u256(times.array().span());
             let cumsales = self._farm_cumsales.read().array();
             let current_cumsale = interpolate(
                 current_time.into(),
