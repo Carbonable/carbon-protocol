@@ -43,13 +43,13 @@ mod Offseter {
 
     #[external(v0)]
     impl UpgradeableImpl of IUpgradeable<ContractState> {
-        fn upgrade(ref self: ContractState, impl_hash: ClassHash) {
+        fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
             // [Effect] Upgrade
             let mut unsafe_state = Upgradeable::unsafe_new_contract_state();
-            Upgradeable::InternalImpl::_upgrade(ref unsafe_state, impl_hash)
+            Upgradeable::InternalImpl::_upgrade(ref unsafe_state, new_class_hash)
         }
     }
 

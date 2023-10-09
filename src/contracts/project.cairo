@@ -12,6 +12,7 @@ trait IExternal<ContractState> {
 
 #[starknet::contract]
 mod Project {
+    use core::traits::Into;
     use starknet::{get_caller_address, ContractAddress, ClassHash};
 
     // Ownable
@@ -22,12 +23,10 @@ mod Project {
     use openzeppelin::upgrades::interface::IUpgradeable;
     use openzeppelin::upgrades::upgradeable::Upgradeable;
 
-    // SRC5
-    use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
-    use openzeppelin::introspection::src5::SRC5;
-
     // ERC721
-    use openzeppelin::token::erc721::interface::{IERC721, IERC721Metadata};
+    use openzeppelin::token::erc721::interface::{
+        IERC721, IERC721Metadata, IERC721CamelOnly, IERC721MetadataCamelOnly
+    };
 
     // ERC3525
     use cairo_erc_3525::interface::IERC3525;
@@ -39,6 +38,7 @@ mod Project {
     // Access control
     use carbon::components::access::interface::{IMinter, ICertifier};
     use carbon::components::access::module::Access;
+    use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
 
     // Absorber
     use carbon::components::absorber::interface::IAbsorber;
@@ -47,6 +47,7 @@ mod Project {
     // Metadata
     use carbon::components::metadata::interface::{IContractDescriptor, ISlotDescriptor, IMetadata};
     use carbon::components::metadata::module::Metadata;
+
 
     #[storage]
     struct Storage {}
@@ -66,13 +67,13 @@ mod Project {
 
     #[external(v0)]
     impl UpgradeableImpl of IUpgradeable<ContractState> {
-        fn upgrade(ref self: ContractState, impl_hash: ClassHash) {
+        fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
             // [Effect] Upgrade
             let mut unsafe_state = Upgradeable::unsafe_new_contract_state();
-            Upgradeable::InternalImpl::_upgrade(ref unsafe_state, impl_hash)
+            Upgradeable::InternalImpl::_upgrade(ref unsafe_state, new_class_hash)
         }
     }
 
@@ -139,13 +140,13 @@ mod Project {
         }
     }
 
-    // SRC5
+    // ERCInterface
 
     #[external(v0)]
     impl SRC5Impl of ISRC5<ContractState> {
         fn supports_interface(self: @ContractState, interface_id: felt252) -> bool {
-            let unsafe_state = SRC5::unsafe_new_contract_state();
-            SRC5::SRC5Impl::supports_interface(@unsafe_state, interface_id)
+            let unsafe_state = Access::unsafe_new_contract_state();
+            Access::SRC5Impl::supports_interface(@unsafe_state, interface_id)
         }
     }
 
@@ -213,6 +214,56 @@ mod Project {
         }
     }
 
+    // ERC721 CamelOnly
+
+    #[external(v0)]
+    impl IERC721CamelOnlyImpl of IERC721CamelOnly<ContractState> {
+        fn balanceOf(self: @ContractState, account: ContractAddress) -> u256 {
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::balance_of(@unsafe_state, account)
+        }
+
+        fn ownerOf(self: @ContractState, tokenId: u256) -> ContractAddress {
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::owner_of(@unsafe_state, tokenId)
+        }
+
+        fn getApproved(self: @ContractState, tokenId: u256) -> ContractAddress {
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::get_approved(@unsafe_state, tokenId)
+        }
+
+        fn isApprovedForAll(
+            self: @ContractState, owner: ContractAddress, operator: ContractAddress
+        ) -> bool {
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::is_approved_for_all(@unsafe_state, owner, operator)
+        }
+
+        fn setApprovalForAll(ref self: ContractState, operator: ContractAddress, approved: bool) {
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::set_approval_for_all(ref unsafe_state, operator, approved)
+        }
+
+        fn transferFrom(
+            ref self: ContractState, from: ContractAddress, to: ContractAddress, tokenId: u256
+        ) {
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::transfer_from(ref unsafe_state, from, to, tokenId)
+        }
+
+        fn safeTransferFrom(
+            ref self: ContractState,
+            from: ContractAddress,
+            to: ContractAddress,
+            tokenId: u256,
+            data: Span<felt252>
+        ) {
+            let mut unsafe_state = ERC3525::unsafe_new_contract_state();
+            ERC3525::ERC721Impl::safe_transfer_from(ref unsafe_state, from, to, tokenId, data)
+        }
+    }
+
     #[generate_trait]
     #[external(v0)]
     impl ERC721MetadataImpl of IERC721MetadataFeltSpan {
@@ -229,6 +280,11 @@ mod Project {
         fn token_uri(self: @ContractState, token_id: u256) -> Span<felt252> {
             let unsafe_state = Metadata::unsafe_new_contract_state();
             Metadata::SlotDescriptorImpl::construct_token_uri(@unsafe_state, token_id)
+        }
+
+        fn tokenURI(self: @ContractState, tokenId: u256) -> Span<felt252> {
+            let unsafe_state = Metadata::unsafe_new_contract_state();
+            self.token_uri(tokenId)
         }
     }
 
@@ -288,6 +344,14 @@ mod Project {
         fn slot_uri(self: @ContractState, slot: u256) -> Span<felt252> {
             let unsafe_state = Metadata::unsafe_new_contract_state();
             Metadata::SlotDescriptorImpl::construct_slot_uri(@unsafe_state, slot)
+        }
+
+        fn contractUri(self: @ContractState) -> Span<felt252> {
+            self.contract_uri()
+        }
+
+        fn slotUri(self: @ContractState, slot: u256) -> Span<felt252> {
+            self.slot_uri(slot)
         }
     }
 
