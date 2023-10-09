@@ -598,5 +598,4 @@ mod Project {
             Access::InternalImpl::initializer(ref unsafe_state);
         }
     }
-
 }

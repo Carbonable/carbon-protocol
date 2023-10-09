@@ -234,17 +234,14 @@ mod Test {
         let (signers, contracts) = setup();
         let absorber = IAbsorberDispatcher { contract_address: contracts.project };
         let project = IProjectDispatcher { contract_address: contracts.project };
-
         // [Revert] Set absorptions
         absorber
             .set_absorptions(SLOT, array![1, 2, 3].span(), array![1, 2, 3].span(), TON_EQUIVALENT);
     }
 
-    
     #[test]
     #[available_gas(20_000_000)]
     fn test_supports_interface_ERC165_backward_compatible() {
-
         // [Setup]
         let (signers, contracts) = setup();
         let project = ISRC5Dispatcher { contract_address: contracts.project };
@@ -253,15 +250,13 @@ mod Test {
             project.supports_interface(Project::IERC165_BACKWARD_COMPATIBLE_ID.into()),
             'ISRC5 not supported'
         );
-    
         assert(
-            project.supports_interface(IERC721_ID),
-            'IERC721 not supported'
+            project.supports_interface(IERC3525_SLOT_ENUMERABLE_ID),
+            '3525SlotEnumerable unsupported'
         );
+        assert(project.supports_interface(IERC721_ID), 'IERC721 not supported');
         assert(project.supports_interface(IERC721_METADATA_ID), 'IERC721Metadata not supported');
         assert(project.supports_interface(IERC3525_ID), 'IERC3525 not supported');
         assert(project.supports_interface(IERC3525_METADATA_ID), '3525Metadata not supported');
-        assert(project.supports_interface(IERC3525_SLOT_ENUMERABLE_ID), '3525SlotEnumerable unsupported');
-
     }
 }
