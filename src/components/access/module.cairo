@@ -27,9 +27,6 @@ mod Access {
     const CERTIFIER_ROLE: felt252 = 'CERTIFIER';
     const WITHDRAWER_ROLE: felt252 = 'WITHDRAWER';
 
-    const IERC165_BACKWARD_COMPATIBLE_ID: u32 = 0x80ac58cd_u32;
-
-
     #[storage]
     struct Storage {
         _access_role_members: LegacyMap<(felt252, u32), ContractAddress>,
@@ -89,23 +86,6 @@ mod Access {
             // [Effect] Set new withdrawer
             AccessControl::InternalImpl::_grant_role(ref unsafe_state, WITHDRAWER_ROLE, user);
             self._access_role_members.write((WITHDRAWER_ROLE, 0), user);
-        }
-    }
-
-    // SRC5
-    impl SRC5Impl of ISRC5<ContractState> {
-        fn supports_interface(self: @ContractState, interface_id: felt252) -> bool {
-            if interface_id == IERC165_BACKWARD_COMPATIBLE_ID.into() {
-                return true;
-            }
-            let unsafe_state = SRC5::unsafe_new_contract_state();
-            SRC5::SRC5Impl::supports_interface(@unsafe_state, interface_id)
-        }
-    }
-
-    impl SRC5CamelImpl of ISRC5Camel<ContractState> {
-        fn supportsInterface(self: @ContractState, interfaceId: felt252) -> bool {
-            self.supports_interface(interfaceId)
         }
     }
 
@@ -360,31 +340,5 @@ mod Test {
         // [Assert] Withdrawer
         set_caller_address(ANYONE());
         Access::InternalImpl::assert_only_withdrawer(@state);
-    }
-
-    #[test]
-    #[available_gas(20_000_000)]
-    fn test_supports_interface() {
-        let mut state = STATE();
-        Access::InternalImpl::initializer(ref state);
-        assert(
-            Access::SRC5Impl::supports_interface(
-                @state, Access::IERC165_BACKWARD_COMPATIBLE_ID.into()
-            ),
-            'Should support own interface'
-        );
-    }
-
-    #[test]
-    #[available_gas(20_000_000)]
-    #[should_panic(expected: ('Should not support interface',))]
-    fn test_not_supports_interface() {
-        let mut state = STATE();
-        let UNSUPPORTED_INTERFACE_ID: u32 = 0x80ac5848_u32;
-        Access::InternalImpl::initializer(ref state);
-        assert(
-            Access::SRC5Impl::supports_interface(@state, UNSUPPORTED_INTERFACE_ID.into()),
-            'Should not support interface'
-        );
     }
 }
