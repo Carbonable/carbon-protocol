@@ -23,6 +23,10 @@ mod Project {
     use openzeppelin::upgrades::interface::IUpgradeable;
     use openzeppelin::upgrades::upgradeable::Upgradeable;
 
+    //SRC5
+    use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
+    use openzeppelin::introspection::src5::SRC5;
+
     // ERC721
     use openzeppelin::token::erc721::interface::{
         IERC721, IERC721Metadata, IERC721CamelOnly, IERC721MetadataCamelOnly
@@ -38,7 +42,6 @@ mod Project {
     // Access control
     use carbon::components::access::interface::{IMinter, ICertifier};
     use carbon::components::access::module::Access;
-    use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
 
     // Absorber
     use carbon::components::absorber::interface::IAbsorber;
@@ -48,6 +51,7 @@ mod Project {
     use carbon::components::metadata::interface::{IContractDescriptor, ISlotDescriptor, IMetadata};
     use carbon::components::metadata::module::Metadata;
 
+    const IERC165_BACKWARD_COMPATIBLE_ID: u32 = 0x80ac58cd_u32;
 
     #[storage]
     struct Storage {}
@@ -140,13 +144,16 @@ mod Project {
         }
     }
 
-    // ERCInterface
+    // SRC5
 
     #[external(v0)]
     impl SRC5Impl of ISRC5<ContractState> {
         fn supports_interface(self: @ContractState, interface_id: felt252) -> bool {
-            let unsafe_state = Access::unsafe_new_contract_state();
-            Access::SRC5Impl::supports_interface(@unsafe_state, interface_id)
+            if interface_id == IERC165_BACKWARD_COMPATIBLE_ID.into() {
+                return true;
+            }
+            let unsafe_state = SRC5::unsafe_new_contract_state();
+            SRC5::SRC5Impl::supports_interface(@unsafe_state, interface_id)
         }
     }
 
