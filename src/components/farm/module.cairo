@@ -5,7 +5,7 @@ mod Farm {
     use zeroable::Zeroable;
     use traits::{Into, TryInto};
     use option::OptionTrait;
-    use array::{Array, ArrayTrait};
+    use array::{Array, ArrayTrait, SpanTrait};
     use debug::PrintTrait;
 
     // Starknet imports
@@ -276,7 +276,7 @@ mod Farm {
         }
 
         fn get_apr(self: @ContractState, minter: ContractAddress) -> (u256, u256) {
-            let times = self._farm_times.read();
+            let times = self.get_cumsale_times();
             let times_len = times.len();
             if times_len == 0 {
                 return (0_u256, 0_u256);
@@ -284,13 +284,14 @@ mod Farm {
 
             // [Check] Current time is not later than the latest time
             let current_time = get_block_timestamp();
-            let latest_time = times[times_len - 1];
+            let latest_time = *times.at(times_len - 1);
             if latest_time <= current_time {
                 return (0_u256, 0_u256);
             }
 
             // [Compute] Current cumsale
-            let times_u256: Span<u256> = self.__span_u64_into_u256(times.array().span());
+
+            let times_u256: Span<u256> = self.__span_u64_into_u256(times);
             let cumsales = self._farm_cumsales.read().array();
             let current_cumsale = interpolate(
                 current_time.into(),
@@ -306,7 +307,7 @@ mod Farm {
                 if index == times_len {
                     break index - 1;
                 }
-                if current_time < times[index] {
+                if current_time < *times.at(index) {
                     break index;
                 }
                 index += 1;
