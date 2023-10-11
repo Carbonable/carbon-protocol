@@ -53,8 +53,97 @@ mod Project {
 
     const IERC165_BACKWARD_COMPATIBLE_ID: u32 = 0x80ac58cd_u32;
 
+    // Storage
+
     #[storage]
     struct Storage {}
+
+    // Events
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        OwnershipTransferred: OwnershipTransferred,
+        Upgraded: Upgraded,
+        Transfer: Transfer,
+        Approval: Approval,
+        ApprovalForAll: ApprovalForAll,
+        ApprovalForSlot: ApprovalForSlot,
+        TransferValue: TransferValue,
+        ApprovalValue: ApprovalValue,
+        SlotChanged: SlotChanged,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct OwnershipTransferred {
+        previous_owner: ContractAddress,
+        new_owner: ContractAddress,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Upgraded {
+        class_hash: ClassHash
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Transfer {
+        #[key]
+        from: ContractAddress,
+        #[key]
+        to: ContractAddress,
+        #[key]
+        token_id: u256
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct Approval {
+        #[key]
+        owner: ContractAddress,
+        #[key]
+        approved: ContractAddress,
+        #[key]
+        token_id: u256
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct ApprovalForAll {
+        #[key]
+        owner: ContractAddress,
+        #[key]
+        operator: ContractAddress,
+        approved: bool
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct ApprovalForSlot {
+        owner: ContractAddress,
+        slot: u256,
+        operator: ContractAddress,
+        approved: bool,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct TransferValue {
+        from_token_id: u256,
+        to_token_id: u256,
+        value: u256,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct ApprovalValue {
+        token_id: u256,
+        operator: ContractAddress,
+        value: u256
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct SlotChanged {
+        token_id: u256,
+        old_slot: u256,
+        new_slot: u256,
+    }
+
+    // Constructor
 
     #[constructor]
     fn constructor(
