@@ -238,7 +238,7 @@ mod Farm {
                 current_time,
                 times_u256,
                 prices.array().span(),
-                Interpolation::Linear,
+                Interpolation::ConstantLeft,
                 Extrapolation::Constant
             )
         }
