@@ -6,9 +6,9 @@ version = "0.1.0"
 
 [dependencies]
 starknet = ">=2.2.0"
-alexandria_storage = { git = "https://github.com/keep-starknet-strange/alexandria", rev="eb93e9b9b0e6b3fb4dfd2d53f58738f7a48682af" }
-alexandria_numeric = { git = "https://github.com/keep-starknet-strange/alexandria", rev="eb93e9b9b0e6b3fb4dfd2d53f58738f7a48682af" }
-alexandria_data_structures = { git = "https://github.com/keep-starknet-strange/alexandria", rev="eb93e9b9b0e6b3fb4dfd2d53f58738f7a48682af" }
+alexandria_storage = { git = "https://github.com/tekkac/alexandria", branch = "feat/interpolation-fast" }
+alexandria_numeric = { git = "https://github.com/tekkac/alexandria", branch = "feat/interpolation-fast" }
+alexandria_data_structures = { git = "https://github.com/tekkac/alexandria", branch = "feat/interpolation-fast" }
 openzeppelin = { git = "https://github.com/OpenZeppelin/cairo-contracts.git", tag = "v0.7.0" }
 cairo_erc_3525 = { git = "https://github.com/carbonable-labs/cairo-erc-3525", tag = "2.0.10" }
 
