@@ -194,6 +194,8 @@ mod Test {
     use starknet::testing::set_block_timestamp;
     use super::Absorber;
 
+    use alexandria_storage::list::{List, ListTrait};
+
     fn STATE() -> Absorber::ContractState {
         Absorber::contract_state_for_testing()
     }
@@ -440,8 +442,6 @@ mod Test {
         let ton_equivalent = 0;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
     }
-
-    use alexandria_storage::list::{List, ListTrait};
 
     #[starknet::interface]
     trait ITestList<T> {
