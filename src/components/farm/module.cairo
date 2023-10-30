@@ -1,13 +1,5 @@
 #[starknet::contract]
 mod Farm {
-    // Core imports
-
-    use zeroable::Zeroable;
-    use traits::{Into, TryInto};
-    use option::OptionTrait;
-    use array::{Array, ArrayTrait, SpanTrait};
-    use debug::PrintTrait;
-
     // Starknet imports
 
     use starknet::ContractAddress;
@@ -15,10 +7,11 @@ mod Farm {
 
     // External imports
 
-    use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
+    use alexandria_numeric::interpolate::{
+        interpolate_fast as interpolate, Interpolation, Extrapolation
+    };
     use alexandria_numeric::cumsum::cumsum;
     use alexandria_storage::list::{List, ListTrait};
-    use alexandria_data_structures::array_ext::ArrayTraitExt;
     use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
     use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
 
@@ -245,8 +238,8 @@ mod Farm {
                 current_time,
                 times_u256,
                 prices.array().span(),
-                Interpolation::Linear(()),
-                Extrapolation::Constant(())
+                Interpolation::Linear,
+                Extrapolation::Constant
             )
         }
 
@@ -297,8 +290,8 @@ mod Farm {
                 current_time.into(),
                 times_u256,
                 cumsales.span(),
-                Interpolation::Linear(()),
-                Extrapolation::Constant(())
+                Interpolation::Linear,
+                Extrapolation::Constant
             );
 
             // [Compute] Next cumsale
@@ -506,15 +499,15 @@ mod Farm {
                 start_time.into(),
                 times_u256,
                 cumsales,
-                Interpolation::Linear(()),
-                Extrapolation::Constant(())
+                Interpolation::Linear,
+                Extrapolation::Constant
             );
             let final_cumsale = interpolate(
                 end_time.into(),
                 times_u256,
                 cumsales,
-                Interpolation::Linear(()),
-                Extrapolation::Constant(())
+                Interpolation::Linear,
+                Extrapolation::Constant
             );
 
             // [Check] Overflow
@@ -539,6 +532,10 @@ mod Farm {
             let project = self._farm_project.read();
             let slot = self._farm_slot.read();
             let absorption_times = project.get_times(slot);
+            let absorption_times_u256 = self.__span_u64_into_u256(absorption_times);
+            let absorptions = project.get_absorptions(slot);
+            let absorptions_u256 = self.__span_u64_into_u256(absorptions);
+
             let price_times = self._farm_times.read().array().span();
             let price_times_u256 = self.__span_u64_into_u256(price_times);
             let times: Span<u64> = self.__merge_and_sort(absorption_times, price_times);
@@ -547,9 +544,8 @@ mod Farm {
             let prices = self._farm_prices.read().array().span();
             let mut sales = ArrayTrait::<u256>::new();
             let mut index = 0;
-            let mut absorption: u256 = 0;
-            let mut negative_delta: u256 = 0;
-            let mut positive_delta: u256 = 0;
+
+            let mut updated_prices_array: Array<u256> = Default::default();
             loop {
                 // [Check] End criteria
                 if index == times.len() {
@@ -561,59 +557,56 @@ mod Farm {
                     time.into(),
                     price_times_u256,
                     prices,
-                    Interpolation::ConstantLeft(()),
-                    Extrapolation::Constant(())
+                    Interpolation::ConstantLeft,
+                    Extrapolation::Constant
                 );
 
                 // [Check] First iteration (special case)
                 if index == 0 {
                     sales.append(0);
-                    updated_prices.append(current_price);
+                    updated_prices_array.append(current_price);
                     index += 1;
                     continue;
                 }
 
                 // [Compute] Interpolated absorptions
                 let previous_time = *times.at(index - 1);
-                let previous_absorption = project.get_absorption(slot, previous_time);
-                let current_absorption = project.get_absorption(slot, time);
+
+                let previous_absorption = interpolate(
+                    previous_time.into(),
+                    absorption_times_u256,
+                    absorptions_u256,
+                    Interpolation::Linear,
+                    Extrapolation::Constant
+                );
+
+                let current_absorption = interpolate(
+                    time.into(),
+                    absorption_times_u256,
+                    absorptions_u256,
+                    Interpolation::Linear,
+                    Extrapolation::Constant
+                );
 
                 // [Check] Absorption is not null otherwise return 0
                 assert(previous_absorption < current_absorption, 'No absorption');
-                let new_absorption: u256 = (current_absorption - previous_absorption).into();
-
-                // [Compute] Delta to compensate from the previous sale
-                let real_sale = absorption * current_price;
-                let previous_sale = *sales.at(index - 1);
-                if real_sale > previous_sale {
-                    positive_delta += real_sale - previous_sale;
-                } else {
-                    negative_delta += previous_sale - real_sale;
-                }
-                let add_price = positive_delta / new_absorption;
-                let sub_price = negative_delta / new_absorption;
-
-                // [Compute] Update price, drop to zero if negative
-                let mut updated_price = 0;
-                if sub_price < current_price + add_price {
-                    updated_price = current_price + add_price - sub_price;
-                }
+                let new_absorption: u256 = current_absorption - previous_absorption;
 
                 // [Compute] Store results and update variables for the next iter
-                sales.append(new_absorption * updated_price);
-                updated_prices.append(updated_price);
-                absorption = new_absorption;
+                sales.append(new_absorption * current_price);
+                updated_prices_array.append(current_price);
                 index += 1;
             };
+            // [Effect] Store cumsales and prices
+            let cumulative_sales = cumsum(sales.span()).span();
 
-            // [Effect] Store cumsales
-            let cumulative_sales = cumsum(sales.span());
             let mut index = 0;
             loop {
-                if index == cumulative_sales.len() {
+                if index == times.len() {
                     break ();
                 }
                 cumsales.append(*cumulative_sales.at(index));
+                updated_prices.append(*updated_prices_array.span().at(index));
                 index += 1;
             };
         }
@@ -673,7 +666,8 @@ mod Farm {
         }
 
         fn __merge_and_sort(self: @ContractState, arr1: Span<u64>, arr2: Span<u64>) -> Span<u64> {
-            let mut array: Array<u64> = ArrayTrait::new();
+            let mut values: Felt252Dict<felt252> = Default::default();
+            let mut array: Array<u64> = Default::default();
             let mut index1 = 0;
             let mut index2 = 0;
             loop {
@@ -683,13 +677,15 @@ mod Farm {
                 let value1 = *arr1[index1];
                 let value2 = *arr2[index2];
                 if value1 < value2 {
-                    if !array.contains(value1) {
+                    if !(values.get(value1.into()) == 1) {
                         array.append(value1);
+                        values.insert(value1.into(), 1);
                     }
                     index1 += 1;
                 } else {
-                    if !array.contains(value2) {
+                    if !(values.get(value2.into()) == 1) {
                         array.append(value2);
+                        values.insert(value2.into(), 1);
                     }
                     index2 += 1;
                 };
@@ -699,8 +695,9 @@ mod Farm {
                     break ();
                 }
                 let value1 = *arr1[index1];
-                if !array.contains(value1) {
+                if !(values.get(value1.into()) == 1) {
                     array.append(value1);
+                    values.insert(value1.into(), 1);
                 }
                 index1 += 1;
             };
@@ -709,8 +706,9 @@ mod Farm {
                     break ();
                 }
                 let value2 = *arr2[index2];
-                if !array.contains(value2) {
+                if !(values.get(value2.into()) == 1) {
                     array.append(value2);
+                    values.insert(value2.into(), 1);
                 }
                 index2 += 1;
             };
@@ -782,6 +780,34 @@ mod Test {
         // [Assert] Prices
         let times = array![10, 20, 30, 40, 50].span();
         let prices = array![100, 200, 300, 400, 500].span();
+        Farm::InternalImpl::_set_prices(ref state, times, prices);
+        assert(state._farm_times.read().array().span() == times, 'Wrong times');
+        assert(state._farm_prices.read().array().span() == prices, 'Wrong prices');
+    }
+
+    use debug::PrintTrait;
+
+    #[test]
+    #[available_gas(999_666_777)]
+    fn test_set_prices_n() {
+        // [Setup]
+        let mut state = STATE();
+        Farm::InternalImpl::initializer(ref state, PROJECT(), SLOT);
+        // [Assert] Prices
+        let mut i = 1;
+        let n: u64 = 25;
+        let mut times: Array<u64> = Default::default();
+        let mut prices: Array<u256> = Default::default();
+        loop {
+            if i > n {
+                break;
+            }
+            times.append(i * 1000);
+            prices.append((i * 10).into());
+            i += 1;
+        };
+        let prices = prices.span();
+        let times = times.span();
         Farm::InternalImpl::_set_prices(ref state, times, prices);
         assert(state._farm_times.read().array().span() == times, 'Wrong times');
         assert(state._farm_prices.read().array().span() == prices, 'Wrong prices');
@@ -860,5 +886,30 @@ mod Test {
         // [Assert] Merged and sorted
         let times = Farm::PrivateImpl::__merge_and_sort(@state, absorption_times, price_times);
         assert(times == array![10, 12, 20, 30, 33, 40, 50].span(), 'Wrong times');
+    }
+
+    fn get_test_array(length: u64, mul: u64) -> Array<u64> {
+        let mut test: Array<u64> = Default::default();
+        let mut i = 1;
+        loop {
+            if i > length {
+                break;
+            }
+            test.append(i * mul);
+            i += 1;
+        };
+        test
+    }
+
+    #[test]
+    #[available_gas(999_350_000)]
+    fn test_merge_and_sort_n() {
+        // [Setup]
+        let mut state = STATE();
+        let n = 25;
+        let absorption_times = get_test_array(n, 1).span();
+        let price_times = get_test_array(n, 2).span();
+
+        let times = Farm::PrivateImpl::__merge_and_sort(@state, absorption_times, price_times);
     }
 }
