@@ -356,7 +356,7 @@ fn sum_span(s: Span<u256>) -> u256 {
 }
 
 #[test]
-#[available_gas(999_666_777)]
+#[available_gas(100_000_000)]
 fn test_setup_apr() {
     let n = 20;
     let (signers, contracts) = setup_for_apr(n);
@@ -364,7 +364,7 @@ fn test_setup_apr() {
 }
 
 #[test]
-#[available_gas(100)]
+#[available_gas(100_000_000)]
 fn test_yielder_set_prices_n() {
     let n = 25;
     let (signers, contracts) = setup_for_apr(n);
