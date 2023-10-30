@@ -40,6 +40,7 @@ use carbon::contracts::project::{
     IExternalDispatcherTrait as IProjectDispatcherTrait
 };
 use carbon::contracts::yielder::Yielder;
+use carbon::contracts::minter::Minter;
 
 // Constants
 
@@ -49,6 +50,16 @@ const DECIMALS: u8 = 6;
 const SLOT: u256 = 1;
 const TON_EQUIVALENT: u64 = 1_000_000;
 const VALUE: u256 = 100;
+
+const MAX_VALUE_PER_TX: u256 = 5;
+const MIN_VALUE_PER_TX: u256 = 1;
+const MAX_VALUE: u256 = 10;
+const UNIT_PRICE: u256 = 10;
+const RESERVED_VALUE: u256 = 4;
+const ALLOCATION: felt252 = 5;
+const BILLION: u256 = 1000000000000;
+
+const PRICE: u256 = 10;
 
 // Signers
 
@@ -63,6 +74,7 @@ struct Contracts {
     project: ContractAddress,
     erc20: ContractAddress,
     yielder: ContractAddress,
+    minter: ContractAddress,
 }
 
 fn deploy_account(public_key: felt252) -> ContractAddress {
@@ -99,6 +111,11 @@ fn deploy_project(owner: ContractAddress) -> ContractAddress {
         false
     )
         .expect('Project deploy failed');
+
+    // [Setup] Project
+    set_contract_address(owner);
+    let absorber = IAbsorberDispatcher { contract_address: address };
+    absorber.set_project_value(SLOT, VALUE);
     address
 }
 
@@ -115,6 +132,39 @@ fn deploy_yielder(
         false
     )
         .expect('Yielder deploy failed');
+    address
+}
+
+fn deploy_minter(
+    project: ContractAddress, erc20: ContractAddress, owner: ContractAddress
+) -> ContractAddress {
+    let public_sale_open: bool = false;
+    let mut calldata: Array<felt252> = array![
+        project.into(),
+        SLOT.low.into(),
+        SLOT.high.into(),
+        erc20.into(),
+        public_sale_open.into(),
+        MAX_VALUE_PER_TX.low.into(),
+        MAX_VALUE_PER_TX.high.into(),
+        MIN_VALUE_PER_TX.low.into(),
+        MIN_VALUE_PER_TX.high.into(),
+        MAX_VALUE.low.into(),
+        MAX_VALUE.high.into(),
+        UNIT_PRICE.low.into(),
+        UNIT_PRICE.high.into(),
+        RESERVED_VALUE.low.into(),
+        RESERVED_VALUE.high.into(),
+        owner.into(),
+    ];
+    let (address, _) = deploy_syscall(
+        Minter::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
+        0,
+        calldata.span(),
+        false
+    )
+        .unwrap();
+    //.expect('Minter deploy failed');
     address
 }
 
@@ -142,6 +192,49 @@ fn setup_project(project: ContractAddress, signers: @Signers) {
     project.set_absorptions(SLOT, times.span(), absorptions.span(), TON_EQUIVALENT);
 }
 
+fn setup_project_apr(project: ContractAddress, signers: @Signers, n: u64) {
+    // Prank caller as owner
+    set_contract_address(*signers.owner);
+    // Grant certifier rights to owner
+    let project = ICertifierDispatcher { contract_address: project };
+    project.set_certifier(SLOT, *signers.owner);
+    // Setup absorptions
+    let project = IAbsorberDispatcher { contract_address: project.contract_address };
+
+    let (times, absorptions) = get_test_absorptions(n);
+    project.set_absorptions(SLOT, times, absorptions, TON_EQUIVALENT);
+}
+
+fn get_test_absorptions(n: u64) -> (Span<u64>, Span<u64>) {
+    let mut times: Array<u64> = Default::default();
+    let mut absorptions: Array<u64> = Default::default();
+    let mut i = 1;
+    loop {
+        if i > n {
+            break;
+        }
+        times.append(i * 10);
+        absorptions.append((i - 1) * 1000);
+        i += 1;
+    };
+    (times.span(), absorptions.span())
+}
+
+fn get_test_prices(n: u64) -> (Span<u64>, Span<u256>) {
+    let mut times: Array<u64> = Default::default();
+    let mut prices: Array<u256> = Default::default();
+    let mut i = 1;
+    loop {
+        if i > n {
+            break;
+        }
+        times.append(i * 10 + 5);
+        prices.append((i * 10).into());
+        i += 1;
+    };
+    (times.span(), prices.span())
+}
+
 fn setup_erc20(erc20: ContractAddress, yielder: ContractAddress, signers: @Signers) {
     let erc20 = IERC20Dispatcher { contract_address: erc20 };
     // Send token to yielder
@@ -151,13 +244,17 @@ fn setup_erc20(erc20: ContractAddress, yielder: ContractAddress, signers: @Signe
 }
 
 fn setup_yielder(
-    project: ContractAddress, erc20: ContractAddress, yielder: ContractAddress, signers: @Signers
+    project: ContractAddress,
+    erc20: ContractAddress,
+    yielder: ContractAddress,
+    signers: @Signers,
+    price: u256
 ) {
     // Setup prices
     set_contract_address(*signers.owner);
     let farmer = IYieldFarmDispatcher { contract_address: yielder };
     let times: Array<u64> = array![1659312000, 2598134400];
-    let prices: Array<u256> = array![10, 10];
+    let prices: Array<u256> = array![price, price];
     farmer.set_prices(times.span(), prices.span());
     // Owner approve yielder to spend his tokens
     let project = IERC721Dispatcher { contract_address: project };
@@ -167,27 +264,156 @@ fn setup_yielder(
     project.set_approval_for_all(yielder, true);
 }
 
-fn setup() -> (Signers, Contracts) {
+fn setup_minter(project: ContractAddress, minter: ContractAddress, signers: @Signers) {
+    let project = IERC721Dispatcher { contract_address: project };
+    // Owner approve minter to spend his tokens
+    set_contract_address(*signers.owner);
+    project.set_approval_for_all(minter, true);
+    // Anyone approve minter to spend his tokens
+    set_contract_address(*signers.anyone);
+    project.set_approval_for_all(minter, true);
+}
+
+fn setup(price: u256) -> (Signers, Contracts) {
     // Deploy
     let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), };
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
     let yielder = deploy_yielder(project, erc20, signers.owner);
+    let minter = deploy_minter(project, erc20, signers.owner);
 
     // Setup
     setup_project(project, @signers);
     setup_erc20(erc20, yielder, @signers);
-    setup_yielder(project, erc20, yielder, @signers);
+    setup_yielder(project, erc20, yielder, @signers, price);
+    setup_minter(project, minter, @signers);
+
+    // Setup Minter 
+    set_contract_address(signers.owner);
+    let project_minter = IMinterDispatcher { contract_address: project };
+    project_minter.add_minter(SLOT, minter);
 
     // Return
-    let contracts = Contracts { project: project, erc20: erc20, yielder: yielder, };
+    let contracts = Contracts { project: project, erc20: erc20, yielder: yielder, minter: minter };
     (signers, contracts)
 }
 
+fn setup_for_apr(n: u64) -> (Signers, Contracts) {
+    // Deploy
+    let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), };
+    let project = deploy_project(signers.owner);
+    let erc20 = deploy_erc20(signers.owner);
+    let yielder = deploy_yielder(project, erc20, signers.owner);
+    let minter = deploy_minter(project, erc20, signers.owner);
+
+    // Setup
+    setup_project_apr(project, @signers, n);
+    setup_erc20(erc20, yielder, @signers);
+    // setup_yielder(project, erc20, yielder, @signers);
+    setup_minter(project, minter, @signers);
+
+    // Setup Minter 
+    set_contract_address(signers.owner);
+    let project_minter = IMinterDispatcher { contract_address: project };
+    project_minter.add_minter(SLOT, minter);
+
+    // Return
+    let contracts = Contracts { project: project, erc20: erc20, yielder: yielder, minter: minter };
+    (signers, contracts)
+}
+
+impl SpanPrintImpl<
+    T, impl TCopy: Copy<T>, impl TPrint: PrintTrait<T>, impl TDrop: Drop<T>
+> of PrintTrait<Span<T>> {
+    fn print(self: Span<T>) {
+        let mut s = self;
+        loop {
+            match s.pop_front() {
+                Option::Some(x) => {
+                    (*x).print();
+                },
+                Option::None => {
+                    break;
+                },
+            };
+        };
+    }
+}
+
+fn sum_span(s: Span<u256>) -> u256 {
+    let mut sum = 0;
+    let mut s = s;
+    loop {
+        match s.pop_front() {
+            Option::Some(x) => {
+                sum += *x;
+            },
+            Option::None => {
+                break sum;
+            },
+        };
+    }
+}
+
 #[test]
-#[available_gas(40_000_000)]
+#[available_gas(999_666_777)]
+fn test_setup_apr() {
+    let n = 20;
+    let (signers, contracts) = setup_for_apr(n);
+    let (times, prices) = get_test_prices(n - 1);
+}
+
+#[test]
+#[available_gas(999_666_777)]
+fn test_yielder_set_prices_n() {
+    let n = 25;
+    let (signers, contracts) = setup_for_apr(n);
+    // Instantiate contracts
+    let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+
+    // [Assert] times, prices and cumsales
+    let (times, prices) = get_test_prices(n - 1);
+
+    farmer.set_prices(times, prices);
+    let updated_prices = farmer.get_updated_prices();
+
+    let cumsales = farmer.get_cumsales();
+    assert(sum_span(cumsales).low == 0x3586648, 'Wrong total sales');
+}
+
+#[test]
+#[available_gas(990_000_000)]
+fn test_yielder_get_apr() {
+    let (signers, contracts) = setup(20);
+    // Instantiate contracts
+    let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+    let minter_address = contracts.minter;
+
+    // [Assert] times, prices and cumsales
+    let times = farmer.get_cumsale_times();
+    let prices = farmer.get_updated_prices();
+    let cumsales = farmer.get_cumsales();
+
+    let mut prices_span = prices;
+    loop {
+        match prices_span.pop_front() {
+            Option::Some(price) => {
+                let (num, den) = farmer.get_apr(minter_address);
+            // 'apr is'.print();
+            // num.low.print();
+            // den.low.print();
+            },
+            Option::None => {
+                break;
+            },
+        };
+    };
+}
+
+#[test]
+#[available_gas(140_000_000)]
 fn test_yielder_cumsales() {
-    let (signers, contracts) = setup();
+    let (signers, contracts) = setup(PRICE);
     // Instantiate contracts
     let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
 
@@ -220,9 +446,9 @@ fn test_yielder_cumsales() {
 }
 
 #[test]
-#[available_gas(300_000_000)]
+#[available_gas(400_000_000)]
 fn test_yielder_nominal_single_user_case() {
-    let (signers, contracts) = setup();
+    let (signers, contracts) = setup(PRICE);
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };
     let yielder = IYieldDispatcher { contract_address: contracts.yielder };
@@ -314,9 +540,9 @@ fn test_yielder_nominal_single_user_case() {
 }
 
 #[test]
-#[available_gas(370_000_000)]
+#[available_gas(470_000_000)]
 fn test_yielder_nominal_multi_user_case() {
-    let (signers, contracts) = setup();
+    let (signers, contracts) = setup(PRICE);
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };
     let yielder = IYieldDispatcher { contract_address: contracts.yielder };
@@ -390,7 +616,7 @@ fn test_yielder_nominal_multi_user_case() {
 #[should_panic(expected: ('Caller is not owner', 'ENTRYPOINT_FAILED'))]
 #[should_panic]
 fn test_yielder_deposit_revert_not_token_owner() {
-    let (signers, contracts) = setup();
+    let (signers, contracts) = setup(PRICE);
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };
     let minter = IMinterDispatcher { contract_address: contracts.project };
@@ -427,7 +653,7 @@ fn test_yielder_deposit_revert_not_token_owner() {
 #[available_gas(110_000_000)]
 #[should_panic(expected: ('Caller is not owner', 'ENTRYPOINT_FAILED'))]
 fn test_yielder_withdraw_revert_not_token_owner() {
-    let (signers, contracts) = setup();
+    let (signers, contracts) = setup(PRICE);
     // Instantiate contracts
     let farmer = IFarmDispatcher { contract_address: contracts.yielder };
     let minter = IMinterDispatcher { contract_address: contracts.project };
