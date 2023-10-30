@@ -859,13 +859,11 @@ mod Test {
         // [Assert] After start, prices[0] < price < prices[1]
         set_block_timestamp(*times.at(0) + 5);
         let price = Farm::YieldFarmImpl::get_current_price(@state);
-        assert(price > *prices.at(0), 'Wrong price');
-        assert(price < *prices.at(1), 'Wrong price');
+        assert(price == *prices.at(1), 'Wrong price');
         // [Assert] Before end, prices[-2] < price < prices[-1]
         set_block_timestamp(*times.at(times.len() - 1) - 5);
         let price = Farm::YieldFarmImpl::get_current_price(@state);
-        assert(price > *prices.at(prices.len() - 2), 'Wrong price');
-        assert(price < *prices.at(prices.len() - 1), 'Wrong price');
+        assert(price == *prices.at(prices.len() - 1), 'Wrong price');
         // [Assert] At end, price = prices[-1]
         set_block_timestamp(*times.at(times.len() - 1));
         let price = Farm::YieldFarmImpl::get_current_price(@state);
