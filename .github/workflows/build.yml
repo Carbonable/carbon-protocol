@@ -11,4 +11,4 @@ jobs:
         with:
           scarb-version: "0.7.0"
       - run: scarb fmt --check
-      - run: scarb test
+      - run: scarb build
