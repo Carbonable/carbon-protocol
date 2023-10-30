@@ -86,9 +86,10 @@ mod Absorber {
                 time_u256,
                 times_u256,
                 absorptions_u256,
-                Interpolation::Linear(()),
-                Extrapolation::Constant(())
+                Interpolation::Linear,
+                Extrapolation::Constant
             );
+
             absorption.try_into().expect('Absorber: Absorption overflow')
         }
         fn get_current_absorption(self: @ContractState, slot: u256) -> u64 {
@@ -438,5 +439,64 @@ mod Test {
         let absorptions: Span<u64> = array![0, 1179750, 2359500, 3539250, 4719000].span();
         let ton_equivalent = 0;
         Absorber::AbsorberImpl::set_absorptions(ref state, 0, times, absorptions, ton_equivalent);
+    }
+
+    use alexandria_storage::list::{List, ListTrait};
+
+    #[starknet::interface]
+    trait ITestList<T> {
+        fn set_list(ref self: T, length: u64, mul: u64);
+        fn do_list_into(ref self: T);
+    }
+
+    #[starknet::contract]
+    mod TestList {
+        use alexandria_storage::list::{List, ListTrait};
+        #[storage]
+        struct Storage {
+            _test_list64: List<u64>,
+            _test_list256: List<u256>,
+        }
+
+        impl ITestImpl of super::ITestList<ContractState> {
+            fn set_list(ref self: ContractState, length: u64, mul: u64) {
+                let mut list = self._test_list64.read();
+                let mut i = 1;
+                loop {
+                    if i > length {
+                        break;
+                    }
+                    list.append(i * mul);
+                    i += 1;
+                };
+            }
+            fn do_list_into(ref self: ContractState) {
+                let mut array = ArrayTrait::<u256>::new();
+                let mut index = 0;
+                let list = self._test_list64.read();
+                loop {
+                    if index == list.len() {
+                        break ();
+                    }
+                    array.append(list[index].into());
+                    index += 1;
+                };
+                array.span();
+            }
+        }
+    }
+
+    fn TEST_LIST_STATE() -> TestList::ContractState {
+        TestList::contract_state_for_testing()
+    }
+
+    #[test]
+    #[available_gas(999_350_000)]
+    fn test_list_into_array() {
+        // [Setup]
+        let mut state = TEST_LIST_STATE();
+        let n = 50;
+        TestList::ITestImpl::set_list(ref state, n, 2);
+        TestList::ITestImpl::do_list_into(ref state);
     }
 }
