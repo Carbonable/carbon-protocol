@@ -364,7 +364,7 @@ fn test_setup_apr() {
 }
 
 #[test]
-#[available_gas(999_666_777)]
+#[available_gas(100)]
 fn test_yielder_set_prices_n() {
     let n = 25;
     let (signers, contracts) = setup_for_apr(n);
@@ -379,6 +379,64 @@ fn test_yielder_set_prices_n() {
 
     let cumsales = farmer.get_cumsales();
     assert(sum_span(cumsales).low == 0x3586648, 'Wrong total sales');
+}
+
+
+#[test]
+#[available_gas(100_000_000)]
+fn test_yielder_get_current_price() {
+    let (signers, contracts) = setup(20);
+    // Instantiate contracts
+    let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+    let mut times = farmer.get_cumsale_times();
+
+    loop {
+        match times.pop_front() {
+            Option::Some(time) => {
+                set_block_timestamp(*time);
+                let price = farmer.get_current_price();
+                assert(@price == @20, 'Wrong price');
+            },
+            Option::None => {
+                break;
+            },
+        };
+    };
+}
+
+#[test]
+#[available_gas(200_000_000)]
+fn test_yielder_get_current_price_increasing() {
+    // Setup
+    let n = 15;
+    let (signers, contracts) = setup_for_apr(n);
+
+    // Instantiate contracts
+    let farmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+
+    // Setup yielder
+    let (times, prices) = get_test_prices(n - 1);
+    farmer.set_prices(times, prices);
+
+    let updated_prices = farmer.get_updated_prices();
+    let mut times = farmer.get_cumsale_times();
+    let mut i = 1;
+    loop {
+        if i == 28 {
+            break;
+        }
+        match times.pop_front() {
+            Option::Some(time) => {
+                set_block_timestamp(*time - 1);
+                let price = farmer.get_current_price();
+                assert(@price == @(((i + 1) / 2) * 10), 'Wrong price');
+                i += 1;
+            },
+            Option::None => {
+                break;
+            },
+        };
+    };
 }
 
 #[test]
