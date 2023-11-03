@@ -1,10 +1,5 @@
 // Core deps
 
-use array::ArrayTrait;
-use result::ResultTrait;
-use option::OptionTrait;
-use traits::{Into, TryInto};
-use zeroable::Zeroable;
 use debug::PrintTrait;
 
 // Starknet deps
@@ -452,14 +447,18 @@ fn test_yielder_get_apr() {
     let prices = farmer.get_updated_prices();
     let cumsales = farmer.get_cumsales();
 
-    let mut prices_span = prices;
+    let mut times_span = times;
     loop {
-        match prices_span.pop_front() {
-            Option::Some(price) => {
+        match times_span.pop_front() {
+            Option::Some(time) => {
+                set_block_timestamp(*time + 1);
+                let price = farmer.get_current_price();
                 let (num, den) = farmer.get_apr(minter_address);
-            // 'apr is'.print();
-            // num.low.print();
-            // den.low.print();
+                'price is'.print();
+                price.low.print();
+                'apr is'.print();
+                num.low.print();
+                den.low.print();
             },
             Option::None => {
                 break;
