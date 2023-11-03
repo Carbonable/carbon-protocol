@@ -47,5 +47,6 @@ mod tests {
     mod test_minter;
     mod test_offseter;
     mod test_yielder;
+    mod test_apr;
 }
 
