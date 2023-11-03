@@ -317,14 +317,10 @@ mod Farm {
             let slot = self._farm_slot.read();
             let project_value = project.get_project_value(slot);
             let unit_price = IMintDispatcher { contract_address: minter }.get_unit_price();
-            let ton_equivalent = project.get_ton_equivalent(slot);
 
             // [Compute] APR
             let num = (next_cumsale - current_cumsale) * YEAR_SECONDS.into();
-            let den = project_value
-                * unit_price
-                * (next_time - current_time.into())
-                * ton_equivalent.into();
+            let den = project_value * unit_price * (next_time - current_time.into());
             (num, den)
         }
 
