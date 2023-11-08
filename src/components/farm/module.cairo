@@ -202,7 +202,8 @@ mod Farm {
             // [Compute] Max possible sale
             let project = self._farm_project.read();
             let slot = self._farm_slot.read();
-            let ton_equivalent = project.get_ton_equivalent(slot);
+            // TODO: not needed?
+            // let ton_equivalent = project.get_ton_equivalent(slot);
             let project_value = project.get_project_value(slot);
             let start_time = project.get_start_time(slot);
             let current_time = get_block_timestamp();
