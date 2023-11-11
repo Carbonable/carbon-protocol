@@ -48,5 +48,9 @@ mod tests {
     mod test_offseter;
     mod test_yielder;
     mod test_apr;
+    mod scenarios {
+        mod test_iso_yielder_setting;
+        mod test_iso_offseter_setting;
+    }
 }
 
