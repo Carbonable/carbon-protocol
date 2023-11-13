@@ -414,7 +414,7 @@ mod FarmingDepositWithdraw {
         };
 
         // At t = One month after third absorption time
-        set_block_timestamp(*times.at(2) + 31 * 24 * 60 * 60);
+        set_block_timestamp(*times.at(2) + ONE_MONTH);
 
         let mut users = signers.users.span();
         let mut i = 1;
