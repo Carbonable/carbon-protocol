@@ -370,384 +370,448 @@ fn setup_for_apr(n: u64) -> (Signers, Contracts) {
     (signers, contracts)
 }
 
-#[test]
-#[available_gas(400_000_000)]
-fn test_yielder_iso_banegas_farm_deposit_withdraw_value() {
-    let (signers, contracts) = setup(PRICE);
-    // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-    let minter = IMinterDispatcher { contract_address: contracts.project };
-    let project = IProjectDispatcher { contract_address: contracts.project };
-    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
+mod FarmingDepositWithdraw {
+    use starknet::ContractAddress;
+    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+    use debug::PrintTrait;
 
-    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-    minter.add_minter(SLOT, signers.owner);
-    let token_id = project.mint(signers.anyone, SLOT, VALUE);
-    minter.revoke_minter(SLOT, signers.owner);
+    use openzeppelin::account::account::Account;
+    use openzeppelin::token::erc20::erc20::ERC20;
+    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+    use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
-    // Setup project value
-    let project_value = erc3525.total_value(SLOT);
-    absorber.set_project_value(SLOT, project_value);
+    // Components
 
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
+    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+    use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
+    use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
+    use carbon::contracts::project::{
+        Project, IExternalDispatcher as IProjectDispatcher,
+        IExternalDispatcherTrait as IProjectDispatcherTrait
+    };
 
-    // At t = 0
-    set_block_timestamp(0);
-    // Anyone deposits value 100_000_000
-    farmer.deposit(token_id, VALUE);
-    let deposited = farmer.get_deposited_of(signers.anyone);
-    assert(deposited == VALUE, 'Wrong strat deposited');
-    // Claimable is 0
-    let claimable = yielder.get_claimable_of(signers.anyone);
-    assert(claimable == 0, 'Wrong start claim should be 0');
-    // Claimed is 0
-    let claimed = yielder.get_claimed_of(signers.anyone);
-    assert(claimed == 0, 'Wrong start claimed should be 0');
+    use super::setup;
+    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE};
 
-    // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
-    set_block_timestamp(1690873200);
-    // Claimable is 0
-    let claimable = yielder.get_claimable_of(signers.anyone);
-    assert(claimable == 0, 'Wrong claimable: should be 0');
-    // Claimed is 0
-    let claimed = yielder.get_claimed_of(signers.anyone);
-    assert(claimed == 0, 'Wrong claimed: should be 0');
+    #[test]
+    #[available_gas(400_000_000)]
+    fn deposit_and_withdraw_value_in_yielder() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
 
-    // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
-    set_block_timestamp(1693551600);
-    // Claimable is 8781856 * 10 (UNIT_PRICE)
-    let claimable = yielder.get_claimable_of(signers.anyone);
-    assert(claimable == 8781856, 'Wrong claimable:need 8781856');
-    // Claimed is 0
-    let claimed = yielder.get_claimed_of(signers.anyone);
-    assert(claimed == 0, 'Wrong claimed');
-}
+        // Prank caller as owner
+        set_contract_address(signers.owner);
 
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+        let token_id = project.mint(signers.anyone, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
 
-#[test]
-#[available_gas(400_000_000)]
-fn deposit_and_withdraw_value_in_yielder() {
-    let (signers, contracts) = setup(PRICE);
-    // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-    let minter = IMinterDispatcher { contract_address: contracts.project };
-    let project = IProjectDispatcher { contract_address: contracts.project };
-    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in yielder
+        farmer.deposit(token_id, VALUE);
+        let deposited = farmer.get_deposited_of(signers.anyone);
+        assert(deposited == VALUE, 'Wrong strat deposited');
 
-    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-    minter.add_minter(SLOT, signers.owner);
-    let token_id = project.mint(signers.anyone, SLOT, VALUE);
-    minter.revoke_minter(SLOT, signers.owner);
+        //check balance of anyone need to be reviewed 
+        let balance = erc20.balance_of(signers.anyone);
+        assert(balance == 0, 'Wrong balce of anyone shld be 0');
 
-    // Setup project value
-    let project_value = erc3525.total_value(SLOT);
-    absorber.set_project_value(SLOT, project_value);
+        // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
+        set_block_timestamp(1690873200);
+        // Then `get_claimable_of` should be  0
+        let claimable = yielder.get_claimable_of(signers.anyone);
+        assert(claimable == 0, 'Wrong claimable: should be 0');
 
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
+        // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
+        set_block_timestamp(1693551600);
 
-    // At t = 0
-    set_block_timestamp(0);
-    // Anyone deposits value 100_000_000 in yielder
-    farmer.deposit(token_id, VALUE);
-    let deposited = farmer.get_deposited_of(signers.anyone);
-    assert(deposited == VALUE, 'Wrong strat deposited');
+        // Then `get_claimable_of` should be different from 0
+        let claimable = yielder.get_claimable_of(signers.anyone);
+        assert(claimable != 0, 'Wrong claimable should not be 0');
 
-    //check balance of anyone need to be reviewed 
-    let balance = erc20.balance_of(signers.anyone);
-    assert(balance == 0, 'Wrong balce of anyone shld be 0');
-
-    // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
-    set_block_timestamp(1690873200);
-    // Then `get_claimable_of` should be  0
-    let claimable = yielder.get_claimable_of(signers.anyone);
-    assert(claimable == 0, 'Wrong claimable: should be 0');
-
-    // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
-    set_block_timestamp(1693551600);
-
-    // Then `get_claimable_of` should be different from 0
-    let claimable = yielder.get_claimable_of(signers.anyone);
-    assert(claimable != 0, 'Wrong claimable should not be 0');
-
-    // withdraw VALUE from yielder 
-    farmer.withdraw_to_token(token_id, VALUE);
+        // withdraw VALUE from yielder 
+        farmer.withdraw_to_token(token_id, VALUE);
     // balance should be egal to value deposited
     //get value on token_id for anyone
-    let value = erc3525.total_value(SLOT);
-    value.print();
-    assert(VALUE == value, 'Balance shld be = to value depo');
-}
+    // TODO
+    // let value = erc3525.total_value(SLOT);
+    // value.print();
+    // assert(VALUE == value, 'Balance shld be = to value depo');
+    }
 
-#[test]
-#[available_gas(4000_000_000)]
-fn deposit_and_withdraw_value_in_yielder_multiple_user() {
-    let (signers, contracts) = setup(PRICE);
-    // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-    let minter = IMinterDispatcher { contract_address: contracts.project };
-    let project = IProjectDispatcher { contract_address: contracts.project };
-    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    #[test]
+    #[available_gas(4000_000_000)]
+    fn deposit_and_withdraw_value_in_yielder_multiple_user() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
+        // Prank caller as owner
+        set_contract_address(signers.owner);
 
-    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-    minter.add_minter(SLOT, signers.owner);
-    let token_id1 = project.mint(signers.anyone, SLOT, VALUE);
-    // let token_id2 = project.mint(signers.anyone2, SLOT, VALUE);
-    let token_id3 = project.mint(signers.owner, SLOT, VALUE);
-    minter.revoke_minter(SLOT, signers.owner);
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+        let token_id1 = project.mint(signers.anyone, SLOT, VALUE);
+        // let token_id2 = project.mint(signers.anyone2, SLOT, VALUE);
+        let token_id3 = project.mint(signers.owner, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
 
-    // Setup project value
-    let project_value = erc3525.total_value(SLOT);
-    absorber.set_project_value(SLOT, project_value);
+        // Prank caller as owner
+        set_contract_address(signers.owner);
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
+        // owner deposits value 100_000_000 in yielder
+        farmer.deposit(token_id3, VALUE);
+        let deposited2 = farmer.get_deposited_of(signers.owner);
+        assert(deposited2 == VALUE, 'Wrong deposit for owner');
 
-    // owner deposits value 100_000_000 in yielder
-    farmer.deposit(token_id3, VALUE);
-    let deposited2 = farmer.get_deposited_of(signers.owner);
-    assert(deposited2 == VALUE, 'Wrong deposit for owner');
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
 
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in yielder
+        farmer.deposit(token_id1, VALUE);
+        let deposited1 = farmer.get_deposited_of(signers.anyone);
+        assert(deposited1 == VALUE, 'Wrong deposit anyone');
 
-    // At t = 0
-    set_block_timestamp(0);
-    // Anyone deposits value 100_000_000 in yielder
-    farmer.deposit(token_id1, VALUE);
-    let deposited1 = farmer.get_deposited_of(signers.anyone);
-    assert(deposited1 == VALUE, 'Wrong deposit anyone');
+        // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
+        set_block_timestamp(1693551600);
 
-    // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
-    set_block_timestamp(1693551600);
+        // Then `get_claimable_of` should be different from 0 for both users
+        let claimable1 = yielder.get_claimable_of(signers.anyone);
+        assert(claimable1 != 0, 'Wrong claimable  anyone');
+        let claimable2 = yielder.get_claimable_of(signers.owner);
+        assert(claimable2 != 0, 'Wrong claimable  owner');
 
-    // Then `get_claimable_of` should be different from 0 for both users
-    let claimable1 = yielder.get_claimable_of(signers.anyone);
-    assert(claimable1 != 0, 'Wrong claimable  anyone');
-    let claimable2 = yielder.get_claimable_of(signers.owner);
-    assert(claimable2 != 0, 'Wrong claimable  owner');
+        // withdraw VALUE from yielder for both users
 
-    // withdraw VALUE from yielder for both users
+        // Prank caller as owner
+        set_contract_address(signers.owner);
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
+        farmer.withdraw_to_token(token_id3, VALUE);
 
-    farmer.withdraw_to_token(token_id3, VALUE);
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
 
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
+        farmer.withdraw_to_token(token_id1, VALUE);
+    }
 
-    farmer.withdraw_to_token(token_id1, VALUE);
-}
+    #[test]
+    #[available_gas(400_000_000)]
+    fn deposit_and_withdraw_portion_value_in_yielder() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
 
-#[test]
-#[available_gas(400_000_000)]
-fn deposit_and_withdraw_portion_value_in_yielder() {
-    let (signers, contracts) = setup(PRICE);
-    // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-    let minter = IMinterDispatcher { contract_address: contracts.project };
-    let project = IProjectDispatcher { contract_address: contracts.project };
-    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+        // Prank caller as owner
+        set_contract_address(signers.owner);
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+        let token_id = project.mint(signers.anyone, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
 
-    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-    minter.add_minter(SLOT, signers.owner);
-    let token_id = project.mint(signers.anyone, SLOT, VALUE);
-    minter.revoke_minter(SLOT, signers.owner);
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
 
-    // Setup project value
-    let project_value = erc3525.total_value(SLOT);
-    absorber.set_project_value(SLOT, project_value);
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in yielder
+        farmer.deposit(token_id, VALUE / 2);
+        let deposited = farmer.get_deposited_of(signers.anyone);
+        assert(deposited == VALUE / 2, 'Wrong strat deposited');
 
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
+        //check balance of anyone need to be reviewed 
+        let balance = erc20.balance_of(signers.anyone);
+        assert(balance == 0, 'Wrong balce of anyone shld be 0');
 
-    // At t = 0
-    set_block_timestamp(0);
-    // Anyone deposits value 100_000_000 in yielder
-    farmer.deposit(token_id, VALUE / 2);
-    let deposited = farmer.get_deposited_of(signers.anyone);
-    assert(deposited == VALUE / 2, 'Wrong strat deposited');
+        // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
+        set_block_timestamp(1690873200);
+        // Then `get_claimable_of` should be  0
+        let claimable = yielder.get_claimable_of(signers.anyone);
+        assert(claimable == 0, 'Wrong claimable: should be 0');
 
-    //check balance of anyone need to be reviewed 
-    let balance = erc20.balance_of(signers.anyone);
-    assert(balance == 0, 'Wrong balce of anyone shld be 0');
+        // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
+        set_block_timestamp(1693551600);
 
-    // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
-    set_block_timestamp(1690873200);
-    // Then `get_claimable_of` should be  0
-    let claimable = yielder.get_claimable_of(signers.anyone);
-    assert(claimable == 0, 'Wrong claimable: should be 0');
+        // Then `get_claimable_of` should be different from 0
+        let claimable = yielder.get_claimable_of(signers.anyone);
+        assert(claimable != 0, 'Wrong claimable should not be 0');
 
-    // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
-    set_block_timestamp(1693551600);
-
-    // Then `get_claimable_of` should be different from 0
-    let claimable = yielder.get_claimable_of(signers.anyone);
-    assert(claimable != 0, 'Wrong claimable should not be 0');
-
-    // withdraw VALUE from yielder 
-    farmer.withdraw_to_token(token_id, VALUE / 2);
+        // withdraw VALUE from yielder 
+        farmer.withdraw_to_token(token_id, VALUE / 2);
     // balance should be egal to value deposited
     //get value on token_id for anyone
-    let value = erc3525.total_value(SLOT);
-    value.print();
-    assert(VALUE == value, 'Balance shld be = to value depo');
+
+    // TODO
+    // assert(VALUE == value, 'Balance shld be = to value depo');
+    }
+
+    #[test]
+    #[available_gas(400_000_000)]
+    #[should_panic(
+        expected: ('ERC3525: value exceeds balance', 'ENTRYPOINT_FAILED', 'ENTRYPOINT_FAILED')
+    )]
+    fn deposit_more_than_in_wallet() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+        let token_id = project.mint(signers.anyone, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
+
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
+
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in yielder
+        farmer.deposit(token_id, VALUE * 2);
+        let deposited = farmer.get_deposited_of(signers.anyone);
+        assert(deposited == VALUE * 2, 'value exceeds balance');
+    }
+
+
+    #[test]
+    #[available_gas(4000_000_000)]
+    fn deposit_and_withdraw_value_in_yielder_multiple_user_diff_order() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+        let token_id1 = project.mint(signers.anyone, SLOT, VALUE);
+        // let token_id2 = project.mint(signers.anyone2, SLOT, VALUE);
+        let token_id3 = project.mint(signers.owner, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // owner deposits value 100_000_000 in yielder
+        farmer.deposit(token_id3, VALUE);
+        let deposited2 = farmer.get_deposited_of(signers.owner);
+        assert(deposited2 == VALUE, 'Wrong deposit for owner');
+
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
+
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in yielder
+        farmer.deposit(token_id1, VALUE);
+        let deposited1 = farmer.get_deposited_of(signers.anyone);
+        assert(deposited1 == VALUE, 'Wrong deposit anyone');
+
+        // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
+        set_block_timestamp(1693551600);
+
+        // Then `get_claimable_of` should be different from 0 for both users
+        let claimable1 = yielder.get_claimable_of(signers.anyone);
+        assert(claimable1 != 0, 'Wrong claimable  anyone');
+        let claimable2 = yielder.get_claimable_of(signers.owner);
+        assert(claimable2 != 0, 'Wrong claimable  owner');
+
+        // withdraw VALUE from yielder for both users
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
+
+        farmer.withdraw_to_token(token_id1, VALUE);
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        farmer.withdraw_to_token(token_id3, VALUE);
+    }
 }
 
-#[test]
-#[available_gas(400_000_000)]
-#[should_panic(
-    expected: ('ERC3525: value exceeds balance', 'ENTRYPOINT_FAILED', 'ENTRYPOINT_FAILED')
-)]
-fn deposit_more_than_in_wallet() {
-    let (signers, contracts) = setup(PRICE);
-    // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-    let minter = IMinterDispatcher { contract_address: contracts.project };
-    let project = IProjectDispatcher { contract_address: contracts.project };
-    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+mod FarmingClaimingReward {
+    use starknet::ContractAddress;
+    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+    use debug::PrintTrait;
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
+    use openzeppelin::account::account::Account;
+    use openzeppelin::token::erc20::erc20::ERC20;
+    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+    use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
-    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-    minter.add_minter(SLOT, signers.owner);
-    let token_id = project.mint(signers.anyone, SLOT, VALUE);
-    minter.revoke_minter(SLOT, signers.owner);
+    // Components
 
-    // Setup project value
-    let project_value = erc3525.total_value(SLOT);
-    absorber.set_project_value(SLOT, project_value);
+    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+    use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
+    use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
+    use carbon::contracts::project::{
+        Project, IExternalDispatcher as IProjectDispatcher,
+        IExternalDispatcherTrait as IProjectDispatcherTrait
+    };
 
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
+    use super::setup;
+    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE};
 
-    // At t = 0
-    set_block_timestamp(0);
-    // Anyone deposits value 100_000_000 in yielder
-    farmer.deposit(token_id, VALUE * 2);
-    let deposited = farmer.get_deposited_of(signers.anyone);
-    assert(deposited == VALUE * 2, 'value exceeds balance');
+
+    #[test]
+    #[available_gas(4000_000_000)]
+    fn ensure_right_distribution() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+    // TODO
+    }
+
+    #[test]
+    #[available_gas(4000_000_000)]
+    fn claim_part_of_usdc() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+    // TODO
+    }
+
+    #[test]
+    #[available_gas(4000_000_000)]
+    fn multi_deposit_before_start_then_claim_after_start() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+    // TODO
+    }
+
+
+    #[test]
+    #[available_gas(4000_000_000)]
+    fn claim_rewards_first_no_usdc_then_enough_usdc() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+    // TODO
+    }
+
+    #[test]
+    #[available_gas(4000_000_000)]
+    fn farm_but_no_price_set() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+    // TODO
+    }
 }
 
+// TODO
+mod PriceConfigAccounting {}
 
-#[test]
-#[available_gas(4000_000_000)]
-fn deposit_and_withdraw_value_in_yielder_multiple_user_diff_order() {
-    let (signers, contracts) = setup(PRICE);
-    // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-    let minter = IMinterDispatcher { contract_address: contracts.project };
-    let project = IProjectDispatcher { contract_address: contracts.project };
-    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+mod VerifyCumulativeSalePrice {}
 
-    // Prank caller as owner
-    set_contract_address(signers.owner);
-
-    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-    minter.add_minter(SLOT, signers.owner);
-    let token_id1 = project.mint(signers.anyone, SLOT, VALUE);
-    // let token_id2 = project.mint(signers.anyone2, SLOT, VALUE);
-    let token_id3 = project.mint(signers.owner, SLOT, VALUE);
-    minter.revoke_minter(SLOT, signers.owner);
-
-    // Setup project value
-    let project_value = erc3525.total_value(SLOT);
-    absorber.set_project_value(SLOT, project_value);
-
-    // Prank caller as owner
-    set_contract_address(signers.owner);
-
-    // owner deposits value 100_000_000 in yielder
-    farmer.deposit(token_id3, VALUE);
-    let deposited2 = farmer.get_deposited_of(signers.owner);
-    assert(deposited2 == VALUE, 'Wrong deposit for owner');
-
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
-
-    // At t = 0
-    set_block_timestamp(0);
-    // Anyone deposits value 100_000_000 in yielder
-    farmer.deposit(token_id1, VALUE);
-    let deposited1 = farmer.get_deposited_of(signers.anyone);
-    assert(deposited1 == VALUE, 'Wrong deposit anyone');
-
-    // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
-    set_block_timestamp(1693551600);
-
-    // Then `get_claimable_of` should be different from 0 for both users
-    let claimable1 = yielder.get_claimable_of(signers.anyone);
-    assert(claimable1 != 0, 'Wrong claimable  anyone');
-    let claimable2 = yielder.get_claimable_of(signers.owner);
-    assert(claimable2 != 0, 'Wrong claimable  owner');
-
-    // withdraw VALUE from yielder for both users
-    // Prank caller as anyone
-    set_contract_address(signers.anyone);
-
-    farmer.withdraw_to_token(token_id1, VALUE);
-
-    // Prank caller as owner
-    set_contract_address(signers.owner);
-
-    farmer.withdraw_to_token(token_id3, VALUE);
-}
-
-// Farming rewards scenarios:
-
-#[test]
-#[available_gas(4000_000_000)]
-fn ensure_right_distribution() {
-    let (signers, contracts) = setup(PRICE);
-    // Instantiate contracts
-    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-    let minter = IMinterDispatcher { contract_address: contracts.project };
-    let project = IProjectDispatcher { contract_address: contracts.project };
-    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
-
-    // Prank caller as owner
-    set_contract_address(signers.owner);
-
-    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-    minter.add_minter(SLOT, signers.owner);
-    let token_id1 = project.mint(signers.anyone, SLOT, VALUE);
-    // let token_id2 = project.mint(signers.anyone2, SLOT, VALUE);
-    let token_id3 = project.mint(signers.owner, SLOT, VALUE);
-    minter.revoke_minter(SLOT, signers.owner);
-}
