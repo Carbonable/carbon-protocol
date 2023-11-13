@@ -290,7 +290,9 @@ fn setup_yielder(
     set_contract_address(*signers.owner);
     let farmer = IYieldFarmDispatcher { contract_address: yielder };
 
-    let times: Array<u64> = array![1690884000, 1696154400]; // Aug 01 2023 10:00:00 GMT+0000, Oct 01 2023 10:00:00 GMT+0000
+    let times: Array<u64> = array![
+        1690884000, 1696154400
+    ]; // Aug 01 2023 10:00:00 GMT+0000, Oct 01 2023 10:00:00 GMT+0000
     let prices: Array<u256> = array![0, price];
 
     farmer.set_prices(times.span(), prices.span());
@@ -314,7 +316,11 @@ fn setup_minter(project: ContractAddress, minter: ContractAddress, signers: @Sig
 
 fn setup(price: u256) -> (Signers, Contracts) {
     // Deploy
-    let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), anyone2: deploy_account('ANYONE2') };
+    let signers = Signers {
+        owner: deploy_account('OWNER'),
+        anyone: deploy_account('ANYONE'),
+        anyone2: deploy_account('ANYONE2')
+    };
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
     let yielder = deploy_yielder(project, erc20, signers.owner);
@@ -338,7 +344,11 @@ fn setup(price: u256) -> (Signers, Contracts) {
 
 fn setup_for_apr(n: u64) -> (Signers, Contracts) {
     // Deploy
-    let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), anyone2: deploy_account('ANYONE2'), };
+    let signers = Signers {
+        owner: deploy_account('OWNER'),
+        anyone: deploy_account('ANYONE'),
+        anyone2: deploy_account('ANYONE2'),
+    };
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
     let yielder = deploy_yielder(project, erc20, signers.owner);
@@ -402,14 +412,13 @@ fn test_yielder_iso_banegas_farm_deposit_withdraw_value() {
     assert(claimed == 0, 'Wrong start claimed should be 0');
 
     // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
-    set_block_timestamp(1690873200); 
+    set_block_timestamp(1690873200);
     // Claimable is 0
     let claimable = yielder.get_claimable_of(signers.anyone);
     assert(claimable == 0, 'Wrong claimable: should be 0');
     // Claimed is 0
     let claimed = yielder.get_claimed_of(signers.anyone);
     assert(claimed == 0, 'Wrong claimed: should be 0');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
     set_block_timestamp(1693551600);
@@ -456,18 +465,16 @@ fn deposit_and_withdraw_value_in_yielder() {
     farmer.deposit(token_id, VALUE);
     let deposited = farmer.get_deposited_of(signers.anyone);
     assert(deposited == VALUE, 'Wrong strat deposited');
-    
+
     //check balance of anyone need to be reviewed 
     let balance = erc20.balance_of(signers.anyone);
     assert(balance == 0, 'Wrong balce of anyone shld be 0');
 
-
     // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
-    set_block_timestamp(1690873200); 
+    set_block_timestamp(1690873200);
     // Then `get_claimable_of` should be  0
     let claimable = yielder.get_claimable_of(signers.anyone);
     assert(claimable == 0, 'Wrong claimable: should be 0');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
     set_block_timestamp(1693551600);
@@ -512,7 +519,6 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user() {
     let project_value = erc3525.total_value(SLOT);
     absorber.set_project_value(SLOT, project_value);
 
-    
     // Prank caller as owner
     set_contract_address(signers.owner);
 
@@ -520,7 +526,7 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user() {
     farmer.deposit(token_id3, VALUE);
     let deposited2 = farmer.get_deposited_of(signers.owner);
     assert(deposited2 == VALUE, 'Wrong deposit for owner');
-    
+
     // Prank caller as anyone
     set_contract_address(signers.anyone);
 
@@ -530,7 +536,6 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user() {
     farmer.deposit(token_id1, VALUE);
     let deposited1 = farmer.get_deposited_of(signers.anyone);
     assert(deposited1 == VALUE, 'Wrong deposit anyone');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
     set_block_timestamp(1693551600);
@@ -542,19 +547,16 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user() {
     assert(claimable2 != 0, 'Wrong claimable  owner');
 
     // withdraw VALUE from yielder for both users
-    
-     // Prank caller as owner
+
+    // Prank caller as owner
     set_contract_address(signers.owner);
 
     farmer.withdraw_to_token(token_id3, VALUE);
-    
+
     // Prank caller as anyone
     set_contract_address(signers.anyone);
 
     farmer.withdraw_to_token(token_id1, VALUE);
-
-   
-
 }
 
 #[test]
@@ -588,21 +590,19 @@ fn deposit_and_withdraw_portion_value_in_yielder() {
     // At t = 0
     set_block_timestamp(0);
     // Anyone deposits value 100_000_000 in yielder
-    farmer.deposit(token_id, VALUE/2);
+    farmer.deposit(token_id, VALUE / 2);
     let deposited = farmer.get_deposited_of(signers.anyone);
-    assert(deposited == VALUE/2, 'Wrong strat deposited');
-    
+    assert(deposited == VALUE / 2, 'Wrong strat deposited');
+
     //check balance of anyone need to be reviewed 
     let balance = erc20.balance_of(signers.anyone);
     assert(balance == 0, 'Wrong balce of anyone shld be 0');
 
-
     // At t = Aug 01 2023 07:00:00 GMT+0000 (3h before first price other than 0)
-    set_block_timestamp(1690873200); 
+    set_block_timestamp(1690873200);
     // Then `get_claimable_of` should be  0
     let claimable = yielder.get_claimable_of(signers.anyone);
     assert(claimable == 0, 'Wrong claimable: should be 0');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
     set_block_timestamp(1693551600);
@@ -612,7 +612,7 @@ fn deposit_and_withdraw_portion_value_in_yielder() {
     assert(claimable != 0, 'Wrong claimable should not be 0');
 
     // withdraw VALUE from yielder 
-    farmer.withdraw_to_token(token_id, VALUE/2);
+    farmer.withdraw_to_token(token_id, VALUE / 2);
     // balance should be egal to value deposited
     //get value on token_id for anyone
     let value = erc3525.total_value(SLOT);
@@ -622,7 +622,9 @@ fn deposit_and_withdraw_portion_value_in_yielder() {
 
 #[test]
 #[available_gas(400_000_000)]
-#[should_panic(expected: ('ERC3525: value exceeds balance','ENTRYPOINT_FAILED','ENTRYPOINT_FAILED'))]
+#[should_panic(
+    expected: ('ERC3525: value exceeds balance', 'ENTRYPOINT_FAILED', 'ENTRYPOINT_FAILED')
+)]
 fn deposit_more_than_in_wallet() {
     let (signers, contracts) = setup(PRICE);
     // Instantiate contracts
@@ -652,13 +654,10 @@ fn deposit_more_than_in_wallet() {
     // At t = 0
     set_block_timestamp(0);
     // Anyone deposits value 100_000_000 in yielder
-    farmer.deposit(token_id, VALUE*2);
+    farmer.deposit(token_id, VALUE * 2);
     let deposited = farmer.get_deposited_of(signers.anyone);
-    assert(deposited == VALUE*2, 'value exceeds balance');
-    
-
+    assert(deposited == VALUE * 2, 'value exceeds balance');
 }
-
 
 
 #[test]
@@ -688,7 +687,6 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user_diff_order() {
     let project_value = erc3525.total_value(SLOT);
     absorber.set_project_value(SLOT, project_value);
 
-    
     // Prank caller as owner
     set_contract_address(signers.owner);
 
@@ -696,7 +694,7 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user_diff_order() {
     farmer.deposit(token_id3, VALUE);
     let deposited2 = farmer.get_deposited_of(signers.owner);
     assert(deposited2 == VALUE, 'Wrong deposit for owner');
-    
+
     // Prank caller as anyone
     set_contract_address(signers.anyone);
 
@@ -706,7 +704,6 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user_diff_order() {
     farmer.deposit(token_id1, VALUE);
     let deposited1 = farmer.get_deposited_of(signers.anyone);
     assert(deposited1 == VALUE, 'Wrong deposit anyone');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
     set_block_timestamp(1693551600);
@@ -727,5 +724,30 @@ fn deposit_and_withdraw_value_in_yielder_multiple_user_diff_order() {
     set_contract_address(signers.owner);
 
     farmer.withdraw_to_token(token_id3, VALUE);
+}
 
+// Farming rewards scenarios:
+
+#[test]
+#[available_gas(4000_000_000)]
+fn ensure_right_distribution() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+    // Prank caller as owner
+    set_contract_address(signers.owner);
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    minter.add_minter(SLOT, signers.owner);
+    let token_id1 = project.mint(signers.anyone, SLOT, VALUE);
+    // let token_id2 = project.mint(signers.anyone2, SLOT, VALUE);
+    let token_id3 = project.mint(signers.owner, SLOT, VALUE);
+    minter.revoke_minter(SLOT, signers.owner);
 }

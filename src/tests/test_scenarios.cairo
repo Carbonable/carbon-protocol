@@ -222,10 +222,14 @@ fn setup_yielder(
     set_contract_address(*signers.owner);
     let farmer = IYieldFarmDispatcher { contract_address: yielder };
 
-    let times: Array<u64> = array![1699182000, 1699350600, 1699351200]; // 5 nov 11h : d1  , 7 nov 9h50 : d2 , 7 nov 10h : d3
-    let prices: Array<u256> = array![0, 0, price]; // 0 > nov 11h , 0 > 7 nov 9h50 , price > 7 nov 10h , price
+    let times: Array<u64> = array![
+        1699182000, 1699350600, 1699351200
+    ]; // 5 nov 11h : d1  , 7 nov 9h50 : d2 , 7 nov 10h : d3
+    let prices: Array<u256> = array![
+        0, 0, price
+    ]; // 0 > nov 11h , 0 > 7 nov 9h50 , price > 7 nov 10h , price
 
-    farmer.set_prices(times.span(), prices.span());   // 
+    farmer.set_prices(times.span(), prices.span()); // 
     // Owner approve yielder to spend his tokens
     let project = IERC721Dispatcher { contract_address: project };
     project.set_approval_for_all(yielder, true);
@@ -299,11 +303,10 @@ fn test__deposit_before_farming_starts() {
 
     // At t = 58 seconds before farming starts
     set_block_timestamp(1667314400); // date of timestamp unix with sec precision : 1 nov 11h59
-    
 
     assert(yielder.get_claimable_of(signers.anyone) == 0, 'Claimable is not 0');
 
-        // At t = 58 seconds before farming starts
+    // At t = 58 seconds before farming starts
     set_block_timestamp(1699351900); // date of timestamp unix with sec precision : 7 nov 10h05
     'claimable: '.print();
     yielder.get_claimable_of(signers.anyone).print();
