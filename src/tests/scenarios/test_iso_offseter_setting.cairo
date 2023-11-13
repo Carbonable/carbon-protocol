@@ -271,7 +271,6 @@ fn get_test_prices(n: u64) -> (Span<u64>, Span<u256>) {
 }
 
 
-
 fn setup_offseter(project: ContractAddress, offseter: ContractAddress, signers: @Signers) {
     set_contract_address(*signers.owner);
     let farmer = IFarmDispatcher { contract_address: offseter };
@@ -307,7 +306,6 @@ fn setup() -> (Signers, Contracts) {
     let contracts = Contracts { project: project, offseter: offseter, };
     (signers, contracts)
 }
-
 
 
 #[test]
@@ -351,14 +349,13 @@ fn test_offseter_iso_banegas_farm_deposit_withdraw_value() {
     assert(claimed == 0, 'Wrong start claimed should be 0');
 
     // At t = Aug 01 2023 07:00:00 GMT+0000 (2h before first absorption date)
-    set_block_timestamp(1667307258); 
+    set_block_timestamp(1667307258);
     // Claimable is 0
     let claimable = offseter.get_claimable_of(signers.anyone);
     assert(claimable == 0, 'Wrong claimable: should be 0');
     // Claimed is 0
     let claimed = offseter.get_claimed_of(signers.anyone);
     assert(claimed == 0, 'Wrong claimed: should be 0');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 year after first absorption)
     set_block_timestamp(1693551600);
@@ -405,8 +402,6 @@ fn deposit_and_withdraw_value_in_offseter() {
     farmer.deposit(token_id, VALUE);
     let deposited = farmer.get_deposited_of(signers.anyone);
     assert(deposited == VALUE, 'Wrong strat deposited');
-    
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 y  after first absorption)
     set_block_timestamp(1693551600);
@@ -450,7 +445,6 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user() {
     let project_value = erc3525.total_value(SLOT);
     absorber.set_project_value(SLOT, project_value);
 
-    
     // Prank caller as owner
     set_contract_address(signers.owner);
 
@@ -458,7 +452,7 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user() {
     farmer.deposit(token_id3, VALUE);
     let deposited2 = farmer.get_deposited_of(signers.owner);
     assert(deposited2 == VALUE, 'Wrong deposit for owner');
-    
+
     // Prank caller as anyone
     set_contract_address(signers.anyone);
 
@@ -468,7 +462,6 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user() {
     farmer.deposit(token_id1, VALUE);
     let deposited1 = farmer.get_deposited_of(signers.anyone);
     assert(deposited1 == VALUE, 'Wrong deposit anyone');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
     set_block_timestamp(1693551600);
@@ -480,19 +473,16 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user() {
     assert(claimable2 != 0, 'Wrong claimable  owner');
 
     // withdraw VALUE from offseter for both users
-    
-     // Prank caller as owner
+
+    // Prank caller as owner
     set_contract_address(signers.owner);
 
     farmer.withdraw_to_token(token_id3, VALUE);
-    
+
     // Prank caller as anyone
     set_contract_address(signers.anyone);
 
     farmer.withdraw_to_token(token_id1, VALUE);
-
-   
-
 }
 
 #[test]
@@ -525,15 +515,9 @@ fn deposit_and_withdraw_portion_value_in_offseter() {
     // At t = 0
     set_block_timestamp(0);
     // Anyone deposits value 100_000_000 in offseter
-    farmer.deposit(token_id, VALUE/2);
+    farmer.deposit(token_id, VALUE / 2);
     let deposited = farmer.get_deposited_of(signers.anyone);
-    assert(deposited == VALUE/2, 'Wrong strat deposited');
-    
-
-
-
- 
-
+    assert(deposited == VALUE / 2, 'Wrong strat deposited');
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 y after first absorption)
     set_block_timestamp(1693551600);
@@ -543,16 +527,13 @@ fn deposit_and_withdraw_portion_value_in_offseter() {
     assert(claimable != 0, 'Wrong claimable should not be 0');
 
     // withdraw VALUE from offseter 
-    farmer.withdraw_to_token(token_id, VALUE/2);
+    farmer.withdraw_to_token(token_id, VALUE / 2);
     // balance should be egal to value deposited
     //get value on token_id for anyone
     let value = erc3525.total_value(SLOT);
     value.print();
     assert(VALUE == value, 'Balance shld be = to value depo');
 }
-
-
-
 
 
 #[test]
@@ -581,7 +562,6 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user_diff_order() {
     let project_value = erc3525.total_value(SLOT);
     absorber.set_project_value(SLOT, project_value);
 
-    
     // Prank caller as owner
     set_contract_address(signers.owner);
 
@@ -589,7 +569,7 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user_diff_order() {
     farmer.deposit(token_id3, VALUE);
     let deposited2 = farmer.get_deposited_of(signers.owner);
     assert(deposited2 == VALUE, 'Wrong deposit for owner');
-    
+
     // Prank caller as anyone
     set_contract_address(signers.anyone);
 
@@ -599,7 +579,6 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user_diff_order() {
     farmer.deposit(token_id1, VALUE);
     let deposited1 = farmer.get_deposited_of(signers.anyone);
     assert(deposited1 == VALUE, 'Wrong deposit anyone');
-
 
     // At t = Sep 01 2023 07:00:00 GMT+0000 (1 month after first price at 22)
     set_block_timestamp(1693551600);
@@ -620,5 +599,4 @@ fn deposit_and_withdraw_value_in_offseter_multiple_user_diff_order() {
     set_contract_address(signers.owner);
 
     farmer.withdraw_to_token(token_id3, VALUE);
-
 }
