@@ -55,7 +55,6 @@ const UNIT_PRICE: u256 = 10;
 const RESERVED_VALUE: u256 = 25_000_000;
 const ALLOCATION: felt252 = 5;
 const BILLION: u256 = 1_000_000_000_000;
-const ONE_MONTH: u64 = consteval_int!(31 * 24 * 60 * 60);
 
 const PRICE: u256 = 22;
 const VALUE: u256 = 100_000_000;
