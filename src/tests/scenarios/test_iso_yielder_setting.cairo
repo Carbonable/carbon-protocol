@@ -57,6 +57,7 @@ const BILLION: u256 = 1_000_000_000_000;
 
 const PRICE: u256 = 22;
 const VALUE: u256 = 100_000_000;
+const ONE_MONTH: u64 = consteval_int!(31 * 24 * 60 * 60);
 
 // Signers
 #[derive(Drop)]
@@ -691,16 +692,18 @@ mod FarmingClaimingReward {
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
     use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
     use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
-    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
     use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
     use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
     use carbon::contracts::project::{
         Project, IExternalDispatcher as IProjectDispatcher,
         IExternalDispatcherTrait as IProjectDispatcherTrait
     };
+    use carbon::components::farm::interface::{
+        IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
+    };
 
     use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE};
+    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH};
 
 
     #[test]
@@ -769,7 +772,11 @@ mod FarmingClaimingReward {
 
     #[test]
     #[available_gas(4000_000_000)]
+    #[should_panic(expected: ('u256_sub Overflow', 'ENTRYPOINT_FAILED' , 'ENTRYPOINT_FAILED'))]
     fn claim_rewards_first_no_usdc_then_enough_usdc() {
+    // test should panic on yielder.claim() as no usdc     
+
+
         let (signers, contracts) = setup(PRICE);
         // Instantiate contracts
         let farmer = IFarmDispatcher { contract_address: contracts.yielder };
@@ -785,7 +792,55 @@ mod FarmingClaimingReward {
 
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
-    // TODO
+        let token_id = project.mint(signers.anyone, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
+
+
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
+
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in yielder
+        farmer.deposit(token_id, VALUE);
+        let deposited = farmer.get_deposited_of(signers.anyone);
+
+        // At t = 1667260800
+        set_block_timestamp(1667260800);
+        // Compute expected balance
+        let claimable = yielder.get_claimable_of(signers.anyone);
+        let expected_balance = erc20.balance_of(signers.anyone) + claimable;
+        // Anyone claims
+        yielder.claim();
+        // [Assert] Balance
+        let balance = erc20.balance_of(signers.anyone);
+        assert(balance == expected_balance, 'Wrong balance');
+
+        let amount = erc20.balance_of(yielder.contract_address);
+        // pranl caller is yielder
+        set_contract_address(yielder.contract_address);
+        // yielder transfer amount to owner
+        erc20.transfer(signers.owner, amount);
+        let amount = erc20.balance_of(yielder.contract_address);
+        // verify amount is 0
+        assert(amount == 0, 'Wrong balance');
+
+
+
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
+
+        // move timestamp one month later
+        set_block_timestamp(1693551600);
+        // Compute expected balance
+        let claimable = yielder.get_claimable_of(signers.anyone);
+        'claimable: '.print();
+        claimable.print();
+
+        let expected_balance = erc20.balance_of(signers.anyone) + claimable;
+        // Anyone claims should fail !
+        yielder.claim();
+  
     }
 
     #[test]
@@ -793,6 +848,7 @@ mod FarmingClaimingReward {
     fn farm_but_no_price_set() {
         let (signers, contracts) = setup(PRICE);
         // Instantiate contracts
+        let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
         let farmer = IFarmDispatcher { contract_address: contracts.yielder };
         let yielder = IYieldDispatcher { contract_address: contracts.yielder };
         let minter = IMinterDispatcher { contract_address: contracts.project };
@@ -806,7 +862,46 @@ mod FarmingClaimingReward {
 
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
-    // TODO
+        let token_id = project.mint(signers.anyone, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
+
+
+        
+        // Prank caller as user
+        set_contract_address(signers.anyone);
+
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in yielder
+        farmer.deposit(token_id, VALUE);
+        let deposited = farmer.get_deposited_of(signers.anyone);
+
+
+
+        // two month after time setup - ie the price is not setup the last prie to be taken in consideration is PRICE
+        set_block_timestamp(1696154400 + 2 * ONE_MONTH);
+        // Compute expected balance
+        let claimable = yielder.get_claimable_of(signers.anyone);
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // UPDATING NEW PRICES
+        let times: Array<u64> = array![
+            1690884000, 1696154400, 1696154400 + ONE_MONTH , 1696154400 + ONE_MONTH * 2
+        ]; // Aug 01 2023 10:00:00 GMT+0000, Oct 01 2023 10:00:00 GMT+0000
+        let prices: Array<u256> = array![0, PRICE, PRICE * 2 , PRICE *3];
+
+        yieldfarmer.set_prices(times.span(), prices.span());
+
+        // Prank caller as user
+        set_contract_address(signers.anyone);
+
+        let claimable2 = yielder.get_claimable_of(signers.anyone);
+        assert(claimable2 > claimable, 'nouveau pric pas pris en compte');
+
+
+
     }
 }
 
@@ -814,4 +909,5 @@ mod FarmingClaimingReward {
 mod PriceConfigAccounting {}
 
 mod VerifyCumulativeSalePrice {}
+
 
