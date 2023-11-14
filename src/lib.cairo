@@ -43,6 +43,7 @@ mod mocks {
 
 #[cfg(test)]
 mod tests {
+    mod data;
     mod test_project;
     mod test_minter;
     mod test_offseter;
