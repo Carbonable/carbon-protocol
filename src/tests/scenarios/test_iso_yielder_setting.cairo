@@ -772,10 +772,9 @@ mod FarmingClaimingReward {
 
     #[test]
     #[available_gas(4000_000_000)]
-    #[should_panic(expected: ('u256_sub Overflow', 'ENTRYPOINT_FAILED' , 'ENTRYPOINT_FAILED'))]
+    #[should_panic(expected: ('u256_sub Overflow', 'ENTRYPOINT_FAILED', 'ENTRYPOINT_FAILED'))]
     fn claim_rewards_first_no_usdc_then_enough_usdc() {
-    // test should panic on yielder.claim() as no usdc     
-
+        // test should panic on yielder.claim() as no usdc     
 
         let (signers, contracts) = setup(PRICE);
         // Instantiate contracts
@@ -794,7 +793,6 @@ mod FarmingClaimingReward {
         minter.add_minter(SLOT, signers.owner);
         let token_id = project.mint(signers.anyone, SLOT, VALUE);
         minter.revoke_minter(SLOT, signers.owner);
-
 
         // Prank caller as anyone
         set_contract_address(signers.anyone);
@@ -825,8 +823,6 @@ mod FarmingClaimingReward {
         // verify amount is 0
         assert(amount == 0, 'Wrong balance');
 
-
-
         // Prank caller as anyone
         set_contract_address(signers.anyone);
 
@@ -840,7 +836,6 @@ mod FarmingClaimingReward {
         let expected_balance = erc20.balance_of(signers.anyone) + claimable;
         // Anyone claims should fail !
         yielder.claim();
-  
     }
 
     #[test]
@@ -865,8 +860,6 @@ mod FarmingClaimingReward {
         let token_id = project.mint(signers.anyone, SLOT, VALUE);
         minter.revoke_minter(SLOT, signers.owner);
 
-
-        
         // Prank caller as user
         set_contract_address(signers.anyone);
 
@@ -875,8 +868,6 @@ mod FarmingClaimingReward {
         // Anyone deposits value 100_000_000 in yielder
         farmer.deposit(token_id, VALUE);
         let deposited = farmer.get_deposited_of(signers.anyone);
-
-
 
         // two month after time setup - ie the price is not setup the last prie to be taken in consideration is PRICE
         set_block_timestamp(1696154400 + 2 * ONE_MONTH);
@@ -888,9 +879,9 @@ mod FarmingClaimingReward {
 
         // UPDATING NEW PRICES
         let times: Array<u64> = array![
-            1690884000, 1696154400, 1696154400 + ONE_MONTH , 1696154400 + ONE_MONTH * 2
+            1690884000, 1696154400, 1696154400 + ONE_MONTH, 1696154400 + ONE_MONTH * 2
         ]; // Aug 01 2023 10:00:00 GMT+0000, Oct 01 2023 10:00:00 GMT+0000
-        let prices: Array<u256> = array![0, PRICE, PRICE * 2 , PRICE *3];
+        let prices: Array<u256> = array![0, PRICE, PRICE * 2, PRICE * 3];
 
         yieldfarmer.set_prices(times.span(), prices.span());
 
@@ -899,9 +890,6 @@ mod FarmingClaimingReward {
 
         let claimable2 = yielder.get_claimable_of(signers.anyone);
         assert(claimable2 > claimable, 'nouveau pric pas pris en compte');
-
-
-
     }
 }
 
@@ -909,5 +897,4 @@ mod FarmingClaimingReward {
 mod PriceConfigAccounting {}
 
 mod VerifyCumulativeSalePrice {}
-
 
