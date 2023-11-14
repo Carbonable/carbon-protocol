@@ -1014,7 +1014,190 @@ mod FarmingClaimingReward {
     }
 }
 
-// TODO
-mod PriceConfigAccounting {}
+mod PriceConfigAccounting {
+    use starknet::ContractAddress;
+    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+    use debug::PrintTrait;
 
-mod VerifyCumulativeSalePrice {}
+    use openzeppelin::account::account::Account;
+    use openzeppelin::token::erc20::erc20::ERC20;
+    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+    use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
+
+    // Components
+
+    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+    use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
+    use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
+    use carbon::contracts::project::{
+        Project, IExternalDispatcher as IProjectDispatcher,
+        IExternalDispatcherTrait as IProjectDispatcherTrait
+    };
+
+    use super::setup;
+    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE};
+
+    #[test]
+    #[available_gas(4_000_000_000)]
+    fn setting_overwriting_prices() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+
+        panic(array!['TODO']);
+    }
+
+    #[test]
+    #[available_gas(4_000_000_000)]
+    fn verifying_new_prices_in_accounting() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+
+        panic(array!['TODO']);
+    }
+}
+
+mod VerifyCumulativeSalePrice {
+    use starknet::ContractAddress;
+    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+    use debug::PrintTrait;
+
+    use openzeppelin::account::account::Account;
+    use openzeppelin::token::erc20::erc20::ERC20;
+    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+    use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
+
+    // Components
+
+    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+    use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
+    use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
+    use carbon::contracts::project::{
+        Project, IExternalDispatcher as IProjectDispatcher,
+        IExternalDispatcherTrait as IProjectDispatcherTrait
+    };
+
+    use super::setup;
+    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE};
+
+    #[test]
+    #[available_gas(4_000_000_000)]
+    fn set_prices_and_verify_cumsales_dataset1() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+
+        panic(array!['TODO']);
+    }
+
+    #[test]
+    #[available_gas(4_000_000_000)]
+    fn set_prices_and_verify_cumsales_dataset2() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+
+        panic(array!['TODO']);
+    }
+
+    #[test]
+    #[available_gas(4_000_000_000)]
+    fn set_prices_and_verify_cumsales_dataset3() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+
+        panic(array!['TODO']);
+    }
+
+    #[test]
+    #[available_gas(4_000_000_000)]
+    fn set_prices_and_verify_cumsales_dataset4() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+
+        panic(array!['TODO']);
+    }
+}
