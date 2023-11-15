@@ -1059,7 +1059,7 @@ mod PriceConfigAccounting {
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
 
-        panic(array!['TODO']);
+        'TODO'.print();
     }
 
     #[test]
@@ -1081,7 +1081,24 @@ mod PriceConfigAccounting {
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
 
-        panic(array!['TODO']);
+        'TODO'.print();
+    }
+}
+impl SpanPrintImpl<
+    T, impl TCopy: Copy<T>, impl TPrint: PrintTrait<T>, impl TDrop: Drop<T>
+> of PrintTrait<Span<T>> {
+    fn print(self: Span<T>) {
+        let mut s = self;
+        loop {
+            match s.pop_front() {
+                Option::Some(x) => {
+                    (*x).print();
+                },
+                Option::None => {
+                    break;
+                },
+            };
+        };
     }
 }
 
@@ -1101,22 +1118,27 @@ mod VerifyCumulativeSalePrice {
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
     use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
     use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
-    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
     use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
     use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
     use carbon::contracts::project::{
         Project, IExternalDispatcher as IProjectDispatcher,
         IExternalDispatcherTrait as IProjectDispatcherTrait
     };
+    use carbon::components::farm::interface::{
+        IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
+    };
+    use carbon::tests::data;
 
     use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE};
+    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, TON_EQUIVALENT};
+    use super::SpanPrintImpl;
 
     #[test]
     #[available_gas(4_000_000_000)]
-    fn set_prices_and_verify_cumsales_dataset1() {
+    fn set_prices_and_verify_cumsales_datasets() {
         let (signers, contracts) = setup(PRICE);
         // Instantiate contracts
+        let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
         let farmer = IFarmDispatcher { contract_address: contracts.yielder };
         let yielder = IYieldDispatcher { contract_address: contracts.yielder };
         let minter = IMinterDispatcher { contract_address: contracts.project };
@@ -1131,14 +1153,91 @@ mod VerifyCumulativeSalePrice {
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
 
-        panic(array!['TODO']);
+        // Override price and absorptions
+        let abs_times = array![0, 10, 20, 30, 40];
+        let absorptions = array![0, 10000, 20000, 30000, 40000];
+        absorber.set_absorptions(SLOT, abs_times.span(), absorptions.span(), TON_EQUIVALENT);
+        let price_times = array![15, 20, 25, 30, 35];
+
+        let mut datasets: Span<Span<u256>> = array![
+            array![22, 24, 28, 30, 47].span(),
+            array![22, 20, 18, 12, 7].span(),
+            array![22, 24, 18, 12, 47].span(),
+            array![22, 24, 0, 12, 47].span(),
+            array![22, 24, 18, 12, 0].span(),
+            array![22, 0, 0, 12, 47].span(),
+            array![22, 22, 0, 0, 47].span(),
+        ]
+            .span();
+
+        loop {
+            match datasets.pop_front() {
+                Option::Some(prices) => {
+                    let prices = *prices;
+
+                    yieldfarmer.set_prices(price_times.span(), prices);
+
+                    let cumsales = yieldfarmer.get_cumsales();
+                    let cum_times = yieldfarmer.get_cumsale_times();
+                    let updated_prices = yieldfarmer.get_updated_prices();
+
+                    assert(
+                        updated_prices == array![
+                            *prices[0],
+                            *prices[0],
+                            *prices[0],
+                            *prices[1],
+                            *prices[2],
+                            *prices[3],
+                            *prices[4],
+                            *prices[4]
+                        ]
+                            .span(),
+                        'Wrong updated_prices'
+                    );
+                    assert(
+                        cum_times == array![0, 10, 15, 20, 25, 30, 35, 40].span(), 'Wrong cum_times'
+                    );
+                    assert(
+                        cumsales == array![
+                            0,
+                            10000 * *prices[0],
+                            15000 * *prices[0],
+                            15000 * *prices[0] + 5000 * *prices[1],
+                            15000 * *prices[0] + 5000 * *prices[1] + 5000 * *prices[2],
+                            15000 * *prices[0]
+                                + 5000 * *prices[1]
+                                + 5000 * *prices[2]
+                                + 5000 * *prices[3],
+                            15000 * *prices[0]
+                                + 5000 * *prices[1]
+                                + 5000 * *prices[2]
+                                + 5000 * *prices[3]
+                                + 5000 * *prices[4],
+                            15000 * *prices[0]
+                                + 5000 * *prices[1]
+                                + 5000 * *prices[2]
+                                + 5000 * *prices[3]
+                                + 10000 * *prices[4],
+                        ]
+                            .span(),
+                        'Wrong cumsales'
+                    );
+                },
+                Option::None => {
+                    break ();
+                }
+            };
+        };
     }
 
+
     #[test]
     #[available_gas(4_000_000_000)]
-    fn set_prices_and_verify_cumsales_dataset2() {
+    fn set_prices_and_verify_cumsales_iso_dataset() {
         let (signers, contracts) = setup(PRICE);
         // Instantiate contracts
+        let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
         let farmer = IFarmDispatcher { contract_address: contracts.yielder };
         let yielder = IYieldDispatcher { contract_address: contracts.yielder };
         let minter = IMinterDispatcher { contract_address: contracts.project };
@@ -1153,50 +1252,10 @@ mod VerifyCumulativeSalePrice {
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
 
-        panic(array!['TODO']);
-    }
+        // Override price and absorptions
+        let (abs_times, absorptions) = data::get_banegas();
+        absorber.set_absorptions(SLOT, abs_times, absorptions, TON_EQUIVALENT);
 
-    #[test]
-    #[available_gas(4_000_000_000)]
-    fn set_prices_and_verify_cumsales_dataset3() {
-        let (signers, contracts) = setup(PRICE);
-        // Instantiate contracts
-        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-        let minter = IMinterDispatcher { contract_address: contracts.project };
-        let project = IProjectDispatcher { contract_address: contracts.project };
-        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
-
-        // Prank caller as owner
-        set_contract_address(signers.owner);
-
-        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-        minter.add_minter(SLOT, signers.owner);
-
-        panic(array!['TODO']);
-    }
-
-    #[test]
-    #[available_gas(4_000_000_000)]
-    fn set_prices_and_verify_cumsales_dataset4() {
-        let (signers, contracts) = setup(PRICE);
-        // Instantiate contracts
-        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-        let minter = IMinterDispatcher { contract_address: contracts.project };
-        let project = IProjectDispatcher { contract_address: contracts.project };
-        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
-
-        // Prank caller as owner
-        set_contract_address(signers.owner);
-
-        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-        minter.add_minter(SLOT, signers.owner);
-
-        panic(array!['TODO']);
+        'TODO'.print();
     }
 }
