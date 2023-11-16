@@ -371,9 +371,12 @@ fn test_yielder_set_prices_n() {
 
     farmer.set_prices(times, prices);
     let updated_prices = farmer.get_updated_prices();
+    let cumsales: Span<u256> = farmer.get_cumsales();
+    let total_sale = *cumsales.at(cumsales.len() - 1);
 
-    let cumsales = farmer.get_cumsales();
-    assert(sum_span(cumsales).low == 0x3586648, 'Wrong total sales');
+    // Expected sale: sum of prices except first (no absorption) times absorption constant
+    let expected_sale = (sum_span(updated_prices) - 10) * 500;
+    assert(total_sale == expected_sale, 'Wrong total sales');
 }
 
 
@@ -454,11 +457,12 @@ fn test_yielder_get_apr() {
                 set_block_timestamp(*time + 1);
                 let price = farmer.get_current_price();
                 let (num, den) = farmer.get_apr(minter_address);
-                'price is'.print();
-                price.low.print();
-                'apr is'.print();
-                num.low.print();
-                den.low.print();
+            // Uncomment for DEBUG
+            // 'price is'.print();
+            // price.low.print();
+            // 'apr is'.print();
+            // num.low.print();
+            // den.low.print();
             },
             Option::None => {
                 break;
