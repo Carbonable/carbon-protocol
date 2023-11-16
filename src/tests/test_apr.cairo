@@ -415,11 +415,12 @@ fn test_yielder_get_apr() {
                 set_block_timestamp(*time - 1);
                 let price = farmer.get_current_price();
                 let (num, den) = farmer.get_apr(minter_address);
-                'time is'.print();
-                (*time).print();
-                'apr is'.print();
-                num.low.print();
-                den.low.print();
+            // DEBUG
+            // 'time is'.print();
+            // (*time).print();
+            // 'apr is'.print();
+            // num.low.print();
+            // den.low.print();
             },
             Option::None => {
                 break;
