@@ -1013,6 +1013,7 @@ mod FarmingClaimingReward {
     }
 }
 
+
 mod PriceConfigAccounting {
     use starknet::ContractAddress;
     use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
@@ -1029,22 +1030,26 @@ mod PriceConfigAccounting {
     use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
     use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
     use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
-    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
     use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
     use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
     use carbon::contracts::project::{
         Project, IExternalDispatcher as IProjectDispatcher,
         IExternalDispatcherTrait as IProjectDispatcherTrait
     };
+    use carbon::components::farm::interface::{
+        IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
+    };
 
     use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE};
+    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT};
+    use super::SpanPrintImpl;
 
     #[test]
     #[available_gas(4_000_000_000)]
     fn setting_overwriting_prices() {
         let (signers, contracts) = setup(PRICE);
         // Instantiate contracts
+        let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
         let farmer = IFarmDispatcher { contract_address: contracts.yielder };
         let yielder = IYieldDispatcher { contract_address: contracts.yielder };
         let minter = IMinterDispatcher { contract_address: contracts.project };
@@ -1058,8 +1063,52 @@ mod PriceConfigAccounting {
 
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
+        project.mint(signers.anyone, SLOT, VALUE);
+        project.mint(signers.owner, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
 
-        'TODO'.print();
+        let ONE_DAY = 24 * 60 * 60;
+        let times: Array<u64> = array![
+            1690884000 - 2 * ONE_MONTH,
+            1690884000,
+            1690884000 + 2 * ONE_DAY,
+            1696154400 - 2 * ONE_DAY,
+            1696154400,
+            1696154400 + 2 * ONE_MONTH,
+            1696154400 + 6 * ONE_MONTH
+        ];
+
+        let abs: Array<u64> = array![0, 1000, 2000, 3000, 4000, 5000, 6000];
+        absorber.set_absorptions(SLOT, times.span(), abs.span(), TON_EQUIVALENT);
+
+        let times: Array<u64> = array![
+            1690884000, 1696154400
+        ]; // Aug 01 2023 10:00:00 GMT+0000, Oct 01 2023 10:00:00 GMT+0000
+        let prices: Array<u256> = array![0, 20];
+        // Set prices again to update updated_prices
+        yieldfarmer.set_prices(times.span(), prices.span());
+
+        let updated_prices = yieldfarmer.get_updated_prices();
+        assert(updated_prices == array![0, 0, 20, 20, 20, 20, 20].span(), 'Wrong price 1');
+
+        // Deposit as anyone
+        set_contract_address(signers.anyone);
+        farmer.deposit(1, VALUE);
+        set_contract_address(signers.owner);
+
+        // OVERWRITE PRICE
+        let times: Array<u64> = array![
+            1690884000, 1696154400, 1696154400 + ONE_MONTH, 1696154400 + ONE_MONTH * 2
+        ];
+        let prices: Array<u256> = array![0, 0, PRICE, 2 * PRICE];
+        set_contract_address(signers.owner);
+        yieldfarmer.set_prices(times.span(), prices.span());
+
+        let updated_prices = yieldfarmer.get_updated_prices();
+        assert(
+            updated_prices == array![0, 0, 0, 0, 0, PRICE, 2 * PRICE, 2 * PRICE].span(),
+            'Wrong price 2'
+        );
     }
 
     #[test]
@@ -1067,6 +1116,7 @@ mod PriceConfigAccounting {
     fn verifying_new_prices_in_accounting() {
         let (signers, contracts) = setup(PRICE);
         // Instantiate contracts
+        let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
         let farmer = IFarmDispatcher { contract_address: contracts.yielder };
         let yielder = IYieldDispatcher { contract_address: contracts.yielder };
         let minter = IMinterDispatcher { contract_address: contracts.project };
@@ -1080,10 +1130,61 @@ mod PriceConfigAccounting {
 
         // Grant minter rights to owner, mint 1 token to anyone and revoke rights
         minter.add_minter(SLOT, signers.owner);
+        project.mint(signers.anyone, SLOT, VALUE);
+        project.mint(signers.owner, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
 
-        'TODO'.print();
+        // Deposit as anyone
+        set_contract_address(signers.anyone);
+        farmer.deposit(1, VALUE);
+
+        set_block_timestamp(1690884000 - 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) == 0, 'Wrong claimable 1');
+        set_block_timestamp(1696154400 - 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) > 0, 'Wrong claimable 2');
+
+        // OVERWRITE PRICE
+        let times: Array<u64> = array![
+            1690884000, 1696154400, 1696154400 + ONE_MONTH, 1696154400 + ONE_MONTH * 2
+        ];
+        let prices: Array<u256> = array![0, 0, 2 * PRICE, 2 * PRICE];
+        set_contract_address(signers.owner);
+        yieldfarmer.set_prices(times.span(), prices.span());
+        // set_contract_address(signers.anyone);
+
+        set_block_timestamp(1690884000 - 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) == 0, 'Wrong claimable 3');
+        set_block_timestamp(1696154400 - 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) == 0, 'Wrong claimable 4');
+        set_block_timestamp(1696154400 + 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) > 0, 'Wrong claimable 5');
+
+        // OVERWRITE PRICE AND DEPOSIT
+        set_block_timestamp(1690884000 - 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) == 0, 'Wrong claimable 3');
+        set_block_timestamp(1690884000 - 24 * 60 * 60);
+        farmer.deposit(2, VALUE / 4);
+        set_block_timestamp(1690884000 + 24 * 60 * 60);
+        farmer.deposit(2, VALUE / 4);
+        set_block_timestamp(1696154400 - 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) == 0, 'Wrong claimable 4');
+        assert(yielder.get_claimable_of(signers.owner) == 0, 'Wrong claimable o4');
+        set_block_timestamp(1696154400 + 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) > 0, 'Wrong claimable 5');
+        assert(yielder.get_claimable_of(signers.owner) > 0, 'Wrong claimable o5');
+
+        // OVERWRITE PRICE AND DEPOSIT AND CLAIM
+        set_block_timestamp(1690884000 + 2 * 24 * 60 * 60);
+        yielder.claim();
+        set_block_timestamp(1696154400 - 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) == 0, 'Wrong claimable 6');
+        assert(yielder.get_claimable_of(signers.owner) == 0, 'Wrong claimable o6');
+        set_block_timestamp(1696154400 + 7 * 24 * 60 * 60);
+        assert(yielder.get_claimable_of(signers.anyone) > 0, 'Wrong claimable 7');
+        assert(yielder.get_claimable_of(signers.owner) > 0, 'Wrong claimable o7');
     }
 }
+
 impl SpanPrintImpl<
     T, impl TCopy: Copy<T>, impl TPrint: PrintTrait<T>, impl TDrop: Drop<T>
 > of PrintTrait<Span<T>> {
