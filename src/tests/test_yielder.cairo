@@ -15,8 +15,13 @@ use openzeppelin::token::erc20::erc20::ERC20;
 use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
 use cairo_erc_3525::presets::erc3525_mintable_burnable::{
-    IExternalDispatcher as IERC3525Dispatcher, IExternalDispatcherTrait as IERC3525DispatcherTrait
+    IExternalDispatcher as IERC3525ExternalDispatcher,
+    IExternalDispatcherTrait as IERC3525ExternalDispatcherTrait
 };
+use cairo_erc_3525::extensions::slotapprovable::interface::{
+    IERC3525SlotApprovableDispatcher, IERC3525SlotApprovableDispatcherTrait
+};
+use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
 // Components
 
@@ -115,10 +120,10 @@ fn deploy_project(owner: ContractAddress) -> ContractAddress {
 }
 
 fn deploy_yielder(
-    project: ContractAddress, erc20: ContractAddress, owner: ContractAddress
+    project: ContractAddress, erc20: ContractAddress, owner: ContractAddress, slot: u256
 ) -> ContractAddress {
     let mut calldata: Array<felt252> = array![
-        project.into(), SLOT.low.into(), SLOT.high.into(), erc20.into(), owner.into()
+        project.into(), slot.low.into(), slot.high.into(), erc20.into(), owner.into()
     ];
     let (address, _) = deploy_syscall(
         Yielder::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
@@ -274,7 +279,7 @@ fn setup(price: u256) -> (Signers, Contracts) {
     let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), };
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
-    let yielder = deploy_yielder(project, erc20, signers.owner);
+    let yielder = deploy_yielder(project, erc20, signers.owner, SLOT);
     let minter = deploy_minter(project, erc20, signers.owner);
 
     // Setup
@@ -298,7 +303,7 @@ fn setup_for_apr(n: u64) -> (Signers, Contracts) {
     let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), };
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
-    let yielder = deploy_yielder(project, erc20, signers.owner);
+    let yielder = deploy_yielder(project, erc20, signers.owner, SLOT);
     let minter = deploy_minter(project, erc20, signers.owner);
 
     // Setup
@@ -516,7 +521,7 @@ fn test_yielder_nominal_single_user_case() {
     let minter = IMinterDispatcher { contract_address: contracts.project };
     let project = IProjectDispatcher { contract_address: contracts.project };
     let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525ExternalDispatcher { contract_address: contracts.project };
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
 
     // Prank caller as owner
@@ -610,7 +615,7 @@ fn test_yielder_nominal_multi_user_case() {
     let minter = IMinterDispatcher { contract_address: contracts.project };
     let project = IProjectDispatcher { contract_address: contracts.project };
     let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525ExternalDispatcher { contract_address: contracts.project };
 
     // Prank caller as owner
     set_contract_address(signers.owner);
@@ -683,7 +688,7 @@ fn test_yielder_deposit_revert_not_token_owner() {
     let minter = IMinterDispatcher { contract_address: contracts.project };
     let project = IProjectDispatcher { contract_address: contracts.project };
     let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525ExternalDispatcher { contract_address: contracts.project };
 
     // Prank caller as owner
     set_contract_address(signers.owner);
@@ -720,7 +725,7 @@ fn test_yielder_withdraw_revert_not_token_owner() {
     let minter = IMinterDispatcher { contract_address: contracts.project };
     let project = IProjectDispatcher { contract_address: contracts.project };
     let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525ExternalDispatcher { contract_address: contracts.project };
 
     // Prank caller as owner
     set_contract_address(signers.owner);
@@ -751,4 +756,132 @@ fn test_yielder_withdraw_revert_not_token_owner() {
 
     // Withdraw to token #1
     farmer.withdraw_to_token(one, VALUE);
+}
+
+#[test]
+#[available_gas(75_000_000)]
+fn test_deposit_approval_for_all() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc721 = IERC721Dispatcher { contract_address: contracts.project };
+
+    // Setup second yielder
+    let erc20 = yielder.get_payment_token_address();
+    let contract_yielder2 = deploy_yielder(contracts.project, erc20, signers.owner, SLOT + 1);
+    let yielder2 = IYieldDispatcher { contract_address: contract_yielder2 };
+    let farmer2 = IFarmDispatcher { contract_address: contract_yielder2 };
+
+    // Approvals
+    set_contract_address(signers.anyone);
+    erc721.set_approval_for_all(contracts.yielder, true);
+    erc721.set_approval_for_all(contract_yielder2, true);
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    set_contract_address(signers.owner);
+    minter.add_minter(SLOT, signers.owner);
+    minter.add_minter(SLOT + 1, signers.owner);
+    let one = project.mint(signers.anyone, SLOT, VALUE);
+    let two = project.mint(signers.anyone, SLOT + 1, VALUE);
+    minter.revoke_minter(SLOT, signers.owner);
+    minter.revoke_minter(SLOT + 1, signers.owner);
+
+    set_contract_address(signers.anyone);
+    farmer.deposit(one, VALUE);
+    farmer2.deposit(two, VALUE);
+}
+
+#[test]
+#[available_gas(75_000_000)]
+fn test_deposit_approval_for_slot() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc721 = IERC721Dispatcher { contract_address: contracts.project };
+    let erc3525sa = IERC3525SlotApprovableDispatcher { contract_address: contracts.project };
+
+    // Setup second yielder
+    let erc20 = yielder.get_payment_token_address();
+    let contract_yielder2 = deploy_yielder(contracts.project, erc20, signers.owner, SLOT + 1);
+    let yielder2 = IYieldDispatcher { contract_address: contract_yielder2 };
+    let farmer2 = IFarmDispatcher { contract_address: contract_yielder2 };
+
+    // Revoke Approvals
+    set_contract_address(signers.anyone);
+    erc721.set_approval_for_all(contracts.yielder, false);
+    set_contract_address(signers.owner);
+    erc721.set_approval_for_all(contracts.yielder, false);
+
+    // Slot Approvals
+    set_contract_address(signers.anyone);
+    erc3525sa.set_approval_for_slot(signers.anyone, SLOT, contracts.yielder, true);
+    erc3525sa.set_approval_for_slot(signers.anyone, SLOT + 1, contract_yielder2, true);
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    set_contract_address(signers.owner);
+    minter.add_minter(SLOT, signers.owner);
+    minter.add_minter(SLOT + 1, signers.owner);
+    let one = project.mint(signers.anyone, SLOT, VALUE);
+    let two = project.mint(signers.anyone, SLOT + 1, VALUE);
+    minter.revoke_minter(SLOT, signers.owner);
+    minter.revoke_minter(SLOT + 1, signers.owner);
+    set_contract_address(signers.anyone);
+    farmer.deposit(one, VALUE);
+    farmer2.deposit(two, VALUE);
+}
+
+
+#[test]
+#[available_gas(75_000_000)]
+fn test_deposit_approval_of_value() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc721 = IERC721Dispatcher { contract_address: contracts.project };
+    let erc3525sa = IERC3525SlotApprovableDispatcher { contract_address: contracts.project };
+
+    // Setup second yielder
+    let erc20 = yielder.get_payment_token_address();
+    let contract_yielder2 = deploy_yielder(contracts.project, erc20, signers.owner, SLOT + 1);
+    let yielder2 = IYieldDispatcher { contract_address: contract_yielder2 };
+    let farmer2 = IFarmDispatcher { contract_address: contract_yielder2 };
+
+    // Revoke Approvals
+    set_contract_address(signers.anyone);
+    erc721.set_approval_for_all(contracts.yielder, false);
+    set_contract_address(signers.owner);
+    erc721.set_approval_for_all(contracts.yielder, false);
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    set_contract_address(signers.owner);
+    minter.add_minter(SLOT, signers.owner);
+    minter.add_minter(SLOT + 1, signers.owner);
+    let one = project.mint(signers.anyone, SLOT, VALUE);
+    let two = project.mint(signers.anyone, SLOT + 1, VALUE);
+    minter.revoke_minter(SLOT, signers.owner);
+    minter.revoke_minter(SLOT + 1, signers.owner);
+
+    // Slot Approvals
+    set_contract_address(signers.anyone);
+    erc3525.approve_value(one, contracts.yielder, VALUE);
+    erc3525.approve_value(two, contract_yielder2, VALUE);
+
+    set_contract_address(signers.anyone);
+    farmer.deposit(one, VALUE);
+    farmer2.deposit(two, VALUE);
 }
