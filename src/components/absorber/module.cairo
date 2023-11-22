@@ -11,7 +11,9 @@ mod Absorber {
 
     // External imports
 
-    use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
+    use alexandria_numeric::interpolate::{
+        interpolate_fast as interpolate, Interpolation, Extrapolation
+    };
     use alexandria_storage::list::{List, ListTrait};
 
     // Internal imports
