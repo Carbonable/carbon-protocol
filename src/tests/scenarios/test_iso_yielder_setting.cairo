@@ -828,8 +828,8 @@ mod FarmingClaimingReward {
     use super::SpanPrintImpl;
 
 
-    //#[test]
-    //#[available_gas(19_000_000_000)]
+    #[test]
+    #[available_gas(19_000_000_000)]
     fn ensure_correct_distribution() {
         let (mut signers, contracts) = setup(PRICE);
         // Instantiate contracts
