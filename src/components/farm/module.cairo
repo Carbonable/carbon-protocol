@@ -24,6 +24,7 @@ mod Farm {
     // Constants
 
     const YEAR_SECONDS: u64 = 31556925;
+    const MULT_ACCURATE_ABS: u256 = 1_000_000;
 
     #[storage]
     struct Storage {
@@ -97,20 +98,6 @@ mod Farm {
             self._farm_total_registered_value.read()
         }
 
-        fn get_total_absorption(self: @ContractState) -> u256 {
-            // [Compute] Total absorption
-            let value = self._farm_total_registered_value.read();
-            let time = self._farm_total_registered_time.read();
-            let current_time = get_block_timestamp();
-            let computed = self._compute_absorption(value, time, current_time);
-            let stored = self._farm_total_absorption.read();
-            let total_absorption = computed + stored;
-
-            // [Check] Overflow
-            assert(total_absorption <= self.get_max_absorption(), 'Total abs exceeds max abs');
-            total_absorption
-        }
-
         fn get_max_absorption(self: @ContractState) -> u256 {
             let project = self._farm_project.read();
             let slot = self._farm_slot.read();
@@ -121,18 +108,14 @@ mod Farm {
             self._farm_registered_value.read(account)
         }
 
+        fn get_total_absorption(self: @ContractState) -> u256 {
+            // [Compute] Total absorption
+            self._get_accurate_total_absorption() / MULT_ACCURATE_ABS
+        }
+
         fn get_absorption_of(self: @ContractState, account: ContractAddress) -> u256 {
             // [Compute] Account absorption
-            let value = self._farm_registered_value.read(account);
-            let time = self._farm_registered_time.read(account);
-            let current_time = get_block_timestamp();
-            let computed = self._compute_absorption(value, time, current_time);
-            let stored = self._farm_absorption.read(account);
-            let absorption = computed + stored;
-
-            // [Check] Overflow
-            assert(absorption <= self.get_total_absorption(), 'Abs exceeds total abs');
-            absorption
+            self._get_accurate_absorption_of(account) / MULT_ACCURATE_ABS
         }
 
         fn deposit(ref self: ContractState, token_id: u256, value: u256) {
@@ -352,9 +335,9 @@ mod Farm {
         ) {
             // [Effect] Store caller and total absorptions
             let caller = get_caller_address();
-            let absorption = self.get_absorption_of(caller);
+            let absorption = self._get_accurate_absorption_of(caller);
             self._farm_absorption.write(caller, absorption);
-            let total_absorption = self.get_total_absorption();
+            let total_absorption = self._get_accurate_total_absorption();
             self._farm_total_absorption.write(total_absorption);
 
             // [Effect] Store caller and total sales
@@ -396,9 +379,9 @@ mod Farm {
         fn _withdraw(ref self: ContractState, to_token_id: u256, to: ContractAddress, value: u256) {
             // [Effect] Store caller and total absorptions
             let caller = get_caller_address();
-            let absorption = self.get_absorption_of(caller);
+            let absorption = self._get_accurate_absorption_of(caller);
             self._farm_absorption.write(caller, absorption);
-            let total_absorption = self.get_total_absorption();
+            let total_absorption = self._get_accurate_total_absorption();
             self._farm_total_absorption.write(total_absorption);
             // [Effect] Store caller and total sales
             let sale = self.get_sale_of(caller);
@@ -428,6 +411,39 @@ mod Farm {
             // [Event] Emit event
             let withdraw = Withdraw { address: caller, value: value, time: current_time };
             self.emit(withdraw);
+        }
+
+        fn _get_accurate_total_absorption(self: @ContractState) -> u256 {
+            // [Compute] Total absorption
+            let value = self._farm_total_registered_value.read();
+            let time = self._farm_total_registered_time.read();
+            let current_time = get_block_timestamp();
+            let computed = self._compute_absorption(value, time, current_time);
+            let stored = self._farm_total_absorption.read();
+            let total_absorption = computed + stored;
+
+            // [Check] Overflow
+            assert(
+                total_absorption <= (self.get_max_absorption() * MULT_ACCURATE_ABS),
+                'Total abs exceeds max abs'
+            );
+
+            total_absorption
+        }
+
+        fn _get_accurate_absorption_of(self: @ContractState, account: ContractAddress) -> u256 {
+            // [Compute] Account absorption
+            let value = self._farm_registered_value.read(account);
+            let time = self._farm_registered_time.read(account);
+            let current_time = get_block_timestamp();
+            let computed = self._compute_absorption(value, time, current_time);
+            let stored = self._farm_absorption.read(account);
+            let absorption = computed + stored;
+
+            // [Check] Overflow
+            assert(absorption <= self._get_accurate_total_absorption(), 'Abs exceeds total abs');
+
+            absorption
         }
 
         fn _set_prices(ref self: ContractState, times: Span<u64>, prices: Span<u256>) {
@@ -632,7 +648,10 @@ mod Farm {
             assert(initial_absorption <= final_absorption, 'Overflow');
 
             // [Compute] Absorption corresponding to the ratio
-            value * (final_absorption - initial_absorption).into() / project_value
+            (MULT_ACCURATE_ABS
+                * value
+                * (final_absorption - initial_absorption).into()
+                / project_value)
         }
 
         fn __list_u64_into_u256(self: @ContractState, list: @List<u64>) -> Span<u256> {

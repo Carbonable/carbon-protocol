@@ -308,7 +308,7 @@ fn test__deposit_before_farming_starts() {
 
     // At t = 58 seconds before farming starts
     set_block_timestamp(1699351900); // date of timestamp unix with sec precision : 7 nov 10h05
-    'claimable: '.print();
-    yielder.get_claimable_of(signers.anyone).print();
+    // 'claimable: '.print();
+    // yielder.get_claimable_of(signers.anyone).print();
     assert(yielder.get_claimable_of(signers.anyone) > 0, 'Claimable is 0');
 }

@@ -52,6 +52,7 @@ mod tests {
     mod scenarios {
         mod test_iso_yielder_setting;
         mod test_iso_offseter_setting;
+        mod test_iso_las_delicias;
     }
 }
 

@@ -25,3 +25,4 @@ build
 .DS_Store
 
 tmp
+.tmp*
