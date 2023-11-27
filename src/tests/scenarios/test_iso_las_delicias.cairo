@@ -243,12 +243,10 @@ fn setup_yielder(
     let farmer = IYieldFarmDispatcher { contract_address: yielder };
 
     // Setup prices
-    let times: Array<u64> = array![
-        1700053206, 1702645206
-    ]; 
+    let times: Array<u64> = array![1700053206, 1702645206];
     let prices: Array<u256> = array![price, price];
 
-    let set_price_block_timestamps :u64 = 1698930708;
+    let set_price_block_timestamps: u64 = 1698930708;
     set_block_timestamp(set_price_block_timestamps);
     farmer.set_prices(times.span(), prices.span());
 
@@ -276,12 +274,9 @@ fn setup(price: u256) -> (Signers, Contracts) {
         owner: deploy_account('OWNER'),
         anyone: deploy_account('ANYONE'),
         anyone2: deploy_account('ANYONE2'),
-        users: array![
-            deploy_account('USER1'),
-            deploy_account('USER2')
-        ]
+        users: array![deploy_account('USER1'), deploy_account('USER2')]
     };
-    
+
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
     let yielder = deploy_yielder(project, erc20, signers.owner, SLOT);
@@ -306,11 +301,11 @@ fn setup(price: u256) -> (Signers, Contracts) {
 
 mod FarmingDepositWithdrawYielder {
     use core::array::ArrayTrait;
-use core::traits::Into;
-use core::box::BoxTrait;
-use core::option::OptionTrait;
-use core::array::SpanTrait;
-use starknet::ContractAddress;
+    use core::traits::Into;
+    use core::box::BoxTrait;
+    use core::option::OptionTrait;
+    use core::array::SpanTrait;
+    use starknet::ContractAddress;
     use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
     use debug::PrintTrait;
 
@@ -363,20 +358,11 @@ use starknet::ContractAddress;
 
         let (times, absorptions) = data::get_las_delicias();
 
-        let depo_block_timestamp :Array<u64> = array![
-                1699283495,
-                1699284679
-            ];
+        let depo_block_timestamp: Array<u64> = array![1699283495, 1699284679];
 
-        let withdraw_block_timestamp :Array<u64> = array![
-                1699284780,
-                1699284880
-            ];
+        let withdraw_block_timestamp: Array<u64> = array![1699284780, 1699284880];
 
-        let values :Array<u256> = array![
-                40000000,
-                10000000
-            ];
+        let values: Array<u256> = array![40000000, 10000000];
 
         // Prank caller as owner
         set_contract_address(signers.owner);
@@ -386,14 +372,14 @@ use starknet::ContractAddress;
         minter.add_minter(SLOT, signers.owner);
         let mut users = signers.users.span();
         let mut sft_values = values.span();
-        let mut i  = 1;
+        let mut i = 1;
 
         loop {
             match users.pop_front() {
                 Option::Some(user) => {
-                    let token_value :u256 = *sft_values[i - 1];
+                    let token_value: u256 = *sft_values[i - 1];
                     project.mint(*user, SLOT, token_value);
-                    assert(erc3525.value_of(i.into()) == token_value, 'Wrong value of user '+ i.into());
+                    assert(erc3525.value_of(i.into()) == token_value, 'Wrong value of user');
                     i += 1;
                 },
                 Option::None => {
@@ -416,13 +402,10 @@ use starknet::ContractAddress;
                     erc721.set_approval_for_all(contracts.yielder, true);
                     set_block_timestamp(*depo_block_timestamp[i - 1]);
 
-                    let token_value :u256 = *sft_values[i - 1];
+                    let token_value: u256 = *sft_values[i - 1];
                     farmer.deposit(i.into(), token_value);
                     let deposited = farmer.get_deposited_of(*user);
-                    assert(
-                        deposited == token_value,
-                        'Wrong deposit for user' * 256 + 0x30 + i.into()
-                    );
+                    assert(deposited == token_value, 'Wrong deposit for user');
                     i += 1;
                 },
                 Option::None => {
@@ -440,24 +423,23 @@ use starknet::ContractAddress;
         let user_1 = signers.users[0];
         set_contract_address(*user_2);
         set_block_timestamp(*withdraw_block_timestamp[0]);
-        
+
         // let mut deposited :u256 = farmer.get_deposited_of(*user_2);
         // 'user_1 absorption'.print();
-        let mut absorption_of :u256 = farmer.get_absorption_of(*user_1);
+        let mut absorption_of: u256 = farmer.get_absorption_of(*user_1);
         // 'absorption_of'.print();
         // absorption_of.print();
 
         // 'user_2 operation'.print();
-        let mut token_value :u256 = *sft_values[1];
+        let mut token_value: u256 = *sft_values[1];
         // token_value.print();
         farmer.withdraw_to_token(2, token_value);
         let mut deposited = farmer.get_deposited_of(*user_2);
-        assert(deposited == 0,
-                        'Wrong deposit for user');
+        assert(deposited == 0, 'Wrong deposit for user');
         assert(erc3525.value_of(2) == token_value, 'Wrong withdraw value of user 2');
 
         // Control to the second user
-    
+
         set_contract_address(*user_1);
         set_block_timestamp(*withdraw_block_timestamp[1]);
         // 'user_1 after with'.print();
@@ -469,8 +451,7 @@ use starknet::ContractAddress;
         farmer.withdraw_to_token(1, token_value);
         deposited = farmer.get_deposited_of(*user_1);
 
-        assert(deposited == 0,
-                        'Wrong deposit for user');
+        assert(deposited == 0, 'Wrong deposit for user');
         assert(erc3525.value_of(1) == token_value, 'Wrong withdraw value of user 1');
     }
 }

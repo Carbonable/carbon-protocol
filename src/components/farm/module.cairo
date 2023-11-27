@@ -1,6 +1,6 @@
 #[starknet::contract]
 mod Farm {
-        // Starknet imports
+    // Starknet imports
 
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
@@ -423,7 +423,10 @@ mod Farm {
             let total_absorption = computed + stored;
 
             // [Check] Overflow
-            assert(total_absorption <= (self.get_max_absorption() * MULT_ACCURATE_ABS), 'Total abs exceeds max abs');
+            assert(
+                total_absorption <= (self.get_max_absorption() * MULT_ACCURATE_ABS),
+                'Total abs exceeds max abs'
+            );
 
             total_absorption
         }
@@ -645,7 +648,10 @@ mod Farm {
             assert(initial_absorption <= final_absorption, 'Overflow');
 
             // [Compute] Absorption corresponding to the ratio
-            (MULT_ACCURATE_ABS * value * (final_absorption - initial_absorption).into() / project_value)
+            (MULT_ACCURATE_ABS
+                * value
+                * (final_absorption - initial_absorption).into()
+                / project_value)
         }
 
         fn __list_u64_into_u256(self: @ContractState, list: @List<u64>) -> Span<u256> {
