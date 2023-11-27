@@ -14,7 +14,6 @@ node.json
 *.deployments.txt
 artifacts
 target
-Scarb.lock
 
 # nile
 127.0.0.1.*
@@ -25,4 +24,5 @@ build
 
 .DS_Store
 
+tmp
 .tmp*
