@@ -41,6 +41,8 @@ const SLOT: u256 = 1;
 const TON_EQUIVALENT: u64 = 1_000_000;
 const MIN_CLAIMABLE: u256 = 1;
 const VALUE: u256 = 100;
+const ONE_DAY: u64 = consteval_int!(24 * 60 * 60);
+const ONE_MONTH: u64 = consteval_int!(31 * 24 * 60 * 60);
 
 // Signers
 
@@ -432,4 +434,59 @@ fn test_offseter_withdraw_revert_claim_amount_too_low() {
 
     // Owner claims all
     offseter.claim_all();
+}
+
+use carbon::tests::data;
+
+#[test]
+#[available_gas(575_000_000)]
+fn offset_total_abs_exceeds_max_abs() {
+    let (signers, contracts) = setup();
+    // Instantiate contracts
+    let farmer = IFarmDispatcher { contract_address: contracts.offseter };
+    let offeter = IOffsetDispatcher { contract_address: contracts.offseter };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc721 = IERC721Dispatcher { contract_address: contracts.project };
+
+    let (times, absorptions) = data::get_banegas();
+
+    let user1 = signers.owner;
+    let user2 = signers.anyone;
+
+    // Setup
+    set_contract_address(signers.owner);
+    absorber.set_absorptions(SLOT, times, absorptions, TON_EQUIVALENT);
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    minter.add_minter(SLOT, signers.owner);
+    assert(1 == project.mint(user1, SLOT, VALUE * 1), 'Wrong token');
+    assert(2 == project.mint(user2, SLOT, VALUE * 2), 'Wrong token');
+    minter.revoke_minter(SLOT, signers.owner);
+
+    // Setup approvals
+    set_contract_address(user1);
+    erc721.set_approval_for_all(contracts.offseter, true);
+    set_contract_address(user2);
+    erc721.set_approval_for_all(contracts.offseter, true);
+
+    let user1_deposit_time = *times.at(1) + ONE_DAY;
+    set_block_timestamp(user1_deposit_time);
+    let project_prev_abs1 = absorber.get_absorption(SLOT, user1_deposit_time);
+    set_contract_address(user1);
+    farmer.deposit(1, VALUE * 1);
+    let user1_prev_abs = farmer.get_absorption_of(user1);
+    let user2_deposit_time = *times.at(2) + ONE_DAY;
+    set_block_timestamp(user2_deposit_time);
+    let project_prev_abs2 = absorber.get_absorption(SLOT, user2_deposit_time);
+    set_contract_address(user2);
+    farmer.deposit(2, VALUE * 2);
+    let user2_prev_abs = farmer.get_absorption_of(user2);
+    let claim_time = *times.at(4) + ONE_DAY * 3;
+    set_block_timestamp(claim_time);
+    let project_prev_abs2 = absorber.get_absorption(SLOT, claim_time);
+
+    let new_abs_user1 = farmer.get_absorption_of(user1);
+    let new_abs_user2 = farmer.get_absorption_of(user2);
 }

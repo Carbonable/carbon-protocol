@@ -41,6 +41,7 @@ use carbon::contracts::project::{
 };
 use carbon::contracts::yielder::Yielder;
 use carbon::contracts::minter::Minter;
+use carbon::tests::data;
 
 // Constants
 
@@ -60,6 +61,8 @@ const ALLOCATION: felt252 = 5;
 const BILLION: u256 = 1000000000000;
 
 const PRICE: u256 = 10;
+const ONE_DAY: u64 = consteval_int!(24 * 60 * 60);
+const ONE_MONTH: u64 = consteval_int!(31 * 24 * 60 * 60);
 
 // Signers
 
@@ -67,6 +70,7 @@ const PRICE: u256 = 10;
 struct Signers {
     owner: ContractAddress,
     anyone: ContractAddress,
+    users: Array<ContractAddress>,
 }
 
 #[derive(Drop)]
@@ -276,7 +280,18 @@ fn setup_minter(project: ContractAddress, minter: ContractAddress, signers: @Sig
 
 fn setup(price: u256) -> (Signers, Contracts) {
     // Deploy
-    let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), };
+    let signers = Signers {
+        owner: deploy_account('OWNER'),
+        anyone: deploy_account('ANYONE'),
+        users: array![
+            deploy_account('USER1'),
+            deploy_account('USER2'),
+            deploy_account('USER3'),
+            deploy_account('USER4'),
+            deploy_account('USER5'),
+            deploy_account('USER6')
+        ]
+    };
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
     let yielder = deploy_yielder(project, erc20, signers.owner, SLOT);
@@ -300,7 +315,18 @@ fn setup(price: u256) -> (Signers, Contracts) {
 
 fn setup_for_apr(n: u64) -> (Signers, Contracts) {
     // Deploy
-    let signers = Signers { owner: deploy_account('OWNER'), anyone: deploy_account('ANYONE'), };
+    let signers = Signers {
+        owner: deploy_account('OWNER'),
+        anyone: deploy_account('ANYONE'),
+        users: array![
+            deploy_account('USER1'),
+            deploy_account('USER2'),
+            deploy_account('USER3'),
+            deploy_account('USER4'),
+            deploy_account('USER5'),
+            deploy_account('USER6')
+        ]
+    };
     let project = deploy_project(signers.owner);
     let erc20 = deploy_erc20(signers.owner);
     let yielder = deploy_yielder(project, erc20, signers.owner, SLOT);
@@ -884,4 +910,63 @@ fn test_deposit_approval_of_value() {
     set_contract_address(signers.anyone);
     farmer.deposit(one, VALUE);
     farmer2.deposit(two, VALUE);
+}
+
+#[test]
+#[available_gas(575_000_000)]
+#[should_panic()]
+fn yielder_total_abs_exceeds_max_abs() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525ExternalDispatcher { contract_address: contracts.project };
+    let erc721 = IERC721Dispatcher { contract_address: contracts.project };
+
+    let (times, absorptions) = data::get_banegas();
+
+    let user1 = *signers.users[0];
+    let user2 = *signers.users[1];
+
+    // Setup
+    set_contract_address(signers.owner);
+    absorber.set_absorptions(SLOT, times, absorptions, TON_EQUIVALENT);
+    let price_times: Array<u64> = array![1679312000, 2598134400];
+    let prices: Array<u256> = array![0, PRICE];
+    yieldfarmer.set_prices(price_times.span(), prices.span());
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    minter.add_minter(SLOT, signers.owner);
+    assert(1 == project.mint(user1, SLOT, VALUE * 1), 'Wrong token');
+    assert(2 == project.mint(user2, SLOT, VALUE * 2), 'Wrong token');
+    minter.revoke_minter(SLOT, signers.owner);
+
+    // Setup approvals
+    set_contract_address(user1);
+    erc721.set_approval_for_all(contracts.yielder, true);
+    set_contract_address(user2);
+    erc721.set_approval_for_all(contracts.yielder, true);
+
+    let user1_deposit_time = *times.at(1) + ONE_DAY;
+    set_block_timestamp(user1_deposit_time);
+    let project_prev_abs1 = absorber.get_absorption(SLOT, user1_deposit_time);
+    set_contract_address(user1);
+    farmer.deposit(1, VALUE * 1);
+    let user1_prev_abs = farmer.get_absorption_of(user1);
+    let user2_deposit_time = *times.at(2) + ONE_DAY;
+    set_block_timestamp(user2_deposit_time);
+    let project_prev_abs2 = absorber.get_absorption(SLOT, user2_deposit_time);
+    set_contract_address(user2);
+    farmer.deposit(2, VALUE * 2);
+    let user2_prev_abs = farmer.get_absorption_of(user2);
+    let claim_time = *times.at(4) + ONE_DAY * 3;
+    set_block_timestamp(claim_time);
+    let project_prev_abs2 = absorber.get_absorption(SLOT, claim_time);
+
+    let new_abs_user1 = farmer.get_absorption_of(user1);
+// let new_abs_user2 = farmer.get_absorption_of(user2);
 }
