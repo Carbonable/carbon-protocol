@@ -59,6 +59,7 @@ const BILLION: u256 = 1_000_000_000_000;
 const PRICE: u256 = 22;
 const VALUE: u256 = 100_000_000;
 const ONE_MONTH: u64 = consteval_int!(31 * 24 * 60 * 60);
+const ONE_DAY: u64 = consteval_int!(1 * 24 * 60 * 60);
 
 // Signers
 #[derive(Drop)]
@@ -227,7 +228,7 @@ fn setup_erc20(erc20: ContractAddress, yielder: ContractAddress, signers: @Signe
     let erc20 = IERC20Dispatcher { contract_address: erc20 };
     // Send token to yielder
     set_contract_address(*signers.owner);
-    let amount = erc20.balance_of(*signers.owner);
+    let amount = erc20.balance_of(*signers.owner) / 10;
     erc20.transfer(yielder, amount);
 }
 
@@ -827,9 +828,9 @@ mod FarmingClaimingReward {
     use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT};
     use super::SpanPrintImpl;
 
-
-    #[test]
-    #[available_gas(19_000_000_000)]
+    // Costly test to activate locally only
+    //#[test]
+    //#[available_gas(19_000_000_000)]
     fn ensure_correct_distribution() {
         let (mut signers, contracts) = setup(PRICE);
         // Instantiate contracts
@@ -1656,5 +1657,261 @@ mod VerifyCumulativeSalePrice {
         absorber.set_absorptions(SLOT, abs_times, absorptions, TON_EQUIVALENT);
 
         'TODO'.print();
+    }
+}
+
+
+mod AdditionalTests {
+    use starknet::ContractAddress;
+    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+    use debug::PrintTrait;
+
+    use openzeppelin::account::account::Account;
+    use openzeppelin::token::erc20::erc20::ERC20;
+    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+    use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
+
+    // Components
+
+    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
+    use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
+    use carbon::contracts::project::{
+        Project, IExternalDispatcher as IProjectDispatcher,
+        IExternalDispatcherTrait as IProjectDispatcherTrait
+    };
+    use carbon::components::farm::interface::{
+        IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
+    };
+    use carbon::tests::data;
+
+    use super::setup;
+    use super::SpanPrintImpl;
+    use super::{SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT, PRICE};
+
+
+    #[test]
+    #[available_gas(400_000_000_000)]
+    fn expected_claimable_vs_get_claimable_of() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+        let (times, absorptions) = data::get_banegas();
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+        absorber.set_absorptions(SLOT, times, absorptions, TON_EQUIVALENT);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+        let one = project.mint(signers.anyone, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
+
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
+
+        // Deposit when yielder has price set
+        let mut time = 1696154400;
+        set_block_timestamp(time);
+        let prev_abs = absorber.get_current_absorption(SLOT);
+        let value = VALUE / 3;
+        farmer.deposit(one, value);
+        let deposited = farmer.get_deposited_of(signers.anyone);
+        assert(deposited == value, 'Wrong deposited value');
+
+        loop {
+            if time > *times.at(times.len() - 1) {
+                break ();
+            }
+            set_block_timestamp(time);
+
+            let claimable = yielder.get_claimable_of(signers.anyone);
+            let user_abs = farmer.get_absorption_of(signers.anyone);
+            let current_abs = absorber.get_current_absorption(SLOT);
+            let abs = current_abs - prev_abs;
+            let expected_abs = (value * abs.into()) / PROJECT_VALUE;
+            if expected_abs != user_abs {
+                time.print();
+                'abs error'.print();
+                expected_abs.low.print();
+                user_abs.low.print();
+            }
+            assert(expected_abs == user_abs, 'expected != user_abs');
+            let expected_claimable = (value * abs.into() * PRICE) / PROJECT_VALUE;
+            let abs_times_price = expected_abs.into() * PRICE;
+            let expected_2 = (value * (current_abs.into() * PRICE - prev_abs.into() * PRICE))
+                / PROJECT_VALUE;
+
+            if expected_claimable != claimable {
+                assert(claimable == expected_claimable + 1, 'Rounding error too large');
+            }
+
+            time += 5 * ONE_MONTH + 11 * ONE_DAY;
+        }
+    }
+
+
+    #[test]
+    #[available_gas(400_000_000_000)]
+    fn distribute_all_claim_sparse() {
+        let (signers, contracts) = setup(PRICE);
+        // Instantiate contracts
+        let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+        let certifier = ICertifierDispatcher { contract_address: contracts.project };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+        let erc721 = IERC721Dispatcher { contract_address: contracts.project };
+
+        let (times, absorptions) = data::get_banegas();
+
+        let user1 = *signers.users[0];
+        let user2 = *signers.users[1];
+        let user3 = *signers.users[2];
+        let user4 = *signers.users[3];
+
+        set_contract_address(signers.owner);
+
+        // Deploy yielders
+        let contract_yielder2 = super::deploy_yielder(
+            contracts.project, erc20.contract_address, signers.owner, SLOT + 1
+        );
+        let contract_yielder3 = super::deploy_yielder(
+            contracts.project, erc20.contract_address, signers.owner, SLOT + 2
+        );
+        let yielder2 = IYieldDispatcher { contract_address: contract_yielder2 };
+        let farmer2 = IFarmDispatcher { contract_address: contract_yielder2 };
+        let yieldfarmer2 = IYieldFarmDispatcher { contract_address: contract_yielder2 };
+
+        let yielder3 = IYieldDispatcher { contract_address: contract_yielder3 };
+        let farmer3 = IFarmDispatcher { contract_address: contract_yielder3 };
+        let yieldfarmer3 = IYieldFarmDispatcher { contract_address: contract_yielder3 };
+
+        // Setup slots
+        certifier.set_certifier(SLOT + 0, signers.owner);
+        certifier.set_certifier(SLOT + 1, signers.owner);
+        certifier.set_certifier(SLOT + 2, signers.owner);
+        absorber.set_absorptions(SLOT + 0, times, absorptions, TON_EQUIVALENT);
+        absorber.set_project_value(SLOT + 0, PROJECT_VALUE);
+        absorber.set_absorptions(SLOT + 1, times, absorptions, TON_EQUIVALENT);
+        absorber.set_project_value(SLOT + 1, PROJECT_VALUE);
+        absorber.set_absorptions(SLOT + 2, times, absorptions, TON_EQUIVALENT);
+        absorber.set_project_value(SLOT + 2, PROJECT_VALUE);
+        super::setup_yielder(
+            project.contract_address,
+            erc20.contract_address,
+            yielder2.contract_address,
+            @signers,
+            PRICE
+        );
+        super::setup_yielder(
+            project.contract_address,
+            erc20.contract_address,
+            yielder3.contract_address,
+            @signers,
+            PRICE
+        );
+
+        set_contract_address(signers.owner);
+        erc20.transfer(yielder.contract_address, 100_000_000_000);
+        erc20.transfer(yielder2.contract_address, 100_000_000_000);
+        erc20.transfer(yielder3.contract_address, 100_000_000_000);
+
+        minter.add_minter(SLOT + 0, signers.owner);
+        minter.add_minter(SLOT + 1, signers.owner);
+        minter.add_minter(SLOT + 2, signers.owner);
+        assert(1 == project.mint(user1, SLOT + 0, VALUE), 'Wrong token 1');
+        assert(2 == project.mint(user2, SLOT + 1, VALUE), 'Wrong token 2');
+        assert(3 == project.mint(user3, SLOT + 2, VALUE), 'Wrong token 3');
+        assert(4 == project.mint(user4, SLOT + 2, VALUE), 'Wrong token 4');
+        minter.revoke_minter(SLOT + 0, signers.owner);
+        minter.revoke_minter(SLOT + 1, signers.owner);
+        minter.revoke_minter(SLOT + 2, signers.owner);
+
+        // Set approvals
+        set_contract_address(user1);
+        erc721.set_approval_for_all(contracts.yielder, true);
+        set_contract_address(user2);
+        erc721.set_approval_for_all(contracts.yielder, true);
+        erc721.set_approval_for_all(yielder2.contract_address, true);
+        set_contract_address(user3);
+        erc721.set_approval_for_all(yielder3.contract_address, true);
+        set_contract_address(user4);
+        erc721.set_approval_for_all(yielder3.contract_address, true);
+
+        // on yielder1: user1 deposits at t=start and claims at t=end
+        set_contract_address(user1);
+        set_block_timestamp(*times.at(0) - 1);
+        assert(0 == erc20.balance_of(user1), 'Wrong balance');
+        farmer.deposit(1, VALUE);
+        set_block_timestamp(*times.at(times.len() - 1) + 1);
+        yielder.claim();
+        let rewards_u1 = erc20.balance_of(user1);
+
+        // on yielder2: user2 deposits at t=start and claims at t=[start+end/(1,2,3,4)]
+        set_contract_address(user2);
+        set_block_timestamp(*times.at(0) - 1);
+        assert(0 == erc20.balance_of(user2), 'Wrong balance');
+        farmer2.deposit(2, VALUE);
+        set_block_timestamp(*times.at(times.len() / 4 - 1) + 1);
+        yielder2.claim();
+        set_block_timestamp(*times.at(times.len() / 3 - 1) + 1);
+        yielder2.claim();
+        set_block_timestamp(*times.at(times.len() / 2 - 1) + 1);
+        yielder2.claim();
+        set_block_timestamp(*times.at(times.len() - 1) + 1);
+        yielder2.claim();
+        let rewards_u2 = erc20.balance_of(user2);
+
+        // on yielder3: user3 and user4 do the above actions at the same time
+        set_contract_address(user3);
+        set_block_timestamp(*times.at(0) - 1);
+        assert(0 == erc20.balance_of(user3), 'Wrong balance');
+        farmer3.deposit(3, VALUE);
+        set_contract_address(user4);
+        set_block_timestamp(*times.at(0) - 1);
+        assert(0 == erc20.balance_of(user4), 'Wrong balance');
+        farmer3.deposit(4, VALUE);
+        set_block_timestamp(*times.at(times.len() / 4 - 1) + 1);
+        yielder3.claim();
+        set_block_timestamp(*times.at(times.len() / 3 - 1) + 1);
+        yielder3.claim();
+        set_block_timestamp(*times.at(times.len() / 2 - 1) + 1);
+        yielder3.claim();
+        set_block_timestamp(*times.at(times.len() / 2 - 1) + 2);
+        yielder3.claim();
+        set_block_timestamp(*times.at(times.len() / 2 - 1) + 3);
+        yielder3.claim();
+        set_block_timestamp(*times.at(times.len() / 2 - 1) + 4);
+        yielder3.claim();
+        set_block_timestamp(*times.at(times.len() / 2 - 1) + 10);
+        yielder3.claim();
+        set_block_timestamp(*times.at(times.len() - 1) + 1);
+        yielder3.claim();
+        set_contract_address(user3);
+        yielder3.claim();
+        let rewards_u3 = erc20.balance_of(user2);
+        let rewards_u4 = erc20.balance_of(user2);
+
+        assert(rewards_u1 > 0, 'Wrong rewards for user1');
+        assert(
+            rewards_u1 == rewards_u2 && rewards_u2 == rewards_u3 && rewards_u3 == rewards_u4,
+            'Wrong rewards for user2'
+        );
     }
 }

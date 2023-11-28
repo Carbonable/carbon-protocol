@@ -56,6 +56,7 @@ const PRICE: u256 = 22;
 const VALUE: u256 = 100_000_000;
 const MIN_CLAIMABLE: u256 = 1;
 const ONE_MONTH: u64 = consteval_int!(31 * 24 * 60 * 60);
+const ONE_DAY: u64 = consteval_int!(24 * 60 * 60);
 
 // Signers
 #[derive(Drop)]
@@ -598,5 +599,84 @@ mod FarmingDepositWithdrawOffseter {
                 }
             };
         };
+    }
+}
+
+mod AdditionalTests {
+    use starknet::ContractAddress;
+    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+    use debug::PrintTrait;
+
+    use openzeppelin::account::account::Account;
+    use openzeppelin::token::erc20::erc20::ERC20;
+    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+    use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
+
+    // Components
+
+    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
+    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
+    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
+    use carbon::components::farm::interface::{IFarmDispatcher, IFarmDispatcherTrait};
+    use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
+    use carbon::contracts::project::{
+        Project, IExternalDispatcher as IProjectDispatcher,
+        IExternalDispatcherTrait as IProjectDispatcherTrait
+    };
+    use carbon::tests::data;
+    use super::setup;
+    use super::{SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT};
+
+
+    #[test]
+    #[available_gas(400_000_000_000)]
+    fn get_absorption_of_vs_get_claimable_of() {
+        let (signers, contracts) = setup();
+        // Instantiate contracts
+        let farmer = IFarmDispatcher { contract_address: contracts.offseter };
+        let offseter = IOffsetDispatcher { contract_address: contracts.offseter };
+        let minter = IMinterDispatcher { contract_address: contracts.project };
+        let project = IProjectDispatcher { contract_address: contracts.project };
+        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+
+        let (times, absorptions) = data::get_banegas();
+
+        // Prank caller as owner
+        set_contract_address(signers.owner);
+        absorber.set_absorptions(SLOT, times, absorptions, TON_EQUIVALENT);
+
+        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+        minter.add_minter(SLOT, signers.owner);
+        let one = project.mint(signers.anyone, SLOT, VALUE);
+        minter.revoke_minter(SLOT, signers.owner);
+
+        // Prank caller as anyone
+        set_contract_address(signers.anyone);
+
+        // At t = 0
+        set_block_timestamp(0);
+        // Anyone deposits value 100_000_000 in offseter
+        farmer.deposit(one, VALUE);
+        let deposited = farmer.get_deposited_of(signers.anyone);
+        assert(deposited == VALUE, 'Wrong deposited value');
+
+        let mut time = *times.at(0);
+        loop {
+            if time > *times.at(times.len() - 1) {
+                break ();
+            }
+            set_block_timestamp(time);
+
+            let claimable = offseter.get_claimable_of(signers.anyone);
+            let user_abs = farmer.get_absorption_of(signers.anyone);
+            let current_abs = absorber.get_current_absorption(SLOT);
+            let expected_abs = (VALUE * current_abs.into()) / PROJECT_VALUE;
+            assert(expected_abs == claimable, 'expected != claimable');
+            assert(expected_abs == user_abs, 'expected != user_abs');
+
+            time += 2 * ONE_MONTH + 11 * ONE_DAY;
+        }
     }
 }
