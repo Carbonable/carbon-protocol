@@ -277,7 +277,7 @@ impl SpanPrintImpl<
 
 #[test]
 #[available_gas(4_000_000_000)]
-fn deposit_entire_value_claim_at_end() {
+fn multi_deposit_entire_value_claim_at_end() {
     let (signers, contracts) = setup(PRICE);
     // Instantiate contracts
     let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
@@ -313,7 +313,6 @@ fn deposit_entire_value_claim_at_end() {
     set_contract_address(user1);
     erc721.set_approval_for_all(contracts.yielder, true);
     let value = erc3525.value_of(1);
-    value.low.print();
     farmer.deposit(1, value);
     set_contract_address(user2);
     erc721.set_approval_for_all(contracts.yielder, true);
@@ -364,24 +363,112 @@ fn deposit_entire_value_claim_at_end() {
         error += 1;
     };
 
-    error.low.print();
-
     // Rewards
     let claim1 = yielder.get_claimed_of(user1) + yielder.get_claimable_of(user1);
     let claim2 = yielder.get_claimed_of(user2) + yielder.get_claimable_of(user2);
     let claim3 = yielder.get_claimed_of(user3) + yielder.get_claimable_of(user3);
     let claim4 = yielder.get_claimed_of(user4) + yielder.get_claimable_of(user4);
+    let total_sale = yieldfarmer.get_total_sale();
     let claimable_total = yielder.get_total_claimable();
     let claimed_total = yielder.get_total_claimed();
     let claim_total = claimable_total + claimed_total;
     let claim_sum_users = claim1 + claim2 + claim3 + claim4;
 
-    claimed_total.low.print();
-    claimable_total.low.print();
-    claim_total.low.print();
-    claim_sum_users.low.print();
-    expected_claim.low.print();
+    assert(total_sale == claim_total, 'Wrong total');
     assert(claim_total >= claim_sum_users, 'Wrong claimable: total != sum');
     assert(claim_total <= claim_sum_users + error, 'Wrong claimable: total != sum');
+    assert(claim_total == expected_claim, 'Wrong clmbl total != expected');
+}
+
+
+#[test]
+#[available_gas(4_000_000_000)]
+fn user_deposit_entire_value_claim_at_end() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let yieldfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    let erc721 = IERC721Dispatcher { contract_address: contracts.project };
+
+    // Prank caller as owner
+    set_contract_address(signers.owner);
+
+    let user1 = *signers.users[0];
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    minter.add_minter(SLOT, signers.owner);
+    project.mint(user1, SLOT, PROJECT_VALUE);
+    minter.revoke_minter(SLOT, signers.owner);
+
+    let price_times: Span<u64> = array![1690884000, 1696154400].span();
+
+    // Deposit
+    set_block_timestamp(0);
+    set_contract_address(user1);
+    erc721.set_approval_for_all(contracts.yielder, true);
+    let value = erc3525.value_of(1);
+    farmer.deposit(1, value);
+
+    let deposited = farmer.get_total_deposited();
+    assert(deposited == PROJECT_VALUE, 'Wrong deposited value');
+
+    set_block_timestamp(*price_times[0]);
+    let abs1 = absorber.get_current_absorption(SLOT);
+    set_block_timestamp(2614085658 + 3 * ONE_MONTH);
+    let abs2 = absorber.get_current_absorption(SLOT);
+    let expected_claim = (abs2 - abs1).into() * PRICE;
+    set_contract_address(signers.owner);
+    erc20.transfer(contracts.yielder, expected_claim);
+
+    set_block_timestamp(*price_times[0]);
+    set_contract_address(user1);
+    let mut error: u256 = 4;
+    let mut time = *price_times[0];
+    let max_time = 2614085658;
+    loop {
+        if time > max_time {
+            break;
+        }
+        time += 10 * ONE_MONTH + 5 * ONE_DAY;
+        set_block_timestamp(time);
+
+        yielder.claim();
+
+        error += 1;
+    };
+
+    set_block_timestamp(2614085658 + ONE_DAY);
+    yielder.claim();
+
+    // Rewards
+    let claim1 = yielder.get_claimed_of(user1) + yielder.get_claimable_of(user1);
+    let claimable_total = yielder.get_total_claimable();
+    let claimed_total = yielder.get_total_claimed();
+    let claim_total = claimable_total + claimed_total;
+
+    assert(claim_total >= claim1, 'Wrong claimable: total != sum');
+    assert(claim_total <= claim1 + error, 'Wrong claimable: total != sum');
+    assert(claim_total == expected_claim, 'Wrong clmbl total != expected');
+
+    // Claim again just in case
+    set_block_timestamp(2614085658 + ONE_MONTH * 6);
+    yielder.claim();
+
+    // Rewards again just in case
+    let claim1 = yielder.get_claimed_of(user1) + yielder.get_claimable_of(user1);
+    let total_sale = yieldfarmer.get_total_sale();
+    let claimable_total = yielder.get_total_claimable();
+    let claimed_total = yielder.get_total_claimed();
+    let claim_total = claimable_total + claimed_total;
+
+    assert(total_sale == claim_total, 'Wrong total');
+    assert(claim_total >= claim1, 'Wrong claimable: total != sum');
+    assert(claim_total <= claim1 + error, 'Wrong claimable: total != sum');
     assert(claim_total == expected_claim, 'Wrong clmbl total != expected');
 }
