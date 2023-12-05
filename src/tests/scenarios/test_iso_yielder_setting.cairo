@@ -827,9 +827,9 @@ mod FarmingClaimingReward {
     use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT};
     use super::SpanPrintImpl;
 
-
-    // #[test]
-    // #[available_gas(19_000_000_000)]
+    // Costly test to activate locally only
+    //#[test]
+    //#[available_gas(19_000_000_000)]
     fn ensure_correct_distribution() {
         let (mut signers, contracts) = setup(PRICE);
         // Instantiate contracts
