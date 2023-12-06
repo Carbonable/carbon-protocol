@@ -90,7 +90,8 @@ mod Offset {
         fn get_total_claimable(self: @ContractState) -> u256 {
             let total_absorption = self.get_total_absorption();
             let claimed = self._offset_total_claimed.read();
-            total_absorption + claimed
+            assert(total_absorption >= claimed, 'Total absorption is too low');
+            total_absorption - claimed
         }
 
         fn get_total_claimed(self: @ContractState) -> u256 {

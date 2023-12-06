@@ -151,7 +151,8 @@ mod Yield {
         fn get_total_claimable(self: @ContractState) -> u256 {
             let total_sale = self.get_total_sale();
             let claimed = self._yield_total_claimed.read();
-            total_sale + claimed
+            assert(total_sale >= claimed, 'Total absorption is too low');
+            total_sale - claimed
         }
 
         fn get_total_claimed(self: @ContractState) -> u256 {
