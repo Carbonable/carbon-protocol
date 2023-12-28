@@ -1,5 +1,14 @@
 #!/bin/bash
 source ../.env
+# Check if --debug parameter is passed
+debug="false"
+for arg in "$@"
+do
+    if [ "$arg" == "--debug" ]
+    then
+        debug="true"
+    fi
+done
 
 SIERRA_FILE=../target/dev/carbon_Minter.sierra.json
 PROJECT=0x007afb15db3fb57839fec89c20754eb59f8d7e3f87d953ee68b0a99b6f527b3e
@@ -26,6 +35,9 @@ build() {
 # declare the contract
 declare() {
     build
+    if [[ $debug == "true" ]]; then
+        printf "declare %s\n" "$SIERRA_FILE" > debug_minter.log
+    fi
     output=$(starkli declare $SIERRA_FILE --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
     if [[ $output == *"Error"* ]]; then
@@ -33,7 +45,13 @@ declare() {
         exit 1
     fi
 
-    address=$(echo "$output" | grep -oP '0x[0-9a-fA-F]+')
+    # Check if ggrep is available
+    if command -v ggrep >/dev/null 2>&1; then
+        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+')
+    else
+        # If ggrep is not available, use grep
+        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]\+')
+    fi
     echo $address
 }
 
@@ -52,6 +70,9 @@ deploy() {
     class_hash=$(declare | tail -n 1)
     sleep 5
 
+    if [[ $debug == "true" ]]; then
+        printf "deploy %s %s %s %s %s %s %s %s %s %s \n" "$class_hash" "$PROJECT" "$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" "$MIN_VALUE_PER_TX" "$MAX_VALUE_PER_TX" "$MAX_VALUE" "$UNIT_PRICE" "$RESERVED_VALUE" >> debug_minter.log
+    fi
     output=$(starkli deploy $class_hash "$PROJECT" u256:"$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" u256:"$MAX_VALUE_PER_TX" u256:"$MIN_VALUE_PER_TX" u256:"$MAX_VALUE" u256:"$UNIT_PRICE" u256:"$RESERVED_VALUE" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
     if [[ $output == *"Error"* ]]; then
@@ -59,7 +80,13 @@ deploy() {
         exit 1
     fi
 
-    address=$(echo "$output" | grep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
+    # Check if ggrep is available
+    if command -v ggrep >/dev/null 2>&1; then
+        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
+    else
+        # If ggrep is not available, use grep
+        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
+    fi
     echo $address
 }
 
@@ -67,6 +94,9 @@ setup() {
     contract=$(deploy)
     sleep 5
 
+    if [[ $debug == "true" ]]; then
+        printf "invoke %s add_minter %s %s \n" "$PROJECT" "$SLOT" "$contract" >> debug_minter.log
+    fi
     output=$(starkli invoke $PROJECT add_minter u256:$SLOT $contract --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
     if [[ $output == *"Error"* ]]; then

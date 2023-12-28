@@ -1,5 +1,14 @@
 #!/bin/bash
 source ../.env
+# Check if --debug parameter is passed
+debug="false"
+for arg in "$@"
+do
+    if [ "$arg" == "--debug" ]
+    then
+        debug="true"
+    fi
+done
 
 SIERRA_FILE=../target/dev/carbon_Offseter.sierra.json
 PROJECT=0x007afb15db3fb57839fec89c20754eb59f8d7e3f87d953ee68b0a99b6f527b3e
@@ -20,6 +29,9 @@ build() {
 # declare the contract
 declare() {
     build
+    if [[ $debug == "true" ]]; then
+        printf "declare %s\n" "$SIERRA_FILE" > debug_offseter.log
+    fi
     output=$(starkli declare $SIERRA_FILE --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
     if [[ $output == *"Error"* ]]; then
@@ -27,7 +39,13 @@ declare() {
         exit 1
     fi
 
-    address=$(echo "$output" | grep -oP '0x[0-9a-fA-F]+')
+    # Check if ggrep is available
+    if command -v ggrep >/dev/null 2>&1; then
+        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+')
+    else
+        # If ggrep is not available, use grep
+        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]\+')
+    fi
     echo $address
 }
 
@@ -38,6 +56,9 @@ declare() {
 # $4 - Owner
 deploy() {
     class_hash=$(declare | tail -n 1)
+    if [[ $debug == "true" ]]; then
+        printf "deploy %s %s %s %s %s \n" "$class_hash" "$PROJECT" "$SLOT" "$MIN_CLAIMABLE" "$OWNER" >> debug_offseter.log
+    fi
     output=$(starkli deploy $class_hash "$PROJECT" u256:"$SLOT" u256:"$MIN_CLAIMABLE" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
     
     if [[ $output == *"Error"* ]]; then
@@ -45,7 +66,13 @@ deploy() {
         exit 1
     fi
 
-    address=$(echo "$output" | grep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
+    # Check if ggrep is available
+    if command -v ggrep >/dev/null 2>&1; then
+        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
+    else
+        # If ggrep is not available, use grep
+        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
+    fi
     echo $address
 }
 
