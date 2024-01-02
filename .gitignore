@@ -28,3 +28,4 @@ build
 tmp
 .tmp*
 scripts/*.log
+scripts/*/*.log

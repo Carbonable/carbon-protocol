@@ -39,12 +39,12 @@ declare() {
         exit 1
     fi
 
-    # Check if ggrep is available
+     # Check if ggrep is available
     if command -v ggrep >/dev/null 2>&1; then
-        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+')
+        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
     else
         # If ggrep is not available, use grep
-        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]\+')
+        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
     fi
     echo $address
 }
@@ -55,7 +55,7 @@ declare() {
 # $3 - Min Claimable
 # $4 - Owner
 deploy() {
-    class_hash=$(declare | tail -n 1)
+    class_hash=$(declare)
     if [[ $debug == "true" ]]; then
         printf "deploy %s %s %s %s %s \n" "$class_hash" "$PROJECT" "$SLOT" "$MIN_CLAIMABLE" "$OWNER" >> debug_offseter.log
     fi

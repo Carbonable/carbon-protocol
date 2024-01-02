@@ -47,10 +47,10 @@ declare() {
 
     # Check if ggrep is available
     if command -v ggrep >/dev/null 2>&1; then
-        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+')
+        address=$(echo -e "$output" | ggrep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
     else
         # If ggrep is not available, use grep
-        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]\+')
+        address=$(echo -e "$output" | grep -oP '0x[0-9a-fA-F]+' | tail -n 1) 
     fi
     echo $address
 }
@@ -67,11 +67,11 @@ declare() {
 # $9 - Reserved Value
 # $10 - Owner
 deploy() {
-    class_hash=$(declare | tail -n 1)
-    sleep 5
+    class_hash=$(declare)
+    sleep 5    
 
-    if [[ $debug == "true" ]]; then
-        printf "deploy %s %s %s %s %s %s %s %s %s %s \n" "$class_hash" "$PROJECT" "$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" "$MIN_VALUE_PER_TX" "$MAX_VALUE_PER_TX" "$MAX_VALUE" "$UNIT_PRICE" "$RESERVED_VALUE" >> debug_minter.log
+    if [[ $debug == "true" ]]; then        
+        printf "deploy %s %s %s %s %s %s %s %s %s %s %s \n" "$class_hash" "$PROJECT" "$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" "$MIN_VALUE_PER_TX" "$MAX_VALUE_PER_TX" "$MAX_VALUE" "$UNIT_PRICE" "$RESERVED_VALUE" "$OWNER" >> debug_minter.log
     fi
     output=$(starkli deploy $class_hash "$PROJECT" u256:"$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" u256:"$MAX_VALUE_PER_TX" u256:"$MIN_VALUE_PER_TX" u256:"$MAX_VALUE" u256:"$UNIT_PRICE" u256:"$RESERVED_VALUE" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
