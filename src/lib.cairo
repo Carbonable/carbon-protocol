@@ -15,8 +15,12 @@ mod components {
         mod interface;
         mod module;
     }
-    mod mint {
+    mod mint_2step {
         mod booking;
+        mod interface;
+        mod module;
+    }
+    mod mint {
         mod interface;
         mod module;
     }
@@ -33,6 +37,7 @@ mod components {
 mod contracts {
     mod project;
     mod minter;
+    mod minter_2step;
     mod offseter;
     mod yielder;
 }
@@ -46,6 +51,7 @@ mod tests {
     mod data;
     mod test_project;
     mod test_minter;
+    mod test_minter_2step;
     mod test_offseter;
     mod test_yielder;
     mod test_apr;
