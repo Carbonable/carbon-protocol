@@ -6,7 +6,6 @@ keystore.json
 # Python
 __pycache__
 env
-.env
 test.*
 
 # starknet 
@@ -29,3 +28,4 @@ tmp
 .tmp*
 scripts/*.log
 scripts/*/*.log
+.env*
