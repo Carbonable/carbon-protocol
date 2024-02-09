@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 
 #[starknet::contract]
-mod Minter {
+mod Minter2Step {
     use starknet::{get_caller_address, ContractAddress, ClassHash};
 
     // Ownable

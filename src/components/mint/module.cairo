@@ -344,7 +344,7 @@ mod Mint {
             assert(max_value_per_tx > 0, 'Invalid max value per tx');
             assert(min_value_per_tx > 0, 'Invalid min value per tx');
             assert(max_value_per_tx >= min_value_per_tx, 'Invalid max/min value per tx');
-            assert(max_value_per_tx <= max_value, 'Invalid max value');
+            assert(max_value_per_tx <= max_value, 'Invalid max value per tx');
             assert(unit_price > 0, 'Invalid unit price');
             assert(reserved_value <= max_value, 'Invalid reserved value');
 
