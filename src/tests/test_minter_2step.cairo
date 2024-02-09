@@ -36,7 +36,7 @@ use carbon::contracts::project::{
     Project, IExternalDispatcher as IProjectDispatcher,
     IExternalDispatcherTrait as IProjectDispatcherTrait
 };
-use carbon::contracts::minter_2step::Minter;
+use carbon::contracts::minter_2step::Minter2Step;
 
 // Constants
 
@@ -133,7 +133,7 @@ fn deploy_minter(
         owner.into(),
     ];
     let (address, _) = deploy_syscall(
-        Minter::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
+        Minter2Step::TEST_CLASS_HASH.try_into().expect('Class hash conversion failed'),
         0,
         calldata.span(),
         false
