@@ -110,8 +110,8 @@ mod Minter {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::is_public_sale_open(@unsafe_state)
         }
-        
-        fn is_enable_max_value_per_tx(self: @ContractState) -> bool{
+
+        fn is_enable_max_value_per_tx(self: @ContractState) -> bool {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::is_enable_max_value_per_tx(@unsafe_state)
         }

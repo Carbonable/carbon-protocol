@@ -219,7 +219,6 @@ mod Mint {
         }
 
         fn set_min_value_per_tx(ref self: ContractState, min_value_per_tx: u256) {
-
             if self._mint_enable_max_value_per_tx.read() {
                 // [Check] Value in range
                 let max_value_per_tx = self._mint_max_value_per_tx.read();
@@ -230,7 +229,6 @@ mod Mint {
         }
 
         fn set_max_value(ref self: ContractState, max_value: u256) {
-            
             // [Check] Max value is valid
             let remaining_value = self.project_remaining_value();
             assert(max_value <= remaining_value, 'Invalid new max value');
@@ -369,20 +367,20 @@ mod Mint {
             max_value: u256,
             unit_price: u256,
             reserved_value: u256,
-        ) {        
+        ) {
             self.set_enable_max_value_per_tx(enable_max_per_tx);
 
             // [Check] Input consistency        
             assert(min_value_per_tx > 0, 'Invalid min value per tx');
             assert(unit_price > 0, 'Invalid unit price');
-            assert(reserved_value <= max_value, 'Invalid reserved value');            
+            assert(reserved_value <= max_value, 'Invalid reserved value');
 
             // [Check] only if max per tx is enabled
             if enable_max_per_tx {
                 assert(max_value_per_tx > 0, 'Invalid max value per tx');
                 assert(max_value_per_tx >= min_value_per_tx, 'Invalid max/min value per tx');
                 assert(max_value_per_tx <= max_value, 'Invalid max value per tx');
-            } 
+            }
 
             // [Effect] Update storage
             self._mint_carbonable_project_address.write(carbonable_project_address);
