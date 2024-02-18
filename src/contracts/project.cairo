@@ -614,6 +614,12 @@ mod Project {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            
+            // [Check] New Project value is more to total value already minted
+            let unsafe_state = ERC3525::unsafe_new_contract_state();
+            let total_value = ERC3525::ExternalImpl::total_value(@unsafe_state, slot);
+            assert(project_value >= total_value, 'Ttl value greater than Pt value');
+
             // [Effect] Set project value
             let mut unsafe_state = Absorber::unsafe_new_contract_state();
             Absorber::AbsorberImpl::set_project_value(ref unsafe_state, slot, project_value)

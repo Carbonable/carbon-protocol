@@ -15,6 +15,7 @@ PROJECT=0x007afb15db3fb57839fec89c20754eb59f8d7e3f87d953ee68b0a99b6f527b3e
 SLOT=1
 ERC20=0x005a643907b9a4bc6a55e9069c4fd5fd1f5c79a22470690f75556c4736e34426
 PUBLIC_SALE_OPEN=0
+ENABLE_MAX_PER_TX=0
 MIN_VALUE_PER_TX=1000000
 MAX_VALUE_PER_TX=5000000
 MAX_VALUE=100000000
@@ -71,9 +72,9 @@ deploy() {
     sleep 5    
 
     if [[ $debug == "true" ]]; then        
-        printf "deploy %s %s %s %s %s %s %s %s %s %s %s \n" "$class_hash" "$PROJECT" "$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" "$MIN_VALUE_PER_TX" "$MAX_VALUE_PER_TX" "$MAX_VALUE" "$UNIT_PRICE" "$RESERVED_VALUE" "$OWNER" >> debug_minter.log
+        printf "deploy %s %s %s %s %s %s %s %s %s %s %s %s \n" "$class_hash" "$PROJECT" "$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" "$ENABLE_MAX_PER_TX" "$MAX_VALUE_PER_TX" "$MIN_VALUE_PER_TX" "$MAX_VALUE" "$UNIT_PRICE" "$RESERVED_VALUE" "$OWNER" >> debug_minter.log
     fi
-    output=$(starkli deploy $class_hash "$PROJECT" u256:"$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" u256:"$MAX_VALUE_PER_TX" u256:"$MIN_VALUE_PER_TX" u256:"$MAX_VALUE" u256:"$UNIT_PRICE" u256:"$RESERVED_VALUE" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
+    output=$(starkli deploy $class_hash "$PROJECT" u256:"$SLOT" "$ERC20" "$PUBLIC_SALE_OPEN" "$ENABLE_MAX_PER_TX" u256:"$MAX_VALUE_PER_TX" u256:"$MIN_VALUE_PER_TX" u256:"$MAX_VALUE" u256:"$UNIT_PRICE" u256:"$RESERVED_VALUE" "$OWNER" --keystore-password $KEYSTORE_PASSWORD --watch 2>&1)
 
     if [[ $output == *"Error"* ]]; then
         echo "Error: $output"
