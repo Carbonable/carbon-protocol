@@ -118,12 +118,14 @@ fn deploy_minter(
     project: ContractAddress, erc20: ContractAddress, owner: ContractAddress
 ) -> ContractAddress {
     let public_sale_open: bool = false;
+    let enable_VALUE_PER_TX: bool = true;
     let mut calldata: Array<felt252> = array![
         project.into(),
         SLOT.low.into(),
         SLOT.high.into(),
         erc20.into(),
         public_sale_open.into(), // public_sale_open = false
+        enable_VALUE_PER_TX.into(), // enable_VALUE_PER_TX = true
         MAX_VALUE_PER_TX.low.into(),
         MAX_VALUE_PER_TX.high.into(),
         MIN_VALUE_PER_TX.low.into(),

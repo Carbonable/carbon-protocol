@@ -24,6 +24,7 @@ mod Minter {
         carbonable_project_slot: u256,
         payment_token_address: ContractAddress,
         public_sale_open: bool,
+        enable_max_per_tx: bool,
         max_value_per_tx: u256,
         min_value_per_tx: u256,
         max_value: u256,
@@ -37,6 +38,7 @@ mod Minter {
                 carbonable_project_slot,
                 payment_token_address,
                 public_sale_open,
+                enable_max_per_tx,
                 max_value_per_tx,
                 min_value_per_tx,
                 max_value,
@@ -109,6 +111,11 @@ mod Minter {
             Mint::MintImpl::is_public_sale_open(@unsafe_state)
         }
 
+        fn is_enable_max_value_per_tx(self: @ContractState) -> bool {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::is_enable_max_value_per_tx(@unsafe_state)
+        }
+
         fn get_min_value_per_tx(self: @ContractState) -> u256 {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::get_min_value_per_tx(@unsafe_state)
@@ -176,6 +183,15 @@ mod Minter {
             Mint::MintImpl::set_public_sale_open(ref unsafe_state, public_sale_open)
         }
 
+        fn set_enable_max_value_per_tx(ref self: ContractState, enable_max_per_tx: bool) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set public sale open
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::set_enable_max_value_per_tx(ref unsafe_state, enable_max_per_tx)
+        }
+
         fn set_max_value_per_tx(ref self: ContractState, max_value_per_tx: u256) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -192,6 +208,15 @@ mod Minter {
             // [Effect] Set min value per tx
             let mut unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::set_min_value_per_tx(ref unsafe_state, min_value_per_tx)
+        }
+
+        fn set_max_value(ref self: ContractState, max_value: u256) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set max value per tx
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::set_max_value(ref unsafe_state, max_value)
         }
 
         fn set_unit_price(ref self: ContractState, unit_price: u256) {
@@ -269,6 +294,7 @@ mod Minter {
             carbonable_project_slot: u256,
             payment_token_address: ContractAddress,
             public_sale_open: bool,
+            enable_max_per_tx: bool,
             max_value_per_tx: u256,
             min_value_per_tx: u256,
             max_value: u256,
@@ -288,6 +314,7 @@ mod Minter {
                 carbonable_project_slot,
                 payment_token_address,
                 public_sale_open,
+                enable_max_per_tx,
                 max_value_per_tx,
                 min_value_per_tx,
                 max_value,

@@ -103,3 +103,9 @@ fn get_las_delicias() -> (Span<u64>, Span<u64>) {
     ];
     return (times.span(), absorptions.span());
 }
+
+fn get_karathuru() -> (Span<u64>, Span<u64>) {
+    let times: Array<u64> = array![1717236000, 2442996000];
+    let absorptions: Array<u64> = array![0, 410400000000];
+    return (times.span(), absorptions.span());
+}

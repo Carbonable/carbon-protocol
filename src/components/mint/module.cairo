@@ -32,6 +32,7 @@ mod Mint {
         _mint_carbonable_project_slot: u256,
         _mint_payment_token_address: ContractAddress,
         _mint_public_sale_open: bool,
+        _mint_enable_max_value_per_tx: bool,
         _mint_max_value_per_tx: u256,
         _mint_min_value_per_tx: u256,
         _mint_max_value: u256,
@@ -112,6 +113,10 @@ mod Mint {
 
         fn is_public_sale_open(self: @ContractState) -> bool {
             self._mint_public_sale_open.read()
+        }
+
+        fn is_enable_max_value_per_tx(self: @ContractState) -> bool {
+            self._mint_enable_max_value_per_tx.read()
         }
 
         fn get_min_value_per_tx(self: @ContractState) -> u256 {
@@ -198,6 +203,11 @@ mod Mint {
             };
         }
 
+        fn set_enable_max_value_per_tx(ref self: ContractState, enable_max_per_tx: bool) {
+            // [Effect] Update storage
+            self._mint_enable_max_value_per_tx.write(enable_max_per_tx);
+        }
+
         fn set_max_value_per_tx(ref self: ContractState, max_value_per_tx: u256) {
             // [Check] Value in range
             let max_value = self._mint_max_value.read();
@@ -209,11 +219,28 @@ mod Mint {
         }
 
         fn set_min_value_per_tx(ref self: ContractState, min_value_per_tx: u256) {
-            // [Check] Value in range
-            let max_value_per_tx = self._mint_max_value_per_tx.read();
-            assert(max_value_per_tx >= min_value_per_tx, 'Invalid min value per tx');
+            if self._mint_enable_max_value_per_tx.read() {
+                // [Check] Value in range
+                let max_value_per_tx = self._mint_max_value_per_tx.read();
+                assert(max_value_per_tx >= min_value_per_tx, 'Invalid min value per tx');
+            }
             // [Effect] Store value
             self._mint_min_value_per_tx.write(min_value_per_tx);
+        }
+
+        fn set_max_value(ref self: ContractState, max_value: u256) {
+            // [Check] Max value is valid
+            let remaining_value = self.project_remaining_value();
+            assert(max_value <= remaining_value, 'Invalid new max value');
+
+            if self._mint_enable_max_value_per_tx.read() {
+                // [Check] Value in range
+                let max_value_per_tx = self._mint_max_value_per_tx.read();
+                assert(max_value_per_tx <= max_value, 'Invalid new max value');
+            }
+
+            // [Effect] Store value
+            self._mint_max_value.write(max_value);
         }
 
         fn set_unit_price(ref self: ContractState, unit_price: u256) {
@@ -334,19 +361,26 @@ mod Mint {
             carbonable_project_slot: u256,
             payment_token_address: ContractAddress,
             public_sale_open: bool,
+            enable_max_per_tx: bool,
             max_value_per_tx: u256,
             min_value_per_tx: u256,
             max_value: u256,
             unit_price: u256,
             reserved_value: u256,
         ) {
-            // [Check] Input consistency
-            assert(max_value_per_tx > 0, 'Invalid max value per tx');
+            self.set_enable_max_value_per_tx(enable_max_per_tx);
+
+            // [Check] Input consistency        
             assert(min_value_per_tx > 0, 'Invalid min value per tx');
-            assert(max_value_per_tx >= min_value_per_tx, 'Invalid max/min value per tx');
-            assert(max_value_per_tx <= max_value, 'Invalid max value per tx');
             assert(unit_price > 0, 'Invalid unit price');
             assert(reserved_value <= max_value, 'Invalid reserved value');
+
+            // [Check] only if max per tx is enabled
+            if enable_max_per_tx {
+                assert(max_value_per_tx > 0, 'Invalid max value per tx');
+                assert(max_value_per_tx >= min_value_per_tx, 'Invalid max/min value per tx');
+                assert(max_value_per_tx <= max_value, 'Invalid max value per tx');
+            }
 
             // [Effect] Update storage
             self._mint_carbonable_project_address.write(carbonable_project_address);
@@ -379,8 +413,11 @@ mod Mint {
             // [Check] Allowed value
             let min_value_per_tx = self._mint_min_value_per_tx.read();
             assert(value >= min_value_per_tx, 'Value too low');
-            let max_value_per_tx = self._mint_max_value_per_tx.read();
-            assert(value <= max_value_per_tx, 'Value too high');
+
+            if self._mint_enable_max_value_per_tx.read() {
+                let max_value_per_tx = self._mint_max_value_per_tx.read();
+                assert(value <= max_value_per_tx, 'Value too high');
+            }
 
             // [Compute] If remaining value is lower than specified value and force is enabled
             // Then replace the specified value by the remaining value otherwize keep the value unchanged
