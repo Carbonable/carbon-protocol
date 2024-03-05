@@ -21,6 +21,7 @@ use openzeppelin::token::erc721::interface::{IERC721_ID, IERC721_METADATA_ID};
 use cairo_erc_3525::interface::IERC3525_ID;
 use cairo_erc_3525::extensions::metadata::interface::IERC3525_METADATA_ID;
 use cairo_erc_3525::extensions::slotenumerable::interface::IERC3525_SLOT_ENUMERABLE_ID;
+use cairo_erc_2981::components::erc2981::interface::{IERC2981Dispatcher, IERC2981DispatcherTrait};
 
 // Components
 
@@ -249,3 +250,16 @@ fn test_supports_interface_ERC165_backward_compatible() {
     assert(project.supports_interface(IERC3525_ID), 'IERC3525 not supported');
     assert(project.supports_interface(IERC3525_METADATA_ID), '3525Metadata not supported');
 }
+
+#[test]
+#[available_gas(20_000_000)]
+fn test_royalties_default_setup() {
+    // [Setup]
+    let (signers, contracts) = setup();
+    let project = IERC2981Dispatcher { contract_address: contracts.project };
+    let (receiver, fee_numerator, fee_denominator) = project.default_royalty();
+    assert(receiver == signers.owner, 'Invalid receiver');
+    assert(fee_numerator == 500, 'Invalid fee numerator');
+    assert(fee_denominator == 10_000, 'Invalid fee denominator');
+}
+
