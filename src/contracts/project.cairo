@@ -32,6 +32,10 @@ mod Project {
         IERC721, IERC721Metadata, IERC721CamelOnly, IERC721MetadataCamelOnly
     };
 
+    // ERC2981
+    use cairo_erc_2981::components::erc2981::interface::{IERC2981, IERC2981Camel};
+    use cairo_erc_2981::components::erc2981::module::ERC2981;
+
     // ERC3525
     use cairo_erc_3525::interface::IERC3525;
     use cairo_erc_3525::extensions::metadata::interface::IERC3525Metadata;
@@ -674,6 +678,97 @@ mod Project {
         }
     }
 
+    // ERC2981
+
+    #[external(v0)]
+    impl ERC2981Impl of IERC2981<ContractState> {
+        fn default_royalty(self: @ContractState) -> (ContractAddress, u256, u256) {
+            let unsafe_state = ERC2981::unsafe_new_contract_state();
+            ERC2981::ERC2981Impl::default_royalty(@unsafe_state)
+        }
+
+        fn token_royalty(self: @ContractState, token_id: u256) -> (ContractAddress, u256, u256) {
+            let unsafe_state = ERC2981::unsafe_new_contract_state();
+            ERC2981::ERC2981Impl::token_royalty(@unsafe_state, token_id)
+        }
+
+        fn royalty_info(
+            self: @ContractState, token_id: u256, sale_price: u256
+        ) -> (ContractAddress, u256) {
+            let unsafe_state = ERC2981::unsafe_new_contract_state();
+            ERC2981::ERC2981Impl::royalty_info(@unsafe_state, token_id, sale_price)
+        }
+
+        fn set_default_royalty(
+            ref self: ContractState,
+            receiver: ContractAddress,
+            fee_numerator: u256,
+            fee_denominator: u256
+        ) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set default royalty
+            let mut unsafe_state = ERC2981::unsafe_new_contract_state();
+            ERC2981::ERC2981Impl::set_default_royalty(
+                ref unsafe_state, receiver, fee_numerator, fee_denominator
+            )
+        }
+
+        fn set_token_royalty(
+            ref self: ContractState,
+            token_id: u256,
+            receiver: ContractAddress,
+            fee_numerator: u256,
+            fee_denominator: u256
+        ) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set token royalty
+            let mut unsafe_state = ERC2981::unsafe_new_contract_state();
+            ERC2981::ERC2981Impl::set_token_royalty(
+                ref unsafe_state, token_id, receiver, fee_numerator, fee_denominator
+            )
+        }
+    }
+
+    #[external(v0)]
+    impl ERC2981CamelImpl of IERC2981Camel<ContractState> {
+        fn defaultRoyalty(self: @ContractState) -> (ContractAddress, u256, u256) {
+            self.default_royalty()
+        }
+
+        fn tokenRoyalty(self: @ContractState, tokenId: u256) -> (ContractAddress, u256, u256) {
+            self.token_royalty(tokenId)
+        }
+
+        fn royaltyInfo(
+            self: @ContractState, tokenId: u256, salePrice: u256
+        ) -> (ContractAddress, u256) {
+            self.royalty_info(tokenId, salePrice)
+        }
+
+        fn setDefaultRoyalty(
+            ref self: ContractState,
+            receiver: ContractAddress,
+            feeNumerator: u256,
+            feeDenominator: u256
+        ) {
+            self.set_default_royalty(receiver, feeNumerator, feeDenominator)
+        }
+
+        fn setTokenRoyalty(
+            ref self: ContractState,
+            tokenId: u256,
+            receiver: ContractAddress,
+            feeNumerator: u256,
+            feeDenominator: u256
+        ) {
+            self.set_token_royalty(tokenId, receiver, feeNumerator, feeDenominator)
+        }
+    }
+
     #[generate_trait]
     impl InternalImpl of InternalTrait {
         fn initializer(
@@ -686,6 +781,9 @@ mod Project {
             // ERC721 & ERC3525
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
             ERC3525::InternalImpl::initializer(ref unsafe_state, name, symbol, value_decimals);
+            // ERC2981
+            let mut unsafe_state = ERC2981::unsafe_new_contract_state();
+            ERC2981::InternalImpl::initializer(ref unsafe_state, owner, 500, 10_000);
             // Access control
             let mut unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::initializer(ref unsafe_state, owner);
