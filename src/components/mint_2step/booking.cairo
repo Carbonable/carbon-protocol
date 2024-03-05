@@ -1,16 +1,10 @@
-// Core imports
-
-use traits::{Into, TryInto, PartialEq};
-use option::OptionTrait;
-use debug::PrintTrait;
-
 #[derive(Drop, Copy)]
 enum BookingStatus {
-    Unknown: (),
-    Booked: (),
-    Failed: (),
-    Minted: (),
-    Refunded: (),
+    Unknown,
+    Booked,
+    Failed,
+    Minted,
+    Refunded,
 }
 
 #[derive(Drop, Copy, Serde, starknet::Store)]
@@ -56,7 +50,6 @@ impl BookingStatusIntoU8 of Into<BookingStatus, u8> {
 
 impl U8TryIntoBookingStatus of TryInto<u8, BookingStatus> {
     fn try_into(self: u8) -> Option<BookingStatus> {
-        self.print();
         if self == 0 {
             return Option::Some(BookingStatus::Unknown);
         } else if self == 1 {

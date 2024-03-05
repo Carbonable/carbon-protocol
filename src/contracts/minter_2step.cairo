@@ -1,5 +1,7 @@
+use starknet::ContractAddress;
+
 #[starknet::contract]
-mod Minter {
+mod Minter2Step {
     use starknet::{get_caller_address, ContractAddress, ClassHash};
 
     // Ownable
@@ -11,8 +13,8 @@ mod Minter {
     use openzeppelin::upgrades::upgradeable::Upgradeable;
 
     // Mint
-    use carbon::components::mint::interface::IMint;
-    use carbon::components::mint::module::Mint;
+    use carbon::components::mint_2step::interface::{IMint, IL1Mint, IL1Handler};
+    use carbon::components::mint_2step::module::Mint;
 
     #[storage]
     struct Storage {}
@@ -24,7 +26,6 @@ mod Minter {
         carbonable_project_slot: u256,
         payment_token_address: ContractAddress,
         public_sale_open: bool,
-        enable_max_per_tx: bool,
         max_value_per_tx: u256,
         min_value_per_tx: u256,
         max_value: u256,
@@ -38,7 +39,6 @@ mod Minter {
                 carbonable_project_slot,
                 payment_token_address,
                 public_sale_open,
-                enable_max_per_tx,
                 max_value_per_tx,
                 min_value_per_tx,
                 max_value,
@@ -111,11 +111,6 @@ mod Minter {
             Mint::MintImpl::is_public_sale_open(@unsafe_state)
         }
 
-        fn is_enable_max_value_per_tx(self: @ContractState) -> bool {
-            let unsafe_state = Mint::unsafe_new_contract_state();
-            Mint::MintImpl::is_enable_max_value_per_tx(@unsafe_state)
-        }
-
         fn get_min_value_per_tx(self: @ContractState) -> u256 {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::get_min_value_per_tx(@unsafe_state)
@@ -136,9 +131,14 @@ mod Minter {
             Mint::MintImpl::get_reserved_value(@unsafe_state)
         }
 
-        fn get_max_value(self: @ContractState) -> u256 {
+        fn get_remaining_value(self: @ContractState) -> u256 {
             let unsafe_state = Mint::unsafe_new_contract_state();
-            Mint::MintImpl::get_max_value(@unsafe_state)
+            Mint::MintImpl::get_remaining_value(@unsafe_state)
+        }
+
+        fn get_available_value(self: @ContractState) -> u256 {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::get_available_value(@unsafe_state)
         }
 
         fn get_whitelist_merkle_root(self: @ContractState) -> felt252 {
@@ -165,6 +165,11 @@ mod Minter {
             Mint::MintImpl::is_sold_out(@unsafe_state)
         }
 
+        fn is_canceled(self: @ContractState) -> bool {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::is_canceled(@unsafe_state)
+        }
+
         fn set_whitelist_merkle_root(ref self: ContractState, whitelist_merkle_root: felt252) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -183,15 +188,6 @@ mod Minter {
             Mint::MintImpl::set_public_sale_open(ref unsafe_state, public_sale_open)
         }
 
-        fn set_enable_max_value_per_tx(ref self: ContractState, enable_max_per_tx: bool) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Set public sale open
-            let mut unsafe_state = Mint::unsafe_new_contract_state();
-            Mint::MintImpl::set_enable_max_value_per_tx(ref unsafe_state, enable_max_per_tx)
-        }
-
         fn set_max_value_per_tx(ref self: ContractState, max_value_per_tx: u256) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -208,15 +204,6 @@ mod Minter {
             // [Effect] Set min value per tx
             let mut unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::set_min_value_per_tx(ref unsafe_state, min_value_per_tx)
-        }
-
-        fn set_max_value(ref self: ContractState, max_value: u256) {
-            // [Check] Only owner
-            let unsafe_state = Ownable::unsafe_new_contract_state();
-            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Set max value per tx
-            let mut unsafe_state = Mint::unsafe_new_contract_state();
-            Mint::MintImpl::set_max_value(ref unsafe_state, max_value)
         }
 
         fn set_unit_price(ref self: ContractState, unit_price: u256) {
@@ -269,7 +256,7 @@ mod Minter {
             Mint::MintImpl::transfer(ref unsafe_state, token_address, recipient, amount)
         }
 
-        fn pre_buy(
+        fn prebook(
             ref self: ContractState,
             allocation: felt252,
             proof: Span<felt252>,
@@ -277,12 +264,75 @@ mod Minter {
             force: bool
         ) {
             let mut unsafe_state = Mint::unsafe_new_contract_state();
-            Mint::MintImpl::pre_buy(ref unsafe_state, allocation, proof, value, force)
+            Mint::MintImpl::prebook(ref unsafe_state, allocation, proof, value, force)
         }
 
-        fn public_buy(ref self: ContractState, value: u256, force: bool) {
+        fn book(ref self: ContractState, value: u256, force: bool) {
             let mut unsafe_state = Mint::unsafe_new_contract_state();
-            Mint::MintImpl::public_buy(ref unsafe_state, value, force)
+            Mint::MintImpl::book(ref unsafe_state, value, force)
+        }
+
+        fn claim(ref self: ContractState, user_address: ContractAddress, id: u32) {
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::claim(ref unsafe_state, user_address, id)
+        }
+
+        fn refund(ref self: ContractState, user_address: ContractAddress, id: u32) {
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::refund(ref unsafe_state, user_address, id)
+        }
+
+        fn refund_to(
+            ref self: ContractState, to: ContractAddress, user_address: ContractAddress, id: u32
+        ) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Refund to address
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::refund_to(ref unsafe_state, to, user_address, id)
+        }
+
+        fn cancel(ref self: ContractState) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Cancel the mint
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::cancel(ref unsafe_state)
+        }
+    }
+
+    #[external(v0)]
+    impl L1MintImpl of IL1Mint<ContractState> {
+        fn get_l1_minter_address(self: @ContractState) -> ContractAddress {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::L1MintImpl::get_l1_minter_address(@unsafe_state)
+        }
+
+        fn set_l1_minter_address(ref self: ContractState, l1_address: ContractAddress) {
+            // [Check] Only owner
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            // [Effect] Set L1 minter address
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::L1MintImpl::set_l1_minter_address(ref unsafe_state, l1_address)
+        }
+    }
+
+    #[l1_handler]
+    impl L1HandlerImpl of IL1Handler<ContractState> {
+        fn book_from_l1(
+            ref self: ContractState,
+            from_address: ContractAddress,
+            user_address: ContractAddress,
+            value: u256,
+            amount: u256,
+        ) {
+            let mut unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::L1HandlerImpl::book_from_l1(
+                ref unsafe_state, from_address, user_address, value, amount
+            )
         }
     }
 
@@ -294,7 +344,6 @@ mod Minter {
             carbonable_project_slot: u256,
             payment_token_address: ContractAddress,
             public_sale_open: bool,
-            enable_max_per_tx: bool,
             max_value_per_tx: u256,
             min_value_per_tx: u256,
             max_value: u256,
@@ -314,7 +363,6 @@ mod Minter {
                 carbonable_project_slot,
                 payment_token_address,
                 public_sale_open,
-                enable_max_per_tx,
                 max_value_per_tx,
                 min_value_per_tx,
                 max_value,
