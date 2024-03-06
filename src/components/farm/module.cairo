@@ -601,7 +601,7 @@ mod Farm {
                 );
 
                 // [Check] Absorption is not null otherwise return 0
-                assert(previous_absorption < current_absorption, 'No absorption');
+                assert(previous_absorption <= current_absorption, 'No absorption');
                 let new_absorption: u256 = current_absorption - previous_absorption;
 
                 // [Compute] Store results and update variables for the next iter

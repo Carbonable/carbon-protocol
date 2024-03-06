@@ -135,6 +135,21 @@ mod Mint {
             self._mint_reserved_value.read()
         }
 
+        fn get_remaining_value(self: @ContractState) -> u256 {
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
+            let project = IProjectDispatcher { contract_address: project_address };
+            let total_value = project.total_value(slot);
+            let available_value = self.get_available_value();
+            available_value - total_value
+        }
+
+        fn get_available_value(self: @ContractState) -> u256 {
+            let max_value = self._mint_max_value.read();
+            let reserved_value = self._mint_reserved_value.read();
+            max_value - reserved_value
+        }
+
         fn get_max_value(self: @ContractState) -> u256 {
             self._mint_max_value.read()
         }

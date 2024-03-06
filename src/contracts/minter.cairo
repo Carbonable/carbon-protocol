@@ -136,6 +136,16 @@ mod Minter {
             Mint::MintImpl::get_reserved_value(@unsafe_state)
         }
 
+        fn get_remaining_value(self: @ContractState) -> u256 {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::get_remaining_value(@unsafe_state)
+        }
+
+        fn get_available_value(self: @ContractState) -> u256 {
+            let unsafe_state = Mint::unsafe_new_contract_state();
+            Mint::MintImpl::get_available_value(@unsafe_state)
+        }
+
         fn get_max_value(self: @ContractState) -> u256 {
             let unsafe_state = Mint::unsafe_new_contract_state();
             Mint::MintImpl::get_max_value(@unsafe_state)
