@@ -315,7 +315,7 @@ fn test_remaining_value() {
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
-    minter.public_buy(5, false);   
+    minter.public_buy(5, false);
     assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
 }
 
@@ -329,7 +329,7 @@ fn test_update_reserve() {
     // [Assert] initial reserve value
     assert(minter.get_reserved_value() == RESERVED_VALUE, 'Wrong init reserved value');
     // [Assert] update reserve value
-    minter.update_reserved_value(1);    
+    minter.update_reserved_value(1);
     assert(minter.get_reserved_value() == 1, 'Wrong reserved value');
 }
 
@@ -348,7 +348,7 @@ fn test_minter_remaining_after_decrease_reserved_update() {
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
-    minter.public_buy(5, false);   
+    minter.public_buy(5, false);
     assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
     // [Assert] update reserve value
     set_contract_address(signers.owner);
@@ -371,11 +371,11 @@ fn test_minter_remaining_after_increase_reserved_update() {
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
-    minter.public_buy(5, false);   
+    minter.public_buy(5, false);
     assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
     // [Assert] update reserve value
     set_contract_address(signers.owner);
-    minter.update_reserved_value(5); 
+    minter.update_reserved_value(5);
     assert(minter.get_remaining_value() == 0, 'Wrong remaining post update');
 }
 
@@ -395,11 +395,11 @@ fn test_minter_reserved_revert_mint_too_much() {
     set_contract_address(signers.anyone);
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
-    minter.public_buy(5, false);   
+    minter.public_buy(5, false);
     assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
     // [Assert] update reserve value
     set_contract_address(signers.owner);
-    minter.update_reserved_value(6); 
+    minter.update_reserved_value(6);
 }
 
 #[test]
@@ -410,9 +410,8 @@ fn test_minter_reserved_revert_not_enough_remaining_value() {
     // [Assert] Airdrop
     set_contract_address(signers.owner);
     let minter = IMintDispatcher { contract_address: contracts.minter };
-    minter.update_reserved_value(11); 
+    minter.update_reserved_value(11);
 }
-
 
 
 #[test]
