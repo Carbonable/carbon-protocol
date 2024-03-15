@@ -302,6 +302,121 @@ fn test_minter_airdrop() {
 
 #[test]
 #[available_gas(200_000_000)]
+fn test_remaining_value() {
+    let (signers, contracts) = setup();
+    // [Setup] Minter
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.set_public_sale_open(true);
+    // [Assert] initial reserve value
+    assert(minter.get_reserved_value() == RESERVED_VALUE, 'Wrong init reserved value');
+    assert(minter.get_remaining_value() == VALUE - RESERVED_VALUE, 'Wrong init remaining value');
+    // [Assert] Public buy
+    set_contract_address(signers.anyone);
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
+    minter.public_buy(5, false);   
+    assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
+}
+
+#[test]
+#[available_gas(200_000_000)]
+fn test_update_reserve() {
+    let (signers, contracts) = setup();
+    // [Setup] Minter
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    // [Assert] initial reserve value
+    assert(minter.get_reserved_value() == RESERVED_VALUE, 'Wrong init reserved value');
+    // [Assert] update reserve value
+    minter.update_reserved_value(1);    
+    assert(minter.get_reserved_value() == 1, 'Wrong reserved value');
+}
+
+#[test]
+#[available_gas(200_000_000)]
+fn test_minter_remaining_after_decrease_reserved_update() {
+    let (signers, contracts) = setup();
+    // [Setup] Minter
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.set_public_sale_open(true);
+    // [Assert] initial reserve value
+    assert(minter.get_reserved_value() == RESERVED_VALUE, 'Wrong init reserved value');
+    assert(minter.get_remaining_value() == VALUE - RESERVED_VALUE, 'Wrong init remaining value');
+    // [Assert] Public buy
+    set_contract_address(signers.anyone);
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
+    minter.public_buy(5, false);   
+    assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
+    // [Assert] update reserve value
+    set_contract_address(signers.owner);
+    minter.update_reserved_value(2);
+    assert(minter.get_remaining_value() == 3, 'Wrong remaining post update');
+}
+
+#[test]
+#[available_gas(200_000_000)]
+fn test_minter_remaining_after_increase_reserved_update() {
+    let (signers, contracts) = setup();
+    // [Setup] Minter
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.set_public_sale_open(true);
+    // [Assert] initial reserve value
+    assert(minter.get_reserved_value() == RESERVED_VALUE, 'Wrong init reserved value');
+    assert(minter.get_remaining_value() == VALUE - RESERVED_VALUE, 'Wrong init remaining value');
+    // [Assert] Public buy
+    set_contract_address(signers.anyone);
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
+    minter.public_buy(5, false);   
+    assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
+    // [Assert] update reserve value
+    set_contract_address(signers.owner);
+    minter.update_reserved_value(5); 
+    assert(minter.get_remaining_value() == 0, 'Wrong remaining post update');
+}
+
+#[test]
+#[available_gas(200_000_000)]
+#[should_panic(expected: ('Not enough remaining value', 'ENTRYPOINT_FAILED',))]
+fn test_minter_reserved_revert_mint_too_much() {
+    let (signers, contracts) = setup();
+    // [Setup] Minter
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.set_public_sale_open(true);
+    // [Assert] initial reserve value
+    assert(minter.get_reserved_value() == RESERVED_VALUE, 'Wrong init reserved value');
+    assert(minter.get_remaining_value() == VALUE - RESERVED_VALUE, 'Wrong init remaining value');
+    // [Assert] Public buy
+    set_contract_address(signers.anyone);
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
+    minter.public_buy(5, false);   
+    assert(minter.get_remaining_value() == 1, 'Wrong remaining value post buy');
+    // [Assert] update reserve value
+    set_contract_address(signers.owner);
+    minter.update_reserved_value(6); 
+}
+
+#[test]
+#[available_gas(200_000_000)]
+#[should_panic(expected: ('Not enough remaining value', 'ENTRYPOINT_FAILED',))]
+fn test_minter_reserved_revert_not_enough_remaining_value() {
+    let (signers, contracts) = setup();
+    // [Assert] Airdrop
+    set_contract_address(signers.owner);
+    let minter = IMintDispatcher { contract_address: contracts.minter };
+    minter.update_reserved_value(11); 
+}
+
+
+
+#[test]
+#[available_gas(200_000_000)]
 #[should_panic(expected: ('Not enough value', 'ENTRYPOINT_FAILED',))]
 fn test_minter_public_buy_revert_not_enough_available_value() {
     let (signers, contracts) = setup();
