@@ -284,13 +284,13 @@ fn test_minter_airdrop() {
     let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
     erc20.approve(contracts.minter, UNIT_PRICE * MAX_VALUE);
     minter.pre_buy(ALLOCATION, proof, 5, false);
-    // [Assert] Open public sale
-    set_contract_address(signers.owner);
-    minter.set_public_sale_open(true);
     // [Assert] Airdrop
+    set_contract_address(signers.owner);
     minter.airdrop(signers.anyone, 3);
-    // [Assert] Decrease reserve value
-    minter.decrease_reserved_value(1);
+    // [Assert] Open public sale
+    minter.set_public_sale_open(true);
+    assert(minter.is_public_sale_open(), 'Public sale should be open');
+    minter.update_reserved_value(0);
     // [Assert] Public buy
     set_contract_address(signers.anyone);
     minter.public_buy(1, false);

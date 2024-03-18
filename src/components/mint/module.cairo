@@ -264,7 +264,7 @@ mod Mint {
 
         fn update_reserved_value(ref self: ContractState, value: u256) {
             // [Check] Value not null
-            assert(value > 0, 'Invalid value');
+            assert(value >= 0, 'Invalid value');
             // [Check] Enough remaining value for the update value
             let max_value = self._mint_max_value.read();
             let total_value = self.get_total_value();
@@ -272,16 +272,6 @@ mod Mint {
             assert(remaining_value_without_reserve >= value, 'Not enough remaining value');
             // [Effect] Update reserved value
             self._mint_reserved_value.write(value);
-        }
-
-        fn decrease_reserved_value(ref self: ContractState, value: u256) {
-            // [Check] Value not null
-            assert(value > 0, 'Invalid value');
-            // [Check] Enough reserved value available
-            let reserved_value = self._mint_reserved_value.read();
-            assert(reserved_value >= value, 'Not enough reserved value');
-            // [Effect] Update reserved value
-            self._mint_reserved_value.write(reserved_value - value);
         }
 
         fn airdrop(ref self: ContractState, to: ContractAddress, value: u256) {
