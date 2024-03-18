@@ -136,10 +136,7 @@ mod Mint {
         }
 
         fn get_remaining_value(self: @ContractState) -> u256 {
-            let project_address = self._mint_carbonable_project_address.read();
-            let slot = self._mint_carbonable_project_slot.read();
-            let project = IProjectDispatcher { contract_address: project_address };
-            let total_value = project.total_value(slot);
+            let total_value = self.get_total_value();
             let available_value = self.get_available_value();
             available_value - total_value
         }
@@ -265,14 +262,16 @@ mod Mint {
             self._mint_unit_price.write(unit_price);
         }
 
-        fn decrease_reserved_value(ref self: ContractState, value: u256) {
+        fn update_reserved_value(ref self: ContractState, value: u256) {
             // [Check] Value not null
-            assert(value > 0, 'Invalid value');
-            // [Check] Enough reserved value available
-            let reserved_value = self._mint_reserved_value.read();
-            assert(reserved_value >= value, 'Not enough reserved value');
+            assert(value >= 0, 'Invalid value');
+            // [Check] Enough remaining value for the update value
+            let max_value = self._mint_max_value.read();
+            let total_value = self.get_total_value();
+            let remaining_value_without_reserve = max_value - total_value;
+            assert(remaining_value_without_reserve >= value, 'Not enough remaining value');
             // [Effect] Update reserved value
-            self._mint_reserved_value.write(reserved_value - value);
+            self._mint_reserved_value.write(value);
         }
 
         fn airdrop(ref self: ContractState, to: ContractAddress, value: u256) {
@@ -284,12 +283,8 @@ mod Mint {
             assert(value > 0, 'Invalid value');
 
             // [Check] Enough value available
-            let project_address = self._mint_carbonable_project_address.read();
-            let slot = self._mint_carbonable_project_slot.read();
-            let project = IProjectDispatcher { contract_address: project_address };
-            let total_value = project.total_value(slot);
-            let absorber = IAbsorberDispatcher { contract_address: project_address };
-            let project_value = absorber.get_project_value(slot);
+            let total_value = self.get_total_value();
+            let project_value = self.get_project_value();
             assert(total_value + value <= project_value, 'Not enough value');
 
             // [Check] Enough reserved value available
@@ -300,6 +295,9 @@ mod Mint {
             self._mint_reserved_value.write(reserved_value - value);
 
             // [Interaction] Mint
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
+            let project = IProjectDispatcher { contract_address: project_address };
             project.mint(to, slot, value);
 
             // [Event] Emit event
@@ -501,6 +499,22 @@ mod Mint {
             let absorber = IAbsorberDispatcher { contract_address: project_address };
             let project_value = absorber.get_project_value(slot);
             project_value - total_value
+        }
+
+        fn get_total_value(self: @ContractState) -> u256 {
+            // [Compute] Total value
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
+            let project = IProjectDispatcher { contract_address: project_address };
+            project.total_value(slot)
+        }
+
+        fn get_project_value(self: @ContractState) -> u256 {
+            // [Compute] Total value
+            let project_address = self._mint_carbonable_project_address.read();
+            let slot = self._mint_carbonable_project_slot.read();
+            let absorber = IAbsorberDispatcher { contract_address: project_address };
+            absorber.get_project_value(slot)
         }
     }
 }

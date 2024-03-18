@@ -28,7 +28,7 @@ trait IMint<TContractState> {
     fn set_min_value_per_tx(ref self: TContractState, min_value_per_tx: u256);
     fn set_max_value(ref self: TContractState, max_value: u256);
     fn set_unit_price(ref self: TContractState, unit_price: u256);
-    fn decrease_reserved_value(ref self: TContractState, value: u256);
+    fn update_reserved_value(ref self: TContractState, value: u256);
     fn airdrop(ref self: TContractState, to: ContractAddress, value: u256);
     fn withdraw(ref self: TContractState);
     fn transfer(

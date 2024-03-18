@@ -238,13 +238,13 @@ mod Minter {
             Mint::MintImpl::set_unit_price(ref unsafe_state, unit_price)
         }
 
-        fn decrease_reserved_value(ref self: ContractState, value: u256) {
+        fn update_reserved_value(ref self: ContractState, value: u256) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
-            // [Effect] Decrease reserved value
+            // [Effect] Update reserved value
             let mut unsafe_state = Mint::unsafe_new_contract_state();
-            Mint::MintImpl::decrease_reserved_value(ref unsafe_state, value)
+            Mint::MintImpl::update_reserved_value(ref unsafe_state, value)
         }
 
         fn airdrop(ref self: ContractState, to: ContractAddress, value: u256) {
