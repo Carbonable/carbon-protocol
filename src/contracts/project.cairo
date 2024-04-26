@@ -1,6 +1,12 @@
 use starknet::ContractAddress;
 
 #[starknet::interface]
+trait IMetadataSetter<ContractState> {
+    fn set_name(ref self: ContractState, name: felt252);
+    fn set_symbol(ref self: ContractState, symbol: felt252);
+}
+
+#[starknet::interface]
 trait IExternal<ContractState> {
     fn total_value(self: @ContractState, slot: u256) -> u256;
     fn mint(ref self: ContractState, to: ContractAddress, slot: u256, value: u256) -> u256;
@@ -31,6 +37,7 @@ mod Project {
     use openzeppelin::token::erc721::interface::{
         IERC721, IERC721Metadata, IERC721CamelOnly, IERC721MetadataCamelOnly
     };
+    use openzeppelin::token::erc721::erc721::ERC721;
 
     // ERC2981
     use cairo_erc_2981::components::erc2981::interface::{IERC2981, IERC2981Camel};
@@ -60,7 +67,10 @@ mod Project {
     // Storage
 
     #[storage]
-    struct Storage {}
+    struct Storage {
+        ERC721_name: felt252,
+        ERC721_symbol: felt252
+    }
 
     // Events
 
@@ -361,6 +371,21 @@ mod Project {
         ) {
             let mut unsafe_state = ERC3525::unsafe_new_contract_state();
             ERC3525::ERC721Impl::safe_transfer_from(ref unsafe_state, from, to, tokenId, data)
+        }
+    }
+
+    #[external(v0)]
+    impl TemporaryImpl of super::IMetadataSetter<ContractState> {
+        fn set_name(ref self: ContractState, name: felt252) {
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            self.ERC721_name.write(name);
+        }
+
+        fn set_symbol(ref self: ContractState, symbol: felt252) {
+            let unsafe_state = Ownable::unsafe_new_contract_state();
+            Ownable::InternalImpl::assert_only_owner(@unsafe_state);
+            self.ERC721_symbol.write(symbol);
         }
     }
 
