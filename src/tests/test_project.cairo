@@ -11,7 +11,10 @@ use starknet::testing::{set_caller_address, set_contract_address, set_block_time
 // External deps
 
 use openzeppelin::account::account::Account;
-use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
+use openzeppelin::token::erc721::interface::{
+    IERC721Dispatcher, IERC721DispatcherTrait, IERC721MetadataDispatcher,
+    IERC721MetadataDispatcherTrait
+};
 use cairo_erc_3525::presets::erc3525_mintable_burnable::{
     IExternalDispatcher as IERC3525Dispatcher, IExternalDispatcherTrait as IERC3525DispatcherTrait
 };
@@ -261,5 +264,24 @@ fn test_royalties_default_setup() {
     assert(receiver == signers.owner, 'Invalid receiver');
     assert(fee_numerator == 500, 'Invalid fee numerator');
     assert(fee_denominator == 10_000, 'Invalid fee denominator');
+}
+
+use carbon::contracts::project::{IMetadataSetterDispatcherTrait, IMetadataSetterDispatcher};
+
+#[test]
+#[available_gas(20_000_000)]
+fn test_temporary_upgrade() {
+    // [Setup]
+    let (signers, contracts) = setup();
+    set_contract_address(signers.owner);
+
+    let project = IERC721MetadataDispatcher { contract_address: contracts.project };
+    let project_ms = IMetadataSetterDispatcher { contract_address: contracts.project };
+    assert(project.name() == NAME, 'Invalid name');
+    assert(project.symbol() == SYMBOL, 'Invalid symbol');
+    project_ms.set_name('NEW_NAME');
+    project_ms.set_symbol('NEW_SYMBOL');
+    assert(project.name() == 'NEW_NAME', 'Invalid name');
+    assert(project.symbol() == 'NEW_SYMBOL', 'Invalid symbol');
 }
 
