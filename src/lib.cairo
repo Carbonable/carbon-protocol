@@ -56,6 +56,7 @@ mod tests {
     mod test_yielder;
     mod test_apr;
     mod scenarios {
+        mod test_iso_curve;
         mod test_iso_yielder_claims;
         mod test_iso_karathuru;
         mod test_iso_yielder_setting;
