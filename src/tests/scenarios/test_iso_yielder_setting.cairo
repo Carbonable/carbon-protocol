@@ -367,8 +367,9 @@ mod FarmingDepositWithdrawYielder {
 
     use carbon::tests::data;
 
-    use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH};
+    use carbon::tests::scenarios::test_iso_yielder_setting::{
+        setup, SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH
+    };
 
     fn max(a: u64, b: u64) -> u64 {
         if a > b {
@@ -826,9 +827,7 @@ mod FarmingClaimingReward {
     };
     use carbon::tests::data;
 
-    use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT};
-    use super::SpanPrintImpl;
+    use carbon::tests::scenarios::test_iso_yielder_setting::{setup, SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT, SpanPrintImpl, deploy_yielder};
 
     // Costly test to activate locally only
     //#[test]
@@ -935,7 +934,7 @@ mod FarmingClaimingReward {
                         .span();
 
                     // Setup new yielder
-                    let contract_yielder = super::deploy_yielder(
+                    let contract_yielder = deploy_yielder(
                         contracts.project, erc20.contract_address, signers.owner, slot
                     );
                     let yielder = IYieldDispatcher { contract_address: contract_yielder };
@@ -1341,9 +1340,7 @@ mod PriceConfigAccounting {
         IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
     };
 
-    use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT};
-    use super::SpanPrintImpl;
+    use carbon::tests::scenarios::test_iso_yielder_setting::{setup, SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT, SpanPrintImpl};
 
     #[test]
     #[available_gas(4_000_000_000)]
@@ -1531,9 +1528,7 @@ mod VerifyCumulativeSalePrice {
     };
     use carbon::tests::data;
 
-    use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, PRICE, TON_EQUIVALENT};
-    use super::SpanPrintImpl;
+    use carbon::tests::scenarios::test_iso_yielder_setting::{setup, SLOT, VALUE, PROJECT_VALUE, PRICE, TON_EQUIVALENT, SpanPrintImpl};
 
     #[test]
     #[available_gas(4_000_000_000)]
@@ -1690,9 +1685,7 @@ mod AdditionalTests {
     };
     use carbon::tests::data;
 
-    use super::setup;
-    use super::SpanPrintImpl;
-    use super::{SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT, PRICE};
+    use carbon::tests::scenarios::test_iso_yielder_setting::{setup,SpanPrintImpl,SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT, PRICE, setup_yielder, deploy_yielder};
 
 
     #[test]
@@ -1790,10 +1783,10 @@ mod AdditionalTests {
         set_contract_address(signers.owner);
 
         // Deploy yielders
-        let contract_yielder2 = super::deploy_yielder(
+        let contract_yielder2 = deploy_yielder(
             contracts.project, erc20.contract_address, signers.owner, SLOT + 1
         );
-        let contract_yielder3 = super::deploy_yielder(
+        let contract_yielder3 = deploy_yielder(
             contracts.project, erc20.contract_address, signers.owner, SLOT + 2
         );
         let yielder2 = IYieldDispatcher { contract_address: contract_yielder2 };
@@ -1814,14 +1807,14 @@ mod AdditionalTests {
         absorber.set_project_value(SLOT + 1, PROJECT_VALUE);
         absorber.set_absorptions(SLOT + 2, times, absorptions, TON_EQUIVALENT);
         absorber.set_project_value(SLOT + 2, PROJECT_VALUE);
-        super::setup_yielder(
+        setup_yielder(
             project.contract_address,
             erc20.contract_address,
             yielder2.contract_address,
             @signers,
             PRICE
         );
-        super::setup_yielder(
+        setup_yielder(
             project.contract_address,
             erc20.contract_address,
             yielder3.contract_address,

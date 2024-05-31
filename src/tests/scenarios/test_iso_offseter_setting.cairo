@@ -250,8 +250,10 @@ mod FarmingDepositWithdrawOffseter {
         IExternalDispatcherTrait as IProjectDispatcherTrait
     };
     use carbon::tests::data;
-    use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, ONE_MONTH};
+    use carbon::tests::scenarios::test_iso_offseter_setting::setup;
+    use carbon::tests::scenarios::test_iso_offseter_setting::{
+        SLOT, VALUE, PROJECT_VALUE, ONE_MONTH
+    };
 
 
     #[test]
@@ -627,8 +629,10 @@ mod AdditionalTests {
         IExternalDispatcherTrait as IProjectDispatcherTrait
     };
     use carbon::tests::data;
-    use super::setup;
-    use super::{SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT};
+    use carbon::tests::scenarios::test_iso_offseter_setting::setup;
+    use carbon::tests::scenarios::test_iso_offseter_setting::{
+        SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT
+    };
 
 
     #[test]
