@@ -18,7 +18,6 @@ trait IExternal<ContractState> {
 
 #[starknet::contract]
 mod Project {
-    use core::traits::Into;
     use starknet::{get_caller_address, ContractAddress, ClassHash};
 
     // Ownable
@@ -61,6 +60,10 @@ mod Project {
     // Metadata
     use carbon::components::metadata::interface::{IContractDescriptor, ISlotDescriptor, IMetadata};
     use carbon::components::metadata::module::Metadata;
+    use carbon::contracts::project::IMetadataSetter;
+
+    // External Interface
+    use carbon::contracts::project::IExternal;
 
     const IERC165_BACKWARD_COMPATIBLE_ID: u32 = 0x80ac58cd_u32;
 
@@ -375,7 +378,7 @@ mod Project {
     }
 
     #[external(v0)]
-    impl TemporaryImpl of super::IMetadataSetter<ContractState> {
+    impl TemporaryImpl of IMetadataSetter<ContractState> {
         fn set_name(ref self: ContractState, name: felt252) {
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);
@@ -531,7 +534,7 @@ mod Project {
     // Externals
 
     #[external(v0)]
-    impl ExternalImpl of super::IExternal<ContractState> {
+    impl ExternalImpl of IExternal<ContractState> {
         fn total_value(self: @ContractState, slot: u256) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
             ERC3525::ExternalImpl::total_value(@unsafe_state, slot)

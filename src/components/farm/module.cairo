@@ -740,18 +740,18 @@ mod Test {
 
     use alexandria_storage::list::{List, ListTrait};
 
-    use super::Farm;
-    use super::Farm::_farm_token_id::InternalContractMemberStateTrait as TokenIdTrait;
-    use super::Farm::_farm_total_absorption::InternalContractMemberStateTrait as TotalAbsorptionTrait;
-    use super::Farm::_farm_total_sale::InternalContractMemberStateTrait as TotalSaleTrait;
-    use super::Farm::_farm_total_registered_value::InternalContractMemberStateTrait as TotalRegisteredValueTrait;
-    use super::Farm::_farm_total_registered_time::InternalContractMemberStateTrait as TotalRegisteredTimeTrait;
-    use super::Farm::_farm_absorption::InternalContractMemberStateTrait as AbsorptionTrait;
-    use super::Farm::_farm_sale::InternalContractMemberStateTrait as SaleTrait;
-    use super::Farm::_farm_registered_value::InternalContractMemberStateTrait as RegisteredValueTrait;
-    use super::Farm::_farm_registered_time::InternalContractMemberStateTrait as RegisteredTimeTrait;
-    use super::Farm::_farm_times::InternalContractMemberStateTrait as TimesTrait;
-    use super::Farm::_farm_prices::InternalContractMemberStateTrait as PricesTrait;
+    use carbon::components::farm::module::Farm;
+    use Farm::_farm_token_id::InternalContractMemberStateTrait as TokenIdTrait;
+    use Farm::_farm_total_absorption::InternalContractMemberStateTrait as TotalAbsorptionTrait;
+    use Farm::_farm_total_sale::InternalContractMemberStateTrait as TotalSaleTrait;
+    use Farm::_farm_total_registered_value::InternalContractMemberStateTrait as TotalRegisteredValueTrait;
+    use Farm::_farm_total_registered_time::InternalContractMemberStateTrait as TotalRegisteredTimeTrait;
+    use Farm::_farm_absorption::InternalContractMemberStateTrait as AbsorptionTrait;
+    use Farm::_farm_sale::InternalContractMemberStateTrait as SaleTrait;
+    use Farm::_farm_registered_value::InternalContractMemberStateTrait as RegisteredValueTrait;
+    use Farm::_farm_registered_time::InternalContractMemberStateTrait as RegisteredTimeTrait;
+    use Farm::_farm_times::InternalContractMemberStateTrait as TimesTrait;
+    use Farm::_farm_prices::InternalContractMemberStateTrait as PricesTrait;
 
     const SLOT: u256 = 1;
     const VALUE: u256 = 1000;

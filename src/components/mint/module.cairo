@@ -526,9 +526,9 @@ mod Test {
     use traits::TryInto;
     use starknet::ContractAddress;
     use starknet::testing::set_block_timestamp;
-    use super::Mint;
-    use super::Mint::_mint_max_value_per_tx::InternalContractMemberStateTrait as MintMaxValuePerTxTrait;
-    use super::Mint::_mint_max_value::InternalContractMemberStateTrait as MintMaxValueTrait;
+    use carbon::components::mint::module::Mint;
+    use Mint::_mint_max_value_per_tx::InternalContractMemberStateTrait as MintMaxValuePerTxTrait;
+    use Mint::_mint_max_value::InternalContractMemberStateTrait as MintMaxValueTrait;
 
     const MAX_VALUE_PER_TX: u256 = 100;
     const MIN_VALUE_PER_TX: u256 = 5;
