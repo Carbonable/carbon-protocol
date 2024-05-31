@@ -172,7 +172,7 @@ mod Access {
 #[cfg(test)]
 mod Test {
     use starknet::testing::set_caller_address;
-    use super::Access;
+    use carbon::components::access::module::Access;
 
     fn STATE() -> Access::ContractState {
         Access::unsafe_new_contract_state()

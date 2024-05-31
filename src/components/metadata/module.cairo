@@ -94,7 +94,7 @@ mod Metadata {
 mod Test {
     use starknet::ClassHash;
     use starknet::testing::set_caller_address;
-    use super::Metadata;
+    use carbon::components::metadata::module::Metadata;
 
     use carbon::components::metadata::interface::{
         IContractDescriptorLibraryDispatcher, IContractDescriptorDispatcherTrait,
@@ -107,7 +107,7 @@ mod Test {
 
     #[starknet::contract]
     mod MetadataTest {
-        use super::Metadata;
+        use carbon::components::metadata::module::Metadata;
 
         #[storage]
         struct Storage {}

@@ -194,7 +194,7 @@ mod Absorber {
 #[cfg(test)]
 mod Test {
     use starknet::testing::set_block_timestamp;
-    use super::Absorber;
+    use carbon::components::absorber::module::Absorber;
 
     use alexandria_storage::list::{List, ListTrait};
 
@@ -460,7 +460,7 @@ mod Test {
             _test_list256: List<u256>,
         }
 
-        impl ITestImpl of super::ITestList<ContractState> {
+        impl ITestImpl of carbon::components::absorber::module::Test::ITestList<ContractState> {
             fn set_list(ref self: ContractState, length: u64, mul: u64) {
                 let mut list = self._test_list64.read();
                 let mut i = 1;

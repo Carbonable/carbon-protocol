@@ -662,11 +662,11 @@ mod Test {
 
     // Internal imports
 
-    use super::Mint;
-    use super::Mint::_mint_max_value_per_tx::InternalContractMemberStateTrait as MintMaxValuePerTxTrait;
-    use super::Mint::_mint_carbonable_project_address::InternalContractMemberStateTrait as MintProjectAddressTrait;
-    use super::Mint::_mint_remaining_value::InternalContractMemberStateTrait as MintRemainingValueTrait;
-    use super::Mint::_mint_payment_token_address::InternalContractMemberStateTrait as MintPaymentTokenAddressTrait;
+    use carbon::components::mint_2step::module::Mint;
+    use Mint::_mint_max_value_per_tx::InternalContractMemberStateTrait as MintMaxValuePerTxTrait;
+    use Mint::_mint_carbonable_project_address::InternalContractMemberStateTrait as MintProjectAddressTrait;
+    use Mint::_mint_remaining_value::InternalContractMemberStateTrait as MintRemainingValueTrait;
+    use Mint::_mint_payment_token_address::InternalContractMemberStateTrait as MintPaymentTokenAddressTrait;
 
     // Constants
 
@@ -676,7 +676,7 @@ mod Test {
     const MERKLE_ROOT: felt252 = 0x6a60c7ba8f69a71bdb100454e45ea29dc3474e6a0718039c957282f25897422;
     const ALLOCATION: felt252 = 5;
     const PROOF: felt252 = 0x58f605c335d6edee10b834aedf74f8ed903311799ecde69461308439a4537c7;
-    const BILION: u256 = 1000000000;
+    const BILLION: u256 = 1000000000;
 
     fn STATE() -> Mint::ContractState {
         Mint::contract_state_for_testing()
@@ -703,7 +703,7 @@ mod Test {
         #[external(v0)]
         impl MockImpl of MockTrait {
             fn get_project_value(self: @ContractState, slot: u256) -> u256 {
-                super::BILION
+                carbon::components::mint_2step::module::Test::BILLION
             }
             fn total_value(self: @ContractState, slot: u256) -> u256 {
                 0
