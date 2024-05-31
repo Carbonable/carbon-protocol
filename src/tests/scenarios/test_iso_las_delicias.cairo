@@ -332,8 +332,8 @@ mod FarmingDepositWithdrawYielder {
 
     use carbon::tests::data;
 
-    use super::setup;
-    use super::{SLOT, VALUE, VALUE_USER_2, PROJECT_VALUE, PRICE, ONE_MONTH};
+    use carbon::tests::scenarios::test_iso_las_delicias::setup;
+    use carbon::tests::scenarios::test_iso_las_delicias::{SLOT, VALUE, VALUE_USER_2, PROJECT_VALUE, PRICE, ONE_MONTH};
 
     fn max(a: u64, b: u64) -> u64 {
         if a > b {
