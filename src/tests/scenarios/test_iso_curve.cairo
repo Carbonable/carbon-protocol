@@ -292,7 +292,9 @@ mod FarmingDepositWithdrawYielder {
     use carbon::tests::data;
 
     use carbon::tests::scenarios::test_iso_curve::{setup, Contracts};
-    use carbon::tests::scenarios::test_iso_curve::{SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_DAY, ONE_MONTH, TON_EQUIVALENT};
+    use carbon::tests::scenarios::test_iso_curve::{
+        SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_DAY, ONE_MONTH, TON_EQUIVALENT
+    };
 
     fn max(a: u64, b: u64) -> u64 {
         if a > b {

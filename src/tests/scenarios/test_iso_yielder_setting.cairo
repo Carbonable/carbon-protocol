@@ -827,7 +827,10 @@ mod FarmingClaimingReward {
     };
     use carbon::tests::data;
 
-    use carbon::tests::scenarios::test_iso_yielder_setting::{setup, SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT, SpanPrintImpl, deploy_yielder};
+    use carbon::tests::scenarios::test_iso_yielder_setting::{
+        setup, SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT, SpanPrintImpl,
+        deploy_yielder
+    };
 
     // Costly test to activate locally only
     //#[test]
@@ -1340,7 +1343,9 @@ mod PriceConfigAccounting {
         IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
     };
 
-    use carbon::tests::scenarios::test_iso_yielder_setting::{setup, SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT, SpanPrintImpl};
+    use carbon::tests::scenarios::test_iso_yielder_setting::{
+        setup, SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_MONTH, TON_EQUIVALENT, SpanPrintImpl
+    };
 
     #[test]
     #[available_gas(4_000_000_000)]
@@ -1528,7 +1533,9 @@ mod VerifyCumulativeSalePrice {
     };
     use carbon::tests::data;
 
-    use carbon::tests::scenarios::test_iso_yielder_setting::{setup, SLOT, VALUE, PROJECT_VALUE, PRICE, TON_EQUIVALENT, SpanPrintImpl};
+    use carbon::tests::scenarios::test_iso_yielder_setting::{
+        setup, SLOT, VALUE, PROJECT_VALUE, PRICE, TON_EQUIVALENT, SpanPrintImpl
+    };
 
     #[test]
     #[available_gas(4_000_000_000)]
@@ -1685,7 +1692,10 @@ mod AdditionalTests {
     };
     use carbon::tests::data;
 
-    use carbon::tests::scenarios::test_iso_yielder_setting::{setup,SpanPrintImpl,SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT, PRICE, setup_yielder, deploy_yielder};
+    use carbon::tests::scenarios::test_iso_yielder_setting::{
+        setup, SpanPrintImpl, SLOT, VALUE, PROJECT_VALUE, ONE_MONTH, ONE_DAY, TON_EQUIVALENT, PRICE,
+        setup_yielder, deploy_yielder
+    };
 
 
     #[test]

@@ -333,7 +333,9 @@ mod ISOProjectKarathuru {
     use carbon::tests::data;
 
     use carbon::tests::scenarios::test_iso_karathuru::setup;
-    use carbon::tests::scenarios::test_iso_karathuru::{SLOT, VALUE, VALUE_USER_2, PROJECT_VALUE, PRICE, ONE_MONTH};
+    use carbon::tests::scenarios::test_iso_karathuru::{
+        SLOT, VALUE, VALUE_USER_2, PROJECT_VALUE, PRICE, ONE_MONTH
+    };
 
     fn max(a: u64, b: u64) -> u64 {
         if a > b {
