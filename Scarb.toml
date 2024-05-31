@@ -14,3 +14,7 @@ cairo_erc_3525 = { git = "https://github.com/carbonable-labs/cairo-erc-3525", ta
 cairo_erc_2981 = { git = "https://github.com/carbonable-labs/cairo-erc-2981", tag="v1.0.1" }
 
 [[target.starknet-contract]]
+sierra=true
+
+[tool.voyager]
+project = { path = "./src/contracts/project.cairo" }
