@@ -6,7 +6,8 @@ use debug::PrintTrait;
 
 use starknet::ContractAddress;
 use starknet::deploy_syscall;
-use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
+use starknet::testing::{set_contract_address, set_block_timestamp};
+use starknet::get_contract_address;
 
 // External deps
 
@@ -14,9 +15,7 @@ use openzeppelin::account::account::Account;
 use openzeppelin::token::erc20::erc20::ERC20;
 use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
-use cairo_erc_3525::presets::erc3525_mintable_burnable::{
-    IExternalDispatcher as IERC3525Dispatcher, IExternalDispatcherTrait as IERC3525DispatcherTrait
-};
+use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
 
 // Components
 
@@ -261,320 +260,394 @@ fn setup(price: u256) -> (Signers, Contracts) {
     (signers, contracts)
 }
 
-mod FarmingDepositWithdrawYielder {
-    use starknet::ContractAddress;
-    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
-    use starknet::{get_contract_address, get_caller_address};
+// Test helpers
 
-    use debug::PrintTrait;
-
-    use openzeppelin::account::account::Account;
-    use openzeppelin::token::erc20::erc20::ERC20;
-    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
-    use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
-    use cairo_erc_3525::interface::{IERC3525Dispatcher, IERC3525DispatcherTrait};
-
-    // Components
-
-    use carbon::components::absorber::interface::{IAbsorberDispatcher, IAbsorberDispatcherTrait};
-    use carbon::components::access::interface::{ICertifierDispatcher, ICertifierDispatcherTrait};
-    use carbon::components::access::interface::{IMinterDispatcher, IMinterDispatcherTrait};
-    use carbon::components::farm::interface::{
-        IFarmDispatcher, IFarmDispatcherTrait, IYieldFarmDispatcher, IYieldFarmDispatcherTrait
-    };
-    use carbon::components::offset::interface::{IOffsetDispatcher, IOffsetDispatcherTrait};
-    use carbon::components::yield::interface::{IYieldDispatcher, IYieldDispatcherTrait};
-    use carbon::contracts::project::{
-        Project, IExternalDispatcher as IProjectDispatcher,
-        IExternalDispatcherTrait as IProjectDispatcherTrait
-    };
-
-    use carbon::tests::data;
-
-    use carbon::tests::scenarios::test_iso_curve::{setup, Contracts};
-    use carbon::tests::scenarios::test_iso_curve::{
-        SLOT, VALUE, PROJECT_VALUE, PRICE, ONE_DAY, ONE_MONTH, TON_EQUIVALENT
-    };
-
-    fn max(a: u64, b: u64) -> u64 {
-        if a > b {
-            a
-        } else {
-            b
-        }
+fn max(a: u64, b: u64) -> u64 {
+    if a > b {
+        a
+    } else {
+        b
     }
+}
 
-    fn deposit(
-        contracts: @Contracts, user: ContractAddress, amount: u256, time: u64, token_id: u256
-    ) {
-        let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
-        let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
-        set_contract_address(user);
-        set_block_timestamp(time);
-        let initial = erc3525.value_of(token_id);
-        let initial_deposited = farmer.get_deposited_of(user);
-        farmer.deposit(token_id, amount);
-        let final = erc3525.value_of(token_id);
-        let final_deposited = farmer.get_deposited_of(user);
-        assert(final == initial - amount, 'dep: value error');
-        assert(final_deposited == initial_deposited + amount, 'dep: deposited error');
+fn deposit(contracts: @Contracts, user: ContractAddress, amount: u256, time: u64, token_id: u256) {
+    let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
+    let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
+    set_contract_address(user);
+    set_block_timestamp(time);
+    let initial = erc3525.value_of(token_id);
+    let initial_deposited = farmer.get_deposited_of(user);
+    farmer.deposit(token_id, amount);
+    let final = erc3525.value_of(token_id);
+    let final_deposited = farmer.get_deposited_of(user);
+    assert(final == initial - amount, 'dep: value error');
+    assert(final_deposited == initial_deposited + amount, 'dep: deposited error');
+}
+
+
+fn transfer(contracts: @Contracts, token_id: u256, to: u256, amount: u256, time: u64,) {
+    let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
+    let erc721 = IERC721Dispatcher { contract_address: *contracts.project };
+    let from = erc721.owner_of(token_id);
+    set_contract_address(from);
+    set_block_timestamp(time);
+    let initial = erc3525.value_of(token_id);
+    erc3525.transfer_value_from(token_id, to, 0.try_into().unwrap(), amount);
+    let final = erc3525.value_of(token_id);
+    assert(final == initial - amount, 'dep: value error');
+}
+
+
+fn withdraw(contracts: @Contracts, user: ContractAddress, amount: u256, time: u64, token_id: u256) {
+    let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
+    let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
+    set_contract_address(user);
+    set_block_timestamp(time);
+    let initial = erc3525.value_of(token_id);
+    let initial_deposited = farmer.get_deposited_of(user);
+    farmer.withdraw_to_token(token_id, amount);
+    let final = erc3525.value_of(token_id);
+    let final_deposited = farmer.get_deposited_of(user);
+    assert(final == initial + amount, 'with: value error');
+    assert(final_deposited == initial_deposited - amount, 'with: deposited error');
+}
+
+fn withdraw_all(contracts: @Contracts, user: ContractAddress, time: u64, token_id: u256) {
+    let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
+    let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
+    set_contract_address(user);
+    set_block_timestamp(time);
+    let initial = erc3525.value_of(token_id);
+    let initial_deposited = farmer.get_deposited_of(user);
+    farmer.withdraw_to_token(token_id, initial_deposited);
+    let final = erc3525.value_of(token_id);
+    let final_deposited = farmer.get_deposited_of(user);
+    assert(final == initial + initial_deposited, 'with: value error');
+    assert(final_deposited == 0, 'with: deposited error');
+}
+
+
+fn claim(contracts: @Contracts, user: ContractAddress, time: u64) {
+    let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
+    let yielder = IYieldDispatcher { contract_address: *contracts.yielder };
+    set_contract_address(user);
+    set_block_timestamp(time);
+    let claimable = yielder.get_claimable_of(user);
+    let claimed = yielder.get_claimed_of(user);
+    let initial_balance = IERC20Dispatcher { contract_address: *contracts.erc20 }.balance_of(user);
+    yielder.claim();
+    let final_balance = IERC20Dispatcher { contract_address: *contracts.erc20 }.balance_of(user);
+    assert(final_balance == initial_balance + claimable, 'claim: balance error');
+    assert(yielder.get_claimable_of(user) == 0, 'claim: claimable error');
+    assert(yielder.get_claimed_of(user) == claimed + claimable, 'claim: claimed error');
+}
+#[derive(Drop, Copy)]
+struct YieldState {
+    deposited: u256,
+    claimable: u256,
+    claimed: u256,
+}
+
+fn get_user_yielder_state(contracts: @Contracts, user: ContractAddress,) -> YieldState {
+    let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
+    let yielder = IYieldDispatcher { contract_address: *contracts.yielder };
+    let deposited = farmer.get_deposited_of(user);
+    let claimable = yielder.get_claimable_of(user);
+    let claimed = yielder.get_claimed_of(user);
+    YieldState { deposited, claimable, claimed }
+}
+
+fn compare_yield_state(
+    contracts: @Contracts, user: ContractAddress, initial: YieldState, claimed: bool
+) {
+    let current = get_user_yielder_state(contracts, user);
+    if claimed {
+        assert(current.deposited == initial.deposited, 'deposited error');
+        assert(current.claimable == 0, 'claimable error');
+        assert(current.claimed == initial.claimed + initial.claimable, 'claimed error');
+    } else {
+        assert(current.deposited == initial.deposited, 'deposited error');
+        assert(current.claimable == initial.claimable, 'claimable error');
+        assert(current.claimed == initial.claimed, 'claimed error');
     }
+}
+
+fn mint(contracts: @Contracts, user: ContractAddress, amount: u256, time: u64) -> u256 {
+    let project = IProjectDispatcher { contract_address: *contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
+    let erc721 = IERC721Dispatcher { contract_address: *contracts.project };
+    let token_id = project.mint(user, SLOT, amount);
+    let user_value = erc3525.value_of(token_id);
+    assert(user_value == amount, 'mint: value error');
+    let prev_caller = get_contract_address();
+    set_contract_address(user);
+    erc721.set_approval_for_all(*contracts.yielder, true);
+    set_contract_address(prev_caller);
+    token_id
+}
 
 
-    fn transfer(contracts: @Contracts, token_id: u256, to: u256, amount: u256, time: u64,) {
-        let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
-        let erc721 = IERC721Dispatcher { contract_address: *contracts.project };
-        let from = erc721.owner_of(token_id);
-        set_contract_address(from);
-        set_block_timestamp(time);
-        let initial = erc3525.value_of(token_id);
-        erc3525.transfer_value_from(token_id, to, 0.try_into().unwrap(), amount);
-        let final = erc3525.value_of(token_id);
-        assert(final == initial - amount, 'dep: value error');
-    }
+#[test]
+#[available_gas(4_400_000_000)]
+fn when_absorption_curve_changes_users_claimables_are_correct() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let yfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+
+    // Prank caller as owner
+    set_contract_address(signers.owner);
+
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    minter.add_minter(SLOT, signers.owner);
+    let _ = mint(@contracts, *signers.users[0], VALUE * 1, 0);
+    let _ = mint(@contracts, *signers.users[1], VALUE * 1, 0);
+    let _ = mint(@contracts, *signers.users[2], VALUE * 2, 0);
+    let _ = mint(@contracts, *signers.users[3], VALUE * 8, 0);
+    let _ = mint(@contracts, *signers.users[4], VALUE * 8, 0);
+    let _ = mint(@contracts, *signers.users[5], VALUE * 8, 0);
+    minter.revoke_minter(SLOT, signers.owner);
+
+    // Manjarisoa data
+    let (times, abs) = data::get_manjarisoa();
+    // March 24th, April 24th
+    let price_times = array![1711278000, 1713952800].span();
+    let prices = array![19, 19].span();
+
+    deposit(@contracts, *signers.users[0], VALUE, *times[0] + 3 * ONE_DAY, 1);
+    deposit(@contracts, *signers.users[1], VALUE, *times[0] + 4 * ONE_DAY, 2);
+    deposit(@contracts, *signers.users[2], VALUE, *times[0] + 5 * ONE_DAY, 3);
+    transfer(@contracts, 3, 2, VALUE, *times[0] + 6 * ONE_DAY);
+    deposit(@contracts, *signers.users[3], VALUE * 4, *times[0] + 10 * ONE_DAY, 4);
+    withdraw(@contracts, *signers.users[1], VALUE, *times[0] + 14 * ONE_DAY, 2);
+    transfer(@contracts, 4, 1, VALUE * 2, *times[0] + 16 * ONE_DAY);
+    deposit(@contracts, *signers.users[0], VALUE * 2, *times[0] + 17 * ONE_DAY, 1);
+    withdraw(@contracts, *signers.users[3], VALUE * 2, *times[0] + 18 * ONE_DAY, 4);
+    deposit(@contracts, *signers.users[4], VALUE * 4, *times[0] + 19 * ONE_DAY, 5);
+    deposit(@contracts, *signers.users[5], VALUE * 5, *times[0] + 20 * ONE_DAY, 6);
+    transfer(@contracts, 5, 2, VALUE * 2, *times[0] + 21 * ONE_DAY);
+    deposit(@contracts, *signers.users[1], VALUE * 2, *times[0] + 22 * ONE_DAY, 2);
+    claim(@contracts, *signers.users[0], *times[0] + 23 * ONE_DAY);
+    withdraw(@contracts, *signers.users[4], VALUE * 3, *times[0] + 31 * ONE_DAY, 5);
+
+    // Change abs
+    let may29 = 1717005600;
+    set_block_timestamp(may29);
+
+    let ys1_i = get_user_yielder_state(@contracts, *signers.users[0]);
+    let ys2_i = get_user_yielder_state(@contracts, *signers.users[1]);
+    let ys3_i = get_user_yielder_state(@contracts, *signers.users[2]);
+    let ys4_i = get_user_yielder_state(@contracts, *signers.users[3]);
+    let ys5_i = get_user_yielder_state(@contracts, *signers.users[4]);
+    let ys6_i = get_user_yielder_state(@contracts, *signers.users[5]);
+
+    set_contract_address(signers.owner);
+    let (new_times, new_abs) = data::get_manjarisoa_new();
+    absorber.set_absorptions(SLOT, new_times, new_abs, TON_EQUIVALENT);
+    yfarmer.set_prices(price_times, prices);
+
+    compare_yield_state(@contracts, *signers.users[0], ys1_i, false);
+    compare_yield_state(@contracts, *signers.users[1], ys2_i, false);
+    compare_yield_state(@contracts, *signers.users[2], ys3_i, false);
+    compare_yield_state(@contracts, *signers.users[3], ys4_i, false);
+    compare_yield_state(@contracts, *signers.users[4], ys5_i, false);
+    compare_yield_state(@contracts, *signers.users[5], ys6_i, false);
+
+    set_block_timestamp(may29 + 7 * ONE_MONTH + 19 * ONE_DAY);
+
+    compare_yield_state(@contracts, *signers.users[0], ys1_i, false);
+    compare_yield_state(@contracts, *signers.users[1], ys2_i, false);
+    compare_yield_state(@contracts, *signers.users[2], ys3_i, false);
+    compare_yield_state(@contracts, *signers.users[3], ys4_i, false);
+    compare_yield_state(@contracts, *signers.users[4], ys5_i, false);
+    compare_yield_state(@contracts, *signers.users[5], ys6_i, false);
+
+    set_block_timestamp(may29 + 10 * ONE_MONTH);
+
+    claim(@contracts, *signers.users[0], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[1], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[2], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[3], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[4], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[5], may29 + 10 * ONE_MONTH);
+
+    compare_yield_state(@contracts, *signers.users[0], ys1_i, true);
+    compare_yield_state(@contracts, *signers.users[1], ys2_i, true);
+    compare_yield_state(@contracts, *signers.users[2], ys3_i, true);
+    compare_yield_state(@contracts, *signers.users[3], ys4_i, true);
+    compare_yield_state(@contracts, *signers.users[4], ys5_i, true);
+    compare_yield_state(@contracts, *signers.users[5], ys6_i, true);
+
+    let ys1_f = get_user_yielder_state(@contracts, *signers.users[0]);
+    let ys2_f = get_user_yielder_state(@contracts, *signers.users[1]);
+    let ys3_f = get_user_yielder_state(@contracts, *signers.users[2]);
+    let ys4_f = get_user_yielder_state(@contracts, *signers.users[3]);
+    let ys5_f = get_user_yielder_state(@contracts, *signers.users[4]);
+    let ys6_f = get_user_yielder_state(@contracts, *signers.users[5]);
+
+    set_block_timestamp(may29 + 31 * ONE_MONTH);
+
+    withdraw_all(@contracts, *signers.users[0], may29 + 31 * ONE_MONTH, 1);
+    withdraw_all(@contracts, *signers.users[1], may29 + 31 * ONE_MONTH, 2);
+    withdraw_all(@contracts, *signers.users[2], may29 + 31 * ONE_MONTH, 3);
+    withdraw_all(@contracts, *signers.users[3], may29 + 31 * ONE_MONTH, 4);
+    withdraw_all(@contracts, *signers.users[4], may29 + 31 * ONE_MONTH, 5);
+    withdraw_all(@contracts, *signers.users[5], may29 + 31 * ONE_MONTH, 6);
+
+    compare_yield_state(
+        @contracts,
+        *signers.users[0],
+        YieldState { deposited: 0, claimable: 0, claimed: ys1_f.claimable + ys1_f.claimed },
+        false
+    );
+    compare_yield_state(
+        @contracts,
+        *signers.users[1],
+        YieldState { deposited: 0, claimable: 0, claimed: ys2_f.claimable + ys2_f.claimed },
+        false
+    );
+    compare_yield_state(
+        @contracts,
+        *signers.users[2],
+        YieldState { deposited: 0, claimable: 0, claimed: ys3_f.claimable + ys3_f.claimed },
+        false
+    );
+    compare_yield_state(
+        @contracts,
+        *signers.users[3],
+        YieldState { deposited: 0, claimable: 0, claimed: ys4_f.claimable + ys4_f.claimed },
+        false
+    );
+    compare_yield_state(
+        @contracts,
+        *signers.users[4],
+        YieldState { deposited: 0, claimable: 0, claimed: ys5_f.claimable + ys5_f.claimed },
+        false
+    );
+    compare_yield_state(
+        @contracts,
+        *signers.users[5],
+        YieldState { deposited: 0, claimable: 0, claimed: ys6_f.claimable + ys6_f.claimed },
+        false
+    );
+}
 
 
-    fn withdraw(
-        contracts: @Contracts, user: ContractAddress, amount: u256, time: u64, token_id: u256
-    ) {
-        let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
-        let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
-        set_contract_address(user);
-        set_block_timestamp(time);
-        let initial = erc3525.value_of(token_id);
-        let initial_deposited = farmer.get_deposited_of(user);
-        farmer.withdraw_to_token(token_id, amount);
-        let final = erc3525.value_of(token_id);
-        let final_deposited = farmer.get_deposited_of(user);
-        assert(final == initial + amount, 'with: value error');
-        assert(final_deposited == initial_deposited - amount, 'with: deposited error');
-    }
+#[test]
+#[available_gas(4_400_000_000)]
+fn can_change_and_restore_abs_curve() {
+    let (signers, contracts) = setup(PRICE);
+    // Instantiate contracts
+    let farmer = IFarmDispatcher { contract_address: contracts.yielder };
+    let yfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
+    let yielder = IYieldDispatcher { contract_address: contracts.yielder };
+    let minter = IMinterDispatcher { contract_address: contracts.project };
+    let project = IProjectDispatcher { contract_address: contracts.project };
+    let absorber = IAbsorberDispatcher { contract_address: contracts.project };
+    let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
+    let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
 
-    fn withdraw_all(contracts: @Contracts, user: ContractAddress, time: u64, token_id: u256) {
-        let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
-        let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
-        set_contract_address(user);
-        set_block_timestamp(time);
-        let initial = erc3525.value_of(token_id);
-        let initial_deposited = farmer.get_deposited_of(user);
-        farmer.withdraw_to_token(token_id, initial_deposited);
-        let final = erc3525.value_of(token_id);
-        let final_deposited = farmer.get_deposited_of(user);
-        assert(final == initial + initial_deposited, 'with: value error');
-        assert(final_deposited == 0, 'with: deposited error');
-    }
+    // Prank caller as owner
+    set_contract_address(signers.owner);
 
+    // Grant minter rights to owner, mint 1 token to anyone and revoke rights
+    minter.add_minter(SLOT, signers.owner);
+    let _ = mint(@contracts, *signers.users[0], VALUE * 1, 0);
+    let _ = mint(@contracts, *signers.users[1], VALUE * 1, 0);
+    let _ = mint(@contracts, *signers.users[2], VALUE * 2, 0);
+    let _ = mint(@contracts, *signers.users[3], VALUE * 8, 0);
+    let _ = mint(@contracts, *signers.users[4], VALUE * 8, 0);
+    let _ = mint(@contracts, *signers.users[5], VALUE * 8, 0);
+    minter.revoke_minter(SLOT, signers.owner);
 
-    fn claim(contracts: @Contracts, user: ContractAddress, time: u64) {
-        let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
-        let yielder = IYieldDispatcher { contract_address: *contracts.yielder };
-        set_contract_address(user);
-        set_block_timestamp(time);
-        let claimable = yielder.get_claimable_of(user);
-        let claimed = yielder.get_claimed_of(user);
-        let initial_balance = IERC20Dispatcher { contract_address: *contracts.erc20 }
-            .balance_of(user);
-        yielder.claim();
-        let final_balance = IERC20Dispatcher { contract_address: *contracts.erc20 }
-            .balance_of(user);
-        assert(final_balance == initial_balance + claimable, 'claim: balance error');
-        assert(yielder.get_claimable_of(user) == 0, 'claim: claimable error');
-        assert(yielder.get_claimed_of(user) == claimed + claimable, 'claim: claimed error');
-    }
-    #[derive(Drop, Copy)]
-    struct YieldState {
-        deposited: u256,
-        claimable: u256,
-        claimed: u256,
-    }
+    // Manjarisoa data
+    let (times, abs) = data::get_manjarisoa();
+    // March 24th, April 24th
+    let price_times = array![1711278000, 1713952800].span();
+    let prices = array![19, 19].span();
 
-    fn get_user_yielder_state(contracts: @Contracts, user: ContractAddress,) -> YieldState {
-        let farmer = IFarmDispatcher { contract_address: *contracts.yielder };
-        let yielder = IYieldDispatcher { contract_address: *contracts.yielder };
-        let deposited = farmer.get_deposited_of(user);
-        let claimable = yielder.get_claimable_of(user);
-        let claimed = yielder.get_claimed_of(user);
-        YieldState { deposited, claimable, claimed }
-    }
+    deposit(@contracts, *signers.users[0], VALUE, *times[0] + 3 * ONE_DAY, 1);
+    deposit(@contracts, *signers.users[1], VALUE, *times[0] + 4 * ONE_DAY, 2);
+    deposit(@contracts, *signers.users[2], VALUE, *times[0] + 5 * ONE_DAY, 3);
+    transfer(@contracts, 3, 2, VALUE, *times[0] + 6 * ONE_DAY);
+    deposit(@contracts, *signers.users[3], VALUE * 4, *times[0] + 10 * ONE_DAY, 4);
+    withdraw(@contracts, *signers.users[1], VALUE, *times[0] + 14 * ONE_DAY, 2);
+    transfer(@contracts, 4, 1, VALUE * 2, *times[0] + 16 * ONE_DAY);
+    deposit(@contracts, *signers.users[0], VALUE * 2, *times[0] + 17 * ONE_DAY, 1);
+    withdraw(@contracts, *signers.users[3], VALUE * 2, *times[0] + 18 * ONE_DAY, 4);
+    deposit(@contracts, *signers.users[4], VALUE * 4, *times[0] + 19 * ONE_DAY, 5);
+    deposit(@contracts, *signers.users[5], VALUE * 5, *times[0] + 20 * ONE_DAY, 6);
+    transfer(@contracts, 5, 2, VALUE * 2, *times[0] + 21 * ONE_DAY);
+    deposit(@contracts, *signers.users[1], VALUE * 2, *times[0] + 22 * ONE_DAY, 2);
+    claim(@contracts, *signers.users[0], *times[0] + 23 * ONE_DAY);
+    withdraw(@contracts, *signers.users[4], VALUE * 3, *times[0] + 31 * ONE_DAY, 5);
 
-    fn compare_yield_state(
-        contracts: @Contracts, user: ContractAddress, initial: YieldState, claimed: bool
-    ) {
-        let current = get_user_yielder_state(contracts, user);
-        if claimed {
-            assert(current.deposited == initial.deposited, 'deposited error');
-            assert(current.claimable == 0, 'claimable error');
-            assert(current.claimed == initial.claimed + initial.claimable, 'claimed error');
-        } else {
-            assert(current.deposited == initial.deposited, 'deposited error');
-            assert(current.claimable == initial.claimable, 'claimable error');
-            assert(current.claimed == initial.claimed, 'claimed error');
-        }
-    }
+    // Get state
+    let may29 = 1717005600;
+    let six_years = ONE_MONTH * 12 * 6;
+    let some_time = may29 + six_years + 31 * ONE_MONTH;
+    set_block_timestamp(some_time);
 
-    fn mint(contracts: @Contracts, user: ContractAddress, amount: u256, time: u64) -> u256 {
-        let project = IProjectDispatcher { contract_address: *contracts.project };
-        let erc3525 = IERC3525Dispatcher { contract_address: *contracts.project };
-        let erc721 = IERC721Dispatcher { contract_address: *contracts.project };
-        let token_id = project.mint(user, SLOT, amount);
-        let user_value = erc3525.value_of(token_id);
-        assert(user_value == amount, 'mint: value error');
-        let prev_caller = get_contract_address();
-        set_contract_address(user);
-        erc721.set_approval_for_all(*contracts.yielder, true);
-        set_contract_address(prev_caller);
-        token_id
-    }
+    let ys1_i = get_user_yielder_state(@contracts, *signers.users[0]);
+    let ys2_i = get_user_yielder_state(@contracts, *signers.users[1]);
+    let ys3_i = get_user_yielder_state(@contracts, *signers.users[2]);
+    let ys4_i = get_user_yielder_state(@contracts, *signers.users[3]);
+    let ys5_i = get_user_yielder_state(@contracts, *signers.users[4]);
+    let ys6_i = get_user_yielder_state(@contracts, *signers.users[5]);
+    set_block_timestamp(may29);
 
+    // Change abs
+    set_contract_address(signers.owner);
+    let (new_times, new_abs) = data::get_manjarisoa_new();
+    absorber.set_absorptions(SLOT, new_times, new_abs, TON_EQUIVALENT);
+    yfarmer.set_prices(price_times, prices);
 
-    #[test]
-    #[available_gas(4_400_000_000)]
-    fn when_absorption_curve_changes_users_claimables_are_correct() {
-        let (signers, contracts) = setup(PRICE);
-        // Instantiate contracts
-        let farmer = IFarmDispatcher { contract_address: contracts.yielder };
-        let yfarmer = IYieldFarmDispatcher { contract_address: contracts.yielder };
-        let yielder = IYieldDispatcher { contract_address: contracts.yielder };
-        let minter = IMinterDispatcher { contract_address: contracts.project };
-        let project = IProjectDispatcher { contract_address: contracts.project };
-        let absorber = IAbsorberDispatcher { contract_address: contracts.project };
-        let erc3525 = IERC3525Dispatcher { contract_address: contracts.project };
-        let erc20 = IERC20Dispatcher { contract_address: contracts.erc20 };
+    set_block_timestamp(may29 + 10 * ONE_MONTH);
 
-        // Prank caller as owner
-        set_contract_address(signers.owner);
+    claim(@contracts, *signers.users[0], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[1], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[2], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[3], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[4], may29 + 10 * ONE_MONTH);
+    claim(@contracts, *signers.users[5], may29 + 10 * ONE_MONTH);
 
-        // Grant minter rights to owner, mint 1 token to anyone and revoke rights
-        minter.add_minter(SLOT, signers.owner);
-        let _ = mint(@contracts, *signers.users[0], VALUE * 1, 0);
-        let _ = mint(@contracts, *signers.users[1], VALUE * 1, 0);
-        let _ = mint(@contracts, *signers.users[2], VALUE * 2, 0);
-        let _ = mint(@contracts, *signers.users[3], VALUE * 8, 0);
-        let _ = mint(@contracts, *signers.users[4], VALUE * 8, 0);
-        let _ = mint(@contracts, *signers.users[5], VALUE * 8, 0);
-        minter.revoke_minter(SLOT, signers.owner);
+    set_block_timestamp(may29 + six_years);
+    let (new_times, new_abs) = data::get_manjarisoa();
+    set_contract_address(signers.owner);
+    absorber.set_absorptions(SLOT, new_times, new_abs, TON_EQUIVALENT);
+    yfarmer.set_prices(price_times, prices);
 
-        // Manjarisoa data
-        let (times, abs) = data::get_manjarisoa();
-        // March 24th, April 24th
-        let price_times = array![1711278000, 1713952800].span();
-        let prices = array![19, 19].span();
+    set_block_timestamp(some_time);
 
-        deposit(@contracts, *signers.users[0], VALUE, *times[0] + 3 * ONE_DAY, 1);
-        deposit(@contracts, *signers.users[1], VALUE, *times[0] + 4 * ONE_DAY, 2);
-        deposit(@contracts, *signers.users[2], VALUE, *times[0] + 5 * ONE_DAY, 3);
-        transfer(@contracts, 3, 2, VALUE, *times[0] + 6 * ONE_DAY);
-        deposit(@contracts, *signers.users[3], VALUE * 4, *times[0] + 10 * ONE_DAY, 4);
-        withdraw(@contracts, *signers.users[1], VALUE, *times[0] + 14 * ONE_DAY, 2);
-        transfer(@contracts, 4, 1, VALUE * 2, *times[0] + 16 * ONE_DAY);
-        deposit(@contracts, *signers.users[0], VALUE * 2, *times[0] + 17 * ONE_DAY, 1);
-        withdraw(@contracts, *signers.users[3], VALUE * 2, *times[0] + 18 * ONE_DAY, 4);
-        deposit(@contracts, *signers.users[4], VALUE * 4, *times[0] + 19 * ONE_DAY, 5);
-        deposit(@contracts, *signers.users[5], VALUE * 5, *times[0] + 20 * ONE_DAY, 6);
-        transfer(@contracts, 5, 2, VALUE * 2, *times[0] + 21 * ONE_DAY);
-        deposit(@contracts, *signers.users[1], VALUE * 2, *times[0] + 22 * ONE_DAY, 2);
-        claim(@contracts, *signers.users[0], *times[0] + 23 * ONE_DAY);
-        withdraw(@contracts, *signers.users[4], VALUE * 3, *times[0] + 31 * ONE_DAY, 5);
+    claim(@contracts, *signers.users[0], some_time);
+    claim(@contracts, *signers.users[1], some_time);
+    claim(@contracts, *signers.users[2], some_time);
+    claim(@contracts, *signers.users[3], some_time);
+    claim(@contracts, *signers.users[4], some_time);
+    claim(@contracts, *signers.users[5], some_time);
 
-        // Change abs
-        let may29 = 1717005600;
-        set_block_timestamp(may29);
+    compare_yield_state(@contracts, *signers.users[0], ys1_i, true);
+    compare_yield_state(@contracts, *signers.users[1], ys2_i, true);
+    compare_yield_state(@contracts, *signers.users[2], ys3_i, true);
+    compare_yield_state(@contracts, *signers.users[3], ys4_i, true);
+    compare_yield_state(@contracts, *signers.users[4], ys5_i, true);
+    compare_yield_state(@contracts, *signers.users[5], ys6_i, true);
 
-        let ys1_i = get_user_yielder_state(@contracts, *signers.users[0]);
-        let ys2_i = get_user_yielder_state(@contracts, *signers.users[1]);
-        let ys3_i = get_user_yielder_state(@contracts, *signers.users[2]);
-        let ys4_i = get_user_yielder_state(@contracts, *signers.users[3]);
-        let ys5_i = get_user_yielder_state(@contracts, *signers.users[4]);
-        let ys6_i = get_user_yielder_state(@contracts, *signers.users[5]);
+    deposit(@contracts, *signers.users[1], erc3525.value_of(2), some_time, 2);
+    deposit(@contracts, *signers.users[3], erc3525.value_of(4), some_time, 4);
+    deposit(@contracts, *signers.users[4], erc3525.value_of(5), some_time, 5);
+    deposit(@contracts, *signers.users[5], erc3525.value_of(6), some_time, 6);
 
-        set_contract_address(signers.owner);
-        let (new_times, new_abs) = data::get_manjarisoa_new();
-        absorber.set_absorptions(SLOT, new_times, new_abs, TON_EQUIVALENT);
-        yfarmer.set_prices(price_times, prices);
-
-        compare_yield_state(@contracts, *signers.users[0], ys1_i, false);
-        compare_yield_state(@contracts, *signers.users[1], ys2_i, false);
-        compare_yield_state(@contracts, *signers.users[2], ys3_i, false);
-        compare_yield_state(@contracts, *signers.users[3], ys4_i, false);
-        compare_yield_state(@contracts, *signers.users[4], ys5_i, false);
-        compare_yield_state(@contracts, *signers.users[5], ys6_i, false);
-
-        set_block_timestamp(may29 + 7 * ONE_MONTH + 19 * ONE_DAY);
-
-        compare_yield_state(@contracts, *signers.users[0], ys1_i, false);
-        compare_yield_state(@contracts, *signers.users[1], ys2_i, false);
-        compare_yield_state(@contracts, *signers.users[2], ys3_i, false);
-        compare_yield_state(@contracts, *signers.users[3], ys4_i, false);
-        compare_yield_state(@contracts, *signers.users[4], ys5_i, false);
-        compare_yield_state(@contracts, *signers.users[5], ys6_i, false);
-
-        set_block_timestamp(may29 + 10 * ONE_MONTH);
-
-        claim(@contracts, *signers.users[0], may29 + 10 * ONE_MONTH);
-        claim(@contracts, *signers.users[1], may29 + 10 * ONE_MONTH);
-        claim(@contracts, *signers.users[2], may29 + 10 * ONE_MONTH);
-        claim(@contracts, *signers.users[3], may29 + 10 * ONE_MONTH);
-        claim(@contracts, *signers.users[4], may29 + 10 * ONE_MONTH);
-        claim(@contracts, *signers.users[5], may29 + 10 * ONE_MONTH);
-
-        compare_yield_state(@contracts, *signers.users[0], ys1_i, true);
-        compare_yield_state(@contracts, *signers.users[1], ys2_i, true);
-        compare_yield_state(@contracts, *signers.users[2], ys3_i, true);
-        compare_yield_state(@contracts, *signers.users[3], ys4_i, true);
-        compare_yield_state(@contracts, *signers.users[4], ys5_i, true);
-        compare_yield_state(@contracts, *signers.users[5], ys6_i, true);
-
-        let ys1_f = get_user_yielder_state(@contracts, *signers.users[0]);
-        let ys2_f = get_user_yielder_state(@contracts, *signers.users[1]);
-        let ys3_f = get_user_yielder_state(@contracts, *signers.users[2]);
-        let ys4_f = get_user_yielder_state(@contracts, *signers.users[3]);
-        let ys5_f = get_user_yielder_state(@contracts, *signers.users[4]);
-        let ys6_f = get_user_yielder_state(@contracts, *signers.users[5]);
-
-        set_block_timestamp(may29 + 31 * ONE_MONTH);
-
-        withdraw_all(@contracts, *signers.users[0], may29 + 31 * ONE_MONTH, 1);
-        withdraw_all(@contracts, *signers.users[1], may29 + 31 * ONE_MONTH, 2);
-        withdraw_all(@contracts, *signers.users[2], may29 + 31 * ONE_MONTH, 3);
-        withdraw_all(@contracts, *signers.users[3], may29 + 31 * ONE_MONTH, 4);
-        withdraw_all(@contracts, *signers.users[4], may29 + 31 * ONE_MONTH, 5);
-        withdraw_all(@contracts, *signers.users[5], may29 + 31 * ONE_MONTH, 6);
-
-        compare_yield_state(
-            @contracts,
-            *signers.users[0],
-            YieldState { deposited: 0, claimable: 0, claimed: ys1_f.claimable + ys1_f.claimed },
-            false
-        );
-        compare_yield_state(
-            @contracts,
-            *signers.users[1],
-            YieldState { deposited: 0, claimable: 0, claimed: ys2_f.claimable + ys2_f.claimed },
-            false
-        );
-        compare_yield_state(
-            @contracts,
-            *signers.users[2],
-            YieldState { deposited: 0, claimable: 0, claimed: ys3_f.claimable + ys3_f.claimed },
-            false
-        );
-        compare_yield_state(
-            @contracts,
-            *signers.users[3],
-            YieldState { deposited: 0, claimable: 0, claimed: ys4_f.claimable + ys4_f.claimed },
-            false
-        );
-        compare_yield_state(
-            @contracts,
-            *signers.users[4],
-            YieldState { deposited: 0, claimable: 0, claimed: ys5_f.claimable + ys5_f.claimed },
-            false
-        );
-        compare_yield_state(
-            @contracts,
-            *signers.users[5],
-            YieldState { deposited: 0, claimable: 0, claimed: ys6_f.claimable + ys6_f.claimed },
-            false
-        );
-    }
+    withdraw_all(@contracts, *signers.users[0], may29 + six_years + 31 * ONE_MONTH, 1);
+    withdraw_all(@contracts, *signers.users[1], may29 + six_years + 31 * ONE_MONTH, 2);
+    withdraw_all(@contracts, *signers.users[2], may29 + six_years + 31 * ONE_MONTH, 3);
+    withdraw_all(@contracts, *signers.users[3], may29 + six_years + 31 * ONE_MONTH, 4);
+    withdraw_all(@contracts, *signers.users[4], may29 + six_years + 31 * ONE_MONTH, 5);
+    withdraw_all(@contracts, *signers.users[5], may29 + six_years + 31 * ONE_MONTH, 6);
 }
