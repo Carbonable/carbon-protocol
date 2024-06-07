@@ -91,7 +91,7 @@ See [How to deploy Carbonable Protocol](https://carbonable.notion.site/How-to-de
 
 ### Inputs
 
-To manage inputs sent to constructor during the deployment, you can customize the [config files](./scripts/configs/).
+To manage inputs sent to constructor during the deployment, you can customize the [config files](./scripts/).
 
 ### Prepare the contracts before tests
 
