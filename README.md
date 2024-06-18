@@ -110,4 +110,4 @@ So far, you have to do the following actions manually:
 
 ## 📄 License
 
-**carbon-protocol** is released under the [MIT](LICENSE).
+**carbon-protocol** is released under the [Apache License, Version 2.0](LICENSE).
