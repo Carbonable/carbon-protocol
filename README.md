@@ -1,7 +1,7 @@
 <div align="center">
   <h1 align="center">Carbon Protocol on Starknet</h1>
   <p align="center">
-    <a href="https://discord.gg/zUy9UvB7cd">
+    <a href="https://discord.gg/twyWfTGd6m">
         <img src="https://img.shields.io/badge/Discord-6666FF?style=for-the-badge&logo=discord&logoColor=white">
     </a>
     <a href="https://twitter.com/intent/follow?screen_name=Carbonable_io">
