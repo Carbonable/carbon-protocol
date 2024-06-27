@@ -175,7 +175,7 @@ mod Project {
 
     // Upgradable
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl UpgradeableImpl of IUpgradeable<ContractState> {
         fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
             // [Check] Only owner
@@ -189,7 +189,7 @@ mod Project {
 
     // Access control
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl OwnableImpl of IOwnable<ContractState> {
         fn owner(self: @ContractState) -> ContractAddress {
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -207,7 +207,7 @@ mod Project {
         }
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl MinterImpl of IMinter<ContractState> {
         fn get_minters(self: @ContractState, slot: u256) -> Span<ContractAddress> {
             let unsafe_state = Access::unsafe_new_contract_state();
@@ -233,7 +233,7 @@ mod Project {
         }
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl CertifierImpl of ICertifier<ContractState> {
         fn get_certifier(self: @ContractState, slot: u256) -> ContractAddress {
             let unsafe_state = Access::unsafe_new_contract_state();
@@ -252,7 +252,7 @@ mod Project {
 
     // SRC5
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl SRC5Impl of ISRC5<ContractState> {
         fn supports_interface(self: @ContractState, interface_id: felt252) -> bool {
             if interface_id == IERC165_BACKWARD_COMPATIBLE_ID.into() {
@@ -263,7 +263,7 @@ mod Project {
         }
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl SRC5CamelImpl of ISRC5Camel<ContractState> {
         fn supportsInterface(self: @ContractState, interfaceId: felt252) -> bool {
             self.supports_interface(interfaceId)
@@ -272,7 +272,7 @@ mod Project {
 
     // ERC721
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ERC721Impl of IERC721<ContractState> {
         fn balance_of(self: @ContractState, account: ContractAddress) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
@@ -329,7 +329,7 @@ mod Project {
 
     // ERC721 CamelOnly
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl IERC721CamelOnlyImpl of IERC721CamelOnly<ContractState> {
         fn balanceOf(self: @ContractState, account: ContractAddress) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
@@ -377,7 +377,7 @@ mod Project {
         }
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl TemporaryImpl of IMetadataSetter<ContractState> {
         fn set_name(ref self: ContractState, name: felt252) {
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -393,7 +393,7 @@ mod Project {
     }
 
     #[generate_trait]
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ERC721MetadataImpl of IERC721MetadataFeltSpan {
         fn name(self: @ContractState) -> felt252 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
@@ -418,7 +418,7 @@ mod Project {
 
     // ERC3525
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ERC3525Impl of IERC3525<ContractState> {
         fn value_decimals(self: @ContractState) -> u8 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
@@ -462,7 +462,7 @@ mod Project {
     }
 
     #[generate_trait]
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ERC3525MetadataImpl of IERC3525MetadataFeltSpan {
         fn contract_uri(self: @ContractState) -> Span<felt252> {
             let unsafe_state = Metadata::unsafe_new_contract_state();
@@ -483,7 +483,7 @@ mod Project {
         }
     }
 
-    #[external(v0)]
+   #[abi(embed_v0)]
     impl ERC3525SlotApprovableImpl of IERC3525SlotApprovable<ContractState> {
         fn set_approval_for_slot(
             ref self: ContractState,
@@ -508,7 +508,7 @@ mod Project {
         }
     }
 
-    #[external(v0)]
+   #[abi(embed_v0)]
     impl ERC3525SlotEnumerableImpl of IERC3525SlotEnumerable<ContractState> {
         fn slot_count(self: @ContractState) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
@@ -533,7 +533,7 @@ mod Project {
 
     // Externals
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ExternalImpl of IExternal<ContractState> {
         fn total_value(self: @ContractState, slot: u256) -> u256 {
             let unsafe_state = ERC3525::unsafe_new_contract_state();
@@ -573,7 +573,7 @@ mod Project {
 
     // Absorber
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl AbsorberImpl of IAbsorber<ContractState> {
         fn get_start_time(self: @ContractState, slot: u256) -> u64 {
             let unsafe_state = Absorber::unsafe_new_contract_state();
@@ -660,7 +660,7 @@ mod Project {
 
     // Metadata
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl MetadataImpl of IMetadata<ContractState> {
         fn get_contract_uri_implementation(self: @ContractState) -> ClassHash {
             let unsafe_state = Metadata::unsafe_new_contract_state();
@@ -708,7 +708,7 @@ mod Project {
 
     // ERC2981
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ERC2981Impl of IERC2981<ContractState> {
         fn default_royalty(self: @ContractState) -> (ContractAddress, u256, u256) {
             let unsafe_state = ERC2981::unsafe_new_contract_state();
@@ -761,7 +761,7 @@ mod Project {
         }
     }
 
-    #[external(v0)]
+   #[abi(embed_v0)]
     impl ERC2981CamelImpl of IERC2981Camel<ContractState> {
         fn defaultRoyalty(self: @ContractState) -> (ContractAddress, u256, u256) {
             self.default_royalty()

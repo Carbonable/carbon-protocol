@@ -50,7 +50,7 @@ mod Minter {
 
     // Upgradable
 
-    #[external(v0)]
+   #[abi(embed_v0)]
     impl UpgradeableImpl of IUpgradeable<ContractState> {
         fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
             // [Check] Only owner
@@ -64,7 +64,7 @@ mod Minter {
 
     // Access control
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl OwnableImpl of IOwnable<ContractState> {
         fn owner(self: @ContractState) -> ContractAddress {
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -84,7 +84,7 @@ mod Minter {
 
     // Externals
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl MintImpl of IMint<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Mint::unsafe_new_contract_state();
