@@ -41,7 +41,7 @@ mod Yielder {
 
     // Upgradable
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     impl UpgradeableImpl of IUpgradeable<ContractState> {
         fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
             // [Check] Only owner
@@ -55,7 +55,7 @@ mod Yielder {
 
     // Ownable
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     impl OwnableImpl of IOwnable<ContractState> {
         fn owner(self: @ContractState) -> ContractAddress {
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -75,7 +75,7 @@ mod Yielder {
 
     // Pausable
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     impl PausableImpl of IPausable<ContractState> {
         fn is_paused(self: @ContractState) -> bool {
             let unsafe_state = Pausable::unsafe_new_contract_state();
@@ -83,7 +83,7 @@ mod Yielder {
         }
     }
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     #[generate_trait]
     impl PausableExtraImpl of PausableTrait {
         fn pause(ref self: ContractState) {
@@ -111,7 +111,7 @@ mod Yielder {
 
     // SRC5
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     impl SRC5Impl of ISRC5<ContractState> {
         fn supports_interface(self: @ContractState, interface_id: felt252) -> bool {
             let unsafe_state = SRC5::unsafe_new_contract_state();
@@ -119,7 +119,7 @@ mod Yielder {
         }
     }
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     impl SRC5CamelImpl of ISRC5Camel<ContractState> {
         fn supportsInterface(self: @ContractState, interfaceId: felt252) -> bool {
             self.supports_interface(interfaceId)
@@ -128,7 +128,7 @@ mod Yielder {
 
     // Farming
 
-   #[abi(embed_v0)]
+    #[external(v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Yield::unsafe_new_contract_state();
@@ -202,7 +202,7 @@ mod Yielder {
         }
     }
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     impl YieldFarmImpl of IYieldFarm<ContractState> {
         fn get_total_sale(self: @ContractState) -> u256 {
             let unsafe_state = Yield::unsafe_new_contract_state();
@@ -266,7 +266,7 @@ mod Yielder {
 
     // Yield
 
-    #[abi(embed_v0)]
+    #[external(v0)]
     impl YieldImpl of IYield<ContractState> {
         fn get_payment_token_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Yield::unsafe_new_contract_state();
