@@ -266,12 +266,8 @@ impl SpanPrintImpl<
         let mut s = self;
         loop {
             match s.pop_front() {
-                Option::Some(x) => {
-                    (*x).print();
-                },
-                Option::None => {
-                    break;
-                },
+                Option::Some(x) => { (*x).print(); },
+                Option::None => { break; },
             };
         };
     }

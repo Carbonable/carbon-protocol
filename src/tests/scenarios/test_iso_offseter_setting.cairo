@@ -332,9 +332,7 @@ mod FarmingDepositWithdrawOffseter {
                     project.mint(*user, SLOT, VALUE * i);
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
         minter.revoke_minter(SLOT, signers.owner);
@@ -356,9 +354,7 @@ mod FarmingDepositWithdrawOffseter {
                     );
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -377,9 +373,7 @@ mod FarmingDepositWithdrawOffseter {
                     assert(claimable == expected, 'Wrong claimable');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -411,9 +405,7 @@ mod FarmingDepositWithdrawOffseter {
                     assert(claimed == expected, 'Wrong claimed');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
     }
@@ -502,9 +494,7 @@ mod FarmingDepositWithdrawOffseter {
                     project.mint(*user, SLOT, VALUE * i);
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
         minter.revoke_minter(SLOT, signers.owner);
@@ -529,9 +519,7 @@ mod FarmingDepositWithdrawOffseter {
                     );
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -557,9 +545,7 @@ mod FarmingDepositWithdrawOffseter {
                     assert(claimable == expected, 'Wrong claimable');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -598,9 +584,7 @@ mod FarmingDepositWithdrawOffseter {
                     assert(claimed == expected, 'Wrong claimed');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
     }

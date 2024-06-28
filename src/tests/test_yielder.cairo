@@ -357,12 +357,8 @@ impl SpanPrintImpl<
         let mut s = self;
         loop {
             match s.pop_front() {
-                Option::Some(x) => {
-                    (*x).print();
-                },
-                Option::None => {
-                    break;
-                },
+                Option::Some(x) => { (*x).print(); },
+                Option::None => { break; },
             };
         };
     }
@@ -373,12 +369,8 @@ fn sum_span(s: Span<u256>) -> u256 {
     let mut s = s;
     loop {
         match s.pop_front() {
-            Option::Some(x) => {
-                sum += *x;
-            },
-            Option::None => {
-                break sum;
-            },
+            Option::Some(x) => { sum += *x; },
+            Option::None => { break sum; },
         };
     }
 }
@@ -428,9 +420,7 @@ fn test_yielder_get_current_price() {
                 let price = farmer.get_current_price();
                 assert(@price == @20, 'Wrong price');
             },
-            Option::None => {
-                break;
-            },
+            Option::None => { break; },
         };
     };
 }
@@ -463,9 +453,7 @@ fn test_yielder_get_current_price_increasing() {
                 assert(@price == @(((i + 1) / 2) * 10), 'Wrong price');
                 i += 1;
             },
-            Option::None => {
-                break;
-            },
+            Option::None => { break; },
         };
     };
 }
@@ -497,9 +485,7 @@ fn test_yielder_get_apr() {
             // num.low.print();
             // den.low.print();
             },
-            Option::None => {
-                break;
-            },
+            Option::None => { break; },
         };
     };
 }

@@ -387,9 +387,7 @@ mod ISOProjectKarathuru {
                     assert(erc3525.value_of(i.into()) == token_value, 'Wrong value of user');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -413,9 +411,7 @@ mod ISOProjectKarathuru {
                     assert(deposited == token_value, 'Wrong deposit for user');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 

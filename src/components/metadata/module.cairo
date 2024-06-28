@@ -112,7 +112,7 @@ mod Test {
         #[storage]
         struct Storage {}
 
-       #[abi(embed_v0)]
+        #[abi(embed_v0)]
         impl ContractDescriptorTestImpl of Metadata::IContractDescriptor<ContractState> {
             fn construct_contract_uri(self: @ContractState) -> Span<felt252> {
                 array!['http://example.com/', 'contract/uri.json'].span()
