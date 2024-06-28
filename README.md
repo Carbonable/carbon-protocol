@@ -128,6 +128,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/julienbrs"><img src="https://avatars.githubusercontent.com/u/106234742?v=4?s=100" width="100px;" alt="Ainur"/><br /><sub><b>Ainur</b></sub></a><br /><a href="https://github.com/Carbonable/carbon-protocol/commits?author=julienbrs" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Marchand-Nicolas"><img src="https://avatars.githubusercontent.com/u/60229704?v=4?s=100" width="100px;" alt="Nico"/><br /><sub><b>Nico</b></sub></a><br /><a href="https://github.com/Carbonable/carbon-protocol/commits?author=Marchand-Nicolas" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rmzlb"><img src="https://avatars.githubusercontent.com/u/25151724?v=4?s=100" width="100px;" alt="rmzlb"/><br /><sub><b>rmzlb</b></sub></a><br /><a href="https://github.com/Carbonable/carbon-protocol/commits?author=rmzlb" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cloudvenger"><img src="https://avatars.githubusercontent.com/u/3840436?v=4?s=100" width="100px;" alt="Arn0d"/><br /><sub><b>Arn0d</b></sub></a><br /><a href="https://github.com/Carbonable/carbon-protocol/commits?author=cloudvenger" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
