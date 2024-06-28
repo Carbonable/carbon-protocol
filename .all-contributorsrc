@@ -8,6 +8,24 @@
   "commitConvention": "angular",
   "contributors": [
     {
+      "login": "AbdelStark",
+      "name": "A₿del ∞/21M 🐺 - 🐱",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45264458?v=4",
+      "profile": "http://starknet.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Bal7hazar",
+      "name": "Bal7hazar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/97087040?v=4",
+      "profile": "https://github.com/Bal7hazar",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "tekkac",
       "name": "Trunks @ Carbonable",
       "avatar_url": "https://avatars.githubusercontent.com/u/98529704?v=4",
