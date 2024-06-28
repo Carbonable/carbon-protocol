@@ -85,6 +85,7 @@ mod Farm {
     fn constructor(ref self: ContractState, project: ContractAddress, slot: u256,) {
         self.initializer(project, slot);
     }
+
     #[abi(embed_v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {

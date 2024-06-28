@@ -42,7 +42,7 @@ mod Yielder {
     // Upgradable
 
     #[abi(embed_v0)]
-    impl UpgradeableImpl of IUpgradeable<ContractState> {
+    impl UpgradeableImpl of super::IUpgradeable<ContractState> {
         fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
             // [Check] Only owner
             let unsafe_state = Ownable::unsafe_new_contract_state();
@@ -56,7 +56,7 @@ mod Yielder {
     // Ownable
 
     #[abi(embed_v0)]
-    impl OwnableImpl of IOwnable<ContractState> {
+    impl OwnableImpl of super::IOwnable<ContractState> {
         fn owner(self: @ContractState) -> ContractAddress {
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::OwnableImpl::owner(@unsafe_state)
@@ -129,7 +129,7 @@ mod Yielder {
     // Farming
 
     #[abi(embed_v0)]
-    impl FarmImpl of IFarm<ContractState> {
+    impl FarmImpl of super::IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Yield::unsafe_new_contract_state();
             Yield::FarmImpl::get_carbonable_project_address(@unsafe_state)
@@ -203,7 +203,7 @@ mod Yielder {
     }
 
     #[abi(embed_v0)]
-    impl YieldFarmImpl of IYieldFarm<ContractState> {
+    impl YieldFarmImpl of super::IYieldFarm<ContractState> {
         fn get_total_sale(self: @ContractState) -> u256 {
             let unsafe_state = Yield::unsafe_new_contract_state();
             Yield::YieldFarmImpl::get_total_sale(@unsafe_state)
@@ -267,7 +267,7 @@ mod Yielder {
     // Yield
 
     #[abi(embed_v0)]
-    impl YieldImpl of IYield<ContractState> {
+    impl YieldImpl of super::IYield<ContractState> {
         fn get_payment_token_address(self: @ContractState) -> ContractAddress {
             let unsafe_state = Yield::unsafe_new_contract_state();
             Yield::YieldImpl::get_payment_token_address(@unsafe_state)
