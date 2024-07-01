@@ -472,9 +472,7 @@ mod FarmingDepositWithdrawYielder {
                     project.mint(*user, SLOT, VALUE * i);
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
         minter.revoke_minter(SLOT, signers.owner);
@@ -496,9 +494,7 @@ mod FarmingDepositWithdrawYielder {
                     );
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -523,9 +519,7 @@ mod FarmingDepositWithdrawYielder {
                     assert(claimable == expected, 'Wrong claimable 2');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -561,9 +555,7 @@ mod FarmingDepositWithdrawYielder {
                     assert(claimed == expected, 'Wrong claimed');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
     }
@@ -691,9 +683,7 @@ mod FarmingDepositWithdrawYielder {
                     project.mint(*user, SLOT, VALUE * i);
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
         minter.revoke_minter(SLOT, signers.owner);
@@ -718,9 +708,7 @@ mod FarmingDepositWithdrawYielder {
                     );
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -749,9 +737,7 @@ mod FarmingDepositWithdrawYielder {
                     assert(claimable >= expected - 1, 'Wrong claimable 1');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -792,9 +778,7 @@ mod FarmingDepositWithdrawYielder {
                     assert(claimed == expected, 'Wrong claimed');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
     }
@@ -967,9 +951,7 @@ mod FarmingClaimingReward {
                                 );
                                 i += 1;
                             },
-                            Option::None => {
-                                break ();
-                            }
+                            Option::None => { break (); }
                         };
                     };
 
@@ -1031,15 +1013,11 @@ mod FarmingClaimingReward {
                                 };
                                 i += 1;
                             },
-                            Option::None => {
-                                break ();
-                            }
+                            Option::None => { break (); }
                         };
                     };
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
     }
@@ -1134,9 +1112,7 @@ mod FarmingClaimingReward {
                     assert(i == project.mint(*user, SLOT, VALUE * i), 'Wrong token');
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
 
@@ -1156,9 +1132,7 @@ mod FarmingClaimingReward {
                     );
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
         // Claim rewards
@@ -1188,9 +1162,7 @@ mod FarmingClaimingReward {
                     );
                     i += 1;
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
     }
@@ -1495,12 +1467,8 @@ impl SpanPrintImpl<
         let mut s = self;
         loop {
             match s.pop_front() {
-                Option::Some(x) => {
-                    (*x).print();
-                },
-                Option::None => {
-                    break;
-                },
+                Option::Some(x) => { (*x).print(); },
+                Option::None => { break; },
             };
         };
     }
@@ -1628,9 +1596,7 @@ mod VerifyCumulativeSalePrice {
                         'Wrong cumsales'
                     );
                 },
-                Option::None => {
-                    break ();
-                }
+                Option::None => { break (); }
             };
         };
     }

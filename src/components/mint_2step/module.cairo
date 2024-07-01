@@ -700,7 +700,7 @@ mod Test {
         struct Storage {}
 
         #[generate_trait]
-        #[external(v0)]
+        #[abi(embed_v0)]
         impl MockImpl of MockTrait {
             fn get_project_value(self: @ContractState, slot: u256) -> u256 {
                 carbon::components::mint_2step::module::Test::BILLION
@@ -722,7 +722,7 @@ mod Test {
         struct Storage {}
 
         #[generate_trait]
-        #[external(v0)]
+        #[abi(embed_v0)]
         impl ERC20Impl of ERC20Trait {
             fn balanceOf(self: @ContractState, owner: ContractAddress) -> u256 {
                 100

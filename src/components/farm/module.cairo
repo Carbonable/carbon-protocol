@@ -1,7 +1,6 @@
 #[starknet::contract]
 mod Farm {
     // Starknet imports
-
     use starknet::ContractAddress;
     use starknet::{get_caller_address, get_contract_address, get_block_timestamp};
 
@@ -27,7 +26,8 @@ mod Farm {
     const MULT_ACCURATE_ABS: u256 = 1_000_000;
 
     #[storage]
-    struct Storage {
+    #[derive(Drop, Serde, starknet::Store)]
+    pub struct Storage {
         _farm_project: IAbsorberDispatcher,
         _farm_slot: u256,
         _farm_token_id: u256,
@@ -44,6 +44,7 @@ mod Farm {
         _farm_updated_prices: List::<u256>,
         _farm_cumsales: List::<u256>,
     }
+
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -85,6 +86,7 @@ mod Farm {
         self.initializer(project, slot);
     }
 
+    #[abi(embed_v0)]
     impl FarmImpl of IFarm<ContractState> {
         fn get_carbonable_project_address(self: @ContractState) -> ContractAddress {
             self._farm_project.read().contract_address
@@ -463,6 +465,7 @@ mod Farm {
                 stored_prices.append(*prices[index]);
                 index += 1;
             };
+        //TO DO:
         }
 
         fn _compute_absorption(

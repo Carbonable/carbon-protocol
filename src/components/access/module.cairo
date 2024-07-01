@@ -13,9 +13,14 @@ mod Access {
 
     // External imports
 
-    use openzeppelin::access::accesscontrol::accesscontrol::AccessControl;
-    use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
-    use openzeppelin::introspection::src5::SRC5;
+    use openzeppelin::introspection::src5::SRC5Component::InternalTrait as SRC5InternalTrait;
+    use openzeppelin::introspection::src5::SRC5Component::{SRC5, SRC5Camel};
+    use openzeppelin::introspection::src5::SRC5Component;
+
+
+    // use openzeppelin::access::accesscontrol::accesscontrol::AccessControl;
+    // use openzeppelin::introspection::interface::{ISRC5, ISRC5Camel};
+    // use openzeppelin::introspection::src5::SRC5;
 
     // Internal imports
 

@@ -24,7 +24,7 @@ mod Metadata {
         _metadata_slot_implementation: LegacyMap<u256, ClassHash>,
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl ContractDescriptorImpl of IContractDescriptor<ContractState> {
         fn construct_contract_uri(self: @ContractState) -> Span<felt252> {
             let implementation: ClassHash = self._metadata_contract_implementation.read();
@@ -34,7 +34,7 @@ mod Metadata {
             metadata_library.construct_contract_uri()
         }
     }
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl SlotDescriptorImpl of ISlotDescriptor<ContractState> {
         fn construct_slot_uri(self: @ContractState, slot: u256) -> Span<felt252> {
             let implementation: ClassHash = self._metadata_slot_implementation.read(slot);
@@ -112,13 +112,13 @@ mod Test {
         #[storage]
         struct Storage {}
 
-        #[external(v0)]
+        #[abi(embed_v0)]
         impl ContractDescriptorTestImpl of Metadata::IContractDescriptor<ContractState> {
             fn construct_contract_uri(self: @ContractState) -> Span<felt252> {
                 array!['http://example.com/', 'contract/uri.json'].span()
             }
         }
-        #[external(v0)]
+        #[abi(embed_v0)]
         impl SlotDescriptorTestImpl of Metadata::ISlotDescriptor<ContractState> {
             fn construct_slot_uri(self: @ContractState, slot: u256) -> Span<felt252> {
                 array!['http://example.com/', 'slot/uri.json'].span()
